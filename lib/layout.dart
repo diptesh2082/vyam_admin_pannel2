@@ -18,7 +18,7 @@ class LayoutTemplate extends StatelessWidget {
       drawer: Container(
         color: Colors.white,
         child: ListView(
-          children: [
+          children: const [
             UserAccountsDrawerHeader(
               accountEmail: Text("abc@gmail.com"),
               accountName: Text("Santos Enoque"),
