@@ -1,4 +1,5 @@
 import 'package:admin_panel_vyam/database_info.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class SideNavBar1 extends StatefulWidget {
@@ -81,7 +82,23 @@ class _SideNavBar1State extends State<SideNavBar1> {
                       MaterialPageRoute(
                           builder: ((context) => CollectionInfo())));
                 },
-              ))
+              )),
+          Positioned(
+            top: 200,
+            left: 50,
+            child: InkWell(
+              child: const Text(
+                'Logout',
+                style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.w900,
+                    fontFamily: "Poppins"),
+              ),
+              onTap: () {
+                FirebaseAuth.instance.signOut();
+              },
+            ),
+          ),
         ],
       ),
     );

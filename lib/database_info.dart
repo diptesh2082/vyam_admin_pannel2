@@ -32,50 +32,87 @@ class _CollectionInfoState extends State<CollectionInfo> {
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.only(
-              top: 50.0, left: 180, right: 60, bottom: 50),
+              top: 50.0, left: 150, right: 60, bottom: 50),
           child: Container(
             decoration: BoxDecoration(
                 color: Colors.amber.shade300,
                 borderRadius: BorderRadius.circular(20.0)),
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Icon(Icons.add),
-                      GestureDetector(
-                        child: Text('Add User'),
-                        onTap: showEditbox,
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8.0, left: 8.0),
+                    child: GestureDetector(
+                      onTap: showAddbox,
+                      child: Container(
+                        width: 90,
+                        decoration: BoxDecoration(
+                            color: Colors.white30,
+                            borderRadius: BorderRadius.circular(6.0)),
+                        child: Row(
+                          children: const [
+                            Icon(Icons.add),
+                            Text('Add User',
+                                style: TextStyle(fontWeight: FontWeight.w400)),
+                          ],
+                        ),
                       ),
-                    ],
+                    ),
                   ),
-                ),
-                Center(
-                  child: StreamBuilder<QuerySnapshot>(
-                    stream: FirebaseFirestore.instance
-                        .collection("product_details")
-                        .snapshots(),
-                    builder: (context, snapshot) {
-                      if (!snapshot.hasData) {
-                        return CircularProgressIndicator();
-                      }
-                      return DataTable(columns: const [
-                        DataColumn(label: Text('Address')),
-                        DataColumn(label: Text('Gender')),
-                        DataColumn(label: Text('Gym ID')),
-                        DataColumn(label: Text('Gym Owner')),
-                        DataColumn(label: Text('Landmark')),
-                        DataColumn(label: Text('Location')),
-                        DataColumn(label: Text('Gym Name')),
-                        DataColumn(label: Text('Pincode')),
-                        DataColumn(label: Text(''))
-                      ], rows: _buildlist(context, snapshot.data!.docs));
-                    },
+                  Center(
+                    child: StreamBuilder<QuerySnapshot>(
+                      stream: FirebaseFirestore.instance
+                          .collection("product_details")
+                          .snapshots(),
+                      builder: (context, snapshot) {
+                        if (!snapshot.hasData) {
+                          return const CircularProgressIndicator();
+                        }
+                        return DataTable(
+                            dataRowHeight: 65,
+                            columns: const [
+                              DataColumn(
+                                  label: Text(
+                                'Address',
+                                style: TextStyle(fontWeight: FontWeight.w600),
+                              )),
+                              DataColumn(
+                                  label: Text('Gender',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w600))),
+                              DataColumn(
+                                  label: Text('Gym ID',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w600))),
+                              DataColumn(
+                                  label: Text('Gym Owner',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w600))),
+                              DataColumn(
+                                  label: Text('Landmark',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w600))),
+                              DataColumn(
+                                  label: Text('Location',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w600))),
+                              DataColumn(
+                                  label: Text('Gym Name',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w600))),
+                              DataColumn(
+                                  label: Text('Pincode',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w600))),
+                              DataColumn(label: Text(''))
+                            ],
+                            rows: _buildlist(context, snapshot.data!.docs));
+                      },
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
@@ -165,7 +202,7 @@ class _CollectionInfoState extends State<CollectionInfo> {
                           hintText: 'Gender'),
                     )),
                   ),
-                 const Center(
+                  const Center(
                       child: ElevatedButton(
                           onPressed: null,
                           /*() async {
@@ -424,6 +461,12 @@ class _CollectionInfoState extends State<CollectionInfo> {
                                   .whenComplete(() => print("Item Updated"))
                                   .catchError((e) => print(e));
                               Navigator.pop(context);
+                              /* StreamBuilder(
+                                  stream: FirebaseFirestore.instance
+                                      .collection("product_details")
+                                      .snapshots(),
+                                  builder: (context, snapshot) {
+                                                                    });*/
 
                               /*FirebaseFirestore.instance
                                   .collection('product_details')
