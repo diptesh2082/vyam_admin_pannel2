@@ -42,46 +42,46 @@ class _CollectionInfoState extends State<CollectionInfo> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.only(
-              top: 50.0, left: 150, right: 60, bottom: 50),
-          child: Container(
-            decoration: BoxDecoration(
-                color: Colors.amber.shade300,
-                borderRadius: BorderRadius.circular(20.0)),
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(top: 8.0, left: 8.0),
-                    child: GestureDetector(
-                      onTap: showAddbox,
-                      child: Container(
-                        width: 90,
-                        decoration: BoxDecoration(
-                            color: Colors.white30,
-                            borderRadius: BorderRadius.circular(6.0)),
-                        child: Row(
-                          children: const [
-                            Icon(Icons.add),
-                            Text('Add User',
-                                style: TextStyle(fontWeight: FontWeight.w400)),
-                          ],
-                        ),
+        child: Container(
+          padding: EdgeInsets.symmetric(horizontal: 5),
+          decoration: BoxDecoration(
+              color: Colors.amber.shade300,
+              borderRadius: BorderRadius.circular(20.0)),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 8.0, left: 8.0),
+                  child: GestureDetector(
+                    onTap: showAddbox,
+                    child: Container(
+                      width: 90,
+                      decoration: BoxDecoration(
+                          color: Colors.white30,
+                          borderRadius: BorderRadius.circular(6.0)),
+                      child: Row(
+                        children: const [
+                          Icon(Icons.add),
+                          Text('Add User',
+                              style: TextStyle(fontWeight: FontWeight.w400)),
+                        ],
                       ),
                     ),
                   ),
-                  Center(
-                    child: StreamBuilder<QuerySnapshot>(
-                      stream: FirebaseFirestore.instance
-                          .collection("product_details")
-                          .snapshots(),
-                      builder: (context, snapshot) {
-                        if (!snapshot.hasData) {
-                          return const CircularProgressIndicator();
-                        }
-                        return DataTable(
+                ),
+                Center(
+                  child: StreamBuilder<QuerySnapshot>(
+                    stream: FirebaseFirestore.instance
+                        .collection("product_details")
+                        .snapshots(),
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData) {
+                        return const CircularProgressIndicator();
+                      }
+                      return SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: DataTable(
                             dataRowHeight: 65,
                             columns: const [
                               DataColumn(
@@ -90,41 +90,85 @@ class _CollectionInfoState extends State<CollectionInfo> {
                                 style: TextStyle(fontWeight: FontWeight.w600),
                               )),
                               DataColumn(
-                                  label: Text('Gender',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w600))),
+                                label: Text(
+                                  'Gender',
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
+                              ),
                               DataColumn(
-                                  label: Text('Gym ID',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w600))),
+                                label: Text(
+                                  'Gym ID',
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
+                              ),
                               DataColumn(
-                                  label: Text('Gym Owner',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w600))),
+                                label: Text(
+                                  'Gym Owner',
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
+                              ),
                               DataColumn(
-                                  label: Text('Landmark',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w600))),
+                                label: Text(
+                                  'Landmark',
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
+                              ),
                               DataColumn(
-                                  label: Text('Location',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w600))),
+                                label: Text(
+                                  'Location',
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
+                              ),
                               DataColumn(
-                                  label: Text('Gym Name',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w600))),
+                                label: Text(
+                                  'Gym Name',
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
+                              ),
                               DataColumn(
-                                  label: Text('Pincode',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w600))),
+                                label: Text(
+                                  'Pincode',
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
+                              ),
+                              DataColumn(
+                                label: Text(
+                                  'Timing',
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
+                              ),
+                              DataColumn(
+                                label: Text(
+                                  'Timing',
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
+                              ),
+                              DataColumn(
+                                label: Text(
+                                  'Timing',
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
+                              ),
+                              DataColumn(
+                                label: Text(
+                                  'Timing',
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
+                              ),
+                              DataColumn(
+                                label: Text(
+                                  'Timing',
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
+                              ),
                               DataColumn(label: Text(''))
                             ],
-                            rows: _buildlist(context, snapshot.data!.docs));
-                      },
-                    ),
+                            rows: _buildlist(context, snapshot.data!.docs)),
+                      );
+                    },
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),
@@ -147,6 +191,11 @@ class _CollectionInfoState extends State<CollectionInfo> {
       DataCell(Text(data['location'].toString())),
       DataCell(Text(data['name'])),
       DataCell(Text(data['pincode'].toString())),
+      DataCell(Text(data['pincode'].toString())),
+      DataCell(Text(data['pincode'].toString())),
+      DataCell(Text(data['pincode'].toString())),
+      DataCell(Text(data['pincode'].toString())),
+      DataCell(Text(data['pincode'].toString())),
       DataCell(const Text(""), showEditIcon: true, onTap: () {
         showEditbox(
           address: data['address']!,
@@ -162,7 +211,7 @@ class _CollectionInfoState extends State<CollectionInfo> {
     ]);
   }
 
-  Future showAddbox() => showDialog(
+  showAddbox() => showDialog(
       context: context,
       builder: (context) => AlertDialog(
             shape: const RoundedRectangleBorder(
@@ -259,7 +308,7 @@ class _CollectionInfoState extends State<CollectionInfo> {
             ),
           ));
 
-  Future showEditbox({
+  showEditbox({
     required String? address,
     required String? gender,
     required String? gymID,
@@ -489,26 +538,26 @@ class _CollectionInfoState extends State<CollectionInfo> {
                           print("/////");
                           print(_gymname!.text);
                           print(_gymid!.text);
-                          // DocumentReference documentReference =
-                          //     FirebaseFirestore.instance
-                          //         .collection('product_details')
-                          //         .doc('RBRQKBuboUVvDAriCCVe');
+                          DocumentReference documentReference =
+                              FirebaseFirestore.instance
+                                  .collection('product_details')
+                                  .doc('RBRQKBuboUVvDAriCCVe');
 
-                          // Map<String, dynamic> data = <String, dynamic>{
-                          //   'address': _address!.text,
-                          //   'gender': _gender!.text,
-                          //   'gym_id': _gymid!.text,
-                          //   'gym_owner': _gymowner!.text,
-                          //   'landmark': _landmark!.text,
-                          //   'location': _location!.text,
-                          //   'name': _gymname!.text,
-                          //   'pincode': _pincode!.text,
-                          // };
-                          // await documentReference
-                          //     .set(data)
-                          //     .whenComplete(() => print("Item Updated"))
-                          //     .catchError((e) => print(e));
-                          // Navigator.pop(context);
+                          Map<String, dynamic> data = <String, dynamic>{
+                            'address': _address!.text,
+                            'gender': _gender!.text,
+                            'gym_id': _gymid!.text,
+                            'gym_owner': _gymowner!.text,
+                            'landmark': _landmark!.text,
+                            'location': _location!.text,
+                            'name': _gymname!.text,
+                            'pincode': _pincode!.text,
+                          };
+                          await documentReference
+                              .set(data)
+                              .whenComplete(() => print("Item Updated"))
+                              .catchError((e) => print(e));
+                          Navigator.pop(context);
                         },
                         child: const Text('Done'),
                       ),
