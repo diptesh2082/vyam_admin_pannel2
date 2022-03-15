@@ -14,6 +14,16 @@ class _SideNavBar1State extends State<SideNavBar1> {
 
   @override
   Widget build(BuildContext context) {
+    PageController _controller = PageController();
+    List<Widget> _list = [
+      CollectionInfo(),
+      Container(
+        color: Colors.blueGrey,
+      ),
+      Container(
+        color: Colors.green,
+      ),
+    ];
     return Scaffold(
       key: _scaffoldKey,
       body: Stack(
@@ -42,12 +52,13 @@ class _SideNavBar1State extends State<SideNavBar1> {
                 ),
               ),
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: ((context) => const CollectionInfo()),
-                  ),
-                );
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(
+                //     builder: ((context) => const CollectionInfo()),
+                //   ),
+                // );
+                _controller.jumpToPage(0);
               },
             ),
           ),
@@ -63,10 +74,7 @@ class _SideNavBar1State extends State<SideNavBar1> {
                   ),
                 ),
                 onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: ((context) => const CollectionInfo())));
+                  _controller.jumpToPage(1);
                 },
               )),
           Positioned(
@@ -81,10 +89,7 @@ class _SideNavBar1State extends State<SideNavBar1> {
                   ),
                 ),
                 onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: ((context) => const CollectionInfo())));
+                  _controller.jumpToPage(2);
                 },
               )),
           Positioned(
@@ -103,6 +108,21 @@ class _SideNavBar1State extends State<SideNavBar1> {
               },
             ),
           ),
+          Align(
+            alignment: Alignment(0, 0),
+            child: Padding(
+              padding: const EdgeInsets.only(left: 230.0, top: 20),
+              child: SizedBox(
+                child: PageView.builder(
+                  itemCount: 3,
+                  itemBuilder: (_, int idx) {
+                    return _list[idx];
+                  },
+                  controller: _controller,
+                ),
+              ),
+            ),
+          )
         ],
       ),
     );

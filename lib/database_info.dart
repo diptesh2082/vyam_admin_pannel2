@@ -45,7 +45,7 @@ class _CollectionInfoState extends State<CollectionInfo> {
         child: Container(
           padding: EdgeInsets.symmetric(horizontal: 5),
           decoration: BoxDecoration(
-              color: Colors.amber.shade300,
+              color: Colors.grey.shade100,
               borderRadius: BorderRadius.circular(20.0)),
           child: SingleChildScrollView(
             child: Column(
@@ -58,8 +58,8 @@ class _CollectionInfoState extends State<CollectionInfo> {
                     child: Container(
                       width: 90,
                       decoration: BoxDecoration(
-                          color: Colors.white30,
-                          borderRadius: BorderRadius.circular(6.0)),
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(20.0)),
                       child: Row(
                         children: const [
                           Icon(Icons.add),
