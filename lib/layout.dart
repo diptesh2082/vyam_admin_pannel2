@@ -10,6 +10,8 @@ import 'package:admin_panel_vyam/locator.dart';
 class LayoutTemplate extends StatelessWidget {
   final GlobalKey<ScaffoldState> _key = GlobalKey<ScaffoldState>();
 
+  LayoutTemplate({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,7 +20,7 @@ class LayoutTemplate extends StatelessWidget {
       drawer: Container(
         color: Colors.white,
         child: ListView(
-          children: [
+          children: const [
             UserAccountsDrawerHeader(
               accountEmail: Text("abc@gmail.com"),
               accountName: Text("Santos Enoque"),
@@ -32,16 +34,16 @@ class LayoutTemplate extends StatelessWidget {
       ),
       body: Row(
         children: [
-          SideNavBar1(),
+          const SideNavBar1(),
           Expanded(
             child: Column(
               children: [
-                CollectionInfo(),
+                const CollectionInfo(),
                 Expanded(
                   child: Navigator(
                     key: getIt<NavigationService>().navigatorKey,
                     onGenerateRoute: generateRoute,
-                    initialRoute: ProductsRoute,
+                    initialRoute: productsRoute,
                   ),
                 )
               ],

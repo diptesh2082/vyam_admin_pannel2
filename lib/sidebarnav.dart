@@ -3,13 +3,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class SideNavBar1 extends StatefulWidget {
+  const SideNavBar1({Key? key}) : super(key: key);
+
   @override
   _SideNavBar1State createState() => _SideNavBar1State();
 }
 
 class _SideNavBar1State extends State<SideNavBar1> {
-  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  //List<Widget> _widgets = [CollectionInfo(scaffoldState: _scaffoldKey,)];
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +22,7 @@ class _SideNavBar1State extends State<SideNavBar1> {
             color: Colors.white,
           ),
           Container(
-            margin: EdgeInsets.all(8.0),
+            margin: const EdgeInsets.all(8.0),
             height: MediaQuery.of(context).size.height,
             width: 201.0,
             decoration: BoxDecoration(
@@ -30,23 +31,26 @@ class _SideNavBar1State extends State<SideNavBar1> {
             ),
           ),
           Positioned(
-              top: 50,
-              left: 50,
-              child: InkWell(
-                child: const Text(
-                  'Product Details',
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.w900,
-                      fontFamily: "Poppins"),
+            top: 50,
+            left: 50,
+            child: InkWell(
+              child: const Text(
+                'Product Details',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.w900,
                 ),
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: ((context) => CollectionInfo())));
-                },
-              )),
+              ),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: ((context) => const CollectionInfo()),
+                  ),
+                );
+              },
+            ),
+          ),
           Positioned(
               top: 100,
               left: 50,
@@ -54,15 +58,15 @@ class _SideNavBar1State extends State<SideNavBar1> {
                 child: const Text(
                   'User Details',
                   style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.w900,
-                      fontFamily: "Poppins"),
+                    color: Colors.black,
+                    fontWeight: FontWeight.w900,
+                  ),
                 ),
                 onTap: () {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: ((context) => CollectionInfo())));
+                          builder: ((context) => const CollectionInfo())));
                 },
               )),
           Positioned(
@@ -72,15 +76,15 @@ class _SideNavBar1State extends State<SideNavBar1> {
                 child: const Text(
                   'Booking Details',
                   style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.w900,
-                      fontFamily: "Poppins"),
+                    color: Colors.black,
+                    fontWeight: FontWeight.w900,
+                  ),
                 ),
                 onTap: () {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: ((context) => CollectionInfo())));
+                          builder: ((context) => const CollectionInfo())));
                 },
               )),
           Positioned(
@@ -90,9 +94,9 @@ class _SideNavBar1State extends State<SideNavBar1> {
               child: const Text(
                 'Logout',
                 style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.w900,
-                    fontFamily: "Poppins"),
+                  color: Colors.black,
+                  fontWeight: FontWeight.w900,
+                ),
               ),
               onTap: () {
                 FirebaseAuth.instance.signOut();

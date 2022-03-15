@@ -3,9 +3,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class CollectionInfo extends StatefulWidget {
-  //const CollectionInfo({Key? key}) : super(key: key);
-  //final GlobalKey<ScaffoldState> scaffoldState;
-
   const CollectionInfo({
     Key? key,
   }) : super(key: key);
@@ -15,17 +12,32 @@ class CollectionInfo extends StatefulWidget {
 }
 
 class _CollectionInfoState extends State<CollectionInfo> {
-  TextEditingController address = TextEditingController();
-  TextEditingController gender = TextEditingController();
-  TextEditingController gymid = TextEditingController();
-  TextEditingController add_address = TextEditingController();
-  TextEditingController add_gender = TextEditingController();
-  TextEditingController gymowner = TextEditingController();
-  TextEditingController landmark = TextEditingController();
-  TextEditingController location = TextEditingController();
-  TextEditingController gymname = TextEditingController();
-  TextEditingController pincode = TextEditingController();
-  //GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  TextEditingController? _address;
+  TextEditingController? _gender;
+  TextEditingController? _gymid;
+  TextEditingController? _addaddress;
+  TextEditingController? _addgender;
+  TextEditingController? _gymowner;
+  TextEditingController? _landmark;
+  TextEditingController? _location;
+  TextEditingController? _gymname;
+  TextEditingController? _pincode;
+
+  @override
+  void initState() {
+    super.initState();
+    _address = TextEditingController();
+    _landmark = TextEditingController();
+    _location = TextEditingController();
+    _gymname = TextEditingController();
+    _pincode = TextEditingController();
+    _gender = TextEditingController();
+    _gymid = TextEditingController();
+    _addaddress = TextEditingController();
+    _addgender = TextEditingController();
+    _gymowner = TextEditingController();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -135,7 +147,18 @@ class _CollectionInfoState extends State<CollectionInfo> {
       DataCell(Text(data['location'].toString())),
       DataCell(Text(data['name'])),
       DataCell(Text(data['pincode'].toString())),
-      DataCell(const Text(""), showEditIcon: true, onTap: showEditbox),
+      DataCell(const Text(""), showEditIcon: true, onTap: () {
+        showEditbox(
+          address: data['address']!,
+          gender: data['gender'],
+          gymID: data['gym_id'],
+          gymOwner: data['gym_owner'],
+          landmark: data['landmark'],
+          location: data['location'].toString(),
+          name: data['name'],
+          pincode: data['pincode'],
+        );
+      }),
     ]);
   }
 
@@ -144,7 +167,7 @@ class _CollectionInfoState extends State<CollectionInfo> {
       builder: (context) => AlertDialog(
             shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(30))),
-            content: Container(
+            content: SizedBox(
               height: 200,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -166,7 +189,7 @@ class _CollectionInfoState extends State<CollectionInfo> {
                         fontFamily: 'poppins',
                         fontWeight: FontWeight.w400,
                       ),
-                      controller: add_address,
+                      controller: _addaddress,
                       maxLines: 3,
                       decoration: const InputDecoration(
                           border: InputBorder.none,
@@ -189,7 +212,7 @@ class _CollectionInfoState extends State<CollectionInfo> {
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.w400,
                       ),
-                      controller: add_gender,
+                      controller: _addgender,
                       maxLines: 3,
                       decoration: const InputDecoration(
                           border: InputBorder.none,
@@ -203,9 +226,9 @@ class _CollectionInfoState extends State<CollectionInfo> {
                     )),
                   ),
                   const Center(
-                      child: ElevatedButton(
-                          onPressed: null,
-                          /*() async {
+                    child: ElevatedButton(
+                      onPressed: null,
+                      /*() async {
                            
                             Map<String, dynamic> data1 = <String, dynamic>{
                               'address': add_address.text,
@@ -224,29 +247,51 @@ class _CollectionInfoState extends State<CollectionInfo> {
                             /*FirebaseFirestore.instance
                                 .collection('product_details')
                                 .doc('RBRQKBuboUVvDAriCCVe')
-                                .set(
+                                .update(
                               {'address': address},
                             );*/
                           },*/
-                          child: Text('Done')))
+                      child: Text('Done'),
+                    ),
+                  )
                 ],
               ),
             ),
           ));
 
-  Future showEditbox() => showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
+  Future showEditbox({
+    required String? address,
+    required String? gender,
+    required String? gymID,
+    required String? gymOwner,
+    required String? landmark,
+    required String? location,
+    required String? name,
+    required String? pincode,
+  }) =>
+      showDialog(
+        context: context,
+        builder: (context) {
+          print("Address of this user is : $address");
+          _address!.text = address!;
+          _gender!.text = gender!;
+          _gymid!.text = gymID!;
+          _gymowner!.text = gymOwner!;
+          _landmark!.text = landmark!;
+          _location!.text = location!;
+          _pincode!.text = pincode!;
+          _gymname!.text = name!;
+          return AlertDialog(
             shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(30))),
-            content: Container(
+            content: SizedBox(
               height: 480,
               width: 800,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Text(
-                    'Update Records',
+                    'Update Records for this doc',
                     style: TextStyle(
                         fontFamily: 'poppins',
                         fontWeight: FontWeight.w600,
@@ -262,7 +307,7 @@ class _CollectionInfoState extends State<CollectionInfo> {
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.w400,
                       ),
-                      controller: address,
+                      controller: _address,
                       maxLines: 3,
                       decoration: const InputDecoration(
                           border: InputBorder.none,
@@ -285,7 +330,7 @@ class _CollectionInfoState extends State<CollectionInfo> {
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.w400,
                       ),
-                      controller: gender,
+                      controller: _gender,
                       maxLines: 3,
                       decoration: const InputDecoration(
                           border: InputBorder.none,
@@ -308,7 +353,7 @@ class _CollectionInfoState extends State<CollectionInfo> {
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.w400,
                       ),
-                      controller: gymid,
+                      controller: _gymid,
                       maxLines: 3,
                       decoration: const InputDecoration(
                           border: InputBorder.none,
@@ -331,7 +376,7 @@ class _CollectionInfoState extends State<CollectionInfo> {
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.w400,
                       ),
-                      controller: gymowner,
+                      controller: _gymowner,
                       maxLines: 3,
                       decoration: const InputDecoration(
                           border: InputBorder.none,
@@ -354,7 +399,7 @@ class _CollectionInfoState extends State<CollectionInfo> {
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.w400,
                       ),
-                      controller: landmark,
+                      controller: _landmark,
                       maxLines: 3,
                       decoration: const InputDecoration(
                           border: InputBorder.none,
@@ -377,7 +422,7 @@ class _CollectionInfoState extends State<CollectionInfo> {
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.w400,
                       ),
-                      controller: location,
+                      controller: _location,
                       maxLines: 3,
                       decoration: const InputDecoration(
                           border: InputBorder.none,
@@ -400,7 +445,7 @@ class _CollectionInfoState extends State<CollectionInfo> {
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.w400,
                       ),
-                      controller: gymname,
+                      controller: _gymname,
                       maxLines: 3,
                       decoration: const InputDecoration(
                           border: InputBorder.none,
@@ -423,7 +468,7 @@ class _CollectionInfoState extends State<CollectionInfo> {
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.w400,
                       ),
-                      controller: pincode,
+                      controller: _pincode,
                       maxLines: 3,
                       decoration: const InputDecoration(
                           border: InputBorder.none,
@@ -439,62 +484,40 @@ class _CollectionInfoState extends State<CollectionInfo> {
                   Padding(
                     padding: const EdgeInsets.all(12.0),
                     child: Center(
-                        child: ElevatedButton(
-                            onPressed: () async {
-                              DocumentReference documentReference =
-                                  FirebaseFirestore.instance
-                                      .collection('product_details')
-                                      .doc('RBRQKBuboUVvDAriCCVe');
+                      child: ElevatedButton(
+                        onPressed: () async {
+                          print("/////");
+                          print(_gymname!.text);
+                          print(_gymid!.text);
+                          // DocumentReference documentReference =
+                          //     FirebaseFirestore.instance
+                          //         .collection('product_details')
+                          //         .doc('RBRQKBuboUVvDAriCCVe');
 
-                              Map<String, dynamic> data = <String, dynamic>{
-                                'address': address.text,
-                                'gender': gender.text,
-                                'gym_id': gymid.text,
-                                'gym_owner': gymowner.text,
-                                'landmark': landmark.text,
-                                'location': location.text,
-                                'name': gymname.text,
-                                'pincode': pincode.text,
-                              };
-                              await documentReference
-                                  .set(data)
-                                  .whenComplete(() => print("Item Updated"))
-                                  .catchError((e) => print(e));
-                              Navigator.pop(context);
-                              /* StreamBuilder(
-                                  stream: FirebaseFirestore.instance
-                                      .collection("product_details")
-                                      .snapshots(),
-                                  builder: (context, snapshot) {
-                                                                    });*/
-
-                              /*FirebaseFirestore.instance
-                                  .collection('product_details')
-                                  .doc('RBRQKBuboUVvDAriCCVe')
-                                  .set(
-                                {'address': address},
-                              );*/
-                            },
-                            child: Text('Done'))),
+                          // Map<String, dynamic> data = <String, dynamic>{
+                          //   'address': _address!.text,
+                          //   'gender': _gender!.text,
+                          //   'gym_id': _gymid!.text,
+                          //   'gym_owner': _gymowner!.text,
+                          //   'landmark': _landmark!.text,
+                          //   'location': _location!.text,
+                          //   'name': _gymname!.text,
+                          //   'pincode': _pincode!.text,
+                          // };
+                          // await documentReference
+                          //     .set(data)
+                          //     .whenComplete(() => print("Item Updated"))
+                          //     .catchError((e) => print(e));
+                          // Navigator.pop(context);
+                        },
+                        child: const Text('Done'),
+                      ),
+                    ),
                   )
                 ],
               ),
             ),
-          ));
+          );
+        },
+      );
 }
-
-   /* InkWell(
-            child: Text('Add User'),
-            onTap: () {
-              showaddbox();
-              Map<String, dynamic> data = <String, dynamic>{
-                'address': address1.text,
-                'gender': gender1.text,
-                // 'gym_id': gymid
-              };
-              FirebaseFirestore.instance
-                  .collection('product_details')
-                  .add(data);
-            },
-          ),
-      */

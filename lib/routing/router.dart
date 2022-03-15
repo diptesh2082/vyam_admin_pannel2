@@ -1,10 +1,6 @@
-
 import 'package:admin_panel_vyam/database_info.dart';
-import 'package:admin_panel_vyam/main.dart';
 
 import 'package:admin_panel_vyam/login_page.dart';
-
-
 
 import 'package:admin_panel_vyam/routing/route_names.dart';
 import 'package:flutter/material.dart';
@@ -12,16 +8,14 @@ import 'package:flutter/material.dart';
 Route<dynamic> generateRoute(RouteSettings settings) {
   print('generateRoute: ${settings.name}');
   switch (settings.name) {
-    
-    
-    case ProductsRoute:
-      return _getPageRoute(CollectionInfo());
-    
-    case LoginRoute:
-      return _getPageRoute(LoginPage());
-    
+    case productsRoute:
+      return _getPageRoute(const CollectionInfo());
+
+    case loginRoute:
+      return _getPageRoute(const LoginPage());
+
     default:
-      return _getPageRoute(LoginPage());
+      return _getPageRoute(const LoginPage());
   }
 }
 
