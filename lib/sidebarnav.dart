@@ -1,3 +1,4 @@
+import 'package:admin_panel_vyam/booking_details.dart';
 import 'package:admin_panel_vyam/database_info.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -15,15 +16,7 @@ class _SideNavBar1State extends State<SideNavBar1> {
   @override
   Widget build(BuildContext context) {
     PageController _controller = PageController();
-    List<Widget> _list = [
-      CollectionInfo(),
-      Container(
-        color: Colors.blueGrey,
-      ),
-      Container(
-        color: Colors.green,
-      ),
-    ];
+    List<Widget> _list = [CollectionInfo(), CollectionInfo(), BookingDetails()];
     return Scaffold(
       key: _scaffoldKey,
       body: Stack(
@@ -52,12 +45,6 @@ class _SideNavBar1State extends State<SideNavBar1> {
                 ),
               ),
               onTap: () {
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(
-                //     builder: ((context) => const CollectionInfo()),
-                //   ),
-                // );
                 _controller.jumpToPage(0);
               },
             ),
