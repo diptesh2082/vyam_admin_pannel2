@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
 
@@ -40,7 +41,7 @@ class _CollectionInfoState extends State<CollectionInfo> {
                 Padding(
                   padding: const EdgeInsets.only(top: 8.0, left: 8.0),
                   child: GestureDetector(
-                    // onTap: showAddbox,
+                    onTap: showAddbox,
                     child: Container(
                       width: 90,
                       decoration: BoxDecoration(
@@ -194,12 +195,12 @@ class _CollectionInfoState extends State<CollectionInfo> {
             builder: (context) {
               return SingleChildScrollView(
                 child: EditBox(
-                  // imageurl: 'url',
+                  imageurl: 'url',
                   address: data['address'],
                   gender: data['gender'],
                   email: data['email'],
-                  // latitude: data['lat'].toString(),
-                  // longitude: data['long'].toString(),
+                  latitude: data['lat'].toString(),
+                  longitude: data['long'].toString(),
                   locality: data['locality'],
                   number: data['number'],
                   subLocality: data['subLocality'],
@@ -213,487 +214,189 @@ class _CollectionInfoState extends State<CollectionInfo> {
     ]);
   }
 
-  // showAddbox() => showDialog(
-  //     context: context,
-  //     builder: (context) => AlertDialog(
-  //           shape: const RoundedRectangleBorder(
-  //               borderRadius: BorderRadius.all(Radius.circular(30))),
-  //           content: SizedBox(
-  //             height: 200,
-  //             child: Column(
-  //               crossAxisAlignment: CrossAxisAlignment.start,
-  //               children: [
-  //                 const Text(
-  //                   'Add Records',
-  //                   style: TextStyle(
-  //                       fontFamily: 'poppins',
-  //                       fontWeight: FontWeight.w600,
-  //                       fontSize: 14),
-  //                 ),
-  //                 SizedBox(
-  //                   height: 50,
-  //                   child: Card(
-  //                       child: TextField(
-  //                     autofocus: true,
-  //                     style: const TextStyle(
-  //                       fontSize: 14,
-  //                       fontFamily: 'poppins',
-  //                       fontWeight: FontWeight.w400,
-  //                     ),
-  //                     controller: _addaddress,
-  //                     maxLines: 3,
-  //                     decoration: const InputDecoration(
-  //                         border: InputBorder.none,
-  //                         hintStyle: TextStyle(
-  //                           fontSize: 14,
-  //                           fontFamily: 'poppins',
-  //                           fontWeight: FontWeight.w400,
-  //                         ),
-  //                         hintMaxLines: 2,
-  //                         hintText: 'Address'),
-  //                   )),
-  //                 ),
-  //                 SizedBox(
-  //                   height: 50,
-  //                   child: Card(
-  //                       child: TextField(
-  //                     autofocus: true,
-  //                     style: const TextStyle(
-  //                       fontSize: 14,
-  //                       fontFamily: 'Poppins',
-  //                       fontWeight: FontWeight.w400,
-  //                     ),
-  //                     controller: _addgender,
-  //                     maxLines: 3,
-  //                     decoration: const InputDecoration(
-  //                         border: InputBorder.none,
-  //                         hintStyle: TextStyle(
-  //                           fontSize: 14,
-  //                           fontFamily: 'Poppins',
-  //                           fontWeight: FontWeight.w400,
-  //                         ),
-  //                         hintMaxLines: 2,
-  //                         hintText: 'Gender'),
-  //                   )),
-  //                 ),
-  //                 const Center(
-  //                   child: ElevatedButton(
-  //                     onPressed: null,
-  //                     /*() async {
-  //
-  //                           Map<String, dynamic> data1 = <String, dynamic>{
-  //                             'address': add_address.text,
-  //                             'gender': add_gender.text,
-  //                             // 'gym_id': gymid
-  //                           };
-  //                           await FirebaseFirestore.instance
-  //                               .collection('product_details')
-  //                               .add(data1).whenComplete(() => print("Item Updated"))
-  //                               .catchError((e) => print(e));
-  //
-  //
-  //
-  //                           Navigator.pop(context);
-  //
-  //                           /*FirebaseFirestore.instance
-  //                               .collection('product_details')
-  //                               .doc('RBRQKBuboUVvDAriCCVe')
-  //                               .update(
-  //                             {'address': address},
-  //                           );*/
-  //                         },*/
-  //                     child: Text('Done'),
-  //                   ),
-  //                 )
-  //               ],
-  //             ),
-  //           ),
-  //         ));
+  TextEditingController _addaddress = TextEditingController();
+  TextEditingController _addgender = TextEditingController();
+  TextEditingController _addemail = TextEditingController();
+  TextEditingController _addlatitude = TextEditingController();
+  TextEditingController _addlongitude = TextEditingController();
+  TextEditingController _addlocality = TextEditingController();
+  TextEditingController _addname = TextEditingController();
+  TextEditingController _addnumber = TextEditingController();
+  TextEditingController _addpincode = TextEditingController();
+  TextEditingController _addsublocality = TextEditingController();
+  TextEditingController _adduserid = TextEditingController();
+  showAddbox() => showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+            shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(30))),
+            content: SizedBox(
+              height: 480,
+              width: 800,
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Add Records',
+                      style: TextStyle(
+                          fontFamily: 'poppins',
+                          fontWeight: FontWeight.w600,
+                          fontSize: 14),
+                    ),
+                    CustomTextField(
+                        hinttext: "UserID", addcontroller: _adduserid),
+                    CustomTextField(hinttext: "Name", addcontroller: _addname),
+                    CustomTextField(
+                        hinttext: "Email", addcontroller: _addemail),
+                    CustomTextField(
+                        hinttext: "Gender", addcontroller: _addgender),
+                    CustomTextField(
+                        hinttext: "phone number", addcontroller: _addnumber),
+                    CustomTextField(
+                        hinttext: "Address", addcontroller: _addaddress),
+                    CustomTextField(
+                        hinttext: "Locality", addcontroller: _addlocality),
+                    CustomTextField(
+                        hinttext: "Sub Locality",
+                        addcontroller: _addsublocality),
+                    CustomTextField(
+                      addcontroller: _addpincode,
+                      hinttext: "Pincode",
+                    ),
+                    Center(
+                      child: ElevatedButton(
+                        onPressed: () async {
+                          FirebaseFirestore.instance
+                              .collection('user_details')
+                              .doc(_adduserid.text)
+                              .set(
+                            {
+                              'address': _addaddress.text,
+                              'userId': _adduserid.text,
+                              'name': _addname.text,
+                              'email': _addemail.text,
+                              'gender': _addgender.text,
+                              'number': _addnumber.text,
+                              'locality': _addlocality.text,
+                              'subLocality': _addsublocality.text,
+                              'pincode': _addpincode.text,
+                              'long': " ",
+                              'lat': " ",
+                              'image': "image"
+                            },
+                          );
+                          Navigator.pop(context);
+                        },
+                        child: Text('Done'),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ));
+}
 
-  // showEditbox({
-  //   required String? address,
-  //   required String? gender,
-  //   required String? email,
-  //   required String? imageurl,
-  //   required String? latitude,
-  //   required String? longitude,
-  //   required String? locality,
-  //   required String? name,
-  //   required String? number,
-  //   required String? pincode,
-  //   required String? subLocality,
-  //   required String? userid,
-  // }) {
-  //   showDialog(
-  //     context: context,
-  //     builder: (context) {
-  //       print("Address of this user is : $address");
-  //       // _address!.text = address!;
-  //       // _gender!.text = gender!;
-  //       // _email!.text = email!;
-  //       // _latitude!.text = latitude.toString();
-  //       // _longitude!.text = longitude.toString();
-  //       // _locality!.text = locality!;
-  //       // _number!.text = number!;
-  //       // _name!.text = name!;
-  //       // _pincode!.text = pincode!;
-  //       // _sublocality!.text = subLocality!;
-  //       // _userid!.text = userid!;
-  //       //12
-  //
-  //       return AlertDialog(
-  //         shape: const RoundedRectangleBorder(
-  //             borderRadius: BorderRadius.all(Radius.circular(30))),
-  //         content: SizedBox(
-  //           height: 480,
-  //           width: 800,
-  //           child: Column(
-  //             crossAxisAlignment: CrossAxisAlignment.start,
-  //             children: [
-  //               const Text(
-  //                 'Update Records for this doc',
-  //                 style: TextStyle(
-  //                     fontFamily: 'poppins',
-  //                     fontWeight: FontWeight.w600,
-  //                     fontSize: 14),
-  //               ),
-  //               SizedBox(
-  //                 height: 50,
-  //                 child: Card(
-  //                     child: TextField(
-  //                   autofocus: true,
-  //                   style: const TextStyle(
-  //                     fontSize: 14,
-  //                     fontFamily: 'Poppins',
-  //                     fontWeight: FontWeight.w400,
-  //                   ),
-  //                   controller: _userid,
-  //                   maxLines: 3,
-  //                   decoration: const InputDecoration(
-  //                       border: InputBorder.none,
-  //                       hintStyle: TextStyle(
-  //                         fontSize: 14,
-  //                         fontFamily: 'Poppins',
-  //                         fontWeight: FontWeight.w400,
-  //                       ),
-  //                       hintMaxLines: 2,
-  //                       hintText: 'Address'),
-  //                 )),
-  //               ),
-  //               SizedBox(
-  //                 height: 50,
-  //                 child: Card(
-  //                     child: TextField(
-  //                   autofocus: true,
-  //                   style: const TextStyle(
-  //                     fontSize: 14,
-  //                     fontFamily: 'Poppins',
-  //                     fontWeight: FontWeight.w400,
-  //                   ),
-  //                   controller: _name,
-  //                   maxLines: 3,
-  //                   decoration: const InputDecoration(
-  //                       border: InputBorder.none,
-  //                       hintStyle: TextStyle(
-  //                         fontSize: 14,
-  //                         fontFamily: 'Poppins',
-  //                         fontWeight: FontWeight.w400,
-  //                       ),
-  //                       hintMaxLines: 2,
-  //                       hintText: 'Gender'),
-  //                 )),
-  //               ),
-  //               SizedBox(
-  //                 height: 50,
-  //                 child: Card(
-  //                     child: TextField(
-  //                   autofocus: true,
-  //                   style: const TextStyle(
-  //                     fontSize: 14,
-  //                     fontFamily: 'Poppins',
-  //                     fontWeight: FontWeight.w400,
-  //                   ),
-  //                   controller: _email,
-  //                   maxLines: 3,
-  //                   decoration: const InputDecoration(
-  //                       border: InputBorder.none,
-  //                       hintStyle: TextStyle(
-  //                         fontSize: 14,
-  //                         fontFamily: 'Poppins',
-  //                         fontWeight: FontWeight.w400,
-  //                       ),
-  //                       hintMaxLines: 2,
-  //                       hintText: 'Gym ID'),
-  //                 )),
-  //               ),
-  //               SizedBox(
-  //                 height: 50,
-  //                 child: Card(
-  //                     child: TextField(
-  //                   autofocus: true,
-  //                   style: const TextStyle(
-  //                     fontSize: 14,
-  //                     fontFamily: 'Poppins',
-  //                     fontWeight: FontWeight.w400,
-  //                   ),
-  //                   controller: _gender,
-  //                   maxLines: 3,
-  //                   decoration: const InputDecoration(
-  //                       border: InputBorder.none,
-  //                       hintStyle: TextStyle(
-  //                         fontSize: 14,
-  //                         fontFamily: 'Poppins',
-  //                         fontWeight: FontWeight.w400,
-  //                       ),
-  //                       hintMaxLines: 2,
-  //                       hintText: 'Gym Owner'),
-  //                 )),
-  //               ),
-  //               SizedBox(
-  //                 height: 50,
-  //                 child: Card(
-  //                     child: TextField(
-  //                   autofocus: true,
-  //                   style: const TextStyle(
-  //                     fontSize: 14,
-  //                     fontFamily: 'Poppins',
-  //                     fontWeight: FontWeight.w400,
-  //                   ),
-  //                   controller: _number,
-  //                   maxLines: 3,
-  //                   decoration: const InputDecoration(
-  //                       border: InputBorder.none,
-  //                       hintStyle: TextStyle(
-  //                         fontSize: 14,
-  //                         fontFamily: 'Poppins',
-  //                         fontWeight: FontWeight.w400,
-  //                       ),
-  //                       hintMaxLines: 2,
-  //                       hintText: 'Landmark'),
-  //                 )),
-  //               ),
-  //               SizedBox(
-  //                 height: 50,
-  //                 child: Card(
-  //                     child: TextField(
-  //                   autofocus: true,
-  //                   style: const TextStyle(
-  //                     fontSize: 14,
-  //                     fontFamily: 'Poppins',
-  //                     fontWeight: FontWeight.w400,
-  //                   ),
-  //                   controller: _locality,
-  //                   maxLines: 3,
-  //                   decoration: const InputDecoration(
-  //                       border: InputBorder.none,
-  //                       hintStyle: TextStyle(
-  //                         fontSize: 14,
-  //                         fontFamily: 'Poppins',
-  //                         fontWeight: FontWeight.w400,
-  //                       ),
-  //                       hintMaxLines: 2,
-  //                       hintText: 'Location'),
-  //                 )),
-  //               ),
-  //               SizedBox(
-  //                 height: 50,
-  //                 child: Card(
-  //                     child: TextField(
-  //                   autofocus: true,
-  //                   style: const TextStyle(
-  //                     fontSize: 14,
-  //                     fontFamily: 'Poppins',
-  //                     fontWeight: FontWeight.w400,
-  //                   ),
-  //                   controller: _sublocality,
-  //                   maxLines: 3,
-  //                   decoration: const InputDecoration(
-  //                       border: InputBorder.none,
-  //                       hintStyle: TextStyle(
-  //                         fontSize: 14,
-  //                         fontFamily: 'Poppins',
-  //                         fontWeight: FontWeight.w400,
-  //                       ),
-  //                       hintMaxLines: 2,
-  //                       hintText: 'Gym Name'),
-  //                 )),
-  //               ),
-  //               SizedBox(
-  //                 height: 50,
-  //                 child: Card(
-  //                     child: TextField(
-  //                   autofocus: true,
-  //                   style: const TextStyle(
-  //                     fontSize: 14,
-  //                     fontFamily: 'Poppins',
-  //                     fontWeight: FontWeight.w400,
-  //                   ),
-  //                   controller: _pincode,
-  //                   maxLines: 3,
-  //                   decoration: const InputDecoration(
-  //                       border: InputBorder.none,
-  //                       hintStyle: TextStyle(
-  //                         fontSize: 14,
-  //                         fontFamily: 'Poppins',
-  //                         fontWeight: FontWeight.w400,
-  //                       ),
-  //                       hintMaxLines: 2,
-  //                       hintText: 'Pincode'),
-  //                 )),
-  //               ),
-  //               SizedBox(
-  //                 height: 50,
-  //                 child: Card(
-  //                     child: TextField(
-  //                   autofocus: true,
-  //                   style: const TextStyle(
-  //                     fontSize: 14,
-  //                     fontFamily: 'Poppins',
-  //                     fontWeight: FontWeight.w400,
-  //                   ),
-  //                   controller: _latitude,
-  //                   maxLines: 3,
-  //                   decoration: const InputDecoration(
-  //                       border: InputBorder.none,
-  //                       hintStyle: TextStyle(
-  //                         fontSize: 14,
-  //                         fontFamily: 'Poppins',
-  //                         fontWeight: FontWeight.w400,
-  //                       ),
-  //                       hintMaxLines: 2,
-  //                       hintText: 'Pincode'),
-  //                 )),
-  //               ),
-  //               SizedBox(
-  //                 height: 50,
-  //                 child: Card(
-  //                     child: TextField(
-  //                   autofocus: true,
-  //                   style: const TextStyle(
-  //                     fontSize: 14,
-  //                     fontFamily: 'Poppins',
-  //                     fontWeight: FontWeight.w400,
-  //                   ),
-  //                   controller: _longitude,
-  //                   maxLines: 3,
-  //                   decoration: const InputDecoration(
-  //                       border: InputBorder.none,
-  //                       hintStyle: TextStyle(
-  //                         fontSize: 14,
-  //                         fontFamily: 'Poppins',
-  //                         fontWeight: FontWeight.w400,
-  //                       ),
-  //                       hintMaxLines: 2,
-  //                       hintText: 'Pincode'),
-  //                 )),
-  //               ),
-  //               Padding(
-  //                 padding: const EdgeInsets.all(12.0),
-  //                 child: Center(
-  //                   child: ElevatedButton(
-  //                     onPressed: () async {
-  //                       print("/////");
-  //
-  //                       DocumentReference documentReference = FirebaseFirestore
-  //                           .instance
-  //                           .collection('user_details')
-  //                           .doc('');
-  //
-  //                       Map<String, dynamic> data = <String, dynamic>{
-  //                         'address': _address!.text,
-  //                         'gender': _gender!.text,
-  //                         'image': 'imageurl',
-  //                         'lat': _latitude!.text,
-  //                         'long': _longitude!.text,
-  //                         'name': _name!.text,
-  //                         'pincode': _pincode!.text,
-  //                         'userId': _userid!.text,
-  //                         'locality': _locality!.text,
-  //                         'subLocality': _sublocality!.text,
-  //                         'email': _email!.text,
-  //                         'number': _number!.text,
-  //                       };
-  //                       await documentReference
-  //                           .set(data)
-  //                           .whenComplete(() => print("Item Updated"))
-  //                           .catchError((e) => print(e));
-  //                       Navigator.pop(context);
-  //                     },
-  //                     child: const Text('Done'),
-  //                   ),
-  //                 ),
-  //               )
-  //             ],
-  //           ),
-  //         ),
-  //       );
-  //     },
-  //   );
-  // }
+class CustomTextField extends StatelessWidget {
+  const CustomTextField({
+    Key? key,
+    required this.hinttext,
+    required this.addcontroller,
+  }) : super(key: key);
+
+  final TextEditingController addcontroller;
+  final String hinttext;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 50,
+      child: Card(
+          child: TextField(
+        autofocus: true,
+        style: const TextStyle(
+          fontSize: 14,
+          fontFamily: 'poppins',
+          fontWeight: FontWeight.w400,
+        ),
+        controller: addcontroller,
+        maxLines: 3,
+        decoration: InputDecoration(
+            border: InputBorder.none,
+            hintStyle: const TextStyle(
+              fontSize: 14,
+              fontFamily: 'poppins',
+              fontWeight: FontWeight.w400,
+            ),
+            hintMaxLines: 2,
+            hintText: hinttext),
+      )),
+    );
+  }
 }
 
 class EditBox extends StatefulWidget {
   const EditBox({
     Key? key,
-    this.address,
-    this.gender,
-    this.email,
-    // this.imageurl,
-    // this.latitude,
-    // this.longitude,
-    this.locality,
-    this.name,
-    this.number,
-    this.pincode,
-    this.subLocality,
-    this.userid,
+    required this.address,
+    required this.gender,
+    required this.email,
+    required this.imageurl,
+    required this.latitude,
+    required this.longitude,
+    required this.locality,
+    required this.name,
+    required this.number,
+    required this.pincode,
+    required this.subLocality,
+    required this.userid,
   }) : super(key: key);
 
-  final String? address;
-  final String? gender;
-  final String? email;
-  // final String? imageurl;
-  // final String? latitude;
-  // final String? longitude;
-  final String? locality;
-  final String? name;
-  final String? number;
-  final String? pincode;
-  final String? subLocality;
-  final String? userid;
+  final String address;
+  final String gender;
+  final String email;
+  final String imageurl;
+  final String latitude;
+  final String longitude;
+  final String locality;
+  final String name;
+  final String number;
+  final String pincode;
+  final String subLocality;
+  final String userid;
 
   @override
   _EditBoxState createState() => _EditBoxState();
 }
 
 class _EditBoxState extends State<EditBox> {
-  TextEditingController? _address;
-  TextEditingController? _gender;
-  TextEditingController? _email;
-  TextEditingController? _latitude;
-  TextEditingController? _longitude;
-  TextEditingController? _locality;
-  TextEditingController? _name;
-  TextEditingController? _number;
-  TextEditingController? _pincode;
-  TextEditingController? _sublocality;
-  TextEditingController? _userid;
+  TextEditingController _address = TextEditingController();
+  TextEditingController _gender = TextEditingController();
+  TextEditingController _email = TextEditingController();
+  TextEditingController _latitude = TextEditingController();
+  TextEditingController _longitude = TextEditingController();
+  TextEditingController _locality = TextEditingController();
+  TextEditingController _name = TextEditingController();
+  TextEditingController _number = TextEditingController();
+  TextEditingController _pincode = TextEditingController();
+  TextEditingController _sublocality = TextEditingController();
+  TextEditingController _userid = TextEditingController();
   @override
   void initState() {
     super.initState();
     print(widget.address);
-    _address!.text = widget.address!;
-
-    // _gender!.text = widget.gender!;
-    // _email!.text = widget.email!;
-    // // _latitude!.text = widget.latitude.toString();
-    // // _longitude!.text = widget.longitude.toString();
-    // _locality!.text = widget.locality!;
-    // _number!.text = widget.number!;
-    // _name!.text = widget.name!;
-    // _pincode!.text = widget.pincode!;
-    // _sublocality!.text = widget.subLocality!;
-    // _userid!.text = widget.userid!;
+    _address.text = widget.address;
+    _gender.text = widget.gender;
+    _email.text = widget.email;
+    _latitude.text = widget.latitude.toString();
+    _longitude.text = widget.longitude.toString();
+    _locality.text = widget.locality;
+    _number.text = widget.number;
+    _name.text = widget.name;
+    _pincode.text = widget.pincode;
+    _sublocality.text = widget.subLocality;
+    _userid.text = widget.userid;
   }
 
   @override
@@ -735,7 +438,7 @@ class _EditBoxState extends State<EditBox> {
                         fontWeight: FontWeight.w400,
                       ),
                       hintMaxLines: 2,
-                      hintText: 'Address'),
+                      hintText: 'UserID'),
                 )),
               ),
               SizedBox(
@@ -758,7 +461,7 @@ class _EditBoxState extends State<EditBox> {
                         fontWeight: FontWeight.w400,
                       ),
                       hintMaxLines: 2,
-                      hintText: 'Gender'),
+                      hintText: 'Name'),
                 )),
               ),
               SizedBox(
@@ -781,7 +484,7 @@ class _EditBoxState extends State<EditBox> {
                         fontWeight: FontWeight.w400,
                       ),
                       hintMaxLines: 2,
-                      hintText: 'Gym ID'),
+                      hintText: 'email'),
                 )),
               ),
               SizedBox(
@@ -804,7 +507,7 @@ class _EditBoxState extends State<EditBox> {
                         fontWeight: FontWeight.w400,
                       ),
                       hintMaxLines: 2,
-                      hintText: 'Gym Owner'),
+                      hintText: 'Gender'),
                 )),
               ),
               SizedBox(
@@ -827,7 +530,7 @@ class _EditBoxState extends State<EditBox> {
                         fontWeight: FontWeight.w400,
                       ),
                       hintMaxLines: 2,
-                      hintText: 'Landmark'),
+                      hintText: 'Phone Number'),
                 )),
               ),
               SizedBox(
@@ -850,7 +553,7 @@ class _EditBoxState extends State<EditBox> {
                         fontWeight: FontWeight.w400,
                       ),
                       hintMaxLines: 2,
-                      hintText: 'Location'),
+                      hintText: 'Locality'),
                 )),
               ),
               SizedBox(
@@ -873,7 +576,7 @@ class _EditBoxState extends State<EditBox> {
                         fontWeight: FontWeight.w400,
                       ),
                       hintMaxLines: 2,
-                      hintText: 'Gym Name'),
+                      hintText: 'Sub Locality'),
                 )),
               ),
               SizedBox(
@@ -919,7 +622,7 @@ class _EditBoxState extends State<EditBox> {
                         fontWeight: FontWeight.w400,
                       ),
                       hintMaxLines: 2,
-                      hintText: 'Pincode'),
+                      hintText: 'Latitude'),
                 )),
               ),
               SizedBox(
@@ -942,7 +645,7 @@ class _EditBoxState extends State<EditBox> {
                         fontWeight: FontWeight.w400,
                       ),
                       hintMaxLines: 2,
-                      hintText: 'Pincode'),
+                      hintText: 'Longitude'),
                 )),
               ),
               Padding(
@@ -955,21 +658,21 @@ class _EditBoxState extends State<EditBox> {
                       DocumentReference documentReference = FirebaseFirestore
                           .instance
                           .collection('user_details')
-                          .doc('');
+                          .doc('+917407926060');
 
                       Map<String, dynamic> data = <String, dynamic>{
-                        'address': _address!.text,
-                        'gender': _gender!.text,
+                        'address': _address.text,
+                        'gender': _gender.text,
                         'image': 'imageurl',
-                        'lat': _latitude!.text,
-                        'long': _longitude!.text,
-                        'name': _name!.text,
-                        'pincode': _pincode!.text,
-                        'userId': _userid!.text,
-                        'locality': _locality!.text,
-                        'subLocality': _sublocality!.text,
-                        'email': _email!.text,
-                        'number': _number!.text,
+                        'lat': _latitude.text,
+                        'long': _longitude.text,
+                        'name': _name.text,
+                        'pincode': _pincode.text,
+                        'userId': _userid.text,
+                        'locality': _locality.text,
+                        'subLocality': _sublocality.text,
+                        'email': _email.text,
+                        'number': _number.text,
                       };
                       await documentReference
                           .set(data)
