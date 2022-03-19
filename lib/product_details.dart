@@ -23,7 +23,7 @@ class _ProductDetailsState extends State<ProductDetails> {
     return Scaffold(
       body: SafeArea(
         child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 5),
+          padding: const EdgeInsets.symmetric(horizontal: 5),
           decoration: BoxDecoration(
               color: Colors.grey.shade100,
               borderRadius: BorderRadius.circular(20.0)),
@@ -170,14 +170,14 @@ class _ProductDetailsState extends State<ProductDetails> {
     ]);
   }
 
-  TextEditingController _addaddress = TextEditingController();
-  TextEditingController _addgender = TextEditingController();
-  TextEditingController _addname = TextEditingController();
-  TextEditingController _addpincode = TextEditingController();
-  TextEditingController _addlocation = TextEditingController();
-  TextEditingController _addlandmark = TextEditingController();
-  TextEditingController _addgymowner = TextEditingController();
-  TextEditingController _addgymId = TextEditingController();
+  final TextEditingController _addaddress = TextEditingController();
+  final TextEditingController _addgender = TextEditingController();
+  final TextEditingController _addname = TextEditingController();
+  final TextEditingController _addpincode = TextEditingController();
+  final TextEditingController _addlocation = TextEditingController();
+  final TextEditingController _addlandmark = TextEditingController();
+  final TextEditingController _addgymowner = TextEditingController();
+  final TextEditingController _addgymId = TextEditingController();
   showAddbox() => showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -234,7 +234,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                           );
                           Navigator.pop(context);
                         },
-                        child: Text('Done'),
+                        child: const Text('Done'),
                       ),
                     )
                   ],
@@ -318,6 +318,9 @@ class _ProductEditBoxState extends State<ProductEditBox> {
   final TextEditingController _landmark = TextEditingController();
   final TextEditingController _pincode = TextEditingController();
 
+  final TextEditingController _latitudeController = TextEditingController();
+  final TextEditingController _longitudeController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
@@ -330,6 +333,8 @@ class _ProductEditBoxState extends State<ProductEditBox> {
     _gymowner.text = widget.gymOwner;
     _landmark.text = widget.landmark;
     _location.text = "${widget.location.latitude}, ${widget.location.latitude}";
+    _latitudeController.text = widget.location.latitude.toString();
+    _longitudeController.text = widget.location.longitude.toString();
     print(widget.location.latitude);
   }
 
@@ -358,6 +363,10 @@ class _ProductEditBoxState extends State<ProductEditBox> {
               CustomTextField(hinttext: "Gym Owner", addcontroller: _gymowner),
               CustomTextField(hinttext: "Gender", addcontroller: _gender),
               CustomTextField(hinttext: "Location", addcontroller: _location),
+              CustomTextField(
+                  hinttext: 'Latitude', addcontroller: _latitudeController),
+              CustomTextField(
+                  hinttext: 'Longitude', addcontroller: _longitudeController),
               CustomTextField(hinttext: "Landmark", addcontroller: _landmark),
               CustomTextField(hinttext: "Pincode", addcontroller: _pincode),
               Padding(
@@ -366,19 +375,26 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                   child: ElevatedButton(
                     onPressed: () async {
                       print("/////");
-
+                      print("The Gym id is : ${_gymiid.text}");
                       DocumentReference documentReference = FirebaseFirestore
                           .instance
                           .collection('product_details')
-                          .doc(_gymiid.text);
+                          .doc('T@gmail.com');
 
+                      GeoPoint dataForGeoPint = GeoPoint(
+                          double.parse(_latitudeController.text),
+                          double.parse(_longitudeController.text));
+                      print(widget.location.latitude);
+                      print(widget.location.longitude);
+                      print(widget.location.latitude.runtimeType);
+                      print(widget.location.longitude.runtimeType);
+                      print("////////////////////////");
                       Map<String, dynamic> data = <String, dynamic>{
                         'address': _address.text,
                         'gender': _gender.text,
                         'name': _name.text,
                         'pincode': _pincode.text,
-                        'location': GeoPoint(
-                            widget.location.latitude, widget.location.latitude),
+                        'location': dataForGeoPint,
                         'gym_id': _gymiid.text,
                         'gym_owner': _gymowner.text,
                         'landmark': _landmark.text
