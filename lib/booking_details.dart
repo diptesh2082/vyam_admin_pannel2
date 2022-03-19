@@ -203,7 +203,7 @@ class _BookingDetailsState extends State<BookingDetails> {
           gymID: data['gym_id'],
           gymOwner: data['gym_owner'],
           landmark: data['landmark'],
-          location: data['location'].toString(),
+          location: data['location'],
           name: data['name'],
           pincode: data['pincode'],
         );
@@ -314,7 +314,7 @@ class _BookingDetailsState extends State<BookingDetails> {
     required String? gymID,
     required String? gymOwner,
     required String? landmark,
-    required String? location,
+    required GeoPoint? location,
     required String? name,
     required String? pincode,
   }) =>
@@ -327,7 +327,8 @@ class _BookingDetailsState extends State<BookingDetails> {
           _gymid!.text = gymID!;
           _gymowner!.text = gymOwner!;
           _landmark!.text = landmark!;
-          _location!.text = location!;
+          location = GeoPoint(location!.latitude, location!.longitude);
+          _location!.text = "${location!.latitude}. ${location!.longitude}";
           _pincode!.text = pincode!;
           _gymname!.text = name!;
           return AlertDialog(

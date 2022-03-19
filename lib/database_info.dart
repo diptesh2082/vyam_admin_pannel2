@@ -675,7 +675,7 @@ class _EditBoxState extends State<EditBox> {
                         'number': _number.text,
                       };
                       await documentReference
-                          .set(data)
+                          .update(data)
                           .whenComplete(() => print("Item Updated"))
                           .catchError((e) => print(e));
                       Navigator.pop(context);

@@ -1,4 +1,5 @@
 import 'package:admin_panel_vyam/booking_details.dart';
+import 'package:admin_panel_vyam/coupon.dart';
 import 'package:admin_panel_vyam/database_info.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +20,12 @@ class _SideNavBar1State extends State<SideNavBar1> {
   @override
   Widget build(BuildContext context) {
     PageController _controller = PageController();
-    List<Widget> _list = [ProductDetails(), CollectionInfo(), BookingDetails()];
+    List<Widget> _list = [
+      ProductDetails(),
+      CollectionInfo(),
+      BookingDetails(),
+      Coupon()
+    ];
     return Scaffold(
       key: _scaffoldKey,
       body: Stack(
@@ -83,7 +89,22 @@ class _SideNavBar1State extends State<SideNavBar1> {
                 },
               )),
           Positioned(
-            top: 200,
+              top: 200,
+              left: 50,
+              child: InkWell(
+                child: const Text(
+                  'Coupon',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
+                onTap: () {
+                  _controller.jumpToPage(3);
+                },
+              )),
+          Positioned(
+            top: 250,
             left: 50,
             child: InkWell(
               child: const Text(
@@ -104,7 +125,7 @@ class _SideNavBar1State extends State<SideNavBar1> {
               padding: const EdgeInsets.only(left: 230.0, top: 20),
               child: SizedBox(
                 child: PageView.builder(
-                  itemCount: 3,
+                  itemCount: 4,
                   itemBuilder: (_, int idx) {
                     return _list[idx];
                   },
