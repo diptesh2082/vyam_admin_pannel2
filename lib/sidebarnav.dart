@@ -2,6 +2,9 @@ import 'package:admin_panel_vyam/booking_details.dart';
 import 'package:admin_panel_vyam/database_info.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'database_info.dart';
+import 'product_details.dart';
+import 'booking_details.dart';
 
 class SideNavBar1 extends StatefulWidget {
   const SideNavBar1({Key? key}) : super(key: key);
@@ -16,7 +19,7 @@ class _SideNavBar1State extends State<SideNavBar1> {
   @override
   Widget build(BuildContext context) {
     PageController _controller = PageController();
-    List<Widget> _list = [CollectionInfo(), CollectionInfo(), BookingDetails()];
+    List<Widget> _list = [ProductDetails(), CollectionInfo(), BookingDetails()];
     return Scaffold(
       key: _scaffoldKey,
       body: Stack(
