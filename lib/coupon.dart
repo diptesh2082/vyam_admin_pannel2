@@ -270,7 +270,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(30))),
       content: SizedBox(
-        height: 480,
+        height: 300,
         width: 800,
         child: SingleChildScrollView(
           child: Column(
