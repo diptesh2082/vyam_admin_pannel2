@@ -1,6 +1,9 @@
 import 'package:admin_panel_vyam/booking_details.dart';
 import 'package:admin_panel_vyam/coupon.dart';
 import 'package:admin_panel_vyam/database_info.dart';
+import 'package:admin_panel_vyam/faq_details.dart';
+import 'package:admin_panel_vyam/feedback_dateils.dart';
+import 'package:admin_panel_vyam/review_details.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'database_info.dart';
@@ -24,7 +27,10 @@ class _SideNavBar1State extends State<SideNavBar1> {
       ProductDetails(),
       CollectionInfo(),
       BookingDetails(),
-      Coupon()
+      Coupon(),
+      FeedBackInfo(),
+      ReviewInfo(),
+      FaqDetails()
     ];
     return Scaffold(
       key: _scaffoldKey,
@@ -104,7 +110,52 @@ class _SideNavBar1State extends State<SideNavBar1> {
                 },
               )),
           Positioned(
-            top: 250,
+              top: 250,
+              left: 50,
+              child: InkWell(
+                child: const Text(
+                  'Feedback',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
+                onTap: () {
+                  _controller.jumpToPage(4);
+                },
+              )),
+          Positioned(
+              top: 300,
+              left: 50,
+              child: InkWell(
+                child: const Text(
+                  'Reviews',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
+                onTap: () {
+                  _controller.jumpToPage(5);
+                },
+              )),
+          Positioned(
+              top: 350,
+              left: 50,
+              child: InkWell(
+                child: const Text(
+                  'FAQs',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
+                onTap: () {
+                  _controller.jumpToPage(6);
+                },
+              )),
+          Positioned(
+            top: 400,
             left: 50,
             child: InkWell(
               child: const Text(
@@ -125,7 +176,7 @@ class _SideNavBar1State extends State<SideNavBar1> {
               padding: const EdgeInsets.only(left: 230.0, top: 20),
               child: SizedBox(
                 child: PageView.builder(
-                  itemCount: 4,
+                  itemCount: 7,
                   itemBuilder: (_, int idx) {
                     return _list[idx];
                   },
