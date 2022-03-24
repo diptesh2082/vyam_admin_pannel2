@@ -29,25 +29,6 @@ class _BookingDetailsState extends State<BookingDetails> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 8.0, left: 8.0),
-                  child: GestureDetector(
-                    onTap: showAddbox,
-                    child: Container(
-                      width: 120,
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(20.0)),
-                      child: Row(
-                        children: const [
-                          Icon(Icons.add),
-                          Text('Add Product',
-                              style: TextStyle(fontWeight: FontWeight.w400)),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
                 Center(
                   child: StreamBuilder<QuerySnapshot>(
                     stream: FirebaseFirestore.instance
@@ -285,14 +266,35 @@ class _BookingDetailsState extends State<BookingDetails> {
             builder: (context) {
               return SingleChildScrollView(
                 child: ProductEditBox(
-                  address: data['address'],
-                  gender: data['gender'],
-                  name: data['name'],
-                  pincode: data['pincode'],
-                  gymId: data['gym_id'],
-                  gymOwner: data['gym_owner'],
-                  landmark: data['landmark'],
-                  location: data['location'],
+                  vendorid: data['vendorId'],
+                  username: data['user_name'],
+                  userid: data['userId'],
+                  totalprice: data['total_price'].toString(),
+                  totaldays: data['totalDays'].toString(),
+                  taxpay: data['tax_pay'].toString(),
+                  planendyear:
+                      data['plan_end_duration'].toDate().year.toString(),
+                  planendmonth:
+                      data['plan_end_duration'].toDate().month.toString(),
+                  planendday: data['plan_end_duration'].toDate().day.toString(),
+                  paymentdone: data['payment_done'].toString(),
+                  packagetype: data['package_type'],
+                  orderyear: data['order_date'].toDate().year.toString(),
+                  ordermonth: data['order_date'].toDate().month.toString(),
+                  orderday: data['order_date'].toDate().day.toString(),
+                  gymname: data['gym_name'],
+                  gymaddress: data['gym_address'].toString(),
+                  grandtotal: data['grand_total'].toString(),
+                  discount: data['discount'].toString(),
+                  daysleft: data['daysLeft'],
+                  bookingstatus: data['booking_status'],
+                  bookingprice: data['booking_price'].toString(),
+                  bookingplan: data['booking_plan'],
+                  bookingid: data['booking_id'],
+                  bookingyear: data['booking_date'].toDate().year.toString(),
+                  bookingmonth: data['booking_date'].toDate().month.toString(),
+                  bookingday: data['booking_date'].toDate().day.toString(),
+                  bookingaccepted: data['booking_accepted'].toString(),
                 ),
               );
             });
@@ -300,142 +302,115 @@ class _BookingDetailsState extends State<BookingDetails> {
     ]);
   }
 
-  final TextEditingController _addvendorid = TextEditingController();
-  final TextEditingController _addusername = TextEditingController();
-  final TextEditingController _adduserid = TextEditingController();
-  final TextEditingController _addtotalprice = TextEditingController();
-  final TextEditingController _addtotaldays = TextEditingController();
-  final TextEditingController _addtaxpay = TextEditingController();
-  final TextEditingController _addplanendyear = TextEditingController();
-  final TextEditingController _addplanendmonth = TextEditingController();
-  final TextEditingController _addplanendday = TextEditingController();
-  final TextEditingController _addpaymentdone = TextEditingController();
-  final TextEditingController _addpackagetype = TextEditingController();
-  final TextEditingController _addorderyear = TextEditingController();
-  final TextEditingController _addordermonth = TextEditingController();
-  final TextEditingController _addorderday = TextEditingController();
-  final TextEditingController _addgymname = TextEditingController();
-  final TextEditingController _addgymaddress = TextEditingController();
-  final TextEditingController _addgrandtotal = TextEditingController();
-  final TextEditingController _adddiscount = TextEditingController();
-  final TextEditingController _adddaysletf = TextEditingController();
-  final TextEditingController _addbookingstatus = TextEditingController();
-  final TextEditingController _addbookingprice = TextEditingController();
-  final TextEditingController _addbookingplan = TextEditingController();
-  final TextEditingController _addbookingid = TextEditingController();
-  final TextEditingController _addbookingyear = TextEditingController();
-  final TextEditingController _addbookingmonth = TextEditingController();
-  final TextEditingController _addbookingday = TextEditingController();
-  final TextEditingController _addbookingaccepted = TextEditingController();
-
-  showAddbox() => showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-            shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(30))),
-            content: SizedBox(
-              height: 480,
-              width: 800,
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Add Records',
-                      style: TextStyle(
-                          fontFamily: 'poppins',
-                          fontWeight: FontWeight.w600,
-                          fontSize: 14),
-                    ),
-                    CustomTextField(
-                        hinttext: "Vendor ID", addcontroller: _addvendorid),
-                    CustomTextField(
-                        hinttext: "User Name", addcontroller: _addusername),
-                    CustomTextField(
-                        hinttext: "User ID", addcontroller: _adduserid),
-                    CustomTextField(
-                        hinttext: "Total Price", addcontroller: _addtotalprice),
-                    CustomTextField(
-                        hinttext: "Total Days", addcontroller: _addtotaldays),
-                    CustomTextField(
-                        hinttext: "Tax Pay", addcontroller: _addtaxpay),
-                    CustomTextField(
-                        hinttext: "Plan End Y", addcontroller: _addplanendyear),
-                    CustomTextField(
-                        hinttext: "Plan End M",
-                        addcontroller: _addplanendmonth),
-                    CustomTextField(
-                        hinttext: "Name", addcontroller: _addplanendday),
-                    CustomTextField(
-                        hinttext: "Name", addcontroller: _addpaymentdone),
-                    CustomTextField(
-                        hinttext: "Name", addcontroller: _addpackagetype),
-                    CustomTextField(
-                        hinttext: "Name", addcontroller: _addorderyear),
-                    CustomTextField(
-                        hinttext: "Name", addcontroller: _addordermonth),
-                    CustomTextField(
-                        hinttext: "Name", addcontroller: _addorderday),
-                    CustomTextField(
-                        hinttext: "Name", addcontroller: _addgymname),
-                    CustomTextField(
-                        hinttext: "Name", addcontroller: _addgymaddress),
-                    CustomTextField(
-                        hinttext: "Name", addcontroller: _addgrandtotal),
-                    CustomTextField(
-                        hinttext: "Name", addcontroller: _adddiscount),
-                    CustomTextField(
-                        hinttext: "Name", addcontroller: _adddaysletf),
-                    CustomTextField(
-                        hinttext: "Name", addcontroller: _addbookingstatus),
-                    CustomTextField(
-                        hinttext: "Name", addcontroller: _addbookingprice),
-                    CustomTextField(
-                        hinttext: "Name", addcontroller: _addbookingplan),
-                    CustomTextField(
-                        hinttext: "Name", addcontroller: _addbookingid),
-                    CustomTextField(
-                        hinttext: "Name", addcontroller: _addbookingyear),
-                    CustomTextField(
-                        hinttext: "Name", addcontroller: _addbookingmonth),
-                    CustomTextField(
-                        hinttext: "Name", addcontroller: _addbookingday),
-                    CustomTextField(
-                        hinttext: "Name", addcontroller: _addbookingaccepted),
-                    Center(
-                      child: ElevatedButton(
-                        onPressed: () async {
-                          final querySnapshot = FirebaseFirestore.instance
-                              .collection('bookings')
-                              .doc("'data['userId']'")
-                              .collection('user_booking')
-                              .doc("data['booking_id']");
-                          querySnapshot.update({'booking_price': 20});
-                          // FirebaseFirestore.instance
-                          //     .collectionGroup('user_booking')
-                          //     .doc(_addgymId.text)
-                          //     .set(
-                          //   {
-                          //     // 'address': _addaddress.text,
-                          //     // 'gender': _addgender.text,
-                          //     // 'name': _addname.text,
-                          //     // 'pincode': _addpincode.text,
-                          //     // 'location': _addlocation.text,
-                          //     // 'gym_id': _addlandmark.text,
-                          //     // 'gym_owner': _addgymowner.text,
-                          //     // 'landmark': _addlandmark.text
-                          //   },
-                          // );
-                          Navigator.pop(context);
-                        },
-                        child: const Text('Done'),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ),
-          ));
+  //
+  // showAddbox() => showDialog(
+  //     context: context,
+  //     builder: (context) => AlertDialog(
+  //           shape: const RoundedRectangleBorder(
+  //               borderRadius: BorderRadius.all(Radius.circular(30))),
+  //           content: SizedBox(
+  //             height: 480,
+  //             width: 800,
+  //             child: SingleChildScrollView(
+  //               child: Column(
+  //                 crossAxisAlignment: CrossAxisAlignment.start,
+  //                 children: [
+  //                   const Text(
+  //                     'Add Records',
+  //                     style: TextStyle(
+  //                         fontFamily: 'poppins',
+  //                         fontWeight: FontWeight.w600,
+  //                         fontSize: 14),
+  //                   ),
+  //                   CustomTextField(
+  //                       hinttext: "Vendor ID", addcontroller: _addvendorid),
+  //                   CustomTextField(
+  //                       hinttext: "User Name", addcontroller: _addusername),
+  //                   CustomTextField(
+  //                       hinttext: "User ID", addcontroller: _adduserid),
+  //                   CustomTextField(
+  //                       hinttext: "Total Price", addcontroller: _addtotalprice),
+  //                   CustomTextField(
+  //                       hinttext: "Total Days", addcontroller: _addtotaldays),
+  //                   CustomTextField(
+  //                       hinttext: "Tax Pay", addcontroller: _addtaxpay),
+  //                   CustomTextField(
+  //                       hinttext: "Plan End Y", addcontroller: _addplanendyear),
+  //                   CustomTextField(
+  //                       hinttext: "Plan End M",
+  //                       addcontroller: _addplanendmonth),
+  //                   CustomTextField(
+  //                       hinttext: "Name", addcontroller: _addplanendday),
+  //                   CustomTextField(
+  //                       hinttext: "Name", addcontroller: _addpaymentdone),
+  //                   CustomTextField(
+  //                       hinttext: "Name", addcontroller: _addpackagetype),
+  //                   CustomTextField(
+  //                       hinttext: "Name", addcontroller: _addorderyear),
+  //                   CustomTextField(
+  //                       hinttext: "Name", addcontroller: _addordermonth),
+  //                   CustomTextField(
+  //                       hinttext: "Name", addcontroller: _addorderday),
+  //                   CustomTextField(
+  //                       hinttext: "Name", addcontroller: _addgymname),
+  //                   CustomTextField(
+  //                       hinttext: "Name", addcontroller: _addgymaddress),
+  //                   CustomTextField(
+  //                       hinttext: "Name", addcontroller: _addgrandtotal),
+  //                   CustomTextField(
+  //                       hinttext: "Name", addcontroller: _adddiscount),
+  //                   CustomTextField(
+  //                       hinttext: "Name", addcontroller: _adddaysletf),
+  //                   CustomTextField(
+  //                       hinttext: "Name", addcontroller: _addbookingstatus),
+  //                   CustomTextField(
+  //                       hinttext: "Name", addcontroller: _addbookingprice),
+  //                   CustomTextField(
+  //                       hinttext: "Name", addcontroller: _addbookingplan),
+  //                   CustomTextField(
+  //                       hinttext: "Name", addcontroller: _addbookingid),
+  //                   CustomTextField(
+  //                       hinttext: "Name", addcontroller: _addbookingyear),
+  //                   CustomTextField(
+  //                       hinttext: "Name", addcontroller: _addbookingmonth),
+  //                   CustomTextField(
+  //                       hinttext: "Name", addcontroller: _addbookingday),
+  //                   CustomTextField(
+  //                       hinttext: "Name", addcontroller: _addbookingaccepted),
+  //                   Center(
+  //                     child: ElevatedButton(
+  //                       onPressed: () async {
+  //                         final querySnapshot = FirebaseFirestore.instance
+  //                             .collection('bookings')
+  //                             .doc("'data['userId']'")
+  //                             .collection('user_booking')
+  //                             .doc("data['booking_id']");
+  //                         querySnapshot.update({'booking_price': 20});
+  //                         // FirebaseFirestore.instance
+  //                         //     .collectionGroup('user_booking')
+  //                         //     .doc(_addgymId.text)
+  //                         //     .set(
+  //                         //   {
+  //                         //     // 'address': _addaddress.text,
+  //                         //     // 'gender': _addgender.text,
+  //                         //     // 'name': _addname.text,
+  //                         //     // 'pincode': _addpincode.text,
+  //                         //     // 'location': _addlocation.text,
+  //                         //     // 'gym_id': _addlandmark.text,
+  //                         //     // 'gym_owner': _addgymowner.text,
+  //                         //     // 'landmark': _addlandmark.text
+  //                         //   },
+  //                         // );
+  //                         Navigator.pop(context);
+  //                       },
+  //                       child: const Text('Done'),
+  //                     ),
+  //                   )
+  //                 ],
+  //               ),
+  //             ),
+  //           ),
+  //         ));
 }
 
 class CustomTextField extends StatelessWidget {
@@ -479,38 +454,95 @@ class CustomTextField extends StatelessWidget {
 class ProductEditBox extends StatefulWidget {
   const ProductEditBox({
     Key? key,
-    required this.address,
-    required this.name,
-    required this.gymId,
-    required this.gymOwner,
-    required this.gender,
-    required this.location,
-    required this.landmark,
-    required this.pincode,
+    required this.vendorid,
+    required this.username,
+    required this.userid,
+    required this.totalprice,
+    required this.totaldays,
+    required this.taxpay,
+    required this.planendyear,
+    required this.planendmonth,
+    required this.planendday,
+    required this.paymentdone,
+    required this.packagetype,
+    required this.orderyear,
+    required this.ordermonth,
+    required this.orderday,
+    required this.gymname,
+    required this.gymaddress,
+    required this.grandtotal,
+    required this.discount,
+    required this.daysleft,
+    required this.bookingstatus,
+    required this.bookingprice,
+    required this.bookingplan,
+    required this.bookingid,
+    required this.bookingyear,
+    required this.bookingmonth,
+    required this.bookingday,
+    required this.bookingaccepted,
   }) : super(key: key);
 
-  final String name;
-  final String address;
-  final String gymId;
-  final String gymOwner;
-  final String gender;
-  final GeoPoint location;
-  final String landmark;
-  final String pincode;
+  final String vendorid;
+  final String username;
+  final String userid;
+  final String totalprice;
+  final String totaldays;
+  final String taxpay;
+  final String planendyear;
+  final String planendmonth;
+  final String planendday;
+  final String paymentdone;
+  final String packagetype;
+  final String orderyear;
+  final String ordermonth;
+  final String orderday;
+  final String gymname;
+  final String gymaddress;
+  final String grandtotal;
+  final String discount;
+  final String daysleft;
+  final String bookingstatus;
+  final String bookingprice;
+  final String bookingplan;
+  final String bookingid;
+  final String bookingyear;
+  final String bookingmonth;
+  final String bookingday;
+  final String bookingaccepted;
 
   @override
   _ProductEditBoxState createState() => _ProductEditBoxState();
 }
 
 class _ProductEditBoxState extends State<ProductEditBox> {
-  final TextEditingController _name = TextEditingController();
-  final TextEditingController _address = TextEditingController();
-  final TextEditingController _gymiid = TextEditingController();
-  final TextEditingController _gymowner = TextEditingController();
-  final TextEditingController _gender = TextEditingController();
-  final TextEditingController _location = TextEditingController();
-  final TextEditingController _landmark = TextEditingController();
-  final TextEditingController _pincode = TextEditingController();
+  final TextEditingController _addvendorid = TextEditingController();
+  final TextEditingController _addusername = TextEditingController();
+  final TextEditingController _adduserid = TextEditingController();
+  final TextEditingController _addtotalprice = TextEditingController();
+  final TextEditingController _addtotaldays = TextEditingController();
+  final TextEditingController _addtaxpay = TextEditingController();
+  final TextEditingController _addplanendyear = TextEditingController();
+  final TextEditingController _addplanendmonth = TextEditingController();
+  final TextEditingController _addplanendday = TextEditingController();
+  final TextEditingController _addpaymentdone = TextEditingController();
+  final TextEditingController _addpackagetype = TextEditingController();
+  final TextEditingController _addorderyear = TextEditingController();
+  final TextEditingController _addordermonth = TextEditingController();
+  final TextEditingController _addorderday = TextEditingController();
+  final TextEditingController _addgymname = TextEditingController();
+  final TextEditingController _addgymaddress = TextEditingController();
+  final TextEditingController _addgrandtotal = TextEditingController();
+  final TextEditingController _adddiscount = TextEditingController();
+  final TextEditingController _adddaysletf = TextEditingController();
+  final TextEditingController _addbookingstatus = TextEditingController();
+  final TextEditingController _addbookingprice = TextEditingController();
+  final TextEditingController _addbookingplan = TextEditingController();
+  final TextEditingController _addbookingid = TextEditingController();
+  final TextEditingController _addbookingyear = TextEditingController();
+  final TextEditingController _addbookingmonth = TextEditingController();
+  final TextEditingController _addbookingday = TextEditingController();
+  final TextEditingController _addbookingaccepted = TextEditingController();
 
   final TextEditingController _latitudeController = TextEditingController();
   final TextEditingController _longitudeController = TextEditingController();
@@ -518,18 +550,45 @@ class _ProductEditBoxState extends State<ProductEditBox> {
   @override
   void initState() {
     super.initState();
-    print(widget.address);
-    _address.text = widget.address;
-    _gender.text = widget.gender;
-    _name.text = widget.name;
-    _pincode.text = widget.pincode;
-    _gymiid.text = widget.gymId;
-    _gymowner.text = widget.gymOwner;
-    _landmark.text = widget.landmark;
-    _location.text = "${widget.location.latitude}, ${widget.location.latitude}";
-    _latitudeController.text = widget.location.latitude.toString();
-    _longitudeController.text = widget.location.longitude.toString();
-    print(widget.location.latitude);
+    _addvendorid.text = widget.vendorid;
+    _addusername.text = widget.username;
+    _adduserid.text = widget.userid;
+    _addtotalprice.text = widget.totalprice;
+    _addtotaldays.text = widget.totaldays;
+    _addtaxpay.text = widget.taxpay;
+    _addplanendyear.text = widget.planendyear;
+    _addplanendmonth.text = widget.planendmonth;
+    _addplanendday.text = widget.planendday;
+    _addpaymentdone.text = widget.paymentdone;
+    _addpackagetype.text = widget.packagetype;
+    _addorderyear.text = widget.orderyear;
+    _addordermonth.text = widget.ordermonth;
+    _addorderday.text = widget.orderday;
+    _addgymname.text = widget.gymname;
+    _addgymaddress.text = widget.gymaddress;
+    _addgrandtotal.text = widget.grandtotal;
+    _adddiscount.text = widget.discount;
+    _adddaysletf.text = widget.daysleft;
+    _addbookingstatus.text = widget.bookingstatus;
+    _addbookingprice.text = widget.bookingprice;
+    _addbookingplan.text = widget.bookingplan;
+    _addbookingid.text = widget.bookingid;
+    _addbookingyear.text = widget.bookingyear;
+    _addbookingmonth.text = widget.bookingmonth;
+    _addbookingday.text = widget.bookingday;
+    _addbookingaccepted.text = widget.bookingaccepted;
+    // print(widget.address);
+    // _address.text = widget.address;
+    // _gender.text = widget.gender;
+    // _name.text = widget.name;
+    // _pincode.text = widget.pincode;
+    // _gymiid.text = widget.gymId;
+    // _gymowner.text = widget.gymOwner;
+    // _landmark.text = widget.landmark;
+    // _location.text = "${widget.location.latitude}, ${widget.location.latitude}";
+    // _latitudeController.text = widget.location.latitude.toString();
+    // _longitudeController.text = widget.location.longitude.toString();
+    // print(widget.location.latitude);
   }
 
   @override
@@ -551,47 +610,100 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                     fontWeight: FontWeight.w600,
                     fontSize: 14),
               ),
-              CustomTextField(hinttext: "Name", addcontroller: _name),
-              CustomTextField(hinttext: "Address", addcontroller: _address),
-              CustomTextField(hinttext: "Gym ID", addcontroller: _gymiid),
-              CustomTextField(hinttext: "Gym Owner", addcontroller: _gymowner),
-              CustomTextField(hinttext: "Gender", addcontroller: _gender),
-              CustomTextField(hinttext: "Location", addcontroller: _location),
               CustomTextField(
-                  hinttext: 'Latitude', addcontroller: _latitudeController),
+                  hinttext: "Vendor ID", addcontroller: _addvendorid),
               CustomTextField(
-                  hinttext: 'Longitude', addcontroller: _longitudeController),
-              CustomTextField(hinttext: "Landmark", addcontroller: _landmark),
-              CustomTextField(hinttext: "Pincode", addcontroller: _pincode),
+                  hinttext: "User Name", addcontroller: _addusername),
+              CustomTextField(hinttext: "User ID", addcontroller: _adduserid),
+              CustomTextField(
+                  hinttext: "Total Price", addcontroller: _addtotalprice),
+              CustomTextField(
+                  hinttext: "Total Days", addcontroller: _addtotaldays),
+              CustomTextField(hinttext: "Tax Pay", addcontroller: _addtaxpay),
+              CustomTextField(
+                  hinttext: "Plan End Y", addcontroller: _addplanendyear),
+              CustomTextField(
+                  hinttext: "Plan End M", addcontroller: _addplanendmonth),
+              CustomTextField(
+                  hinttext: "Plan End D", addcontroller: _addplanendday),
+              CustomTextField(
+                  hinttext: "Payment Done", addcontroller: _addpaymentdone),
+              CustomTextField(
+                  hinttext: "Package Type", addcontroller: _addpackagetype),
+              CustomTextField(
+                  hinttext: "Order Date Y", addcontroller: _addorderyear),
+              CustomTextField(
+                  hinttext: "Order Date M", addcontroller: _addordermonth),
+              CustomTextField(
+                  hinttext: "Order Date D", addcontroller: _addorderday),
+              CustomTextField(hinttext: "Gym Name", addcontroller: _addgymname),
+              CustomTextField(
+                  hinttext: "Gym Address", addcontroller: _addgymaddress),
+              CustomTextField(
+                  hinttext: "Grand Total", addcontroller: _addgrandtotal),
+              CustomTextField(
+                  hinttext: "Discount", addcontroller: _adddiscount),
+              CustomTextField(
+                  hinttext: "Days Left", addcontroller: _adddaysletf),
+              CustomTextField(
+                  hinttext: "Booking Status", addcontroller: _addbookingstatus),
+              CustomTextField(
+                  hinttext: "Booking Price", addcontroller: _addbookingprice),
+              CustomTextField(
+                  hinttext: "Booking Plan", addcontroller: _addbookingplan),
+              CustomTextField(
+                  hinttext: "booking ID", addcontroller: _addbookingid),
+              CustomTextField(
+                  hinttext: "Booking Date Y", addcontroller: _addbookingyear),
+              CustomTextField(
+                  hinttext: "Booking Date M", addcontroller: _addbookingmonth),
+              CustomTextField(
+                  hinttext: "Booking Date D", addcontroller: _addbookingday),
+              CustomTextField(
+                  hinttext: "Booking Accepted",
+                  addcontroller: _addbookingaccepted),
               Padding(
                 padding: const EdgeInsets.all(12.0),
                 child: Center(
                   child: ElevatedButton(
                     onPressed: () async {
-                      print("/////");
-                      print("The Gym id is : ${_gymiid.text}");
                       DocumentReference documentReference = FirebaseFirestore
                           .instance
-                          .collection('product_details')
-                          .doc('T@gmail.com');
+                          .collection('bookings')
+                          .doc(_adduserid.text)
+                          .collection('user_booking')
+                          .doc(_addbookingid.text);
+                      DateTime endtimedata = DateTime.parse(
+                          '${_addplanendyear.text}-${isLess(_addplanendmonth.text) ? '0' + _addplanendmonth.text : _addplanendday.text}-${isLess(_addplanendday.text) ? '0' + _addplanendday.text : _addplanendday.text} 00:00:04Z');
+                      DateTime ordertimedata = DateTime.parse(
+                          '${_addorderyear.text}-${isLess(_addordermonth.text) ? '0' + _addordermonth.text : _addordermonth.text}-${isLess(_addorderday.text) ? '0' + _addorderday.text : _addorderday.text} 00:00:04Z');
+                      DateTime bookingtimedata = DateTime.parse(
+                          '${_addbookingyear.text}-${isLess(_addbookingmonth.text) ? '0' + _addbookingmonth.text : _addbookingmonth.text}-${isLess(_addbookingday.text) ? '0' + _addbookingday.text : _addbookingday.text} 00:00:04Z');
 
-                      GeoPoint dataForGeoPint = GeoPoint(
-                          double.parse(_latitudeController.text),
-                          double.parse(_longitudeController.text));
-                      print(widget.location.latitude);
-                      print(widget.location.longitude);
-                      print(widget.location.latitude.runtimeType);
-                      print(widget.location.longitude.runtimeType);
-                      print("////////////////////////");
                       Map<String, dynamic> data = <String, dynamic>{
-                        'address': _address.text,
-                        'gender': _gender.text,
-                        'name': _name.text,
-                        'pincode': _pincode.text,
-                        'location': dataForGeoPint,
-                        'gym_id': _gymiid.text,
-                        'gym_owner': _gymowner.text,
-                        'landmark': _landmark.text
+                        'vandorId': _addvendorid.text,
+                        'user_name': _addusername.text,
+                        'userId': _adduserid.text,
+                        'total_price': _addtotalprice.text,
+                        'totalDays': _addtotalprice.text,
+                        'tax_pay': _addtaxpay.text,
+                        'plan_end_duration': endtimedata,
+                        'payment_done':
+                            _addpaymentdone.text == 'true' ? true : false,
+                        'package_type': _addpackagetype.text,
+                        'order_date': ordertimedata,
+                        'gym_name': _addgymname.text,
+                        'gym_address': _addgymaddress.text,
+                        'grand_total': _addgrandtotal.text,
+                        'discount': _adddiscount.text,
+                        'daysLeft': _adddaysletf.text,
+                        'booking_status': _addbookingstatus.text,
+                        'booking_price': _addbookingprice.text,
+                        'booking_plan': _addbookingplan.text,
+                        'booking_id': _addbookingid.text,
+                        'booking_date': bookingtimedata,
+                        'booking_accepted':
+                            _addbookingaccepted.text == 'true' ? true : false,
                       };
                       await documentReference
                           .update(data)
@@ -609,4 +721,29 @@ class _ProductEditBoxState extends State<ProductEditBox> {
       ),
     );
   }
+}
+
+bool isLess(String txt) {
+  if (txt == '0')
+    return true;
+  else if (txt == '1')
+    return true;
+  else if (txt == '2')
+    return true;
+  else if (txt == '3')
+    return true;
+  else if (txt == '4')
+    return true;
+  else if (txt == '5')
+    return true;
+  else if (txt == '6')
+    return true;
+  else if (txt == '7')
+    return true;
+  else if (txt == '8')
+    return true;
+  else if (txt == '9')
+    return true;
+  else
+    return false;
 }

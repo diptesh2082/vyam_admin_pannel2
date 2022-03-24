@@ -1,3 +1,4 @@
+import 'package:admin_panel_vyam/services/maps_api.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -146,7 +147,13 @@ class _ProductDetailsState extends State<ProductDetails> {
       DataCell(data != null ? Text(data['gym_id'] ?? "") : Text("")),
       DataCell(data != null ? Text(data['gym_owner'] ?? "") : Text("")),
       DataCell(data != null ? Text(data['gender'] ?? "") : Text("")),
-      DataCell(data != null ? Text(loctext) : Text("")),
+      DataCell(data != null
+          ? GestureDetector(
+              onTap: () async {
+                await MapsLaucherApi().launchMaps(loc.latitude, loc.longitude);
+              },
+              child: Text(loctext))
+          : Text("")),
       DataCell(data != null ? Text(data['landmark'] ?? "") : Text("")),
       DataCell(data != null ? Text(data['pincode'] ?? "") : Text("")),
       DataCell(const Text(""), showEditIcon: true, onTap: () {
@@ -384,11 +391,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                       GeoPoint dataForGeoPint = GeoPoint(
                           double.parse(_latitudeController.text),
                           double.parse(_longitudeController.text));
-                      print(widget.location.latitude);
-                      print(widget.location.longitude);
-                      print(widget.location.latitude.runtimeType);
-                      print(widget.location.longitude.runtimeType);
-                      print("////////////////////////");
+
                       Map<String, dynamic> data = <String, dynamic>{
                         'address': _address.text,
                         'gender': _gender.text,
