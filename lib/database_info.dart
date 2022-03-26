@@ -269,7 +269,7 @@ class _CollectionInfoState extends State<CollectionInfo> {
                         onPressed: () async {
                           FirebaseFirestore.instance
                               .collection('user_details')
-                              .doc(_adduserid.text)
+                              .doc(_addnumber.text)
                               .set(
                             {
                               'address': _addaddress.text,
@@ -405,7 +405,7 @@ class _EditBoxState extends State<EditBox> {
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(30))),
       content: SizedBox(
-        height: 480,
+        height: 580,
         width: 800,
         child: SingleChildScrollView(
           child: Column(
@@ -655,10 +655,11 @@ class _EditBoxState extends State<EditBox> {
                     onPressed: () async {
                       print("/////");
 
-                      DocumentReference documentReference = FirebaseFirestore
-                          .instance
-                          .collection('user_details')
-                          .doc('+917407926060');
+                      DocumentReference documentReference =
+                          FirebaseFirestore.instance
+                              .collection('user_details')
+                              //change _number to _userid
+                              .doc(_number.text);
 
                       Map<String, dynamic> data = <String, dynamic>{
                         'address': _address.text,
