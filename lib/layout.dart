@@ -1,4 +1,4 @@
-import 'package:admin_panel_vyam/database_info.dart';
+import 'package:admin_panel_vyam/Screens/database_info.dart';
 import 'package:admin_panel_vyam/navigation_service.dart';
 import 'package:admin_panel_vyam/routing/route_names.dart';
 import 'package:admin_panel_vyam/routing/router.dart';

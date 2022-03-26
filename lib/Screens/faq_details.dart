@@ -3,19 +3,33 @@ import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
 
-class ProductDetails extends StatefulWidget {
-  const ProductDetails({
+class FaqDetails extends StatefulWidget {
+  const FaqDetails({
     Key? key,
   }) : super(key: key);
 
   @override
-  State<ProductDetails> createState() => _ProductDetailsState();
+  State<FaqDetails> createState() => _FaqDetailsState();
 }
 
-class _ProductDetailsState extends State<ProductDetails> {
+class _FaqDetailsState extends State<FaqDetails> {
   @override
+  final id = FirebaseFirestore.instance.collection('faq').doc().id.toString();
+
+  createReview(String nid) {
+    final review = FirebaseFirestore.instance.collection('faq');
+    review.doc(nid).set({'id': nid});
+  }
+
   void initState() {
     super.initState();
+    // _address = TextEditingController();
+    // _pincode = TextEditingController();
+    // _gender = TextEditingController();
+    // _gymid = TextEditingController();
+    // _addaddress = TextEditingController();
+    // _addgender = TextEditingController();
+    // _gymowner = TextEditingController();
   }
 
   @override
@@ -36,14 +50,14 @@ class _ProductDetailsState extends State<ProductDetails> {
                   child: GestureDetector(
                     onTap: showAddbox,
                     child: Container(
-                      width: 120,
+                      width: 90,
                       decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(20.0)),
                       child: Row(
                         children: const [
                           Icon(Icons.add),
-                          Text('Add Product',
+                          Text('Add FAQ',
                               style: TextStyle(fontWeight: FontWeight.w400)),
                         ],
                       ),
@@ -53,7 +67,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                 Center(
                   child: StreamBuilder<QuerySnapshot>(
                     stream: FirebaseFirestore.instance
-                        .collection("product_details")
+                        .collection("faq")
                         .snapshots(),
                     builder: (context, AsyncSnapshot snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
@@ -72,12 +86,12 @@ class _ProductDetailsState extends State<ProductDetails> {
                             columns: const [
                               DataColumn(
                                   label: Text(
-                                'Name',
+                                'Question',
                                 style: TextStyle(fontWeight: FontWeight.w600),
                               )),
                               DataColumn(
                                 label: Text(
-                                  'Address',
+                                  'Answer',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
@@ -89,31 +103,13 @@ class _ProductDetailsState extends State<ProductDetails> {
                               ),
                               DataColumn(
                                 label: Text(
-                                  'Gym Owner',
+                                  'ID',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
                               DataColumn(
                                 label: Text(
-                                  'Gender',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
-                              ),
-                              DataColumn(
-                                label: Text(
-                                  'Location',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
-                              ),
-                              DataColumn(
-                                label: Text(
-                                  'Landmark',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
-                              ),
-                              DataColumn(
-                                label: Text(
-                                  'Pincode',
+                                  'User ID',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
@@ -138,31 +134,23 @@ class _ProductDetailsState extends State<ProductDetails> {
   }
 
   DataRow _buildListItem(BuildContext context, DocumentSnapshot data) {
-    GeoPoint loc = data['location'];
-    String loctext = "${loc.latitude},${loc.longitude}";
     return DataRow(cells: [
-      DataCell(data != null ? Text(data['name'] ?? "") : Text("")),
-      DataCell(data != null ? Text(data['address'] ?? "") : Text("")),
+      DataCell(data != null ? Text(data['question'] ?? "") : Text("")),
+      DataCell(data != null ? Text(data['answer'] ?? "") : Text("")),
       DataCell(data != null ? Text(data['gym_id'] ?? "") : Text("")),
-      DataCell(data != null ? Text(data['gym_owner'] ?? "") : Text("")),
-      DataCell(data != null ? Text(data['gender'] ?? "") : Text("")),
-      DataCell(data != null ? Text(loctext) : Text("")),
-      DataCell(data != null ? Text(data['landmark'] ?? "") : Text("")),
-      DataCell(data != null ? Text(data['pincode'] ?? "") : Text("")),
+      DataCell(data != null ? Text(data['id'] ?? "") : Text("")),
+      DataCell(data != null ? Text(data['user_id'] ?? "") : Text("")),
       DataCell(const Text(""), showEditIcon: true, onTap: () {
         showDialog(
             context: context,
             builder: (context) {
               return SingleChildScrollView(
-                child: ProductEditBox(
-                  address: data['address'],
-                  gender: data['gender'],
-                  name: data['name'],
-                  pincode: data['pincode'],
-                  gymId: data['gym_id'],
-                  gymOwner: data['gym_owner'],
-                  landmark: data['landmark'],
-                  location: data['location'],
+                child: EditBox(
+                  userid: data['user_id'],
+                  answer: data['answer'],
+                  gymid: data['gym_id'],
+                  id: data['id'],
+                  question: data['question'],
                 ),
               );
             });
@@ -170,14 +158,11 @@ class _ProductDetailsState extends State<ProductDetails> {
     ]);
   }
 
-  TextEditingController _addaddress = TextEditingController();
-  TextEditingController _addgender = TextEditingController();
-  TextEditingController _addname = TextEditingController();
-  TextEditingController _addpincode = TextEditingController();
-  TextEditingController _addlocation = TextEditingController();
-  TextEditingController _addlandmark = TextEditingController();
-  TextEditingController _addgymowner = TextEditingController();
-  TextEditingController _addgymId = TextEditingController();
+  TextEditingController _addaquestion = TextEditingController();
+  TextEditingController _addanswer = TextEditingController();
+  TextEditingController _addgymid = TextEditingController();
+  TextEditingController _adduserid = TextEditingController();
+
   showAddbox() => showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -197,39 +182,27 @@ class _ProductDetailsState extends State<ProductDetails> {
                           fontWeight: FontWeight.w600,
                           fontSize: 14),
                     ),
-                    CustomTextField(hinttext: "Name", addcontroller: _addname),
                     CustomTextField(
-                        hinttext: "Address", addcontroller: _addaddress),
+                        hinttext: "Question", addcontroller: _addaquestion),
                     CustomTextField(
-                        hinttext: "Gym ID", addcontroller: _addgymId),
+                        hinttext: "Answer", addcontroller: _addanswer),
                     CustomTextField(
-                        hinttext: "Gym Owner", addcontroller: _addgymowner),
+                        hinttext: "Gym ID", addcontroller: _addgymid),
                     CustomTextField(
-                        hinttext: "Gender", addcontroller: _addgender),
-                    CustomTextField(
-                        hinttext: "Location", addcontroller: _addlocation),
-                    CustomTextField(
-                        hinttext: "Landmark", addcontroller: _addlandmark),
-                    CustomTextField(
-                      addcontroller: _addpincode,
-                      hinttext: "Pincode",
-                    ),
+                        hinttext: "User ID", addcontroller: _adduserid),
                     Center(
                       child: ElevatedButton(
                         onPressed: () async {
-                          FirebaseFirestore.instance
-                              .collection('product_details')
-                              .doc(_addgymId.text)
-                              .set(
+                          await createReview(id);
+                          await FirebaseFirestore.instance
+                              .collection('faq')
+                              .doc(id)
+                              .update(
                             {
-                              'address': _addaddress.text,
-                              'gender': _addgender.text,
-                              'name': _addname.text,
-                              'pincode': _addpincode.text,
-                              'location': _addlocation.text,
-                              'gym_id': _addlandmark.text,
-                              'gym_owner': _addgymowner.text,
-                              'landmark': _addlandmark.text
+                              'question': _addaquestion.text,
+                              'answer': _addanswer.text,
+                              'gym_id': _addgymid.text,
+                              'user_id': _adduserid.text
                             },
                           );
                           Navigator.pop(context);
@@ -282,55 +255,41 @@ class CustomTextField extends StatelessWidget {
   }
 }
 
-class ProductEditBox extends StatefulWidget {
-  const ProductEditBox({
+class EditBox extends StatefulWidget {
+  const EditBox({
     Key? key,
-    required this.address,
-    required this.name,
-    required this.gymId,
-    required this.gymOwner,
-    required this.gender,
-    required this.location,
-    required this.landmark,
-    required this.pincode,
+    required this.question,
+    required this.answer,
+    required this.gymid,
+    required this.id,
+    required this.userid,
   }) : super(key: key);
 
-  final String name;
-  final String address;
-  final String gymId;
-  final String gymOwner;
-  final String gender;
-  final GeoPoint location;
-  final String landmark;
-  final String pincode;
+  final String question;
+  final String answer;
+  final String gymid;
+  final String id;
+  final String userid;
 
   @override
-  _ProductEditBoxState createState() => _ProductEditBoxState();
+  _EditBoxState createState() => _EditBoxState();
 }
 
-class _ProductEditBoxState extends State<ProductEditBox> {
-  final TextEditingController _name = TextEditingController();
-  final TextEditingController _address = TextEditingController();
-  final TextEditingController _gymiid = TextEditingController();
-  final TextEditingController _gymowner = TextEditingController();
-  final TextEditingController _gender = TextEditingController();
-  final TextEditingController _location = TextEditingController();
-  final TextEditingController _landmark = TextEditingController();
-  final TextEditingController _pincode = TextEditingController();
+class _EditBoxState extends State<EditBox> {
+  TextEditingController _question = TextEditingController();
+  TextEditingController _answer = TextEditingController();
+  TextEditingController _gymid = TextEditingController();
+  TextEditingController _id = TextEditingController();
+  TextEditingController _userid = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    print(widget.address);
-    _address.text = widget.address;
-    _gender.text = widget.gender;
-    _name.text = widget.name;
-    _pincode.text = widget.pincode;
-    _gymiid.text = widget.gymId;
-    _gymowner.text = widget.gymOwner;
-    _landmark.text = widget.landmark;
-    _location.text = "${widget.location.latitude}, ${widget.location.latitude}";
-    print(widget.location.latitude);
+    _question.text = widget.question;
+    _answer.text = widget.answer;
+    _gymid.text = widget.gymid;
+    _id.text = widget.id;
+    _userid.text = widget.userid;
   }
 
   @override
@@ -339,7 +298,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(30))),
       content: SizedBox(
-        height: 480,
+        height: 580,
         width: 800,
         child: SingleChildScrollView(
           child: Column(
@@ -352,14 +311,121 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                     fontWeight: FontWeight.w600,
                     fontSize: 14),
               ),
-              CustomTextField(hinttext: "Name", addcontroller: _name),
-              CustomTextField(hinttext: "Address", addcontroller: _address),
-              CustomTextField(hinttext: "Gym ID", addcontroller: _gymiid),
-              CustomTextField(hinttext: "Gym Owner", addcontroller: _gymowner),
-              CustomTextField(hinttext: "Gender", addcontroller: _gender),
-              CustomTextField(hinttext: "Location", addcontroller: _location),
-              CustomTextField(hinttext: "Landmark", addcontroller: _landmark),
-              CustomTextField(hinttext: "Pincode", addcontroller: _pincode),
+              SizedBox(
+                height: 50,
+                child: Card(
+                    child: TextField(
+                  autofocus: true,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontFamily: 'Poppins',
+                    fontWeight: FontWeight.w400,
+                  ),
+                  controller: _question,
+                  maxLines: 3,
+                  decoration: const InputDecoration(
+                      border: InputBorder.none,
+                      hintStyle: TextStyle(
+                        fontSize: 14,
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w400,
+                      ),
+                      hintMaxLines: 2,
+                      hintText: 'Question'),
+                )),
+              ),
+              SizedBox(
+                height: 50,
+                child: Card(
+                    child: TextField(
+                  autofocus: true,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontFamily: 'Poppins',
+                    fontWeight: FontWeight.w400,
+                  ),
+                  controller: _answer,
+                  maxLines: 3,
+                  decoration: const InputDecoration(
+                      border: InputBorder.none,
+                      hintStyle: TextStyle(
+                        fontSize: 14,
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w400,
+                      ),
+                      hintMaxLines: 2,
+                      hintText: 'Answer'),
+                )),
+              ),
+              SizedBox(
+                height: 50,
+                child: Card(
+                    child: TextField(
+                  autofocus: true,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontFamily: 'Poppins',
+                    fontWeight: FontWeight.w400,
+                  ),
+                  controller: _gymid,
+                  maxLines: 3,
+                  decoration: const InputDecoration(
+                      border: InputBorder.none,
+                      hintStyle: TextStyle(
+                        fontSize: 14,
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w400,
+                      ),
+                      hintMaxLines: 2,
+                      hintText: 'Gym ID'),
+                )),
+              ),
+              SizedBox(
+                height: 50,
+                child: Card(
+                    child: TextField(
+                  autofocus: true,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontFamily: 'Poppins',
+                    fontWeight: FontWeight.w400,
+                  ),
+                  controller: _id,
+                  maxLines: 3,
+                  decoration: const InputDecoration(
+                      border: InputBorder.none,
+                      hintStyle: TextStyle(
+                        fontSize: 14,
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w400,
+                      ),
+                      hintMaxLines: 2,
+                      hintText: 'ID'),
+                )),
+              ),
+              SizedBox(
+                height: 50,
+                child: Card(
+                    child: TextField(
+                  autofocus: true,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontFamily: 'Poppins',
+                    fontWeight: FontWeight.w400,
+                  ),
+                  controller: _userid,
+                  maxLines: 3,
+                  decoration: const InputDecoration(
+                      border: InputBorder.none,
+                      hintStyle: TextStyle(
+                        fontSize: 14,
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w400,
+                      ),
+                      hintMaxLines: 2,
+                      hintText: 'User ID'),
+                )),
+              ),
               Padding(
                 padding: const EdgeInsets.all(12.0),
                 child: Center(
@@ -367,21 +433,18 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                     onPressed: () async {
                       print("/////");
 
-                      DocumentReference documentReference = FirebaseFirestore
-                          .instance
-                          .collection('product_details')
-                          .doc(_gymiid.text);
+                      DocumentReference documentReference =
+                          FirebaseFirestore.instance
+                              .collection('faq')
+                              //change _number to _userid
+                              .doc(_id.text);
 
                       Map<String, dynamic> data = <String, dynamic>{
-                        'address': _address.text,
-                        'gender': _gender.text,
-                        'name': _name.text,
-                        'pincode': _pincode.text,
-                        'location': GeoPoint(
-                            widget.location.latitude, widget.location.latitude),
-                        'gym_id': _gymiid.text,
-                        'gym_owner': _gymowner.text,
-                        'landmark': _landmark.text
+                        'question': _question.text,
+                        'answer': _answer.text,
+                        'gym_id': _gymid.text,
+                        'id': _id.text,
+                        'user_id': _userid.text,
                       };
                       await documentReference
                           .update(data)

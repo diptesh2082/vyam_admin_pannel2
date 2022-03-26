@@ -3,16 +3,24 @@ import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
 
-class Coupon extends StatefulWidget {
-  const Coupon({
+class ReviewInfo extends StatefulWidget {
+  const ReviewInfo({
     Key? key,
   }) : super(key: key);
 
   @override
-  State<Coupon> createState() => _CouponState();
+  State<ReviewInfo> createState() => _ReviewInfoState();
 }
 
-class _CouponState extends State<Coupon> {
+class _ReviewInfoState extends State<ReviewInfo> {
+  final id =
+      FirebaseFirestore.instance.collection('Reviews').doc().id.toString();
+
+  createReview(String nid) {
+    final review = FirebaseFirestore.instance.collection('Reviews');
+    review.doc(nid).set({'review_id': nid});
+  }
+
   @override
   void initState() {
     super.initState();
@@ -36,14 +44,14 @@ class _CouponState extends State<Coupon> {
                   child: GestureDetector(
                     onTap: showAddbox,
                     child: Container(
-                      width: 120,
+                      width: 130,
                       decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(20.0)),
                       child: Row(
                         children: const [
                           Icon(Icons.add),
-                          Text('Add Coupon',
+                          Text('Add Review',
                               style: TextStyle(fontWeight: FontWeight.w400)),
                         ],
                       ),
@@ -51,10 +59,12 @@ class _CouponState extends State<Coupon> {
                   ),
                 ),
                 Center(
-                  child: StreamBuilder<QuerySnapshot>(
+                  child: StreamBuilder(
                     stream: FirebaseFirestore.instance
-                        .collection("coupon")
+                        .collection("Reviews")
                         .snapshots(),
+                    // .collection('T@gmail.com')
+                    // .snapshots(),
                     builder: (context, AsyncSnapshot snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return const CircularProgressIndicator();
@@ -65,6 +75,7 @@ class _CouponState extends State<Coupon> {
                       print("-----------------------------------");
 
                       print(snapshot.data.docs);
+
                       return SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
                         child: DataTable(
@@ -72,24 +83,24 @@ class _CouponState extends State<Coupon> {
                             columns: const [
                               DataColumn(
                                   label: Text(
-                                'Code',
+                                'Experience',
                                 style: TextStyle(fontWeight: FontWeight.w600),
                               )),
                               DataColumn(
                                 label: Text(
-                                  'Details',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
-                              ),
-                              DataColumn(
-                                label: Text(
-                                  'Discount',
+                                  'Rating',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
                               DataColumn(
                                 label: Text(
                                   'Title',
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
+                              ),
+                              DataColumn(
+                                label: Text(
+                                  'UserID',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
@@ -115,20 +126,21 @@ class _CouponState extends State<Coupon> {
 
   DataRow _buildListItem(BuildContext context, DocumentSnapshot data) {
     return DataRow(cells: [
-      DataCell(data != null ? Text(data['code'] ?? "") : Text("")),
-      DataCell(data != null ? Text(data['detail'] ?? "") : Text("")),
-      DataCell(data != null ? Text(data['discount'] ?? "") : Text("")),
+      DataCell(data != null ? Text(data['experience'] ?? "") : Text("")),
+      DataCell(data != null ? Text(data['rating'] ?? "") : Text("")),
       DataCell(data != null ? Text(data['title'] ?? "") : Text("")),
+      DataCell(data != null ? Text(data['user_id'] ?? "") : Text("")),
       DataCell(const Text(""), showEditIcon: true, onTap: () {
         showDialog(
             context: context,
             builder: (context) {
               return SingleChildScrollView(
-                child: ProductEditBox(
+                child: EditBox(
+                  reviewid: data['review_id'],
+                  userid: data['user_id'],
                   title: data['title'],
-                  code: data['code'],
-                  details: data['detail'],
-                  discount: data['discount'],
+                  experience: data['experience'],
+                  rating: data['rating'],
                 ),
               );
             });
@@ -136,10 +148,11 @@ class _CouponState extends State<Coupon> {
     ]);
   }
 
-  TextEditingController _addCode = TextEditingController();
-  TextEditingController _adddetails = TextEditingController();
-  TextEditingController _adddiscount = TextEditingController();
+  TextEditingController _addexperience = TextEditingController();
+  TextEditingController _addrating = TextEditingController();
   TextEditingController _addtitle = TextEditingController();
+  TextEditingController _adduserid = TextEditingController();
+  TextEditingController _addgymid = TextEditingController();
 
   showAddbox() => showDialog(
       context: context,
@@ -160,25 +173,30 @@ class _CouponState extends State<Coupon> {
                           fontWeight: FontWeight.w600,
                           fontSize: 14),
                     ),
-                    CustomTextField(hinttext: "Code", addcontroller: _addCode),
                     CustomTextField(
-                        hinttext: "Details", addcontroller: _adddetails),
+                        hinttext: "Experience", addcontroller: _addexperience),
                     CustomTextField(
-                        hinttext: "Discount", addcontroller: _adddiscount),
+                        hinttext: "Rating", addcontroller: _addrating),
                     CustomTextField(
                         hinttext: "Title", addcontroller: _addtitle),
+                    CustomTextField(
+                        hinttext: "UserID", addcontroller: _adduserid),
+                    CustomTextField(
+                        hinttext: "Gym ID", addcontroller: _addgymid),
                     Center(
                       child: ElevatedButton(
                         onPressed: () async {
-                          FirebaseFirestore.instance
-                              .collection('coupon')
-                              .doc(_addCode.text)
-                              .set(
+                          await createReview(id);
+                          await FirebaseFirestore.instance
+                              .collection('Reviews')
+                              .doc(id)
+                              .update(
                             {
-                              'code': _addCode.text,
-                              'detail': _adddetails.text,
-                              'discount': _adddiscount.text,
+                              'experience': _addexperience.text,
+                              'rating': _addrating.text,
                               'title': _addtitle.text,
+                              'user_id': _adduserid.text,
+                              'gym_id': _addgymid.text
                             },
                           );
                           Navigator.pop(context);
@@ -231,37 +249,39 @@ class CustomTextField extends StatelessWidget {
   }
 }
 
-class ProductEditBox extends StatefulWidget {
-  const ProductEditBox({
-    Key? key,
-    required this.details,
-    required this.discount,
-    required this.title,
-    required this.code,
-  }) : super(key: key);
+class EditBox extends StatefulWidget {
+  const EditBox(
+      {Key? key,
+      required this.experience,
+      required this.rating,
+      required this.title,
+      required this.userid,
+      required this.reviewid})
+      : super(key: key);
 
-  final String details;
-  final String discount;
+  final String experience;
+  final String rating;
   final String title;
-  final String code;
+  final String userid;
+  final String reviewid;
 
   @override
-  _ProductEditBoxState createState() => _ProductEditBoxState();
+  _EditBoxState createState() => _EditBoxState();
 }
 
-class _ProductEditBoxState extends State<ProductEditBox> {
-  TextEditingController _code = TextEditingController();
-  TextEditingController _detail = TextEditingController();
-  TextEditingController _discount = TextEditingController();
+class _EditBoxState extends State<EditBox> {
+  TextEditingController _experience = TextEditingController();
+  TextEditingController _rating = TextEditingController();
   TextEditingController _title = TextEditingController();
+  TextEditingController _userid = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    _code.text = widget.code;
-    _detail.text = widget.details;
-    _discount.text = widget.discount;
+    _experience.text = widget.experience;
+    _rating.text = widget.rating;
     _title.text = widget.title;
+    _userid.text = widget.userid;
   }
 
   @override
@@ -270,7 +290,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(30))),
       content: SizedBox(
-        height: 480,
+        height: 580,
         width: 800,
         child: SingleChildScrollView(
           child: Column(
@@ -283,10 +303,11 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                     fontWeight: FontWeight.w600,
                     fontSize: 14),
               ),
-              CustomTextField(hinttext: "Code", addcontroller: _code),
-              CustomTextField(hinttext: "Detail", addcontroller: _detail),
-              CustomTextField(hinttext: "Discount", addcontroller: _discount),
+              CustomTextField(
+                  hinttext: "Experience", addcontroller: _experience),
+              CustomTextField(hinttext: "Rating", addcontroller: _rating),
               CustomTextField(hinttext: "Title", addcontroller: _title),
+              CustomTextField(hinttext: "User ID", addcontroller: _userid),
               Padding(
                 padding: const EdgeInsets.all(12.0),
                 child: Center(
@@ -296,17 +317,17 @@ class _ProductEditBoxState extends State<ProductEditBox> {
 
                       DocumentReference documentReference = FirebaseFirestore
                           .instance
-                          .collection('product_details')
-                          .doc('T@gmail.com');
+                          .collection('Reviews')
+                          .doc(widget.reviewid);
 
                       Map<String, dynamic> data = <String, dynamic>{
-                        'code': _code.text,
-                        'detail': _detail.text,
-                        'discount': _discount.text,
+                        'experience': _experience.text,
+                        'rating': _rating.text,
                         'title': _title.text,
+                        'user_id': _userid.text,
                       };
                       await documentReference
-                          .set(data)
+                          .update(data)
                           .whenComplete(() => print("Item Updated"))
                           .catchError((e) => print(e));
                       Navigator.pop(context);
