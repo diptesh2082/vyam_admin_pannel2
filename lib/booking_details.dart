@@ -228,8 +228,8 @@ class _BookingDetailsState extends State<BookingDetails> {
           ? Text(data['package_type'].toString())
           : const Text("")),
       DataCell(data['order_date'] != null ? Text(orderDate) : const Text("")),
-      DataCell(data['gym_name'] != null
-          ? Text(data['gym_name'].toString())
+      DataCell(data['gym_details']['name'] != null
+          ? Text(data['gym_details']['name'].toString())
           : const Text("")),
       DataCell(data['gym_address'] != null
           ? Text(data['gym_address'].toString())
