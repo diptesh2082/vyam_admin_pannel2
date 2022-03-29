@@ -78,27 +78,29 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
               color: Colors.blue,
             ),
           ),
-          Column(
-            // mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Text(
-                title!,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 14,
+          FittedBox(
+            child: Column(
+              // mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Text(
+                  title!,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 14,
+                  ),
                 ),
-              ),
-              const SizedBox(
-                height: 8,
-              ),
-              Text(
-                count.toString(),
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 25,
+                const SizedBox(
+                  height: 8,
                 ),
-              ),
-            ],
+                Text(
+                  count.toString(),
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 25,
+                  ),
+                ),
+              ],
+            ),
           )
         ],
       ),

@@ -1,9 +1,11 @@
 import 'package:admin_panel_vyam/Screens/database_info.dart';
 
-import 'package:admin_panel_vyam/login_page.dart';
+// import 'package:admin_panel_vyam/login_page.dart';
 
 import 'package:admin_panel_vyam/routing/route_names.dart';
 import 'package:flutter/material.dart';
+
+import '../Screens/login_page.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
   print('generateRoute: ${settings.name}');
