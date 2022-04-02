@@ -143,19 +143,19 @@ class _ProductDetailsState extends State<ProductDetails> {
     String loctext = "${loc.latitude},${loc.longitude}";
     return DataRow(cells: [
       DataCell(data != null ? Text(data['name'] ?? "") : Text("")),
-      DataCell(data != null ? Text(data['address'] ?? "") : Text("")),
-      DataCell(data != null ? Text(data['gym_id'] ?? "") : Text("")),
-      DataCell(data != null ? Text(data['gym_owner'] ?? "") : Text("")),
-      DataCell(data != null ? Text(data['gender'] ?? "") : Text("")),
-      DataCell(data != null
-          ? GestureDetector(
-              onTap: () async {
-                await MapsLaucherApi().launchMaps(loc.latitude, loc.longitude);
-              },
-              child: Text(loctext))
-          : Text("")),
-      DataCell(data != null ? Text(data['landmark'] ?? "") : Text("")),
-      DataCell(data != null ? Text(data['pincode'] ?? "") : Text("")),
+      // DataCell(data != null ? Text(data['address'] ?? "") : Text("")),
+      // DataCell(data != null ? Text(data['gym_id'] ?? "") : Text("")),
+      // DataCell(data != null ? Text(data['gym_owner'] ?? "") : Text("")),
+      // DataCell(data != null ? Text(data['gender'] ?? "") : Text("")),
+      // DataCell(data != null
+      //     ? GestureDetector(
+      //         onTap: () async {
+      //           await MapsLaucherApi().launchMaps(loc.latitude, loc.longitude);
+      //         },
+      //         child: Text(loctext))
+      //     : Text("")),
+      // DataCell(data != null ? Text(data['landmark'] ?? "") : Text("")),
+      // DataCell(data != null ? Text(data['pincode'] ?? "") : Text("")),
       DataCell(const Text(""), showEditIcon: true, onTap: () {
         showDialog(
             context: context,
@@ -386,7 +386,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                       DocumentReference documentReference = FirebaseFirestore
                           .instance
                           .collection('product_details')
-                          .doc('T@gmail.com');
+                          .doc('buauwPKAbssSDbVJ0JNv');
 
                       GeoPoint dataForGeoPint = GeoPoint(
                           double.parse(_latitudeController.text),
