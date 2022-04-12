@@ -1,7 +1,7 @@
+import 'package:admin_panel_vyam/Packages/packages.dart';
+import 'package:admin_panel_vyam/Trainers/Trainers.dart';
 import 'package:admin_panel_vyam/services/maps_api.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
-
 import 'package:flutter/material.dart';
 
 class ProductDetails extends StatefulWidget {
@@ -29,7 +29,7 @@ class _ProductDetailsState extends State<ProductDetails> {
               color: Colors.grey.shade100,
               borderRadius: BorderRadius.circular(20.0)),
           child: SingleChildScrollView(
-            child: Column(  
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
@@ -64,11 +64,12 @@ class _ProductDetailsState extends State<ProductDetails> {
                         return Container();
                       }
                       print("-----------------------------------");
-          
+
                       print(snapshot.data.docs);
                       return SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
-                        child: DataTable(                                    // ? DATATABLE
+                        child: DataTable(
+                            // ? DATATABLE
                             dataRowHeight: 65,
                             columns: const [
                               DataColumn(
@@ -118,9 +119,11 @@ class _ProductDetailsState extends State<ProductDetails> {
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
-                              DataColumn(label: Text('')), // ! For edit pencil
-                              DataColumn(label: Text('Trainers')), //! For trainer
-                              // DataColumn(label: Text('')), //!For Package
+                              DataColumn(label: Text('')), //! For edit pencil
+                              DataColumn(
+                                  label: Text('Trainers')), //! For trainer
+                              DataColumn(
+                                  label: Text('Packages')), //!For Package
                             ],
                             rows: _buildlist(context, snapshot.data!.docs)),
                       );
@@ -158,27 +161,44 @@ class _ProductDetailsState extends State<ProductDetails> {
           : Text("")),
       DataCell(data != null ? Text(data['landmark'] ?? "") : Text("")),
       DataCell(data != null ? Text(data['pincode'] ?? "") : Text("")),
-      DataCell(const Text(""), showEditIcon: true, onTap: () {
-        showDialog(
+      DataCell(
+        const Text(""),
+        showEditIcon: true,
+        onTap: () {
+          showDialog(
             context: context,
             builder: (context) {
-              return SingleChildScrollView(
-                child: ProductEditBox(
-                  address: data['address'],
-                  gender: data['gender'],
-                  name: data['name'],
-                  pincode: data['pincode'],
-                  gymId: data['gym_id'],
-                  gymOwner: data['gym_owner'],
-                  landmark: data['landmark'],
-                  location: data['location'],
+              return GestureDetector(
+                // ? Added Gesture Detecter for popping off update record Card
+                child: SingleChildScrollView(
+                  child: ProductEditBox(
+                    address: data['address'],
+                    gender: data['gender'],
+                    name: data['name'],
+                    pincode: data['pincode'],
+                    gymId: data['gym_id'],
+                    gymOwner: data['gym_owner'],
+                    landmark: data['landmark'],
+                    location: data['location'],
+                  ),
                 ),
+                onTap: () =>
+                    Navigator.pop(context), // ? ontap Property for popping of
               );
-            });
-      }),
-      DataCell(const Text('Trainer'),onTap: (() {
-        print('HELLO Trainer DATA');
-      }))
+            },
+          );
+        },
+      ),
+      DataCell(const Text('Trainer'), onTap: (() {
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => const TrainerPage(),
+        ));
+      })),
+      DataCell(const Text('Package '), onTap: () {
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => const PackagesPage(),
+        ));
+      })
     ]);
   }
 
@@ -294,6 +314,8 @@ class CustomTextField extends StatelessWidget {
   }
 }
 
+// *Updating Item list Class
+
 class ProductEditBox extends StatefulWidget {
   const ProductEditBox({
     Key? key,
@@ -386,7 +408,6 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                 child: Center(
                   child: ElevatedButton(
                     onPressed: () async {
-                      print("/////");
                       print("The Gym id is : ${_gymiid.text}");
                       DocumentReference documentReference = FirebaseFirestore
                           .instance
