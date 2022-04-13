@@ -2,11 +2,13 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:admin_panel_vyam/services/maps_api.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:textfield_tags/textfield_tags.dart';
@@ -24,7 +26,7 @@ class TrainerPage extends StatefulWidget {
 }
 
 class _TrainerPageState extends State<TrainerPage> {
-  TextfieldTagsController _tagsController = TextfieldTagsController();
+  TextfieldTagsController? _tagsController;
   double? _distanceToField;
 
   @override
@@ -36,6 +38,14 @@ class _TrainerPageState extends State<TrainerPage> {
   @override
   void initState() {
     super.initState();
+    _tagsController = TextfieldTagsController();
+    // getCertification();
+  }
+
+  @override
+  void dispose() {
+    _tagsController!.dispose();
+    super.dispose();
   }
 
   @override
@@ -110,12 +120,12 @@ class _TrainerPageState extends State<TrainerPage> {
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
-                              DataColumn(
-                                label: Text(
-                                  'Certifications',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
-                              ),
+                              // DataColumn(
+                              //   label: Text(
+                              //     'Certifications',
+                              //     style: TextStyle(fontWeight: FontWeight.w600),
+                              //   ),
+                              // ),
                               DataColumn(
                                 label: Text(
                                   'Experience',
@@ -160,23 +170,17 @@ class _TrainerPageState extends State<TrainerPage> {
     return snapshot.map((data) => _buildListItem(context, data)).toList();
   }
 
-  // getdata() async {
-  //   await FirebaseFirestore.instance.collection('product_details').doc('mahtab5752@gmail.com').collection('trainers').get().then((value){
-  //     setState(() {
-  //       List.from(data['certifications']).forEach((element) {
-  //         String dat = (element);
-  //
-  //         certificationList.add(dat);
-  //       });
-  //     });
-  //   })
-  //
-  //   );
+  List certificationList = ['HI', 'NOOB', 'bye'];
+
+  // void getCertification() async {
+  //   FirebaseFirestore.instance
+  //       .collection("product_details")
+  //       .doc('mahtab5752@gmail.com')
+  //       .update({"images": FieldValue.arrayUnion(certificationList)});
   // }
 
   DataRow _buildListItem(BuildContext context, DocumentSnapshot data) {
     String imageUrl = data['images'];
-    List<String> certificationList = data['certifications'];
 
     return DataRow(cells: [
       DataCell(data != null
@@ -184,14 +188,14 @@ class _TrainerPageState extends State<TrainerPage> {
           : Text("")),
       DataCell(data != null ? Text(data['name'] ?? "") : Text("")),
       DataCell(data != null ? Text(data['about'] ?? "") : Text("")),
-      DataCell(data != null
-          ? ListView.builder(
-              itemCount: certificationList.length,
-              itemBuilder: (context, index) {
-                return Text(certificationList[index]);
-              },
-            )
-          : Text("")),
+      // DataCell(data != null
+      //     ? ListView.builder(
+      //         itemCount: certificationList.length,
+      //         itemBuilder: (context, index) {
+      //           return Text(certificationList[index]);
+      //         },
+      //       )
+      //     : Text("")),
       DataCell(data != null ? Text(data['experience'] ?? "") : Text("")),
       DataCell(data != null ? Text(data['clients'] ?? "") : Text("")),
       DataCell(data != null ? Text(data['review'] ?? "") : Text("")),
@@ -237,10 +241,18 @@ class _TrainerPageState extends State<TrainerPage> {
 
   List<String> tagList = [];
   List<String> multiimages = [];
+  late Future<List<FirebaseFile>> futurefiles;
 
   String getImageName(XFile image) {
     return image.path.split("/").last;
   }
+
+  Widget buildFile(BuildContext context, FirebaseFile file) =>
+      CachedNetworkImage(
+        height: 128,
+        width: 127,
+        imageUrl: file.url,
+      );
 
   Future<List<XFile>> multiimagepicker() async {
     List<XFile>? _images = await ImagePicker().pickMultiImage(imageQuality: 50);
@@ -260,10 +272,28 @@ class _TrainerPageState extends State<TrainerPage> {
 
   Future<String> uploadimage(XFile image) async {
     Reference db = FirebaseStorage.instance
-        .ref("gyms/TransformerGymImage/${getImageName(image)}");
+        .ref("/gyms/FitnessFantasy2.0/Images/trainers${getImageName(image)}");
     await db.putFile(File(image.path));
     return await db.getDownloadURL();
   }
+
+  // Future creatUserImage(String url)async{
+  //   final docUser = FirebaseFirestore.instance
+  //       .collection("user_details")
+  //       .doc(number);
+  //   await docUser.update(
+  //       {
+  //         "image": url
+  //       }
+  //   );
+  // }
+  //
+  // File? image;
+  //
+  //
+  // final ref =  FirebaseStorage.instance.ref().child("user_images").child(number+".jpg");
+  // await ref.putFile(image!);
+  // final url = await ref.getDownloadURL();
 
   showAddbox() => showDialog(
       context: context,
@@ -304,9 +334,50 @@ class _TrainerPageState extends State<TrainerPage> {
                             File file = File.fromUri(Uri.file(res));
                             print(file.path);
                           },
+                          // onTap: ()async {
+                          //   String res = await ImagePickerAPI().pickImage(ImageSource.gallery);
+                          //   File file = File.fromUri(Uri.file(res));
+                          //   print(file.path);
+                          // },
                         ),
                       ),
                     ),
+                    // FutureBuilder<List<FirebaseFile>>(
+                    //     future: futurefiles,
+                    //     builder: (context, snapshot) {
+                    //       switch (snapshot.connectionState) {
+                    //         case ConnectionState.waiting:
+                    //           return const Center(
+                    //               child: CircularProgressIndicator());
+                    //         default:
+                    //           if (snapshot.hasError) {
+                    //             return const Center(
+                    //                 child: Text(" Some error occured!!"));
+                    //           } else {
+                    //             final files = snapshot.data!;
+                    //
+                    //             return Padding(
+                    //               padding: const EdgeInsets.symmetric(
+                    //                   horizontal: 8.0),
+                    //               child: SizedBox(
+                    //                 height: 200,
+                    //                 child: GridView.builder(
+                    //                     shrinkWrap: true,
+                    //                     gridDelegate:
+                    //                         const SliverGridDelegateWithFixedCrossAxisCount(
+                    //                             crossAxisCount: 3,
+                    //                             crossAxisSpacing: 0,
+                    //                             mainAxisSpacing: 12.0),
+                    //                     itemCount: files.length,
+                    //                     itemBuilder: (context, index) {
+                    //                       final file = files[index];
+                    //                       return buildFile(context, file);
+                    //                     }),
+                    //               ),
+                    //             );
+                    //           }
+                    //       }
+                    //     }),
                     CustomTextField(hinttext: "name", addcontroller: _addname),
                     CustomTextField(
                         hinttext: "about", addcontroller: _addabout),
@@ -331,7 +402,7 @@ class _TrainerPageState extends State<TrainerPage> {
                       validator: (String tag) {
                         if (tag == 'php') {
                           return 'No, please just no';
-                        } else if (_tagsController.getTags!.contains(tag)) {
+                        } else if (_tagsController!.getTags!.contains(tag)) {
                           return 'you already entered that';
                         }
                         return null;
@@ -362,7 +433,7 @@ class _TrainerPageState extends State<TrainerPage> {
                                 helperStyle: TextStyle(
                                   color: Color.fromARGB(255, 74, 137, 92),
                                 ),
-                                hintText: _tagsController.hasTags
+                                hintText: _tagsController!.hasTags
                                     ? ''
                                     : 'Enter tags:',
                                 errorText: 'error',
@@ -421,11 +492,11 @@ class _TrainerPageState extends State<TrainerPage> {
                                       )
                                     : null,
                               ),
-                              onChanged: (tag) {
+                              onChanged: onChanged,
+                              onSubmitted: (tag) {
                                 tagList.add(tag);
                                 print(tagList);
                               },
-                              onSubmitted: onSubmitted,
                             ),
                           );
                         };
@@ -438,7 +509,7 @@ class _TrainerPageState extends State<TrainerPage> {
                         ),
                       ),
                       onPressed: () {
-                        _tagsController.clearTags();
+                        _tagsController!.clearTags();
                       },
                       child: const Text('CLEAR TAGS'),
                     ),

@@ -175,7 +175,8 @@ class _PackagesPageState extends State<PackagesPage> {
                           FirebaseFirestore.instance
                               .collection('product_details')
                               .doc('mahtab5752@gmail.com')
-                              .set(
+                              .collection('package')
+                              .add(
                             {
                               '1_month': _add1Month.text,
                               '3_month': _add3Month.text,
