@@ -14,7 +14,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:textfield_tags/textfield_tags.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../services/image_picker_api.dart';
+import '../../../services/image_picker_api.dart';
 
 class TrainerPage extends StatefulWidget {
   const TrainerPage({

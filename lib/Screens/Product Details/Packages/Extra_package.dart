@@ -1,24 +1,17 @@
-import 'package:admin_panel_vyam/Packages/packages.dart';
-import 'package:admin_panel_vyam/Trainers/Trainers.dart';
 import 'package:admin_panel_vyam/services/maps_api.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-class ProductDetails extends StatefulWidget {
-  const ProductDetails({
+class ExtraPackagesPage extends StatefulWidget {
+  const ExtraPackagesPage({
     Key? key,
   }) : super(key: key);
 
   @override
-  State<ProductDetails> createState() => _ProductDetailsState();
+  State<ExtraPackagesPage> createState() => _ExtraPackagesPageState();
 }
 
-class _ProductDetailsState extends State<ProductDetails> {
-  @override
-  void initState() {
-    super.initState();
-  }
-
+class _ExtraPackagesPageState extends State<ExtraPackagesPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -55,6 +48,10 @@ class _ProductDetailsState extends State<ProductDetails> {
                   child: StreamBuilder<QuerySnapshot>(
                     stream: FirebaseFirestore.instance
                         .collection("product_details")
+                        .doc("mahtab5752@gmail.com")
+                        .collection("package")
+                        .doc("normal_package")
+                        .collection("gym")
                         .snapshots(),
                     builder: (context, AsyncSnapshot snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
@@ -69,61 +66,44 @@ class _ProductDetailsState extends State<ProductDetails> {
                       return SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
                         child: DataTable(
-                            // ? DATATABLE
                             dataRowHeight: 65,
                             columns: const [
                               DataColumn(
                                   label: Text(
-                                'Name',
+                                'Discount',
                                 style: TextStyle(fontWeight: FontWeight.w600),
                               )),
                               DataColumn(
                                 label: Text(
-                                  'Address',
+                                  'Original Price',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
                               DataColumn(
                                 label: Text(
-                                  'Gym ID',
+                                  'Price',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
                               DataColumn(
                                 label: Text(
-                                  'Gym Owner',
+                                  'Title',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
                               DataColumn(
                                 label: Text(
-                                  'Gender',
+                                  'Type',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
                               DataColumn(
                                 label: Text(
-                                  'Location',
+                                  'Validity',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
-                              DataColumn(
-                                label: Text(
-                                  'Landmark',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
-                              ),
-                              DataColumn(
-                                label: Text(
-                                  'Pincode',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
-                              ),
-                              DataColumn(label: Text('')), //! For edit pencil
-                              DataColumn(
-                                  label: Text('Trainers')), //! For trainer
-                              DataColumn(
-                                  label: Text('Packages')), //!For Package
+                              // DataColumn(label: Text('')), //! For edit pencil
                             ],
                             rows: _buildlist(context, snapshot.data!.docs)),
                       );
@@ -144,72 +124,50 @@ class _ProductDetailsState extends State<ProductDetails> {
   }
 
   DataRow _buildListItem(BuildContext context, DocumentSnapshot data) {
-    GeoPoint loc = data['location'];
-    String loctext = "${loc.latitude},${loc.longitude}";
     return DataRow(cells: [
-      DataCell(data != null ? Text(data['name'] ?? "") : Text("")),
-      DataCell(data != null ? Text(data['address'] ?? "") : Text("")),
-      DataCell(data != null ? Text(data['gym_id'] ?? "") : Text("")),
-      DataCell(data != null ? Text(data['gym_owner'] ?? "") : Text("")),
-      DataCell(data != null ? Text(data['gender'] ?? "") : Text("")),
-      DataCell(data != null
-          ? GestureDetector(
-              onTap: () async {
-                await MapsLaucherApi().launchMaps(loc.latitude, loc.longitude);
-              },
-              child: Text(loctext))
-          : Text("")),
-      DataCell(data != null ? Text(data['landmark'] ?? "") : Text("")),
-      DataCell(data != null ? Text(data['pincode'] ?? "") : Text("")),
-      DataCell(
-        const Text(""),
-        showEditIcon: true,
-        onTap: () {
-          showDialog(
-            context: context,
-            builder: (context) {
-              return GestureDetector(
-                // ? Added Gesture Detecter for popping off update record Card
-                child: SingleChildScrollView(
-                  child: ProductEditBox(
-                    address: data['address'],
-                    gender: data['gender'],
-                    name: data['name'],
-                    pincode: data['pincode'],
-                    gymId: data['gym_id'],
-                    gymOwner: data['gym_owner'],
-                    landmark: data['landmark'],
-                    location: data['location'],
-                  ),
-                ),
-                onTap: () =>
-                    Navigator.pop(context), // ? ontap Property for popping of
-              );
-            },
-          );
-        },
-      ),
-      DataCell(const Text('Trainer'), onTap: (() {
-        Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => const TrainerPage(),
-        ));
-      })),
-      DataCell(const Text('Package '), onTap: () {
-        Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => const PackagesPage(),
-        ));
-      })
+      DataCell(data != null ? Text(data['discount'] ?? "") : Text("")),
+      DataCell(data != null ? Text(data['original_price'] ?? "") : Text("")),
+      DataCell(data != null ? Text(data['price'] ?? "") : Text("")),
+      DataCell(data != null ? Text(data['title'] ?? "") : Text("")),
+      DataCell(data != null ? Text(data['type'] ?? "") : Text("")),
+      DataCell(data != null ? Text(data['validity'] ?? "") : Text("")),
+      // DataCell(
+      //   const Text(""),
+      //   showEditIcon: true,
+      //   onTap: () {
+      //     showDialog(
+      //       context: context,
+      //       builder: (context) {
+      //         return GestureDetector(
+      //           // ? Added Gesture Detecter for popping off update record Card
+      //           child: SingleChildScrollView(
+      //             child: ProductEditBox(
+      //               address: data['address'],
+      //               gender: data['gender'],
+      //               name: data['name'],
+      //               pincode: data['pincode'],
+      //               gymId: data['gym_id'],
+      //               gymOwner: data['gym_owner'],
+      //               landmark: data['landmark'],
+      //               location: data['location'],
+      //             ),
+      //           ),
+      //           onTap: () =>
+      //               Navigator.pop(context), // ? ontap Property for popping of
+      //         );
+      //       },
+      //     );
+      //   },
+      // ),
     ]);
   }
 
-  final TextEditingController _addaddress = TextEditingController();
-  final TextEditingController _addgender = TextEditingController();
-  final TextEditingController _addname = TextEditingController();
-  final TextEditingController _addpincode = TextEditingController();
-  final TextEditingController _addlocation = TextEditingController();
-  final TextEditingController _addlandmark = TextEditingController();
-  final TextEditingController _addgymowner = TextEditingController();
-  final TextEditingController _addgymId = TextEditingController();
+  final TextEditingController _addDiscount = TextEditingController();
+  final TextEditingController _addOriginalPrice = TextEditingController();
+  final TextEditingController _addPrice = TextEditingController();
+  final TextEditingController _addTitle = TextEditingController();
+  final TextEditingController _addType = TextEditingController();
+  final TextEditingController _addValidity = TextEditingController();
   showAddbox() => showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -229,39 +187,35 @@ class _ProductDetailsState extends State<ProductDetails> {
                           fontWeight: FontWeight.w600,
                           fontSize: 14),
                     ),
-                    CustomTextField(hinttext: "Name", addcontroller: _addname),
                     CustomTextField(
-                        hinttext: "Address", addcontroller: _addaddress),
+                        hinttext: "Discount", addcontroller: _addDiscount),
                     CustomTextField(
-                        hinttext: "Gym ID", addcontroller: _addgymId),
+                        hinttext: "OriginalPrice",
+                        addcontroller: _addOriginalPrice),
                     CustomTextField(
-                        hinttext: "Gym Owner", addcontroller: _addgymowner),
+                        hinttext: "Price", addcontroller: _addPrice),
                     CustomTextField(
-                        hinttext: "Gender", addcontroller: _addgender),
+                        hinttext: "Title", addcontroller: _addTitle),
+                    CustomTextField(hinttext: "Type", addcontroller: _addType),
                     CustomTextField(
-                        hinttext: "Location", addcontroller: _addlocation),
-                    CustomTextField(
-                        hinttext: "Landmark", addcontroller: _addlandmark),
-                    CustomTextField(
-                      addcontroller: _addpincode,
-                      hinttext: "Pincode",
-                    ),
+                        hinttext: "Validity", addcontroller: _addValidity),
                     Center(
                       child: ElevatedButton(
                         onPressed: () async {
                           FirebaseFirestore.instance
                               .collection('product_details')
-                              .doc(_addgymId.text)
-                              .set(
+                              .doc("mahtab5752@gmail.com")
+                              .collection("package")
+                              .doc("normal_package")
+                              .collection("gym")
+                              .add(
                             {
-                              'address': _addaddress.text,
-                              'gender': _addgender.text,
-                              'name': _addname.text,
-                              'pincode': _addpincode.text,
-                              'location': _addlocation.text,
-                              'gym_id': _addlandmark.text,
-                              'gym_owner': _addgymowner.text,
-                              'landmark': _addlandmark.text
+                              'discount': _addDiscount.text,
+                              'original_price': _addOriginalPrice.text,
+                              'price': _addPrice.text,
+                              'title': _addTitle.text,
+                              'type': _addType.text,
+                              'validity': _addValidity.text,
                             },
                           );
                           Navigator.pop(context);
@@ -319,57 +273,42 @@ class CustomTextField extends StatelessWidget {
 class ProductEditBox extends StatefulWidget {
   const ProductEditBox({
     Key? key,
-    required this.address,
-    required this.name,
-    required this.gymId,
-    required this.gymOwner,
-    required this.gender,
-    required this.location,
-    required this.landmark,
-    required this.pincode,
+    required this.discount,
+    required this.originalPrice,
+    required this.price,
+    required this.title,
+    required this.type,
+    required this.validity,
   }) : super(key: key);
 
-  final String name;
-  final String address;
-  final String gymId;
-  final String gymOwner;
-  final String gender;
-  final GeoPoint location;
-  final String landmark;
-  final String pincode;
+  final String discount;
+  final String originalPrice;
+  final String price;
+  final String title;
+  final String type;
+  final String validity;
 
   @override
   _ProductEditBoxState createState() => _ProductEditBoxState();
 }
 
 class _ProductEditBoxState extends State<ProductEditBox> {
-  final TextEditingController _name = TextEditingController();
-  final TextEditingController _address = TextEditingController();
-  final TextEditingController _gymiid = TextEditingController();
-  final TextEditingController _gymowner = TextEditingController();
-  final TextEditingController _gender = TextEditingController();
-  final TextEditingController _location = TextEditingController();
-  final TextEditingController _landmark = TextEditingController();
-  final TextEditingController _pincode = TextEditingController();
-
-  final TextEditingController _latitudeController = TextEditingController();
-  final TextEditingController _longitudeController = TextEditingController();
+  final TextEditingController _discount = TextEditingController();
+  final TextEditingController _originalPrice = TextEditingController();
+  final TextEditingController _price = TextEditingController();
+  final TextEditingController _title = TextEditingController();
+  final TextEditingController _type = TextEditingController();
+  final TextEditingController _validity = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    print(widget.address);
-    _address.text = widget.address;
-    _gender.text = widget.gender;
-    _name.text = widget.name;
-    _pincode.text = widget.pincode;
-    _gymiid.text = widget.gymId;
-    _gymowner.text = widget.gymOwner;
-    _landmark.text = widget.landmark;
-    _location.text = "${widget.location.latitude}, ${widget.location.latitude}";
-    _latitudeController.text = widget.location.latitude.toString();
-    _longitudeController.text = widget.location.longitude.toString();
-    print(widget.location.latitude);
+    _discount.text = widget.discount;
+    _originalPrice.text = widget.originalPrice;
+    _price.text = widget.price;
+    _title.text = widget.title;
+    _type.text = widget.type;
+    _validity.text = widget.validity;
   }
 
   @override
@@ -391,42 +330,34 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                     fontWeight: FontWeight.w600,
                     fontSize: 14),
               ),
-              CustomTextField(hinttext: "Name", addcontroller: _name),
-              CustomTextField(hinttext: "Address", addcontroller: _address),
-              CustomTextField(hinttext: "Gym ID", addcontroller: _gymiid),
-              CustomTextField(hinttext: "Gym Owner", addcontroller: _gymowner),
-              CustomTextField(hinttext: "Gender", addcontroller: _gender),
-              CustomTextField(hinttext: "Location", addcontroller: _location),
+              CustomTextField(hinttext: "Discount", addcontroller: _discount),
               CustomTextField(
-                  hinttext: 'Latitude', addcontroller: _latitudeController),
-              CustomTextField(
-                  hinttext: 'Longitude', addcontroller: _longitudeController),
-              CustomTextField(hinttext: "Landmark", addcontroller: _landmark),
-              CustomTextField(hinttext: "Pincode", addcontroller: _pincode),
+                  hinttext: "Original Price", addcontroller: _originalPrice),
+              CustomTextField(hinttext: "Price", addcontroller: _price),
+              CustomTextField(hinttext: "Title", addcontroller: _title),
+              CustomTextField(hinttext: "Type", addcontroller: _type),
+              CustomTextField(hinttext: "Validity", addcontroller: _validity),
               Padding(
                 padding: const EdgeInsets.all(12.0),
                 child: Center(
                   child: ElevatedButton(
                     onPressed: () async {
-                      print("The Gym id is : ${_gymiid.text}");
+                      print("The Gym id is : ${_discount.text}");
                       DocumentReference documentReference = FirebaseFirestore
                           .instance
                           .collection('product_details')
-                          .doc('T@gmail.com');
-
-                      GeoPoint dataForGeoPint = GeoPoint(
-                          double.parse(_latitudeController.text),
-                          double.parse(_longitudeController.text));
-
+                          .doc("mahtab5752@gmail.com")
+                          .collection("package")
+                          .doc("normal_package")
+                          .collection("gym")
+                          .doc();
                       Map<String, dynamic> data = <String, dynamic>{
-                        'address': _address.text,
-                        'gender': _gender.text,
-                        'name': _name.text,
-                        'pincode': _pincode.text,
-                        'location': dataForGeoPint,
-                        'gym_id': _gymiid.text,
-                        'gym_owner': _gymowner.text,
-                        'landmark': _landmark.text
+                        'discount': _discount.text,
+                        'originalPrice': _originalPrice.text,
+                        'price': _price.text,
+                        'title': _title.text,
+                        'type': _type,
+                        'validity': _validity.text,
                       };
                       await documentReference
                           .update(data)
