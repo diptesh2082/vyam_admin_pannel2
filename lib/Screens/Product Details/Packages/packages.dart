@@ -94,6 +94,7 @@ class _PackagesPageState extends State<PackagesPage> {
                                 ),
                               ),
                               DataColumn(label: Text('')), // ! For edit pencil
+                              DataColumn(label: Text('')),
                             ],
                             rows: _buildlist(context, snapshot.data!.docs)),
                       );
@@ -133,6 +134,9 @@ class _PackagesPageState extends State<PackagesPage> {
               );
             });
       }),
+      DataCell(Icon(Icons.delete), onTap: () {
+        deleteMethod();
+      })
     ]);
   }
 
@@ -194,6 +198,18 @@ class _PackagesPageState extends State<PackagesPage> {
               ),
             ),
           ));
+
+  Future<void> deleteMethod() {
+    CollectionReference users = FirebaseFirestore.instance
+        .collection('product_details')
+        .doc('mahtab5752@gmail.com')
+        .collection('package');
+    return users
+        .doc('EsNqlfdGbWwwIMnt0a6L')
+        .delete()
+        .then((value) => print("User Deleted"))
+        .catchError((error) => print("Failed to delete user: $error"));
+  }
 }
 
 class CustomTextField extends StatelessWidget {

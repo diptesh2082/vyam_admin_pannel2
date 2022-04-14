@@ -150,7 +150,7 @@ class _TrainerPageState extends State<TrainerPage> {
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
-                              // DataColumn(label: Text('')), // ! For edit pencil
+                              DataColumn(label: Text('')), // ! For edit pencil
                             ],
                             rows: _buildlist(context, snapshot.data!.docs)),
                       );
@@ -207,25 +207,30 @@ class _TrainerPageState extends State<TrainerPage> {
               },
               icon: Icon(FontAwesome.instagram))
           : Text("")),
-      // DataCell(const Text(""), showEditIcon: true, onTap: () {
-      //   showDialog(
-      //       context: context,
-      //       builder: (context) {
-      //         return SingleChildScrollView(
-      //           child: ProductEditBox(
-      //             images: data['images'],
-      //             name: data['name'],
-      //             about: data['about'],
-      //             certifications: data['certifications'],
-      //             experience: data['experience'],
-      //             clients: data['clients'],
-      //             review: data['review'],
-      //             socialMedia: data['social_media'],
-      //             // specialization: data['specialization'],
-      //           ),
-      //         );
-      //       });
-      // }),
+      DataCell(const Text(""), showEditIcon: true, onTap: () {
+        showDialog(
+            context: context,
+            builder: (context) {
+              return GestureDetector(
+                child: SingleChildScrollView(
+                  child: ProductEditBox(
+                    images: data['images'],
+                    name: data['name'],
+                    about: data['about'],
+                    // certifications: data['certifications'],
+                    experience: data['experience'],
+                    clients: data['clients'],
+                    review: data['review'],
+                    socialMedia: data['social_media'],
+                    // specialization: data['specialization'],
+                  ),
+                ),
+                onTap: (){
+                  Navigator.pop(context);
+                },
+              );
+            });
+      }),
     ]);
   }
 
@@ -518,8 +523,8 @@ class _TrainerPageState extends State<TrainerPage> {
                         onPressed: () async {
                           FirebaseFirestore.instance
                               .collection('product_details')
-                              .doc(_addname.text)
-                              .set(
+                              .doc('mahtab5752@gmail.com').collection('trainer')
+                              .add(
                             {
                               'image': _addimages.text,
                               'gender': _addabout.text,
@@ -614,7 +619,7 @@ class ProductEditBox extends StatefulWidget {
     required this.images,
     required this.name,
     required this.about,
-    required this.certifications,
+    // required this.certifications,
     required this.experience,
     required this.clients,
     required this.review,
@@ -625,7 +630,7 @@ class ProductEditBox extends StatefulWidget {
   final String name;
   final String images;
   final String about;
-  final List certifications;
+  // final List certifications;
   final String experience;
   final String clients;
   final String review;
@@ -640,7 +645,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
   final TextEditingController _name = TextEditingController();
   final TextEditingController _images = TextEditingController();
   final TextEditingController _about = TextEditingController();
-  final TextEditingController _certifications = TextEditingController();
+  // final TextEditingController _certifications = TextEditingController();
   final TextEditingController _experience = TextEditingController();
   final TextEditingController _clients = TextEditingController();
   final TextEditingController _review = TextEditingController();
@@ -702,8 +707,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                       DocumentReference documentReference = FirebaseFirestore
                           .instance
                           .collection('product_details')
-                          .doc('T@gmail.com');
-
+                          .doc('mahtab5752@gmail.com').collection('trainer').doc();
                       Map<String, dynamic> data = <String, dynamic>{
                         'image': _images.text,
                         'name': _name.text,

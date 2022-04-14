@@ -1,10 +1,5 @@
-import 'package:admin_panel_vyam/services/maps_api.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-
-import 'Product Details/Packages/Extra_package.dart';
-import 'Product Details/Packages/packages.dart';
-import 'Product Details/Trainers/Trainers.dart';
 
 class PaymentsPage extends StatefulWidget {
   const PaymentsPage({
@@ -97,7 +92,7 @@ class _PaymentsPageState extends State<PaymentsPage> {
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
-                              // DataColumn(label: Text('')), //! For edit pencil
+                              DataColumn(label: Text('')), //! For edit pencil
                             ],
                             rows: _buildlist(context, snapshot.data!.docs)),
                       );
@@ -125,34 +120,34 @@ class _PaymentsPageState extends State<PaymentsPage> {
       DataCell(data != null ? Text(data['amount'] ?? "") : Text("")),
       DataCell(data != null ? Text(data['place'] ?? "") : Text("")),
       DataCell(data != null ? Text(stamp) : Text("")),
-      // DataCell(
-      //   const Text(""),
-      //   showEditIcon: true,
-      //   onTap: () {
-      //     showDialog(
-      //       context: context,
-      //       builder: (context) {
-      //         return GestureDetector(
-      //           // ? Added Gesture Detecter for popping off update record Card
-      //           child: SingleChildScrollView(
-      //             child: ProductEditBox(
-      //               address: data['address'],
-      //               gender: data['gender'],
-      //               name: data['name'],
-      //               pincode: data['pincode'],
-      //               gymId: data['gym_id'],
-      //               gymOwner: data['gym_owner'],
-      //               landmark: data['landmark'],
-      //               location: data['location'],
-      //             ),
-      //           ),
-      //           onTap: () =>
-      //               Navigator.pop(context), // ? ontap Property for popping of
-      //         );
-      //       },
-      //     );
-      //   },
-      // ),
+      DataCell(
+        const Text(""),
+        showEditIcon: true,
+        onTap: () {
+          showDialog(
+            context: context,
+            builder: (context) {
+              return GestureDetector(
+                // ? Added Gesture Detecter for popping off update record Card
+                child: SingleChildScrollView(
+                  child: ProductEditBox(
+                    amount: data['amount'],
+                    place: data['place'],
+                    name: data['name'],
+                    timestamp: data['timestamp'],
+                  ),
+                ),
+                onTap: () =>
+                    Navigator.pop(context), // ? ontap Property for popping of
+              );
+            },
+          );
+        },
+      ),
+      DataCell(Icon(Icons.delete),
+      onTap: (){
+        deleteMethod();
+      })
     ]);
   }
 
@@ -208,6 +203,17 @@ class _PaymentsPageState extends State<PaymentsPage> {
               ),
             ),
           ));
+
+  
+    Future<void> deleteMethod() {
+    CollectionReference users = FirebaseFirestore.instance
+        .collection('payment');
+    return users
+        .doc('mahtab5752@gmail.com')
+        .delete()
+        .then((value) => print("User Deleted"))
+        .catchError((error) => print("Failed to delete user: $error"));
+  }
 }
 
 class CustomTextField extends StatelessWidget {

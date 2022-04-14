@@ -131,6 +131,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                               DataColumn(
                                 label: Text('Extra Packages'),
                               ),
+                              DataColumn(label: Text('')),
                             ],
                             rows: _buildlist(context, snapshot.data!.docs)),
                       );
@@ -210,6 +211,10 @@ class _ProductDetailsState extends State<ProductDetails> {
         Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => const ExtraPackagesPage(),
         ));
+      }),
+      DataCell(Icon(Icons.delete),
+      onTap: (){
+        deleteMethod();
       })
     ]);
   }
@@ -286,6 +291,14 @@ class _ProductDetailsState extends State<ProductDetails> {
               ),
             ),
           ));
+
+Future<void> deleteMethod() {
+    CollectionReference users = FirebaseFirestore.instance.collection('product_details');
+  return users.doc('mahtab5752@gmail.com')
+    .delete()
+    .then((value) => print("User Deleted"))
+    .catchError((error) => print("Failed to delete user: $error"));
+  }
 }
 
 class CustomTextField extends StatelessWidget {
