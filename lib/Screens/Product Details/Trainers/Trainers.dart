@@ -1,26 +1,25 @@
 import 'dart:async';
 import 'dart:io';
-
-import 'package:admin_panel_vyam/services/maps_api.dart';
+import 'package:admin_panel_vyam/services/MatchIDMethod.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:textfield_tags/textfield_tags.dart';
 import 'package:url_launcher/url_launcher.dart';
-
+import '../../../services/CustomTextFieldClass.dart';
+import '../../../services/deleteMethod.dart';
 import '../../../services/image_picker_api.dart';
 
-class TrainerPage extends StatefulWidget {
-  const TrainerPage({
-    Key? key,
-  }) : super(key: key);
+String globalGymId = '';
 
+class TrainerPage extends StatefulWidget {
+  TrainerPage({Key? key, required this.tGymId}) : super(key: key);
+
+  String tGymId;
   @override
   State<TrainerPage> createState() => _TrainerPageState();
 }
@@ -28,6 +27,9 @@ class TrainerPage extends StatefulWidget {
 class _TrainerPageState extends State<TrainerPage> {
   TextfieldTagsController? _tagsController;
   double? _distanceToField;
+
+  CollectionReference? trainerStream;
+  final id = FirebaseFirestore.instance.collection('product_details').doc().id;
 
   @override
   void didChangeDependencies() {
@@ -39,17 +41,16 @@ class _TrainerPageState extends State<TrainerPage> {
   void initState() {
     super.initState();
     _tagsController = TextfieldTagsController();
-    // getCertification();
-  }
-
-  @override
-  void dispose() {
-    _tagsController!.dispose();
-    super.dispose();
+    globalGymId = widget.tGymId;
+    trainerStream = FirebaseFirestore.instance
+        .collection('product_details')
+        .doc(widget.tGymId)
+        .collection('trainers');
   }
 
   @override
   Widget build(BuildContext context) {
+    print("Current Document_id -->${widget.tGymId}"); //Printing for information
     return Scaffold(
       body: SafeArea(
         child: Container(
@@ -82,11 +83,7 @@ class _TrainerPageState extends State<TrainerPage> {
                 ),
                 Center(
                   child: StreamBuilder<QuerySnapshot>(
-                    stream: FirebaseFirestore.instance
-                        .collection('product_details')
-                        .doc('mahtab5752@gmail.com')
-                        .collection('trainers')
-                        .snapshots(),
+                    stream: trainerStream!.snapshots(),
                     builder: (context, AsyncSnapshot snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return const CircularProgressIndicator();
@@ -97,7 +94,11 @@ class _TrainerPageState extends State<TrainerPage> {
                       }
                       print("-----------------------------------");
 
-                      print(snapshot.data.docs);
+                      var document = snapshot.data.docs;
+                      int documentLength = snapshot.data.docs.length;
+                      for (int i = 0; i <= documentLength - 1; i++) {
+                        print(document[i]['name']);
+                      }
                       return SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
                         child: DataTable(
@@ -111,6 +112,11 @@ class _TrainerPageState extends State<TrainerPage> {
                               )),
                               DataColumn(
                                   label: Text(
+                                'Trainer Id',
+                                style: TextStyle(fontWeight: FontWeight.w600),
+                              )),
+                              DataColumn(
+                                  label: Text(
                                 'Name',
                                 style: TextStyle(fontWeight: FontWeight.w600),
                               )),
@@ -120,12 +126,6 @@ class _TrainerPageState extends State<TrainerPage> {
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
-                              // DataColumn(
-                              //   label: Text(
-                              //     'Certifications',
-                              //     style: TextStyle(fontWeight: FontWeight.w600),
-                              //   ),
-                              // ),
                               DataColumn(
                                 label: Text(
                                   'Experience',
@@ -151,6 +151,7 @@ class _TrainerPageState extends State<TrainerPage> {
                                 ),
                               ),
                               DataColumn(label: Text('')), // ! For edit pencil
+                              DataColumn(label: Text('')),
                             ],
                             rows: _buildlist(context, snapshot.data!.docs)),
                       );
@@ -172,34 +173,19 @@ class _TrainerPageState extends State<TrainerPage> {
 
   List certificationList = ['HI', 'NOOB', 'bye'];
 
-  // void getCertification() async {
-  //   FirebaseFirestore.instance
-  //       .collection("product_details")
-  //       .doc('mahtab5752@gmail.com')
-  //       .update({"images": FieldValue.arrayUnion(certificationList)});
-  // }
-
   DataRow _buildListItem(BuildContext context, DocumentSnapshot data) {
     String imageUrl = data['images'];
-
+    String trainerId = data['trainer_id'];
     return DataRow(cells: [
       DataCell(data != null
           ? CircleAvatar(backgroundImage: NetworkImage(imageUrl))
           : Text("")),
+      DataCell(data != null ? Text(trainerId) : Text("")),
       DataCell(data != null ? Text(data['name'] ?? "") : Text("")),
       DataCell(data != null ? Text(data['about'] ?? "") : Text("")),
-      // DataCell(data != null
-      //     ? ListView.builder(
-      //         itemCount: certificationList.length,
-      //         itemBuilder: (context, index) {
-      //           return Text(certificationList[index]);
-      //         },
-      //       )
-      //     : Text("")),
       DataCell(data != null ? Text(data['experience'] ?? "") : Text("")),
       DataCell(data != null ? Text(data['clients'] ?? "") : Text("")),
       DataCell(data != null ? Text(data['review'] ?? "") : Text("")),
-      // DataCell(data != null ? Text(data['specialization'] ?? "") : Text("")),
       DataCell(data != null
           ? IconButton(
               onPressed: () {
@@ -217,19 +203,21 @@ class _TrainerPageState extends State<TrainerPage> {
                     images: data['images'],
                     name: data['name'],
                     about: data['about'],
-                    // certifications: data['certifications'],
                     experience: data['experience'],
                     clients: data['clients'],
                     review: data['review'],
                     socialMedia: data['social_media'],
-                    // specialization: data['specialization'],
+                    trainerId: data['trainer_id'],
                   ),
                 ),
-                onTap: (){
+                onTap: () {
                   Navigator.pop(context);
                 },
               );
             });
+      }),
+      DataCell(Icon(Icons.delete), onTap: () {
+        deleteMethod(stream: trainerStream, uniqueDocId: trainerId);
       }),
     ]);
   }
@@ -347,52 +335,16 @@ class _TrainerPageState extends State<TrainerPage> {
                         ),
                       ),
                     ),
-                    // FutureBuilder<List<FirebaseFile>>(
-                    //     future: futurefiles,
-                    //     builder: (context, snapshot) {
-                    //       switch (snapshot.connectionState) {
-                    //         case ConnectionState.waiting:
-                    //           return const Center(
-                    //               child: CircularProgressIndicator());
-                    //         default:
-                    //           if (snapshot.hasError) {
-                    //             return const Center(
-                    //                 child: Text(" Some error occured!!"));
-                    //           } else {
-                    //             final files = snapshot.data!;
-                    //
-                    //             return Padding(
-                    //               padding: const EdgeInsets.symmetric(
-                    //                   horizontal: 8.0),
-                    //               child: SizedBox(
-                    //                 height: 200,
-                    //                 child: GridView.builder(
-                    //                     shrinkWrap: true,
-                    //                     gridDelegate:
-                    //                         const SliverGridDelegateWithFixedCrossAxisCount(
-                    //                             crossAxisCount: 3,
-                    //                             crossAxisSpacing: 0,
-                    //                             mainAxisSpacing: 12.0),
-                    //                     itemCount: files.length,
-                    //                     itemBuilder: (context, index) {
-                    //                       final file = files[index];
-                    //                       return buildFile(context, file);
-                    //                     }),
-                    //               ),
-                    //             );
-                    //           }
-                    //       }
-                    //     }),
-                    CustomTextField(hinttext: "name", addcontroller: _addname),
-                    CustomTextField(
+                    customTextField(hinttext: "name", addcontroller: _addname),
+                    customTextField(
                         hinttext: "about", addcontroller: _addabout),
-                    CustomTextField(
+                    customTextField(
                         hinttext: "experience", addcontroller: _addexperience),
-                    CustomTextField(
+                    customTextField(
                         hinttext: "clients", addcontroller: _addclients),
-                    CustomTextField(
+                    customTextField(
                         hinttext: "review", addcontroller: _addreview),
-                    CustomTextField(
+                    customTextField(
                         hinttext: "socialMedia",
                         addcontroller: _addsocialMedia),
                     TextFieldTags(
@@ -521,10 +473,16 @@ class _TrainerPageState extends State<TrainerPage> {
                     Center(
                       child: ElevatedButton(
                         onPressed: () async {
+                          await matchID(
+                              newId: id,
+                              matchStream: trainerStream,
+                              idField: 'trainer_id');
                           FirebaseFirestore.instance
                               .collection('product_details')
-                              .doc('mahtab5752@gmail.com').collection('trainer')
-                              .add(
+                              .doc(widget.tGymId)
+                              .collection('trainer')
+                              .doc(id)
+                              .set(
                             {
                               'image': _addimages.text,
                               'gender': _addabout.text,
@@ -532,8 +490,7 @@ class _TrainerPageState extends State<TrainerPage> {
                               'pincode': _addclients.text,
                               'location': _addreview.text,
                               'gym_id': _addsocialMedia.text,
-                              // 'gym_owner': _addcertification.text,
-                              // 'landmark': _addspecialization.text
+                              'trainer_id': id,
                             },
                           );
                           Navigator.pop(context);
@@ -575,57 +532,20 @@ class FirebaseFile {
   const FirebaseFile({required this.ref, required this.url});
 }
 
-class CustomTextField extends StatelessWidget {
-  const CustomTextField({
-    Key? key,
-    required this.hinttext,
-    required this.addcontroller,
-  }) : super(key: key);
-
-  final TextEditingController addcontroller;
-  final String hinttext;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 50,
-      child: Card(
-          child: TextField(
-        autofocus: true,
-        style: const TextStyle(
-          fontSize: 14,
-          fontFamily: 'poppins',
-          fontWeight: FontWeight.w400,
-        ),
-        controller: addcontroller,
-        maxLines: 3,
-        decoration: InputDecoration(
-            border: InputBorder.none,
-            hintStyle: const TextStyle(
-              fontSize: 14,
-              fontFamily: 'poppins',
-              fontWeight: FontWeight.w400,
-            ),
-            hintMaxLines: 2,
-            hintText: hinttext),
-      )),
-    );
-  }
-}
-
 class ProductEditBox extends StatefulWidget {
-  const ProductEditBox({
-    Key? key,
-    required this.images,
-    required this.name,
-    required this.about,
-    // required this.certifications,
-    required this.experience,
-    required this.clients,
-    required this.review,
-    required this.socialMedia,
-    // required this.specialization,
-  }) : super(key: key);
+  const ProductEditBox(
+      {Key? key,
+      required this.images,
+      required this.name,
+      required this.about,
+      // required this.certifications,
+      required this.experience,
+      required this.clients,
+      required this.review,
+      required this.socialMedia,
+      // required this.specialization,
+      required this.trainerId})
+      : super(key: key);
 
   final String name;
   final String images;
@@ -636,6 +556,7 @@ class ProductEditBox extends StatefulWidget {
   final String review;
   // final List specialization;
   final String socialMedia;
+  final String trainerId;
 
   @override
   _ProductEditBoxState createState() => _ProductEditBoxState();
@@ -685,17 +606,17 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                     fontWeight: FontWeight.w600,
                     fontSize: 14),
               ),
-              CustomTextField(hinttext: "Image", addcontroller: _images),
-              CustomTextField(hinttext: "Name", addcontroller: _name),
-              CustomTextField(hinttext: "About", addcontroller: _about),
+              customTextField(hinttext: "Image", addcontroller: _images),
+              customTextField(hinttext: "Name", addcontroller: _name),
+              customTextField(hinttext: "About", addcontroller: _about),
               // CustomTextField(hinttext: "Certifications", addcontroller: _certifications),
-              CustomTextField(
+              customTextField(
                   hinttext: "Experience", addcontroller: _experience),
-              CustomTextField(hinttext: "Client", addcontroller: _clients),
-              CustomTextField(hinttext: "Review", addcontroller: _review),
+              customTextField(hinttext: "Client", addcontroller: _clients),
+              customTextField(hinttext: "Review", addcontroller: _review),
 
               // CustomTextField(hinttext: "Specialization", addcontroller: _specialization),
-              CustomTextField(
+              customTextField(
                   hinttext: "Social Media", addcontroller: _socialMedia),
 
               Padding(
@@ -703,11 +624,13 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                 child: Center(
                   child: ElevatedButton(
                     onPressed: () async {
-                      print("The Gym id is : ${_name.text}");
+                      print("The Gym id is : ${widget.trainerId}");
                       DocumentReference documentReference = FirebaseFirestore
                           .instance
                           .collection('product_details')
-                          .doc('mahtab5752@gmail.com').collection('trainer').doc();
+                          .doc(globalGymId)
+                          .collection('trainers')
+                          .doc(widget.trainerId);
                       Map<String, dynamic> data = <String, dynamic>{
                         'image': _images.text,
                         'name': _name.text,

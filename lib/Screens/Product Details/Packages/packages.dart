@@ -1,23 +1,38 @@
+import 'package:admin_panel_vyam/services/deleteMethod.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import '../../../services/CustomTextFieldClass.dart';
+import '../../../services/MatchIDMethod.dart';
+
+String globalGymId = '';
 
 class PackagesPage extends StatefulWidget {
-  const PackagesPage({
-    Key? key,
-  }) : super(key: key);
+  String pGymId;
+  PackagesPage({Key? key, required this.pGymId}) : super(key: key);
 
   @override
   State<PackagesPage> createState() => _PackagesPageState();
 }
 
 class _PackagesPageState extends State<PackagesPage> {
+  CollectionReference? packageStream;
+
   @override
   void initState() {
     super.initState();
+    packageStream = FirebaseFirestore.instance
+        .collection('product_details')
+        .doc(widget.pGymId)
+        .collection('package');
+    globalGymId = widget.pGymId;
   }
+
+  final finalPackID =
+      FirebaseFirestore.instance.collection('product_details').doc().id;
 
   @override
   Widget build(BuildContext context) {
+    print(finalPackID);
     return Scaffold(
       body: SafeArea(
         child: Container(
@@ -50,11 +65,7 @@ class _PackagesPageState extends State<PackagesPage> {
                 ),
                 Center(
                   child: StreamBuilder<QuerySnapshot>(
-                    stream: FirebaseFirestore.instance
-                        .collection('product_details')
-                        .doc('mahtab5752@gmail.com')
-                        .collection('package')
-                        .snapshots(),
+                    stream: packageStream!.snapshots(),
                     builder: (context, AsyncSnapshot snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return const CircularProgressIndicator();
@@ -94,7 +105,7 @@ class _PackagesPageState extends State<PackagesPage> {
                                 ),
                               ),
                               DataColumn(label: Text('')), // ! For edit pencil
-                              DataColumn(label: Text('')),
+                              DataColumn(label: Text('')), // ! For delete
                             ],
                             rows: _buildlist(context, snapshot.data!.docs)),
                       );
@@ -115,6 +126,7 @@ class _PackagesPageState extends State<PackagesPage> {
   }
 
   DataRow _buildListItem(BuildContext context, DocumentSnapshot data) {
+    String packId = data['pack_id'];
     return DataRow(cells: [
       DataCell(data != null ? Text(data['1_month'] ?? "") : Text("")),
       DataCell(data != null ? Text(data['3_month'] ?? "") : Text("")),
@@ -124,18 +136,22 @@ class _PackagesPageState extends State<PackagesPage> {
         showDialog(
             context: context,
             builder: (context) {
-              return SingleChildScrollView(
-                child: ProductEditBox(
-                  oneMonth: data['1_month'],
-                  threeMonth: data['3_month'],
-                  sixMonth: data['6_month'],
-                  payPerSession: data['pay_per_session'],
+              return GestureDetector(
+                onTap: () => Navigator.pop(context),
+                child: SingleChildScrollView(
+                  child: ProductEditBox(
+                    oneMonth: data['1_month'],
+                    threeMonth: data['3_month'],
+                    sixMonth: data['6_month'],
+                    payPerSession: data['pay_per_session'],
+                    packId: data['pack_id'],
+                  ),
                 ),
               );
             });
       }),
       DataCell(Icon(Icons.delete), onTap: () {
-        deleteMethod();
+        deleteMethod(stream: packageStream, uniqueDocId: packId);
       })
     ]);
   }
@@ -164,28 +180,34 @@ class _PackagesPageState extends State<PackagesPage> {
                           fontWeight: FontWeight.w600,
                           fontSize: 14),
                     ),
-                    CustomTextField(
+                    customTextField(
                         hinttext: "1 month", addcontroller: _add1Month),
-                    CustomTextField(
+                    customTextField(
                         hinttext: "3 month", addcontroller: _add3Month),
-                    CustomTextField(
+                    customTextField(
                         hinttext: "6 month", addcontroller: _add6Month),
-                    CustomTextField(
+                    customTextField(
                         hinttext: "pay per day",
                         addcontroller: _addPayPerSession),
                     Center(
                       child: ElevatedButton(
                         onPressed: () async {
+                          await matchID(
+                              newId: finalPackID,
+                              matchStream: packageStream,
+                              idField: 'pack_id');
                           FirebaseFirestore.instance
                               .collection('product_details')
-                              .doc('mahtab5752@gmail.com')
+                              .doc(widget.pGymId)
                               .collection('package')
-                              .add(
+                              .doc(finalPackID)
+                              .set(
                             {
                               '1_month': _add1Month.text,
                               '3_month': _add3Month.text,
                               '6_month': _add6Month.text,
                               'pay_per_session': _addPayPerSession.text,
+                              'pack_id': finalPackID,
                             },
                           );
                           Navigator.pop(context);
@@ -198,56 +220,6 @@ class _PackagesPageState extends State<PackagesPage> {
               ),
             ),
           ));
-
-  Future<void> deleteMethod() {
-    CollectionReference users = FirebaseFirestore.instance
-        .collection('product_details')
-        .doc('mahtab5752@gmail.com')
-        .collection('package');
-    return users
-        .doc('EsNqlfdGbWwwIMnt0a6L')
-        .delete()
-        .then((value) => print("User Deleted"))
-        .catchError((error) => print("Failed to delete user: $error"));
-  }
-}
-
-class CustomTextField extends StatelessWidget {
-  const CustomTextField({
-    Key? key,
-    required this.hinttext,
-    required this.addcontroller,
-  }) : super(key: key);
-
-  final TextEditingController addcontroller;
-  final String hinttext;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 50,
-      child: Card(
-          child: TextField(
-        autofocus: true,
-        style: const TextStyle(
-          fontSize: 14,
-          fontFamily: 'poppins',
-          fontWeight: FontWeight.w400,
-        ),
-        controller: addcontroller,
-        maxLines: 3,
-        decoration: InputDecoration(
-            border: InputBorder.none,
-            hintStyle: const TextStyle(
-              fontSize: 14,
-              fontFamily: 'poppins',
-              fontWeight: FontWeight.w400,
-            ),
-            hintMaxLines: 2,
-            hintText: hinttext),
-      )),
-    );
-  }
 }
 
 class ProductEditBox extends StatefulWidget {
@@ -257,12 +229,14 @@ class ProductEditBox extends StatefulWidget {
     required this.threeMonth,
     required this.sixMonth,
     required this.payPerSession,
+    required this.packId,
   }) : super(key: key);
 
   final String oneMonth;
   final String threeMonth;
   final String sixMonth;
   final String payPerSession;
+  final String packId;
 
   @override
   _ProductEditBoxState createState() => _ProductEditBoxState();
@@ -301,23 +275,23 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                     fontWeight: FontWeight.w600,
                     fontSize: 14),
               ),
-              CustomTextField(hinttext: "1 month", addcontroller: _oneMonth),
-              CustomTextField(hinttext: "3 month", addcontroller: _threeMonth),
-              CustomTextField(hinttext: "6 month", addcontroller: _sixMonth),
-              CustomTextField(
+              customTextField(hinttext: "1 month", addcontroller: _oneMonth),
+              customTextField(hinttext: "3 month", addcontroller: _threeMonth),
+              customTextField(hinttext: "6 month", addcontroller: _sixMonth),
+              customTextField(
                   hinttext: "pay per session", addcontroller: _payPerSession),
               Padding(
                 padding: const EdgeInsets.all(12.0),
                 child: Center(
                   child: ElevatedButton(
                     onPressed: () async {
-                      print("The Gym id is : ${_oneMonth.text}");
+                      print("The Gym id is : ${widget.packId}");
                       DocumentReference documentReference = FirebaseFirestore
                           .instance
                           .collection('product_details')
-                          .doc('mahtab5752@gmail.com')
+                          .doc(globalGymId)
                           .collection('package')
-                          .doc('normal_package');
+                          .doc(widget.packId);
                       Map<String, dynamic> data = <String, dynamic>{
                         '1_month': _oneMonth.text,
                         '3_month': _threeMonth.text,

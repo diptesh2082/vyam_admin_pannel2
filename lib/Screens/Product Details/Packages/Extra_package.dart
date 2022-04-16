@@ -2,16 +2,34 @@ import 'package:admin_panel_vyam/services/maps_api.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
+import '../../../services/CustomTextFieldClass.dart';
+
+String globalGymId = '';
+
 class ExtraPackagesPage extends StatefulWidget {
-  const ExtraPackagesPage({
-    Key? key,
-  }) : super(key: key);
+  String pGymId;
+  ExtraPackagesPage({required this.pGymId});
 
   @override
   State<ExtraPackagesPage> createState() => _ExtraPackagesPageState();
 }
 
 class _ExtraPackagesPageState extends State<ExtraPackagesPage> {
+  CollectionReference? extraPackageStream;
+
+  @override
+  void initState() {
+    super.initState();
+
+    globalGymId = widget.pGymId;
+    extraPackageStream = FirebaseFirestore.instance
+        .collection("product_details")
+        .doc(widget.pGymId)
+        .collection("package")
+        .doc("normal_package")
+        .collection("gym");
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,13 +64,7 @@ class _ExtraPackagesPageState extends State<ExtraPackagesPage> {
                 ),
                 Center(
                   child: StreamBuilder<QuerySnapshot>(
-                    stream: FirebaseFirestore.instance
-                        .collection("product_details")
-                        .doc("mahtab5752@gmail.com")
-                        .collection("package")
-                        .doc("normal_package")
-                        .collection("gym")
-                        .snapshots(),
+                    stream: extraPackageStream!.snapshots(),
                     builder: (context, AsyncSnapshot snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return const CircularProgressIndicator();
@@ -68,6 +80,11 @@ class _ExtraPackagesPageState extends State<ExtraPackagesPage> {
                         child: DataTable(
                             dataRowHeight: 65,
                             columns: const [
+                              DataColumn(
+                                  label: Text(
+                                'ID',
+                                style: TextStyle(fontWeight: FontWeight.w600),
+                              )),
                               DataColumn(
                                   label: Text(
                                 'Discount',
@@ -103,8 +120,8 @@ class _ExtraPackagesPageState extends State<ExtraPackagesPage> {
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
-                              // DataColumn(label: Text('')), //! For edit pencil
-                              DataColumn(label: Text('')),
+                              DataColumn(label: Text('')), //! For edit pencil
+                              DataColumn(label: Text('')), // For Delete
                             ],
                             rows: _buildlist(context, snapshot.data!.docs)),
                       );
@@ -125,41 +142,50 @@ class _ExtraPackagesPageState extends State<ExtraPackagesPage> {
   }
 
   DataRow _buildListItem(BuildContext context, DocumentSnapshot data) {
+    String docId = data['doc_id'];
+    Future<void> deleteMethod() {
+      return extraPackageStream!
+          .doc(docId)
+          .delete()
+          .then((value) => print("User Deleted"))
+          .catchError((error) => print("Failed to delete user: $error"));
+    }
+
     return DataRow(cells: [
+      DataCell(data != null ? Text(docId) : Text("")),
       DataCell(data != null ? Text(data['discount'] ?? "") : Text("")),
       DataCell(data != null ? Text(data['original_price'] ?? "") : Text("")),
       DataCell(data != null ? Text(data['price'] ?? "") : Text("")),
       DataCell(data != null ? Text(data['title'] ?? "") : Text("")),
       DataCell(data != null ? Text(data['type'] ?? "") : Text("")),
       DataCell(data != null ? Text(data['validity'] ?? "") : Text("")),
-      // DataCell(
-      //   const Text(""),
-      //   showEditIcon: true,
-      //   onTap: () {
-      //     showDialog(
-      //       context: context,
-      //       builder: (context) {
-      //         return GestureDetector(
-      //           // ? Added Gesture Detecter for popping off update record Card
-      //           child: SingleChildScrollView(
-      //             child: ProductEditBox(
-      //               address: data['address'],
-      //               gender: data['gender'],
-      //               name: data['name'],
-      //               pincode: data['pincode'],
-      //               gymId: data['gym_id'],
-      //               gymOwner: data['gym_owner'],
-      //               landmark: data['landmark'],
-      //               location: data['location'],
-      //             ),
-      //           ),
-      //           onTap: () =>
-      //               Navigator.pop(context), // ? ontap Property for popping of
-      //         );
-      //       },
-      //     );
-      //   },
-      // ),
+      DataCell(
+        const Text(""),
+        showEditIcon: true,
+        onTap: () {
+          showDialog(
+            context: context,
+            builder: (context) {
+              return GestureDetector(
+                // ? Added Gesture Detecter for popping off update record Card
+                child: SingleChildScrollView(
+                  child: ProductEditBox(
+                    discount: data['discount'],
+                    originalPrice: data['original_price'],
+                    price: data['price'],
+                    title: data['title'],
+                    type: data['type'],
+                    validity: data['validity'],
+                    docId: data['doc_id'],
+                  ),
+                ),
+                onTap: () =>
+                    Navigator.pop(context), // ? ontap Property for popping of
+              );
+            },
+          );
+        },
+      ),
       DataCell(Icon(Icons.delete), onTap: () {
         deleteMethod();
       })
@@ -172,6 +198,7 @@ class _ExtraPackagesPageState extends State<ExtraPackagesPage> {
   final TextEditingController _addTitle = TextEditingController();
   final TextEditingController _addType = TextEditingController();
   final TextEditingController _addValidity = TextEditingController();
+  final TextEditingController _addDocId = TextEditingController();
   showAddbox() => showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -191,29 +218,25 @@ class _ExtraPackagesPageState extends State<ExtraPackagesPage> {
                           fontWeight: FontWeight.w600,
                           fontSize: 14),
                     ),
-                    CustomTextField(
+                    customTextField(hinttext: "ID", addcontroller: _addDocId),
+                    customTextField(
                         hinttext: "Discount", addcontroller: _addDiscount),
-                    CustomTextField(
+                    customTextField(
                         hinttext: "OriginalPrice",
                         addcontroller: _addOriginalPrice),
-                    CustomTextField(
+                    customTextField(
                         hinttext: "Price", addcontroller: _addPrice),
-                    CustomTextField(
+                    customTextField(
                         hinttext: "Title", addcontroller: _addTitle),
-                    CustomTextField(hinttext: "Type", addcontroller: _addType),
-                    CustomTextField(
+                    customTextField(hinttext: "Type", addcontroller: _addType),
+                    customTextField(
                         hinttext: "Validity", addcontroller: _addValidity),
                     Center(
                       child: ElevatedButton(
                         onPressed: () async {
-                          FirebaseFirestore.instance
-                              .collection('product_details')
-                              .doc("mahtab5752@gmail.com")
-                              .collection("package")
-                              .doc("normal_package")
-                              .collection("gym")
-                              .add(
+                          extraPackageStream!.add(
                             {
+                              'doc_id': _addDocId.text,
                               'discount': _addDiscount.text,
                               'original_price': _addOriginalPrice.text,
                               'price': _addPrice.text,
@@ -232,57 +255,6 @@ class _ExtraPackagesPageState extends State<ExtraPackagesPage> {
               ),
             ),
           ));
-  Future<void> deleteMethod() {
-    CollectionReference users = FirebaseFirestore.instance
-        .collection('product_details')
-        .doc('mahtab5752@gmail.com')
-        .collection('package')
-        .doc('normal_package')
-        .collection('gym');
-    return users
-        .doc("e7dh9gV95VK5VrR5PUn6")
-        .delete()
-        .then((value) => print("User Deleted"))
-        .catchError((error) => print("Failed to delete user: $error"));
-  }
-}
-
-class CustomTextField extends StatelessWidget {
-  const CustomTextField({
-    Key? key,
-    required this.hinttext,
-    required this.addcontroller,
-  }) : super(key: key);
-
-  final TextEditingController addcontroller;
-  final String hinttext;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 50,
-      child: Card(
-          child: TextField(
-        autofocus: true,
-        style: const TextStyle(
-          fontSize: 14,
-          fontFamily: 'poppins',
-          fontWeight: FontWeight.w400,
-        ),
-        controller: addcontroller,
-        maxLines: 3,
-        decoration: InputDecoration(
-            border: InputBorder.none,
-            hintStyle: const TextStyle(
-              fontSize: 14,
-              fontFamily: 'poppins',
-              fontWeight: FontWeight.w400,
-            ),
-            hintMaxLines: 2,
-            hintText: hinttext),
-      )),
-    );
-  }
 }
 
 // *Updating Item list Class
@@ -296,6 +268,7 @@ class ProductEditBox extends StatefulWidget {
     required this.title,
     required this.type,
     required this.validity,
+    required this.docId,
   }) : super(key: key);
 
   final String discount;
@@ -304,6 +277,7 @@ class ProductEditBox extends StatefulWidget {
   final String title;
   final String type;
   final String validity;
+  final String docId;
 
   @override
   _ProductEditBoxState createState() => _ProductEditBoxState();
@@ -316,6 +290,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
   final TextEditingController _title = TextEditingController();
   final TextEditingController _type = TextEditingController();
   final TextEditingController _validity = TextEditingController();
+  final TextEditingController _docId = TextEditingController();
 
   @override
   void initState() {
@@ -326,6 +301,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
     _title.text = widget.title;
     _type.text = widget.type;
     _validity.text = widget.validity;
+    _docId.text = widget.docId;
   }
 
   @override
@@ -347,30 +323,30 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                     fontWeight: FontWeight.w600,
                     fontSize: 14),
               ),
-              CustomTextField(hinttext: "Discount", addcontroller: _discount),
-              CustomTextField(
+              customTextField(hinttext: "Discount", addcontroller: _discount),
+              customTextField(
                   hinttext: "Original Price", addcontroller: _originalPrice),
-              CustomTextField(hinttext: "Price", addcontroller: _price),
-              CustomTextField(hinttext: "Title", addcontroller: _title),
-              CustomTextField(hinttext: "Type", addcontroller: _type),
-              CustomTextField(hinttext: "Validity", addcontroller: _validity),
+              customTextField(hinttext: "Price", addcontroller: _price),
+              customTextField(hinttext: "Title", addcontroller: _title),
+              customTextField(hinttext: "Type", addcontroller: _type),
+              customTextField(hinttext: "Validity", addcontroller: _validity),
               Padding(
                 padding: const EdgeInsets.all(12.0),
                 child: Center(
                   child: ElevatedButton(
                     onPressed: () async {
-                      print("The Gym id is : ${_discount.text}");
+                      print("The Gym id is : ${_docId.text}");
                       DocumentReference documentReference = FirebaseFirestore
                           .instance
                           .collection('product_details')
-                          .doc("mahtab5752@gmail.com")
+                          .doc(globalGymId)
                           .collection("package")
                           .doc("normal_package")
                           .collection("gym")
-                          .doc();
+                          .doc(_docId.text);
                       Map<String, dynamic> data = <String, dynamic>{
                         'discount': _discount.text,
-                        'originalPrice': _originalPrice.text,
+                        'original_price': _originalPrice.text,
                         'price': _price.text,
                         'title': _title.text,
                         'type': _type,

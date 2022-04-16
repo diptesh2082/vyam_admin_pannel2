@@ -1,6 +1,10 @@
+import 'package:admin_panel_vyam/services/deleteMethod.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:flutter/material.dart';
+
+import '../services/CustomTextFieldClass.dart';
+import '../services/MatchIDMethod.dart';
 
 class Coupon extends StatefulWidget {
   const Coupon({
@@ -12,8 +16,13 @@ class Coupon extends StatefulWidget {
 }
 
 class _CouponState extends State<Coupon> {
+  final id =
+      FirebaseFirestore.instance.collection('coupon').doc().id.toString();
+
+  CollectionReference? couponStream;
   @override
   void initState() {
+    couponStream = FirebaseFirestore.instance.collection("coupon");
     super.initState();
   }
 
@@ -51,9 +60,7 @@ class _CouponState extends State<Coupon> {
                 ),
                 Center(
                   child: StreamBuilder<QuerySnapshot>(
-                    stream: FirebaseFirestore.instance
-                        .collection("coupon")
-                        .snapshots(),
+                    stream: couponStream!.snapshots(),
                     builder: (context, AsyncSnapshot snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return const CircularProgressIndicator();
@@ -92,6 +99,7 @@ class _CouponState extends State<Coupon> {
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
+                              DataColumn(label: Text('')),
                               DataColumn(label: Text(''))
                             ],
                             rows: _buildlist(context, snapshot.data!.docs)),
@@ -113,6 +121,7 @@ class _CouponState extends State<Coupon> {
   }
 
   DataRow _buildListItem(BuildContext context, DocumentSnapshot data) {
+    String couponIdData = data['coupon_id'];
     return DataRow(cells: [
       DataCell(
           data['code'] != null ? Text(data['code'] ?? "") : const Text("")),
@@ -127,15 +136,24 @@ class _CouponState extends State<Coupon> {
         showDialog(
             context: context,
             builder: (context) {
-              return SingleChildScrollView(
-                child: ProductEditBox(
-                  title: data['title'],
-                  code: data['code'],
-                  details: data['detail'],
-                  discount: data['discount'],
+              return GestureDetector(
+                child: SingleChildScrollView(
+                  child: ProductEditBox(
+                    title: data['title'],
+                    code: data['code'],
+                    details: data['detail'],
+                    discount: data['discount'],
+                    couponId: data['coupon_id'],
+                  ),
                 ),
+                onTap: () {
+                  Navigator.pop(context);
+                },
               );
             });
+      }),
+      DataCell(Icon(Icons.delete), onTap: () {
+        deleteMethod(stream: couponStream, uniqueDocId: couponIdData);
       }),
     ]);
   }
@@ -164,25 +182,30 @@ class _CouponState extends State<Coupon> {
                           fontWeight: FontWeight.w600,
                           fontSize: 14),
                     ),
-                    CustomTextField(hinttext: "Code", addcontroller: _addCode),
-                    CustomTextField(
+                    customTextField(hinttext: "Code", addcontroller: _addCode),
+                    customTextField(
                         hinttext: "Details", addcontroller: _adddetails),
-                    CustomTextField(
+                    customTextField(
                         hinttext: "Discount", addcontroller: _adddiscount),
-                    CustomTextField(
+                    customTextField(
                         hinttext: "Title", addcontroller: _addtitle),
                     Center(
                       child: ElevatedButton(
                         onPressed: () async {
-                          FirebaseFirestore.instance
+                          await matchID(
+                              newId: id,
+                              matchStream: couponStream,
+                              idField: 'coupon_id');
+                          await FirebaseFirestore.instance
                               .collection('coupon')
-                              .doc(_addCode.text)
+                              .doc(id)
                               .set(
                             {
                               'code': _addCode.text,
                               'detail': _adddetails.text,
                               'discount': _adddiscount.text,
                               'title': _addtitle.text,
+                              'coupon_id': id,
                             },
                           );
                           Navigator.pop(context);
@@ -197,57 +220,21 @@ class _CouponState extends State<Coupon> {
           ));
 }
 
-class CustomTextField extends StatelessWidget {
-  const CustomTextField({
-    Key? key,
-    required this.hinttext,
-    required this.addcontroller,
-  }) : super(key: key);
-
-  final TextEditingController addcontroller;
-  final String hinttext;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 50,
-      child: Card(
-          child: TextField(
-        autofocus: true,
-        style: const TextStyle(
-          fontSize: 14,
-          fontFamily: 'poppins',
-          fontWeight: FontWeight.w400,
-        ),
-        controller: addcontroller,
-        maxLines: 3,
-        decoration: InputDecoration(
-            border: InputBorder.none,
-            hintStyle: const TextStyle(
-              fontSize: 14,
-              fontFamily: 'poppins',
-              fontWeight: FontWeight.w400,
-            ),
-            hintMaxLines: 2,
-            hintText: hinttext),
-      )),
-    );
-  }
-}
-
 class ProductEditBox extends StatefulWidget {
-  const ProductEditBox({
-    Key? key,
-    required this.details,
-    required this.discount,
-    required this.title,
-    required this.code,
-  }) : super(key: key);
+  const ProductEditBox(
+      {Key? key,
+      required this.details,
+      required this.discount,
+      required this.title,
+      required this.code,
+      required this.couponId})
+      : super(key: key);
 
   final String details;
   final String discount;
   final String title;
   final String code;
+  final String couponId;
 
   @override
   _ProductEditBoxState createState() => _ProductEditBoxState();
@@ -287,27 +274,26 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                     fontWeight: FontWeight.w600,
                     fontSize: 14),
               ),
-              CustomTextField(hinttext: "Code", addcontroller: _code),
-              CustomTextField(hinttext: "Detail", addcontroller: _detail),
-              CustomTextField(hinttext: "Discount", addcontroller: _discount),
-              CustomTextField(hinttext: "Title", addcontroller: _title),
+              customTextField(hinttext: "Code", addcontroller: _code),
+              customTextField(hinttext: "Detail", addcontroller: _detail),
+              customTextField(hinttext: "Discount", addcontroller: _discount),
+              customTextField(hinttext: "Title", addcontroller: _title),
               Padding(
                 padding: const EdgeInsets.all(12.0),
                 child: Center(
                   child: ElevatedButton(
                     onPressed: () async {
                       print("/////");
-
                       DocumentReference documentReference = FirebaseFirestore
                           .instance
-                          .collection('product_details')
-                          .doc('T@gmail.com');
-
+                          .collection('coupon')
+                          .doc(widget.couponId);
                       Map<String, dynamic> data = <String, dynamic>{
                         'code': _code.text,
                         'detail': _detail.text,
                         'discount': _discount.text,
                         'title': _title.text,
+                        'coupon_id': widget.couponId,
                       };
                       await documentReference
                           .set(data)

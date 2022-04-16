@@ -6,6 +6,8 @@ import 'package:admin_panel_vyam/Screens/category_screen.dart';
 import 'package:admin_panel_vyam/Screens/cities.dart';
 import 'package:admin_panel_vyam/Screens/coupon.dart';
 import 'package:admin_panel_vyam/Screens/database_info.dart';
+
+import 'package:admin_panel_vyam/Screens/faq_details.dart';
 import 'package:admin_panel_vyam/Screens/feedback_dateils.dart';
 import 'package:admin_panel_vyam/Screens/payments_screen.dart';
 import 'package:admin_panel_vyam/services/image_picker_api.dart';
@@ -114,7 +116,7 @@ class _SideNavBar1State extends State<SideNavBar1> {
             ),
             ListTile(
               title: Text(
-                'Cupon',
+                'Coupon',
                 style: kTextStyle,
               ),
               onTap: () {
@@ -175,6 +177,16 @@ class _SideNavBar1State extends State<SideNavBar1> {
             ),
             ListTile(
               title: Text(
+                'FAQ',
+                style: kTextStyle,
+              ),
+              onTap: () {
+                index = 11;
+                setState(() {});
+              },
+            ),
+            ListTile(
+              title: Text(
                 'Logout',
                 style: kTextStyle,
               ),
@@ -199,6 +211,7 @@ class _SideNavBar1State extends State<SideNavBar1> {
           index == 8 ? const AmenetiesScreen() : Container(),
           index == 9 ? const PaymentsPage() : Container(),
           index == 10 ? const CitiesScreen() : Container(),
+          index == 11 ? const FaqDetails() : Container(),
         ],
       ),
     );

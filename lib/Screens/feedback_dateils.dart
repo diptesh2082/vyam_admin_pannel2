@@ -1,7 +1,10 @@
+import 'package:admin_panel_vyam/services/deleteMethod.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
+
+import '../services/CustomTextFieldClass.dart';
 
 class FeedBackInfo extends StatefulWidget {
   const FeedBackInfo({
@@ -16,13 +19,15 @@ class _FeedBackInfoState extends State<FeedBackInfo> {
   final id =
       FirebaseFirestore.instance.collection('Feedback').doc().id.toString();
 
-  createReview(String nid) {
-    final review = FirebaseFirestore.instance.collection('Feedback');
-    review.doc(nid).set({'feedback_id': nid});
+  matchID(String nid) {
+    final match = FirebaseFirestore.instance.collection('Feedback');
+    match.doc(nid).set({'feedback_id': nid});
   }
 
+  CollectionReference? feedbackStream;
   @override
   void initState() {
+    feedbackStream = FirebaseFirestore.instance.collection("Feedback");
     super.initState();
   }
 
@@ -60,9 +65,7 @@ class _FeedBackInfoState extends State<FeedBackInfo> {
                 ),
                 Center(
                   child: StreamBuilder<QuerySnapshot>(
-                    stream: FirebaseFirestore.instance
-                        .collection("Feedback")
-                        .snapshots(),
+                    stream: feedbackStream!.snapshots(),
                     builder: (context, AsyncSnapshot snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return const CircularProgressIndicator();
@@ -95,6 +98,7 @@ class _FeedBackInfoState extends State<FeedBackInfo> {
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
+                              DataColumn(label: Text('')),
                               DataColumn(label: Text(''))
                             ],
                             rows: _buildlist(context, snapshot.data!.docs)),
@@ -116,6 +120,7 @@ class _FeedBackInfoState extends State<FeedBackInfo> {
   }
 
   DataRow _buildListItem(BuildContext context, DocumentSnapshot data) {
+    String feedbackId = data['feedback_id'];
     return DataRow(cells: [
       DataCell(data != null ? Text(data['feedback_review'] ?? "") : Text("")),
       DataCell(
@@ -125,16 +130,24 @@ class _FeedBackInfoState extends State<FeedBackInfo> {
         showDialog(
             context: context,
             builder: (context) {
-              return SingleChildScrollView(
-                child: EditBox(
-                  feedbackid: data['feedback_id'],
-                  userId: data['user_id'],
-                  freview: data['feedback_review'],
-                  fsugg: data['feedback_suggestion'],
+              return GestureDetector(
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: SingleChildScrollView(
+                  child: EditBox(
+                    feedbackid: data['feedback_id'],
+                    userId: data['user_id'],
+                    freview: data['feedback_review'],
+                    fsuggestion: data['feedback_suggestion'],
+                  ),
                 ),
               );
             });
       }),
+      DataCell(Icon(Icons.delete), onTap: () {
+        deleteMethod(stream: feedbackStream, uniqueDocId: feedbackId);
+      })
     ]);
   }
 
@@ -162,20 +175,20 @@ class _FeedBackInfoState extends State<FeedBackInfo> {
                           fontWeight: FontWeight.w600,
                           fontSize: 14),
                     ),
-                    CustomTextField(
+                    customTextField(
                         hinttext: "Feedback Review",
                         addcontroller: _addfeedbackreview),
-                    CustomTextField(
+                    customTextField(
                         hinttext: "Feedback Suggestion",
                         addcontroller: _addfeedbacksuggestion),
-                    CustomTextField(
+                    customTextField(
                         hinttext: "User ID", addcontroller: _adduserid),
-                    CustomTextField(
+                    customTextField(
                         hinttext: "Vendor ID", addcontroller: _addvendorid),
                     Center(
                       child: ElevatedButton(
                         onPressed: () async {
-                          await createReview(id);
+                          await matchID(id);
                           await FirebaseFirestore.instance
                               .collection('Feedback')
                               .doc(id)
@@ -200,55 +213,17 @@ class _FeedBackInfoState extends State<FeedBackInfo> {
           ));
 }
 
-class CustomTextField extends StatelessWidget {
-  const CustomTextField({
-    Key? key,
-    required this.hinttext,
-    required this.addcontroller,
-  }) : super(key: key);
-
-  final TextEditingController addcontroller;
-  final String hinttext;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 50,
-      child: Card(
-          child: TextField(
-        autofocus: true,
-        style: const TextStyle(
-          fontSize: 14,
-          fontFamily: 'poppins',
-          fontWeight: FontWeight.w400,
-        ),
-        controller: addcontroller,
-        maxLines: 3,
-        decoration: InputDecoration(
-            border: InputBorder.none,
-            hintStyle: const TextStyle(
-              fontSize: 14,
-              fontFamily: 'poppins',
-              fontWeight: FontWeight.w400,
-            ),
-            hintMaxLines: 2,
-            hintText: hinttext),
-      )),
-    );
-  }
-}
-
 class EditBox extends StatefulWidget {
   const EditBox({
     Key? key,
     required this.freview,
-    required this.fsugg,
+    required this.fsuggestion,
     required this.userId,
     required this.feedbackid,
   }) : super(key: key);
 
   final String freview;
-  final String fsugg;
+  final String fsuggestion;
   final String userId;
   final String feedbackid;
 
@@ -263,8 +238,8 @@ class _EditBoxState extends State<EditBox> {
   @override
   void initState() {
     super.initState();
-    _feedbackReview.text = widget.fsugg;
-    _feedbackSuggestion.text = widget.fsugg;
+    _feedbackReview.text = widget.freview;
+    _feedbackSuggestion.text = widget.fsuggestion;
   }
 
   @override
@@ -286,9 +261,9 @@ class _EditBoxState extends State<EditBox> {
                     fontWeight: FontWeight.w600,
                     fontSize: 14),
               ),
-              CustomTextField(
+              customTextField(
                   hinttext: "Feedback Review", addcontroller: _feedbackReview),
-              CustomTextField(
+              customTextField(
                   hinttext: "Feedback Suggestion",
                   addcontroller: _feedbackSuggestion),
               Padding(
