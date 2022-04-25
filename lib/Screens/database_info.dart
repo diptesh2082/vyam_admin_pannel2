@@ -198,8 +198,8 @@ class _CollectionInfoState extends State<CollectionInfo> {
                   address: data['address'],
                   gender: data['gender'],
                   email: data['email'],
-                  latitude: data['lat'].toString(),
-                  longitude: data['long'].toString(),
+                  // latitude: data['lat'].toString(),
+                  // longitude: data['long'].toString(),
                   locality: data['locality'],
                   number: data['number'],
                   subLocality: data['subLocality'],
@@ -216,8 +216,8 @@ class _CollectionInfoState extends State<CollectionInfo> {
   final TextEditingController _addaddress = TextEditingController();
   final TextEditingController _addgender = TextEditingController();
   final TextEditingController _addemail = TextEditingController();
-  final TextEditingController _addlatitude = TextEditingController();
-  final TextEditingController _addlongitude = TextEditingController();
+  // final TextEditingController _addlatitude = TextEditingController();
+  // final TextEditingController _addlongitude = TextEditingController();
   final TextEditingController _addlocality = TextEditingController();
   final TextEditingController _addname = TextEditingController();
   final TextEditingController _addnumber = TextEditingController();
@@ -342,8 +342,8 @@ class EditBox extends StatefulWidget {
     required this.gender,
     required this.email,
     required this.imageurl,
-    required this.latitude,
-    required this.longitude,
+    // required this.latitude,
+    // required this.longitude,
     required this.locality,
     required this.name,
     required this.number,
@@ -356,8 +356,8 @@ class EditBox extends StatefulWidget {
   final String gender;
   final String email;
   final String imageurl;
-  final String latitude;
-  final String longitude;
+  // final String latitude;
+  // final String longitude;
   final String locality;
   final String name;
   final String number;
@@ -373,8 +373,8 @@ class _EditBoxState extends State<EditBox> {
   TextEditingController _address = TextEditingController();
   TextEditingController _gender = TextEditingController();
   TextEditingController _email = TextEditingController();
-  TextEditingController _latitude = TextEditingController();
-  TextEditingController _longitude = TextEditingController();
+  // TextEditingController _latitude = TextEditingController();
+  // TextEditingController _longitude = TextEditingController();
   TextEditingController _locality = TextEditingController();
   TextEditingController _name = TextEditingController();
   TextEditingController _number = TextEditingController();
@@ -388,8 +388,8 @@ class _EditBoxState extends State<EditBox> {
     _address.text = widget.address;
     _gender.text = widget.gender;
     _email.text = widget.email;
-    _latitude.text = widget.latitude.toString();
-    _longitude.text = widget.longitude.toString();
+    // _latitude.text = widget.latitude.toString();
+    // _longitude.text = widget.longitude.toString();
     _locality.text = widget.locality;
     _number.text = widget.number;
     _name.text = widget.name;
@@ -400,291 +400,296 @@ class _EditBoxState extends State<EditBox> {
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(30))),
-      content: SizedBox(
-        height: 580,
-        width: 800,
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'Update Records for this doc',
-                style: TextStyle(
-                    fontFamily: 'poppins',
-                    fontWeight: FontWeight.w600,
-                    fontSize: 14),
-              ),
-              SizedBox(
-                height: 50,
-                child: Card(
-                    child: TextField(
-                  autofocus: true,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w400,
-                  ),
-                  controller: _userid,
-                  maxLines: 3,
-                  decoration: const InputDecoration(
-                      border: InputBorder.none,
-                      hintStyle: TextStyle(
-                        fontSize: 14,
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w400,
-                      ),
-                      hintMaxLines: 2,
-                      hintText: 'UserID'),
-                )),
-              ),
-              SizedBox(
-                height: 50,
-                child: Card(
-                    child: TextField(
-                  autofocus: true,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w400,
-                  ),
-                  controller: _name,
-                  maxLines: 3,
-                  decoration: const InputDecoration(
-                      border: InputBorder.none,
-                      hintStyle: TextStyle(
-                        fontSize: 14,
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w400,
-                      ),
-                      hintMaxLines: 2,
-                      hintText: 'Name'),
-                )),
-              ),
-              SizedBox(
-                height: 50,
-                child: Card(
-                    child: TextField(
-                  autofocus: true,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w400,
-                  ),
-                  controller: _email,
-                  maxLines: 3,
-                  decoration: const InputDecoration(
-                      border: InputBorder.none,
-                      hintStyle: TextStyle(
-                        fontSize: 14,
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w400,
-                      ),
-                      hintMaxLines: 2,
-                      hintText: 'email'),
-                )),
-              ),
-              SizedBox(
-                height: 50,
-                child: Card(
-                    child: TextField(
-                  autofocus: true,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w400,
-                  ),
-                  controller: _gender,
-                  maxLines: 3,
-                  decoration: const InputDecoration(
-                      border: InputBorder.none,
-                      hintStyle: TextStyle(
-                        fontSize: 14,
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w400,
-                      ),
-                      hintMaxLines: 2,
-                      hintText: 'Gender'),
-                )),
-              ),
-              SizedBox(
-                height: 50,
-                child: Card(
-                    child: TextField(
-                  autofocus: true,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w400,
-                  ),
-                  controller: _number,
-                  maxLines: 3,
-                  decoration: const InputDecoration(
-                      border: InputBorder.none,
-                      hintStyle: TextStyle(
-                        fontSize: 14,
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w400,
-                      ),
-                      hintMaxLines: 2,
-                      hintText: 'Phone Number'),
-                )),
-              ),
-              SizedBox(
-                height: 50,
-                child: Card(
-                    child: TextField(
-                  autofocus: true,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w400,
-                  ),
-                  controller: _locality,
-                  maxLines: 3,
-                  decoration: const InputDecoration(
-                      border: InputBorder.none,
-                      hintStyle: TextStyle(
-                        fontSize: 14,
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w400,
-                      ),
-                      hintMaxLines: 2,
-                      hintText: 'Locality'),
-                )),
-              ),
-              SizedBox(
-                height: 50,
-                child: Card(
-                    child: TextField(
-                  autofocus: true,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w400,
-                  ),
-                  controller: _sublocality,
-                  maxLines: 3,
-                  decoration: const InputDecoration(
-                      border: InputBorder.none,
-                      hintStyle: TextStyle(
-                        fontSize: 14,
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w400,
-                      ),
-                      hintMaxLines: 2,
-                      hintText: 'Sub Locality'),
-                )),
-              ),
-              SizedBox(
-                height: 50,
-                child: Card(
-                    child: TextField(
-                  autofocus: true,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w400,
-                  ),
-                  controller: _pincode,
-                  maxLines: 3,
-                  decoration: const InputDecoration(
-                      border: InputBorder.none,
-                      hintStyle: TextStyle(
-                        fontSize: 14,
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w400,
-                      ),
-                      hintMaxLines: 2,
-                      hintText: 'Pincode'),
-                )),
-              ),
-              SizedBox(
-                height: 50,
-                child: Card(
-                    child: TextField(
-                  autofocus: true,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w400,
-                  ),
-                  controller: _latitude,
-                  maxLines: 3,
-                  decoration: const InputDecoration(
-                      border: InputBorder.none,
-                      hintStyle: TextStyle(
-                        fontSize: 14,
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w400,
-                      ),
-                      hintMaxLines: 2,
-                      hintText: 'Latitude'),
-                )),
-              ),
-              SizedBox(
-                height: 50,
-                child: Card(
-                    child: TextField(
-                  autofocus: true,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w400,
-                  ),
-                  controller: _longitude,
-                  maxLines: 3,
-                  decoration: const InputDecoration(
-                      border: InputBorder.none,
-                      hintStyle: TextStyle(
-                        fontSize: 14,
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w400,
-                      ),
-                      hintMaxLines: 2,
-                      hintText: 'Longitude'),
-                )),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: Center(
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      print("/////");
-
-                      DocumentReference documentReference =
-                          FirebaseFirestore.instance
-                              .collection('user_details')
-                              //change _number to _userid
-                              .doc(_number.text);
-
-                      Map<String, dynamic> data = <String, dynamic>{
-                        'address': _address.text,
-                        'gender': _gender.text,
-                        'image': 'imageurl',
-                        'lat': _latitude.text,
-                        'long': _longitude.text,
-                        'name': _name.text,
-                        'pincode': _pincode.text,
-                        'userId': _userid.text,
-                        'locality': _locality.text,
-                        'subLocality': _sublocality.text,
-                        'email': _email.text,
-                        'number': _number.text,
-                      };
-                      await documentReference
-                          .update(data)
-                          .whenComplete(() => print("Item Updated"))
-                          .catchError((e) => print(e));
-                      Navigator.pop(context);
-                    },
-                    child: const Text('Done'),
-                  ),
+    return GestureDetector(
+      onTap: (){
+        Navigator.pop(context);
+      },
+      child: AlertDialog(
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(30))),
+        content: SizedBox(
+          height: 580,
+          width: 800,
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Update Records for this doc',
+                  style: TextStyle(
+                      fontFamily: 'poppins',
+                      fontWeight: FontWeight.w600,
+                      fontSize: 14),
                 ),
-              )
-            ],
+                SizedBox(
+                  height: 50,
+                  child: Card(
+                      child: TextField(
+                    autofocus: true,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontFamily: 'Poppins',
+                      fontWeight: FontWeight.w400,
+                    ),
+                    controller: _userid,
+                    maxLines: 3,
+                    decoration: const InputDecoration(
+                        border: InputBorder.none,
+                        hintStyle: TextStyle(
+                          fontSize: 14,
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w400,
+                        ),
+                        hintMaxLines: 2,
+                        hintText: 'UserID'),
+                  )),
+                ),
+                SizedBox(
+                  height: 50,
+                  child: Card(
+                      child: TextField(
+                    autofocus: true,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontFamily: 'Poppins',
+                      fontWeight: FontWeight.w400,
+                    ),
+                    controller: _name,
+                    maxLines: 3,
+                    decoration: const InputDecoration(
+                        border: InputBorder.none,
+                        hintStyle: TextStyle(
+                          fontSize: 14,
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w400,
+                        ),
+                        hintMaxLines: 2,
+                        hintText: 'Name'),
+                  )),
+                ),
+                SizedBox(
+                  height: 50,
+                  child: Card(
+                      child: TextField(
+                    autofocus: true,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontFamily: 'Poppins',
+                      fontWeight: FontWeight.w400,
+                    ),
+                    controller: _email,
+                    maxLines: 3,
+                    decoration: const InputDecoration(
+                        border: InputBorder.none,
+                        hintStyle: TextStyle(
+                          fontSize: 14,
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w400,
+                        ),
+                        hintMaxLines: 2,
+                        hintText: 'email'),
+                  )),
+                ),
+                SizedBox(
+                  height: 50,
+                  child: Card(
+                      child: TextField(
+                    autofocus: true,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontFamily: 'Poppins',
+                      fontWeight: FontWeight.w400,
+                    ),
+                    controller: _gender,
+                    maxLines: 3,
+                    decoration: const InputDecoration(
+                        border: InputBorder.none,
+                        hintStyle: TextStyle(
+                          fontSize: 14,
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w400,
+                        ),
+                        hintMaxLines: 2,
+                        hintText: 'Gender'),
+                  )),
+                ),
+                SizedBox(
+                  height: 50,
+                  child: Card(
+                      child: TextField(
+                    autofocus: true,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontFamily: 'Poppins',
+                      fontWeight: FontWeight.w400,
+                    ),
+                    controller: _number,
+                    maxLines: 3,
+                    decoration: const InputDecoration(
+                        border: InputBorder.none,
+                        hintStyle: TextStyle(
+                          fontSize: 14,
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w400,
+                        ),
+                        hintMaxLines: 2,
+                        hintText: 'Phone Number'),
+                  )),
+                ),
+                SizedBox(
+                  height: 50,
+                  child: Card(
+                      child: TextField(
+                    autofocus: true,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontFamily: 'Poppins',
+                      fontWeight: FontWeight.w400,
+                    ),
+                    controller: _locality,
+                    maxLines: 3,
+                    decoration: const InputDecoration(
+                        border: InputBorder.none,
+                        hintStyle: TextStyle(
+                          fontSize: 14,
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w400,
+                        ),
+                        hintMaxLines: 2,
+                        hintText: 'Locality'),
+                  )),
+                ),
+                SizedBox(
+                  height: 50,
+                  child: Card(
+                      child: TextField(
+                    autofocus: true,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontFamily: 'Poppins',
+                      fontWeight: FontWeight.w400,
+                    ),
+                    controller: _sublocality,
+                    maxLines: 3,
+                    decoration: const InputDecoration(
+                        border: InputBorder.none,
+                        hintStyle: TextStyle(
+                          fontSize: 14,
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w400,
+                        ),
+                        hintMaxLines: 2,
+                        hintText: 'Sub Locality'),
+                  )),
+                ),
+                SizedBox(
+                  height: 50,
+                  child: Card(
+                      child: TextField(
+                    autofocus: true,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontFamily: 'Poppins',
+                      fontWeight: FontWeight.w400,
+                    ),
+                    controller: _pincode,
+                    maxLines: 3,
+                    decoration: const InputDecoration(
+                        border: InputBorder.none,
+                        hintStyle: TextStyle(
+                          fontSize: 14,
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w400,
+                        ),
+                        hintMaxLines: 2,
+                        hintText: 'Pincode'),
+                  )),
+                ),
+                // SizedBox(
+                //   height: 50,
+                //   child: Card(
+                //       child: TextField(
+                //     autofocus: true,
+                //     style: const TextStyle(
+                //       fontSize: 14,
+                //       fontFamily: 'Poppins',
+                //       fontWeight: FontWeight.w400,
+                //     ),
+                //     controller: _latitude,
+                //     maxLines: 3,
+                //     decoration: const InputDecoration(
+                //         border: InputBorder.none,
+                //         hintStyle: TextStyle(
+                //           fontSize: 14,
+                //           fontFamily: 'Poppins',
+                //           fontWeight: FontWeight.w400,
+                //         ),
+                //         hintMaxLines: 2,
+                //         hintText: 'Latitude'),
+                //   )),
+                // ),
+                // SizedBox(
+                //   height: 50,
+                //   child: Card(
+                //       child: TextField(
+                //     autofocus: true,
+                //     style: const TextStyle(
+                //       fontSize: 14,
+                //       fontFamily: 'Poppins',
+                //       fontWeight: FontWeight.w400,
+                //     ),
+                //     controller: _longitude,
+                //     maxLines: 3,
+                //     decoration: const InputDecoration(
+                //         border: InputBorder.none,
+                //         hintStyle: TextStyle(
+                //           fontSize: 14,
+                //           fontFamily: 'Poppins',
+                //           fontWeight: FontWeight.w400,
+                //         ),
+                //         hintMaxLines: 2,
+                //         hintText: 'Longitude'),
+                //   )),
+                // ),
+                Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Center(
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        print("/////");
+
+                        DocumentReference documentReference =
+                            FirebaseFirestore.instance
+                                .collection('user_details')
+                                //change _number to _userid
+                                .doc(_number.text);
+
+                        Map<String, dynamic> data = <String, dynamic>{
+                          'address': _address.text,
+                          'gender': _gender.text,
+                          'image': 'imageurl',
+                          // 'lat': _latitude.text,
+                          // 'long': _longitude.text,
+                          'name': _name.text,
+                          'pincode': _pincode.text,
+                          'userId': _userid.text,
+                          'locality': _locality.text,
+                          'subLocality': _sublocality.text,
+                          'email': _email.text,
+                          'number': _number.text,
+                        };
+                        await documentReference
+                            .update(data)
+                            .whenComplete(() => print("Item Updated"))
+                            .catchError((e) => print(e));
+                        Navigator.pop(context);
+                      },
+                      child: const Text('Done'),
+                    ),
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ),

@@ -95,6 +95,12 @@ class _FeedBackInfoState extends State<FeedBackInfo> {
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
+                              DataColumn(
+                                label: Text(
+                                  'Vendor ID',
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
+                              ),
                               DataColumn(label: Text(''))
                             ],
                             rows: _buildlist(context, snapshot.data!.docs)),
@@ -121,6 +127,7 @@ class _FeedBackInfoState extends State<FeedBackInfo> {
       DataCell(
           data != null ? Text(data['feedback_suggestion'] ?? "") : Text("")),
       DataCell(data != null ? Text(data['user_id'] ?? "") : Text("")),
+      DataCell(data != null ? Text(data['vendor_id'] ?? "") : const Text("")),
       DataCell(const Text(""), showEditIcon: true, onTap: () {
         showDialog(
             context: context,
@@ -131,6 +138,7 @@ class _FeedBackInfoState extends State<FeedBackInfo> {
                   userId: data['user_id'],
                   freview: data['feedback_review'],
                   fsugg: data['feedback_suggestion'],
+                  fvendor: data["vendor_id"]
                 ),
               );
             });
@@ -244,7 +252,7 @@ class EditBox extends StatefulWidget {
     required this.freview,
     required this.fsugg,
     required this.userId,
-    required this.feedbackid,
+    required this.feedbackid, fvendor,
   }) : super(key: key);
 
   final String freview;
@@ -259,66 +267,77 @@ class EditBox extends StatefulWidget {
 class _EditBoxState extends State<EditBox> {
   TextEditingController _feedbackReview = TextEditingController();
   TextEditingController _feedbackSuggestion = TextEditingController();
+  TextEditingController _feedbackUser=TextEditingController();
 
   @override
   void initState() {
     super.initState();
     _feedbackReview.text = widget.fsugg;
     _feedbackSuggestion.text = widget.fsugg;
+    _feedbackUser.text=widget.userId;
   }
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(30))),
-      content: SizedBox(
-        height: 580,
-        width: 800,
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'Update Records for this doc',
-                style: TextStyle(
-                    fontFamily: 'poppins',
-                    fontWeight: FontWeight.w600,
-                    fontSize: 14),
-              ),
-              CustomTextField(
-                  hinttext: "Feedback Review", addcontroller: _feedbackReview),
-              CustomTextField(
-                  hinttext: "Feedback Suggestion",
-                  addcontroller: _feedbackSuggestion),
-              Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: Center(
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      print("/////");
-
-                      DocumentReference documentReference =
-                          FirebaseFirestore.instance
-                              .collection('Feedback')
-                              //change _number to _userid
-                              .doc(widget.feedbackid);
-
-                      Map<String, dynamic> data = <String, dynamic>{
-                        'feedback_review': _feedbackReview.text,
-                        'feedback_suggestion': _feedbackSuggestion.text,
-                      };
-                      await documentReference
-                          .update(data)
-                          .whenComplete(() => print("Item Updated"))
-                          .catchError((e) => print(e));
-                      Navigator.pop(context);
-                    },
-                    child: const Text('Done'),
-                  ),
+    return GestureDetector(
+      onTap: (){
+        Navigator.pop(context);
+      },
+      child: AlertDialog(
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(30))),
+        content: SizedBox(
+          height: 580,
+          width: 800,
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Update Records for this doc',
+                  style: TextStyle(
+                      fontFamily: 'poppins',
+                      fontWeight: FontWeight.w600,
+                      fontSize: 14),
                 ),
-              )
-            ],
+                CustomTextField(
+                    hinttext: "Feedback Review", addcontroller: _feedbackReview),
+                CustomTextField(
+                    hinttext: "Feedback Suggestion",
+                    addcontroller: _feedbackSuggestion),
+                CustomTextField(
+                    hinttext: "Feedback Suggestion",
+                    addcontroller: _feedbackUser),
+                Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Center(
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        print("/////");
+
+                        DocumentReference documentReference =
+                            FirebaseFirestore.instance
+                                .collection('Feedback')
+                                //change _number to _userid
+                                .doc(widget.feedbackid);
+
+                        Map<String, dynamic> data = <String, dynamic>{
+                          'feedback_review': _feedbackReview.text,
+                          'feedback_suggestion': _feedbackSuggestion.text,
+                          "user_id":_feedbackUser
+                        };
+                        await documentReference
+                            .update(data)
+                            .whenComplete(() => print("Item Updated"))
+                            .catchError((e) => print(e));
+                        Navigator.pop(context);
+                      },
+                      child: const Text('Done'),
+                    ),
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ),
