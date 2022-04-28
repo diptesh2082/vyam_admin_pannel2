@@ -413,7 +413,7 @@ class _BookingDetailsState extends State<BookingDetails> {
   //         ));
 }
 
-class CustomTextField extends StatelessWidget {
+class CustomTextField extends StatefulWidget {
   const CustomTextField({
     Key? key,
     required this.hinttext,
@@ -423,6 +423,11 @@ class CustomTextField extends StatelessWidget {
   final TextEditingController addcontroller;
   final String hinttext;
 
+  @override
+  State<CustomTextField> createState() => _CustomTextFieldState();
+}
+
+class _CustomTextFieldState extends State<CustomTextField> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -435,7 +440,7 @@ class CustomTextField extends StatelessWidget {
           fontFamily: 'poppins',
           fontWeight: FontWeight.w400,
         ),
-        controller: addcontroller,
+        controller: widget.addcontroller,
         maxLines: 3,
         decoration: InputDecoration(
             border: InputBorder.none,
@@ -445,7 +450,7 @@ class CustomTextField extends StatelessWidget {
               fontWeight: FontWeight.w400,
             ),
             hintMaxLines: 2,
-            hintText: hinttext),
+            hintText: widget.hinttext),
       )),
     );
   }
@@ -616,7 +621,8 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                   hinttext: "Total Price", addcontroller: _addtotalprice),
               CustomTextField(
                   hinttext: "Total Days", addcontroller: _addtotaldays),
-              CustomTextField(hinttext: "Tax Pay", addcontroller: _addtaxpay),
+              CustomTextField(
+                  hinttext: "Tax Pay", addcontroller: _addtaxpay),
               CustomTextField(
                   hinttext: "Plan End Y", addcontroller: _addplanendyear),
               CustomTextField(

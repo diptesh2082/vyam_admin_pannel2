@@ -1,28 +1,23 @@
 import 'package:admin_panel_vyam/services/deleteMethod.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
 import 'package:flutter/material.dart';
 
 import '../services/CustomTextFieldClass.dart';
-import '../services/MatchIDMethod.dart';
 
-class Coupon extends StatefulWidget {
-  const Coupon({
+class PaymentsPage extends StatefulWidget {
+  const PaymentsPage({
     Key? key,
   }) : super(key: key);
 
   @override
-  State<Coupon> createState() => _CouponState();
+  State<PaymentsPage> createState() => _PaymentsPageState();
 }
 
-class _CouponState extends State<Coupon> {
-  final id =
-      FirebaseFirestore.instance.collection('coupon').doc().id.toString();
-
-  CollectionReference? couponStream;
+class _PaymentsPageState extends State<PaymentsPage> {
+  CollectionReference? paymentStream;
   @override
   void initState() {
-    couponStream = FirebaseFirestore.instance.collection("coupon");
+    paymentStream = FirebaseFirestore.instance.collection('payment');
     super.initState();
   }
 
@@ -51,7 +46,7 @@ class _CouponState extends State<Coupon> {
                       child: Row(
                         children: const [
                           Icon(Icons.add),
-                          Text('Add Coupon',
+                          Text('Add Product',
                               style: TextStyle(fontWeight: FontWeight.w400)),
                         ],
                       ),
@@ -60,7 +55,7 @@ class _CouponState extends State<Coupon> {
                 ),
                 Center(
                   child: StreamBuilder<QuerySnapshot>(
-                    stream: couponStream!.snapshots(),
+                    stream: paymentStream!.snapshots(),
                     builder: (context, AsyncSnapshot snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return const CircularProgressIndicator();
@@ -74,32 +69,33 @@ class _CouponState extends State<Coupon> {
                       return SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
                         child: DataTable(
+                            // ? DATATABLE
                             dataRowHeight: 65,
                             columns: const [
                               DataColumn(
                                   label: Text(
-                                'Code',
+                                'Name',
                                 style: TextStyle(fontWeight: FontWeight.w600),
                               )),
                               DataColumn(
                                 label: Text(
-                                  'Details',
+                                  'Amount',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
                               DataColumn(
                                 label: Text(
-                                  'Discount',
+                                  'Place',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
                               DataColumn(
                                 label: Text(
-                                  'Title',
+                                  'Timestamp',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
-                              DataColumn(label: Text('')),
+                              DataColumn(label: Text('')), //! For edit pencil
                               DataColumn(label: Text(''))
                             ],
                             rows: _buildlist(context, snapshot.data!.docs)),
@@ -121,47 +117,49 @@ class _CouponState extends State<Coupon> {
   }
 
   DataRow _buildListItem(BuildContext context, DocumentSnapshot data) {
-    String couponIdData = data['coupon_id'];
+    Timestamp timestamp = data['timestamp'];
+    String stamp = timestamp.toString();
+    String paymentID = data['payment_id'];
+
     return DataRow(cells: [
+      DataCell(data != null ? Text(data['name'] ?? "") : Text("")),
+      DataCell(data != null ? Text(data['amount'] ?? "") : Text("")),
+      DataCell(data != null ? Text(data['place'] ?? "") : Text("")),
+      DataCell(data != null ? Text(stamp) : Text("")),
       DataCell(
-          data['code'] != null ? Text(data['code'] ?? "") : const Text("")),
-      DataCell(
-          data['detail'] != null ? Text(data['detail'] ?? "") : const Text("")),
-      DataCell(data['discount'] != null
-          ? Text(data['discount'] ?? "")
-          : const Text("")),
-      DataCell(
-          data['title'] != null ? Text(data['title'] ?? "") : const Text("")),
-      DataCell(const Text(""), showEditIcon: true, onTap: () {
-        showDialog(
+        const Text(""),
+        showEditIcon: true,
+        onTap: () {
+          showDialog(
             context: context,
             builder: (context) {
               return GestureDetector(
+                // ? Added Gesture Detecter for popping off update record Card
                 child: SingleChildScrollView(
                   child: ProductEditBox(
-                    title: data['title'],
-                    code: data['code'],
-                    details: data['detail'],
-                    discount: data['discount'],
-                    couponId: data['coupon_id'],
+                    amount: data['amount'],
+                    place: data['place'],
+                    name: data['name'],
+                    timestamp: data['timestamp'],
                   ),
                 ),
-                onTap: () {
-                  Navigator.pop(context);
-                },
+                onTap: () =>
+                    Navigator.pop(context), // ? ontap Property for popping of
               );
-            });
-      }),
+            },
+          );
+        },
+      ),
       DataCell(Icon(Icons.delete), onTap: () {
-        deleteMethod(stream: couponStream, uniqueDocId: couponIdData);
-      }),
+        deleteMethod(stream: paymentStream, uniqueDocId: paymentID);
+      })
     ]);
   }
 
-  final TextEditingController _addCode = TextEditingController();
-  final TextEditingController _adddetails = TextEditingController();
-  final TextEditingController _adddiscount = TextEditingController();
-  final TextEditingController _addtitle = TextEditingController();
+  final TextEditingController _addAmount = TextEditingController();
+  final TextEditingController _addPlace = TextEditingController();
+  final TextEditingController _addName = TextEditingController();
+  final TextEditingController _addTimestamp = TextEditingController();
 
   showAddbox() => showDialog(
       context: context,
@@ -182,30 +180,22 @@ class _CouponState extends State<Coupon> {
                           fontWeight: FontWeight.w600,
                           fontSize: 14),
                     ),
-                    customTextField(hinttext: "Code", addcontroller: _addCode),
+                    customTextField(hinttext: "Name", addcontroller: _addName),
                     customTextField(
-                        hinttext: "Details", addcontroller: _adddetails),
+                        hinttext: "Amount", addcontroller: _addAmount),
                     customTextField(
-                        hinttext: "Discount", addcontroller: _adddiscount),
+                        hinttext: "Place", addcontroller: _addPlace),
                     customTextField(
-                        hinttext: "Title", addcontroller: _addtitle),
+                        hinttext: "TimeStamp", addcontroller: _addTimestamp),
                     Center(
                       child: ElevatedButton(
                         onPressed: () async {
-                          await matchID(
-                              newId: id,
-                              matchStream: couponStream,
-                              idField: 'coupon_id');
-                          await FirebaseFirestore.instance
-                              .collection('coupon')
-                              .doc(id)
-                              .set(
+                          FirebaseFirestore.instance.collection("payment").add(
                             {
-                              'code': _addCode.text,
-                              'detail': _adddetails.text,
-                              'discount': _adddiscount.text,
-                              'title': _addtitle.text,
-                              'coupon_id': id,
+                              'amount': _addAmount.text,
+                              'place': _addPlace.text,
+                              'name': _addName.text,
+                              'timestamp': _addTimestamp.text,
                             },
                           );
                           Navigator.pop(context);
@@ -220,39 +210,38 @@ class _CouponState extends State<Coupon> {
           ));
 }
 
+// *Updating Item list Class
+
 class ProductEditBox extends StatefulWidget {
-  const ProductEditBox(
-      {Key? key,
-      required this.details,
-      required this.discount,
-      required this.title,
-      required this.code,
-      required this.couponId})
-      : super(key: key);
+  const ProductEditBox({
+    Key? key,
+    required this.amount,
+    required this.name,
+    required this.place,
+    required this.timestamp,
+  }) : super(key: key);
 
-  final String details;
-  final String discount;
-  final String title;
-  final String code;
-  final String couponId;
-
+  final String name;
+  final String amount;
+  final String place;
+  final Timestamp timestamp;
   @override
   _ProductEditBoxState createState() => _ProductEditBoxState();
 }
 
 class _ProductEditBoxState extends State<ProductEditBox> {
-  final TextEditingController _code = TextEditingController();
-  final TextEditingController _detail = TextEditingController();
-  final TextEditingController _discount = TextEditingController();
-  final TextEditingController _title = TextEditingController();
+  final TextEditingController _name = TextEditingController();
+  final TextEditingController _amount = TextEditingController();
+  final TextEditingController _place = TextEditingController();
+  final TextEditingController _timeStamp = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    _code.text = widget.code;
-    _detail.text = widget.details;
-    _discount.text = widget.discount;
-    _title.text = widget.title;
+    _amount.text = widget.amount;
+    _place.text = widget.place;
+    _name.text = widget.name;
+    _timeStamp.text = widget.timestamp.toString();
   }
 
   @override
@@ -261,7 +250,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(30))),
       content: SizedBox(
-        height: 300,
+        height: 580,
         width: 800,
         child: SingleChildScrollView(
           child: Column(
@@ -274,29 +263,31 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                     fontWeight: FontWeight.w600,
                     fontSize: 14),
               ),
-              customTextField(hinttext: "Code", addcontroller: _code),
-              customTextField(hinttext: "Detail", addcontroller: _detail),
-              customTextField(hinttext: "Discount", addcontroller: _discount),
-              customTextField(hinttext: "Title", addcontroller: _title),
+              customTextField(hinttext: "Name", addcontroller: _name),
+              customTextField(hinttext: "Amount", addcontroller: _amount),
+              customTextField(hinttext: "Place", addcontroller: _place),
+              customTextField(
+                  hinttext: "Time Stamp", addcontroller: _timeStamp),
               Padding(
                 padding: const EdgeInsets.all(12.0),
                 child: Center(
                   child: ElevatedButton(
                     onPressed: () async {
-                      print("/////");
+                      print("The Gym id is : ${_name.text}");
                       DocumentReference documentReference = FirebaseFirestore
                           .instance
-                          .collection('coupon')
-                          .doc(widget.couponId);
+                          .collection('payment')
+                          .doc();
+                      Timestamp dataForTimeStamp = Timestamp.now();
+
                       Map<String, dynamic> data = <String, dynamic>{
-                        'code': _code.text,
-                        'detail': _detail.text,
-                        'discount': _discount.text,
-                        'title': _title.text,
-                        'coupon_id': widget.couponId,
+                        'amount': _amount.text,
+                        'place': _place.text,
+                        'name': _name.text,
+                        'timestamp': dataForTimeStamp,
                       };
                       await documentReference
-                          .set(data)
+                          .update(data)
                           .whenComplete(() => print("Item Updated"))
                           .catchError((e) => print(e));
                       Navigator.pop(context);

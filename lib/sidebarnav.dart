@@ -6,13 +6,16 @@ import 'package:admin_panel_vyam/Screens/category_screen.dart';
 import 'package:admin_panel_vyam/Screens/cities.dart';
 import 'package:admin_panel_vyam/Screens/coupon.dart';
 import 'package:admin_panel_vyam/Screens/database_info.dart';
+
+import 'package:admin_panel_vyam/Screens/faq_details.dart';
 import 'package:admin_panel_vyam/Screens/feedback_dateils.dart';
+import 'package:admin_panel_vyam/Screens/payments_screen.dart';
 import 'package:admin_panel_vyam/services/image_picker_api.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dashboard.dart';
 import 'Screens/database_info.dart';
-import 'Screens/product_details.dart';
+import 'Screens/Product Details/product_details.dart';
 import 'Screens/booking_details.dart';
 
 class SideNavBar1 extends StatefulWidget {
@@ -113,7 +116,7 @@ class _SideNavBar1State extends State<SideNavBar1> {
             ),
             ListTile(
               title: Text(
-                'Cupon',
+                'Coupon',
                 style: kTextStyle,
               ),
               onTap: () {
@@ -154,11 +157,31 @@ class _SideNavBar1State extends State<SideNavBar1> {
             ),
             ListTile(
               title: Text(
-                'Cities',
+                'Payments',
                 style: kTextStyle,
               ),
               onTap: () {
                 index = 9;
+                setState(() {});
+              },
+            ),
+            ListTile(
+              title: Text(
+                'Cities',
+                style: kTextStyle,
+              ),
+              onTap: () {
+                index = 10;
+                setState(() {});
+              },
+            ),
+            ListTile(
+              title: Text(
+                'FAQ',
+                style: kTextStyle,
+              ),
+              onTap: () {
+                index = 11;
                 setState(() {});
               },
             ),
@@ -186,7 +209,9 @@ class _SideNavBar1State extends State<SideNavBar1> {
           index == 6 ? const FeedBackInfo() : Container(),
           index == 7 ? const CategoryInfoScreen() : Container(),
           index == 8 ? const AmenetiesScreen() : Container(),
-          index == 9 ? const CitiesScreen() : Container(),
+          index == 9 ? const PaymentsPage() : Container(),
+          index == 10 ? const CitiesScreen() : Container(),
+          index == 11 ? const FaqDetails() : Container(),
         ],
       ),
     );

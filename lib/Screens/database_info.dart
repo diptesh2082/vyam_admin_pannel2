@@ -1,6 +1,10 @@
+import 'package:admin_panel_vyam/services/deleteMethod.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+
+import '../services/CustomTextFieldClass.dart';
 
 class CollectionInfo extends StatefulWidget {
   const CollectionInfo({
@@ -12,8 +16,10 @@ class CollectionInfo extends StatefulWidget {
 }
 
 class _CollectionInfoState extends State<CollectionInfo> {
+  CollectionReference? userDetailStream;
   @override
   void initState() {
+    userDetailStream = FirebaseFirestore.instance.collection("user_details");
     super.initState();
     // _address = TextEditingController();
     // _pincode = TextEditingController();
@@ -58,9 +64,7 @@ class _CollectionInfoState extends State<CollectionInfo> {
                 ),
                 Center(
                   child: StreamBuilder<QuerySnapshot>(
-                    stream: FirebaseFirestore.instance
-                        .collection("user_details")
-                        .snapshots(),
+                    stream: userDetailStream!.snapshots(),
                     builder: (context, AsyncSnapshot snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return const CircularProgressIndicator();
@@ -141,6 +145,7 @@ class _CollectionInfoState extends State<CollectionInfo> {
                               //     style: TextStyle(fontWeight: FontWeight.w600),
                               //   ),
                               // ),
+                              DataColumn(label: Text('')),
                               DataColumn(label: Text(''))
                             ],
                             rows: _buildlist(context, snapshot.data!.docs)),
@@ -162,8 +167,10 @@ class _CollectionInfoState extends State<CollectionInfo> {
   }
 
   DataRow _buildListItem(BuildContext context, DocumentSnapshot data) {
+    String userIDData = data['userId'];
+
     return DataRow(cells: [
-      DataCell(data != null ? Text(data['userId'] ?? "") : Text("")),
+      DataCell(data != null ? Text(userIDData) : Text("")),
       DataCell(data != null ? Text(data['name'] ?? "") : Text("")),
       DataCell(data != null ? Text(data['email'] ?? "") : Text("")),
       DataCell(data != null ? Text(data['gender'] ?? "") : Text("")),
@@ -175,40 +182,34 @@ class _CollectionInfoState extends State<CollectionInfo> {
       // DataCell(Text(data['lat'] ?? "")),
       // DataCell(Text(data['long'] ?? "")),
       DataCell(const Text(""), showEditIcon: true, onTap: () {
-        // showEditbox(
-        //   imageurl: 'url',
-        //   address: data['address']!,
-        //   gender: data['gender'],
-        //   email: data['email'],
-        //   latitude: data['lat'].toString(),
-        //   longitude: data['long'].toString(),
-        //   locality: data['locality'],
-        //   number: data['number'],
-        //   subLocality: data['subLocality'],
-        //   userid: data['userId'],
-        //   name: data['name'],
-        //   pincode: data['pincode'],
-        // );
         showDialog(
             context: context,
             builder: (context) {
-              return SingleChildScrollView(
-                child: EditBox(
-                  imageurl: 'url',
-                  address: data['address'],
-                  gender: data['gender'],
-                  email: data['email'],
-                  // latitude: data['lat'].toString(),
-                  // longitude: data['long'].toString(),
-                  locality: data['locality'],
-                  number: data['number'],
-                  subLocality: data['subLocality'],
-                  userid: data['userId'],
-                  name: data['name'],
-                  pincode: data['pincode'],
+              return GestureDetector(
+                child: SingleChildScrollView(
+                  child: EditBox(
+                    imageurl: 'url',
+                    address: data['address'],
+                    gender: data['gender'],
+                    email: data['email'],
+                    // latitude: data['lat'].toString(),
+                    // longitude: data['long'].toString(),
+                    locality: data['locality'],
+                    number: data['number'],
+                    subLocality: data['subLocality'],
+                    userid: data['userId'],
+                    name: data['name'],
+                    pincode: data['pincode'],
+                  ),
                 ),
+                onTap: () {
+                  Navigator.pop(context);
+                },
               );
             });
+      }),
+      DataCell(Icon(Icons.delete), onTap: () {
+        deleteMethod(stream: userDetailStream, uniqueDocId: userIDData);
       }),
     ]);
   }
@@ -243,23 +244,23 @@ class _CollectionInfoState extends State<CollectionInfo> {
                           fontWeight: FontWeight.w600,
                           fontSize: 14),
                     ),
-                    CustomTextField(
+                    customTextField(
                         hinttext: "UserID", addcontroller: _adduserid),
-                    CustomTextField(hinttext: "Name", addcontroller: _addname),
-                    CustomTextField(
+                    customTextField(hinttext: "Name", addcontroller: _addname),
+                    customTextField(
                         hinttext: "Email", addcontroller: _addemail),
-                    CustomTextField(
+                    customTextField(
                         hinttext: "Gender", addcontroller: _addgender),
-                    CustomTextField(
+                    customTextField(
                         hinttext: "phone number", addcontroller: _addnumber),
-                    CustomTextField(
+                    customTextField(
                         hinttext: "Address", addcontroller: _addaddress),
-                    CustomTextField(
+                    customTextField(
                         hinttext: "Locality", addcontroller: _addlocality),
-                    CustomTextField(
+                    customTextField(
                         hinttext: "Sub Locality",
                         addcontroller: _addsublocality),
-                    CustomTextField(
+                    customTextField(
                       addcontroller: _addpincode,
                       hinttext: "Pincode",
                     ),
@@ -295,44 +296,6 @@ class _CollectionInfoState extends State<CollectionInfo> {
               ),
             ),
           ));
-}
-
-class CustomTextField extends StatelessWidget {
-  const CustomTextField({
-    Key? key,
-    required this.hinttext,
-    required this.addcontroller,
-  }) : super(key: key);
-
-  final TextEditingController addcontroller;
-  final String hinttext;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 50,
-      child: Card(
-          child: TextField(
-        autofocus: true,
-        style: const TextStyle(
-          fontSize: 14,
-          fontFamily: 'poppins',
-          fontWeight: FontWeight.w400,
-        ),
-        controller: addcontroller,
-        maxLines: 3,
-        decoration: InputDecoration(
-            border: InputBorder.none,
-            hintStyle: const TextStyle(
-              fontSize: 14,
-              fontFamily: 'poppins',
-              fontWeight: FontWeight.w400,
-            ),
-            hintMaxLines: 2,
-            hintText: hinttext),
-      )),
-    );
-  }
 }
 
 class EditBox extends StatefulWidget {

@@ -1,33 +1,38 @@
 import 'package:admin_panel_vyam/services/deleteMethod.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
 import 'package:flutter/material.dart';
+import '../../../services/CustomTextFieldClass.dart';
+import '../../../services/MatchIDMethod.dart';
 
-import '../services/CustomTextFieldClass.dart';
-import '../services/MatchIDMethod.dart';
+String globalGymId = '';
 
-class Coupon extends StatefulWidget {
-  const Coupon({
-    Key? key,
-  }) : super(key: key);
+class PackagesPage extends StatefulWidget {
+  String pGymId;
+  PackagesPage({Key? key, required this.pGymId}) : super(key: key);
 
   @override
-  State<Coupon> createState() => _CouponState();
+  State<PackagesPage> createState() => _PackagesPageState();
 }
 
-class _CouponState extends State<Coupon> {
-  final id =
-      FirebaseFirestore.instance.collection('coupon').doc().id.toString();
+class _PackagesPageState extends State<PackagesPage> {
+  CollectionReference? packageStream;
 
-  CollectionReference? couponStream;
   @override
   void initState() {
-    couponStream = FirebaseFirestore.instance.collection("coupon");
     super.initState();
+    packageStream = FirebaseFirestore.instance
+        .collection('product_details')
+        .doc(widget.pGymId)
+        .collection('package');
+    globalGymId = widget.pGymId;
   }
+
+  final finalPackID =
+      FirebaseFirestore.instance.collection('product_details').doc().id;
 
   @override
   Widget build(BuildContext context) {
+    print(finalPackID);
     return Scaffold(
       body: SafeArea(
         child: Container(
@@ -51,7 +56,7 @@ class _CouponState extends State<Coupon> {
                       child: Row(
                         children: const [
                           Icon(Icons.add),
-                          Text('Add Coupon',
+                          Text('Add Product',
                               style: TextStyle(fontWeight: FontWeight.w400)),
                         ],
                       ),
@@ -60,12 +65,13 @@ class _CouponState extends State<Coupon> {
                 ),
                 Center(
                   child: StreamBuilder<QuerySnapshot>(
-                    stream: couponStream!.snapshots(),
+                    stream: packageStream!.snapshots(),
                     builder: (context, AsyncSnapshot snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return const CircularProgressIndicator();
                       }
                       if (snapshot.data == null) {
+                        print('No output for package');
                         return Container();
                       }
                       print("-----------------------------------");
@@ -78,29 +84,28 @@ class _CouponState extends State<Coupon> {
                             columns: const [
                               DataColumn(
                                   label: Text(
-                                'Code',
+                                '1 month',
+                                style: TextStyle(fontWeight: FontWeight.w600),
+                              )),
+                              DataColumn(
+                                  label: Text(
+                                '3 month',
                                 style: TextStyle(fontWeight: FontWeight.w600),
                               )),
                               DataColumn(
                                 label: Text(
-                                  'Details',
+                                  '6 month',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
                               DataColumn(
                                 label: Text(
-                                  'Discount',
+                                  'pay per session',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
-                              DataColumn(
-                                label: Text(
-                                  'Title',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
-                              ),
-                              DataColumn(label: Text('')),
-                              DataColumn(label: Text(''))
+                              DataColumn(label: Text('')), // ! For edit pencil
+                              DataColumn(label: Text('')), // ! For delete
                             ],
                             rows: _buildlist(context, snapshot.data!.docs)),
                       );
@@ -121,47 +126,40 @@ class _CouponState extends State<Coupon> {
   }
 
   DataRow _buildListItem(BuildContext context, DocumentSnapshot data) {
-    String couponIdData = data['coupon_id'];
+    String packId = data['pack_id'];
     return DataRow(cells: [
-      DataCell(
-          data['code'] != null ? Text(data['code'] ?? "") : const Text("")),
-      DataCell(
-          data['detail'] != null ? Text(data['detail'] ?? "") : const Text("")),
-      DataCell(data['discount'] != null
-          ? Text(data['discount'] ?? "")
-          : const Text("")),
-      DataCell(
-          data['title'] != null ? Text(data['title'] ?? "") : const Text("")),
+      DataCell(data != null ? Text(data['1_month'] ?? "") : Text("")),
+      DataCell(data != null ? Text(data['3_month'] ?? "") : Text("")),
+      DataCell(data != null ? Text(data['6_month'] ?? "") : Text("")),
+      DataCell(data != null ? Text(data['pay_per_session'] ?? "") : Text("")),
       DataCell(const Text(""), showEditIcon: true, onTap: () {
         showDialog(
             context: context,
             builder: (context) {
               return GestureDetector(
+                onTap: () => Navigator.pop(context),
                 child: SingleChildScrollView(
                   child: ProductEditBox(
-                    title: data['title'],
-                    code: data['code'],
-                    details: data['detail'],
-                    discount: data['discount'],
-                    couponId: data['coupon_id'],
+                    oneMonth: data['1_month'],
+                    threeMonth: data['3_month'],
+                    sixMonth: data['6_month'],
+                    payPerSession: data['pay_per_session'],
+                    packId: data['pack_id'],
                   ),
                 ),
-                onTap: () {
-                  Navigator.pop(context);
-                },
               );
             });
       }),
       DataCell(Icon(Icons.delete), onTap: () {
-        deleteMethod(stream: couponStream, uniqueDocId: couponIdData);
-      }),
+        deleteMethod(stream: packageStream, uniqueDocId: packId);
+      })
     ]);
   }
 
-  final TextEditingController _addCode = TextEditingController();
-  final TextEditingController _adddetails = TextEditingController();
-  final TextEditingController _adddiscount = TextEditingController();
-  final TextEditingController _addtitle = TextEditingController();
+  final TextEditingController _add1Month = TextEditingController();
+  final TextEditingController _add3Month = TextEditingController();
+  final TextEditingController _add6Month = TextEditingController();
+  final TextEditingController _addPayPerSession = TextEditingController();
 
   showAddbox() => showDialog(
       context: context,
@@ -182,30 +180,34 @@ class _CouponState extends State<Coupon> {
                           fontWeight: FontWeight.w600,
                           fontSize: 14),
                     ),
-                    customTextField(hinttext: "Code", addcontroller: _addCode),
                     customTextField(
-                        hinttext: "Details", addcontroller: _adddetails),
+                        hinttext: "1 month", addcontroller: _add1Month),
                     customTextField(
-                        hinttext: "Discount", addcontroller: _adddiscount),
+                        hinttext: "3 month", addcontroller: _add3Month),
                     customTextField(
-                        hinttext: "Title", addcontroller: _addtitle),
+                        hinttext: "6 month", addcontroller: _add6Month),
+                    customTextField(
+                        hinttext: "pay per day",
+                        addcontroller: _addPayPerSession),
                     Center(
                       child: ElevatedButton(
                         onPressed: () async {
                           await matchID(
-                              newId: id,
-                              matchStream: couponStream,
-                              idField: 'coupon_id');
-                          await FirebaseFirestore.instance
-                              .collection('coupon')
-                              .doc(id)
+                              newId: finalPackID,
+                              matchStream: packageStream,
+                              idField: 'pack_id');
+                          FirebaseFirestore.instance
+                              .collection('product_details')
+                              .doc(widget.pGymId)
+                              .collection('package')
+                              .doc(finalPackID)
                               .set(
                             {
-                              'code': _addCode.text,
-                              'detail': _adddetails.text,
-                              'discount': _adddiscount.text,
-                              'title': _addtitle.text,
-                              'coupon_id': id,
+                              '1_month': _add1Month.text,
+                              '3_month': _add3Month.text,
+                              '6_month': _add6Month.text,
+                              'pay_per_session': _addPayPerSession.text,
+                              'pack_id': finalPackID,
                             },
                           );
                           Navigator.pop(context);
@@ -221,38 +223,37 @@ class _CouponState extends State<Coupon> {
 }
 
 class ProductEditBox extends StatefulWidget {
-  const ProductEditBox(
-      {Key? key,
-      required this.details,
-      required this.discount,
-      required this.title,
-      required this.code,
-      required this.couponId})
-      : super(key: key);
+  const ProductEditBox({
+    Key? key,
+    required this.oneMonth,
+    required this.threeMonth,
+    required this.sixMonth,
+    required this.payPerSession,
+    required this.packId,
+  }) : super(key: key);
 
-  final String details;
-  final String discount;
-  final String title;
-  final String code;
-  final String couponId;
+  final String oneMonth;
+  final String threeMonth;
+  final String sixMonth;
+  final String payPerSession;
+  final String packId;
 
   @override
   _ProductEditBoxState createState() => _ProductEditBoxState();
 }
 
 class _ProductEditBoxState extends State<ProductEditBox> {
-  final TextEditingController _code = TextEditingController();
-  final TextEditingController _detail = TextEditingController();
-  final TextEditingController _discount = TextEditingController();
-  final TextEditingController _title = TextEditingController();
-
+  final TextEditingController _oneMonth = TextEditingController();
+  final TextEditingController _threeMonth = TextEditingController();
+  final TextEditingController _sixMonth = TextEditingController();
+  final TextEditingController _payPerSession = TextEditingController();
   @override
   void initState() {
     super.initState();
-    _code.text = widget.code;
-    _detail.text = widget.details;
-    _discount.text = widget.discount;
-    _title.text = widget.title;
+    _oneMonth.text = widget.oneMonth;
+    _threeMonth.text = widget.threeMonth;
+    _sixMonth.text = widget.sixMonth;
+    _payPerSession.text = widget.payPerSession;
   }
 
   @override
@@ -261,7 +262,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(30))),
       content: SizedBox(
-        height: 300,
+        height: 580,
         width: 800,
         child: SingleChildScrollView(
           child: Column(
@@ -274,29 +275,31 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                     fontWeight: FontWeight.w600,
                     fontSize: 14),
               ),
-              customTextField(hinttext: "Code", addcontroller: _code),
-              customTextField(hinttext: "Detail", addcontroller: _detail),
-              customTextField(hinttext: "Discount", addcontroller: _discount),
-              customTextField(hinttext: "Title", addcontroller: _title),
+              customTextField(hinttext: "1 month", addcontroller: _oneMonth),
+              customTextField(hinttext: "3 month", addcontroller: _threeMonth),
+              customTextField(hinttext: "6 month", addcontroller: _sixMonth),
+              customTextField(
+                  hinttext: "pay per session", addcontroller: _payPerSession),
               Padding(
                 padding: const EdgeInsets.all(12.0),
                 child: Center(
                   child: ElevatedButton(
                     onPressed: () async {
-                      print("/////");
+                      print("The Gym id is : ${widget.packId}");
                       DocumentReference documentReference = FirebaseFirestore
                           .instance
-                          .collection('coupon')
-                          .doc(widget.couponId);
+                          .collection('product_details')
+                          .doc(globalGymId)
+                          .collection('package')
+                          .doc(widget.packId);
                       Map<String, dynamic> data = <String, dynamic>{
-                        'code': _code.text,
-                        'detail': _detail.text,
-                        'discount': _discount.text,
-                        'title': _title.text,
-                        'coupon_id': widget.couponId,
+                        '1_month': _oneMonth.text,
+                        '3_month': _threeMonth.text,
+                        '6_month': _sixMonth.text,
+                        'pay_per_session': _payPerSession.text,
                       };
                       await documentReference
-                          .set(data)
+                          .update(data)
                           .whenComplete(() => print("Item Updated"))
                           .catchError((e) => print(e));
                       Navigator.pop(context);
