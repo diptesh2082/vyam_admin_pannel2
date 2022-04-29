@@ -32,7 +32,7 @@ class _BookingDetailsState extends State<BookingDetails> {
                 Center(
                   child: StreamBuilder<QuerySnapshot>(
                     stream: FirebaseFirestore.instance
-                        .collectionGroup('user_booking')
+                        .collection('bookings')
                         .snapshots(),
                     builder: (context, AsyncSnapshot snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
@@ -41,7 +41,13 @@ class _BookingDetailsState extends State<BookingDetails> {
                       if (snapshot.data == null) {
                         return Container();
                       }
-
+                      // var document=snapshot.data!.docs;
+                      //   document = document.where((element) {
+                      //     return element
+                      //         .get('booking_status')
+                      //         .toString()
+                      //         .contains("active" || "upcomming");
+                      //   }).toList();
                       return SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
                         child: DataTable(
@@ -64,12 +70,12 @@ class _BookingDetailsState extends State<BookingDetails> {
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
-                              DataColumn(
-                                label: Text(
-                                  'Total Price',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
-                              ),
+                              // DataColumn(
+                              //   label: Text(
+                              //     'Total Price',
+                              //     style: TextStyle(fontWeight: FontWeight.w600),
+                              //   ),
+                              // ),
                               DataColumn(
                                 label: Text(
                                   'Total Days',
@@ -112,12 +118,12 @@ class _BookingDetailsState extends State<BookingDetails> {
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
-                              DataColumn(
-                                label: Text(
-                                  'Gym Address',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
-                              ),
+                              // DataColumn(
+                              //   label: Text(
+                              //     'Gym Address',
+                              //     style: TextStyle(fontWeight: FontWeight.w600),
+                              //   ),
+                              // ),
                               DataColumn(
                                 label: Text(
                                   'Grand Total',
@@ -142,24 +148,24 @@ class _BookingDetailsState extends State<BookingDetails> {
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
-                              DataColumn(
-                                label: Text(
-                                  'Booking Price',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
-                              ),
+                              // DataColumn(
+                              //   label: Text(
+                              //     'Booking Price',
+                              //     style: TextStyle(fontWeight: FontWeight.w600),
+                              //   ),
+                              // ),
                               DataColumn(
                                 label: Text(
                                   'Booking Plan',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
-                              DataColumn(
-                                label: Text(
-                                  'Booking ID',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
-                              ),
+                              // DataColumn(
+                              //   label: Text(
+                              //     'Booking ID',
+                              //     style: TextStyle(fontWeight: FontWeight.w600),
+                              //   ),
+                              // ),
                               DataColumn(
                                 label: Text(
                                   'Booking Date',
@@ -209,9 +215,9 @@ class _BookingDetailsState extends State<BookingDetails> {
       DataCell(data['userId'] != null
           ? Text(data['userId'].toString())
           : const Text("")),
-      DataCell(data['total_price'] != null
-          ? Text(data['total_price'].toString())
-          : const Text("")),
+      // DataCell(data['total_price'] != null
+      //     ? Text(data['total_price'].toString())
+      //     : const Text("")),
       DataCell(data['totalDays'] != null
           ? Text(data['totalDays'].toString())
           : const Text("")),
@@ -231,9 +237,9 @@ class _BookingDetailsState extends State<BookingDetails> {
       DataCell(data['gym_details']['name'] != null
           ? Text(data['gym_details']['name'].toString())
           : const Text("")),
-      DataCell(data['gym_address'] != null
-          ? Text(data['gym_address'].toString())
-          : const Text("")),
+      // DataCell(data['gym_address'] != null
+      //     ? Text(data['gym_address'].toString())
+      //     : const Text("")),
       DataCell(data['grand_total'] != null
           ? Text(data['grand_total'].toString())
           : const Text("")),
@@ -246,15 +252,15 @@ class _BookingDetailsState extends State<BookingDetails> {
       DataCell(data['booking_status'] != null
           ? Text(data['booking_status'].toString())
           : const Text("")),
-      DataCell(data['booking_price'] != null
-          ? Text(data['booking_price'].toString())
-          : const Text("")),
+      // DataCell(data['booking_price'] != null
+      //     ? Text(data['booking_price'].toString())
+      //     : const Text("")),
       DataCell(data['booking_plan'] != null
           ? Text(data['booking_plan'].toString())
           : const Text("")),
-      DataCell(data['booking_id'] != null
-          ? Text(data['booking_id'].toString())
-          : const Text("")),
+      // DataCell(data['booking_id'] != null
+      //     ? Text(data['booking_id'].toString())
+      //     : const Text("")),
       DataCell(
           data['booking_date'] != null ? Text(bookingDate) : const Text("")),
       DataCell(data['booking_accepted'] != null
