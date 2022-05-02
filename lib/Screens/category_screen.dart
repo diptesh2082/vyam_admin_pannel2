@@ -95,7 +95,12 @@ class _CategoryInfoScreenState extends State<CategoryInfoScreen> {
                                 style: TextStyle(fontWeight: FontWeight.w600),
                               ),
                             ),
-                            DataColumn(label: Text('')),
+                            DataColumn(
+                              label: Text(
+                                'Delete',
+                                style: TextStyle(fontWeight: FontWeight.w600),
+                              ),
+                            ),
                           ],
                           rows: _buildlist(context, snapshot.data!.docs),
                         ),

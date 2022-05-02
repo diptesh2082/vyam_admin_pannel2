@@ -131,16 +131,33 @@ class _ProductDetailsState extends State<ProductDetails> {
                               ),
 
                               DataColumn(
-                                label: Text('Trainers'),
+                                label: Text(
+                                  'Trainers',
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
                               ), //! For trainer
                               DataColumn(
-                                label: Text('Packages'),
+                                label: Text(
+                                  'Packages',
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
                               ), //!For Package
                               DataColumn(
-                                label: Text('Extra Packages'),
+                                label: Text(
+                                  'Extra Packages',
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
                               ),
-                              DataColumn(label: Text('')), //! For edit pencil
-                              DataColumn(label: Text('')),
+                              DataColumn(
+                                  label: Text(
+                                'Edit',
+                                style: TextStyle(fontWeight: FontWeight.w600),
+                              )),
+                              DataColumn(
+                                  label: Text(
+                                'Delete',
+                                style: TextStyle(fontWeight: FontWeight.w600),
+                              )),
                             ],
                             rows: _buildlist(context, snapshot.data!.docs)),
                       );

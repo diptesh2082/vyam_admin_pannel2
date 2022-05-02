@@ -104,7 +104,18 @@ class _ReviewInfoState extends State<ReviewInfo> {
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
-                              DataColumn(label: Text(''))
+                              DataColumn(
+                                label: Text(
+                                  'Edit',
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
+                              ),
+                              DataColumn(
+                                label: Text(
+                                  'Delete',
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
+                              ),
                             ],
                             rows: _buildlist(context, snapshot.data!.docs)),
                       );
@@ -145,6 +156,9 @@ class _ReviewInfoState extends State<ReviewInfo> {
               );
             });
       }),
+      DataCell(
+        Icon(Icons.delete),
+      ),
     ]);
   }
 
