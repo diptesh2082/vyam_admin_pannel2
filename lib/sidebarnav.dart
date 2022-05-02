@@ -1,9 +1,9 @@
 import 'dart:io';
 
-import 'package:admin_panel_vyam/Screens/ameneties.dart';
+import 'package:admin_panel_vyam/Screens/CitiesScreen.dart';
 import 'package:admin_panel_vyam/Screens/booking_details.dart';
 import 'package:admin_panel_vyam/Screens/category_screen.dart';
-import 'package:admin_panel_vyam/Screens/cities.dart';
+import 'package:admin_panel_vyam/Screens/AmenetiesScreen.dart';
 import 'package:admin_panel_vyam/Screens/coupon.dart';
 import 'package:admin_panel_vyam/Screens/database_info.dart';
 

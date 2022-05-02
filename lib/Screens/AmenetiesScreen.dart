@@ -1,26 +1,25 @@
-import 'package:admin_panel_vyam/services/deleteMethod.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import '../services/CustomTextFieldClass.dart';
 import '../services/MatchIDMethod.dart';
+import '../services/deleteMethod.dart';
 
-class CategoryInfoScreen extends StatefulWidget {
-  const CategoryInfoScreen({Key? key}) : super(key: key);
+class AmenetiesScreen extends StatefulWidget {
+  const AmenetiesScreen({Key? key}) : super(key: key);
 
   @override
-  State<CategoryInfoScreen> createState() => _CategoryInfoScreenState();
+  State<AmenetiesScreen> createState() => _AmenetiesScreenState();
 }
 
-class _CategoryInfoScreenState extends State<CategoryInfoScreen> {
-  CollectionReference? categoryStream;
-  final catId =
-      FirebaseFirestore.instance.collection('category').doc().id.toString();
+class _AmenetiesScreenState extends State<AmenetiesScreen> {
+  CollectionReference? amenityStream;
 
+  final amenityId = FirebaseFirestore.instance.collection('amenities').doc().id;
   @override
   void initState() {
-    categoryStream = FirebaseFirestore.instance.collection('category');
     super.initState();
+    amenityStream = FirebaseFirestore.instance.collection('amenities');
   }
 
   @override
@@ -57,7 +56,7 @@ class _CategoryInfoScreenState extends State<CategoryInfoScreen> {
                 ),
                 Center(
                   child: StreamBuilder<QuerySnapshot>(
-                    stream: categoryStream!.snapshots(),
+                    stream: amenityStream!.snapshots(),
                     builder: (context, AsyncSnapshot snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return const CircularProgressIndicator();
@@ -73,7 +72,7 @@ class _CategoryInfoScreenState extends State<CategoryInfoScreen> {
                           columns: const [
                             DataColumn(
                               label: Text(
-                                'Name',
+                                'ID',
                                 style: TextStyle(fontWeight: FontWeight.w600),
                               ),
                             ),
@@ -85,7 +84,7 @@ class _CategoryInfoScreenState extends State<CategoryInfoScreen> {
                             ),
                             DataColumn(
                               label: Text(
-                                'Status',
+                                'Name',
                                 style: TextStyle(fontWeight: FontWeight.w600),
                               ),
                             ),
@@ -95,7 +94,7 @@ class _CategoryInfoScreenState extends State<CategoryInfoScreen> {
                                 style: TextStyle(fontWeight: FontWeight.w600),
                               ),
                             ),
-                            DataColumn(label: Text('')),
+                            DataColumn(label: Text(''))
                           ],
                           rows: _buildlist(context, snapshot.data!.docs),
                         ),
@@ -117,10 +116,10 @@ class _CategoryInfoScreenState extends State<CategoryInfoScreen> {
   }
 
   DataRow _buildListItem(BuildContext context, DocumentSnapshot data) {
-    String categoryID = data['category_id'];
+    String amenitiesId = data['id'];
     return DataRow(cells: [
       DataCell(
-        data['name'] != null ? Text(data['name'] ?? "") : const Text(""),
+        data['id'] != null ? Text(data['id'] ?? "") : const Text(""),
       ),
       DataCell(
         data['image'] != null
@@ -133,40 +132,41 @@ class _CategoryInfoScreenState extends State<CategoryInfoScreen> {
             : const Text(""),
       ),
       DataCell(
-        data['status'] == 'true'
-            ? const Text("Enabled")
-            : const Text("Disabled"),
+        data['name'] != null ? Text(data['name']) : const Text("Disabled"),
       ),
       DataCell(
         const Text(''),
         showEditIcon: true,
         onTap: () {
           showDialog(
-              context: context,
-              builder: (context) {
-                return GestureDetector(
-                  onTap: () => Navigator.pop(context),
-                  child: SingleChildScrollView(
-                    child: ProductEditBox(
-                      name: data['name'],
-                      status: data['status'],
-                      image: data['image'],
-                      categoryId: data['category_id'],
-                    ),
+            context: context,
+            builder: (context) {
+              return GestureDetector(
+                onTap: () => Navigator.pop(context),
+                child: SingleChildScrollView(
+                  child: ProductEditBox(
+                    image: data['image'],
+                    amenityId: data['id'],
+                    name: data['name'],
                   ),
-                );
-              });
+                ),
+              );
+            },
+          );
         },
       ),
       DataCell(Icon(Icons.delete), onTap: () {
-        deleteMethod(stream: categoryStream, uniqueDocId: categoryID);
+        deleteMethod(
+            stream: FirebaseFirestore.instance.collection('amenities'),
+            uniqueDocId: amenitiesId);
       })
     ]);
   }
 
   final TextEditingController _addName = TextEditingController();
-  final TextEditingController _addStatus = TextEditingController();
   final TextEditingController _addImage = TextEditingController();
+  final TextEditingController _addId = TextEditingController();
+
   showAddbox() => showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -188,25 +188,23 @@ class _CategoryInfoScreenState extends State<CategoryInfoScreen> {
                     ),
                     customTextField(hinttext: "Name", addcontroller: _addName),
                     customTextField(
-                        hinttext: "Status", addcontroller: _addStatus),
-                    customTextField(
                         hinttext: "Image", addcontroller: _addImage),
+                    customTextField(hinttext: "ID", addcontroller: _addId),
                     Center(
                       child: ElevatedButton(
                         onPressed: () async {
                           await matchID(
-                              newId: catId,
-                              matchStream: categoryStream,
-                              idField: 'category_id');
+                              newId: _addId.text,
+                              matchStream: amenityStream,
+                              idField: 'id');
                           FirebaseFirestore.instance
-                              .collection('category')
-                              .doc(catId)
+                              .collection('amenities')
+                              .doc(_addId.text)
                               .set(
                             {
-                              'status': _addStatus.text,
-                              'image': _addImage.text,
                               'name': _addName.text,
-                              'category_id': catId,
+                              'image': _addImage.text,
+                              'id': _addId.text,
                             },
                           );
                           Navigator.pop(context);
@@ -221,20 +219,19 @@ class _CategoryInfoScreenState extends State<CategoryInfoScreen> {
           ));
 }
 
-// EDIT FEATURE
+//EDIT FEATURE
+
 class ProductEditBox extends StatefulWidget {
   const ProductEditBox({
     Key? key,
     required this.name,
-    required this.status,
     required this.image,
-    required this.categoryId,
+    required this.amenityId,
   }) : super(key: key);
 
   final String name;
-  final String status;
   final String image;
-  final String categoryId;
+  final String amenityId;
 
   @override
   _ProductEditBoxState createState() => _ProductEditBoxState();
@@ -242,14 +239,14 @@ class ProductEditBox extends StatefulWidget {
 
 class _ProductEditBoxState extends State<ProductEditBox> {
   final TextEditingController _name = TextEditingController();
-  final TextEditingController _status = TextEditingController();
   final TextEditingController _image = TextEditingController();
+  final TextEditingController _amenityId = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    _status.text = widget.status;
     _image.text = widget.image;
+    _amenityId.text = widget.amenityId;
     _name.text = widget.name;
   }
 
@@ -273,26 +270,25 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                     fontSize: 14),
               ),
               customTextField(hinttext: "Name", addcontroller: _name),
-              customTextField(hinttext: "Status", addcontroller: _status),
               customTextField(hinttext: "Image", addcontroller: _image),
+              customTextField(hinttext: "ID", addcontroller: _amenityId),
               Padding(
                 padding: const EdgeInsets.all(12.0),
                 child: Center(
                   child: ElevatedButton(
                     onPressed: () async {
-                      print("The Gym id is : ${widget.categoryId}");
+                      print("The Gym id is : ${_amenityId.text}");
                       DocumentReference documentReference = FirebaseFirestore
                           .instance
-                          .collection('category')
-                          .doc(widget.categoryId);
+                          .collection('amenities')
+                          .doc(_amenityId.text);
                       Map<String, dynamic> data = <String, dynamic>{
-                        'status': _status.text,
                         'image': _image.text,
+                        'id': _amenityId.text,
                         'name': _name.text,
-                        'category_id': widget.categoryId,
                       };
                       await documentReference
-                          .update(data)
+                          .set(data)
                           .whenComplete(() => print("Item Updated"))
                           .catchError((e) => print(e));
                       Navigator.pop(context);

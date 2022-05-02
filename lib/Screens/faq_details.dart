@@ -135,14 +135,19 @@ class _FaqDetailsState extends State<FaqDetails> {
         showDialog(
             context: context,
             builder: (context) {
-              return SingleChildScrollView(
-                child: EditBox(
-                  userid: data['user_id'],
-                  answer: data['answer'],
-                  gymid: data['gym_id'],
-                  question: data['question'],
-                  id: data['id'],
+              return GestureDetector(
+                child: SingleChildScrollView(
+                  child: EditBox(
+                    userid: data['user_id'],
+                    answer: data['answer'],
+                    gymid: data['gym_id'],
+                    question: data['question'],
+                    id: data['id'],
+                  ),
                 ),
+                onTap: () {
+                  Navigator.pop(context);
+                },
               );
             });
       }),

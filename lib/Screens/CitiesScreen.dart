@@ -1,26 +1,23 @@
-import 'package:admin_panel_vyam/services/deleteMethod.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import '../services/CustomTextFieldClass.dart';
 import '../services/MatchIDMethod.dart';
+import '../services/deleteMethod.dart';
 
-class CategoryInfoScreen extends StatefulWidget {
-  const CategoryInfoScreen({Key? key}) : super(key: key);
+class CitiesScreen extends StatefulWidget {
+  const CitiesScreen({Key? key}) : super(key: key);
 
   @override
-  State<CategoryInfoScreen> createState() => _CategoryInfoScreenState();
+  State<CitiesScreen> createState() => _CitiesScreenState();
 }
 
-class _CategoryInfoScreenState extends State<CategoryInfoScreen> {
-  CollectionReference? categoryStream;
-  final catId =
-      FirebaseFirestore.instance.collection('category').doc().id.toString();
-
+class _CitiesScreenState extends State<CitiesScreen> {
+  CollectionReference? cityStream;
   @override
   void initState() {
-    categoryStream = FirebaseFirestore.instance.collection('category');
     super.initState();
+    cityStream = FirebaseFirestore.instance.collection('Cities');
   }
 
   @override
@@ -57,7 +54,7 @@ class _CategoryInfoScreenState extends State<CategoryInfoScreen> {
                 ),
                 Center(
                   child: StreamBuilder<QuerySnapshot>(
-                    stream: categoryStream!.snapshots(),
+                    stream: cityStream!.snapshots(),
                     builder: (context, AsyncSnapshot snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return const CircularProgressIndicator();
@@ -79,13 +76,13 @@ class _CategoryInfoScreenState extends State<CategoryInfoScreen> {
                             ),
                             DataColumn(
                               label: Text(
-                                'Images',
+                                'Status',
                                 style: TextStyle(fontWeight: FontWeight.w600),
                               ),
                             ),
                             DataColumn(
                               label: Text(
-                                'Status',
+                                'ID',
                                 style: TextStyle(fontWeight: FontWeight.w600),
                               ),
                             ),
@@ -95,7 +92,12 @@ class _CategoryInfoScreenState extends State<CategoryInfoScreen> {
                                 style: TextStyle(fontWeight: FontWeight.w600),
                               ),
                             ),
-                            DataColumn(label: Text('')),
+                            DataColumn(
+                              label: Text(
+                                'Delete',
+                                style: TextStyle(fontWeight: FontWeight.w600),
+                              ),
+                            ),
                           ],
                           rows: _buildlist(context, snapshot.data!.docs),
                         ),
@@ -117,56 +119,50 @@ class _CategoryInfoScreenState extends State<CategoryInfoScreen> {
   }
 
   DataRow _buildListItem(BuildContext context, DocumentSnapshot data) {
-    String categoryID = data['category_id'];
+    String cityId = data['id'];
     return DataRow(cells: [
       DataCell(
-        data['name'] != null ? Text(data['name'] ?? "") : const Text(""),
+        data['Address'] != null ? Text(data['Address'] ?? "") : const Text(""),
       ),
       DataCell(
-        data['image'] != null
-            ? Image.network(
-                data['image'] ?? "",
-                scale: 0.5,
-                height: 150,
-                width: 150,
-              )
-            : const Text(""),
+        data['Status'] != null ? Text(data['Status']) : const Text(""),
       ),
       DataCell(
-        data['status'] == 'true'
-            ? const Text("Enabled")
-            : const Text("Disabled"),
+        data['id'] != null ? Text(data['id']) : const Text(""),
       ),
       DataCell(
         const Text(''),
         showEditIcon: true,
         onTap: () {
           showDialog(
-              context: context,
-              builder: (context) {
-                return GestureDetector(
-                  onTap: () => Navigator.pop(context),
-                  child: SingleChildScrollView(
-                    child: ProductEditBox(
-                      name: data['name'],
-                      status: data['status'],
-                      image: data['image'],
-                      categoryId: data['category_id'],
-                    ),
+            context: context,
+            builder: (context) {
+              return GestureDetector(
+                onTap: () => Navigator.pop(context),
+                child: SingleChildScrollView(
+                  child: ProductEditBox(
+                    address: data['Address'],
+                    status: data['Status'],
+                    cityId: data['id'],
                   ),
-                );
-              });
+                ),
+              );
+            },
+          );
         },
       ),
-      DataCell(Icon(Icons.delete), onTap: () {
-        deleteMethod(stream: categoryStream, uniqueDocId: categoryID);
+      DataCell(const Icon(Icons.delete), onTap: () {
+        deleteMethod(
+            stream: FirebaseFirestore.instance.collection('Cities'),
+            uniqueDocId: cityId);
       })
     ]);
   }
 
-  final TextEditingController _addName = TextEditingController();
+  final TextEditingController _addAddress = TextEditingController();
   final TextEditingController _addStatus = TextEditingController();
-  final TextEditingController _addImage = TextEditingController();
+  final TextEditingController _addId = TextEditingController();
+
   showAddbox() => showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -186,27 +182,26 @@ class _CategoryInfoScreenState extends State<CategoryInfoScreen> {
                           fontWeight: FontWeight.w600,
                           fontSize: 14),
                     ),
-                    customTextField(hinttext: "Name", addcontroller: _addName),
+                    customTextField(
+                        hinttext: "Address", addcontroller: _addAddress),
                     customTextField(
                         hinttext: "Status", addcontroller: _addStatus),
-                    customTextField(
-                        hinttext: "Image", addcontroller: _addImage),
+                    customTextField(hinttext: "ID", addcontroller: _addId),
                     Center(
                       child: ElevatedButton(
                         onPressed: () async {
                           await matchID(
-                              newId: catId,
-                              matchStream: categoryStream,
-                              idField: 'category_id');
+                              newId: _addId.text,
+                              matchStream: cityStream,
+                              idField: 'id');
                           FirebaseFirestore.instance
-                              .collection('category')
-                              .doc(catId)
+                              .collection('Cities')
+                              .doc(_addId.text)
                               .set(
                             {
-                              'status': _addStatus.text,
-                              'image': _addImage.text,
-                              'name': _addName.text,
-                              'category_id': catId,
+                              'Address': _addAddress.text,
+                              'Status': _addStatus.text,
+                              'id': _addId.text,
                             },
                           );
                           Navigator.pop(context);
@@ -221,36 +216,35 @@ class _CategoryInfoScreenState extends State<CategoryInfoScreen> {
           ));
 }
 
-// EDIT FEATURE
+//EDIT FEATURE
+
 class ProductEditBox extends StatefulWidget {
   const ProductEditBox({
     Key? key,
-    required this.name,
+    required this.address,
     required this.status,
-    required this.image,
-    required this.categoryId,
+    required this.cityId,
   }) : super(key: key);
 
-  final String name;
+  final String address;
   final String status;
-  final String image;
-  final String categoryId;
+  final String cityId;
 
   @override
   _ProductEditBoxState createState() => _ProductEditBoxState();
 }
 
 class _ProductEditBoxState extends State<ProductEditBox> {
-  final TextEditingController _name = TextEditingController();
+  final TextEditingController _address = TextEditingController();
   final TextEditingController _status = TextEditingController();
-  final TextEditingController _image = TextEditingController();
+  final TextEditingController _cityId = TextEditingController();
 
   @override
   void initState() {
     super.initState();
+    _address.text = widget.address;
+    _cityId.text = widget.cityId;
     _status.text = widget.status;
-    _image.text = widget.image;
-    _name.text = widget.name;
   }
 
   @override
@@ -272,27 +266,26 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                     fontWeight: FontWeight.w600,
                     fontSize: 14),
               ),
-              customTextField(hinttext: "Name", addcontroller: _name),
-              customTextField(hinttext: "Status", addcontroller: _status),
-              customTextField(hinttext: "Image", addcontroller: _image),
+              customTextField(hinttext: "Name", addcontroller: _address),
+              customTextField(hinttext: "Image", addcontroller: _status),
+              customTextField(hinttext: "ID", addcontroller: _cityId),
               Padding(
                 padding: const EdgeInsets.all(12.0),
                 child: Center(
                   child: ElevatedButton(
                     onPressed: () async {
-                      print("The Gym id is : ${widget.categoryId}");
+                      print("The Gym id is : ${_cityId.text}");
                       DocumentReference documentReference = FirebaseFirestore
                           .instance
-                          .collection('category')
-                          .doc(widget.categoryId);
+                          .collection('Cities')
+                          .doc(_cityId.text);
                       Map<String, dynamic> data = <String, dynamic>{
-                        'status': _status.text,
-                        'image': _image.text,
-                        'name': _name.text,
-                        'category_id': widget.categoryId,
+                        'Address': _address.text,
+                        'id': _cityId.text,
+                        'Status': _status.text,
                       };
                       await documentReference
-                          .update(data)
+                          .set(data)
                           .whenComplete(() => print("Item Updated"))
                           .catchError((e) => print(e));
                       Navigator.pop(context);
