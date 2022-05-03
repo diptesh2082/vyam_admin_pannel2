@@ -35,7 +35,13 @@ class _BookingDetailsState extends State<BookingDetails> {
               children: [
                 Center(
                   child: StreamBuilder<QuerySnapshot>(
-                    stream: bookingStream.snapshots(),
+                    stream: FirebaseFirestore.instance
+                        .collection('bookings')
+                        .where('booking_status', whereIn: [
+                      'completed',
+                      'active',
+                      'upcoming'
+                    ]).snapshots(),
                     builder: (context, AsyncSnapshot snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return const CircularProgressIndicator();
@@ -213,6 +219,8 @@ class _BookingDetailsState extends State<BookingDetails> {
 
   DataRow _buildListItem(BuildContext context, DocumentSnapshot data) {
     String bookingId = data['booking_id'];
+    bool paymentDoneBool = data['payment_done'];
+    bool bookingAccepted = data['booking_accepted'];
     String durationEnd =
         "${data['plan_end_duration'].toDate().year}/${data['plan_end_duration'].toDate().month}/${data['plan_end_duration'].toDate().day}";
     String orderDate =
@@ -241,9 +249,24 @@ class _BookingDetailsState extends State<BookingDetails> {
       DataCell(data['plan_end_duration'] != null
           ? Text(durationEnd)
           : const Text("")),
-      DataCell(data['payment_done'] != null
-          ? Text(data['payment_done'].toString())
-          : const Text("")),
+      DataCell(Center(
+        child: ElevatedButton(
+          onPressed: () async {
+            bool temp = paymentDoneBool;
+            temp = !temp;
+            DocumentReference documentReference = FirebaseFirestore.instance
+                .collection('bookings')
+                .doc(bookingId);
+            await documentReference
+                .update({'payment_done': temp})
+                .whenComplete(() => print("Payment done updated"))
+                .catchError((e) => print(e));
+          },
+          child: Text(paymentDoneBool.toString()),
+          style: ElevatedButton.styleFrom(
+              primary: paymentDoneBool ? Colors.green : Colors.red),
+        ),
+      )),
       DataCell(data['package_type'] != null
           ? Text(data['package_type'].toString())
           : const Text("")),
@@ -277,9 +300,24 @@ class _BookingDetailsState extends State<BookingDetails> {
       //     : const Text("")),
       DataCell(
           data['booking_date'] != null ? Text(bookingDate) : const Text("")),
-      DataCell(data['booking_accepted'] != null
-          ? Text(data['booking_accepted'].toString())
-          : const Text("")),
+      DataCell(Center(
+        child: ElevatedButton(
+          onPressed: () async {
+            bool temp = bookingAccepted;
+            temp = !temp;
+            DocumentReference documentReference = FirebaseFirestore.instance
+                .collection('bookings')
+                .doc(bookingId);
+            await documentReference
+                .update({'booking_accepted': temp})
+                .whenComplete(() => print("booking accepted updated"))
+                .catchError((e) => print(e));
+          },
+          child: Text(bookingAccepted.toString()),
+          style: ElevatedButton.styleFrom(
+              primary: bookingAccepted ? Colors.green : Colors.red),
+        ),
+      )),
       DataCell(const Text(""), showEditIcon: true, onTap: () {
         showDialog(
             context: context,
@@ -695,8 +733,6 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                       DocumentReference documentReference = FirebaseFirestore
                           .instance
                           .collection('bookings')
-                          .doc(_adduserid.text)
-                          .collection('user_booking')
                           .doc(_addbookingid.text);
                       DateTime endtimedata = DateTime.parse(
                           '${_addplanendyear.text}-${isLess(_addplanendmonth.text) ? '0' + _addplanendmonth.text : _addplanendday.text}-${isLess(_addplanendday.text) ? '0' + _addplanendday.text : _addplanendday.text} 00:00:04Z');

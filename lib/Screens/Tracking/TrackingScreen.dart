@@ -33,6 +33,7 @@ class _TrackingScreenState extends State<TrackingScreen> {
                   child: StreamBuilder<QuerySnapshot>(
                     stream: FirebaseFirestore.instance
                         .collection('bookings')
+                        .where('booking_status', isEqualTo: 'incomplete')
                         .snapshots(),
                     builder: (context, AsyncSnapshot snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {

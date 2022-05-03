@@ -149,15 +149,23 @@ class _ProductDetailsState extends State<ProductDetails> {
                                 ),
                               ),
                               DataColumn(
-                                  label: Text(
-                                'Edit',
-                                style: TextStyle(fontWeight: FontWeight.w600),
-                              )),
+                                label: Text(
+                                  'Validity of User',
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
+                              ),
                               DataColumn(
-                                  label: Text(
-                                'Delete',
-                                style: TextStyle(fontWeight: FontWeight.w600),
-                              )),
+                                label: Text(
+                                  'Edit',
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
+                              ),
+                              DataColumn(
+                                label: Text(
+                                  'Delete',
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
+                              ),
                             ],
                             rows: _buildlist(context, snapshot.data!.docs)),
                       );
@@ -180,6 +188,7 @@ class _ProductDetailsState extends State<ProductDetails> {
   DataRow _buildListItem(BuildContext context, DocumentSnapshot data) {
     String gymId = data['gym_id'];
     GeoPoint loc = data['location'];
+    bool legit = data['legit'];
     String loctext = "${loc.latitude},${loc.longitude}";
     return DataRow(cells: [
       DataCell(data != null ? Text(data['name'] ?? "") : Text("")),
@@ -215,6 +224,26 @@ class _ProductDetailsState extends State<ProductDetails> {
           ),
         ));
       }),
+      DataCell(
+        Center(
+          child: ElevatedButton(
+            onPressed: () async {
+              bool temp = legit;
+              temp = !temp;
+              DocumentReference documentReference = FirebaseFirestore.instance
+                  .collection('product_details')
+                  .doc(gymId);
+              await documentReference
+                  .update({'legit': temp})
+                  .whenComplete(() => print("Legitimate toggled"))
+                  .catchError((e) => print(e));
+            },
+            child: Text(legit.toString()),
+            style: ElevatedButton.styleFrom(
+                primary: legit ? Colors.green : Colors.red),
+          ),
+        ),
+      ),
       DataCell(
         const Text(""),
         showEditIcon: true,
@@ -319,6 +348,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                               'landmark': _addlandmark.text,
                               'total_booking': " ",
                               'total_sales': " ",
+                              'legit': true
                             },
                           );
                           Navigator.pop(context);
