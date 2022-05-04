@@ -78,7 +78,12 @@ class _FeedBackInfoState extends State<FeedBackInfo> {
                     style: TextStyle(fontWeight: FontWeight.w600),
                   ),
                 ),
-                DataColumn(label: Text('delete')),
+                DataColumn(
+                  label: Text(
+                    'Edit',
+                    style: TextStyle(fontWeight: FontWeight.w600),
+                  ),
+                ),
               ],
               rows: _buildlist(context, snapshot.data!.docs),
             ),
@@ -98,19 +103,29 @@ class _FeedBackInfoState extends State<FeedBackInfo> {
     return DataRow(
       cells: [
         DataCell(
-          data['feedback_id'] != null ? Text(data['feedback_id'] ?? "") : const Text(""),
+          data['feedback_id'] != null
+              ? Text(data['feedback_id'] ?? "")
+              : const Text(""),
         ),
         DataCell(
-          data['vendor_id'] != null ? Text(data['vendor_id'] ?? "") : const Text(""),
+          data['vendor_id'] != null
+              ? Text(data['vendor_id'] ?? "")
+              : const Text(""),
         ),
         DataCell(
-          data['feedback_review'] != null ? Text(data['feedback_review'] ?? "") : const Text(""),
+          data['feedback_review'] != null
+              ? Text(data['feedback_review'] ?? "")
+              : const Text(""),
         ),
         DataCell(
-          data['feedback_suggestion'] != null ? Text(data['feedback_suggestion'] ?? "") : const Text(""),
+          data['feedback_suggestion'] != null
+              ? Text(data['feedback_suggestion'] ?? "")
+              : const Text(""),
         ),
         DataCell(
-          data['user_id'] != null ? Text(data['user_id'] ?? "") : const Text(""),
+          data['user_id'] != null
+              ? Text(data['user_id'] ?? "")
+              : const Text(""),
         ),
         // DataCell(
         //   data['image'] != null

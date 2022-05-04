@@ -120,8 +120,18 @@ class _ExtraPackagesPageState extends State<ExtraPackagesPage> {
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
-                              DataColumn(label: Text('')), //! For edit pencil
-                              DataColumn(label: Text('')), // For Delete
+                              DataColumn(
+                                label: Text(
+                                  'Edit',
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
+                              ),
+                              DataColumn(
+                                label: Text(
+                                  'Delete',
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
+                              ),
                             ],
                             rows: _buildlist(context, snapshot.data!.docs)),
                       );

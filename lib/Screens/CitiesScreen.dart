@@ -1,24 +1,23 @@
-import 'package:admin_panel_vyam/services/deleteMethod.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import '../services/CustomTextFieldClass.dart';
+import '../services/MatchIDMethod.dart';
+import '../services/deleteMethod.dart';
 
-class PaymentsPage extends StatefulWidget {
-  const PaymentsPage({
-    Key? key,
-  }) : super(key: key);
+class CitiesScreen extends StatefulWidget {
+  const CitiesScreen({Key? key}) : super(key: key);
 
   @override
-  State<PaymentsPage> createState() => _PaymentsPageState();
+  State<CitiesScreen> createState() => _CitiesScreenState();
 }
 
-class _PaymentsPageState extends State<PaymentsPage> {
-  CollectionReference? paymentStream;
+class _CitiesScreenState extends State<CitiesScreen> {
+  CollectionReference? cityStream;
   @override
   void initState() {
-    paymentStream = FirebaseFirestore.instance.collection('payment');
     super.initState();
+    cityStream = FirebaseFirestore.instance.collection('Cities');
   }
 
   @override
@@ -55,7 +54,7 @@ class _PaymentsPageState extends State<PaymentsPage> {
                 ),
                 Center(
                   child: StreamBuilder<QuerySnapshot>(
-                    stream: paymentStream!.snapshots(),
+                    stream: cityStream!.snapshots(),
                     builder: (context, AsyncSnapshot snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return const CircularProgressIndicator();
@@ -63,52 +62,45 @@ class _PaymentsPageState extends State<PaymentsPage> {
                       if (snapshot.data == null) {
                         return Container();
                       }
-                      print("-----------------------------------");
 
-                      print(snapshot.data.docs);
                       return SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
                         child: DataTable(
-                            // ? DATATABLE
-                            dataRowHeight: 65,
-                            columns: const [
-                              DataColumn(
-                                  label: Text(
+                          dataRowHeight: 65,
+                          columns: const [
+                            DataColumn(
+                              label: Text(
                                 'Name',
                                 style: TextStyle(fontWeight: FontWeight.w600),
-                              )),
-                              DataColumn(
-                                label: Text(
-                                  'Amount',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
                               ),
-                              DataColumn(
-                                label: Text(
-                                  'Place',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
+                            ),
+                            DataColumn(
+                              label: Text(
+                                'Status',
+                                style: TextStyle(fontWeight: FontWeight.w600),
                               ),
-                              DataColumn(
-                                label: Text(
-                                  'Timestamp',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
+                            ),
+                            DataColumn(
+                              label: Text(
+                                'ID',
+                                style: TextStyle(fontWeight: FontWeight.w600),
                               ),
-                              DataColumn(
-                                label: Text(
-                                  'Edit',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
+                            ),
+                            DataColumn(
+                              label: Text(
+                                'Edit',
+                                style: TextStyle(fontWeight: FontWeight.w600),
                               ),
-                              DataColumn(
-                                label: Text(
-                                  'Delete',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
+                            ),
+                            DataColumn(
+                              label: Text(
+                                'Delete',
+                                style: TextStyle(fontWeight: FontWeight.w600),
                               ),
-                            ],
-                            rows: _buildlist(context, snapshot.data!.docs)),
+                            ),
+                          ],
+                          rows: _buildlist(context, snapshot.data!.docs),
+                        ),
                       );
                     },
                   ),
@@ -127,49 +119,49 @@ class _PaymentsPageState extends State<PaymentsPage> {
   }
 
   DataRow _buildListItem(BuildContext context, DocumentSnapshot data) {
-    Timestamp timestamp = data['timestamp'];
-    String stamp = timestamp.toString();
-    String paymentID = data['payment_id'];
-
+    String cityId = data['id'];
     return DataRow(cells: [
-      DataCell(data != null ? Text(data['name'] ?? "") : Text("")),
-      DataCell(data != null ? Text(data['amount'] ?? "") : Text("")),
-      DataCell(data != null ? Text(data['place'] ?? "") : Text("")),
-      DataCell(data != null ? Text(stamp) : Text("")),
       DataCell(
-        const Text(""),
+        data['Address'] != null ? Text(data['Address'] ?? "") : const Text(""),
+      ),
+      DataCell(
+        data['Status'] != null ? Text(data['Status']) : const Text(""),
+      ),
+      DataCell(
+        data['id'] != null ? Text(data['id']) : const Text(""),
+      ),
+      DataCell(
+        const Text(''),
         showEditIcon: true,
         onTap: () {
           showDialog(
             context: context,
             builder: (context) {
               return GestureDetector(
-                // ? Added Gesture Detecter for popping off update record Card
+                onTap: () => Navigator.pop(context),
                 child: SingleChildScrollView(
                   child: ProductEditBox(
-                    amount: data['amount'],
-                    place: data['place'],
-                    name: data['name'],
-                    timestamp: data['timestamp'],
+                    address: data['Address'],
+                    status: data['Status'],
+                    cityId: data['id'],
                   ),
                 ),
-                onTap: () =>
-                    Navigator.pop(context), // ? ontap Property for popping of
               );
             },
           );
         },
       ),
-      DataCell(Icon(Icons.delete), onTap: () {
-        deleteMethod(stream: paymentStream, uniqueDocId: paymentID);
+      DataCell(const Icon(Icons.delete), onTap: () {
+        deleteMethod(
+            stream: FirebaseFirestore.instance.collection('Cities'),
+            uniqueDocId: cityId);
       })
     ]);
   }
 
-  final TextEditingController _addAmount = TextEditingController();
-  final TextEditingController _addPlace = TextEditingController();
-  final TextEditingController _addName = TextEditingController();
-  final TextEditingController _addTimestamp = TextEditingController();
+  final TextEditingController _addAddress = TextEditingController();
+  final TextEditingController _addStatus = TextEditingController();
+  final TextEditingController _addId = TextEditingController();
 
   showAddbox() => showDialog(
       context: context,
@@ -190,22 +182,26 @@ class _PaymentsPageState extends State<PaymentsPage> {
                           fontWeight: FontWeight.w600,
                           fontSize: 14),
                     ),
-                    customTextField(hinttext: "Name", addcontroller: _addName),
                     customTextField(
-                        hinttext: "Amount", addcontroller: _addAmount),
+                        hinttext: "Address", addcontroller: _addAddress),
                     customTextField(
-                        hinttext: "Place", addcontroller: _addPlace),
-                    customTextField(
-                        hinttext: "TimeStamp", addcontroller: _addTimestamp),
+                        hinttext: "Status", addcontroller: _addStatus),
+                    customTextField(hinttext: "ID", addcontroller: _addId),
                     Center(
                       child: ElevatedButton(
                         onPressed: () async {
-                          FirebaseFirestore.instance.collection("payment").add(
+                          await matchID(
+                              newId: _addId.text,
+                              matchStream: cityStream,
+                              idField: 'id');
+                          FirebaseFirestore.instance
+                              .collection('Cities')
+                              .doc(_addId.text)
+                              .set(
                             {
-                              'amount': _addAmount.text,
-                              'place': _addPlace.text,
-                              'name': _addName.text,
-                              'timestamp': _addTimestamp.text,
+                              'Address': _addAddress.text,
+                              'Status': _addStatus.text,
+                              'id': _addId.text,
                             },
                           );
                           Navigator.pop(context);
@@ -220,38 +216,35 @@ class _PaymentsPageState extends State<PaymentsPage> {
           ));
 }
 
-// *Updating Item list Class
+//EDIT FEATURE
 
 class ProductEditBox extends StatefulWidget {
   const ProductEditBox({
     Key? key,
-    required this.amount,
-    required this.name,
-    required this.place,
-    required this.timestamp,
+    required this.address,
+    required this.status,
+    required this.cityId,
   }) : super(key: key);
 
-  final String name;
-  final String amount;
-  final String place;
-  final Timestamp timestamp;
+  final String address;
+  final String status;
+  final String cityId;
+
   @override
   _ProductEditBoxState createState() => _ProductEditBoxState();
 }
 
 class _ProductEditBoxState extends State<ProductEditBox> {
-  final TextEditingController _name = TextEditingController();
-  final TextEditingController _amount = TextEditingController();
-  final TextEditingController _place = TextEditingController();
-  final TextEditingController _timeStamp = TextEditingController();
+  final TextEditingController _address = TextEditingController();
+  final TextEditingController _status = TextEditingController();
+  final TextEditingController _cityId = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    _amount.text = widget.amount;
-    _place.text = widget.place;
-    _name.text = widget.name;
-    _timeStamp.text = widget.timestamp.toString();
+    _address.text = widget.address;
+    _cityId.text = widget.cityId;
+    _status.text = widget.status;
   }
 
   @override
@@ -273,31 +266,26 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                     fontWeight: FontWeight.w600,
                     fontSize: 14),
               ),
-              customTextField(hinttext: "Name", addcontroller: _name),
-              customTextField(hinttext: "Amount", addcontroller: _amount),
-              customTextField(hinttext: "Place", addcontroller: _place),
-              customTextField(
-                  hinttext: "Time Stamp", addcontroller: _timeStamp),
+              customTextField(hinttext: "Name", addcontroller: _address),
+              customTextField(hinttext: "Image", addcontroller: _status),
+              customTextField(hinttext: "ID", addcontroller: _cityId),
               Padding(
                 padding: const EdgeInsets.all(12.0),
                 child: Center(
                   child: ElevatedButton(
                     onPressed: () async {
-                      print("The Gym id is : ${_name.text}");
+                      print("The Gym id is : ${_cityId.text}");
                       DocumentReference documentReference = FirebaseFirestore
                           .instance
-                          .collection('payment')
-                          .doc();
-                      Timestamp dataForTimeStamp = Timestamp.now();
-
+                          .collection('Cities')
+                          .doc(_cityId.text);
                       Map<String, dynamic> data = <String, dynamic>{
-                        'amount': _amount.text,
-                        'place': _place.text,
-                        'name': _name.text,
-                        'timestamp': dataForTimeStamp,
+                        'Address': _address.text,
+                        'id': _cityId.text,
+                        'Status': _status.text,
                       };
                       await documentReference
-                          .update(data)
+                          .set(data)
                           .whenComplete(() => print("Item Updated"))
                           .catchError((e) => print(e));
                       Navigator.pop(context);

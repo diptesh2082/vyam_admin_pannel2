@@ -1,24 +1,25 @@
-import 'package:admin_panel_vyam/services/deleteMethod.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import '../services/CustomTextFieldClass.dart';
+import '../services/MatchIDMethod.dart';
+import '../services/deleteMethod.dart';
 
-class PaymentsPage extends StatefulWidget {
-  const PaymentsPage({
-    Key? key,
-  }) : super(key: key);
+class AmenetiesScreen extends StatefulWidget {
+  const AmenetiesScreen({Key? key}) : super(key: key);
 
   @override
-  State<PaymentsPage> createState() => _PaymentsPageState();
+  State<AmenetiesScreen> createState() => _AmenetiesScreenState();
 }
 
-class _PaymentsPageState extends State<PaymentsPage> {
-  CollectionReference? paymentStream;
+class _AmenetiesScreenState extends State<AmenetiesScreen> {
+  CollectionReference? amenityStream;
+
+  final amenityId = FirebaseFirestore.instance.collection('amenities').doc().id;
   @override
   void initState() {
-    paymentStream = FirebaseFirestore.instance.collection('payment');
     super.initState();
+    amenityStream = FirebaseFirestore.instance.collection('amenities');
   }
 
   @override
@@ -55,7 +56,7 @@ class _PaymentsPageState extends State<PaymentsPage> {
                 ),
                 Center(
                   child: StreamBuilder<QuerySnapshot>(
-                    stream: paymentStream!.snapshots(),
+                    stream: amenityStream!.snapshots(),
                     builder: (context, AsyncSnapshot snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return const CircularProgressIndicator();
@@ -63,52 +64,45 @@ class _PaymentsPageState extends State<PaymentsPage> {
                       if (snapshot.data == null) {
                         return Container();
                       }
-                      print("-----------------------------------");
 
-                      print(snapshot.data.docs);
                       return SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
                         child: DataTable(
-                            // ? DATATABLE
-                            dataRowHeight: 65,
-                            columns: const [
-                              DataColumn(
-                                  label: Text(
+                          dataRowHeight: 65,
+                          columns: const [
+                            DataColumn(
+                              label: Text(
+                                'ID',
+                                style: TextStyle(fontWeight: FontWeight.w600),
+                              ),
+                            ),
+                            DataColumn(
+                              label: Text(
+                                'Images',
+                                style: TextStyle(fontWeight: FontWeight.w600),
+                              ),
+                            ),
+                            DataColumn(
+                              label: Text(
                                 'Name',
                                 style: TextStyle(fontWeight: FontWeight.w600),
-                              )),
-                              DataColumn(
-                                label: Text(
-                                  'Amount',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
                               ),
-                              DataColumn(
-                                label: Text(
-                                  'Place',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
+                            ),
+                            DataColumn(
+                              label: Text(
+                                'Edit',
+                                style: TextStyle(fontWeight: FontWeight.w600),
                               ),
-                              DataColumn(
-                                label: Text(
-                                  'Timestamp',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
+                            ),
+                            DataColumn(
+                              label: Text(
+                                'Delete',
+                                style: TextStyle(fontWeight: FontWeight.w600),
                               ),
-                              DataColumn(
-                                label: Text(
-                                  'Edit',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
-                              ),
-                              DataColumn(
-                                label: Text(
-                                  'Delete',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
-                              ),
-                            ],
-                            rows: _buildlist(context, snapshot.data!.docs)),
+                            ),
+                          ],
+                          rows: _buildlist(context, snapshot.data!.docs),
+                        ),
                       );
                     },
                   ),
@@ -127,49 +121,56 @@ class _PaymentsPageState extends State<PaymentsPage> {
   }
 
   DataRow _buildListItem(BuildContext context, DocumentSnapshot data) {
-    Timestamp timestamp = data['timestamp'];
-    String stamp = timestamp.toString();
-    String paymentID = data['payment_id'];
-
+    String amenitiesId = data['id'];
     return DataRow(cells: [
-      DataCell(data != null ? Text(data['name'] ?? "") : Text("")),
-      DataCell(data != null ? Text(data['amount'] ?? "") : Text("")),
-      DataCell(data != null ? Text(data['place'] ?? "") : Text("")),
-      DataCell(data != null ? Text(stamp) : Text("")),
       DataCell(
-        const Text(""),
+        data['id'] != null ? Text(data['id'] ?? "") : const Text(""),
+      ),
+      DataCell(
+        data['image'] != null
+            ? Image.network(
+                data['image'] ?? "",
+                scale: 0.5,
+                height: 150,
+                width: 150,
+              )
+            : const Text(""),
+      ),
+      DataCell(
+        data['name'] != null ? Text(data['name']) : const Text("Disabled"),
+      ),
+      DataCell(
+        const Text(''),
         showEditIcon: true,
         onTap: () {
           showDialog(
             context: context,
             builder: (context) {
               return GestureDetector(
-                // ? Added Gesture Detecter for popping off update record Card
+                onTap: () => Navigator.pop(context),
                 child: SingleChildScrollView(
                   child: ProductEditBox(
-                    amount: data['amount'],
-                    place: data['place'],
+                    image: data['image'],
+                    amenityId: data['id'],
                     name: data['name'],
-                    timestamp: data['timestamp'],
                   ),
                 ),
-                onTap: () =>
-                    Navigator.pop(context), // ? ontap Property for popping of
               );
             },
           );
         },
       ),
       DataCell(Icon(Icons.delete), onTap: () {
-        deleteMethod(stream: paymentStream, uniqueDocId: paymentID);
+        deleteMethod(
+            stream: FirebaseFirestore.instance.collection('amenities'),
+            uniqueDocId: amenitiesId);
       })
     ]);
   }
 
-  final TextEditingController _addAmount = TextEditingController();
-  final TextEditingController _addPlace = TextEditingController();
   final TextEditingController _addName = TextEditingController();
-  final TextEditingController _addTimestamp = TextEditingController();
+  final TextEditingController _addImage = TextEditingController();
+  final TextEditingController _addId = TextEditingController();
 
   showAddbox() => showDialog(
       context: context,
@@ -192,20 +193,23 @@ class _PaymentsPageState extends State<PaymentsPage> {
                     ),
                     customTextField(hinttext: "Name", addcontroller: _addName),
                     customTextField(
-                        hinttext: "Amount", addcontroller: _addAmount),
-                    customTextField(
-                        hinttext: "Place", addcontroller: _addPlace),
-                    customTextField(
-                        hinttext: "TimeStamp", addcontroller: _addTimestamp),
+                        hinttext: "Image", addcontroller: _addImage),
+                    customTextField(hinttext: "ID", addcontroller: _addId),
                     Center(
                       child: ElevatedButton(
                         onPressed: () async {
-                          FirebaseFirestore.instance.collection("payment").add(
+                          await matchID(
+                              newId: _addId.text,
+                              matchStream: amenityStream,
+                              idField: 'id');
+                          FirebaseFirestore.instance
+                              .collection('amenities')
+                              .doc(_addId.text)
+                              .set(
                             {
-                              'amount': _addAmount.text,
-                              'place': _addPlace.text,
                               'name': _addName.text,
-                              'timestamp': _addTimestamp.text,
+                              'image': _addImage.text,
+                              'id': _addId.text,
                             },
                           );
                           Navigator.pop(context);
@@ -220,38 +224,35 @@ class _PaymentsPageState extends State<PaymentsPage> {
           ));
 }
 
-// *Updating Item list Class
+//EDIT FEATURE
 
 class ProductEditBox extends StatefulWidget {
   const ProductEditBox({
     Key? key,
-    required this.amount,
     required this.name,
-    required this.place,
-    required this.timestamp,
+    required this.image,
+    required this.amenityId,
   }) : super(key: key);
 
   final String name;
-  final String amount;
-  final String place;
-  final Timestamp timestamp;
+  final String image;
+  final String amenityId;
+
   @override
   _ProductEditBoxState createState() => _ProductEditBoxState();
 }
 
 class _ProductEditBoxState extends State<ProductEditBox> {
   final TextEditingController _name = TextEditingController();
-  final TextEditingController _amount = TextEditingController();
-  final TextEditingController _place = TextEditingController();
-  final TextEditingController _timeStamp = TextEditingController();
+  final TextEditingController _image = TextEditingController();
+  final TextEditingController _amenityId = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    _amount.text = widget.amount;
-    _place.text = widget.place;
+    _image.text = widget.image;
+    _amenityId.text = widget.amenityId;
     _name.text = widget.name;
-    _timeStamp.text = widget.timestamp.toString();
   }
 
   @override
@@ -274,30 +275,25 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                     fontSize: 14),
               ),
               customTextField(hinttext: "Name", addcontroller: _name),
-              customTextField(hinttext: "Amount", addcontroller: _amount),
-              customTextField(hinttext: "Place", addcontroller: _place),
-              customTextField(
-                  hinttext: "Time Stamp", addcontroller: _timeStamp),
+              customTextField(hinttext: "Image", addcontroller: _image),
+              customTextField(hinttext: "ID", addcontroller: _amenityId),
               Padding(
                 padding: const EdgeInsets.all(12.0),
                 child: Center(
                   child: ElevatedButton(
                     onPressed: () async {
-                      print("The Gym id is : ${_name.text}");
+                      print("The Gym id is : ${_amenityId.text}");
                       DocumentReference documentReference = FirebaseFirestore
                           .instance
-                          .collection('payment')
-                          .doc();
-                      Timestamp dataForTimeStamp = Timestamp.now();
-
+                          .collection('amenities')
+                          .doc(_amenityId.text);
                       Map<String, dynamic> data = <String, dynamic>{
-                        'amount': _amount.text,
-                        'place': _place.text,
+                        'image': _image.text,
+                        'id': _amenityId.text,
                         'name': _name.text,
-                        'timestamp': dataForTimeStamp,
                       };
                       await documentReference
-                          .update(data)
+                          .set(data)
                           .whenComplete(() => print("Item Updated"))
                           .catchError((e) => print(e));
                       Navigator.pop(context);

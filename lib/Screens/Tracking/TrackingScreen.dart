@@ -1,20 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-import '../services/deleteMethod.dart';
-
-class BookingDetails extends StatefulWidget {
-  const BookingDetails({
+class TrackingScreen extends StatefulWidget {
+  const TrackingScreen({
     Key? key,
   }) : super(key: key);
 
   @override
-  State<BookingDetails> createState() => _BookingDetailsState();
+  State<TrackingScreen> createState() => _TrackingScreenState();
 }
 
-class _BookingDetailsState extends State<BookingDetails> {
-  CollectionReference bookingStream =
-      FirebaseFirestore.instance.collection('bookings');
+class _TrackingScreenState extends State<TrackingScreen> {
   @override
   void initState() {
     super.initState();
@@ -37,11 +33,8 @@ class _BookingDetailsState extends State<BookingDetails> {
                   child: StreamBuilder<QuerySnapshot>(
                     stream: FirebaseFirestore.instance
                         .collection('bookings')
-                        .where('booking_status', whereIn: [
-                      'completed',
-                      'active',
-                      'upcoming'
-                    ]).snapshots(),
+                        .where('booking_status', isEqualTo: 'incomplete')
+                        .snapshots(),
                     builder: (context, AsyncSnapshot snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return const CircularProgressIndicator();
@@ -218,9 +211,6 @@ class _BookingDetailsState extends State<BookingDetails> {
   }
 
   DataRow _buildListItem(BuildContext context, DocumentSnapshot data) {
-    String bookingId = data['booking_id'];
-    bool paymentDoneBool = data['payment_done'];
-    bool bookingAccepted = data['booking_accepted'];
     String durationEnd =
         "${data['plan_end_duration'].toDate().year}/${data['plan_end_duration'].toDate().month}/${data['plan_end_duration'].toDate().day}";
     String orderDate =
@@ -249,24 +239,9 @@ class _BookingDetailsState extends State<BookingDetails> {
       DataCell(data['plan_end_duration'] != null
           ? Text(durationEnd)
           : const Text("")),
-      DataCell(Center(
-        child: ElevatedButton(
-          onPressed: () async {
-            bool temp = paymentDoneBool;
-            temp = !temp;
-            DocumentReference documentReference = FirebaseFirestore.instance
-                .collection('bookings')
-                .doc(bookingId);
-            await documentReference
-                .update({'payment_done': temp})
-                .whenComplete(() => print("Payment done updated"))
-                .catchError((e) => print(e));
-          },
-          child: Text(paymentDoneBool.toString()),
-          style: ElevatedButton.styleFrom(
-              primary: paymentDoneBool ? Colors.green : Colors.red),
-        ),
-      )),
+      DataCell(data['payment_done'] != null
+          ? Text(data['payment_done'].toString())
+          : const Text("")),
       DataCell(data['package_type'] != null
           ? Text(data['package_type'].toString())
           : const Text("")),
@@ -300,24 +275,9 @@ class _BookingDetailsState extends State<BookingDetails> {
       //     : const Text("")),
       DataCell(
           data['booking_date'] != null ? Text(bookingDate) : const Text("")),
-      DataCell(Center(
-        child: ElevatedButton(
-          onPressed: () async {
-            bool temp = bookingAccepted;
-            temp = !temp;
-            DocumentReference documentReference = FirebaseFirestore.instance
-                .collection('bookings')
-                .doc(bookingId);
-            await documentReference
-                .update({'booking_accepted': temp})
-                .whenComplete(() => print("booking accepted updated"))
-                .catchError((e) => print(e));
-          },
-          child: Text(bookingAccepted.toString()),
-          style: ElevatedButton.styleFrom(
-              primary: bookingAccepted ? Colors.green : Colors.red),
-        ),
-      )),
+      DataCell(data['booking_accepted'] != null
+          ? Text(data['booking_accepted'].toString())
+          : const Text("")),
       DataCell(const Text(""), showEditIcon: true, onTap: () {
         showDialog(
             context: context,
@@ -357,121 +317,121 @@ class _BookingDetailsState extends State<BookingDetails> {
               );
             });
       }),
-      DataCell(Icon(Icons.delete), onTap: () {
-        deleteMethod(stream: bookingStream, uniqueDocId: bookingId);
-      })
+      DataCell(
+        Icon(Icons.delete),
+      ),
     ]);
   }
 
-  //
-  // showAddbox() => showDialog(
-  //     context: context,
-  //     builder: (context) => AlertDialog(
-  //           shape: const RoundedRectangleBorder(
-  //               borderRadius: BorderRadius.all(Radius.circular(30))),
-  //           content: SizedBox(
-  //             height: 480,
-  //             width: 800,
-  //             child: SingleChildScrollView(
-  //               child: Column(
-  //                 crossAxisAlignment: CrossAxisAlignment.start,
-  //                 children: [
-  //                   const Text(
-  //                     'Add Records',
-  //                     style: TextStyle(
-  //                         fontFamily: 'poppins',
-  //                         fontWeight: FontWeight.w600,
-  //                         fontSize: 14),
-  //                   ),
-  //                   CustomTextField(
-  //                       hinttext: "Vendor ID", addcontroller: _addvendorid),
-  //                   CustomTextField(
-  //                       hinttext: "User Name", addcontroller: _addusername),
-  //                   CustomTextField(
-  //                       hinttext: "User ID", addcontroller: _adduserid),
-  //                   CustomTextField(
-  //                       hinttext: "Total Price", addcontroller: _addtotalprice),
-  //                   CustomTextField(
-  //                       hinttext: "Total Days", addcontroller: _addtotaldays),
-  //                   CustomTextField(
-  //                       hinttext: "Tax Pay", addcontroller: _addtaxpay),
-  //                   CustomTextField(
-  //                       hinttext: "Plan End Y", addcontroller: _addplanendyear),
-  //                   CustomTextField(
-  //                       hinttext: "Plan End M",
-  //                       addcontroller: _addplanendmonth),
-  //                   CustomTextField(
-  //                       hinttext: "Name", addcontroller: _addplanendday),
-  //                   CustomTextField(
-  //                       hinttext: "Name", addcontroller: _addpaymentdone),
-  //                   CustomTextField(
-  //                       hinttext: "Name", addcontroller: _addpackagetype),
-  //                   CustomTextField(
-  //                       hinttext: "Name", addcontroller: _addorderyear),
-  //                   CustomTextField(
-  //                       hinttext: "Name", addcontroller: _addordermonth),
-  //                   CustomTextField(
-  //                       hinttext: "Name", addcontroller: _addorderday),
-  //                   CustomTextField(
-  //                       hinttext: "Name", addcontroller: _addgymname),
-  //                   CustomTextField(
-  //                       hinttext: "Name", addcontroller: _addgymaddress),
-  //                   CustomTextField(
-  //                       hinttext: "Name", addcontroller: _addgrandtotal),
-  //                   CustomTextField(
-  //                       hinttext: "Name", addcontroller: _adddiscount),
-  //                   CustomTextField(
-  //                       hinttext: "Name", addcontroller: _adddaysletf),
-  //                   CustomTextField(
-  //                       hinttext: "Name", addcontroller: _addbookingstatus),
-  //                   CustomTextField(
-  //                       hinttext: "Name", addcontroller: _addbookingprice),
-  //                   CustomTextField(
-  //                       hinttext: "Name", addcontroller: _addbookingplan),
-  //                   CustomTextField(
-  //                       hinttext: "Name", addcontroller: _addbookingid),
-  //                   CustomTextField(
-  //                       hinttext: "Name", addcontroller: _addbookingyear),
-  //                   CustomTextField(
-  //                       hinttext: "Name", addcontroller: _addbookingmonth),
-  //                   CustomTextField(
-  //                       hinttext: "Name", addcontroller: _addbookingday),
-  //                   CustomTextField(
-  //                       hinttext: "Name", addcontroller: _addbookingaccepted),
-  //                   Center(
-  //                     child: ElevatedButton(
-  //                       onPressed: () async {
-  //                         final querySnapshot = FirebaseFirestore.instance
-  //                             .collection('bookings')
-  //                             .doc("'data['userId']'")
-  //                             .collection('user_booking')
-  //                             .doc("data['booking_id']");
-  //                         querySnapshot.update({'booking_price': 20});
-  //                         // FirebaseFirestore.instance
-  //                         //     .collectionGroup('user_booking')
-  //                         //     .doc(_addgymId.text)
-  //                         //     .set(
-  //                         //   {
-  //                         //     // 'address': _addaddress.text,
-  //                         //     // 'gender': _addgender.text,
-  //                         //     // 'name': _addname.text,
-  //                         //     // 'pincode': _addpincode.text,
-  //                         //     // 'location': _addlocation.text,
-  //                         //     // 'gym_id': _addlandmark.text,
-  //                         //     // 'gym_owner': _addgymowner.text,
-  //                         //     // 'landmark': _addlandmark.text
-  //                         //   },
-  //                         // );
-  //                         Navigator.pop(context);
-  //                       },
-  //                       child: const Text('Done'),
-  //                     ),
-  //                   )
-  //                 ],
-  //               ),
-  //             ),
-  //           ),
-  //         ));
+//
+// showAddbox() => showDialog(
+//     context: context,
+//     builder: (context) => AlertDialog(
+//           shape: const RoundedRectangleBorder(
+//               borderRadius: BorderRadius.all(Radius.circular(30))),
+//           content: SizedBox(
+//             height: 480,
+//             width: 800,
+//             child: SingleChildScrollView(
+//               child: Column(
+//                 crossAxisAlignment: CrossAxisAlignment.start,
+//                 children: [
+//                   const Text(
+//                     'Add Records',
+//                     style: TextStyle(
+//                         fontFamily: 'poppins',
+//                         fontWeight: FontWeight.w600,
+//                         fontSize: 14),
+//                   ),
+//                   CustomTextField(
+//                       hinttext: "Vendor ID", addcontroller: _addvendorid),
+//                   CustomTextField(
+//                       hinttext: "User Name", addcontroller: _addusername),
+//                   CustomTextField(
+//                       hinttext: "User ID", addcontroller: _adduserid),
+//                   CustomTextField(
+//                       hinttext: "Total Price", addcontroller: _addtotalprice),
+//                   CustomTextField(
+//                       hinttext: "Total Days", addcontroller: _addtotaldays),
+//                   CustomTextField(
+//                       hinttext: "Tax Pay", addcontroller: _addtaxpay),
+//                   CustomTextField(
+//                       hinttext: "Plan End Y", addcontroller: _addplanendyear),
+//                   CustomTextField(
+//                       hinttext: "Plan End M",
+//                       addcontroller: _addplanendmonth),
+//                   CustomTextField(
+//                       hinttext: "Name", addcontroller: _addplanendday),
+//                   CustomTextField(
+//                       hinttext: "Name", addcontroller: _addpaymentdone),
+//                   CustomTextField(
+//                       hinttext: "Name", addcontroller: _addpackagetype),
+//                   CustomTextField(
+//                       hinttext: "Name", addcontroller: _addorderyear),
+//                   CustomTextField(
+//                       hinttext: "Name", addcontroller: _addordermonth),
+//                   CustomTextField(
+//                       hinttext: "Name", addcontroller: _addorderday),
+//                   CustomTextField(
+//                       hinttext: "Name", addcontroller: _addgymname),
+//                   CustomTextField(
+//                       hinttext: "Name", addcontroller: _addgymaddress),
+//                   CustomTextField(
+//                       hinttext: "Name", addcontroller: _addgrandtotal),
+//                   CustomTextField(
+//                       hinttext: "Name", addcontroller: _adddiscount),
+//                   CustomTextField(
+//                       hinttext: "Name", addcontroller: _adddaysletf),
+//                   CustomTextField(
+//                       hinttext: "Name", addcontroller: _addbookingstatus),
+//                   CustomTextField(
+//                       hinttext: "Name", addcontroller: _addbookingprice),
+//                   CustomTextField(
+//                       hinttext: "Name", addcontroller: _addbookingplan),
+//                   CustomTextField(
+//                       hinttext: "Name", addcontroller: _addbookingid),
+//                   CustomTextField(
+//                       hinttext: "Name", addcontroller: _addbookingyear),
+//                   CustomTextField(
+//                       hinttext: "Name", addcontroller: _addbookingmonth),
+//                   CustomTextField(
+//                       hinttext: "Name", addcontroller: _addbookingday),
+//                   CustomTextField(
+//                       hinttext: "Name", addcontroller: _addbookingaccepted),
+//                   Center(
+//                     child: ElevatedButton(
+//                       onPressed: () async {
+//                         final querySnapshot = FirebaseFirestore.instance
+//                             .collection('bookings')
+//                             .doc("'data['userId']'")
+//                             .collection('user_booking')
+//                             .doc("data['booking_id']");
+//                         querySnapshot.update({'booking_price': 20});
+//                         // FirebaseFirestore.instance
+//                         //     .collectionGroup('user_booking')
+//                         //     .doc(_addgymId.text)
+//                         //     .set(
+//                         //   {
+//                         //     // 'address': _addaddress.text,
+//                         //     // 'gender': _addgender.text,
+//                         //     // 'name': _addname.text,
+//                         //     // 'pincode': _addpincode.text,
+//                         //     // 'location': _addlocation.text,
+//                         //     // 'gym_id': _addlandmark.text,
+//                         //     // 'gym_owner': _addgymowner.text,
+//                         //     // 'landmark': _addlandmark.text
+//                         //   },
+//                         // );
+//                         Navigator.pop(context);
+//                       },
+//                       child: const Text('Done'),
+//                     ),
+//                   )
+//                 ],
+//               ),
+//             ),
+//           ),
+//         ));
 }
 
 class CustomTextField extends StatefulWidget {
@@ -733,6 +693,8 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                       DocumentReference documentReference = FirebaseFirestore
                           .instance
                           .collection('bookings')
+                          .doc(_adduserid.text)
+                          .collection('user_booking')
                           .doc(_addbookingid.text);
                       DateTime endtimedata = DateTime.parse(
                           '${_addplanendyear.text}-${isLess(_addplanendmonth.text) ? '0' + _addplanendmonth.text : _addplanendday.text}-${isLess(_addplanendday.text) ? '0' + _addplanendday.text : _addplanendday.text} 00:00:04Z');

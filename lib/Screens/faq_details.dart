@@ -97,8 +97,18 @@ class _FaqDetailsState extends State<FaqDetails> {
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
-                              DataColumn(label: Text('')),
-                              DataColumn(label: Text(''))
+                              DataColumn(
+                                label: Text(
+                                  'Edit',
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
+                              ),
+                              DataColumn(
+                                label: Text(
+                                  'Delete',
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
+                              ),
                             ],
                             rows: _buildlist(context, snapshot.data!.docs)),
                       );
@@ -135,14 +145,19 @@ class _FaqDetailsState extends State<FaqDetails> {
         showDialog(
             context: context,
             builder: (context) {
-              return SingleChildScrollView(
-                child: EditBox(
-                  userid: data['user_id'],
-                  answer: data['answer'],
-                  gymid: data['gym_id'],
-                  question: data['question'],
-                  id: data['id'],
+              return GestureDetector(
+                child: SingleChildScrollView(
+                  child: EditBox(
+                    userid: data['user_id'],
+                    answer: data['answer'],
+                    gymid: data['gym_id'],
+                    question: data['question'],
+                    id: data['id'],
+                  ),
                 ),
+                onTap: () {
+                  Navigator.pop(context);
+                },
               );
             });
       }),

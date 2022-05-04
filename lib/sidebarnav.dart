@@ -1,11 +1,12 @@
 import 'dart:io';
 
-import 'package:admin_panel_vyam/Screens/ameneties.dart';
+import 'package:admin_panel_vyam/Screens/CitiesScreen.dart';
+import 'package:admin_panel_vyam/Screens/Tracking/TrackingScreen.dart';
 import 'package:admin_panel_vyam/Screens/booking_details.dart';
 import 'package:admin_panel_vyam/Screens/category_screen.dart';
-import 'package:admin_panel_vyam/Screens/cities.dart';
+import 'package:admin_panel_vyam/Screens/AmenetiesScreen.dart';
 import 'package:admin_panel_vyam/Screens/coupon.dart';
-import 'package:admin_panel_vyam/Screens/database_info.dart';
+import 'package:admin_panel_vyam/Screens/Collection_info.dart';
 
 import 'package:admin_panel_vyam/Screens/faq_details.dart';
 import 'package:admin_panel_vyam/Screens/feedback_dateils.dart';
@@ -14,7 +15,7 @@ import 'package:admin_panel_vyam/services/image_picker_api.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dashboard.dart';
-import 'Screens/database_info.dart';
+import 'Screens/Collection_info.dart';
 import 'Screens/Product Details/product_details.dart';
 import 'Screens/booking_details.dart';
 
@@ -177,11 +178,21 @@ class _SideNavBar1State extends State<SideNavBar1> {
             ),
             ListTile(
               title: Text(
-                'FAQ',
+                'Tracking',
                 style: kTextStyle,
               ),
               onTap: () {
                 index = 11;
+                setState(() {});
+              },
+            ),
+            ListTile(
+              title: Text(
+                'FAQ',
+                style: kTextStyle,
+              ),
+              onTap: () {
+                index = 12;
                 setState(() {});
               },
             ),
@@ -211,7 +222,8 @@ class _SideNavBar1State extends State<SideNavBar1> {
           index == 8 ? const AmenetiesScreen() : Container(),
           index == 9 ? const PaymentsPage() : Container(),
           index == 10 ? const CitiesScreen() : Container(),
-          index == 11 ? const FaqDetails() : Container(),
+          index == 11 ? const TrackingScreen() : Container(),
+          index == 12 ? const FaqDetails() : Container(),
         ],
       ),
     );
