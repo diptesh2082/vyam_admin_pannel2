@@ -1,4 +1,5 @@
 import 'package:admin_panel_vyam/services/deleteMethod.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:flutter/material.dart';
@@ -81,6 +82,12 @@ class _CollectionInfoState extends State<CollectionInfo> {
                             dataRowHeight: 65,
                             columns: const [
                               DataColumn(
+                                label: Text(
+                                  'Profile Image',
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
+                              ),
+                              DataColumn(
                                   label: Text(
                                 'UserId',
                                 style: TextStyle(fontWeight: FontWeight.w600),
@@ -133,6 +140,12 @@ class _CollectionInfoState extends State<CollectionInfo> {
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
+                              DataColumn(
+                                label: Text(
+                                  'Validity of User',
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
+                              ),
                               // DataColumn(
                               //   label: Text(
                               //     'Latitude',
@@ -145,8 +158,18 @@ class _CollectionInfoState extends State<CollectionInfo> {
                               //     style: TextStyle(fontWeight: FontWeight.w600),
                               //   ),
                               // ),
-                              DataColumn(label: Text('')),
-                              DataColumn(label: Text(''))
+                              DataColumn(
+                                label: Text(
+                                  'Edit',
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
+                              ),
+                              DataColumn(
+                                label: Text(
+                                  'Delete',
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
+                              )
                             ],
                             rows: _buildlist(context, snapshot.data!.docs)),
                       );
@@ -168,8 +191,33 @@ class _CollectionInfoState extends State<CollectionInfo> {
 
   DataRow _buildListItem(BuildContext context, DocumentSnapshot data) {
     String userIDData = data['userId'];
+    String profileImage = data['image'];
+    bool legit = data['legit'];
 
     return DataRow(cells: [
+      DataCell(
+        profileImage != "null"
+            ? CircleAvatar(
+                child: CachedNetworkImage(
+                  imageUrl: profileImage,
+                  imageBuilder: (context, imageProvider) => Container(
+                    width: 100.0,
+                    height: 100.0,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      image: DecorationImage(
+                        image: imageProvider,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                ),
+              )
+            : const CircleAvatar(
+                backgroundColor: Colors.white,
+                child: Text('Null'),
+              ),
+      ),
       DataCell(data != null ? Text(userIDData) : Text("")),
       DataCell(data != null ? Text(data['name'] ?? "") : Text("")),
       DataCell(data != null ? Text(data['email'] ?? "") : Text("")),
@@ -179,8 +227,26 @@ class _CollectionInfoState extends State<CollectionInfo> {
       DataCell(data != null ? Text(data['locality'] ?? "") : Text("")),
       DataCell(data != null ? Text(data['subLocality'] ?? "") : Text("")),
       DataCell(data != null ? Text(data['pincode'] ?? "") : Text("")),
-      // DataCell(Text(data['lat'] ?? "")),
-      // DataCell(Text(data['long'] ?? "")),
+      DataCell(
+        Center(
+          child: ElevatedButton(
+            onPressed: () async {
+              bool temp = legit;
+              temp = !temp;
+              DocumentReference documentReference = FirebaseFirestore.instance
+                  .collection('user_details')
+                  .doc(userIDData);
+              await documentReference
+                  .update({'legit': temp})
+                  .whenComplete(() => print("Legitimate toggled"))
+                  .catchError((e) => print(e));
+            },
+            child: Text(legit.toString()),
+            style: ElevatedButton.styleFrom(
+                primary: legit ? Colors.green : Colors.red),
+          ),
+        ),
+      ),
       DataCell(const Text(""), showEditIcon: true, onTap: () {
         showDialog(
             context: context,
@@ -364,7 +430,7 @@ class _EditBoxState extends State<EditBox> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: (){
+      onTap: () {
         Navigator.pop(context);
       },
       child: AlertDialog(

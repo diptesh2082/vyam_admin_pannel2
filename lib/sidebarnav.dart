@@ -6,7 +6,7 @@ import 'package:admin_panel_vyam/Screens/booking_details.dart';
 import 'package:admin_panel_vyam/Screens/category_screen.dart';
 import 'package:admin_panel_vyam/Screens/AmenetiesScreen.dart';
 import 'package:admin_panel_vyam/Screens/coupon.dart';
-import 'package:admin_panel_vyam/Screens/database_info.dart';
+import 'package:admin_panel_vyam/Screens/Collection_info.dart';
 
 import 'package:admin_panel_vyam/Screens/faq_details.dart';
 import 'package:admin_panel_vyam/Screens/feedback_dateils.dart';
@@ -15,7 +15,7 @@ import 'package:admin_panel_vyam/services/image_picker_api.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dashboard.dart';
-import 'Screens/database_info.dart';
+import 'Screens/Collection_info.dart';
 import 'Screens/Product Details/product_details.dart';
 import 'Screens/booking_details.dart';
 
