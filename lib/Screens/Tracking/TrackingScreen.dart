@@ -1,5 +1,7 @@
+import 'package:admin_panel_vyam/services/deleteMethod.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+
 
 class TrackingScreen extends StatefulWidget {
   const TrackingScreen({
@@ -11,6 +13,8 @@ class TrackingScreen extends StatefulWidget {
 }
 
 class _TrackingScreenState extends State<TrackingScreen> {
+  CollectionReference bookingStream =
+  FirebaseFirestore.instance.collection('bookings');
   @override
   void initState() {
     super.initState();
@@ -33,8 +37,7 @@ class _TrackingScreenState extends State<TrackingScreen> {
                   child: StreamBuilder<QuerySnapshot>(
                     stream: FirebaseFirestore.instance
                         .collection('bookings')
-                        .where('booking_status', isEqualTo: 'incomplete')
-                        .snapshots(),
+                        .where('booking_status', isEqualTo: 'incomplete').snapshots(),
                     builder: (context, AsyncSnapshot snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return const CircularProgressIndicator();
@@ -56,9 +59,9 @@ class _TrackingScreenState extends State<TrackingScreen> {
                             columns: const [
                               DataColumn(
                                   label: Text(
-                                'Vendor ID',
-                                style: TextStyle(fontWeight: FontWeight.w600),
-                              )),
+                                    'Vendor ID',
+                                    style: TextStyle(fontWeight: FontWeight.w600),
+                                  )),
                               DataColumn(
                                 label: Text(
                                   'User Name',
@@ -211,6 +214,9 @@ class _TrackingScreenState extends State<TrackingScreen> {
   }
 
   DataRow _buildListItem(BuildContext context, DocumentSnapshot data) {
+    String bookingId = data['booking_id'];
+    bool paymentDoneBool = data['payment_done'];
+    bool bookingAccepted = data['booking_accepted'];
     String durationEnd =
         "${data['plan_end_duration'].toDate().year}/${data['plan_end_duration'].toDate().month}/${data['plan_end_duration'].toDate().day}";
     String orderDate =
@@ -239,9 +245,24 @@ class _TrackingScreenState extends State<TrackingScreen> {
       DataCell(data['plan_end_duration'] != null
           ? Text(durationEnd)
           : const Text("")),
-      DataCell(data['payment_done'] != null
-          ? Text(data['payment_done'].toString())
-          : const Text("")),
+      DataCell(Center(
+        child: ElevatedButton(
+          onPressed: () async {
+            bool temp = paymentDoneBool;
+            temp = !temp;
+            DocumentReference documentReference = FirebaseFirestore.instance
+                .collection('bookings')
+                .doc(bookingId);
+            await documentReference
+                .update({'payment_done': temp})
+                .whenComplete(() => print("Payment done updated"))
+                .catchError((e) => print(e));
+          },
+          child: Text(paymentDoneBool.toString()),
+          style: ElevatedButton.styleFrom(
+              primary: paymentDoneBool ? Colors.green : Colors.red),
+        ),
+      )),
       DataCell(data['package_type'] != null
           ? Text(data['package_type'].toString())
           : const Text("")),
@@ -275,9 +296,24 @@ class _TrackingScreenState extends State<TrackingScreen> {
       //     : const Text("")),
       DataCell(
           data['booking_date'] != null ? Text(bookingDate) : const Text("")),
-      DataCell(data['booking_accepted'] != null
-          ? Text(data['booking_accepted'].toString())
-          : const Text("")),
+      DataCell(Center(
+        child: ElevatedButton(
+          onPressed: () async {
+            bool temp = bookingAccepted;
+            temp = !temp;
+            DocumentReference documentReference = FirebaseFirestore.instance
+                .collection('bookings')
+                .doc(bookingId);
+            await documentReference
+                .update({'booking_accepted': temp})
+                .whenComplete(() => print("booking accepted updated"))
+                .catchError((e) => print(e));
+          },
+          child: Text(bookingAccepted.toString()),
+          style: ElevatedButton.styleFrom(
+              primary: bookingAccepted ? Colors.green : Colors.red),
+        ),
+      )),
       DataCell(const Text(""), showEditIcon: true, onTap: () {
         showDialog(
             context: context,
@@ -291,9 +327,9 @@ class _TrackingScreenState extends State<TrackingScreen> {
                   totaldays: data['totalDays'].toString(),
                   taxpay: data['tax_pay'].toString(),
                   planendyear:
-                      data['plan_end_duration'].toDate().year.toString(),
+                  data['plan_end_duration'].toDate().year.toString(),
                   planendmonth:
-                      data['plan_end_duration'].toDate().month.toString(),
+                  data['plan_end_duration'].toDate().month.toString(),
                   planendday: data['plan_end_duration'].toDate().day.toString(),
                   paymentdone: data['payment_done'].toString(),
                   packagetype: data['package_type'],
@@ -317,9 +353,9 @@ class _TrackingScreenState extends State<TrackingScreen> {
               );
             });
       }),
-      DataCell(
-        Icon(Icons.delete),
-      ),
+      DataCell(Icon(Icons.delete), onTap: () {
+        deleteMethod(stream: bookingStream, uniqueDocId: bookingId);
+      })
     ]);
   }
 
@@ -455,24 +491,24 @@ class _CustomTextFieldState extends State<CustomTextField> {
       height: 50,
       child: Card(
           child: TextField(
-        autofocus: true,
-        style: const TextStyle(
-          fontSize: 14,
-          fontFamily: 'poppins',
-          fontWeight: FontWeight.w400,
-        ),
-        controller: widget.addcontroller,
-        maxLines: 3,
-        decoration: InputDecoration(
-            border: InputBorder.none,
-            hintStyle: const TextStyle(
+            autofocus: true,
+            style: const TextStyle(
               fontSize: 14,
               fontFamily: 'poppins',
               fontWeight: FontWeight.w400,
             ),
-            hintMaxLines: 2,
-            hintText: widget.hinttext),
-      )),
+            controller: widget.addcontroller,
+            maxLines: 3,
+            decoration: InputDecoration(
+                border: InputBorder.none,
+                hintStyle: const TextStyle(
+                  fontSize: 14,
+                  fontFamily: 'poppins',
+                  fontWeight: FontWeight.w400,
+                ),
+                hintMaxLines: 2,
+                hintText: widget.hinttext),
+          )),
     );
   }
 }
@@ -693,8 +729,6 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                       DocumentReference documentReference = FirebaseFirestore
                           .instance
                           .collection('bookings')
-                          .doc(_adduserid.text)
-                          .collection('user_booking')
                           .doc(_addbookingid.text);
                       DateTime endtimedata = DateTime.parse(
                           '${_addplanendyear.text}-${isLess(_addplanendmonth.text) ? '0' + _addplanendmonth.text : _addplanendday.text}-${isLess(_addplanendday.text) ? '0' + _addplanendday.text : _addplanendday.text} 00:00:04Z');
@@ -712,7 +746,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                         'tax_pay': _addtaxpay.text,
                         'plan_end_duration': endtimedata,
                         'payment_done':
-                            _addpaymentdone.text == 'true' ? true : false,
+                        _addpaymentdone.text == 'true' ? true : false,
                         'package_type': _addpackagetype.text,
                         'order_date': ordertimedata,
                         'gym_name': _addgymname.text,
@@ -726,7 +760,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                         'booking_id': _addbookingid.text,
                         'booking_date': bookingtimedata,
                         'booking_accepted':
-                            _addbookingaccepted.text == 'true' ? true : false,
+                        _addbookingaccepted.text == 'true' ? true : false,
                       };
                       await documentReference
                           .update(data)

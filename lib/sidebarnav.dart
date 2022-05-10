@@ -95,7 +95,7 @@ class _SideNavBar1State extends State<SideNavBar1> {
             ),
             ListTile(
               title: Text(
-                'Collection Details',
+                'User Details',
                 style: kTextStyle,
               ),
               onTap: () {
@@ -214,7 +214,7 @@ class _SideNavBar1State extends State<SideNavBar1> {
         children: [
           index == 1 ? const DashBoardScreen() : Container(),
           index == 2 ? const ProductDetails() : Container(),
-          index == 3 ? const CollectionInfo() : Container(),
+          index == 3 ? const UserInfo() : Container(),
           index == 4 ? const BookingDetails() : Container(),
           index == 5 ? const Coupon() : Container(),
           index == 6 ? const FeedBackInfo() : Container(),

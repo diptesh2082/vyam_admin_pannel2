@@ -39,6 +39,7 @@
        application. For more information, see:
        https://developers.google.com/web/fundamentals/primers/service-workers -->
   <script>
+
     var serviceWorkerVersion = null;
     var scriptLoaded = false;
     function loadMainDartJs() {
@@ -102,7 +103,21 @@
       loadMainDartJs();
     }
   </script>
-
+  <script src="https://www.gstatic.com/firebasejs/8.2.3/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.2.2/firebase-storage.js"></script>
+  <script>
+  // Your web app's Firebase configuration
+  var firebaseConfig = {
+    apiKey: "AIzaSyC4mba7aVuHVABYXOKBZuNCXpzN3-lQQQQ",
+    authDomain: "trial-web-97394.firebaseapp.com",
+    projectId: "trial-web-97394",
+    storageBucket: "trial-web-97394.appspot.com",
+    messagingSenderId: "401036808951",
+    appId: "1:401036808951:web:ff2e8015c4e64ae90079f2"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+</script>
 </body>
 
 </html>
