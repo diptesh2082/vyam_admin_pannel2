@@ -1,6 +1,10 @@
+import 'dart:io';
+
 import 'package:admin_panel_vyam/services/maps_api.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import '../../services/MatchIDMethod.dart';
 import '../../services/deleteMethod.dart';
 import 'Packages/Extra_package.dart';
@@ -24,6 +28,7 @@ class _ProductDetailsState extends State<ProductDetails> {
       .id
       .toString();
   CollectionReference? productStream;
+  List<String> multiimages = [];
 
   @override
   void initState() {
@@ -139,6 +144,12 @@ class _ProductDetailsState extends State<ProductDetails> {
                               DataColumn(
                                 label: Text('Extra Packages'),
                               ),
+                              DataColumn(
+                                label: Text(
+                                  'Upload Image',
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
+                              ),
                               DataColumn(label: Text('')), //! For edit pencil
                               DataColumn(label: Text('')),
                             ],
@@ -154,6 +165,38 @@ class _ProductDetailsState extends State<ProductDetails> {
       ),
     );
   }
+
+
+Future<List<XFile>> multiimagepicker() async {
+  List<XFile>? _images = await ImagePicker().pickMultiImage();
+  if (_images != null && _images.isNotEmpty) {
+    return _images;
+  }
+  return [];
+}
+
+Future<String> uploadimage(XFile image) async {
+  Reference db = FirebaseStorage.instance
+      .ref("TransformerGymImage/${getImageName(image)}");
+  await db.putFile(File(image.path));
+  return await db.getDownloadURL();
+}
+
+String getImageName(XFile image) {
+  return image.path.split("/").last;
+}
+
+Future<List<String>> multiimageuploader(List<XFile> list) async {
+  List<String> _path = [];
+  for (XFile _image in list) {
+    _path.add(await uploadimage(_image));
+  }
+  return _path;
+}
+
+
+
+
 
   List<DataRow> _buildlist(
       BuildContext context, List<DocumentSnapshot> snapshot) {
@@ -198,6 +241,25 @@ class _ProductDetailsState extends State<ProductDetails> {
           ),
         ));
       }),
+      DataCell(Row(children:[
+     const    Spacer(),
+        GestureDetector(
+           onTap: () async {
+                          List<XFile>? _images = await multiimagepicker();
+                          //  multiimages = await multiimagepicker();
+                          if (_images.isNotEmpty) {
+                          await multiimageuploader(_images);
+                            setState(() {});
+                          }
+                        },
+          child: const Center(
+            child: Icon(
+                          Icons.file_upload_outlined,
+                          size: 20,
+                        ),
+          ),
+        )
+      ])),
       DataCell(
         const Text(""),
         showEditIcon: true,

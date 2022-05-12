@@ -19,6 +19,7 @@ class _AmenetiesScreenState extends State<AmenetiesScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance.collection('amenities').snapshots(),
         builder: (context, AsyncSnapshot snapshot) {

@@ -627,8 +627,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                   hinttext: "Total Price", addcontroller: _addtotalprice),
               CustomTextField(
                   hinttext: "Total Days", addcontroller: _addtotaldays),
-              CustomTextField(
-                  hinttext: "Tax Pay", addcontroller: _addtaxpay),
+              CustomTextField(hinttext: "Tax Pay", addcontroller: _addtaxpay),
               CustomTextField(
                   hinttext: "Plan End Y", addcontroller: _addplanendyear),
               CustomTextField(
