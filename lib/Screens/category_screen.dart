@@ -91,6 +91,12 @@ class _CategoryInfoScreenState extends State<CategoryInfoScreen> {
                             ),
                             DataColumn(
                               label: Text(
+                                'Position',
+                                style: TextStyle(fontWeight: FontWeight.w600),
+                              ),
+                            ),
+                            DataColumn(
+                              label: Text(
                                 'Edit',
                                 style: TextStyle(fontWeight: FontWeight.w600),
                               ),
@@ -141,6 +147,9 @@ class _CategoryInfoScreenState extends State<CategoryInfoScreen> {
         data['status'] == 'true'
             ? const Text("Enabled")
             : const Text("Disabled"),
+      ),
+      DataCell(
+        data['position'] != null ? Center(child: Text(data['position'].toString() )) : const Text(""),
       ),
       DataCell(
         const Text(''),

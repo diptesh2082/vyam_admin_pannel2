@@ -7,16 +7,16 @@ import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 
 import '../services/CustomTextFieldClass.dart';
 
-class CollectionInfo extends StatefulWidget {
-  const CollectionInfo({
+class UserInfo extends StatefulWidget {
+  const UserInfo({
     Key? key,
   }) : super(key: key);
 
   @override
-  State<CollectionInfo> createState() => _CollectionInfoState();
+  State<UserInfo> createState() => _UserInfoState();
 }
 
-class _CollectionInfoState extends State<CollectionInfo> {
+class _UserInfoState extends State<UserInfo> {
   CollectionReference? userDetailStream;
   @override
   void initState() {
@@ -146,6 +146,7 @@ class _CollectionInfoState extends State<CollectionInfo> {
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
+
                               // DataColumn(
                               //   label: Text(
                               //     'Latitude',
@@ -196,7 +197,7 @@ class _CollectionInfoState extends State<CollectionInfo> {
 
     return DataRow(cells: [
       DataCell(
-        profileImage != "null"
+        profileImage != "null" ||  profileImage != null
             ? CircleAvatar(
                 child: CachedNetworkImage(
                   imageUrl: profileImage,
@@ -214,7 +215,7 @@ class _CollectionInfoState extends State<CollectionInfo> {
                 ),
               )
             : const CircleAvatar(
-                backgroundColor: Colors.white,
+                backgroundColor: Colors.black,
                 child: Text('Null'),
               ),
       ),
