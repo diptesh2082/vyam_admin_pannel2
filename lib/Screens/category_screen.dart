@@ -173,57 +173,57 @@ class _CategoryInfoScreenState extends State<CategoryInfoScreen> {
   final TextEditingController _addStatus = TextEditingController();
   final TextEditingController _addImage = TextEditingController();
   showAddbox() => showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-            shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(30))),
-            content: SizedBox(
-              height: 480,
-              width: 800,
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Add Records',
-                      style: TextStyle(
-                          fontFamily: 'poppins',
-                          fontWeight: FontWeight.w600,
-                          fontSize: 14),
+        context: context,
+        builder: (context) => AlertDialog(
+          shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(30))),
+          content: SizedBox(
+            height: 480,
+            width: 800,
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Add Records',
+                    style: TextStyle(
+                        fontFamily: 'poppins',
+                        fontWeight: FontWeight.w600,
+                        fontSize: 14),
+                  ),
+                  customTextField(hinttext: "Name", addcontroller: _addName),
+                  customTextField(
+                      hinttext: "Status", addcontroller: _addStatus),
+                  customTextField(hinttext: "Image", addcontroller: _addImage),
+                  Center(
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        await matchID(
+                            newId: catId,
+                            matchStream: categoryStream,
+                            idField: 'category_id');
+                        FirebaseFirestore.instance
+                            .collection('category')
+                            .doc(catId)
+                            .set(
+                          {
+                            'status': _addStatus.text,
+                            'image': _addImage.text,
+                            'name': _addName.text,
+                            'category_id': catId,
+                          },
+                        );
+                        Navigator.pop(context);
+                      },
+                      child: const Text('Done'),
                     ),
-                    customTextField(hinttext: "Name", addcontroller: _addName),
-                    customTextField(
-                        hinttext: "Status", addcontroller: _addStatus),
-                    customTextField(
-                        hinttext: "Image", addcontroller: _addImage),
-                    Center(
-                      child: ElevatedButton(
-                        onPressed: () async {
-                          await matchID(
-                              newId: catId,
-                              matchStream: categoryStream,
-                              idField: 'category_id');
-                          FirebaseFirestore.instance
-                              .collection('category')
-                              .doc(catId)
-                              .set(
-                            {
-                              'status': _addStatus.text,
-                              'image': _addImage.text,
-                              'name': _addName.text,
-                              'category_id': catId,
-                            },
-                          );
-                          Navigator.pop(context);
-                        },
-                        child: const Text('Done'),
-                      ),
-                    )
-                  ],
-                ),
+                  )
+                ],
               ),
             ),
-          ));
+          ),
+        ),
+      );
 }
 
 // EDIT FEATURE
