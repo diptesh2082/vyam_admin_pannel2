@@ -1,27 +1,23 @@
-import 'package:admin_panel_vyam/Screens/reset.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
+class ResetPass extends StatefulWidget {
+  const ResetPass({Key? key}) : super(key: key);
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<ResetPass> createState() => _ResetPass();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _ResetPass extends State<ResetPass> {
   final GlobalKey<ScaffoldState> _key = GlobalKey<ScaffoldState>();
 
   final TextEditingController email = TextEditingController();
-
-  final TextEditingController password = TextEditingController();
 
   @override
   void initState() {
     super.initState();
 
     email.text = "mahakbansal017@gmail.com";
-    password.text = "maahaak259";
   }
 
   @override
@@ -57,7 +53,7 @@ class _LoginPageState extends State<LoginPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const Text(
-                    "LOGIN",
+                    "Reset Password",
                     style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(
@@ -83,43 +79,8 @@ class _LoginPageState extends State<LoginPage> {
                   const SizedBox(
                     height: 20,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Container(
-                      decoration: BoxDecoration(color: Colors.grey[200]),
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 8.0),
-                        child: TextField(
-                          obscureText: true,
-                          autocorrect: false,
-                          controller: password,
-                          decoration: const InputDecoration(
-                              border: InputBorder.none,
-                              hintText: 'Password',
-                              icon: Icon(Icons.lock_open)),
-                        ),
-                      ),
-                    ),
-                  ),
                   const SizedBox(
                     height: 5,
-                  ),
-                  TextButton(
-                    child: Padding(
-                      padding: const EdgeInsets.only(right: 20),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: const [
-                          Text("Forgot password?",
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.grey,
-                              )),
-                        ],
-                      ),
-                    ),
-                    onPressed: () => Navigator.of(context).push(
-                        MaterialPageRoute(builder: ((context) => ResetPass()))),
                   ),
                   const SizedBox(
                     height: 40,
@@ -130,14 +91,13 @@ class _LoginPageState extends State<LoginPage> {
                       decoration:
                           const BoxDecoration(color: Colors.amberAccent),
                       child: ElevatedButton(
-                        onPressed: signIn,
                         child: Padding(
                           padding: const EdgeInsets.symmetric(vertical: 4),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: const [
                               Text(
-                                "LOGIN",
+                                "Send Request",
                                 style: TextStyle(
                                   fontSize: 22,
                                   color: Colors.white,
@@ -147,6 +107,11 @@ class _LoginPageState extends State<LoginPage> {
                             ],
                           ),
                         ),
+                        onPressed: () => {
+                          FirebaseAuth.instance
+                              .sendPasswordResetEmail(email: email.text),
+                          Navigator.of(context).pop(),
+                        },
                       ),
                     ),
                   ),
@@ -160,16 +125,5 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
-  }
-
-  Future signIn() async {
-    try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: email.text.trim(),
-        password: password.text.trim(),
-      );
-    } catch (e) {
-      print(e);
-    }
   }
 }
