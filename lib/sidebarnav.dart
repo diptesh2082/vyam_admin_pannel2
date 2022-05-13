@@ -1,8 +1,10 @@
 import 'dart:io';
 
 import 'package:admin_panel_vyam/Screens/CitiesScreen.dart';
+import 'package:admin_panel_vyam/Screens/Review.dart';
 import 'package:admin_panel_vyam/Screens/Tracking/TrackingScreen.dart';
 import 'package:admin_panel_vyam/Screens/booking_details.dart';
+import 'package:admin_panel_vyam/Screens/cancelation_page.dart';
 import 'package:admin_panel_vyam/Screens/category_screen.dart';
 import 'package:admin_panel_vyam/Screens/AmenetiesScreen.dart';
 import 'package:admin_panel_vyam/Screens/coupon.dart';
@@ -198,6 +200,26 @@ class _SideNavBar1State extends State<SideNavBar1> {
             ),
             ListTile(
               title: Text(
+                'Cancelation Data',
+                style: kTextStyle,
+              ),
+              onTap: () {
+                index = 13;
+                setState(() {});
+              },
+            ),
+            ListTile(
+              title: Text(
+                'Review',
+                style: kTextStyle,
+              ),
+              onTap: () {
+                index = 14;
+                setState(() {});
+              },
+            ),
+            ListTile(
+              title: Text(
                 'Logout',
                 style: kTextStyle,
               ),
@@ -224,6 +246,8 @@ class _SideNavBar1State extends State<SideNavBar1> {
           index == 10 ? const CitiesScreen() : Container(),
           index == 11 ? const TrackingScreen() : Container(),
           index == 12 ? const FaqDetails() : Container(),
+          index == 13 ? const CancelationPage() : Container(),
+          index == 14 ? const ReviewPage() : Container(),
         ],
       ),
     );
