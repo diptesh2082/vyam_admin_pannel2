@@ -150,6 +150,12 @@ class _ProductDetailsState extends State<ProductDetails> {
                               ),
                               DataColumn(
                                 label: Text(
+                                  'Gym_status',
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
+                              ),
+                              DataColumn(
+                                label: Text(
                                   'Validity of User',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
@@ -189,6 +195,7 @@ class _ProductDetailsState extends State<ProductDetails> {
     String gymId = data['gym_id'];
     GeoPoint loc = data['location'];
     bool legit = data['legit'];
+    bool status=data["gym_status"];
     String loctext = "${loc.latitude},${loc.longitude}";
     return DataRow(cells: [
       DataCell(data != null ? Text(data['name'] ?? "") : Text("")),
@@ -224,6 +231,26 @@ class _ProductDetailsState extends State<ProductDetails> {
           ),
         ));
       }),
+      DataCell(
+        Center(
+          child: ElevatedButton(
+            onPressed: () async {
+              bool temp = status;
+              temp = !temp;
+              DocumentReference documentReference = FirebaseFirestore.instance
+                  .collection('product_details')
+                  .doc(gymId);
+              await documentReference
+                  .update({'gym_status': temp})
+                  .whenComplete(() => print("Legitimate toggled"))
+                  .catchError((e) => print(e));
+            },
+            child: Text(status.toString()),
+            style: ElevatedButton.styleFrom(
+                primary: status ? Colors.green : Colors.red),
+          ),
+        ),
+      ),
       DataCell(
         Center(
           child: ElevatedButton(
