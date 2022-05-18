@@ -4,7 +4,9 @@ import 'package:admin_panel_vyam/services/maps_api.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+
 import 'package:flutter/services.dart';
+
 import 'package:image_picker/image_picker.dart';
 import '../../services/MatchIDMethod.dart';
 import '../../services/deleteMethod.dart';
@@ -29,6 +31,7 @@ class _ProductDetailsState extends State<ProductDetails> {
       .id
       .toString();
   CollectionReference? productStream;
+// <<<<<<< HEAD
   File? image;
   Future pickImage() async {
     try{
@@ -74,6 +77,9 @@ class _ProductDetailsState extends State<ProductDetails> {
 
     // }
   }
+// =======
+//   List<String> multiimages = [];
+// >>>>>>> 2bd9314ce4369a0ee8841fb3648ac2b93b65ffa4
 
   @override
   void initState() {
@@ -229,6 +235,16 @@ class _ProductDetailsState extends State<ProductDetails> {
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
+
+                              DataColumn(
+                                label: Text(
+                                  'Upload Image',
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
+                              ),
+                              DataColumn(label: Text('')), //! For edit pencil
+                              DataColumn(label: Text('')),
+
                             ],
                             rows: _buildlist(context, snapshot.data!.docs)),
                       );
@@ -242,6 +258,38 @@ class _ProductDetailsState extends State<ProductDetails> {
       ),
     );
   }
+
+
+Future<List<XFile>> multiimagepicker() async {
+  List<XFile>? _images = await ImagePicker().pickMultiImage();
+  if (_images != null && _images.isNotEmpty) {
+    return _images;
+  }
+  return [];
+}
+
+Future<String> uploadimage(XFile image) async {
+  Reference db = FirebaseStorage.instance
+      .ref("TransformerGymImage/${getImageName(image)}");
+  await db.putFile(File(image.path));
+  return await db.getDownloadURL();
+}
+
+String getImageName(XFile image) {
+  return image.path.split("/").last;
+}
+
+Future<List<String>> multiimageuploader(List<XFile> list) async {
+  List<String> _path = [];
+  for (XFile _image in list) {
+    _path.add(await uploadimage(_image));
+  }
+  return _path;
+}
+
+
+
+
 
   List<DataRow> _buildlist(
       BuildContext context, List<DocumentSnapshot> snapshot) {
@@ -288,6 +336,25 @@ class _ProductDetailsState extends State<ProductDetails> {
           ),
         ));
       }),
+      DataCell(Row(children:[
+     const    Spacer(),
+        GestureDetector(
+           onTap: () async {
+                          List<XFile>? _images = await multiimagepicker();
+                          //  multiimages = await multiimagepicker();
+                          if (_images.isNotEmpty) {
+                          await multiimageuploader(_images);
+                            setState(() {});
+                          }
+                        },
+          child: const Center(
+            child: Icon(
+                          Icons.file_upload_outlined,
+                          size: 20,
+                        ),
+          ),
+        )
+      ])),
       DataCell(
         Center(
           child: ElevatedButton(

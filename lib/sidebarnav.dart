@@ -14,10 +14,11 @@ import 'package:admin_panel_vyam/Screens/faq_details.dart';
 import 'package:admin_panel_vyam/Screens/feedback_dateils.dart';
 import 'package:admin_panel_vyam/Screens/payments_screen.dart';
 import 'package:admin_panel_vyam/services/image_picker_api.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dashboard.dart';
-import 'Screens/Collection_info.dart';
+
 import 'Screens/Product Details/product_details.dart';
 import 'Screens/booking_details.dart';
 
@@ -83,6 +84,7 @@ class _SideNavBar1State extends State<SideNavBar1> {
                 setState(() {
                   index = 1;
                 });
+                Navigator.pop(context);
               },
             ),
             ListTile(
@@ -93,6 +95,7 @@ class _SideNavBar1State extends State<SideNavBar1> {
               onTap: () {
                 index = 2;
                 setState(() {});
+                Navigator.pop(context);
               },
             ),
             ListTile(
@@ -104,6 +107,7 @@ class _SideNavBar1State extends State<SideNavBar1> {
                 setState(() {
                   index = 3;
                 });
+                Navigator.pop(context);
               },
             ),
             ListTile(
@@ -115,6 +119,7 @@ class _SideNavBar1State extends State<SideNavBar1> {
                 setState(() {
                   index = 4;
                 });
+                Navigator.pop(context);
               },
             ),
             ListTile(
@@ -126,6 +131,7 @@ class _SideNavBar1State extends State<SideNavBar1> {
                 setState(() {
                   index = 5;
                 });
+                Navigator.pop(context);
               },
             ),
             ListTile(
@@ -136,6 +142,7 @@ class _SideNavBar1State extends State<SideNavBar1> {
               onTap: () {
                 index = 6;
                 setState(() {});
+                Navigator.pop(context);
               },
             ),
             ListTile(
@@ -146,6 +153,7 @@ class _SideNavBar1State extends State<SideNavBar1> {
               onTap: () {
                 index = 7;
                 setState(() {});
+                Navigator.pop(context);
               },
             ),
             ListTile(
@@ -156,6 +164,7 @@ class _SideNavBar1State extends State<SideNavBar1> {
               onTap: () {
                 index = 8;
                 setState(() {});
+                Navigator.pop(context);
               },
             ),
             ListTile(
@@ -166,6 +175,7 @@ class _SideNavBar1State extends State<SideNavBar1> {
               onTap: () {
                 index = 9;
                 setState(() {});
+                Navigator.pop(context);
               },
             ),
             ListTile(
@@ -176,6 +186,7 @@ class _SideNavBar1State extends State<SideNavBar1> {
               onTap: () {
                 index = 10;
                 setState(() {});
+                Navigator.pop(context);
               },
             ),
             ListTile(
@@ -186,6 +197,7 @@ class _SideNavBar1State extends State<SideNavBar1> {
               onTap: () {
                 index = 11;
                 setState(() {});
+                Navigator.pop(context);
               },
             ),
             ListTile(
@@ -227,6 +239,7 @@ class _SideNavBar1State extends State<SideNavBar1> {
                 // setState(() {
                 //   index = 5;
                 // });
+                FirebaseAuth.instance.signOut();
               },
             ),
           ],
@@ -236,7 +249,7 @@ class _SideNavBar1State extends State<SideNavBar1> {
         children: [
           index == 1 ? const DashBoardScreen() : Container(),
           index == 2 ? const ProductDetails() : Container(),
-          index == 3 ? const UserInfo() : Container(),
+          index == 3 ?  Container() : Container(),
           index == 4 ? const BookingDetails() : Container(),
           index == 5 ? const Coupon() : Container(),
           index == 6 ? const FeedBackInfo() : Container(),

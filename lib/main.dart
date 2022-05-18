@@ -14,6 +14,8 @@ Future main() async {
       messagingSenderId:
           "307925634075-eor486qatoohnsg2hlcc0ehe55v6b77r.apps.googleusercontent.com",
       projectId: "vyam-f99ab",
+storageBucket: 'vyam-f99ab.appspot.com',
+measurementId: "G-N5WNBKEP64",
     ),
   );
   runApp(const HomePage());
