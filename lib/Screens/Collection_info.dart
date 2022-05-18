@@ -5,16 +5,16 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../services/CustomTextFieldClass.dart';
 
-class UserInfo extends StatefulWidget {
-  const UserInfo({
+class UserInformation extends StatefulWidget {
+  const UserInformation({
     Key? key,
   }) : super(key: key);
 
   @override
-  State<UserInfo> createState() => _UserInfoState();
+  State<UserInformation> createState() => _UserInformationState();
 }
 
-class _UserInfoState extends State<UserInfo> {
+class _UserInformationState extends State<UserInformation> {
   CollectionReference? userDetailStream;
   @override
   void initState() {

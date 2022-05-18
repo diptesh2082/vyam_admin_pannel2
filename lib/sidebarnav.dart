@@ -8,7 +8,7 @@ import 'package:admin_panel_vyam/Screens/cancelation_page.dart';
 import 'package:admin_panel_vyam/Screens/category_screen.dart';
 import 'package:admin_panel_vyam/Screens/AmenetiesScreen.dart';
 import 'package:admin_panel_vyam/Screens/coupon.dart';
-import 'package:admin_panel_vyam/Screens/Collection_info.dart';
+
 
 import 'package:admin_panel_vyam/Screens/faq_details.dart';
 import 'package:admin_panel_vyam/Screens/feedback_dateils.dart';
@@ -21,6 +21,8 @@ import 'dashboard.dart';
 
 import 'Screens/Product Details/product_details.dart';
 import 'Screens/booking_details.dart';
+
+import 'Screens/Collection_info.dart';
 
 class SideNavBar1 extends StatefulWidget {
   const SideNavBar1({Key? key}) : super(key: key);
@@ -249,7 +251,7 @@ class _SideNavBar1State extends State<SideNavBar1> {
         children: [
           index == 1 ? const DashBoardScreen() : Container(),
           index == 2 ? const ProductDetails() : Container(),
-          index == 3 ?  Container() : Container(),
+          index == 3 ?  const UserInformation() : Container(),
           index == 4 ? const BookingDetails() : Container(),
           index == 5 ? const Coupon() : Container(),
           index == 6 ? const FeedBackInfo() : Container(),
