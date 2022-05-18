@@ -1,6 +1,11 @@
+import 'dart:io';
+
 import 'package:admin_panel_vyam/services/maps_api.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
 import '../../services/MatchIDMethod.dart';
 import '../../services/deleteMethod.dart';
 import 'Packages/Extra_package.dart';
@@ -24,6 +29,51 @@ class _ProductDetailsState extends State<ProductDetails> {
       .id
       .toString();
   CollectionReference? productStream;
+  File? image;
+  Future pickImage() async {
+    try{
+      final image = await ImagePicker().pickImage(
+          source: ImageSource.gallery,
+          imageQuality: 60
+      );
+      if (image == null) return;
+      final imageTemporary = File(image.path);
+      setState(() {
+        this.image = imageTemporary;
+      });
+    } on PlatformException catch (e) {
+      // ignore: avoid_print
+      print("Faild to pick image: $e");
+    }
+
+  }
+
+
+  saveData(gymId)async {
+    // if (_globalKey.currentState!.validate()) {
+      try{
+        // _globalKey.currentState!.save();
+        final ref =  FirebaseStorage.instance.ref().child("gs://vyam-f99ab.appspot.com/productDetails").child(gymId+".jpg");
+        print(ref);
+        await ref.putFile(image!);
+        final url = await ref.getDownloadURL();
+        await FirebaseFirestore.instance.collection("product_details")
+            .doc(gymId).update({
+          "display_picture": url
+        });
+        // setState(() {
+        //   imageUrl=url;
+        //   // isLoading=false;
+        // }
+        // );
+      }catch (e){
+        // imageUrl="";
+      }
+
+      // print(imageUrl);
+
+    // }
+  }
 
   @override
   void initState() {
@@ -162,6 +212,13 @@ class _ProductDetailsState extends State<ProductDetails> {
                               ),
                               DataColumn(
                                 label: Text(
+                                  'Display Picture',
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
+                              ),
+
+                              DataColumn(
+                                label: Text(
                                   'Edit',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
@@ -251,6 +308,7 @@ class _ProductDetailsState extends State<ProductDetails> {
           ),
         ),
       ),
+
       DataCell(
         Center(
           child: ElevatedButton(
@@ -270,6 +328,20 @@ class _ProductDetailsState extends State<ProductDetails> {
                 primary: legit ? Colors.green : Colors.red),
           ),
         ),
+      ),
+      DataCell(
+        Center(child: Column(
+          children: [
+            IconButton(onPressed: ()async{
+              await pickImage();
+              await saveData(gymId);
+            }, icon: Icon(
+              Icons.camera_alt_outlined
+            )),
+            const Text("Display Picture"),
+          ],
+        )),
+
       ),
       DataCell(
         const Text(""),
