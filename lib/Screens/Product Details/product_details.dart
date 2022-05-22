@@ -146,15 +146,25 @@ class _ProductDetailsState extends State<ProductDetails> {
                   child: GestureDetector(
                     onTap: showAddbox,
                     child: Container(
-                      width: 120,
+                      width: 200,
                       decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(20.0)),
                       child: Row(
-                        children: const [
-                          Icon(Icons.add),
-                          Text('Add Product',
-                              style: TextStyle(fontWeight: FontWeight.w400)),
+                        children: [
+                          GestureDetector(
+                              onTap: (){
+                                Navigator.pop(context);
+                              },
+                              child: const Icon(Icons.arrow_back_ios_outlined)),
+                          const SizedBox(width: 20,),
+                          Row(
+                            children: const [
+                              Icon(Icons.add),
+                              Text('Add Product',
+                                  style: TextStyle(fontWeight: FontWeight.w400)),
+                            ],
+                          ),
                         ],
                       ),
                     ),
@@ -269,6 +279,12 @@ class _ProductDetailsState extends State<ProductDetails> {
                               //     style: TextStyle(fontWeight: FontWeight.w600),
                               //   ),
                               // ),
+                              DataColumn(
+                                label: Text(
+                                  'Upload Display Image',
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
+                              ),
 
                               DataColumn(
                                 label: Text(
@@ -283,12 +299,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                                 ),
                               ),
 
-                              DataColumn(
-                                label: Text(
-                                  'Upload Image',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
-                              ),
+
                               // DataColumn(label: Text('')), //! For edit pencil
                               // DataColumn(label: Text('')),
 
@@ -355,20 +366,20 @@ class _ProductDetailsState extends State<ProductDetails> {
     bool status=data["gym_status"];
     String loctext = "${loc.latitude},${loc.longitude}";
     return DataRow(cells: [
-      DataCell(data != null ? Text(data['name'] ?? "") : Text("")),
-      DataCell(data != null ? Text(data['address'] ?? "") : Text("")),
-      DataCell(data != null ? Text(gymId) : Text("")),
-      DataCell(data != null ? Text(data['gym_owner'] ?? "") : Text("")),
-      DataCell(data != null ? Text(data['gender'] ?? "") : Text("")),
+      DataCell(data != null ? Text(data['name'] ?? "") : const Text("")),
+      DataCell(data != null ? Text(data['address'] ?? "") : const Text("")),
+      DataCell(data != null ? Text(gymId) : const Text("")),
+      DataCell(data != null ? Text(data['gym_owner'] ?? "") : const Text("")),
+      DataCell(data != null ? Text(data['gender'] ?? "") : const Text("")),
       DataCell(data != null
           ? GestureDetector(
           onTap: () async {
             await MapsLaucherApi().launchMaps(loc.latitude, loc.longitude);
           },
           child: Text(loctext))
-          : Text("")),
-      DataCell(data != null ? Text(data['landmark'] ?? "") : Text("")),
-      DataCell(data != null ? Text(data['pincode'] ?? "") : Text("")),
+          : const Text("")),
+      DataCell(data != null ? Text(data['landmark'] ?? "") : const Text("")),
+      DataCell(data != null ? Text(data['pincode'] ?? "") : const Text("")),
       DataCell(const Text('Trainer'), onTap: (() {
         Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => TrainerPage(tGymId: gymId),
@@ -507,7 +518,7 @@ class _ProductDetailsState extends State<ProductDetails> {
           );
         },
       ),
-      DataCell(Icon(Icons.delete), onTap: () {
+      DataCell(const Icon(Icons.delete), onTap: () {
         deleteMethod(stream: productStream, uniqueDocId: gymId);
       })
     ]);
@@ -522,14 +533,17 @@ class _ProductDetailsState extends State<ProductDetails> {
   final TextEditingController _latitudeController = TextEditingController();
   final TextEditingController _longitudeController = TextEditingController();
   final TextEditingController _branchController = TextEditingController();
+  final TextEditingController _descriptionCon =TextEditingController();
+  final TextEditingController _numberCon =TextEditingController();
+
   showAddbox() => showDialog(
       context: context,
       builder: (context) => AlertDialog(
         shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(30))),
         content: SizedBox(
-          height: 480,
-          width: 800,
+          height: MediaQuery.of(context).size.height*.90,
+          width: MediaQuery.of(context).size.width*.92,
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -564,6 +578,15 @@ class _ProductDetailsState extends State<ProductDetails> {
                   addcontroller: _addpincode,
                   hinttext: "Pincode",
                 ),
+                customTextField(
+                  addcontroller: _descriptionCon,
+                  hinttext: "Description",
+                ),
+                customTextField(
+                  addcontroller: _numberCon,
+                  hinttext: "Number",
+
+                ),
                 Center(
                   child: ElevatedButton(
                     onPressed: () async {
@@ -588,10 +611,23 @@ class _ProductDetailsState extends State<ProductDetails> {
                           'gym_id': _addgymownerid.text,
                           'gym_owner': _addgymownerid.text,
                           'landmark': _addlandmark.text,
-                          'total_booking': " ",
-                          'total_sales': " ",
+                          'total_booking': "",
+                          'total_sales': "",
                           'legit': false,
                           "branch":_branchController.text,
+                          "description":_descriptionCon.text,
+                          "display_picture": "",
+                          "images":[],
+                          "locality": "",
+                          "number":_numberCon.text,
+                          "online_pay":true,
+                          "payment_due": "",
+                          "rating": 0.0,
+                          "service": [],
+                          "timings":[],
+                          "token": [],
+                          "view_count": 0.0,
+                          "gym_status":false,
 
                         },
                       );
@@ -599,7 +635,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                     },
                     child: const Text('Done'),
                   ),
-                )
+                ),
               ],
             ),
           ),
@@ -666,73 +702,75 @@ class _ProductEditBoxState extends State<ProductEditBox> {
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(30))),
-      content: SizedBox(
-        height: 580,
-        width: 800,
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'Update Records for this doc',
-                style: TextStyle(
-                    fontFamily: 'poppins',
-                    fontWeight: FontWeight.w600,
-                    fontSize: 14),
-              ),
-              customTextField(hinttext: "Name", addcontroller: _name),
-              customTextField(hinttext: "Address", addcontroller: _address),
-              customTextField(hinttext: "Gym ID", addcontroller: _gymiid),
-              customTextField(hinttext: "Gym Owner", addcontroller: _gymowner),
-              customTextField(hinttext: "Gender", addcontroller: _gender),
-              customTextField(
-                  hinttext: 'Latitude', addcontroller: _latitudeController),
-              customTextField(
-                  hinttext: 'Longitude', addcontroller: _longitudeController),
-              customTextField(hinttext: "Landmark", addcontroller: _landmark),
-              customTextField(hinttext: "Pincode", addcontroller: _pincode),
-              Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: Center(
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      print("The Gym id is : ${_gymiid.text}");
-                      DocumentReference documentReference = FirebaseFirestore
-                          .instance
-                          .collection('product_details')
-                          .doc(_gymiid.text);
-
-                      GeoPoint dataForGeoPint = GeoPoint(
-                          double.parse(_latitudeController.text),
-                          double.parse(_longitudeController.text));
-
-                      Map<String, dynamic> data = <String, dynamic>{
-                        'address': _address.text,
-                        'gender': _gender.text,
-                        'name': _name.text,
-                        'pincode': _pincode.text,
-                        'location': dataForGeoPint,
-                        'gym_id': _gymiid.text,
-                        'gym_owner': _gymowner.text,
-                        'landmark': _landmark.text
-                      };
-                      await documentReference
-                          .update(data)
-                          .whenComplete(() => print("Item Updated"))
-                          .catchError((e) => print(e));
-                      Navigator.pop(context);
-                    },
-                    child: const Text('Done'),
+        return AlertDialog(
+          scrollable: true,
+          shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(30))),
+          content: SizedBox(
+            height: MediaQuery.of(context).size.height*.90,
+            width: MediaQuery.of(context).size.width*.92,
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Update Records for this doc',
+                    style: TextStyle(
+                        fontFamily: 'poppins',
+                        fontWeight: FontWeight.w600,
+                        fontSize: 14),
                   ),
-                ),
-              )
-            ],
+                  customTextField(hinttext: "Name", addcontroller: _name),
+                  customTextField(hinttext: "Address", addcontroller: _address),
+                  customTextField(hinttext: "Gym ID", addcontroller: _gymiid),
+                  customTextField(hinttext: "Gym Owner", addcontroller: _gymowner),
+                  customTextField(hinttext: "Gender", addcontroller: _gender),
+                  customTextField(
+                      hinttext: 'Latitude', addcontroller: _latitudeController),
+                  customTextField(
+                      hinttext: 'Longitude', addcontroller: _longitudeController),
+                  customTextField(hinttext: "Landmark", addcontroller: _landmark),
+                  customTextField(hinttext: "Pincode", addcontroller: _pincode),
+                  Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Center(
+                      child: ElevatedButton(
+                        onPressed: () async {
+                          print("The Gym id is : ${_gymiid.text}");
+                          DocumentReference documentReference = FirebaseFirestore
+                              .instance
+                              .collection('product_details')
+                              .doc(_gymiid.text);
+
+                          GeoPoint dataForGeoPint = GeoPoint(
+                              double.parse(_latitudeController.text),
+                              double.parse(_longitudeController.text));
+
+                          Map<String, dynamic> data = <String, dynamic>{
+                            'address': _address.text,
+                            'gender': _gender.text,
+                            'name': _name.text,
+                            'pincode': _pincode.text,
+                            'location': dataForGeoPint,
+                            'gym_id': _gymiid.text,
+                            'gym_owner': _gymowner.text,
+                            'landmark': _landmark.text
+                          };
+                          await documentReference
+                              .update(data)
+                              .whenComplete(() => print("Item Updated"))
+                              .catchError((e) => print(e));
+                          Navigator.pop(context);
+                        },
+                        child: const Text('Done'),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
           ),
-        ),
-      ),
-    );
+        );
+
   }
 }
