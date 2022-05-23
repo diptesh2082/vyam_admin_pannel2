@@ -288,20 +288,12 @@ class _ProductDetailsState extends State<ProductDetails> {
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
-
-                              // DataColumn(
-                              //   label: Text(
-                              //     'Display Picture',
-                              //     style: TextStyle(fontWeight: FontWeight.w600),
-                              //   ),
-                              // ),
                               DataColumn(
                                 label: Text(
                                   'Upload Display Image',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
-
                               DataColumn(
                                 label: Text(
                                   'Edit',
