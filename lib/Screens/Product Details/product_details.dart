@@ -1,7 +1,9 @@
 import 'dart:io';
 // import 'dart:html';
 import 'dart:math';
+import 'package:admin_panel_vyam/Screens/timings.dart';
 import 'package:flutter/foundation.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as Path;
 import 'package:admin_panel_vyam/services/maps_api.dart';
@@ -263,6 +265,12 @@ class _ProductDetailsState extends State<ProductDetails> {
                               ),
                               DataColumn(
                                 label: Text(
+                                  'Timings',
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
+                              ),
+                              DataColumn(
+                                label: Text(
                                   'Gym_status',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
@@ -273,6 +281,13 @@ class _ProductDetailsState extends State<ProductDetails> {
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
+                              DataColumn(
+                                label: Text(
+                                  'Online Pay Status',
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
+                              ),
+
                               // DataColumn(
                               //   label: Text(
                               //     'Display Picture',
@@ -350,6 +365,11 @@ class _ProductDetailsState extends State<ProductDetails> {
     return _path;
   }
 
+  // final TextEditingController morning = TextEditingController();
+  // final TextEditingController evening = TextEditingController();
+  // final TextEditingController closed = TextEditingController();
+  // final TextEditingController morning_days = TextEditingController();
+  // final TextEditingController evening_days = TextEditingController();
 
 
 
@@ -360,10 +380,16 @@ class _ProductDetailsState extends State<ProductDetails> {
   }
 
   DataRow _buildListItem(BuildContext context, DocumentSnapshot data) {
+    // morning.text=data['timings']["gym"]["Morning"];
+    // evening.text=data['timings']["gym"]["Evening"];
+    // closed.text=data['timings']["gym"]["Closed"];
+    // morning_days.text=data['timings']["gym"]["morning_days"];
+    // evening_days.text=data['timings']["gym"]["evening_days"];
     String gymId = data['gym_id'];
     GeoPoint loc = data['location'];
     bool legit = data['legit'];
     bool status=data["gym_status"];
+    bool online_pay=data["online_pay"];
     String loctext = "${loc.latitude},${loc.longitude}";
     return DataRow(cells: [
       DataCell(data != null ? Text(data['name'] ?? "") : const Text("")),
@@ -414,6 +440,30 @@ class _ProductDetailsState extends State<ProductDetails> {
           ),
         )
       ])),
+      DataCell(
+        Center(
+          child: ElevatedButton(
+            onPressed: () async {
+              // Adding timings +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++---------------------------------
+
+
+              Get.to(()=> Timings(pGymId: gymId,));
+              // bool temp = online_pay;
+              // temp = !temp;
+              // DocumentReference documentReference = FirebaseFirestore.instance
+              //     .collection('product_details')
+              //     .doc(gymId);
+              // await documentReference
+              //     .update({'online_pay': temp})
+              //     .whenComplete(() => print("Legitimate toggled"))
+              //     .catchError((e) => print(e));
+            },
+            child: const Text("See Timings"),
+            style: ElevatedButton.styleFrom(
+                primary:  Colors.blue),
+          ),
+        ),
+      ),
       // DataCell(
       //   Center(
       //     child: ElevatedButton(
@@ -476,6 +526,27 @@ class _ProductDetailsState extends State<ProductDetails> {
         ),
       ),
       DataCell(
+        Center(
+          child: ElevatedButton(
+            onPressed: () async {
+              bool temp = online_pay;
+              temp = !temp;
+              DocumentReference documentReference = FirebaseFirestore.instance
+                  .collection('product_details')
+                  .doc(gymId);
+              await documentReference
+                  .update({'online_pay': temp})
+                  .whenComplete(() => print("Legitimate toggled"))
+                  .catchError((e) => print(e));
+            },
+            child: Text(online_pay.toString()),
+            style: ElevatedButton.styleFrom(
+                primary: online_pay ? Colors.green : Colors.red),
+          ),
+        ),
+      ),
+
+      DataCell(
         Center(child: Column(
           children: [
             IconButton(onPressed: ()async{
@@ -524,6 +595,8 @@ class _ProductDetailsState extends State<ProductDetails> {
     ]);
   }
 
+
+//Adding new data -----------------------------------------------------------------+++++++++++++++++++++++++++-------------------
   final TextEditingController _addaddress = TextEditingController();
   final TextEditingController _addgender = TextEditingController();
   final TextEditingController _addname = TextEditingController();
