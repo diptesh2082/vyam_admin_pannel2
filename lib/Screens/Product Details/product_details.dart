@@ -62,7 +62,8 @@ class _ProductDetailsState extends State<ProductDetails> {
           await FirebaseFirestore.instance.collection("product_details")
           .doc(id)
           .update({
-            "display_picture": value
+            "display_picture": value,
+            "images": FieldValue.arrayUnion([value])
           });
 
         });
