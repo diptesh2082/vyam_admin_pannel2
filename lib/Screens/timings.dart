@@ -281,6 +281,8 @@ class _ProductEditBoxState extends State<ProductEditBox> {
 
   @override
   Widget build(BuildContext context) {
+    print("The Gym id is : ${typecon.text}");
+    print("The Gym id is : ${widget.gymId}");
     return AlertDialog(
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(30))),
@@ -321,7 +323,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                           .instance
                           .collection('product_details')
                           .doc(widget.gymId)
-                          .collection('trainers')
+                          .collection('timings')
                           .doc(typecon.text);
                       Map<String, dynamic> data = <String, dynamic> {
                         "Morning":morning.text,
