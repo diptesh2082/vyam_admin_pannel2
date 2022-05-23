@@ -42,15 +42,28 @@ class _FaqDetailsState extends State<FaqDetails> {
                   child: GestureDetector(
                     onTap: showAddbox,
                     child: Container(
-                      width: 90,
+                      width: 200,
                       decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(20.0)),
                       child: Row(
-                        children: const [
-                          Icon(Icons.add),
-                          Text('Add FAQ',
-                              style: TextStyle(fontWeight: FontWeight.w400)),
+                        children: [
+                          GestureDetector(
+                              onTap: () {
+                                Navigator.pop(context);
+                              },
+                              child: const Icon(Icons.arrow_back_ios_outlined)),
+                          const SizedBox(
+                            width: 20,
+                          ),
+                          Row(
+                            children: const [
+                              Icon(Icons.add),
+                              Text('Add FAQ',
+                                  style:
+                                      TextStyle(fontWeight: FontWeight.w400)),
+                            ],
+                          ),
                         ],
                       ),
                     ),

@@ -34,17 +34,45 @@ class _BookingDetailsState extends State<BookingDetails> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 8.0, left: 8.0),
+                  child: GestureDetector(
+                    // onTap: showAddbox,
+                    child: Container(
+                      width: 200,
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(20.0)),
+                      child: Row(
+                        children: [
+                          GestureDetector(
+                              onTap: () {
+                                Navigator.pop(context);
+                              },
+                              child: const Icon(Icons.arrow_back_ios_outlined)),
+                          const SizedBox(
+                            width: 20,
+                          ),
+                          Row(
+                            children: const [
+                              Icon(Icons.add),
+                              Text('Add Booking',
+                                  style:
+                                      TextStyle(fontWeight: FontWeight.w400)),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
                 Center(
                   child: StreamBuilder<QuerySnapshot>(
                     stream: FirebaseFirestore.instance
                         .collection('bookings')
-
-                        .where('booking_status', whereIn: [
-                      'completed',
-                      'active',
-                      'upcoming'
-                    ])
-                        .orderBy("order_date",descending: true)
+                        .where('booking_status',
+                            whereIn: ['completed', 'active', 'upcoming'])
+                        .orderBy("order_date", descending: true)
                         .snapshots(),
                     builder: (context, AsyncSnapshot snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
@@ -58,7 +86,7 @@ class _BookingDetailsState extends State<BookingDetails> {
                         print(snapshot.error);
                         return Container();
                       }
-                      var document=snapshot.data!.docs;
+                      var document = snapshot.data!.docs;
                       // document.sort();
                       //   document = document.where((element) {
                       //     return element
@@ -231,12 +259,15 @@ class _BookingDetailsState extends State<BookingDetails> {
     String bookingId = data['booking_id'];
     bool paymentDoneBool = data['payment_done'];
     bool bookingAccepted = data['booking_accepted'];
-    String durationEnd =DateFormat("MMM, dd, yyyy").format(data["plan_end_duration"].toDate());
-        // "${data['plan_end_duration'].toDate().year}/${data['plan_end_duration'].toDate().month}/${data['plan_end_duration'].toDate().day}";
-    String orderDate =DateFormat("MMM, dd, yyyy").format(data["order_date"].toDate());
-        // "${data['order_date'].toDate().year}/${data['order_date'].toDate().month}/${data['order_date'].toDate().day}";
-    String bookingDate =DateFormat("MMM, dd, yyyy").format(data["booking_date"].toDate());
-        // "${data['booking_date'].toDate().year}/${data['booking_date'].toDate().month}/${data['booking_date'].toDate().day}";
+    String durationEnd =
+        DateFormat("MMM, dd, yyyy").format(data["plan_end_duration"].toDate());
+    // "${data['plan_end_duration'].toDate().year}/${data['plan_end_duration'].toDate().month}/${data['plan_end_duration'].toDate().day}";
+    String orderDate =
+        DateFormat("MMM, dd, yyyy").format(data["order_date"].toDate());
+    // "${data['order_date'].toDate().year}/${data['order_date'].toDate().month}/${data['order_date'].toDate().day}";
+    String bookingDate =
+        DateFormat("MMM, dd, yyyy").format(data["booking_date"].toDate());
+    // "${data['booking_date'].toDate().year}/${data['booking_date'].toDate().month}/${data['booking_date'].toDate().day}";
     return DataRow(cells: [
       DataCell(data["vendorId"] != null
           ? Text(data['vendorId'].toString())
@@ -319,10 +350,11 @@ class _BookingDetailsState extends State<BookingDetails> {
                 .collection('bookings')
                 .doc(bookingId);
             await documentReference
-                .update({'booking_accepted': temp,
-            "booking_status":temp?"active":"cancelled",
-              "payment_done":temp
-            })
+                .update({
+                  'booking_accepted': temp,
+                  "booking_status": temp ? "active" : "cancelled",
+                  "payment_done": temp
+                })
                 .whenComplete(() => print("booking accepted updated"))
                 .catchError((e) => print(e));
           },
