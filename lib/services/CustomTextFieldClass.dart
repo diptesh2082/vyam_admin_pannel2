@@ -10,7 +10,7 @@ Widget customTextField(
           child: TextField(
             autofocus: true,
             style: const TextStyle(
-              fontSize: 14,
+              fontSize: 20,
               fontFamily: 'poppins',
               fontWeight: FontWeight.w400,
             ),
@@ -22,13 +22,13 @@ Widget customTextField(
                     ? Text(
                         '$hinttext :  ',
                         style: GoogleFonts.poppins(
-                          fontSize: 14,
+                          fontSize: 20,
                           fontWeight: FontWeight.bold,
                         ),
                       )
                     : const SizedBox(),
                 hintStyle: GoogleFonts.poppins(
-                  fontSize: 14,
+                  fontSize: 20,
                   fontWeight: FontWeight.w400,
                 ),
                 hintMaxLines: 2,
@@ -60,7 +60,7 @@ addcontroller!.text=dic! ;
       child: TextField(
         autofocus: true,
         style: const TextStyle(
-          fontSize: 14,
+          fontSize: 20,
           fontFamily: 'poppins',
           fontWeight: FontWeight.w400,
         ),
@@ -73,13 +73,13 @@ addcontroller!.text=dic! ;
                 ? Text(
               '$hinttext :  ',
               style: GoogleFonts.poppins(
-                fontSize: 14,
+                fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),
             )
                 : const SizedBox(),
             hintStyle: GoogleFonts.poppins(
-              fontSize: 14,
+              fontSize: 20,
               fontWeight: FontWeight.w400,
             ),
             hintMaxLines: 2,
