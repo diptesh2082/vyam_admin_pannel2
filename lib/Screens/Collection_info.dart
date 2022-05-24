@@ -64,9 +64,10 @@ class _UserInformationState extends State<UserInformation> {
                           Row(
                             children: const [
                               Icon(Icons.add),
-                              Text('Add User',
-                                  style:
-                                      TextStyle(fontWeight: FontWeight.w400)),
+                              Text(
+                                'Add User',
+                                style: TextStyle(fontWeight: FontWeight.w400),
+                              ),
                             ],
                           ),
                         ],
@@ -366,9 +367,9 @@ class _UserInformationState extends State<UserInformation> {
                               'locality': _addlocality.text,
                               'subLocality': _addsublocality.text,
                               'pincode': _addpincode.text,
-                              'long': " ",
-                              'lat': " ",
-                              'image': "image"
+                              // 'long': " ",
+                              // 'lat': " ",
+                              // 'image': "image"
                             },
                           );
                           Navigator.pop(context);

@@ -21,12 +21,10 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
       itemCount: 11,
       itemBuilder: (ctx, i) {
         if (i == 0) {
-        
           //Intial Commit
           return InkWell(
             hoverColor: Colors.blue,
             splashColor: Colors.amber,
-           
             onTap: () {
               Navigator.push(
                   context,
@@ -34,10 +32,10 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                       builder: (context) => CategoryInfoScreen()));
             },
             child: buildDashBoardCard(
-                title: 'Categories',
-                count: 4,
-                collectionID: 'category',
-          ),
+              title: 'Categories',
+              count: 4,
+              collectionID: 'category',
+            ),
           );
         }
         if (i == 1) {
@@ -151,54 +149,53 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
           }
 
           return InkWell(
-              hoverColor: isHovering == true ? Colors.green : Colors.amber,  
-              child: Container(
-                padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                width: 300,
-                height: 100,
-                decoration: BoxDecoration(
-                  color: count!.isEven ? Colors.red : Colors.lightBlueAccent,
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    CircleAvatar(
-                      backgroundColor: Colors.white,
-                      radius: 30,
-                      child: Icon(
-                        iconData!,
-                        color: Colors.blue,
-                      ),
-                    ),
-                    FittedBox(
-                      child: Column(
-                        // mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Text(
-                            title!,
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 14,
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 8,
-                          ),
-                          Text(
-                            snapshot.data.docs.length.toString(),
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 25,
-                            ),
-                          ),
-                        ],
-                      ),
-                    )
-                  ],
-                ),
+            hoverColor: isHovering == true ? Colors.green : Colors.amber,
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+              width: 300,
+              height: 100,
+              decoration: BoxDecoration(
+                color: count!.isEven ? Colors.red : Colors.lightBlueAccent,
               ),
-            );
-          
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  CircleAvatar(
+                    backgroundColor: Colors.white,
+                    radius: 30,
+                    child: Icon(
+                      iconData!,
+                      color: Colors.blue,
+                    ),
+                  ),
+                  FittedBox(
+                    child: Column(
+                      // mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Text(
+                          title!,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 8,
+                        ),
+                        Text(
+                          snapshot.data.docs.length.toString(),
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 25,
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            ),
+          );
         });
   }
 }

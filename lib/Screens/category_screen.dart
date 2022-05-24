@@ -197,6 +197,7 @@ class _CategoryInfoScreenState extends State<CategoryInfoScreen> {
   final TextEditingController _addName = TextEditingController();
   final TextEditingController _addStatus = TextEditingController();
   final TextEditingController _addImage = TextEditingController();
+  final TextEditingController _addposition = TextEditingController();
   showAddbox() => showDialog(
         context: context,
         builder: (context) => AlertDialog(
@@ -220,6 +221,8 @@ class _CategoryInfoScreenState extends State<CategoryInfoScreen> {
                   customTextField(
                       hinttext: "Status", addcontroller: _addStatus),
                   customTextField(hinttext: "Image", addcontroller: _addImage),
+                  customTextField(
+                      hinttext: "Position", addcontroller: _addposition),
                   Center(
                     child: ElevatedButton(
                       onPressed: () async {
@@ -236,6 +239,7 @@ class _CategoryInfoScreenState extends State<CategoryInfoScreen> {
                             'image': _addImage.text,
                             'name': _addName.text,
                             'category_id': catId,
+                            'position': _addposition.text,
                           },
                         );
                         Navigator.pop(context);
