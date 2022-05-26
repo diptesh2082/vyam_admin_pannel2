@@ -169,6 +169,7 @@ class _PackagesPageState extends State<PackagesPage> {
                 onTap: () => Navigator.pop(context),
                 child: SingleChildScrollView(
                   child: ProductEditBox(
+                    gym_id: widget.pGymId,
                     type: data['type'], index: data['index'], discount: data['discount'], title:  data['title'], originalprice: data['original_price'], id: packId,
                   ),
                 ),
@@ -222,6 +223,7 @@ class _PackagesPageState extends State<PackagesPage> {
                     Center(
                       child: ElevatedButton(
                         onPressed: () async {
+
                           await
                           FirebaseFirestore.instance
                               .collection('product_details')
@@ -261,7 +263,7 @@ class ProductEditBox extends StatefulWidget {
     required this.originalprice,
     required this.index,
     required this.title,
-    required this.type,required this.id,
+    required this.type,required this.id,required this.gym_id,
   }) : super(key: key);
 
   final String discount;
@@ -270,6 +272,7 @@ class ProductEditBox extends StatefulWidget {
   final String title;
   final String type;
   final String id;
+  final gym_id;
 
   @override
   _ProductEditBoxState createState() => _ProductEditBoxState();
@@ -322,12 +325,16 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                 child: Center(
                   child: ElevatedButton(
                     onPressed: () async {
+                      print(widget.id);
+                      print(widget.gym_id);
                       // print("The Gym id is : ${widget.}");
                       DocumentReference documentReference = FirebaseFirestore
                           .instance
                           .collection('product_details')
-                          .doc(globalGymId)
+                          .doc(widget.gym_id)
                           .collection('package')
+                          .doc("normal_package")
+                          .collection("gym")
                           .doc(widget.id);
                       Map<String, dynamic> data = <String, dynamic>{
                         'discount': _discount.text,

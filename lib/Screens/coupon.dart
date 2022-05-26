@@ -497,7 +497,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                         'coupon_id': widget.couponId,
                       };
                       await documentReference
-                          .set(data)
+                          .update(data)
                           .whenComplete(() => print("Item Updated"))
                           .catchError((e) => print(e));
                       Navigator.pop(context);
