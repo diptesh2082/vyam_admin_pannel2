@@ -40,6 +40,34 @@ uploadImageToStorage(PickedFile? pickedFile ,String? id) async {
 
 }
 
+uploadImageToUser(PickedFile? pickedFile ,String? id) async {
+  if(kIsWeb){
+    Reference _reference = _firebaseStorage
+        .child('Users/${Path.basename(pickedFile!.path)}');
+    await _reference
+        .putData(
+      await pickedFile.readAsBytes(),
+      SettableMetadata(contentType: 'image/jpeg'),
+    )
+        .whenComplete(() async {
+      await _reference.getDownloadURL().then((value) async {
+        var uploadedPhotoUrl = value;
+        print(value);
+        await FirebaseFirestore.instance.collection("user_details")
+            .doc(id)
+            .update({
+          "image": value,
+        });
+
+      });
+    });
+  }else{
+//write a code for android or ios
+  }
+
+}
+
+
 addImageToStorage(PickedFile? pickedFile ,String? id) async {
   if(kIsWeb){
     Reference _reference = _firebaseStorage
