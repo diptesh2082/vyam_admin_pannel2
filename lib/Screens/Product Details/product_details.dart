@@ -2,7 +2,6 @@ import 'dart:io';
 // import 'dart:html';
 import 'dart:math';
 import 'package:admin_panel_vyam/Screens/timings.dart';
-import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as Path;
@@ -38,41 +37,52 @@ class _ProductDetailsState extends State<ProductDetails> {
       .id
       .toString();
   CollectionReference? productStream;
-  chooseImage() async {
-    PickedFile? pickedFile = await ImagePicker().getImage(
-      source: ImageSource.gallery,
-    );
-    return pickedFile;
-  }
-  final _firebaseStorage = FirebaseStorage.instance
-      .ref().child("product_image");
-  uploadImageToStorage(PickedFile? pickedFile ,String? id) async {
-    if(kIsWeb){
-      Reference _reference = _firebaseStorage
-          .child('images/${Path.basename(pickedFile!.path)}');
-      await _reference
-          .putData(
-        await pickedFile.readAsBytes(),
-        SettableMetadata(contentType: 'image/jpeg'),
-      )
-          .whenComplete(() async {
-        await _reference.getDownloadURL().then((value) async {
-          var uploadedPhotoUrl = value;
-          print(value);
-          await FirebaseFirestore.instance.collection("product_details")
-          .doc(id)
-          .update({
-            "display_picture": value,
-            "images": FieldValue.arrayUnion([value])
-          });
-
-        });
-      });
-    }else{
-//write a code for android or ios
-    }
-
-  }
+  // chooseImage() async {
+  //   PickedFile? pickedFile = await ImagePicker().getImage(
+  //     source: ImageSource.gallery,
+  //
+  //     imageQuality: 50
+  //   );
+  //
+  //   // print(pickedFile.lengthSync());
+  //   // print(result.lengthSync());
+  //
+  //   return pickedFile;
+  // }
+//   final _firebaseStorage = FirebaseStorage.instance
+//       .ref().child("product_image");
+//   uploadImageToStorage(PickedFile? pickedFile ,String? id) async {
+//     if(kIsWeb){
+//       var pickedFilex = await FlutterImageCompress.compressAndGetFile(
+//         File(pickedFile!.path).absolute.path, File(pickedFile.path).path,
+//         quality: 70,
+//
+//       );
+//       Reference _reference = _firebaseStorage
+//           .child('images/${Path.basename(pickedFilex!.path)}');
+//       await _reference
+//           .putData(
+//         await pickedFilex.readAsBytes(),
+//         SettableMetadata(contentType: 'image/jpeg'),
+//       )
+//           .whenComplete(() async {
+//         await _reference.getDownloadURL().then((value) async {
+//           var uploadedPhotoUrl = value;
+//           print(value);
+//           await FirebaseFirestore.instance.collection("product_details")
+//           .doc(id)
+//           .update({
+//             "display_picture": value,
+//             "images": FieldValue.arrayUnion([value])
+//           });
+//
+//         });
+//       });
+//     }else{
+// //write a code for android or ios
+//     }
+//
+//   }
 
 
 // <<<<<<< HEAD

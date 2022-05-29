@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
@@ -5,17 +7,20 @@ import 'package:flutter/material.dart';
 import 'package:path/path.dart' as Path;
 import 'package:image_picker/image_picker.dart';
 chooseImage() async {
-  PickedFile? pickedFile = await ImagePicker().getImage(
+  XFile? pickedFile = await ImagePicker().pickImage(
     source: ImageSource.gallery,
+    imageQuality: 50
   );
+  // pickedFile=await
+  //
   return pickedFile;
 }
 final _firebaseStorage = FirebaseStorage.instance
     .ref().child("product_image");
-uploadImageToStorage(PickedFile? pickedFile ,String? id) async {
+uploadImageToStorage(XFile? pickedFile ,String? id) async {
   if(kIsWeb){
     Reference _reference = _firebaseStorage
-        .child('images/${Path.basename(pickedFile!.path)}');
+        .child('product_images/${Path.basename(pickedFile!.path)}');
     await _reference
         .putData(
       await pickedFile.readAsBytes(),
@@ -40,9 +45,10 @@ uploadImageToStorage(PickedFile? pickedFile ,String? id) async {
 
 }
 
-uploadImageToUser(PickedFile? pickedFile ,String? id) async {
+uploadImageToUser(XFile? pickedFile ,String? id) async {
   if(kIsWeb){
-    Reference _reference = _firebaseStorage
+    Reference _reference = FirebaseStorage.instance
+        .ref().child("user_image")
         .child('Users/${Path.basename(pickedFile!.path)}');
     await _reference
         .putData(
@@ -68,9 +74,10 @@ uploadImageToUser(PickedFile? pickedFile ,String? id) async {
 }
 
 
-addImageToStorage(PickedFile? pickedFile ,String? id) async {
+addImageToStorage(XFile? pickedFile ,String? id) async {
   if(kIsWeb){
-    Reference _reference = _firebaseStorage
+    Reference _reference = FirebaseStorage.instance
+        .ref().child("product_image")
         .child('images/${Path.basename(pickedFile!.path)}');
     await _reference
         .putData(
