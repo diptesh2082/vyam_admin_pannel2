@@ -8,6 +8,7 @@ import 'package:admin_panel_vyam/Screens/cancelation_page.dart';
 import 'package:admin_panel_vyam/Screens/category_screen.dart';
 import 'package:admin_panel_vyam/Screens/AmenetiesScreen.dart';
 import 'package:admin_panel_vyam/Screens/coupon.dart';
+import 'package:admin_panel_vyam/Screens/banners.dart';
 
 
 import 'package:admin_panel_vyam/Screens/faq_details.dart';
@@ -232,6 +233,19 @@ class _SideNavBar1State extends State<SideNavBar1> {
                 setState(() {});
               },
             ),
+
+            ListTile(
+              title: Text(
+                'Banners',
+                style: kTextStyle,
+              ),
+              onTap: () {
+                index = 15;
+                setState(() {});
+              },
+            ),
+
+
             ListTile(
               title: Text(
                 'Logout',
@@ -244,6 +258,7 @@ class _SideNavBar1State extends State<SideNavBar1> {
                 FirebaseAuth.instance.signOut();
               },
             ),
+
           ],
         ),
       ),
@@ -263,6 +278,7 @@ class _SideNavBar1State extends State<SideNavBar1> {
           index == 12 ? const FaqDetails() : Container(),
           index == 13 ? const CancelationPage() : Container(),
           index == 14 ? const ReviewPage() : Container(),
+          index == 15 ? const BannerPage() : Container(),
         ],
       ),
     );
