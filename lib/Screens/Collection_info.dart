@@ -1,9 +1,12 @@
+import 'dart:io';
+
 import 'package:admin_panel_vyam/services/deleteMethod.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:flutter/material.dart';
 import '../services/CustomTextFieldClass.dart';
+import '../services/image_picker_api.dart';
 
 class UserInformation extends StatefulWidget {
   const UserInformation({
@@ -290,6 +293,7 @@ class _UserInformationState extends State<UserInformation> {
   final TextEditingController _addpincode = TextEditingController();
   final TextEditingController _addsublocality = TextEditingController();
   final TextEditingController _adduserid = TextEditingController();
+  var profileImage;
   showAddbox() => showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -309,15 +313,28 @@ class _UserInformationState extends State<UserInformation> {
                           fontWeight: FontWeight.w600,
                           fontSize: 14),
                     ),
+                    Row(
+                      children: [
+                        const Text("User Image"),
+
+                        IconButton(onPressed: () async {
+                          profileImage= await chooseImage();
+                        }, icon:const Icon(Icons.camera_alt) ),
+                        // if(profileImage != null)
+                        // Image.file();
+                      ],
+                    ),
                     customTextField(
-                        hinttext: "UserID", addcontroller: _adduserid),
+                        hinttext: "phone number", addcontroller: _addnumber),
+                    // customTextField(
+                    //
+                    //     hinttext: "UserID", addcontroller: _adduserid),
                     customTextField(hinttext: "Name", addcontroller: _addname),
                     customTextField(
                         hinttext: "Email", addcontroller: _addemail),
                     customTextField(
                         hinttext: "Gender", addcontroller: _addgender),
-                    customTextField(
-                        hinttext: "phone number", addcontroller: _addnumber),
+
                     customTextField(
                         hinttext: "Address", addcontroller: _addaddress),
                     customTextField(
@@ -334,23 +351,25 @@ class _UserInformationState extends State<UserInformation> {
                         onPressed: () async {
                           FirebaseFirestore.instance
                               .collection('user_details')
-                              .doc(_addnumber.text)
+                              .doc("+91${_addnumber.text}")
                               .set(
                             {
                               'address': _addaddress.text,
-                              'userId': _adduserid.text,
+                              'userId': "+91${_addnumber.text}",
                               'name': _addname.text,
                               'email': _addemail.text,
                               'gender': _addgender.text,
-                              'number': _addnumber.text,
+                              'number': "+91${_addnumber.text}",
                               'locality': _addlocality.text,
                               'subLocality': _addsublocality.text,
                               'pincode': _addpincode.text,
                               'long': " ",
                               'lat': " ",
-                              'image': "image"
+                              'image': ""
                             },
-                          );
+                          ).then((value) async {
+                            await uploadImageToUser(profileImage,"+91${_addnumber.text}");
+                          });
                           Navigator.pop(context);
                         },
                         child: const Text('Done'),
@@ -690,7 +709,7 @@ class _EditBoxState extends State<EditBox> {
                             FirebaseFirestore.instance
                                 .collection('user_details')
                                 //change _number to _userid
-                                .doc(_number.text);
+                                .doc("+91${_number.text}");
 
                         Map<String, dynamic> data = <String, dynamic>{
                           'address': _address.text,

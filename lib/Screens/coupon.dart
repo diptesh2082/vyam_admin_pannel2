@@ -290,8 +290,8 @@ class _CouponState extends State<Coupon> {
                               });
 
                               },),
-                             Text("${DateFormat("dd,MMM, yyyy").format(start_date)}",
-                                  style: TextStyle(
+                             Text(DateFormat("dd,MMM, yyyy").format(start_date),
+                                  style: const TextStyle(
                                     fontSize: 36,
                                     fontWeight: FontWeight.w500
                                   ),
@@ -318,8 +318,8 @@ class _CouponState extends State<Coupon> {
                                 });
 
                               },),
-                            Text("${DateFormat("dd,MMM, yyyy").format(end_date)}",
-                              style: TextStyle(
+                            Text(DateFormat("dd,MMM, yyyy").format(end_date),
+                              style: const TextStyle(
                                   fontSize: 36,
                                   fontWeight: FontWeight.w500
                               ),
@@ -349,7 +349,7 @@ class _CouponState extends State<Coupon> {
                               child: DropdownButton(
                                 hint: Text("${Select_Package_type}"),
                                   items: const [
-                                    DropdownMenuItem(child: Text("pay per day"),value: "pay per day",),
+                                    DropdownMenuItem(child: Text("pay per session"),value: "pay per session",),
                                     DropdownMenuItem(child: Text("package"),value: "package",),
                                   ], onChanged: dropDownPackage),
                             ),
@@ -400,7 +400,7 @@ class _CouponState extends State<Coupon> {
                                   "end_date":end_date,
                                   "start_date":start_date,
                                   "max_dis":max_dis.text,
-                                  "munimum_cart_value":munimum_cart_value.text,
+                                  "minimum_cart_value":munimum_cart_value.text,
                                   "offer_type":coupontype,
                                   "package_type":packageType!.trim(),
                                   "price":price.text,
@@ -498,7 +498,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                         'coupon_id': widget.couponId,
                       };
                       await documentReference
-                          .set(data)
+                          .update(data)
                           .whenComplete(() => print("Item Updated"))
                           .catchError((e) => print(e));
                       Navigator.pop(context);
