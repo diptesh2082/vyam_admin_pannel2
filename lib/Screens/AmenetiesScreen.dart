@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import '../services/CustomTextFieldClass.dart';
 import '../services/MatchIDMethod.dart';
 import '../services/deleteMethod.dart';
+import '../services/image_picker_api.dart';
 
 class AmenetiesScreen extends StatefulWidget {
   const AmenetiesScreen({Key? key}) : super(key: key);
@@ -121,7 +122,7 @@ class _AmenetiesScreenState extends State<AmenetiesScreen> {
   }
 
   DataRow _buildListItem(BuildContext context, DocumentSnapshot data) {
-    String amenitiesId = data['id'];
+    String amenitiesId = data['amenity_id'];
     return DataRow(cells: [
       DataCell(
         data['id'] != null ? Text(data['id'] ?? "") : const Text(""),
@@ -150,10 +151,10 @@ class _AmenetiesScreenState extends State<AmenetiesScreen> {
                 onTap: () => Navigator.pop(context),
                 child: SingleChildScrollView(
                   child: ProductEditBox(
-                    image: data['image'],
-                    amenityId: data['id'],
-                    name: data['name'],
-                  ),
+                      image: data['image'],
+                      amenityId: data['id'],
+                      name: data['name'],
+                      am: data['amenity_id']),
                 ),
               );
             },
@@ -171,6 +172,7 @@ class _AmenetiesScreenState extends State<AmenetiesScreen> {
   final TextEditingController _addName = TextEditingController();
   final TextEditingController _addImage = TextEditingController();
   final TextEditingController _addId = TextEditingController();
+  var image;
 
   showAddbox() => showDialog(
       context: context,
@@ -192,26 +194,52 @@ class _AmenetiesScreenState extends State<AmenetiesScreen> {
                           fontSize: 14),
                     ),
                     customTextField(hinttext: "Name", addcontroller: _addName),
-                    customTextField(
-                        hinttext: "Image", addcontroller: _addImage),
+                    // customTextField(
+                    //     hinttext: "Image", addcontroller: _addImage),
+                    Container(
+                      padding: EdgeInsets.all(20),
+                      child: Row(
+                        children: [
+                          Text(
+                            'Upload Image: ',
+                            style: TextStyle(
+                                color: Colors.grey,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15),
+                          ),
+                          SizedBox(
+                            width: 20,
+                          ),
+                          InkWell(
+                            onTap: () async {
+                              image = await chooseImage();
+                            },
+                            child: Icon(
+                              Icons.upload_file_outlined,
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
                     customTextField(hinttext: "ID", addcontroller: _addId),
                     Center(
                       child: ElevatedButton(
                         onPressed: () async {
-                          await matchID(
-                              newId: _addId.text,
-                              matchStream: amenityStream,
-                              idField: 'id');
-                          FirebaseFirestore.instance
+                          await FirebaseFirestore.instance
                               .collection('amenities')
-                              .doc(_addId.text)
+                              .doc(amenityId)
                               .set(
                             {
                               'name': _addName.text,
-                              'image': _addImage.text,
+                              // 'image': _addImage.text,
                               'id': _addId.text,
+                              'amenity_id': amenityId,
+                              'gym_id': [],
                             },
-                          );
+                          ).then((snapshot) async {
+                            await uploadImageToAmeneties(image, amenityId);
+                          });
+
                           Navigator.pop(context);
                         },
                         child: const Text('Done'),
@@ -232,11 +260,13 @@ class ProductEditBox extends StatefulWidget {
     required this.name,
     required this.image,
     required this.amenityId,
+    required this.am,
   }) : super(key: key);
 
   final String name;
   final String image;
   final String amenityId;
+  final String am;
 
   @override
   _ProductEditBoxState createState() => _ProductEditBoxState();
@@ -246,6 +276,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
   final TextEditingController _name = TextEditingController();
   final TextEditingController _image = TextEditingController();
   final TextEditingController _amenityId = TextEditingController();
+  late String amm;
 
   @override
   void initState() {
@@ -253,7 +284,11 @@ class _ProductEditBoxState extends State<ProductEditBox> {
     _image.text = widget.image;
     _amenityId.text = widget.amenityId;
     _name.text = widget.name;
+    amm = widget.am;
   }
+
+  var imagee;
+  bool checker = false;
 
   @override
   Widget build(BuildContext context) {
@@ -275,7 +310,35 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                     fontSize: 14),
               ),
               customTextField(hinttext: "Name", addcontroller: _name),
-              customTextField(hinttext: "Image", addcontroller: _image),
+              // customTextField(hinttext: "Image", addcontroller: _image),
+              Container(
+                padding: EdgeInsets.all(20),
+                child: Row(
+                  children: [
+                    Text(
+                      'Upload Image: ',
+                      style: TextStyle(
+                          color: Colors.grey,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15),
+                    ),
+                    SizedBox(
+                      width: 20,
+                    ),
+                    InkWell(
+                      onTap: () async {
+                        setState(() {
+                          checker = (checker == false) ? true : false;
+                        });
+                        imagee = await chooseImage();
+                      },
+                      child: Icon(
+                        Icons.upload_file_outlined,
+                      ),
+                    )
+                  ],
+                ),
+              ),
               customTextField(hinttext: "ID", addcontroller: _amenityId),
               Padding(
                 padding: const EdgeInsets.all(12.0),
@@ -283,20 +346,39 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                   child: ElevatedButton(
                     onPressed: () async {
                       print("The Gym id is : ${_amenityId.text}");
-                      DocumentReference documentReference = FirebaseFirestore
-                          .instance
-                          .collection('amenities')
-                          .doc(_amenityId.text);
-                      Map<String, dynamic> data = <String, dynamic>{
-                        'image': _image.text,
-                        'id': _amenityId.text,
-                        'name': _name.text,
-                      };
-                      await documentReference
-                          .set(data)
-                          .whenComplete(() => print("Item Updated"))
-                          .catchError((e) => print(e));
-                      Navigator.pop(context);
+                      if (checker == true) {
+                        FirebaseFirestore.instance
+                            .collection('amenities')
+                            .doc(amm)
+                            .update(
+                          {
+                            'name': _name.text,
+                            // 'image': _image,
+                            'id': _amenityId.text,
+                            'amenity_id': amm,
+                            'gym_id': [],
+                          },
+                        ).then((snapshot) async {
+                          await uploadImageToAmeneties(imagee, amm);
+                        });
+
+                        Navigator.pop(context);
+                      } else {
+                        FirebaseFirestore.instance
+                            .collection('amenities')
+                            .doc(amm)
+                            .update(
+                          {
+                            'name': _name.text,
+                            'image': _image.text,
+                            'id': _amenityId.text,
+                            'amenity_id': amm,
+                            'gym_id': [],
+                          },
+                        );
+
+                        Navigator.pop(context);
+                      }
                     },
                     child: const Text('Done'),
                   ),
