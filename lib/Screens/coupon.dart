@@ -418,7 +418,8 @@ class _CouponState extends State<Coupon> {
                 ),
               );
         }
-      ));
+      ),
+  );
 }
 
 class ProductEditBox extends StatefulWidget {
