@@ -216,7 +216,6 @@ class _FaqDetailsState extends State<FaqDetails> {
                               'id': id,
                             },
                           );
-                          Navigator.pop(context);
                         },
                         child: const Text('Done'),
                       ),
