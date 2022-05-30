@@ -124,3 +124,27 @@ uploadImageToBanner(PickedFile? pickedFile, String? id) async {
 //write a code for android or ios
   }
 }
+
+uploadImageToPush(PickedFile? pickedFile, String? id) async {
+  if (kIsWeb) {
+    Reference _reference = _firebaseStoragee
+        .child('push_notifications/${Path.basename(pickedFile!.path)}');
+    await _reference
+        .putData(
+      await pickedFile.readAsBytes(),
+      SettableMetadata(contentType: 'image/jpeg'),
+    )
+        .whenComplete(() async {
+      await _reference.getDownloadURL().then((value) async {
+        var uploadedPhotoUrl = value;
+        print(value);
+        await FirebaseFirestore.instance
+            .collection("push_notifications")
+            .doc(id)
+            .update({"image": value});
+      });
+    });
+  } else {
+//write a code for android or ios
+  }
+}

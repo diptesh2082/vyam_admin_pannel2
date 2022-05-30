@@ -12,6 +12,7 @@ import 'package:admin_panel_vyam/Screens/coupon.dart';
 import 'package:admin_panel_vyam/Screens/faq_details.dart';
 import 'package:admin_panel_vyam/Screens/feedback_dateils.dart';
 import 'package:admin_panel_vyam/Screens/payments_screen.dart';
+import 'package:admin_panel_vyam/push_n.dart';
 import 'package:admin_panel_vyam/services/image_picker_api.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -240,6 +241,16 @@ class _SideNavBar1State extends State<SideNavBar1> {
             ),
             ListTile(
               title: Text(
+                'Push Notifications',
+                style: kTextStyle,
+              ),
+              onTap: () {
+                index = 15;
+                setState(() {});
+              },
+            ),
+            ListTile(
+              title: Text(
                 'Logout',
                 style: kTextStyle,
               ),
@@ -269,6 +280,7 @@ class _SideNavBar1State extends State<SideNavBar1> {
           index == 12 ? const FaqDetails() : Container(),
           index == 13 ? const CancelationPage() : Container(),
           index == 14 ? const ReviewPage() : Container(),
+          index == 15 ? const Push() : Container(),
         ],
       ),
     );
