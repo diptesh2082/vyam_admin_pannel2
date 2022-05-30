@@ -1,9 +1,14 @@
 import 'dart:io';
 // import 'dart:html';
 import 'dart:math';
+<<<<<<< HEAD
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+=======
+import 'package:admin_panel_vyam/Screens/timings.dart';
+import 'package:get/get.dart';
+>>>>>>> 39301b603a430fc9803df29ba70b59135c783388
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as Path;
 import 'package:admin_panel_vyam/services/maps_api.dart';
@@ -39,6 +44,7 @@ class _ProductDetailsState extends State<ProductDetails> {
       .toString();
   CollectionReference? productStream;
 
+<<<<<<< HEAD
   chooseImage() async {
     PickedFile? pickedFile = await ImagePicker().getImage(
       source: ImageSource.gallery,
@@ -91,6 +97,8 @@ class _ProductDetailsState extends State<ProductDetails> {
     }
   }
 
+=======
+>>>>>>> 39301b603a430fc9803df29ba70b59135c783388
 // <<<<<<< HEAD
 //   File? image;
 //   Future pickImage() async {
@@ -285,6 +293,12 @@ class _ProductDetailsState extends State<ProductDetails> {
                               ),
                               DataColumn(
                                 label: Text(
+                                  'Timings',
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
+                              ),
+                              DataColumn(
+                                label: Text(
                                   'Gym_status',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
@@ -295,19 +309,18 @@ class _ProductDetailsState extends State<ProductDetails> {
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
-                              // DataColumn(
-                              //   label: Text(
-                              //     'Display Picture',
-                              //     style: TextStyle(fontWeight: FontWeight.w600),
-                              //   ),
-                              // ),
+                              DataColumn(
+                                label: Text(
+                                  'Online Pay Status',
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
+                              ),
                               DataColumn(
                                 label: Text(
                                   'Upload Display Image',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
-
                               DataColumn(
                                 label: Text(
                                   'Edit',
@@ -369,16 +382,34 @@ class _ProductDetailsState extends State<ProductDetails> {
     return _path;
   }
 
+<<<<<<< HEAD
+=======
+  // final TextEditingController morning = TextEditingController();
+  // final TextEditingController evening = TextEditingController();
+  // final TextEditingController closed = TextEditingController();
+  // final TextEditingController morning_days = TextEditingController();
+  // final TextEditingController evening_days = TextEditingController();
+
+>>>>>>> 39301b603a430fc9803df29ba70b59135c783388
   List<DataRow> _buildlist(
       BuildContext context, List<DocumentSnapshot> snapshot) {
     return snapshot.map((data) => _buildListItem(context, data)).toList();
   }
 
   DataRow _buildListItem(BuildContext context, DocumentSnapshot data) {
+    // morning.text=data['timings']["gym"]["Morning"];
+    // evening.text=data['timings']["gym"]["Evening"];
+    // closed.text=data['timings']["gym"]["Closed"];
+    // morning_days.text=data['timings']["gym"]["morning_days"];
+    // evening_days.text=data['timings']["gym"]["evening_days"];
     String gymId = data['gym_id'];
     GeoPoint loc = data['location'];
     bool legit = data['legit'];
     bool status = data["gym_status"];
+<<<<<<< HEAD
+=======
+    bool online_pay = data["online_pay"];
+>>>>>>> 39301b603a430fc9803df29ba70b59135c783388
     String loctext = "${loc.latitude},${loc.longitude}";
     return DataRow(cells: [
       DataCell(data != null ? Text(data['name'] ?? "") : const Text("")),
@@ -414,6 +445,7 @@ class _ProductDetailsState extends State<ProductDetails> {
           ),
         ));
       }),
+<<<<<<< HEAD
       DataCell(Row(children: [
         const Spacer(),
         GestureDetector(
@@ -426,9 +458,51 @@ class _ProductDetailsState extends State<ProductDetails> {
               Icons.file_upload_outlined,
               size: 20,
             ),
+=======
+      DataCell(
+        Row(
+          children: [
+            const Spacer(),
+            GestureDetector(
+              onTap: () async {
+                var image = await chooseImage();
+                await addImageToStorage(image, gymId);
+              },
+              child: const Center(
+                child: Icon(
+                  Icons.file_upload_outlined,
+                  size: 20,
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+      DataCell(
+        Center(
+          child: ElevatedButton(
+            onPressed: () async {
+              // Adding timings +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++---------------------------------
+
+              Get.to(() => Timings(
+                    pGymId: gymId,
+                  ));
+              // bool temp = online_pay;
+              // temp = !temp;
+              // DocumentReference documentReference = FirebaseFirestore.instance
+              //     .collection('product_details')
+              //     .doc(gymId);
+              // await documentReference
+              //     .update({'online_pay': temp})
+              //     .whenComplete(() => print("Legitimate toggled"))
+              //     .catchError((e) => print(e));
+            },
+            child: const Text("See Timings"),
+            style: ElevatedButton.styleFrom(primary: Colors.blue),
+>>>>>>> 39301b603a430fc9803df29ba70b59135c783388
           ),
-        )
-      ])),
+        ),
+      ),
       // DataCell(
       //   Center(
       //     child: ElevatedButton(
@@ -492,6 +566,7 @@ class _ProductDetailsState extends State<ProductDetails> {
       ),
       DataCell(
         Center(
+<<<<<<< HEAD
             child: Column(
           children: [
             IconButton(
@@ -506,7 +581,46 @@ class _ProductDetailsState extends State<ProductDetails> {
             const Text("Display Picture"),
           ],
         )),
+=======
+          child: ElevatedButton(
+            onPressed: () async {
+              bool temp = online_pay;
+              temp = !temp;
+              DocumentReference documentReference = FirebaseFirestore.instance
+                  .collection('product_details')
+                  .doc(gymId);
+              await documentReference
+                  .update({'online_pay': temp})
+                  .whenComplete(() => print("Legitimate toggled"))
+                  .catchError((e) => print(e));
+            },
+            child: Text(online_pay.toString()),
+            style: ElevatedButton.styleFrom(
+                primary: online_pay ? Colors.green : Colors.red),
+          ),
+        ),
       ),
+
+      DataCell(
+        Center(
+          child: Column(
+            children: [
+              IconButton(
+                  onPressed: () async {
+                    // print('OS: ${Platform.operatingSystem}');
+                    var dic = await chooseImage();
+                    await uploadImageToStorage(dic, gymId);
+                    // await pickImage();
+                    // await saveData(gymId);
+                  },
+                  icon: const Icon(Icons.camera_alt_outlined)),
+              const Text("Display Picture"),
+            ],
+          ),
+        ),
+>>>>>>> 39301b603a430fc9803df29ba70b59135c783388
+      ),
+
       DataCell(
         const Text(""),
         showEditIcon: true,
@@ -539,6 +653,7 @@ class _ProductDetailsState extends State<ProductDetails> {
     ]);
   }
 
+//Adding new data -----------------------------------------------------------------+++++++++++++++++++++++++++-------------------
   final TextEditingController _addaddress = TextEditingController();
   final TextEditingController _addgender = TextEditingController();
   final TextEditingController _addname = TextEditingController();
@@ -557,6 +672,7 @@ class _ProductDetailsState extends State<ProductDetails> {
             shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(30))),
             content: SizedBox(
+<<<<<<< HEAD
               height: MediaQuery.of(context).size.height * .70,
               width: MediaQuery.of(context).size.width * .70,
               child: SingleChildScrollView(
@@ -580,6 +696,8 @@ class _ProductDetailsState extends State<ProductDetails> {
             shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(30))),
             content: SizedBox(
+=======
+>>>>>>> 39301b603a430fc9803df29ba70b59135c783388
               height: MediaQuery.of(context).size.height * .90,
               width: MediaQuery.of(context).size.width * .92,
               child: SingleChildScrollView(
@@ -605,6 +723,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                     ),
                     customTextField(
                         hinttext: "Gender", addcontroller: _addgender),
+<<<<<<< HEAD
                     // customTextField(
                     //     hinttext: 'Latitude',
                     //     addcontroller: _latitudeController),
@@ -640,6 +759,14 @@ class _ProductDetailsState extends State<ProductDetails> {
                         ],
                       ),
                     ),
+=======
+                    customTextField(
+                        hinttext: 'Latitude',
+                        addcontroller: _latitudeController),
+                    customTextField(
+                        hinttext: 'Longitude',
+                        addcontroller: _longitudeController),
+>>>>>>> 39301b603a430fc9803df29ba70b59135c783388
                     customTextField(
                         hinttext: "Landmark", addcontroller: _addlandmark),
                     customTextField(
@@ -657,9 +784,15 @@ class _ProductDetailsState extends State<ProductDetails> {
                     Center(
                       child: ElevatedButton(
                         onPressed: () async {
+<<<<<<< HEAD
                           // GeoPoint dataForGeoPint = GeoPoint(
                           //     double.parse(_latitudeController.text),
                           //     double.parse(_longitudeController.text));
+=======
+                          GeoPoint dataForGeoPint = GeoPoint(
+                              double.parse(_latitudeController.text),
+                              double.parse(_longitudeController.text));
+>>>>>>> 39301b603a430fc9803df29ba70b59135c783388
 
                           await matchID(
                               newId: _addgymownerid.text,
@@ -674,7 +807,11 @@ class _ProductDetailsState extends State<ProductDetails> {
                               'gender': _addgender.text,
                               'name': _addname.text,
                               'pincode': _addpincode.text,
+<<<<<<< HEAD
                               'location': positionn,
+=======
+                              'location': dataForGeoPint,
+>>>>>>> 39301b603a430fc9803df29ba70b59135c783388
                               'gym_id': _addgymownerid.text,
                               'gym_owner': _addgymownerid.text,
                               'landmark': _addlandmark.text,
@@ -834,6 +971,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
               customTextField(hinttext: "Gym ID", addcontroller: _gymiid),
               customTextField(hinttext: "Gym Owner", addcontroller: _gymowner),
               customTextField(hinttext: "Gender", addcontroller: _gender),
+<<<<<<< HEAD
               // customTextField(
               //     hinttext: 'Latitude', addcontroller: _latitudeController),
               // customTextField(
@@ -867,6 +1005,12 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                   ],
                 ),
               ),
+=======
+              customTextField(
+                  hinttext: 'Latitude', addcontroller: _latitudeController),
+              customTextField(
+                  hinttext: 'Longitude', addcontroller: _longitudeController),
+>>>>>>> 39301b603a430fc9803df29ba70b59135c783388
               customTextField(hinttext: "Landmark", addcontroller: _landmark),
               customTextField(hinttext: "Pincode", addcontroller: _pincode),
               Padding(
@@ -880,16 +1024,26 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                           .collection('product_details')
                           .doc(_gymiid.text);
 
+<<<<<<< HEAD
                       // GeoPoint dataForGeoPint = GeoPoint(
                       //     double.parse(_latitudeController.text),
                       //     double.parse(_longitudeController.text));
+=======
+                      GeoPoint dataForGeoPint = GeoPoint(
+                          double.parse(_latitudeController.text),
+                          double.parse(_longitudeController.text));
+>>>>>>> 39301b603a430fc9803df29ba70b59135c783388
 
                       Map<String, dynamic> data = <String, dynamic>{
                         'address': _address.text,
                         'gender': _gender.text,
                         'name': _name.text,
                         'pincode': _pincode.text,
+<<<<<<< HEAD
                         'location': positionn,
+=======
+                        'location': dataForGeoPint,
+>>>>>>> 39301b603a430fc9803df29ba70b59135c783388
                         'gym_id': _gymiid.text,
                         'gym_owner': _gymowner.text,
                         'landmark': _landmark.text

@@ -1,5 +1,6 @@
 import 'package:admin_panel_vyam/dashboard.dart';
 import 'package:admin_panel_vyam/services/deleteMethod.dart';
+import 'package:admin_panel_vyam/services/image_picker_api.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -15,8 +16,8 @@ class CategoryInfoScreen extends StatefulWidget {
 
 class _CategoryInfoScreenState extends State<CategoryInfoScreen> {
   CollectionReference? categoryStream;
-  final catId =
-      FirebaseFirestore.instance.collection('category').doc().id.toString();
+  var catId =
+      FirebaseFirestore.instance.collection('category').doc().id;
 
   @override
   void initState() {
@@ -150,7 +151,9 @@ class _CategoryInfoScreenState extends State<CategoryInfoScreen> {
             : const Text("Disabled"),
       ),
       DataCell(
-        data['position'] != null ? Center(child: Text(data['position'].toString() )) : const Text(""),
+        data['position'] != null
+            ? Center(child: Text(data['position'].toString()))
+            : const Text(""),
       ),
       DataCell(
         const Text(''),
@@ -180,59 +183,150 @@ class _CategoryInfoScreenState extends State<CategoryInfoScreen> {
   }
 
   final TextEditingController _addName = TextEditingController();
-  final TextEditingController _addStatus = TextEditingController();
-  final TextEditingController _addImage = TextEditingController();
+   bool _addStatus = true ;
+  final TextEditingController  _addPosition = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+  var image;
+  String? selectedType;
+  String? print_type = 'Status';
+
   showAddbox() => showDialog(
         context: context,
-        builder: (context) => AlertDialog(
-          shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(30))),
-          content: SizedBox(
-            height: 480,
-            width: 800,
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'Add Records',
-                    style: TextStyle(
-                        fontFamily: 'poppins',
-                        fontWeight: FontWeight.w600,
-                        fontSize: 14),
-                  ),
-                  customTextField(hinttext: "Name", addcontroller: _addName),
-                  customTextField(
-                      hinttext: "Status", addcontroller: _addStatus),
-                  customTextField(hinttext: "Image", addcontroller: _addImage),
-                  Center(
-                    child: ElevatedButton(
-                      onPressed: () async {
-                        await matchID(
-                            newId: catId,
-                            matchStream: categoryStream,
-                            idField: 'category_id');
-                        FirebaseFirestore.instance
-                            .collection('category')
-                            .doc(catId)
-                            .set(
-                          {
-                            'status': _addStatus.text,
-                            'image': _addImage.text,
-                            'name': _addName.text,
-                            'category_id': catId,
+        builder: (context) => StatefulBuilder(builder: (context, setState) {
+
+          void dropDowntype(bool? selecetValue) {
+            // if(selecetValue is String){
+            setState(() {
+              selectedType = selecetValue.toString();
+              if (selecetValue == true) {
+                print_type = "TRUE";
+              }
+              if (selecetValue == false) {
+                print_type = "FALSE";
+              }
+            });
+            // }
+          }
+
+
+          return AlertDialog(
+            shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(30))),
+            content: Form(
+              key: _formKey, //Changed
+              child: SizedBox(
+                height: 480,
+                width: 800,
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Add Records',
+                        style: TextStyle(
+                            fontFamily: 'poppins',
+                            fontWeight: FontWeight.w600,
+                            fontSize: 14),
+                      ),
+                      customTextField3(
+                          hinttext: "Name", addcontroller: _addName),
+                      // customTextField3(
+                      //     hinttext: "Status", addcontroller: _addStatus),
+                      customTextField3(
+                          hinttext: "Position", addcontroller: _addPosition),
+
+                      Container(
+                        padding: const EdgeInsets.all(20),
+                        child: Row(
+                          children: [
+                            const Text(
+                              'Upload Image: ',
+                              style: TextStyle(
+                                  color: Colors.grey,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15),
+                            ),
+                            const SizedBox(
+                              width: 20,
+                            ),
+                            InkWell(
+                              onTap: () async {
+                                image = await chooseImage();
+                              },
+                              child: const Icon(
+                                Icons.upload_file_outlined,
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+
+                      Column(
+                        children: [
+                          const Text(
+                            "Status",
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.w100),
+                          ),
+                          Container(
+                            color: Colors.white10,
+                            width: 120,
+                            child: DropdownButton(
+                                hint: Text('$print_type'),
+                                items: const [
+                                  DropdownMenuItem(
+                                    child: Text("TRUE"),
+                                    value: true,
+                                  ),
+                                  DropdownMenuItem(
+                                    child: Text("FALSE"),
+                                    value: false,
+                                  ),
+                                ],
+                                onChanged: dropDowntype),
+                          ),
+                        ],
+                      ),
+
+
+
+                      Center(
+                        child: ElevatedButton(
+                          onPressed: () async {
+                            if (_formKey.currentState!.validate()) {
+                              await matchID(
+                                  newId: catId,
+                                  matchStream: categoryStream,
+                                  idField: 'category_id');
+                              await FirebaseFirestore.instance
+                                  .collection('category')
+                                  .doc(catId)
+                                  .set(
+                                {
+                                  'status': _addStatus,
+                                  //'image': _addImage.text,
+                                  'name': _addName.text,
+                                  'category_id': catId,
+                                  'position': _addPosition.text,
+                                },
+                              ).then(
+                                    (snapshot) async {
+                                  await uploadImageToCateogry(image, catId);
+                                },
+                              );
+                              Navigator.pop(context);
+                            }
                           },
-                        );
-                        Navigator.pop(context);
-                      },
-                      child: const Text('Done'),
-                    ),
-                  )
-                ],
+                          child: const Text('Done'),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
               ),
             ),
-          ),
-        ),
+          );
+        }),
       );
 }
 
@@ -247,7 +341,7 @@ class ProductEditBox extends StatefulWidget {
   }) : super(key: key);
 
   final String name;
-  final String status;
+  final bool status;
   final String image;
   final String categoryId;
 
@@ -257,14 +351,17 @@ class ProductEditBox extends StatefulWidget {
 
 class _ProductEditBoxState extends State<ProductEditBox> {
   final TextEditingController _name = TextEditingController();
-  final TextEditingController _status = TextEditingController();
-  final TextEditingController _image = TextEditingController();
+  //final TextEditingController _status = TextEditingController();
+ // final TextEditingController _image = TextEditingController();
+  var categoryId;
+  var image;
+  bool status = true;
 
   @override
   void initState() {
     super.initState();
-    _status.text = widget.status;
-    _image.text = widget.image;
+    image = widget.image;
+    categoryId = widget.categoryId;
     _name.text = widget.name;
   }
 
@@ -288,28 +385,63 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                     fontSize: 14),
               ),
               customTextField(hinttext: "Name", addcontroller: _name),
-              customTextField(hinttext: "Status", addcontroller: _status),
-              customTextField(hinttext: "Image", addcontroller: _image),
+             // customTextField(hinttext: "Status", addcontroller: _status),
+              //customTextField(hinttext: "Image", addcontroller: _image),
+
+              Container(
+                padding: EdgeInsets.all(20),
+                child: Row(
+                  children: [
+                    const Text(
+                      'Upload Image: ',
+                      style: TextStyle(
+                          color: Colors.grey,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15),
+                    ),
+                    const SizedBox(
+                      width: 20,
+                    ),
+                    InkWell(
+                      onTap: () async {
+                        image = await chooseImage();
+                      },
+                      child: const Icon(
+                        Icons.upload_file_outlined,
+                      ),
+                    )
+                  ],
+                ),
+              ),
+
+
+
+
               Padding(
                 padding: const EdgeInsets.all(12.0),
                 child: Center(
                   child: ElevatedButton(
                     onPressed: () async {
                       print("The Gym id is : ${widget.categoryId}");
-                      DocumentReference documentReference = FirebaseFirestore
-                          .instance
+
+                      FirebaseFirestore.instance
                           .collection('category')
-                          .doc(widget.categoryId);
-                      Map<String, dynamic> data = <String, dynamic>{
-                        'status': _status.text,
-                        'image': _image.text,
-                        'name': _name.text,
-                        'category_id': widget.categoryId,
-                      };
-                      await documentReference
-                          .update(data)
-                          .whenComplete(() => print("Item Updated"))
-                          .catchError((e) => print(e));
+                          .doc(categoryId)
+                          .update(
+                        {
+
+                          'status': status,
+                          //'image': _addImage.text,
+                          'name': _name.text,
+                          'category_id': categoryId,
+                          'position': categoryId,
+
+                        },
+                      ).then((snapshot) async {
+                        await uploadImageToBanner(image, categoryId);
+                      });
+
+
                       Navigator.pop(context);
                     },
                     child: const Text('Done'),
