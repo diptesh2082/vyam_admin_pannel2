@@ -1,5 +1,8 @@
+import 'package:admin_panel_vyam/Screens/ameneties_new_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 
 import '../services/CustomTextFieldClass.dart';
 import '../services/MatchIDMethod.dart';
@@ -39,7 +42,9 @@ class _AmenetiesScreenState extends State<AmenetiesScreen> {
                 Padding(
                   padding: const EdgeInsets.only(top: 8.0, left: 8.0),
                   child: GestureDetector(
-                    onTap: showAddbox,
+                    onTap:() {
+                      Get.to(() => newAmeneties());
+                    },
                     child: Container(
                       width: 120,
                       decoration: BoxDecoration(
@@ -144,21 +149,22 @@ class _AmenetiesScreenState extends State<AmenetiesScreen> {
         const Text(''),
         showEditIcon: true,
         onTap: () {
-          showDialog(
-            context: context,
-            builder: (context) {
-              return GestureDetector(
-                onTap: () => Navigator.pop(context),
-                child: SingleChildScrollView(
-                  child: ProductEditBox(
-                      image: data['image'],
-                      amenityId: data['id'],
-                      name: data['name'],
-                      am: data['amenity_id']),
-                ),
-              );
-            },
-          );
+          Get.to(()=>ProductEditBox(name: data['name'], image: data['image'], amenityId: data['id'], am: data['amenity_id']));
+          // showDialog(
+          //   context: context,
+          //   builder: (context) {
+          //     return GestureDetector(
+          //       onTap: () => Navigator.pop(context),
+          //       child: SingleChildScrollView(
+          //         child: ProductEditBox(
+          //             image: data['image'],
+          //             amenityId: data['id'],
+          //             name: data['name'],
+          //             am: data['amenity_id']),
+          //       ),
+          //     );
+          //   },
+          // );
         },
       ),
       DataCell(Icon(Icons.delete), onTap: () {
@@ -174,82 +180,82 @@ class _AmenetiesScreenState extends State<AmenetiesScreen> {
   final TextEditingController _addId = TextEditingController();
   var image;
 
-  showAddbox() => showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-            shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(30))),
-            content: SizedBox(
-              height: 480,
-              width: 800,
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Add Records',
-                      style: TextStyle(
-                          fontFamily: 'poppins',
-                          fontWeight: FontWeight.w600,
-                          fontSize: 14),
-                    ),
-                    customTextField(hinttext: "Name", addcontroller: _addName),
-                    // customTextField(
-                    //     hinttext: "Image", addcontroller: _addImage),
-                    Container(
-                      padding: EdgeInsets.all(20),
-                      child: Row(
-                        children: [
-                          Text(
-                            'Upload Image: ',
-                            style: TextStyle(
-                                color: Colors.grey,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 15),
-                          ),
-                          SizedBox(
-                            width: 20,
-                          ),
-                          InkWell(
-                            onTap: () async {
-                              image = await chooseImage();
-                            },
-                            child: Icon(
-                              Icons.upload_file_outlined,
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                    customTextField(hinttext: "ID", addcontroller: _addId),
-                    Center(
-                      child: ElevatedButton(
-                        onPressed: () async {
-                          await FirebaseFirestore.instance
-                              .collection('amenities')
-                              .doc(amenityId)
-                              .set(
-                            {
-                              'name': _addName.text,
-                              // 'image': _addImage.text,
-                              'id': _addId.text,
-                              'amenity_id': amenityId,
-                              'gym_id': [],
-                            },
-                          ).then((snapshot) async {
-                            await uploadImageToAmenities(image, amenityId);
-                          });
-
-                          Navigator.pop(context);
-                        },
-                        child: const Text('Done'),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ),
-          ));
+  // showAddbox() => showDialog(
+  //     context: context,
+  //     builder: (context) => AlertDialog(
+  //           shape: const RoundedRectangleBorder(
+  //               borderRadius: BorderRadius.all(Radius.circular(30))),
+            // content: SizedBox(
+            //   height: 480,
+            //   width: 800,
+            //   child: SingleChildScrollView(
+            //     child: Column(
+            //       crossAxisAlignment: CrossAxisAlignment.start,
+            //       children: [
+            //         const Text(
+            //           'Add Records',
+            //           style: TextStyle(
+            //               fontFamily: 'poppins',
+            //               fontWeight: FontWeight.w600,
+            //               fontSize: 14),
+            //         ),
+            //         customTextField(hinttext: "Name", addcontroller: _addName),
+            //         // customTextField(
+            //         //     hinttext: "Image", addcontroller: _addImage),
+            //         Container(
+            //           padding: EdgeInsets.all(20),
+            //           child: Row(
+            //             children: [
+            //               Text(
+            //                 'Upload Image: ',
+            //                 style: TextStyle(
+            //                     color: Colors.grey,
+            //                     fontWeight: FontWeight.bold,
+            //                     fontSize: 15),
+            //               ),
+            //               const SizedBox(
+            //                 width: 20,
+            //               ),
+            //               InkWell(
+            //                 onTap: () async {
+            //                   image = await chooseImage();
+            //                 },
+            //                 child: const Icon(
+            //                   Icons.upload_file_outlined,
+            //                 ),
+            //               )
+            //             ],
+            //           ),
+            //         ),
+            //         customTextField(hinttext: "ID", addcontroller: _addId),
+            //         Center(
+            //           child: ElevatedButton(
+            //             onPressed: () async {
+            //               await FirebaseFirestore.instance
+            //                   .collection('amenities')
+            //                   .doc(amenityId)
+            //                   .set(
+            //                 {
+            //                   'name': _addName.text,
+            //                   // 'image': _addImage.text,
+            //                   'id': _addId.text,
+            //                   'amenity_id': amenityId,
+            //                   'gym_id': [],
+            //                 },
+            //               ).then((snapshot) async {
+            //                 await uploadImageToAmenities(image, amenityId);
+            //               });
+            //
+            //               Navigator.pop(context);
+            //             },
+            //             child: const Text('Done'),
+            //           ),
+            //         )
+            //       ],
+            //     ),
+            //   ),
+            // ),
+          // ));
 }
 
 //EDIT FEATURE
@@ -292,102 +298,108 @@ class _ProductEditBoxState extends State<ProductEditBox> {
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(30))),
-      content: SizedBox(
-        height: 580,
-        width: 800,
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'Update Records for this doc',
-                style: TextStyle(
-                    fontFamily: 'poppins',
-                    fontWeight: FontWeight.w600,
-                    fontSize: 14),
-              ),
-              customTextField3(hinttext: "Name", addcontroller: _name),
-              // customTextField(hinttext: "Image", addcontroller: _image),
-              Container(
-                padding: EdgeInsets.all(20),
-                child: Row(
-                  children: [
-                    const Text(
-                      'Upload Image: ',
-                      style: TextStyle(
-                          color: Colors.grey,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 15),
-                    ),
-                    const SizedBox(
-                      width: 20,
-                    ),
-                    InkWell(
-                      onTap: () async {
-                        setState(() {
-                          checker = (checker == false) ? true : false;
-                        });
-                        imagee = await chooseImage();
-                      },
-                      child: const Icon(
-                        Icons.upload_file_outlined,
-                      ),
-                    )
-                  ],
+    return
+    Scaffold(
+      backgroundColor: Colors.white10,
+      appBar: AppBar(
+        title: Text('Edit Amenites'),
+      ),
+      body:
+      Center(
+      child: SizedBox(
+          height: 580,
+          width: 800,
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Update Records for this doc',
+                  style: TextStyle(
+                      fontFamily: 'poppins',
+                      fontWeight: FontWeight.w600,
+                      fontSize: 14),
                 ),
-              ),
-              customTextField(hinttext: "ID", addcontroller: _amenityId),
-              Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: Center(
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      print("The Gym id is : ${_amenityId.text}");
-                      if (checker == true) {
-                        FirebaseFirestore.instance
-                            .collection('amenities')
-                            .doc(amm)
-                            .update(
-                          {
-                            'name': _name.text,
-                            // 'image': _image,
-                            'id': _amenityId.text,
-                            'amenity_id': amm,
-                            'gym_id': [],
-                          },
-                        ).then((snapshot) async {
-                          await uploadImageToAmenities(imagee, amm);
-                        });
-
-                        Navigator.pop(context);
-                      } else {
-                        FirebaseFirestore.instance
-                            .collection('amenities')
-                            .doc(amm)
-                            .update(
-                          {
-                            'name': _name.text,
-                            'image': _image.text,
-                            'id': _amenityId.text,
-                            'amenity_id': amm,
-                            'gym_id': [],
-                          },
-                        );
-
-                        Navigator.pop(context);
-                      }
-                    },
-                    child: const Text('Done'),
+                customTextField3(hinttext: "Name", addcontroller: _name),
+                // customTextField(hinttext: "Image", addcontroller: _image),
+                Container(
+                  padding: EdgeInsets.all(20),
+                  child: Row(
+                    children: [
+                      const Text(
+                        'Upload Image: ',
+                        style: TextStyle(
+                            color: Colors.grey,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15),
+                      ),
+                      const SizedBox(
+                        width: 20,
+                      ),
+                      InkWell(
+                        onTap: () async {
+                          setState(() {
+                            checker = (checker == false) ? true : false;
+                          });
+                          imagee = await chooseImage();
+                        },
+                        child: const Icon(
+                          Icons.upload_file_outlined,
+                        ),
+                      )
+                    ],
                   ),
                 ),
-              )
-            ],
+                customTextField(hinttext: "ID", addcontroller: _amenityId),
+                Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Center(
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        print("The Gym id is : ${_amenityId.text}");
+                        if (checker == true) {
+                          FirebaseFirestore.instance
+                              .collection('amenities')
+                              .doc(amm)
+                              .update(
+                            {
+                              'name': _name.text,
+                              // 'image': _image,
+                              'id': _amenityId.text,
+                              'amenity_id': amm,
+                              'gym_id': [],
+                            },
+                          ).then((snapshot) async {
+                            await uploadImageToAmenities(imagee, amm);
+                          });
+
+                          Navigator.pop(context);
+                        } else {
+                          FirebaseFirestore.instance
+                              .collection('amenities')
+                              .doc(amm)
+                              .update(
+                            {
+                              'name': _name.text,
+                              'image': _image.text,
+                              'id': _amenityId.text,
+                              'amenity_id': amm,
+                              'gym_id': [],
+                            },
+                          );
+
+                          Navigator.pop(context);
+                        }
+                      },
+                      child: const Text('Done'),
+                    ),
+                  ),
+                )
+              ],
+            ),
           ),
         ),
-      ),
+    ),
     );
   }
 }
