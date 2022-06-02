@@ -237,7 +237,7 @@ class _AmenetiesScreenState extends State<AmenetiesScreen> {
                               'gym_id': [],
                             },
                           ).then((snapshot) async {
-                            await uploadImageToAmeneties(image, amenityId);
+                            await uploadImageToAmenities(image, amenityId);
                           });
 
                           Navigator.pop(context);
@@ -309,20 +309,20 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                     fontWeight: FontWeight.w600,
                     fontSize: 14),
               ),
-              customTextField(hinttext: "Name", addcontroller: _name),
+              customTextField3(hinttext: "Name", addcontroller: _name),
               // customTextField(hinttext: "Image", addcontroller: _image),
               Container(
                 padding: EdgeInsets.all(20),
                 child: Row(
                   children: [
-                    Text(
+                    const Text(
                       'Upload Image: ',
                       style: TextStyle(
                           color: Colors.grey,
                           fontWeight: FontWeight.bold,
                           fontSize: 15),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 20,
                     ),
                     InkWell(
@@ -332,7 +332,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                         });
                         imagee = await chooseImage();
                       },
-                      child: Icon(
+                      child: const Icon(
                         Icons.upload_file_outlined,
                       ),
                     )
@@ -359,7 +359,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                             'gym_id': [],
                           },
                         ).then((snapshot) async {
-                          await uploadImageToAmeneties(imagee, amm);
+                          await uploadImageToAmenities(imagee, amm);
                         });
 
                         Navigator.pop(context);

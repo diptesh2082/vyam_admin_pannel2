@@ -116,7 +116,7 @@ class ImagePickerAPI {
     }
   }
 }
-uploadImageToBanner(PickedFile? pickedFile ,String? id) async {
+uploadImageToBanner(XFile? pickedFile ,String? id) async {
   if(kIsWeb){
     Reference _reference = _firebaseStorage
         .child('banner_details/${Path.basename(pickedFile!.path)}');
@@ -145,7 +145,7 @@ uploadImageToBanner(PickedFile? pickedFile ,String? id) async {
 }
 
 
-uploadImageToCateogry(PickedFile? pickedFile ,String? id) async {
+uploadImageToCateogry(XFile? pickedFile ,String? id) async {
   if(kIsWeb){
     Reference _reference = _firebaseStorage
         .child('banner_details/${Path.basename(pickedFile!.path)}');
@@ -173,10 +173,12 @@ uploadImageToCateogry(PickedFile? pickedFile ,String? id) async {
 
 }
 
-uploadImageToPush(PickedFile? pickedFile, String? id) async {
+final _firebaseStorages = FirebaseStorage.instance.ref().child("amenities");
+uploadImageToAmenities(XFile? pickedFile, String? id) async {
   if (kIsWeb) {
-    Reference _reference = _firebaseStoragee
-        .child('push_notifications/${Path.basename(pickedFile!.path)}');
+    Reference _reference =
+    _firebaseStorages.child('amenities/${Path.basename(pickedFile!.path)}');
+
     await _reference
         .putData(
       await pickedFile.readAsBytes(),
@@ -187,7 +189,9 @@ uploadImageToPush(PickedFile? pickedFile, String? id) async {
         var uploadedPhotoUrl = value;
         print(value);
         await FirebaseFirestore.instance
-            .collection("push_notifications")
+
+            .collection("amenities")
+
             .doc(id)
             .update({"image": value});
       });
@@ -195,4 +199,6 @@ uploadImageToPush(PickedFile? pickedFile, String? id) async {
   } else {
 //write a code for android or ios
   }
+
 }
+
