@@ -172,11 +172,13 @@ uploadImageToCateogry(XFile? pickedFile ,String? id) async {
   }
 
 }
+
 final _firebaseStorages = FirebaseStorage.instance.ref().child("amenities");
 uploadImageToAmenities(XFile? pickedFile, String? id) async {
   if (kIsWeb) {
     Reference _reference =
     _firebaseStorages.child('amenities/${Path.basename(pickedFile!.path)}');
+
     await _reference
         .putData(
       await pickedFile.readAsBytes(),
@@ -187,7 +189,9 @@ uploadImageToAmenities(XFile? pickedFile, String? id) async {
         var uploadedPhotoUrl = value;
         print(value);
         await FirebaseFirestore.instance
+
             .collection("amenities")
+
             .doc(id)
             .update({"image": value});
       });
@@ -195,4 +199,6 @@ uploadImageToAmenities(XFile? pickedFile, String? id) async {
   } else {
 //write a code for android or ios
   }
+
 }
+
