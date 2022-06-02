@@ -1,6 +1,7 @@
 import 'package:admin_panel_vyam/services/deleteMethod.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '../services/CustomTextFieldClass.dart';
 
@@ -15,6 +16,11 @@ class PaymentsPage extends StatefulWidget {
 
 class _PaymentsPageState extends State<PaymentsPage> {
   CollectionReference? paymentStream;
+  var dt, d12, ds;
+  // late String paymentid;
+
+  final userid = FirebaseFirestore.instance.collection('payment').doc().id;
+
   @override
   void initState() {
     paymentStream = FirebaseFirestore.instance.collection('payment');
@@ -129,7 +135,10 @@ class _PaymentsPageState extends State<PaymentsPage> {
   DataRow _buildListItem(BuildContext context, DocumentSnapshot data) {
     Timestamp timestamp = data['timestamp'];
     String stamp = timestamp.toString();
-    String paymentID = data['payment_id'];
+    // var dtt = DateTime.fromMillisecondsSinceEpoch(stamp.millisecondsSinceEpoch);
+    // var d122 = DateFormat('dd/MM/yyyy, HH:mm').format(dt);
+    // String paymentID = data['payment_id'];
+    // paymentid = paymentID;
 
     return DataRow(cells: [
       DataCell(data != null ? Text(data['name'] ?? "") : Text("")),
@@ -148,9 +157,12 @@ class _PaymentsPageState extends State<PaymentsPage> {
                 child: SingleChildScrollView(
                   child: ProductEditBox(
                     amount: data['amount'],
-                    place: data['place'],
+                    gym_id: data['gym_id'],
                     name: data['name'],
+                    // paymentid: data['paymentid'],
+                    place: data['place'],
                     timestamp: data['timestamp'],
+                    userid: data['userid'],
                   ),
                 ),
                 onTap: () =>
@@ -161,7 +173,7 @@ class _PaymentsPageState extends State<PaymentsPage> {
         },
       ),
       DataCell(Icon(Icons.delete), onTap: () {
-        deleteMethod(stream: paymentStream, uniqueDocId: paymentID);
+        deleteMethod(stream: paymentStream, uniqueDocId: userid);
       })
     ]);
   }
@@ -169,55 +181,85 @@ class _PaymentsPageState extends State<PaymentsPage> {
   final TextEditingController _addAmount = TextEditingController();
   final TextEditingController _addPlace = TextEditingController();
   final TextEditingController _addName = TextEditingController();
-  final TextEditingController _addTimestamp = TextEditingController();
+  // final TextEditingController _addTimestamp = TextEditingController();
+  late Timestamp dtime = Timestamp.now();
 
-  showAddbox() => showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-            shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(30))),
-            content: SizedBox(
-              height: 480,
-              width: 800,
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Add Records',
-                      style: TextStyle(
-                          fontFamily: 'poppins',
-                          fontWeight: FontWeight.w600,
-                          fontSize: 14),
-                    ),
-                    customTextField(hinttext: "Name", addcontroller: _addName),
-                    customTextField(
-                        hinttext: "Amount", addcontroller: _addAmount),
-                    customTextField(
-                        hinttext: "Place", addcontroller: _addPlace),
-                    customTextField(
-                        hinttext: "TimeStamp", addcontroller: _addTimestamp),
-                    Center(
-                      child: ElevatedButton(
-                        onPressed: () async {
-                          FirebaseFirestore.instance.collection("payment").add(
-                            {
-                              'amount': _addAmount.text,
-                              'place': _addPlace.text,
-                              'name': _addName.text,
-                              'timestamp': _addTimestamp.text,
-                            },
-                          );
-                          Navigator.pop(context);
-                        },
-                        child: const Text('Done'),
+  showAddbox() {
+    setState(() {
+      //from firebase
+      dt = DateTime.fromMillisecondsSinceEpoch(dtime.millisecondsSinceEpoch);
+      d12 = DateFormat('dd/MM/yyyy, HH:mm').format(dt);
+    });
+    showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+              shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(30))),
+              content: SizedBox(
+                height: 480,
+                width: 800,
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Add Records',
+                        style: TextStyle(
+                            fontFamily: 'poppins',
+                            fontWeight: FontWeight.w600,
+                            fontSize: 14),
                       ),
-                    )
-                  ],
+                      customTextField(
+                          hinttext: "Name", addcontroller: _addName),
+                      customTextField(
+                          hinttext: "Amount", addcontroller: _addAmount),
+                      customTextField(
+                          hinttext: "Place", addcontroller: _addPlace),
+                      // customTextField(
+                      //     hinttext: "TimeStamp",
+                      //     addcontroller: _addTimestamp),
+                      Container(
+                        padding: EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Text(
+                          'Date And Time: $d12',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontFamily: 'poppins',
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                      ),
+                      Center(
+                        child: ElevatedButton(
+                          onPressed: () async {
+                            FirebaseFirestore.instance
+                                .collection("payment")
+                                .doc(userid)
+                                .set(
+                              {
+                                'amount': _addAmount.text,
+                                'gym_id': _addName.text,
+                                'place': _addPlace.text,
+                                // 'payment_id': paymentid,
+                                'name': _addName.text,
+                                'timestamp': dtime,
+                                'userid': userid,
+                              },
+                            );
+                            Navigator.pop(context);
+                          },
+                          child: const Text('Done'),
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ));
+            ));
+  }
 }
 
 // *Updating Item list Class
@@ -229,12 +271,19 @@ class ProductEditBox extends StatefulWidget {
     required this.name,
     required this.place,
     required this.timestamp,
+    // required this.paymentid,
+    required this.userid,
+    required this.gym_id,
   }) : super(key: key);
 
   final String name;
   final String amount;
   final String place;
   final Timestamp timestamp;
+  // final String paymentid;
+  final String userid;
+  final String gym_id;
+
   @override
   _ProductEditBoxState createState() => _ProductEditBoxState();
 }
@@ -243,7 +292,13 @@ class _ProductEditBoxState extends State<ProductEditBox> {
   final TextEditingController _name = TextEditingController();
   final TextEditingController _amount = TextEditingController();
   final TextEditingController _place = TextEditingController();
-  final TextEditingController _timeStamp = TextEditingController();
+  // final TextEditingController _timeStamp = TextEditingController();
+  var dt, d12;
+  late Timestamp dtime = Timestamp.now();
+  late Timestamp r;
+  // late String _paymentid;
+  late String userid;
+  late String gym_id;
 
   @override
   void initState() {
@@ -251,11 +306,19 @@ class _ProductEditBoxState extends State<ProductEditBox> {
     _amount.text = widget.amount;
     _place.text = widget.place;
     _name.text = widget.name;
-    _timeStamp.text = widget.timestamp.toString();
+    r = widget.timestamp;
+    // _paymentid = widget.paymentid;
+    userid = widget.userid;
+    gym_id = widget.gym_id;
   }
 
   @override
   Widget build(BuildContext context) {
+    setState(() {
+      //from firebase
+      dt = DateTime.fromMillisecondsSinceEpoch(dtime.millisecondsSinceEpoch);
+      d12 = DateFormat('dd/MM/yyyy, HH:mm').format(dt);
+    });
     return AlertDialog(
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(30))),
@@ -276,30 +339,28 @@ class _ProductEditBoxState extends State<ProductEditBox> {
               customTextField(hinttext: "Name", addcontroller: _name),
               customTextField(hinttext: "Amount", addcontroller: _amount),
               customTextField(hinttext: "Place", addcontroller: _place),
-              customTextField(
-                  hinttext: "Time Stamp", addcontroller: _timeStamp),
+              // customTextField(
+              //     hinttext: "Time Stamp", addcontroller: _timeStamp),
+              Text(d12),
               Padding(
                 padding: const EdgeInsets.all(12.0),
                 child: Center(
                   child: ElevatedButton(
                     onPressed: () async {
                       print("The Gym id is : ${_name.text}");
-                      DocumentReference documentReference = FirebaseFirestore
-                          .instance
+                      FirebaseFirestore.instance
                           .collection('payment')
-                          .doc();
-                      Timestamp dataForTimeStamp = Timestamp.now();
-
-                      Map<String, dynamic> data = <String, dynamic>{
+                          .doc(userid)
+                          .update({
                         'amount': _amount.text,
-                        'place': _place.text,
+                        'gym_id': _name.text,
                         'name': _name.text,
-                        'timestamp': dataForTimeStamp,
-                      };
-                      await documentReference
-                          .update(data)
-                          .whenComplete(() => print("Item Updated"))
-                          .catchError((e) => print(e));
+                        // 'payment_id': _paymentid,
+                        'place': _place.text,
+                        'timestamp': r,
+                        'userid': userid,
+                      }).whenComplete(() => print("Update Complete"));
+
                       Navigator.pop(context);
                     },
                     child: const Text('Done'),
