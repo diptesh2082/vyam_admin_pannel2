@@ -1,11 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../services/CustomTextFieldClass.dart';
 import '../services/MatchIDMethod.dart';
 import '../services/image_picker_api.dart';
+import 'package:path/path.dart' as Path;
 
 class categoryAddScreen extends StatefulWidget {
   const categoryAddScreen({Key? key}) : super(key: key);
@@ -31,6 +35,7 @@ class _categoryAddScreenState extends State<categoryAddScreen> {
   final TextEditingController  _addPosition = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   var image;
+  var imgUrl1;
   bool _addStatus = true ;
   String? selectedType;
   String? print_type = 'Status';
@@ -97,11 +102,21 @@ class _categoryAddScreenState extends State<categoryAddScreen> {
                         InkWell(
                           onTap: () async {
                             image = await chooseImage();
+                            await getUrlImage(image);
                           },
                           child: const Icon(
                             Icons.upload_file_outlined,
                           ),
-                        )
+                        ),
+                        SizedBox(
+                          width: 300,
+                          height: 200,
+                          child: Container(
+                            child:
+                            Image.network((imgUrl1 == null) ? ' ' : imgUrl1,
+                              fit: BoxFit.contain,),
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -149,16 +164,13 @@ class _categoryAddScreenState extends State<categoryAddScreen> {
                               .set(
                             {
                               'status': _addStatus,
-                              //'image': _addImage.text,
+                              'image': imgUrl1,
                               'name': _addName.text,
                               'category_id': catId,
                               'position': _addPosition.text,
                             },
-                          ).then(
-                                (snapshot) async {
-                              await uploadImageToCateogry(image, catId);
-                            },
                           );
+
                           Navigator.pop(context);
                         }
                       },
@@ -175,4 +187,28 @@ class _categoryAddScreenState extends State<categoryAddScreen> {
 
     );
   }
+
+  getUrlImage(XFile? pickedFile) async {
+    if (kIsWeb) {
+      final _firebaseStorage = FirebaseStorage.instance
+          .ref().child("category");
+
+      Reference _reference = _firebaseStorage
+          .child('category/${Path.basename(pickedFile!.path)}');
+      await _reference
+          .putData(
+        await pickedFile.readAsBytes(),
+        SettableMetadata(contentType: 'image/jpeg'),
+      );
+
+      String imageUrl = await _reference.getDownloadURL();
+
+      setState(() {
+        imgUrl1 = imageUrl;
+      });
+
+    }
+  }
+
+
 }

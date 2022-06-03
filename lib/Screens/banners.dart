@@ -22,9 +22,9 @@ class _BannerPageState extends State<BannerPage> {
   final id = FirebaseFirestore.instance.collection('banner_details').doc().id;
   CollectionReference? bannerStream;
 
-  createReview(String nid ) {
+  createReview(String nid) {
     final review = FirebaseFirestore.instance.collection('banner_details');
-    review.doc(nid).set({'id': nid });
+    review.doc(nid).set({'id': nid});
   }
 
   @override
@@ -49,9 +49,9 @@ class _BannerPageState extends State<BannerPage> {
                 Padding(
                   padding: const EdgeInsets.only(top: 8.0, left: 8.0),
                   child: GestureDetector(
-                    onTap: (){
-                      Get.to(const bannerNewPage());     //showAddbox,
-                      },
+                    onTap: () {
+                      Get.to(const bannerNewPage()); //showAddbox,
+                    },
                     child: Container(
                       width: 120,
                       decoration: BoxDecoration(
@@ -89,9 +89,9 @@ class _BannerPageState extends State<BannerPage> {
                             columns: const [
                               DataColumn(
                                   label: Text(
-                                    'Name',
-                                    style: TextStyle(fontWeight: FontWeight.w600),
-                                  )),
+                                'Name',
+                                style: TextStyle(fontWeight: FontWeight.w600),
+                              )),
                               DataColumn(
                                 label: Text(
                                   'Image',
@@ -164,7 +164,11 @@ class _BannerPageState extends State<BannerPage> {
         ),
       ),
       DataCell(const Text(""), showEditIcon: true, onTap: () {
-       Get.to(()=>EditBox(name: data['name'], image: data['image'], id: data['id'], access: data['access']));
+        Get.to(() => EditBox(
+            name: data['name'],
+            image: data['image'],
+            id: data['id'],
+            access: data['access']));
         // showDialog(
         //     context: context,
         //     builder: (context) {
@@ -183,7 +187,6 @@ class _BannerPageState extends State<BannerPage> {
       })
     ]);
   }
-
 
   // final TextEditingController _addname = TextEditingController();
   // bool _accesible = false;
@@ -347,30 +350,30 @@ class CustomTextField extends StatelessWidget {
       height: 50,
       child: Card(
           child: TextFormField(
-            validator: (value) {
-              if (value!.isEmpty) {
-                return 'This Field cannot be empty';
-              }
-              return null;
-            },
-            autofocus: true,
-            style: const TextStyle(
+        validator: (value) {
+          if (value!.isEmpty) {
+            return 'This Field cannot be empty';
+          }
+          return null;
+        },
+        autofocus: true,
+        style: const TextStyle(
+          fontSize: 14,
+          fontFamily: 'poppins',
+          fontWeight: FontWeight.w400,
+        ),
+        controller: addcontroller,
+        maxLines: 3,
+        decoration: InputDecoration(
+            border: InputBorder.none,
+            hintStyle: const TextStyle(
               fontSize: 14,
               fontFamily: 'poppins',
               fontWeight: FontWeight.w400,
             ),
-            controller: addcontroller,
-            maxLines: 3,
-            decoration: InputDecoration(
-                border: InputBorder.none,
-                hintStyle: const TextStyle(
-                  fontSize: 14,
-                  fontFamily: 'poppins',
-                  fontWeight: FontWeight.w400,
-                ),
-                hintMaxLines: 2,
-                hintText: hinttext),
-          )),
+            hintMaxLines: 2,
+            hintText: hinttext),
+      )),
     );
   }
 }
@@ -412,100 +415,97 @@ class _EditBoxState extends State<EditBox> {
 
   @override
   Widget build(BuildContext context) {
-    return
-
-Scaffold(
-  // shape: const RoundedRectangleBorder(
-  //     borderRadius: BorderRadius.all(Radius.circular(30))),
-  // content:
- body:
- SizedBox(
-    height: 600,
-    width: 800,
-    child: SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Center(
-            child: Text(
-              'Update Records for this doc',
-              style: TextStyle(
-                  fontFamily: 'poppins',
-                  fontWeight: FontWeight.w600,
-                  fontSize: 14),
-            ),
-          ),
-          CustomTextField(hinttext: "Name", addcontroller: _name),
-          //CustomTextField(hinttext: "Image url", addcontroller: _image),
-
-
-          Center(
-            child: Container(
-              padding: EdgeInsets.all(20),   //EdgeInsets.only(top: 8.0, left: 8.0)
-              child: Row(
+    return Scaffold(
+        backgroundColor: Colors.white10,
+        appBar: AppBar(
+          title: Text('Edit Banners'),
+        ),
+        body: Center(
+          child: SizedBox(
+            height: 600,
+            width: 800,
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    'Upload Image: ',
-                    style: TextStyle(
-                        color: Colors.grey,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 15),
-                  ),
-                  const SizedBox(
-                    width: 20,
-                  ),
-                  InkWell(
-                    onTap: () async {
-                      image = await chooseImage();
-                    },
-                    child: const Icon(
-                      Icons.upload_file_outlined,
+                  const Center(
+                    child: Text(
+                      'Update Records for this doc',
+                      style: TextStyle(
+                          fontFamily: 'poppins',
+                          fontWeight: FontWeight.w600,
+                          fontSize: 14),
                     ),
-                  )
+                  ),
+                  CustomTextField(hinttext: "Name", addcontroller: _name),
+                  //CustomTextField(hinttext: "Image url", addcontroller: _image),
+
+                  Center(
+                    child: Container(
+                      padding: EdgeInsets.all(
+                          20), //EdgeInsets.only(top: 8.0, left: 8.0)
+                      child: Row(
+                        children: [
+                          const Text(
+                            'Upload Image: ',
+                            style: TextStyle(
+                                color: Colors.grey,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15),
+                          ),
+                          const SizedBox(
+                            width: 20,
+                          ),
+                          InkWell(
+                            onTap: () async {
+                              image = await chooseImage();
+                            },
+                            child: const Icon(
+                              Icons.upload_file_outlined,
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+
+                  Padding(
+                    padding: EdgeInsets.all(50),
+                    child: Center(
+                      child: ElevatedButton(
+                        onPressed: () async {
+                          print("/////");
+
+                          FirebaseFirestore.instance
+                              .collection('banner_details')
+                              .doc(id)
+                              .update(
+                            {
+                              'name': _name.text,
+                              //'image': image,
+                              'id': id,
+                              'access': access,
+                            },
+                          ).then((snapshot) async {
+                            await uploadImageToBanner(image, id);
+                          });
+                          Navigator.pop(context);
+                        },
+                        child: const Text('Done'),
+                      ),
+                    ),
+                  ),
+                  Center(
+                      child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Text('Close'),
+                  )),
                 ],
               ),
             ),
           ),
-
-
-          Padding(
-            padding:  EdgeInsets.all(50),
-            child: Center(
-              child: ElevatedButton(
-                onPressed: () async {
-                  print("/////");
-
-                  FirebaseFirestore.instance
-                      .collection('banner_details')
-                      .doc(id)
-                      .update(
-                    {
-                      'name': _name.text,
-                      //'image': image,
-                      'id': id,
-                      'access':access,
-                    },
-                  ).then((snapshot) async {
-                    await uploadImageToBanner(image, id);
-                  });
-                  Navigator.pop(context);
-                },
-                child: const Text('Done'),
-              ),
-            ),
-          ),
-          Center(
-            child: ElevatedButton(
-              onPressed: (){
-                Navigator.pop(context);
-              },
-              child: const Text('Close'),
-            )
-          ),
-        ],
-      ),
-    ),
-  )
-  );
+        ));
   }
 }

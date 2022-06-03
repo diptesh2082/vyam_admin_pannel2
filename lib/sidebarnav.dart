@@ -13,10 +13,11 @@ import 'package:admin_panel_vyam/Screens/banners.dart';
 import 'package:admin_panel_vyam/Screens/faq_details.dart';
 import 'package:admin_panel_vyam/Screens/feedback_dateils.dart';
 import 'package:admin_panel_vyam/Screens/payments_screen.dart';
+import 'package:admin_panel_vyam/Screens/push_n.dart';
 import 'package:admin_panel_vyam/services/image_picker_api.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
+//import 'package:flutter/painting.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dashboard.dart';
 
@@ -251,6 +252,19 @@ class _SideNavBar1State extends State<SideNavBar1> {
               },
             ),
 
+            ListTile(
+              title: Text(
+                'Push Notification',
+                style: kTextStyle,
+              ),
+              onTap: () {
+                index = 16;
+                setState(() {});
+              },
+            ),
+
+
+
 
             ListTile(
               title: Text(
@@ -285,6 +299,7 @@ class _SideNavBar1State extends State<SideNavBar1> {
           index == 13 ? const CancelationPage() : Container(),
           index == 14 ? const ReviewPage() : Container(),
           index == 15 ? const BannerPage() : Container(),
+          index == 16 ? const Push() : Container(),
         ],
       ),
     );
