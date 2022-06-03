@@ -1,9 +1,13 @@
+import 'package:admin_panel_vyam/Screens/banner_edit.dart';
+import 'package:admin_panel_vyam/Screens/banner_new_window.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../services/image_picker_api.dart';
 import '../services/CustomTextFieldClass.dart';
 import 'package:admin_panel_vyam/services/deleteMethod.dart';
+import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
+import 'package:get/get.dart';
 
 class BannerPage extends StatefulWidget {
   const BannerPage({
@@ -18,9 +22,9 @@ class _BannerPageState extends State<BannerPage> {
   final id = FirebaseFirestore.instance.collection('banner_details').doc().id;
   CollectionReference? bannerStream;
 
-  createReview(String nid ) {
+  createReview(String nid) {
     final review = FirebaseFirestore.instance.collection('banner_details');
-    review.doc(nid).set({'id': nid });
+    review.doc(nid).set({'id': nid});
   }
 
   @override
@@ -45,7 +49,9 @@ class _BannerPageState extends State<BannerPage> {
                 Padding(
                   padding: const EdgeInsets.only(top: 8.0, left: 8.0),
                   child: GestureDetector(
-                    onTap: showAddbox,
+                    onTap: () {
+                      Get.to(const bannerNewPage()); //showAddbox,
+                    },
                     child: Container(
                       width: 120,
                       decoration: BoxDecoration(
@@ -83,9 +89,9 @@ class _BannerPageState extends State<BannerPage> {
                             columns: const [
                               DataColumn(
                                   label: Text(
-                                    'Name',
-                                    style: TextStyle(fontWeight: FontWeight.w600),
-                                  )),
+                                'Name',
+                                style: TextStyle(fontWeight: FontWeight.w600),
+                              )),
                               DataColumn(
                                 label: Text(
                                   'Image',
@@ -158,18 +164,23 @@ class _BannerPageState extends State<BannerPage> {
         ),
       ),
       DataCell(const Text(""), showEditIcon: true, onTap: () {
-        showDialog(
-            context: context,
-            builder: (context) {
-              return SingleChildScrollView(
-                child: EditBox(
-                  image: data['image'],
-                  id: data['id'],
-                  name: data['name'],
-                  access: data['access'],
-                ),
-              );
-            });
+        Get.to(() => EditBox(
+            name: data['name'],
+            image: data['image'],
+            id: data['id'],
+            access: data['access']));
+        // showDialog(
+        //     context: context,
+        //     builder: (context) {
+        //       return SingleChildScrollView(
+        //         child: EditBox(
+        //           image: data['image'],
+        //           id: data['id'],
+        //           name: data['name'],
+        //           access: data['access'],
+        //         ),
+        //       );
+        //     });
       }),
       DataCell(const Icon(Icons.delete), onTap: () {
         deleteMethod(stream: bannerStream, uniqueDocId: banner_id);
@@ -177,148 +188,150 @@ class _BannerPageState extends State<BannerPage> {
     ]);
   }
 
-
-  final TextEditingController _addname = TextEditingController();
-  bool _accesible = false;
+  // final TextEditingController _addname = TextEditingController();
+  // bool _accesible = false;
   var image;
 
   final _formKey = GlobalKey<FormState>();
   String? selectedType;
   String? print_type = 'accessible';
 
-  showAddbox() => showDialog(
-    context: context,
-    builder: (context) => StatefulBuilder(builder: (context, setState) {
-      void dropDowntype(bool? selecetValue) {
-        // if(selecetValue is String){
-        setState(() {
-          selectedType = selecetValue.toString();
-          if (selecetValue == true) {
-            print_type = "TRUE";
-          }
-          if (selecetValue == false) {
-            print_type = "FALSE";
-          }
-        });
-        // }
-      }
+  // showAddbox() => showDialog(
+  //   context: context,
+  //   builder: (context) => StatefulBuilder(builder: (context, setState) {
+  //     void dropDowntype(bool? selecetValue) {
+  //       // if(selecetValue is String){
+  //       setState(() {
+  //         selectedType = selecetValue.toString();
+  //         if (selecetValue == true) {
+  //           print_type = "TRUE";
+  //         }
+  //         if (selecetValue == false) {
+  //           print_type = "FALSE";
+  //         }
+  //       });
+  //       // }
+  //     }
+  //
+  //
+  //
+  //
+  //     return AlertDialog(
+  //       shape: const RoundedRectangleBorder(
+  //           borderRadius: BorderRadius.all(Radius.circular(30))),
+  //       content: Form(
+  //         key: _formKey,
+  //         child: SizedBox(
+  //           height: 200,
+  //           width: 800,
+  //           child: SingleChildScrollView(
+  //             child: Column(
+  //               crossAxisAlignment: CrossAxisAlignment.start,
+  //               children: [
+  //                 const Text(
+  //                   'Add Records',
+  //                   style: TextStyle(
+  //                       fontFamily: 'poppins',
+  //                       fontWeight: FontWeight.w600,
+  //                       fontSize: 14),
+  //                 ),
+  //                 CustomTextField(
+  //                     hinttext: "Name", addcontroller: _addname),
+  //                 // CustomTextField(
+  //                 //     hinttext: "Image url", addcontroller: _addimage),
+  //
+  //                 Container(
+  //                   padding: const EdgeInsets.all(20),
+  //                   child: Row(
+  //                     children: [
+  //                       const Text(
+  //                         'Upload Image: ',
+  //                         style: TextStyle(
+  //                             color: Colors.grey,
+  //                             fontWeight: FontWeight.bold,
+  //                             fontSize: 15),
+  //                       ),
+  //                       const SizedBox(
+  //                         width: 20,
+  //                       ),
+  //                       InkWell(
+  //                         onTap: () async {
+  //                           image = await chooseImage();
+  //                         },
+  //                         child: const Icon(
+  //                           Icons.upload_file_outlined,
+  //                         ),
+  //                       )
+  //                     ],
+  //                   ),
+  //                 ),
+  //
+  //                 const SizedBox(
+  //                   height: 8,
+  //                 ),
+  //
+  //                 Column(
+  //                   children: [
+  //                     const Text(
+  //                       "Accessible",
+  //                       style: TextStyle(
+  //                           fontSize: 20, fontWeight: FontWeight.w100),
+  //                     ),
+  //                     Container(
+  //                       color: Colors.white10,
+  //                       width: 120,
+  //                       child: DropdownButton(
+  //                           hint: Text('$print_type'),
+  //                           items: const [
+  //                             DropdownMenuItem(
+  //                               child: Text("TRUE"),
+  //                               value: true,
+  //                             ),
+  //                             DropdownMenuItem(
+  //                               child: Text("FALSE"),
+  //                               value: false,
+  //                             ),
+  //                           ],
+  //                           onChanged: dropDowntype),
+  //                     ),
+  //                   ],
+  //                 ),
 
-      return AlertDialog(
-        shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(30))),
-        content: Form(
-          key: _formKey,
-          child: SizedBox(
-            height: 200,
-            width: 800,
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'Add Records',
-                    style: TextStyle(
-                        fontFamily: 'poppins',
-                        fontWeight: FontWeight.w600,
-                        fontSize: 14),
-                  ),
-                  CustomTextField(
-                      hinttext: "Name", addcontroller: _addname),
-                  // CustomTextField(
-                  //     hinttext: "Image url", addcontroller: _addimage),
-
-                  Container(
-                    padding: const EdgeInsets.all(20),
-                    child: Row(
-                      children: [
-                        const Text(
-                          'Upload Image: ',
-                          style: TextStyle(
-                              color: Colors.grey,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 15),
-                        ),
-                        const SizedBox(
-                          width: 20,
-                        ),
-                        InkWell(
-                          onTap: () async {
-                            image = await chooseImage();
-                          },
-                          child: const Icon(
-                            Icons.upload_file_outlined,
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-
-                  const SizedBox(
-                    height: 8,
-                  ),
-
-                  Column(
-                    children: [
-                      const Text(
-                        "Accessible",
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.w100),
-                      ),
-                      Container(
-                        color: Colors.white10,
-                        width: 120,
-                        child: DropdownButton(
-                            hint: Text('$print_type'),
-                            items: const [
-                              DropdownMenuItem(
-                                child: Text("TRUE"),
-                                value: true,
-                              ),
-                              DropdownMenuItem(
-                                child: Text("FALSE"),
-                                value: false,
-                              ),
-                            ],
-                            onChanged: dropDowntype),
-                      ),
-                    ],
-                  ),
-
-                  Center(
-                    child: ElevatedButton(
-                      onPressed: () async {
-                        if (_formKey.currentState!.validate()) {
-                         // await createReview(id);
-                          await FirebaseFirestore.instance
-                              .collection('banner_details')
-                              .doc(id)
-                              .set(
-                            {
-                              'name': _addname.text,
-                              // 'image': _addimage.text,
-                              'access': _accesible,
-                              'id': id,
-                            },
-                          ).then(
-                                (snapshot) async {
-                              await uploadImageToBanner(image, id);
-                            },
-                          );
-
-                          Navigator.pop(context);
-                        }
-                      },
-                      child: const Text('Done'),
-                    ),
-                  )
-                ],
-              ),
-            ),
-          ),
-        ),
-      );
-    }),
-  );
+  //                 Center(
+  //                   child: ElevatedButton(
+  //                     onPressed: () async {
+  //                       if (_formKey.currentState!.validate()) {
+  //                        // await createReview(id);
+  //                         await FirebaseFirestore.instance
+  //                             .collection('banner_details')
+  //                             .doc(id)
+  //                             .set(
+  //                           {
+  //                             'name': _addname.text,
+  //                             // 'image': _addimage.text,
+  //                             'access': _accesible,
+  //                             'id': id,
+  //                           },
+  //                         ).then(
+  //                               (snapshot) async {
+  //                             await uploadImageToBanner(image, id);
+  //                           },
+  //                         );
+  //
+  //                         Navigator.pop(context);
+  //                       }
+  //                     },
+  //                     child: const Text('Done'),
+  //                   ),
+  //                 )
+  //               ],
+  //             ),
+  //           ),
+  //         ),
+  //       ),
+  //     );
+  //   }),
+  // );
 }
 
 class CustomTextField extends StatelessWidget {
@@ -337,30 +350,30 @@ class CustomTextField extends StatelessWidget {
       height: 50,
       child: Card(
           child: TextFormField(
-            validator: (value) {
-              if (value!.isEmpty) {
-                return 'This Field cannot be empty';
-              }
-              return null;
-            },
-            autofocus: true,
-            style: const TextStyle(
+        validator: (value) {
+          if (value!.isEmpty) {
+            return 'This Field cannot be empty';
+          }
+          return null;
+        },
+        autofocus: true,
+        style: const TextStyle(
+          fontSize: 14,
+          fontFamily: 'poppins',
+          fontWeight: FontWeight.w400,
+        ),
+        controller: addcontroller,
+        maxLines: 3,
+        decoration: InputDecoration(
+            border: InputBorder.none,
+            hintStyle: const TextStyle(
               fontSize: 14,
               fontFamily: 'poppins',
               fontWeight: FontWeight.w400,
             ),
-            controller: addcontroller,
-            maxLines: 3,
-            decoration: InputDecoration(
-                border: InputBorder.none,
-                hintStyle: const TextStyle(
-                  fontSize: 14,
-                  fontFamily: 'poppins',
-                  fontWeight: FontWeight.w400,
-                ),
-                hintMaxLines: 2,
-                hintText: hinttext),
-          )),
+            hintMaxLines: 2,
+            hintText: hinttext),
+      )),
     );
   }
 }
@@ -388,6 +401,7 @@ class _EditBoxState extends State<EditBox> {
   var id;
   var image;
   bool access = false;
+
   // final TextEditingController _image = TextEditingController();
 
   @override
@@ -397,89 +411,101 @@ class _EditBoxState extends State<EditBox> {
     _name.text = widget.name;
     id = widget.id;
     image = widget.image;
-
   }
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(30))),
-      content: SizedBox(
-        height: 200,
-        width: 800,
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'Update Records for this doc',
-                style: TextStyle(
-                    fontFamily: 'poppins',
-                    fontWeight: FontWeight.w600,
-                    fontSize: 14),
-              ),
-              CustomTextField(hinttext: "Name", addcontroller: _name),
-              //CustomTextField(hinttext: "Image url", addcontroller: _image),
-
-
-              Container(
-                padding: EdgeInsets.all(20),
-                child: Row(
-                  children: [
-                    const Text(
-                      'Upload Image: ',
+    return Scaffold(
+        backgroundColor: Colors.white10,
+        appBar: AppBar(
+          title: Text('Edit Banners'),
+        ),
+        body: Center(
+          child: SizedBox(
+            height: 600,
+            width: 800,
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Center(
+                    child: Text(
+                      'Update Records for this doc',
                       style: TextStyle(
-                          color: Colors.grey,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 15),
+                          fontFamily: 'poppins',
+                          fontWeight: FontWeight.w600,
+                          fontSize: 14),
                     ),
-                    const SizedBox(
-                      width: 20,
-                    ),
-                    InkWell(
-                      onTap: () async {
-                        image = await chooseImage();
-                      },
-                      child: const Icon(
-                        Icons.upload_file_outlined,
+                  ),
+                  CustomTextField(hinttext: "Name", addcontroller: _name),
+                  //CustomTextField(hinttext: "Image url", addcontroller: _image),
+
+                  Center(
+                    child: Container(
+                      padding: EdgeInsets.all(
+                          20), //EdgeInsets.only(top: 8.0, left: 8.0)
+                      child: Row(
+                        children: [
+                          const Text(
+                            'Upload Image: ',
+                            style: TextStyle(
+                                color: Colors.grey,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15),
+                          ),
+                          const SizedBox(
+                            width: 20,
+                          ),
+                          InkWell(
+                            onTap: () async {
+                              image = await chooseImage();
+                            },
+                            child: const Icon(
+                              Icons.upload_file_outlined,
+                            ),
+                          )
+                        ],
                       ),
-                    )
-                  ],
-                ),
-              ),
+                    ),
+                  ),
 
+                  Padding(
+                    padding: EdgeInsets.all(50),
+                    child: Center(
+                      child: ElevatedButton(
+                        onPressed: () async {
+                          print("/////");
 
-              Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: Center(
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      print("/////");
-
-                      FirebaseFirestore.instance
-                          .collection('banner_details')
-                          .doc(id)
-                          .update(
-                        {
-                          'name': _name.text,
-                          //'image': image,
-                          'id': id,
-                          'access':access,
+                          FirebaseFirestore.instance
+                              .collection('banner_details')
+                              .doc(id)
+                              .update(
+                            {
+                              'name': _name.text,
+                              //'image': image,
+                              'id': id,
+                              'access': access,
+                            },
+                          ).then((snapshot) async {
+                            await uploadImageToBanner(image, id);
+                          });
+                          Navigator.pop(context);
                         },
-                      ).then((snapshot) async {
-                        await uploadImageToBanner(image, id);
-                      });
+                        child: const Text('Done'),
+                      ),
+                    ),
+                  ),
+                  Center(
+                      child: ElevatedButton(
+                    onPressed: () {
                       Navigator.pop(context);
                     },
-                    child: const Text('Done'),
-                  ),
-                ),
-              )
-            ],
+                    child: const Text('Close'),
+                  )),
+                ],
+              ),
+            ),
           ),
-        ),
-      ),
-    );
+        ));
   }
 }

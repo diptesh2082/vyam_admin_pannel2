@@ -1,8 +1,11 @@
+import 'package:admin_panel_vyam/Screens/category_add_screen.dart';
 import 'package:admin_panel_vyam/dashboard.dart';
 import 'package:admin_panel_vyam/services/deleteMethod.dart';
 import 'package:admin_panel_vyam/services/image_picker_api.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 
 import '../services/CustomTextFieldClass.dart';
 import '../services/MatchIDMethod.dart';
@@ -41,7 +44,9 @@ class _CategoryInfoScreenState extends State<CategoryInfoScreen> {
                 Padding(
                   padding: const EdgeInsets.only(top: 8.0, left: 8.0),
                   child: GestureDetector(
-                    onTap: showAddbox,
+                    onTap: (){
+                      Get.to(()=>const categoryAddScreen());
+                    },
                     child: Container(
                       width: 120,
                       decoration: BoxDecoration(
@@ -159,175 +164,33 @@ class _CategoryInfoScreenState extends State<CategoryInfoScreen> {
         const Text(''),
         showEditIcon: true,
         onTap: () {
-          showDialog(
-              context: context,
-              builder: (context) {
-                return GestureDetector(
-                  onTap: () => Navigator.pop(context),
-                  child: SingleChildScrollView(
-                    child: ProductEditBox(
-                      name: data['name'],
-                      status: data['status'],
-                      image: data['image'],
-                      categoryId: data['category_id'],
-                    ),
-                  ),
-                );
-              });
+          Get.to(()=>ProductEditBox(name: data['name'], status:data['status'], image: data['image'], categoryId: data['category_id']));
+          // showDialog(
+          //     context: context,
+          //     builder: (context) {
+          //       return GestureDetector(
+          //         onTap: () => ,
+          //         child: SingleChildScrollView(
+          //           child: ProductEditBox(
+          //             name: data['name'],
+          //             status: data['status'],
+          //             image: data['image'],
+          //             categoryId: data['category_id'],
+          //           ),
+          //         ),
+          //       );
+          //     }
+          //     );
         },
       ),
-      DataCell(Icon(Icons.delete), onTap: () {
+      DataCell(const Icon(Icons.delete), onTap: () {
         deleteMethod(stream: categoryStream, uniqueDocId: categoryID);
       })
     ]);
   }
 
-  final TextEditingController _addName = TextEditingController();
-   bool _addStatus = true ;
-  final TextEditingController  _addPosition = TextEditingController();
-  final _formKey = GlobalKey<FormState>();
-  var image;
-  String? selectedType;
-  String? print_type = 'Status';
+//MOVED TO ANOTHER FILE category_add_screen
 
-  showAddbox() => showDialog(
-        context: context,
-        builder: (context) => StatefulBuilder(builder: (context, setState) {
-
-          void dropDowntype(bool? selecetValue) {
-            // if(selecetValue is String){
-            setState(() {
-              selectedType = selecetValue.toString();
-              if (selecetValue == true) {
-                print_type = "TRUE";
-              }
-              if (selecetValue == false) {
-                print_type = "FALSE";
-              }
-            });
-            // }
-          }
-
-
-          return AlertDialog(
-            shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(30))),
-            content: Form(
-              key: _formKey, //Changed
-              child: SizedBox(
-                height: 480,
-                width: 800,
-                child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        'Add Records',
-                        style: TextStyle(
-                            fontFamily: 'poppins',
-                            fontWeight: FontWeight.w600,
-                            fontSize: 14),
-                      ),
-                      customTextField3(
-                          hinttext: "Name", addcontroller: _addName),
-                      // customTextField3(
-                      //     hinttext: "Status", addcontroller: _addStatus),
-                      customTextField3(
-                          hinttext: "Position", addcontroller: _addPosition),
-
-                      Container(
-                        padding: const EdgeInsets.all(20),
-                        child: Row(
-                          children: [
-                            const Text(
-                              'Upload Image: ',
-                              style: TextStyle(
-                                  color: Colors.grey,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 15),
-                            ),
-                            const SizedBox(
-                              width: 20,
-                            ),
-                            InkWell(
-                              onTap: () async {
-                                image = await chooseImage();
-                              },
-                              child: const Icon(
-                                Icons.upload_file_outlined,
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-
-                      Column(
-                        children: [
-                          const Text(
-                            "Status",
-                            style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.w100),
-                          ),
-                          Container(
-                            color: Colors.white10,
-                            width: 120,
-                            child: DropdownButton(
-                                hint: Text('$print_type'),
-                                items: const [
-                                  DropdownMenuItem(
-                                    child: Text("TRUE"),
-                                    value: true,
-                                  ),
-                                  DropdownMenuItem(
-                                    child: Text("FALSE"),
-                                    value: false,
-                                  ),
-                                ],
-                                onChanged: dropDowntype),
-                          ),
-                        ],
-                      ),
-
-
-
-                      Center(
-                        child: ElevatedButton(
-                          onPressed: () async {
-                            if (_formKey.currentState!.validate()) {
-                              await matchID(
-                                  newId: catId,
-                                  matchStream: categoryStream,
-                                  idField: 'category_id');
-                              await FirebaseFirestore.instance
-                                  .collection('category')
-                                  .doc(catId)
-                                  .set(
-                                {
-                                  'status': _addStatus,
-                                  //'image': _addImage.text,
-                                  'name': _addName.text,
-                                  'category_id': catId,
-                                  'position': _addPosition.text,
-                                },
-                              ).then(
-                                    (snapshot) async {
-                                  await uploadImageToCateogry(image, catId);
-                                },
-                              );
-                              Navigator.pop(context);
-                            }
-                          },
-                          child: const Text('Done'),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          );
-        }),
-      );
 }
 
 // EDIT FEATURE
@@ -367,88 +230,93 @@ class _ProductEditBoxState extends State<ProductEditBox> {
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(30))),
-      content: SizedBox(
-        height: 580,
-        width: 800,
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'Update Records for this doc',
-                style: TextStyle(
-                    fontFamily: 'poppins',
-                    fontWeight: FontWeight.w600,
-                    fontSize: 14),
-              ),
-              customTextField(hinttext: "Name", addcontroller: _name),
-             // customTextField(hinttext: "Status", addcontroller: _status),
-              //customTextField(hinttext: "Image", addcontroller: _image),
-
-              Container(
-                padding: EdgeInsets.all(20),
-                child: Row(
-                  children: [
-                    const Text(
-                      'Upload Image: ',
-                      style: TextStyle(
-                          color: Colors.grey,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 15),
-                    ),
-                    const SizedBox(
-                      width: 20,
-                    ),
-                    InkWell(
-                      onTap: () async {
-                        image = await chooseImage();
-                      },
-                      child: const Icon(
-                        Icons.upload_file_outlined,
-                      ),
-                    )
-                  ],
+    return Scaffold(
+      backgroundColor: Colors.white10,
+      appBar: AppBar(
+        title: Text('Edit Category'),
+      ),
+      body:
+      Center(
+        child: SizedBox(
+          height: 580,
+          width: 800,
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Update Records for this doc',
+                  style: TextStyle(
+                      fontFamily: 'poppins',
+                      fontWeight: FontWeight.w600,
+                      fontSize: 14),
                 ),
-              ),
+                customTextField(hinttext: "Name", addcontroller: _name),
+               // customTextField(hinttext: "Status", addcontroller: _status),
+                //customTextField(hinttext: "Image", addcontroller: _image),
 
-
-
-
-              Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: Center(
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      print("The Gym id is : ${widget.categoryId}");
-
-                      FirebaseFirestore.instance
-                          .collection('category')
-                          .doc(categoryId)
-                          .update(
-                        {
-
-                          'status': status,
-                          //'image': _addImage.text,
-                          'name': _name.text,
-                          'category_id': categoryId,
-                          'position': categoryId,
-
+                Container(
+                  padding: EdgeInsets.all(20),
+                  child: Row(
+                    children: [
+                      const Text(
+                        'Upload Image: ',
+                        style: TextStyle(
+                            color: Colors.grey,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15),
+                      ),
+                      const SizedBox(
+                        width: 20,
+                      ),
+                      InkWell(
+                        onTap: () async {
+                          image = await chooseImage();
                         },
-                      ).then((snapshot) async {
-                        await uploadImageToBanner(image, categoryId);
-                      });
-
-
-                      Navigator.pop(context);
-                    },
-                    child: const Text('Done'),
+                        child: const Icon(
+                          Icons.upload_file_outlined,
+                        ),
+                      )
+                    ],
                   ),
                 ),
-              )
-            ],
+
+
+
+
+                Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Center(
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        print("The Gym id is : ${widget.categoryId}");
+
+                        FirebaseFirestore.instance
+                            .collection('category')
+                            .doc(categoryId)
+                            .update(
+                          {
+
+                            'status': status,
+                            //'image': _addImage.text,
+                            'name': _name.text,
+                            'category_id': categoryId,
+                            'position': categoryId,
+
+                          },
+                        ).then((snapshot) async {
+                          await uploadImageToBanner(image, categoryId);
+                        });
+
+
+                        Navigator.pop(context);
+                      },
+                      child: const Text('Done'),
+                    ),
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ),

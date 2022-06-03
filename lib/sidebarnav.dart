@@ -13,11 +13,13 @@ import 'package:admin_panel_vyam/Screens/banners.dart';
 import 'package:admin_panel_vyam/Screens/faq_details.dart';
 import 'package:admin_panel_vyam/Screens/feedback_dateils.dart';
 import 'package:admin_panel_vyam/Screens/payments_screen.dart';
-import 'package:admin_panel_vyam/push_n.dart';
+import 'package:admin_panel_vyam/Screens/push_n.dart';
+
+
 import 'package:admin_panel_vyam/services/image_picker_api.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
+//import 'package:flutter/painting.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dashboard.dart';
 
@@ -250,16 +252,23 @@ class _SideNavBar1State extends State<SideNavBar1> {
                 setState(() {});
               },
             ),
+
+
             ListTile(
               title: Text(
-                'Push Notifications',
+                'Push Notification',
                 style: kTextStyle,
               ),
               onTap: () {
-                index = 15;
+                index = 16;
                 setState(() {});
               },
             ),
+
+
+
+
+
             ListTile(
               title: Text(
                 'Logout',
@@ -295,7 +304,9 @@ class _SideNavBar1State extends State<SideNavBar1> {
           index == 16 ? const Push() : Container(),
 // =======
           index == 15 ? const BannerPage() : Container(),
-// >>>>>>> 39301b603a430fc9803df29ba70b59135c783388
+
+          index == 16 ? const Push() : Container(),
+
         ],
       ),
     );
