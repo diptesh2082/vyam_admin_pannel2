@@ -1,7 +1,9 @@
+import 'dart:html';
 import 'dart:io';
 // import 'dart:html';
 import 'dart:math';
 import 'package:admin_panel_vyam/Screens/timings.dart';
+import 'package:admin_panel_vyam/routing/showadd.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as Path;
@@ -37,6 +39,7 @@ class _ProductDetailsState extends State<ProductDetails> {
       .id
       .toString();
   CollectionReference? productStream;
+  var image;
 
 // <<<<<<< HEAD
 //   File? image;
@@ -110,7 +113,11 @@ class _ProductDetailsState extends State<ProductDetails> {
                 Padding(
                   padding: const EdgeInsets.only(top: 8.0, left: 8.0),
                   child: GestureDetector(
-                    onTap: showAddbox,
+                    onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => ShowAddBox(),
+                      ));
+                    },
                     child: Container(
                       width: 200,
                       decoration: BoxDecoration(
@@ -297,29 +304,29 @@ class _ProductDetailsState extends State<ProductDetails> {
     return [];
   }
 
-  Future<String> uploadimage(XFile image) async {
-    var x = Random().nextInt(9999);
-    if (x < 1000) {
-      x = x + 1000;
-    }
-    Reference db =
-        FirebaseStorage.instance.ref().child("product_image").child("${x}");
-    await db.putFile(File(image.path));
-    // await db.putFile(File(image.path));
-    return await db.getDownloadURL();
-  }
-
-  String getImageName(XFile image) {
-    return image.path.split("/").last;
-  }
-
-  Future<List<String>> multiimageuploader(List<XFile> list) async {
-    List<String> _path = [];
-    for (XFile _image in list) {
-      _path.add(await uploadimage(_image));
-    }
-    return _path;
-  }
+  // Future<String> uploadimage(XFile image) async {
+  //   var x = Random().nextInt(9999);
+  //   if (x < 1000) {
+  //     x = x + 1000;
+  //   }
+  //   Reference db =
+  //       FirebaseStorage.instance.ref().child("product_image").child("${x}");
+  //   await db.putFile(File(image.path));
+  //   // await db.putFile(File(image.path));
+  //   return await db.getDownloadURL();
+  // }
+  //
+  // String getImageName(XFile image) {
+  //   return image.path.split("/").last;
+  // }
+  //
+  // Future<List<String>> multiimageuploader(List<XFile> list) async {
+  //   List<String> _path = [];
+  //   for (XFile _image in list) {
+  //     _path.add(await uploadimage(_image));
+  //   }
+  //   return _path;
+  // }
 
   // final TextEditingController morning = TextEditingController();
   // final TextEditingController evening = TextEditingController();
@@ -526,28 +533,22 @@ class _ProductDetailsState extends State<ProductDetails> {
         const Text(""),
         showEditIcon: true,
         onTap: () {
-          showDialog(
-            context: context,
-            builder: (context) {
-              return GestureDetector(
-                onTap: () => Navigator.pop(context),
-                child: SingleChildScrollView(
-                  child: ProductEditBox(
-                    address: data['address'],
-                    gender: data['gender'],
-                    name: data['name'],
-                    pincode: data['pincode'],
-                    gymId: data['gym_id'],
-                    gymOwner: data['gym_owner'],
-                    landmark: data['landmark'],
-                    location: data['location'],
-                  ),
-                ),
-              );
-            },
-          );
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => ProductEditBox(
+                        address: data['address'],
+                        gender: data['gender'],
+                        name: data['name'],
+                        pincode: data['pincode'],
+                        gymId: data['gym_id'],
+                        gymOwner: data['gym_owner'],
+                        landmark: data['landmark'],
+                        location: data['location'],
+                      )));
         },
       ),
+
       DataCell(const Icon(Icons.delete), onTap: () {
         deleteMethod(stream: productStream, uniqueDocId: gymId);
       })
@@ -566,114 +567,348 @@ class _ProductDetailsState extends State<ProductDetails> {
   final TextEditingController _branchController = TextEditingController();
   final TextEditingController _descriptionCon = TextEditingController();
   final TextEditingController _numberCon = TextEditingController();
-
-  showAddbox() => showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-            shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(30))),
-            content: SizedBox(
-              height: MediaQuery.of(context).size.height * .90,
-              width: MediaQuery.of(context).size.width * .92,
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Add Records',
-                      style: TextStyle(
-                          fontFamily: 'poppins',
-                          fontWeight: FontWeight.w600,
-                          fontSize: 14),
-                    ),
-                    customTextField(hinttext: "Name", addcontroller: _addname),
-                    customTextField(
-                        hinttext: "Address", addcontroller: _addaddress),
-                    customTextField(
-                        hinttext: "Gym Owner Id",
-                        addcontroller: _addgymownerid),
-                    customTextField(
-                      addcontroller: _branchController,
-                      hinttext: "branch",
-                    ),
-                    customTextField(
-                        hinttext: "Gender", addcontroller: _addgender),
-                    customTextField(
-                        hinttext: 'Latitude',
-                        addcontroller: _latitudeController),
-                    customTextField(
-                        hinttext: 'Longitude',
-                        addcontroller: _longitudeController),
-                    customTextField(
-                        hinttext: "Landmark", addcontroller: _addlandmark),
-                    customTextField(
-                      addcontroller: _addpincode,
-                      hinttext: "Pincode",
-                    ),
-                    customTextField(
-                      addcontroller: _descriptionCon,
-                      hinttext: "Description",
-                    ),
-                    customTextField(
-                      addcontroller: _numberCon,
-                      hinttext: "Number",
-                    ),
-                    Center(
-                      child: ElevatedButton(
-                        onPressed: () async {
-                          GeoPoint dataForGeoPint = GeoPoint(
-                              double.parse(_latitudeController.text),
-                              double.parse(_longitudeController.text));
-
-                          await matchID(
-                              newId: _addgymownerid.text,
-                              matchStream: productStream,
-                              idField: 'gym_id');
-                          FirebaseFirestore.instance
-                              .collection('product_details')
-                              .doc(_addgymownerid.text)
-                              .set(
-                            {
-                              'address': _addaddress.text,
-                              'gender': _addgender.text,
-                              'name': _addname.text,
-                              'pincode': _addpincode.text,
-                              'location': dataForGeoPint,
-                              'gym_id': _addgymownerid.text,
-                              'gym_owner': _addgymownerid.text,
-                              'landmark': _addlandmark.text,
-                              'total_booking': "",
-                              'total_sales': "",
-                              'legit': false,
-                              "branch": _branchController.text,
-                              "description": _descriptionCon.text,
-                              "display_picture": "",
-                              "images": [],
-                              "locality": "",
-                              "number": _numberCon.text,
-                              "online_pay": true,
-                              "payment_due": "",
-                              "rating": 0.0,
-                              "service": [],
-                              "timings": [],
-                              "token": [],
-                              "view_count": 0.0,
-                              "gym_status": false,
-                            },
-                          );
-                          Navigator.pop(context);
-                        },
-                        child: const Text('Done'),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ));
 }
 
-// *Updating Item list Class
+class ShowAddBox extends StatefulWidget {
+  const ShowAddBox({Key? key}) : super(key: key);
+
+  @override
+  State<ShowAddBox> createState() => _ShowAddBoxState();
+}
+
+class _ShowAddBoxState extends State<ShowAddBox> {
+  @override
+  CollectionReference? productStream;
+  final TextEditingController _addaddress = TextEditingController();
+  final TextEditingController _addgender = TextEditingController();
+  final TextEditingController _addname = TextEditingController();
+  final TextEditingController _addpincode = TextEditingController();
+  final TextEditingController _addlandmark = TextEditingController();
+  final TextEditingController _addgymownerid = TextEditingController();
+  final TextEditingController _latitudeController = TextEditingController();
+  final TextEditingController _longitudeController = TextEditingController();
+  final TextEditingController _branchController = TextEditingController();
+  final TextEditingController _descriptionCon = TextEditingController();
+  final TextEditingController _numberCon = TextEditingController();
+  var dic;
+  var multipic;
+  var impath;
+  var image;
+  @override
+  void initState() {
+    productStream = FirebaseFirestore.instance.collection("product_details");
+    super.initState();
+  }
+
+  Widget build(BuildContext context) {
+    return Scaffold(
+        body: Container(
+      padding: EdgeInsets.all(50),
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 8.0, top: 2, right: 8),
+              child: const Text(
+                'Add Records',
+                style: TextStyle(
+                    fontFamily: 'poppins',
+                    fontWeight: FontWeight.w600,
+                    fontSize: 14),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text('Name:',
+                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
+            ),
+            customTextField(hinttext: "Name", addcontroller: _addname),
+            SizedBox(height: 15),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text('Address:',
+                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
+            ),
+            customTextField(hinttext: "Address", addcontroller: _addaddress),
+            SizedBox(height: 15),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text('Gym Owner Id:',
+                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
+            ),
+            customTextField(
+                hinttext: "Gym Owner Id", addcontroller: _addgymownerid),
+            SizedBox(height: 15),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text('Branch:',
+                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
+            ),
+            customTextField(
+              addcontroller: _branchController,
+              hinttext: "branch",
+            ),
+            SizedBox(height: 15),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text('Gender:',
+                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
+            ),
+            customTextField(hinttext: "Gender", addcontroller: _addgender),
+            SizedBox(height: 15),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text('Latitude:',
+                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
+            ),
+            customTextField(
+                hinttext: 'Latitude', addcontroller: _latitudeController),
+            SizedBox(height: 15),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text('Longitude:',
+                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
+            ),
+            customTextField(
+                hinttext: 'Longitude', addcontroller: _longitudeController),
+            SizedBox(height: 15),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text('Landmark:',
+                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
+            ),
+            customTextField(hinttext: "Landmark", addcontroller: _addlandmark),
+            SizedBox(height: 15),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text('Pincode:',
+                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
+            ),
+            customTextField(
+              addcontroller: _addpincode,
+              hinttext: "Pincode",
+            ),
+            SizedBox(height: 15),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text('Description:',
+                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
+            ),
+            customTextField(
+              addcontroller: _descriptionCon,
+              hinttext: "Description",
+            ),
+            SizedBox(height: 15),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text('Number:',
+                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
+            ),
+            customTextField(
+              addcontroller: _numberCon,
+              hinttext: "Number",
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Text(
+              'Upload Display Image',
+              style:
+                  TextStyle(color: Colors.black, fontWeight: FontWeight.w700),
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            Row(
+              children: [
+                ElevatedButton(
+                  onPressed: () async {
+                    // dic = await chooseImage();
+                    image = uploadToStroagees();
+                  },
+                  child: Text(
+                    'Upload Gym Image',
+                    style: TextStyle(
+                        color: Colors.white, fontWeight: FontWeight.w700),
+                  ),
+                ),
+                SizedBox(
+                  width: 20,
+                ),
+                image != null
+                    ? Image(
+                        image: NetworkImage('$image'),
+                        height: 200,
+                        width: 200,
+                      )
+                    : Container(
+                        color: Colors.black,
+                        height: 200,
+                        width: 200,
+                      )
+              ],
+            ),
+            SizedBox(height: 10),
+
+            // Text(
+            //   'Upload Display Image',
+            //   style:
+            //       TextStyle(color: Colors.black, fontWeight: FontWeight.w700),
+            // ),
+            // SizedBox(
+            //   height: 20,
+            // ),
+            // ElevatedButton(
+            //   onPressed: () async {
+            //     multipic = await multiimagepickerr();
+            //     impath = await multiimageuploader(multipic);
+            //   },
+            //   child: Text(
+            //     'Upload Image',
+            //     style:
+            //         TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
+            //   ),
+            // ),
+            // // Image(
+            // //   image: FileImage(vall, scale: 4),
+            // // ),
+            // SizedBox(
+            //   height: 20,
+            // ),
+
+            Row(
+              children: [
+                ElevatedButton(
+                  onPressed: () async {
+                    print(dic);
+                    GeoPoint dataForGeoPint = GeoPoint(
+                        double.parse(_latitudeController.text),
+                        double.parse(_longitudeController.text));
+
+                    await matchID(
+                        newId: _addgymownerid.text,
+                        matchStream: productStream,
+                        idField: 'gym_id');
+                    FirebaseFirestore.instance
+                        .collection('product_details')
+                        .doc(_addgymownerid.text)
+                        .set(
+                      {
+                        'address': _addaddress.text,
+                        'gender': _addgender.text,
+                        'name': _addname.text,
+                        'pincode': _addpincode.text,
+                        'location': dataForGeoPint,
+                        'gym_id': _addgymownerid.text,
+                        'gym_owner': _addgymownerid.text,
+                        'landmark': _addlandmark.text,
+                        'total_booking': "",
+                        'total_sales': "",
+                        'legit': false,
+                        "branch": _branchController.text,
+                        "description": _descriptionCon.text,
+                        "display_picture": image,
+                        "images": [],
+                        "locality": "",
+                        "number": _numberCon.text,
+                        "online_pay": true,
+                        "payment_due": "",
+                        "rating": 0.0,
+                        "service": [],
+                        "timings": [],
+                        "token": [],
+                        "view_count": 0.0,
+                        "gym_status": false,
+                      },
+                      // ).then((snapshot) async {
+                      //   await uploadImageToStorage(dic, _addgymownerid.text);
+                      //   await FirebaseFirestore.instance
+                      //       .collection('product_details')
+                      //       .doc(_addgymownerid.text)
+                      //       .update({'images': impath});
+                      // });
+                    );
+                    Navigator.pop(context);
+                  },
+                  child: const Text('Done'),
+                ),
+                SizedBox(
+                  width: 50,
+                ),
+                ElevatedButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: Text('Close')),
+                // ElevatedButton(
+                //     onPressed: () {
+                //       print(impath);
+                //     },
+                //     child: Text('Press Me'))
+              ],
+            ),
+          ],
+        ),
+      ),
+    ));
+  }
+
+  // Future<List<XFile>> multiimagepickerr() async {
+  //   List<XFile>? _images = await ImagePicker().pickMultiImage();
+  //   if (_images != null && _images.isNotEmpty) {
+  //     return _images;
+  //   }
+  //   return [];
+  // }
+
+  // Future<List<String>> multiimageuploader(List<XFile> list) async {
+  //   List<String> _path = [];
+  //   for (XFile _image in list) {
+  //     _path.add(await uploadimage(_image));
+  //   }
+  //   return _path;
+  // }
+  //
+  // Future<String> uploadimage(XFile image) async {
+  //   var x = Random().nextInt(9999);
+  //   if (x < 1000) {
+  //     x = x + 1000;
+  //   }
+  //   Reference db =
+  //       FirebaseStorage.instance.ref().child("product_image").child("${x}");
+  //   await db.putFile(File(image.path));
+  //   // await db.putFile(File(image.path));
+  //   return await db.getDownloadURL();
+  // }
+  //
+  // String getImageName(XFile image) {
+  //   return image.path.split("/").last;
+  // }
+  uploadToStroagees() {
+    InputElement input = FileUploadInputElement() as InputElement
+      ..accept = 'image/*';
+    FirebaseStorage fs = FirebaseStorage.instance;
+
+    input.click();
+    input.onChange.listen((event) {
+      final file = input.files?.first;
+      final reader = FileReader();
+
+      reader.readAsDataUrl(file!);
+      reader.onLoadEnd.listen((event) async {
+        var snapshot = await fs
+            .ref()
+            .child('produt_image/${_addgymownerid.text}')
+            .putBlob(file);
+        String downloadUrl = await snapshot.ref.getDownloadURL();
+        setState(() {
+          image = downloadUrl;
+        });
+      });
+    });
+  }
+}
 
 class ProductEditBox extends StatefulWidget {
   const ProductEditBox({
@@ -732,13 +967,9 @@ class _ProductEditBoxState extends State<ProductEditBox> {
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      scrollable: true,
-      shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(30))),
-      content: SizedBox(
-        height: MediaQuery.of(context).size.height * .90,
-        width: MediaQuery.of(context).size.width * .92,
+    return Scaffold(
+      body: Container(
+        padding: EdgeInsets.all(20),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

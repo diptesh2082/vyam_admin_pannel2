@@ -14,6 +14,8 @@ import 'package:admin_panel_vyam/Screens/faq_details.dart';
 import 'package:admin_panel_vyam/Screens/feedback_dateils.dart';
 import 'package:admin_panel_vyam/Screens/payments_screen.dart';
 import 'package:admin_panel_vyam/Screens/push_n.dart';
+
+
 import 'package:admin_panel_vyam/services/image_picker_api.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -240,7 +242,6 @@ class _SideNavBar1State extends State<SideNavBar1> {
                 setState(() {});
               },
             ),
-
             ListTile(
               title: Text(
                 'Banners',
@@ -252,6 +253,7 @@ class _SideNavBar1State extends State<SideNavBar1> {
               },
             ),
 
+
             ListTile(
               title: Text(
                 'Push Notification',
@@ -262,6 +264,7 @@ class _SideNavBar1State extends State<SideNavBar1> {
                 setState(() {});
               },
             ),
+
 
 
 
@@ -278,7 +281,6 @@ class _SideNavBar1State extends State<SideNavBar1> {
                 FirebaseAuth.instance.signOut();
               },
             ),
-
           ],
         ),
       ),
@@ -298,8 +300,13 @@ class _SideNavBar1State extends State<SideNavBar1> {
           index == 12 ? const FaqDetails() : Container(),
           index == 13 ? const CancelationPage() : Container(),
           index == 14 ? const ReviewPage() : Container(),
-          index == 15 ? const BannerPage() : Container(),
+// <<<<<<< HEAD
           index == 16 ? const Push() : Container(),
+// =======
+          index == 15 ? const BannerPage() : Container(),
+
+          index == 16 ? const Push() : Container(),
+
         ],
       ),
     );
