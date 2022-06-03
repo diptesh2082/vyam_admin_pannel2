@@ -240,7 +240,6 @@ class _SideNavBar1State extends State<SideNavBar1> {
                 setState(() {});
               },
             ),
-
             ListTile(
               title: Text(
                 'Banners',
@@ -251,8 +250,6 @@ class _SideNavBar1State extends State<SideNavBar1> {
                 setState(() {});
               },
             ),
-
-
             ListTile(
               title: Text(
                 'Push Notifications',
@@ -275,7 +272,6 @@ class _SideNavBar1State extends State<SideNavBar1> {
                 FirebaseAuth.instance.signOut();
               },
             ),
-
           ],
         ),
       ),
@@ -295,11 +291,11 @@ class _SideNavBar1State extends State<SideNavBar1> {
           index == 12 ? const FaqDetails() : Container(),
           index == 13 ? const CancelationPage() : Container(),
           index == 14 ? const ReviewPage() : Container(),
-<<<<<<< HEAD
-          index == 15 ? const Push() : Container(),
-=======
+// <<<<<<< HEAD
+          index == 16 ? const Push() : Container(),
+// =======
           index == 15 ? const BannerPage() : Container(),
->>>>>>> 39301b603a430fc9803df29ba70b59135c783388
+// >>>>>>> 39301b603a430fc9803df29ba70b59135c783388
         ],
       ),
     );

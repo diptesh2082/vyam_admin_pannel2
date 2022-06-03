@@ -237,7 +237,7 @@ class _AmenetiesScreenState extends State<AmenetiesScreen> {
                               'gym_id': [],
                             },
                           ).then((snapshot) async {
-                            await uploadImageToAmeneties(image, amenityId);
+                            await uploadImageToAmenities(image, amenityId);
                           });
 
                           Navigator.pop(context);
@@ -359,7 +359,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                             'gym_id': [],
                           },
                         ).then((snapshot) async {
-                          await uploadImageToAmeneties(imagee, amm);
+                          await uploadImageToAmenities(imagee, amm);
                         });
 
                         Navigator.pop(context);
