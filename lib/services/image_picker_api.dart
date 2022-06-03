@@ -194,7 +194,7 @@ uploadImageToAmenities(XFile? pickedFile, String? id) async {
   }
 
 }
-
+final _firebaseStoragee = FirebaseStorage.instance.ref().child("product_details");
 
 uploadImageToProduct(XFile? pickedFile, String? id) async {
   var uploadedPhotoUrl = " ";
@@ -224,30 +224,31 @@ uploadImageToProduct(XFile? pickedFile, String? id) async {
   return uploadedPhotoUrl;
 }
 
-final _firebaseStorages = FirebaseStorage.instance.ref().child("amenities");
-uploadImageToAmenities(XFile? pickedFile, String? id) async {
-  if (kIsWeb) {
-    Reference _reference =
-        _firebaseStorages.child('amenities/${Path.basename(pickedFile!.path)}');
-    await _reference
-        .putData(
-      await pickedFile.readAsBytes(),
-      SettableMetadata(contentType: 'image/jpeg'),
-    )
-        .whenComplete(() async {
-      await _reference.getDownloadURL().then((value) async {
-        var uploadedPhotoUrl = value;
-        print(value);
-        await FirebaseFirestore.instance
-            .collection("amenities")
-            .doc(id)
-            .update({"image": value});
-      });
-    });
-  } else {
-//write a code for android or ios
-  }
-}
+// final _firebaseStorages = FirebaseStorage.instance.ref().child("amenities");
+//
+// uploadImageToAmenities(XFile? pickedFile, String? id) async {
+//   if (kIsWeb) {
+//     Reference _reference =
+//         _firebaseStorages.child('amenities/${Path.basename(pickedFile!.path)}');
+//     await _reference
+//         .putData(
+//       await pickedFile.readAsBytes(),
+//       SettableMetadata(contentType: 'image/jpeg'),
+//     )
+//         .whenComplete(() async {
+//       await _reference.getDownloadURL().then((value) async {
+//         var uploadedPhotoUrl = value;
+//         print(value);
+//         await FirebaseFirestore.instance
+//             .collection("amenities")
+//             .doc(id)
+//             .update({"image": value});
+//       });
+//     });
+//   } else {
+// //write a code for android or ios
+//   }
+// }
 
 uploadImageToPush(XFile? pickedFile ,String? id) async {
   if(kIsWeb){
