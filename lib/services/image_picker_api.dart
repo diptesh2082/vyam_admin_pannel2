@@ -111,8 +111,14 @@ class ImagePickerAPI {
   }
 }
 
-uploadImageToBanner(PickedFile? pickedFile, String? id) async {
+// <<<<<<< HEAD
+//
+// uploadImageToBanner(PickedFile? pickedFile, String? id) async {
+//   if (kIsWeb) {
+// =======
+uploadImageToBanner(XFile? pickedFile, String? id) async {
   if (kIsWeb) {
+// >>>>>>> 0a5609047c67f26f59a73d8ed566b1e865568769
     Reference _reference = _firebaseStorage
         .child('banner_details/${Path.basename(pickedFile!.path)}');
     await _reference
@@ -138,8 +144,14 @@ uploadImageToBanner(PickedFile? pickedFile, String? id) async {
   }
 }
 
-uploadImageToCateogry(PickedFile? pickedFile, String? id) async {
+// <<<<<<< HEAD
+// uploadImageToCateogry(PickedFile? pickedFile, String? id) async {
+//   if (kIsWeb) {
+// =======
+
+uploadImageToCateogry(XFile? pickedFile, String? id) async {
   if (kIsWeb) {
+// >>>>>>> 0a5609047c67f26f59a73d8ed566b1e865568769
     Reference _reference = _firebaseStorage
         .child('banner_details/${Path.basename(pickedFile!.path)}');
     await _reference
@@ -162,13 +174,19 @@ uploadImageToCateogry(PickedFile? pickedFile, String? id) async {
   }
 }
 
-final _firebaseStoragee =
-    FirebaseStorage.instance.ref().child("push_notifications");
-
-uploadImageToPush(PickedFile? pickedFile, String? id) async {
+// <<<<<<< HEAD
+// final _firebaseStoragee =
+//     FirebaseStorage.instance.ref().child("push_notifications");
+//
+// uploadImageToPush(PickedFile? pickedFile, String? id) async {
+// =======
+final _firebaseStorages = FirebaseStorage.instance.ref().child("amenities");
+uploadImageToAmenities(XFile? pickedFile, String? id) async {
+// >>>>>>> 0a5609047c67f26f59a73d8ed566b1e865568769
   if (kIsWeb) {
-    Reference _reference = _firebaseStoragee
-        .child('push_notifications/${Path.basename(pickedFile!.path)}');
+    Reference _reference =
+        _firebaseStorages.child('amenities/${Path.basename(pickedFile!.path)}');
+
     await _reference
         .putData(
       await pickedFile.readAsBytes(),
@@ -179,7 +197,7 @@ uploadImageToPush(PickedFile? pickedFile, String? id) async {
         var uploadedPhotoUrl = value;
         print(value);
         await FirebaseFirestore.instance
-            .collection("push_notifications")
+            .collection("amenities")
             .doc(id)
             .update({"image": value});
       });
@@ -189,6 +207,10 @@ uploadImageToPush(PickedFile? pickedFile, String? id) async {
   }
 }
 
+final _firebaseStoragee =
+    FirebaseStorage.instance.ref().child("product_details");
+
+// <<<<<<< HEAD
 uploadImageToProduct(PickedFile? pickedFile, String? id) async {
   var uploadedPhotoUrl = " ";
   if (kIsWeb) {
@@ -217,11 +239,39 @@ uploadImageToProduct(PickedFile? pickedFile, String? id) async {
   return uploadedPhotoUrl;
 }
 
-final _firebaseStorages = FirebaseStorage.instance.ref().child("amenities");
-uploadImageToAmenities(PickedFile? pickedFile, String? id) async {
+// final _firebaseStorages = FirebaseStorage.instance.ref().child("amenities");
+// uploadImageToAmenities(PickedFile? pickedFile, String? id) async {
+//   if (kIsWeb) {
+//     Reference _reference =
+//         _firebaseStorages.child('amenities/${Path.basename(pickedFile!.path)}');
+//     await _reference
+//         .putData(
+//       await pickedFile.readAsBytes(),
+//       SettableMetadata(contentType: 'image/jpeg'),
+//     )
+//         .whenComplete(() async {
+//       await _reference.getDownloadURL().then((value) async {
+//         var uploadedPhotoUrl = value;
+//         print(value);
+//         await FirebaseFirestore.instance
+//             .collection("amenities")
+//             .doc(id)
+//             .update({"image": value});
+//       });
+//     });
+//   } else {
+// //write a code for android or ios
+//   }
+// }
+// // =======
+// // >>>>>>> 0a5609047c67f26f59a73d8ed566b1e865568769
+final _firebaseStoraga =
+    FirebaseStorage.instance.ref().child("push_notifications");
+uploadImageToPush(PickedFile? pickedFile, String? id) async {
+  var uploadedPhotoUrl = " ";
   if (kIsWeb) {
-    Reference _reference =
-        _firebaseStorages.child('amenities/${Path.basename(pickedFile!.path)}');
+    Reference _reference = _firebaseStoraga
+        .child('push_notifications/${Path.basename(pickedFile!.path)}');
     await _reference
         .putData(
       await pickedFile.readAsBytes(),
@@ -229,10 +279,10 @@ uploadImageToAmenities(PickedFile? pickedFile, String? id) async {
     )
         .whenComplete(() async {
       await _reference.getDownloadURL().then((value) async {
-        var uploadedPhotoUrl = value;
+        uploadedPhotoUrl = value;
         print(value);
         await FirebaseFirestore.instance
-            .collection("amenities")
+            .collection("push_notifications")
             .doc(id)
             .update({"image": value});
       });
@@ -240,4 +290,5 @@ uploadImageToAmenities(PickedFile? pickedFile, String? id) async {
   } else {
 //write a code for android or ios
   }
+  return uploadedPhotoUrl;
 }

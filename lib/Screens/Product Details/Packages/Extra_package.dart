@@ -48,12 +48,20 @@ class _ExtraPackagesPageState extends State<ExtraPackagesPage> {
                   child: GestureDetector(
                     onTap: showAddbox,
                     child: Container(
-                      width: 120,
+                      width: 300,
                       decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(20.0)),
                       child: Row(
-                        children: const [
+                        children: [
+                          ElevatedButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: Icon(Icons.add)),
+                          SizedBox(
+                            width: 20,
+                          ),
                           Icon(Icons.add),
                           Text('Add Product',
                               style: TextStyle(fontWeight: FontWeight.w400)),

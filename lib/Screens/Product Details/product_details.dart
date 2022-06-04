@@ -357,6 +357,7 @@ class _ProductDetailsState extends State<ProductDetails> {
       DataCell(data != null ? Text(gymId) : const Text("")),
       DataCell(data != null ? Text(data['gym_owner'] ?? "") : const Text("")),
       DataCell(data != null ? Text(data['gender'] ?? "") : const Text("")),
+      // DataCell(data != null ? Text(data['gym_type'] ?? "") : const Text("")),
       DataCell(data != null
           ? GestureDetector(
               onTap: () async {
@@ -366,25 +367,76 @@ class _ProductDetailsState extends State<ProductDetails> {
           : const Text("")),
       DataCell(data != null ? Text(data['landmark'] ?? "") : const Text("")),
       DataCell(data != null ? Text(data['pincode'] ?? "") : const Text("")),
-      DataCell(const Text('Trainer'), onTap: (() {
-        Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => TrainerPage(tGymId: gymId),
-        ));
-      })),
-      DataCell(const Text('Package '), onTap: () {
-        Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => PackagesPage(
-            pGymId: gymId,
+      DataCell(
+        Center(
+          child: ElevatedButton(
+            onPressed: () async {
+              // Adding timings +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++---------------------------------
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => TrainerPage(tGymId: gymId),
+              ));
+            },
+            child: const Text("Trainers"),
+            style: ElevatedButton.styleFrom(
+                primary: Color.fromRGBO(245, 190, 0, 1)),
           ),
-        ));
-      }),
-      DataCell(const Text('Extra Package '), onTap: () {
-        Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => ExtraPackagesPage(
-            pGymId: gymId,
+        ),
+      ),
+      DataCell(
+        Center(
+          child: ElevatedButton(
+            onPressed: () async {
+              // Adding timings +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++---------------------------------
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => PackagesPage(
+                  pGymId: gymId,
+                ),
+              ));
+            },
+            child: const Text("Packages"),
+            style: ElevatedButton.styleFrom(primary: Colors.blue),
           ),
-        ));
-      }),
+        ),
+      ),
+      // DataCell(const Text('Package '), onTap: () {
+      //   Navigator.of(context).push(MaterialPageRoute(
+      //     builder: (context) => PackagesPage(
+      //       pGymId: gymId,
+      //     ),
+      //   ));
+      // }),
+      DataCell(
+        Center(
+          child: GestureDetector(
+            onTap: () async {
+              // Adding timings +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++---------------------------------
+
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => ExtraPackagesPage(
+                  pGymId: gymId,
+                ),
+              ));
+              // bool temp = online_pay;
+              // temp = !temp;
+              // DocumentReference documentReference = FirebaseFirestore.instance
+              //     .collection('product_details')
+              //     .doc(gymId);
+              // await documentReference
+              //     .update({'online_pay': temp})
+              //     .whenComplete(() => print("Legitimate toggled"))
+              //     .catchError((e) => print(e));
+            },
+            child: Container(child: Text("Extra Packages")),
+          ),
+        ),
+        //     const Text('Extra Package '), onTap: () {
+        //   Navigator.of(context).push(MaterialPageRoute(
+        //     builder: (context) => ExtraPackagesPage(
+        //       pGymId: gymId,
+        //     ),
+        //   ));
+        // }
+      ),
       DataCell(
         Row(
           children: [
@@ -594,6 +646,7 @@ class _ShowAddBoxState extends State<ShowAddBox> {
   var multipic;
   var impath;
   var image;
+  String gymtype = "Yoga";
   @override
   void initState() {
     productStream = FirebaseFirestore.instance.collection("product_details");
@@ -689,6 +742,24 @@ class _ShowAddBoxState extends State<ShowAddBox> {
               addcontroller: _addpincode,
               hinttext: "Pincode",
             ),
+            DropdownButton(
+                value: gymtype,
+                items: [
+                  DropdownMenuItem(
+                    child: Text("ZUMBA"),
+                    value: "Zumba",
+                  ),
+                  DropdownMenuItem(
+                    child: Text("YOGA"),
+                    value: "Yoga",
+                  ),
+                  DropdownMenuItem(child: Text("GYM"), value: "GYM"),
+                ],
+                onChanged: (value) {
+                  setState(() {
+                    gymtype = value as String;
+                  });
+                }),
             SizedBox(height: 15),
             Padding(
               padding: const EdgeInsets.all(8.0),
@@ -820,6 +891,7 @@ class _ShowAddBoxState extends State<ShowAddBox> {
                         "token": [],
                         "view_count": 0.0,
                         "gym_status": false,
+                        "gym_type": gymtype,
                       },
                       // ).then((snapshot) async {
                       //   await uploadImageToStorage(dic, _addgymownerid.text);
