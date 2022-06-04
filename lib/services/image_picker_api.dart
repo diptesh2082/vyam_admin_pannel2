@@ -110,15 +110,21 @@ class ImagePickerAPI {
     }
   }
 }
+// <<<<<<< HEAD
 
 // <<<<<<< HEAD
 //
 // uploadImageToBanner(PickedFile? pickedFile, String? id) async {
 //   if (kIsWeb) {
 // =======
+// uploadImageToBanner(XFile? pickedFile, String? id) async {
+//   if (kIsWeb) {
+// >>>>>>> 0a5609047c67f26f59a73d8ed566b1e865568769
+// =======
+
 uploadImageToBanner(XFile? pickedFile, String? id) async {
   if (kIsWeb) {
-// >>>>>>> 0a5609047c67f26f59a73d8ed566b1e865568769
+// >>>>>>> 419576ed132f1f7631adea2357dfe8fbddca83b9
     Reference _reference = _firebaseStorage
         .child('banner_details/${Path.basename(pickedFile!.path)}');
     await _reference
@@ -145,13 +151,18 @@ uploadImageToBanner(XFile? pickedFile, String? id) async {
 }
 
 // <<<<<<< HEAD
-// uploadImageToCateogry(PickedFile? pickedFile, String? id) async {
+// // <<<<<<< HEAD
+// // uploadImageToCateogry(PickedFile? pickedFile, String? id) async {
+// //   if (kIsWeb) {
+// // =======
+//
+// uploadImageToCateogry(XFile? pickedFile, String? id) async {
 //   if (kIsWeb) {
+// // >>>>>>> 0a5609047c67f26f59a73d8ed566b1e865568769
 // =======
-
 uploadImageToCateogry(XFile? pickedFile, String? id) async {
   if (kIsWeb) {
-// >>>>>>> 0a5609047c67f26f59a73d8ed566b1e865568769
+// >>>>>>> 419576ed132f1f7631adea2357dfe8fbddca83b9
     Reference _reference = _firebaseStorage
         .child('banner_details/${Path.basename(pickedFile!.path)}');
     await _reference
@@ -175,14 +186,20 @@ uploadImageToCateogry(XFile? pickedFile, String? id) async {
 }
 
 // <<<<<<< HEAD
-// final _firebaseStoragee =
-//     FirebaseStorage.instance.ref().child("push_notifications");
-//
-// uploadImageToPush(PickedFile? pickedFile, String? id) async {
+// // <<<<<<< HEAD
+// // final _firebaseStoragee =
+// //     FirebaseStorage.instance.ref().child("push_notifications");
+// //
+// // uploadImageToPush(PickedFile? pickedFile, String? id) async {
+// // =======
+// final _firebaseStorages = FirebaseStorage.instance.ref().child("amenities");
+// uploadImageToAmenities(XFile? pickedFile, String? id) async {
+// // >>>>>>> 0a5609047c67f26f59a73d8ed566b1e865568769
 // =======
+
 final _firebaseStorages = FirebaseStorage.instance.ref().child("amenities");
 uploadImageToAmenities(XFile? pickedFile, String? id) async {
-// >>>>>>> 0a5609047c67f26f59a73d8ed566b1e865568769
+// >>>>>>> 419576ed132f1f7631adea2357dfe8fbddca83b9
   if (kIsWeb) {
     Reference _reference =
         _firebaseStorages.child('amenities/${Path.basename(pickedFile!.path)}');
@@ -209,9 +226,16 @@ uploadImageToAmenities(XFile? pickedFile, String? id) async {
 
 final _firebaseStoragee =
     FirebaseStorage.instance.ref().child("product_details");
-
+//
 // <<<<<<< HEAD
-uploadImageToProduct(PickedFile? pickedFile, String? id) async {
+// final _firebaseStoragee =
+//     FirebaseStorage.instance.ref().child("product_details");
+//
+// // <<<<<<< HEAD
+// uploadImageToProduct(PickedFile? pickedFile, String? id) async {
+// =======
+uploadImageToProduct(XFile? pickedFile, String? id) async {
+// >>>>>>> 419576ed132f1f7631adea2357dfe8fbddca83b9
   var uploadedPhotoUrl = " ";
   if (kIsWeb) {
     Reference _reference = _firebaseStoragee
@@ -240,7 +264,12 @@ uploadImageToProduct(PickedFile? pickedFile, String? id) async {
 }
 
 // final _firebaseStorages = FirebaseStorage.instance.ref().child("amenities");
-// uploadImageToAmenities(PickedFile? pickedFile, String? id) async {
+// <<<<<<< HEAD
+// // uploadImageToAmenities(PickedFile? pickedFile, String? id) async {
+// =======
+// //
+// uploadImageToAmenities(XFile? pickedFile, String? id) async {
+// >>>>>>> 419576ed132f1f7631adea2357dfe8fbddca83b9
 //   if (kIsWeb) {
 //     Reference _reference =
 //         _firebaseStorages.child('amenities/${Path.basename(pickedFile!.path)}');
@@ -263,14 +292,21 @@ uploadImageToProduct(PickedFile? pickedFile, String? id) async {
 // //write a code for android or ios
 //   }
 // }
+// <<<<<<< HEAD
 // // =======
-// // >>>>>>> 0a5609047c67f26f59a73d8ed566b1e865568769
-final _firebaseStoraga =
-    FirebaseStorage.instance.ref().child("push_notifications");
-uploadImageToPush(PickedFile? pickedFile, String? id) async {
-  var uploadedPhotoUrl = " ";
+// // // >>>>>>> 0a5609047c67f26f59a73d8ed566b1e865568769
+// final _firebaseStoraga =
+//     FirebaseStorage.instance.ref().child("push_notifications");
+// uploadImageToPush(PickedFile? pickedFile, String? id) async {
+var uploadedPhotoUrl = " ";
+//   if (kIsWeb) {
+//     Reference _reference = _firebaseStoraga
+// // =======
+
+uploadImageToPush(XFile? pickedFile, String? id) async {
   if (kIsWeb) {
-    Reference _reference = _firebaseStoraga
+    Reference _reference = _firebaseStorage
+// >>>>>>> 419576ed132f1f7631adea2357dfe8fbddca83b9
         .child('push_notifications/${Path.basename(pickedFile!.path)}');
     await _reference
         .putData(
@@ -281,14 +317,26 @@ uploadImageToPush(PickedFile? pickedFile, String? id) async {
       await _reference.getDownloadURL().then((value) async {
         uploadedPhotoUrl = value;
         print(value);
+// <<<<<<< HEAD
+//         await FirebaseFirestore.instance
+//             .collection("push_notifications")
+// =======
         await FirebaseFirestore.instance
             .collection("push_notifications")
+// >>>>>>> 419576ed132f1f7631adea2357dfe8fbddca83b9
             .doc(id)
-            .update({"image": value});
+            .update({
+          //"display_picture": value,
+          "image": value
+        });
       });
     });
   } else {
 //write a code for android or ios
   }
+// <<<<<<< HEAD
   return uploadedPhotoUrl;
 }
+// =======
+
+// >>>>>>> 419576ed132f1f7631adea2357dfe8fbddca83b9

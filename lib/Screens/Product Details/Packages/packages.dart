@@ -16,10 +16,37 @@ class PackagesPage extends StatefulWidget {
 
 class _PackagesPageState extends State<PackagesPage> {
   CollectionReference? packageStream;
+  var catagory;
+  var drop=[];
+  var catagory_type;
+  void dropDownPackage(String? selecetValue){
+    // if(selecetValue is String){
+    setState(() {
+      catagory_type=selecetValue;
+    });
+    // }
+  }
+  // bool loadig=true;
+  // catagoryStream()async{
+  //   await FirebaseFirestore.instance.collection("category").snapshots()
+  //       .listen((event) {
+  //         if(event.docs.isNotEmpty){
+  //           catagory=event.docs;
+  //           catagory.forEach((event){
+  //             drop.add( event["name"].toString().toLowerCase());
+  //             setState(() {
+  //               loadig=false;
+  //             });
+  //             // DropdownMenuItem(child: Text(event["name"].toString()),value: event["name"].toString().toLowerCase(),),
+  //           });
+  //         }
+  //   });
+  // }
 
   @override
   void initState() {
     super.initState();
+    // catagoryStream();
     packageStream = FirebaseFirestore.instance
         .collection('product_details')
         .doc(widget.pGymId)
@@ -37,7 +64,11 @@ class _PackagesPageState extends State<PackagesPage> {
   @override
   Widget build(BuildContext context) {
     print(finalPackID);
-    return Scaffold(
+    return
+      // loadig?
+      //   const Center(child: CircularProgressIndicator())
+      //   :
+      Scaffold(
       body: SafeArea(
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 5),
@@ -220,6 +251,20 @@ class _PackagesPageState extends State<PackagesPage> {
                         hinttext: "validity", addcontroller: _validity),
                     customTextField(
                         hinttext: "price", addcontroller: _price),
+                    // Container(
+                    //   color: Colors.yellowAccent,
+                    //   width: 280,
+                    //   child: DropdownButton(
+                    //       hint: Text("bgg"),
+                    //       items: catagory.map<DropdownMenuItem<String>>((DocumentSnapshot value){
+                    //         return DropdownMenuItem(child: Text(value["name"]),value:value["name"],);
+                    //       }).toList(),
+                    //       // const [
+                    //       //   DropdownMenuItem(child: Text("pay per session"),value: "pay per session",),
+                    //       //   DropdownMenuItem(child: Text("package"),value: "package",),
+                    //       // ],
+                    //       onChanged:dropDownPackage ),
+                    // ),
                     Center(
                       child: ElevatedButton(
                         onPressed: () async {

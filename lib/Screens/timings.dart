@@ -34,6 +34,9 @@ class _TimingsState extends State<Timings> {
   Widget build(BuildContext context) {
     print(finalPackID);
     return Scaffold(
+      appBar: AppBar(
+        title: Text(' '),
+      ),
       body: SafeArea(
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 5),

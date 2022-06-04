@@ -80,30 +80,30 @@ class _TrackingScreenState extends State<TrackingScreen> {
                               //     style: TextStyle(fontWeight: FontWeight.w600),
                               //   ),
                               // ),
-                              DataColumn(
-                                label: Text(
-                                  'Total Days',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
-                              ),
-                              DataColumn(
-                                label: Text(
-                                  'Tax Pay',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
-                              ),
+                              // DataColumn(
+                              //   label: Text(
+                              //     'Total Days',
+                              //     style: TextStyle(fontWeight: FontWeight.w600),
+                              //   ),
+                              // ),
+                              // DataColumn(
+                              //   label: Text(
+                              //     'Tax Pay',
+                              //     style: TextStyle(fontWeight: FontWeight.w600),
+                              //   ),
+                              // ),
                               DataColumn(
                                 label: Text(
                                   'Plan End',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
-                              DataColumn(
-                                label: Text(
-                                  'Payment done',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
-                              ),
+                              // DataColumn(
+                              //   label: Text(
+                              //     'Payment done',
+                              //     style: TextStyle(fontWeight: FontWeight.w600),
+                              //   ),
+                              // ),
                               DataColumn(
                                 label: Text(
                                   'Package Type',
@@ -116,12 +116,12 @@ class _TrackingScreenState extends State<TrackingScreen> {
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
-                              DataColumn(
-                                label: Text(
-                                  'Gym Name',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
-                              ),
+                              // DataColumn(
+                              //   label: Text(
+                              //     'Gym Name',
+                              //     style: TextStyle(fontWeight: FontWeight.w600),
+                              //   ),
+                              // ),
                               // DataColumn(
                               //   label: Text(
                               //     'Gym Address',
@@ -236,33 +236,34 @@ class _TrackingScreenState extends State<TrackingScreen> {
       // DataCell(data['total_price'] != null
       //     ? Text(data['total_price'].toString())
       //     : const Text("")),
-      DataCell(data['totalDays'] != null
-          ? Text(data['totalDays'].toString())
-          : const Text("")),
-      DataCell(data['tax_pay'] != null
-          ? Text(data['tax_pay'].toString())
-          : const Text("")),
+      // DataCell(data['totalDays'] != null
+      //     ? Text(data['totalDays'].toString())
+      //     : const Text("")),
+      // DataCell(data['tax_pay'] != null
+      //     ? Text(data['tax_pay'].toString())
+      //     : const Text("")),
       DataCell(data['plan_end_duration'] != null
           ? Text(durationEnd)
           : const Text("")),
-      DataCell(Center(
-        child: ElevatedButton(
-          onPressed: () async {
-            bool temp = paymentDoneBool;
-            temp = !temp;
-            DocumentReference documentReference = FirebaseFirestore.instance
-                .collection('bookings')
-                .doc(bookingId);
-            await documentReference
-                .update({'payment_done': temp})
-                .whenComplete(() => print("Payment done updated"))
-                .catchError((e) => print(e));
-          },
-          child: Text(paymentDoneBool.toString()),
-          style: ElevatedButton.styleFrom(
-              primary: paymentDoneBool ? Colors.green : Colors.red),
-        ),
-      )),
+// <<<<<<< HEAD
+//       DataCell(Center(
+//         child: ElevatedButton(
+//           onPressed: () async {
+//             bool temp = paymentDoneBool;
+//             temp = !temp;
+//             DocumentReference documentReference = FirebaseFirestore.instance
+//                 .collection('bookings')
+//                 .doc(bookingId);
+//             await documentReference
+//                 .update({'payment_done': temp})
+//                 .whenComplete(() => print("Payment done updated"))
+//                 .catchError((e) => print(e));
+//           },
+//           child: Text(paymentDoneBool.toString()),
+//           style: ElevatedButton.styleFrom(
+//               primary: paymentDoneBool ? Colors.green : Colors.red),
+//         ),
+//       )),
       DataCell(
         Center(
           child: ElevatedButton(
@@ -280,10 +281,34 @@ class _TrackingScreenState extends State<TrackingScreen> {
         // ? Text(data['package_type'].toString())
         // : const Text("")
       ),
+// =======
+      // DataCell(Center(
+      //   child: ElevatedButton(
+      //     onPressed: () async {
+      //       bool temp = paymentDoneBool;
+      //       temp = !temp;
+      //       DocumentReference documentReference = FirebaseFirestore.instance
+      //           .collection('bookings')
+      //           .doc(bookingId);
+      //       await documentReference
+      //           .update({'payment_done': temp})
+      //           .whenComplete(() => print("Payment done updated"))
+      //           .catchError((e) => print(e));
+      //     },
+      //     child: Text(paymentDoneBool.toString()),
+      //     style: ElevatedButton.styleFrom(
+      //         primary: paymentDoneBool ? Colors.green : Colors.red),
+      //   ),
+      // ),
+      // ),
+      // DataCell(data['package_type'] != null
+      //     ? Text(data['package_type'].toString())
+      //     : const Text("")),
+// >>>>>>> 419576ed132f1f7631adea2357dfe8fbddca83b9
       DataCell(data['order_date'] != null ? Text(orderDate) : const Text("")),
-      DataCell(data['gym_details']['name'] != null
-          ? Text(data['gym_details']['name'].toString())
-          : const Text("")),
+      // DataCell(data['gym_details']['name'] != null
+      //     ? Text(data['gym_details']['name'].toString())
+      //     : const Text("")),
       // DataCell(data['gym_address'] != null
       //     ? Text(data['gym_address'].toString())
       //     : const Text("")),

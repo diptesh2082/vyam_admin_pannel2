@@ -45,26 +45,32 @@ class _CouponState extends State<Coupon> {
               children: [
                 Padding(
                   padding: const EdgeInsets.only(top: 8.0, left: 8.0),
-                  child: GestureDetector(
-                    onTap: () {
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      textStyle:
+                      const TextStyle(fontSize: 15 ),
+                    ),
+                    onPressed: () {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) => CouponScreen()));
                     },
-                    child: Container(
-                      width: 120,
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(20.0)),
-                      child: Row(
-                        children: const [
-                          Icon(Icons.add),
-                          Text('Add Coupon',
-                              style: TextStyle(fontWeight: FontWeight.w400)),
-                        ],
-                      ),
-                    ),
+                    child:
+                    Text('Add Coupon'),
+                    // Container(
+                    //   width: 120,
+                    //   decoration: BoxDecoration(
+                    //       color: Colors.white,
+                    //       borderRadius: BorderRadius.circular(20.0)),
+                    //   child: Row(
+                    //     children: const [
+                    //       Icon(Icons.add),
+                    //       Text('Add Coupon',
+                    //           style: TextStyle(fontWeight: FontWeight.w400)),
+                    //     ],
+                    //   ),
+                    // ),
                   ),
                 ),
                 Center(
@@ -483,6 +489,10 @@ class _ProductEditBoxState extends State<ProductEditBox> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white10,
+      appBar: AppBar(
+        title: Text('Edit Coupon'),
+      ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

@@ -36,6 +36,7 @@ class _UserInformationState extends State<UserInformation> {
   var xs = "Yes";
   Widget build(BuildContext context) {
     return Scaffold(
+
       body: SafeArea(
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 5),
@@ -48,26 +49,31 @@ class _UserInformationState extends State<UserInformation> {
               children: [
                 Padding(
                   padding: const EdgeInsets.only(top: 8.0, left: 8.0),
-                  child: GestureDetector(
-                    onTap: () {
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      textStyle:
+                      const TextStyle(fontSize: 15 ),
+                    ),
+                    onPressed: () {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) => detailsadd()));
                     },
-                    child: Container(
-                      width: 90,
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(20.0)),
-                      child: Row(
-                        children: const [
-                          Icon(Icons.add),
-                          Text('Add User',
-                              style: TextStyle(fontWeight: FontWeight.w400)),
-                        ],
-                      ),
-                    ),
+                     child: Text('Add User'),
+                    // Container(
+                    //   width: 90,
+                    //   decoration: BoxDecoration(
+                    //       color: Colors.white,
+                    //       borderRadius: BorderRadius.circular(20.0)),
+                    //   child: Row(
+                    //     children: const [
+                    //       Icon(Icons.add),
+                    //       Text('Add User',
+                    //           style: TextStyle(fontWeight: FontWeight.w400)),
+                    //     ],
+                    //   ),
+                    // ),
                   ),
                 ),
                 Center(
@@ -456,6 +462,10 @@ class _EditBoxState extends State<EditBox> {
           Navigator.pop(context);
         },
         child: Scaffold(
+          appBar: AppBar(
+            title: Text('Edit User Details'),
+          ),
+          backgroundColor: Colors.white10,
           body: Container(
             padding: EdgeInsets.all(20),
             child: SingleChildScrollView(
@@ -779,6 +789,10 @@ class _detailsaddState extends State<detailsadd> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white10,
+      appBar: AppBar(
+        title: Text('Add User Details'),
+      ),
       body: SingleChildScrollView(
         child: Container(
           padding: EdgeInsets.all(20),

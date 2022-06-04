@@ -2,6 +2,7 @@ import 'dart:html';
 import 'dart:io';
 // import 'dart:html';
 import 'dart:math';
+import 'package:admin_panel_vyam/Screens/banners.dart';
 import 'package:admin_panel_vyam/Screens/timings.dart';
 import 'package:admin_panel_vyam/routing/showadd.dart';
 import 'package:get/get.dart';
@@ -40,6 +41,7 @@ class _ProductDetailsState extends State<ProductDetails> {
       .toString();
   CollectionReference? productStream;
   var image;
+  String gender = 'male';
 
 // <<<<<<< HEAD
 //   File? image;
@@ -110,41 +112,54 @@ class _ProductDetailsState extends State<ProductDetails> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 8.0, left: 8.0),
-                  child: GestureDetector(
-                    onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => ShowAddBox(),
-                      ));
-                    },
-                    child: Container(
-                      width: 200,
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(20.0)),
-                      child: Row(
-                        children: [
-                          GestureDetector(
-                              onTap: () {
-                                Navigator.pop(context);
-                              },
-                              child: const Icon(Icons.arrow_back_ios_outlined)),
-                          const SizedBox(
-                            width: 20,
-                          ),
-                          Row(
-                            children: const [
-                              Icon(Icons.add),
-                              Text('Add Product',
-                                  style:
-                                      TextStyle(fontWeight: FontWeight.w400)),
-                            ],
-                          ),
-                        ],
+                Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(top: 8.0, left: 8.0),
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          //padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 20),
+                          textStyle: const TextStyle(fontSize: 15),
+                        ),
+                        onPressed: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => ShowAddBox(),
+                          ));
+                        },
+                        child: Text('Add Product'),
+                        // Container(
+                        //   width: 200,
+                        //   decoration: BoxDecoration(
+                        //       color: Colors.white,
+                        //       borderRadius: BorderRadius.circular(20.0)),
+                        //   child: Row(
+                        //     children: [
+                        //       const SizedBox(
+                        //         width: 20,
+                        //       ),
+                        //       Row(
+                        //         children: const [
+                        //           Icon(Icons.add),
+                        //           Text('Add Product',
+                        //               style:
+                        //                   TextStyle(fontWeight: FontWeight.w400)),
+                        //         ],
+                        //       ),
+                        //     ],
+                        //   ),
+                        // ),
                       ),
                     ),
-                  ),
+                    Spacer(),
+                    Padding(
+                        padding: const EdgeInsets.only(top: 8.0, left: 8.0),
+                        child: IconButton(
+                          onPressed: () {
+                            setState(() {});
+                          },
+                          icon: const Icon(Icons.search),
+                        )),
+                  ],
                 ),
                 Center(
                   child: StreamBuilder<QuerySnapshot>(
@@ -194,12 +209,12 @@ class _ProductDetailsState extends State<ProductDetails> {
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
-                              DataColumn(
-                                label: Text(
-                                  'Location',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
-                              ),
+                              // DataColumn(
+                              //   label: Text(
+                              //     'Location',
+                              //     style: TextStyle(fontWeight: FontWeight.w600),
+                              //   ),
+                              // ),
                               DataColumn(
                                 label: Text(
                                   'Landmark',
@@ -351,20 +366,23 @@ class _ProductDetailsState extends State<ProductDetails> {
     bool status = data["gym_status"];
     bool online_pay = data["online_pay"];
     String loctext = "${loc.latitude},${loc.longitude}";
+    String x;
+    String y;
     return DataRow(cells: [
       DataCell(data != null ? Text(data['name'] ?? "") : const Text("")),
       DataCell(data != null ? Text(data['address'] ?? "") : const Text("")),
       DataCell(data != null ? Text(gymId) : const Text("")),
       DataCell(data != null ? Text(data['gym_owner'] ?? "") : const Text("")),
       DataCell(data != null ? Text(data['gender'] ?? "") : const Text("")),
+// <<<<<<< HEAD
       // DataCell(data != null ? Text(data['gym_type'] ?? "") : const Text("")),
-      DataCell(data != null
-          ? GestureDetector(
-              onTap: () async {
-                await MapsLaucherApi().launchMaps(loc.latitude, loc.longitude);
-              },
-              child: Text(loctext))
-          : const Text("")),
+      // DataCell(data != null
+      //     ? GestureDetector(
+      //         onTap: () async {
+      //           await MapsLaucherApi().launchMaps(loc.latitude, loc.longitude);
+      //         },
+      //         child: Text(loctext))
+      //     : const Text("")),
       DataCell(data != null ? Text(data['landmark'] ?? "") : const Text("")),
       DataCell(data != null ? Text(data['pincode'] ?? "") : const Text("")),
       DataCell(
@@ -398,13 +416,39 @@ class _ProductDetailsState extends State<ProductDetails> {
           ),
         ),
       ),
+// =======
+      // DataCell(data != null
+      //     ? GestureDetector(
+      //         onTap: () async {
+      //           await MapsLaucherApi().launchMaps(loc.latitude, loc.longitude);
+      //         },
+      //         child: Text(loctext))
+      //: const Text("")),
+      // DataCell(data != null ? Text(data['landmark'] ?? "") : const Text("")),
+      // DataCell(data != null ? Text(data['pincode'] ?? "") : const Text("")),
+
+      // DataCell(const Text('Trainer',), onTap: (() {
+      //   Navigator.of(context).push(MaterialPageRoute(
+      //     builder: (context) => TrainerPage(tGymId: gymId),
+      //   ));
+      // })),
+
+//       DataCell(const Text('Package '), onTap: () {
+//         Navigator.of(context).push(MaterialPageRoute(
+//           builder: (context) => PackagesPage(
+//             pGymId: gymId,
+// >>>>>>> 419576ed132f1f7631adea2357dfe8fbddca83b9
+//           ),
+//         ),
+//       ),
       // DataCell(const Text('Package '), onTap: () {
       //   Navigator.of(context).push(MaterialPageRoute(
       //     builder: (context) => PackagesPage(
       //       pGymId: gymId,
       //     ),
       //   ));
-      // }),
+      // }
+      // ),
       DataCell(
         Center(
           child: GestureDetector(
@@ -500,12 +544,14 @@ class _ProductDetailsState extends State<ProductDetails> {
       //     ),
       //   ),
       // ),
+
       DataCell(
         Center(
           child: ElevatedButton(
             onPressed: () async {
               bool temp = status;
               temp = !temp;
+
               DocumentReference documentReference = FirebaseFirestore.instance
                   .collection('product_details')
                   .doc(gymId);
@@ -514,7 +560,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                   .whenComplete(() => print("Legitimate toggled"))
                   .catchError((e) => print(e));
             },
-            child: Text(status.toString()),
+            child: Text(x = status ? 'YES' : 'NO'),
             style: ElevatedButton.styleFrom(
                 primary: status ? Colors.green : Colors.red),
           ),
@@ -535,7 +581,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                   .whenComplete(() => print("Legitimate toggled"))
                   .catchError((e) => print(e));
             },
-            child: Text(legit.toString()),
+            child: Text(y = legit ? 'YES' : 'NO'),
             style: ElevatedButton.styleFrom(
                 primary: legit ? Colors.green : Colors.red),
           ),
@@ -646,7 +692,12 @@ class _ShowAddBoxState extends State<ShowAddBox> {
   var multipic;
   var impath;
   var image;
+// <<<<<<< HEAD
   String gymtype = "Yoga";
+// =======
+
+  var selectedValue = "MALE";
+// >>>>>>> 419576ed132f1f7631adea2357dfe8fbddca83b9
   @override
   void initState() {
     productStream = FirebaseFirestore.instance.collection("product_details");
@@ -655,275 +706,315 @@ class _ShowAddBoxState extends State<ShowAddBox> {
 
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Container(
-      padding: EdgeInsets.all(50),
-      child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 8.0, top: 2, right: 8),
-              child: const Text(
-                'Add Records',
-                style: TextStyle(
-                    fontFamily: 'poppins',
-                    fontWeight: FontWeight.w600,
-                    fontSize: 14),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text('Name:',
-                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
-            ),
-            customTextField(hinttext: "Name", addcontroller: _addname),
-            SizedBox(height: 15),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text('Address:',
-                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
-            ),
-            customTextField(hinttext: "Address", addcontroller: _addaddress),
-            SizedBox(height: 15),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text('Gym Owner Id:',
-                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
-            ),
-            customTextField(
-                hinttext: "Gym Owner Id", addcontroller: _addgymownerid),
-            SizedBox(height: 15),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text('Branch:',
-                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
-            ),
-            customTextField(
-              addcontroller: _branchController,
-              hinttext: "branch",
-            ),
-            SizedBox(height: 15),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text('Gender:',
-                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
-            ),
-            customTextField(hinttext: "Gender", addcontroller: _addgender),
-            SizedBox(height: 15),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text('Latitude:',
-                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
-            ),
-            customTextField(
-                hinttext: 'Latitude', addcontroller: _latitudeController),
-            SizedBox(height: 15),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text('Longitude:',
-                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
-            ),
-            customTextField(
-                hinttext: 'Longitude', addcontroller: _longitudeController),
-            SizedBox(height: 15),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text('Landmark:',
-                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
-            ),
-            customTextField(hinttext: "Landmark", addcontroller: _addlandmark),
-            SizedBox(height: 15),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text('Pincode:',
-                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
-            ),
-            customTextField(
-              addcontroller: _addpincode,
-              hinttext: "Pincode",
-            ),
-            DropdownButton(
-                value: gymtype,
-                items: [
-                  DropdownMenuItem(
-                    child: Text("ZUMBA"),
-                    value: "Zumba",
-                  ),
-                  DropdownMenuItem(
-                    child: Text("YOGA"),
-                    value: "Yoga",
-                  ),
-                  DropdownMenuItem(child: Text("GYM"), value: "GYM"),
-                ],
-                onChanged: (value) {
-                  setState(() {
-                    gymtype = value as String;
-                  });
-                }),
-            SizedBox(height: 15),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text('Description:',
-                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
-            ),
-            customTextField(
-              addcontroller: _descriptionCon,
-              hinttext: "Description",
-            ),
-            SizedBox(height: 15),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text('Number:',
-                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
-            ),
-            customTextField(
-              addcontroller: _numberCon,
-              hinttext: "Number",
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Text(
-              'Upload Display Image',
-              style:
-                  TextStyle(color: Colors.black, fontWeight: FontWeight.w700),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Row(
-              children: [
-                ElevatedButton(
-                  onPressed: () async {
-                    // dic = await chooseImage();
-                    image = uploadToStroagees();
-                  },
-                  child: Text(
-                    'Upload Gym Image',
-                    style: TextStyle(
-                        color: Colors.white, fontWeight: FontWeight.w700),
-                  ),
-                ),
-                SizedBox(
-                  width: 20,
-                ),
-                image != null
-                    ? Image(
-                        image: NetworkImage('$image'),
-                        height: 200,
-                        width: 200,
-                      )
-                    : Container(
-                        color: Colors.black,
-                        height: 200,
-                        width: 200,
-                      )
-              ],
-            ),
-            SizedBox(height: 10),
-
-            // Text(
-            //   'Upload Display Image',
-            //   style:
-            //       TextStyle(color: Colors.black, fontWeight: FontWeight.w700),
-            // ),
-            // SizedBox(
-            //   height: 20,
-            // ),
-            // ElevatedButton(
-            //   onPressed: () async {
-            //     multipic = await multiimagepickerr();
-            //     impath = await multiimageuploader(multipic);
-            //   },
-            //   child: Text(
-            //     'Upload Image',
-            //     style:
-            //         TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
-            //   ),
-            // ),
-            // // Image(
-            // //   image: FileImage(vall, scale: 4),
-            // // ),
-            // SizedBox(
-            //   height: 20,
-            // ),
-
-            Row(
-              children: [
-                ElevatedButton(
-                  onPressed: () async {
-                    print(dic);
-                    GeoPoint dataForGeoPint = GeoPoint(
-                        double.parse(_latitudeController.text),
-                        double.parse(_longitudeController.text));
-
-                    await matchID(
-                        newId: _addgymownerid.text,
-                        matchStream: productStream,
-                        idField: 'gym_id');
-                    FirebaseFirestore.instance
-                        .collection('product_details')
-                        .doc(_addgymownerid.text)
-                        .set(
-                      {
-                        'address': _addaddress.text,
-                        'gender': _addgender.text,
-                        'name': _addname.text,
-                        'pincode': _addpincode.text,
-                        'location': dataForGeoPint,
-                        'gym_id': _addgymownerid.text,
-                        'gym_owner': _addgymownerid.text,
-                        'landmark': _addlandmark.text,
-                        'total_booking': "",
-                        'total_sales': "",
-                        'legit': false,
-                        "branch": _branchController.text,
-                        "description": _descriptionCon.text,
-                        "display_picture": image,
-                        "images": [],
-                        "locality": "",
-                        "number": _numberCon.text,
-                        "online_pay": true,
-                        "payment_due": "",
-                        "rating": 0.0,
-                        "service": [],
-                        "timings": [],
-                        "token": [],
-                        "view_count": 0.0,
-                        "gym_status": false,
-                        "gym_type": gymtype,
-                      },
-                      // ).then((snapshot) async {
-                      //   await uploadImageToStorage(dic, _addgymownerid.text);
-                      //   await FirebaseFirestore.instance
-                      //       .collection('product_details')
-                      //       .doc(_addgymownerid.text)
-                      //       .update({'images': impath});
-                      // });
-                    );
-                    Navigator.pop(context);
-                  },
-                  child: const Text('Done'),
-                ),
-                SizedBox(
-                  width: 50,
-                ),
-                ElevatedButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: Text('Close')),
-                // ElevatedButton(
-                //     onPressed: () {
-                //       print(impath);
-                //     },
-                //     child: Text('Press Me'))
-              ],
-            ),
-          ],
+        backgroundColor: Colors.white10,
+        appBar: AppBar(
+          title: const Text('Add Vendor Details'),
         ),
-      ),
-    ));
+        body: Container(
+          padding: EdgeInsets.all(50),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 8.0, top: 2, right: 8),
+                  child: const Text(
+                    'Add Records',
+                    style: TextStyle(
+                        fontFamily: 'poppins',
+                        fontWeight: FontWeight.w600,
+                        fontSize: 14),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text('Name:',
+                      style:
+                          TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
+                ),
+                customTextField(hinttext: "Name", addcontroller: _addname),
+                SizedBox(height: 15),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text('Address:',
+                      style:
+                          TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
+                ),
+                customTextField(
+                    hinttext: "Address", addcontroller: _addaddress),
+                SizedBox(height: 15),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text('Gym Owner Id:',
+                      style:
+                          TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
+                ),
+                customTextField(
+                    hinttext: "Gym Owner Id", addcontroller: _addgymownerid),
+                const SizedBox(height: 15),
+                const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Text('Branch:',
+                      style:
+                          TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
+                ),
+                customTextField(
+                  addcontroller: _branchController,
+                  hinttext: "branch",
+                ),
+                SizedBox(height: 15),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text('Gender:',
+                      style:
+                          TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
+                ),
+                //customTextField(hinttext: "Gender", addcontroller: _addgender),
+
+                Container(
+                  child: DropdownButton(
+                      value: selectedValue,
+                      items: [
+                        DropdownMenuItem(
+                          child: Text("Male"),
+                          value: "MALE",
+                        ),
+                        DropdownMenuItem(
+                          child: Text("Female"),
+                          value: "FEMALE",
+                        ),
+                        DropdownMenuItem(
+                            child: Text("Unisex"), value: "UNISEX"),
+                      ],
+                      onChanged: (value) {
+                        setState(() {
+                          selectedValue = value as String;
+                        });
+                      }),
+                ),
+
+                SizedBox(height: 15),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text('Latitude:',
+                      style:
+                          TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
+                ),
+                customTextField(
+                    hinttext: 'Latitude', addcontroller: _latitudeController),
+                SizedBox(height: 15),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text('Longitude:',
+                      style:
+                          TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
+                ),
+                customTextField(
+                    hinttext: 'Longitude', addcontroller: _longitudeController),
+                SizedBox(height: 15),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text('Landmark:',
+                      style:
+                          TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
+                ),
+                customTextField(
+                    hinttext: "Landmark", addcontroller: _addlandmark),
+                SizedBox(height: 15),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text('Pincode:',
+                      style:
+                          TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
+                ),
+                customTextField(
+                  addcontroller: _addpincode,
+                  hinttext: "Pincode",
+                ),
+                DropdownButton(
+                    value: gymtype,
+                    items: [
+                      DropdownMenuItem(
+                        child: Text("ZUMBA"),
+                        value: "Zumba",
+                      ),
+                      DropdownMenuItem(
+                        child: Text("YOGA"),
+                        value: "Yoga",
+                      ),
+                      DropdownMenuItem(child: Text("GYM"), value: "GYM"),
+                    ],
+                    onChanged: (value) {
+                      setState(() {
+                        gymtype = value as String;
+                      });
+                    }),
+                SizedBox(height: 15),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text('Description:',
+                      style:
+                          TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
+                ),
+                customTextField(
+                  addcontroller: _descriptionCon,
+                  hinttext: "Description",
+                ),
+                SizedBox(height: 15),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text('Number:',
+                      style:
+                          TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
+                ),
+                customTextField(
+                  addcontroller: _numberCon,
+                  hinttext: "Number",
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  'Upload Display Image',
+                  style: TextStyle(
+                      color: Colors.black, fontWeight: FontWeight.w700),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Row(
+                  children: [
+                    ElevatedButton(
+                      onPressed: () async {
+                        // dic = await chooseImage();
+                        image = uploadToStroagees();
+                      },
+                      child: Text(
+                        'Upload Gym Image',
+                        style: TextStyle(
+                            color: Colors.white, fontWeight: FontWeight.w700),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 20,
+                    ),
+                    image != null
+                        ? Image(
+                            image: NetworkImage('$image'),
+                            height: 200,
+                            width: 200,
+                          )
+                        : Container(
+                            color: Colors.black,
+                            height: 200,
+                            width: 200,
+                          )
+                  ],
+                ),
+                SizedBox(height: 10),
+
+                // Text(
+                //   'Upload Display Image',
+                //   style:
+                //       TextStyle(color: Colors.black, fontWeight: FontWeight.w700),
+                // ),
+                // SizedBox(
+                //   height: 20,
+                // ),
+                // ElevatedButton(
+                //   onPressed: () async {
+                //     multipic = await multiimagepickerr();
+                //     impath = await multiimageuploader(multipic);
+                //   },
+                //   child: Text(
+                //     'Upload Image',
+                //     style:
+                //         TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
+                //   ),
+                // ),
+                // // Image(
+                // //   image: FileImage(vall, scale: 4),
+                // // ),
+                // SizedBox(
+                //   height: 20,
+                // ),
+
+                Row(
+                  children: [
+                    ElevatedButton(
+                      onPressed: () async {
+                        print(dic);
+                        GeoPoint dataForGeoPint = GeoPoint(
+                            double.parse(_latitudeController.text),
+                            double.parse(_longitudeController.text));
+
+                        await matchID(
+                            newId: _addgymownerid.text,
+                            matchStream: productStream,
+                            idField: 'gym_id');
+                        FirebaseFirestore.instance
+                            .collection('product_details')
+                            .doc(_addgymownerid.text)
+                            .set(
+                          {
+                            'address': _addaddress.text,
+                            'gender': selectedValue,
+                            'name': _addname.text,
+                            'pincode': _addpincode.text,
+                            'location': dataForGeoPint,
+                            'gym_id': _addgymownerid.text,
+                            'gym_owner': _addgymownerid.text,
+                            'landmark': _addlandmark.text,
+                            'total_booking': "",
+                            'total_sales': "",
+                            'legit': false,
+                            "branch": _branchController.text,
+                            "description": _descriptionCon.text,
+                            "display_picture": image,
+                            "images": [],
+                            "locality": "",
+                            "number": _numberCon.text,
+                            "online_pay": true,
+                            "payment_due": "",
+                            "rating": 0.0,
+                            "service": [],
+                            "timings": [],
+                            "token": [],
+                            "view_count": 0.0,
+                            "gym_status": false,
+                            "gym_type": gymtype,
+                          },
+                          // ).then((snapshot) async {
+                          //   await uploadImageToStorage(dic, _addgymownerid.text);
+                          //   await FirebaseFirestore.instance
+                          //       .collection('product_details')
+                          //       .doc(_addgymownerid.text)
+                          //       .update({'images': impath});
+                          // });
+                        );
+                        Navigator.pop(context);
+                      },
+                      child: const Text('Done'),
+                    ),
+                    SizedBox(
+                      width: 50,
+                    ),
+                    ElevatedButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: Text('Close')),
+                    // ElevatedButton(
+                    //     onPressed: () {
+                    //       print(impath);
+                    //     },
+                    //     child: Text('Press Me'))
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ));
   }
 
   // Future<List<XFile>> multiimagepickerr() async {

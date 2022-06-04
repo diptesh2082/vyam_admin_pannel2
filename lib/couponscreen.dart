@@ -86,6 +86,10 @@ class _CouponScreenState extends State<CouponScreen> {
 
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white10,
+        appBar: AppBar(
+          title: Text('Add Coupon'),
+        ),
         body: Container(
       padding: EdgeInsets.all(50),
       child: SingleChildScrollView(
