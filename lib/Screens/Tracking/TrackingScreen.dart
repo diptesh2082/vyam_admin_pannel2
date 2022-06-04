@@ -2,7 +2,6 @@ import 'package:admin_panel_vyam/services/deleteMethod.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-
 class TrackingScreen extends StatefulWidget {
   const TrackingScreen({
     Key? key,
@@ -14,7 +13,7 @@ class TrackingScreen extends StatefulWidget {
 
 class _TrackingScreenState extends State<TrackingScreen> {
   CollectionReference bookingStream =
-  FirebaseFirestore.instance.collection('bookings');
+      FirebaseFirestore.instance.collection('bookings');
   @override
   void initState() {
     super.initState();
@@ -37,7 +36,8 @@ class _TrackingScreenState extends State<TrackingScreen> {
                   child: StreamBuilder<QuerySnapshot>(
                     stream: FirebaseFirestore.instance
                         .collection('bookings')
-                        .where('booking_status', isEqualTo: 'incomplete').snapshots(),
+                        .where('booking_status', isEqualTo: 'incomplete')
+                        .snapshots(),
                     builder: (context, AsyncSnapshot snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return const CircularProgressIndicator();
@@ -59,9 +59,9 @@ class _TrackingScreenState extends State<TrackingScreen> {
                             columns: const [
                               DataColumn(
                                   label: Text(
-                                    'Vendor ID',
-                                    style: TextStyle(fontWeight: FontWeight.w600),
-                                  )),
+                                'Vendor ID',
+                                style: TextStyle(fontWeight: FontWeight.w600),
+                              )),
                               DataColumn(
                                 label: Text(
                                   'User Name',
@@ -223,6 +223,7 @@ class _TrackingScreenState extends State<TrackingScreen> {
         "${data['order_date'].toDate().year}/${data['order_date'].toDate().month}/${data['order_date'].toDate().day}";
     String bookingDate =
         "${data['booking_date'].toDate().year}/${data['booking_date'].toDate().month}/${data['booking_date'].toDate().day}";
+    String o;
     return DataRow(cells: [
       DataCell(data["vendorId"] != null
           ? Text(data['vendorId'].toString())
@@ -310,7 +311,7 @@ class _TrackingScreenState extends State<TrackingScreen> {
                 .whenComplete(() => print("booking accepted updated"))
                 .catchError((e) => print(e));
           },
-          child: Text(bookingAccepted.toString()),
+          child: Text(o = bookingAccepted ? 'YES' : 'NO'),
           style: ElevatedButton.styleFrom(
               primary: bookingAccepted ? Colors.green : Colors.red),
         ),
@@ -328,9 +329,9 @@ class _TrackingScreenState extends State<TrackingScreen> {
                   totaldays: data['totalDays'].toString(),
                   taxpay: data['tax_pay'].toString(),
                   planendyear:
-                  data['plan_end_duration'].toDate().year.toString(),
+                      data['plan_end_duration'].toDate().year.toString(),
                   planendmonth:
-                  data['plan_end_duration'].toDate().month.toString(),
+                      data['plan_end_duration'].toDate().month.toString(),
                   planendday: data['plan_end_duration'].toDate().day.toString(),
                   paymentdone: data['payment_done'].toString(),
                   packagetype: data['package_type'],
@@ -492,24 +493,24 @@ class _CustomTextFieldState extends State<CustomTextField> {
       height: 50,
       child: Card(
           child: TextField(
-            autofocus: true,
-            style: const TextStyle(
+        autofocus: true,
+        style: const TextStyle(
+          fontSize: 14,
+          fontFamily: 'poppins',
+          fontWeight: FontWeight.w400,
+        ),
+        controller: widget.addcontroller,
+        maxLines: 3,
+        decoration: InputDecoration(
+            border: InputBorder.none,
+            hintStyle: const TextStyle(
               fontSize: 14,
               fontFamily: 'poppins',
               fontWeight: FontWeight.w400,
             ),
-            controller: widget.addcontroller,
-            maxLines: 3,
-            decoration: InputDecoration(
-                border: InputBorder.none,
-                hintStyle: const TextStyle(
-                  fontSize: 14,
-                  fontFamily: 'poppins',
-                  fontWeight: FontWeight.w400,
-                ),
-                hintMaxLines: 2,
-                hintText: widget.hinttext),
-          )),
+            hintMaxLines: 2,
+            hintText: widget.hinttext),
+      )),
     );
   }
 }
@@ -747,7 +748,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                         'tax_pay': _addtaxpay.text,
                         'plan_end_duration': endtimedata,
                         'payment_done':
-                        _addpaymentdone.text == 'true' ? true : false,
+                            _addpaymentdone.text == 'true' ? true : false,
                         'package_type': _addpackagetype.text,
                         'order_date': ordertimedata,
                         'gym_name': _addgymname.text,
@@ -761,7 +762,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                         'booking_id': _addbookingid.text,
                         'booking_date': bookingtimedata,
                         'booking_accepted':
-                        _addbookingaccepted.text == 'true' ? true : false,
+                            _addbookingaccepted.text == 'true' ? true : false,
                       };
                       await documentReference
                           .update(data)

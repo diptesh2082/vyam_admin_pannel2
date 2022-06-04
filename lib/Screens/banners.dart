@@ -50,27 +50,26 @@ class _BannerPageState extends State<BannerPage> {
                   padding: const EdgeInsets.only(top: 8.0, left: 8.0),
                   child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        textStyle:
-                        const TextStyle(fontSize: 15 ),
+                        textStyle: const TextStyle(fontSize: 15),
                       ),
-                    onPressed: () {
-                      Get.to(const bannerNewPage()); //showAddbox,
-                    },
-                    child: Text('Add Banner')
-                    // Container(
-                    //   width: 120,
-                    //   decoration: BoxDecoration(
-                    //       color: Colors.white,
-                    //       borderRadius: BorderRadius.circular(20.0)),
-                    //   child: Row(
-                    //     children: const [
-                    //       Icon(Icons.add),
-                    //       Text('Add Banner',
-                    //           style: TextStyle(fontWeight: FontWeight.w400)),
-                    //     ],
-                    //   ),
-                    // ),
-                  ),
+                      onPressed: () {
+                        Get.to(const bannerNewPage()); //showAddbox,
+                      },
+                      child: Text('Add Banner')
+                      // Container(
+                      //   width: 120,
+                      //   decoration: BoxDecoration(
+                      //       color: Colors.white,
+                      //       borderRadius: BorderRadius.circular(20.0)),
+                      //   child: Row(
+                      //     children: const [
+                      //       Icon(Icons.add),
+                      //       Text('Add Banner',
+                      //           style: TextStyle(fontWeight: FontWeight.w400)),
+                      //     ],
+                      //   ),
+                      // ),
+                      ),
                 ),
                 Center(
                   child: StreamBuilder<QuerySnapshot>(
@@ -143,6 +142,7 @@ class _BannerPageState extends State<BannerPage> {
   DataRow _buildListItem(BuildContext context, DocumentSnapshot data) {
     bool access = data['access'];
     String banner_id = data['id'];
+    String f;
 
     return DataRow(cells: [
       DataCell(
@@ -162,7 +162,7 @@ class _BannerPageState extends State<BannerPage> {
                   .whenComplete(() => print("Legitimate toggled"))
                   .catchError((e) => print(e));
             },
-            child: Text(access.toString()),
+            child: Text(f = access ? 'YES' : 'NO'),
             style: ElevatedButton.styleFrom(
                 primary: access ? Colors.green : Colors.red),
           ),

@@ -35,7 +35,6 @@ class _UserInformationState extends State<UserInformation> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       body: SafeArea(
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 5),
@@ -50,8 +49,7 @@ class _UserInformationState extends State<UserInformation> {
                   padding: const EdgeInsets.only(top: 8.0, left: 8.0),
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      textStyle:
-                      const TextStyle(fontSize: 15 ),
+                      textStyle: const TextStyle(fontSize: 15),
                     ),
                     onPressed: () {
                       Navigator.push(
@@ -59,7 +57,7 @@ class _UserInformationState extends State<UserInformation> {
                           MaterialPageRoute(
                               builder: (context) => detailsadd()));
                     },
-                     child: Text('Add User'),
+                    child: Text('Add User'),
                     // Container(
                     //   width: 90,
                     //   decoration: BoxDecoration(
@@ -206,6 +204,7 @@ class _UserInformationState extends State<UserInformation> {
     String userIDData = data['userId'];
     String profileImage = data['image'];
     bool legit = data['legit'];
+    String a;
 
     return DataRow(cells: [
       DataCell(
@@ -254,7 +253,7 @@ class _UserInformationState extends State<UserInformation> {
                   .whenComplete(() => print("Legitimate toggled"))
                   .catchError((e) => print(e));
             },
-            child: Text(legit.toString()),
+            child: Text(a = legit ? 'YES' : 'NO'),
             style: ElevatedButton.styleFrom(
                 primary: legit ? Colors.green : Colors.red),
           ),
