@@ -6,6 +6,7 @@ import 'package:admin_panel_vyam/Screens/banners.dart';
 import 'package:admin_panel_vyam/Screens/timings.dart';
 import 'package:admin_panel_vyam/routing/showadd.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as Path;
 import 'package:admin_panel_vyam/services/maps_api.dart';
@@ -93,6 +94,7 @@ class _ProductDetailsState extends State<ProductDetails> {
 // // =======
 // //   List<String> multiimages = [];
 // // >>>>>>> 2bd9314ce4369a0ee8841fb3648ac2b93b65ffa4
+  String searchGymName = '';
 
   @override
   void initState() {
@@ -152,21 +154,64 @@ class _ProductDetailsState extends State<ProductDetails> {
                       // ),
                     ),
                   ),
-                    Spacer(),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 8.0, left: 8.0),
-                    child: IconButton(
+                    const Spacer(),
+                    Container(
+                      width: 500,
+                      height: 51,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(14),
+                        color: Colors.white12,
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(15),
+                        child: TextField(
+                          // focusNode: _node,
 
-                      onPressed: () {
-                        setState(() {
-
-                        });
-
-                      },
-                      icon: const Icon(Icons.search),
-                    )
-
-                  ),
+                          autofocus: false,
+                          textAlignVertical: TextAlignVertical.bottom,
+                          onSubmitted: (value) async {
+                            FocusScope.of(context).unfocus();
+                          },
+                          // controller: searchController,
+                          onChanged: (value) {
+                            if (value.length == 0) {
+                              // _node.canRequestFocus=false;
+                              // FocusScope.of(context).unfocus();
+                            }
+                            if (mounted) {
+                              setState(() {
+                                searchGymName = value.toString();
+                              });
+                            }
+                          },
+                          decoration:  InputDecoration(
+                            prefixIcon: const Icon(Icons.search),
+                            hintText: 'Search',
+                            hintStyle: GoogleFonts.poppins(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500
+                            ),
+                            border: InputBorder.none,
+                            filled: true,
+                            fillColor: Colors.white12,
+                          ),
+                        ),
+                      ),
+                    ),
+                  // Padding(
+                  //   padding: const EdgeInsets.only(top: 8.0, left: 8.0),
+                  //   child: IconButton(
+                  //
+                  //     onPressed: () {
+                  //       setState(() {
+                  //
+                  //       });
+                  //
+                  //     },
+                  //     icon: const Icon(Icons.search),
+                  //   )
+                  //
+                  // ),
 
                   ],
                 ),
@@ -182,6 +227,27 @@ class _ProductDetailsState extends State<ProductDetails> {
                         return Container();
                       }
                       print("-----------------------------------");
+                      var doc = snapshot.data.docs;
+
+                      if (searchGymName.length > 0) {
+                        doc = doc.where((element) {
+                          return element
+                              .get('name')
+                              .toString()
+                              .toLowerCase()
+                              .contains(searchGymName.toString())
+                              || element
+                              .get('gym_id')
+                              .toString()
+                              .toLowerCase()
+                              .contains(searchGymName.toString())
+                          || element
+                              .get('address')
+                              .toString()
+                              .toLowerCase()
+                              .contains(searchGymName.toString());
+                        }).toList();
+                      }
 
                       print(snapshot.data.docs);
                       return SingleChildScrollView(
@@ -308,7 +374,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                               // DataColumn(label: Text('')), //! For edit pencil
                               // DataColumn(label: Text('')),
                             ],
-                            rows: _buildlist(context, snapshot.data!.docs)),
+                            rows: _buildlist(context, doc)),
                       );
                     },
                   ),
