@@ -41,23 +41,30 @@ class _AmenetiesScreenState extends State<AmenetiesScreen> {
               children: [
                 Padding(
                   padding: const EdgeInsets.only(top: 8.0, left: 8.0),
-                  child: GestureDetector(
-                    onTap:() {
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      textStyle:
+                      const TextStyle(fontSize: 15 ),
+                    ),
+                    onPressed:() {
                       Get.to(() => newAmeneties());
                     },
-                    child: Container(
-                      width: 120,
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(20.0)),
-                      child: Row(
-                        children: const [
-                          Icon(Icons.add),
-                          Text('Add Product',
-                              style: TextStyle(fontWeight: FontWeight.w400)),
-                        ],
-                      ),
-                    ),
+                     child: Text(
+                       'Add Product'
+                     ),
+                    // Container(
+                    //   width: 120,
+                    //   decoration: BoxDecoration(
+                    //       color: Colors.white,
+                    //       borderRadius: BorderRadius.circular(20.0)),
+                    //   child: Row(
+                    //     children: const [
+                    //       Icon(Icons.add),
+                    //       Text('Add Product',
+                    //           style: TextStyle(fontWeight: FontWeight.w400)),
+                    //     ],
+                    //   ),
+                    // ),
                   ),
                 ),
                 Center(

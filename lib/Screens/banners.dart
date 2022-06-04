@@ -48,23 +48,28 @@ class _BannerPageState extends State<BannerPage> {
               children: [
                 Padding(
                   padding: const EdgeInsets.only(top: 8.0, left: 8.0),
-                  child: GestureDetector(
-                    onTap: () {
+                  child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        textStyle:
+                        const TextStyle(fontSize: 15 ),
+                      ),
+                    onPressed: () {
                       Get.to(const bannerNewPage()); //showAddbox,
                     },
-                    child: Container(
-                      width: 120,
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(20.0)),
-                      child: Row(
-                        children: const [
-                          Icon(Icons.add),
-                          Text('Add Banner',
-                              style: TextStyle(fontWeight: FontWeight.w400)),
-                        ],
-                      ),
-                    ),
+                    child: Text('Add Banner')
+                    // Container(
+                    //   width: 120,
+                    //   decoration: BoxDecoration(
+                    //       color: Colors.white,
+                    //       borderRadius: BorderRadius.circular(20.0)),
+                    //   child: Row(
+                    //     children: const [
+                    //       Icon(Icons.add),
+                    //       Text('Add Banner',
+                    //           style: TextStyle(fontWeight: FontWeight.w400)),
+                    //     ],
+                    //   ),
+                    // ),
                   ),
                 ),
                 Center(

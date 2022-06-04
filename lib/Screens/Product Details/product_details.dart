@@ -2,6 +2,7 @@ import 'dart:html';
 import 'dart:io';
 // import 'dart:html';
 import 'dart:math';
+import 'package:admin_panel_vyam/Screens/banners.dart';
 import 'package:admin_panel_vyam/Screens/timings.dart';
 import 'package:admin_panel_vyam/routing/showadd.dart';
 import 'package:get/get.dart';
@@ -40,6 +41,8 @@ class _ProductDetailsState extends State<ProductDetails> {
       .toString();
   CollectionReference? productStream;
   var image;
+  String gender = 'male';
+
 
 // <<<<<<< HEAD
 //   File? image;
@@ -110,42 +113,64 @@ class _ProductDetailsState extends State<ProductDetails> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 8.0, left: 8.0),
-                  child: GestureDetector(
-                    onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => ShowAddBox(),
-                      ));
-                    },
-                    child: Container(
-                      width: 200,
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(20.0)),
-                      child: Row(
-                        children: [
-                          GestureDetector(
-                              onTap: () {
-                                Navigator.pop(context);
-                              },
-                              child: const Icon(Icons.arrow_back_ios_outlined)),
-                          const SizedBox(
-                            width: 20,
-                          ),
-                          Row(
-                            children: const [
-                              Icon(Icons.add),
-                              Text('Add Product',
-                                  style:
-                                      TextStyle(fontWeight: FontWeight.w400)),
-                            ],
-                          ),
-                        ],
+                Row(
+                  children: [
+                    Padding(
+                    padding: const EdgeInsets.only(top: 8.0, left: 8.0),
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          //padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 20),
+                          textStyle:
+                          const TextStyle(fontSize: 15 ),
                       ),
+                      onPressed: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => ShowAddBox(),
+                        ));
+                      },
+                      child: Text('Add Product'),
+                      // Container(
+                      //   width: 200,
+                      //   decoration: BoxDecoration(
+                      //       color: Colors.white,
+                      //       borderRadius: BorderRadius.circular(20.0)),
+                      //   child: Row(
+                      //     children: [
+                      //       const SizedBox(
+                      //         width: 20,
+                      //       ),
+                      //       Row(
+                      //         children: const [
+                      //           Icon(Icons.add),
+                      //           Text('Add Product',
+                      //               style:
+                      //                   TextStyle(fontWeight: FontWeight.w400)),
+                      //         ],
+                      //       ),
+                      //     ],
+                      //   ),
+                      // ),
                     ),
                   ),
+                    Spacer(),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8.0, left: 8.0),
+                    child: IconButton(
+
+                      onPressed: () {
+                        setState(() {
+
+                        });
+
+                      },
+                      icon: const Icon(Icons.search),
+                    )
+
+                  ),
+
+                  ],
                 ),
+
                 Center(
                   child: StreamBuilder<QuerySnapshot>(
                     stream: productStream!.snapshots(),
@@ -194,12 +219,12 @@ class _ProductDetailsState extends State<ProductDetails> {
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
-                              DataColumn(
-                                label: Text(
-                                  'Location',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
-                              ),
+                              // DataColumn(
+                              //   label: Text(
+                              //     'Location',
+                              //     style: TextStyle(fontWeight: FontWeight.w600),
+                              //   ),
+                              // ),
                               DataColumn(
                                 label: Text(
                                   'Landmark',
@@ -351,26 +376,30 @@ class _ProductDetailsState extends State<ProductDetails> {
     bool status = data["gym_status"];
     bool online_pay = data["online_pay"];
     String loctext = "${loc.latitude},${loc.longitude}";
+    String x;
+    String y;
     return DataRow(cells: [
       DataCell(data != null ? Text(data['name'] ?? "") : const Text("")),
       DataCell(data != null ? Text(data['address'] ?? "") : const Text("")),
       DataCell(data != null ? Text(gymId) : const Text("")),
       DataCell(data != null ? Text(data['gym_owner'] ?? "") : const Text("")),
       DataCell(data != null ? Text(data['gender'] ?? "") : const Text("")),
-      DataCell(data != null
-          ? GestureDetector(
-              onTap: () async {
-                await MapsLaucherApi().launchMaps(loc.latitude, loc.longitude);
-              },
-              child: Text(loctext))
-          : const Text("")),
+      // DataCell(data != null
+      //     ? GestureDetector(
+      //         onTap: () async {
+      //           await MapsLaucherApi().launchMaps(loc.latitude, loc.longitude);
+      //         },
+      //         child: Text(loctext))
+          //: const Text("")),
       DataCell(data != null ? Text(data['landmark'] ?? "") : const Text("")),
       DataCell(data != null ? Text(data['pincode'] ?? "") : const Text("")),
-      DataCell(const Text('Trainer'), onTap: (() {
+
+      DataCell(const Text('Trainer',), onTap: (() {
         Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => TrainerPage(tGymId: gymId),
         ));
       })),
+
       DataCell(const Text('Package '), onTap: () {
         Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => PackagesPage(
@@ -448,12 +477,14 @@ class _ProductDetailsState extends State<ProductDetails> {
       //     ),
       //   ),
       // ),
+
       DataCell(
         Center(
           child: ElevatedButton(
             onPressed: () async {
               bool temp = status;
               temp = !temp;
+
               DocumentReference documentReference = FirebaseFirestore.instance
                   .collection('product_details')
                   .doc(gymId);
@@ -462,7 +493,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                   .whenComplete(() => print("Legitimate toggled"))
                   .catchError((e) => print(e));
             },
-            child: Text(status.toString()),
+            child: Text( x = status ? 'YES':'NO'),
             style: ElevatedButton.styleFrom(
                 primary: status ? Colors.green : Colors.red),
           ),
@@ -483,7 +514,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                   .whenComplete(() => print("Legitimate toggled"))
                   .catchError((e) => print(e));
             },
-            child: Text(legit.toString()),
+            child: Text(y = legit ? 'YES':'NO'),
             style: ElevatedButton.styleFrom(
                 primary: legit ? Colors.green : Colors.red),
           ),
@@ -594,6 +625,8 @@ class _ShowAddBoxState extends State<ShowAddBox> {
   var multipic;
   var impath;
   var image;
+
+   var selectedValue = "MALE";
   @override
   void initState() {
     productStream = FirebaseFirestore.instance.collection("product_details");
@@ -602,6 +635,10 @@ class _ShowAddBoxState extends State<ShowAddBox> {
 
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white10,
+        appBar: AppBar(
+          title: const Text('Add Vendor Details'),
+        ),
         body: Container(
       padding: EdgeInsets.all(50),
       child: SingleChildScrollView(
@@ -639,9 +676,9 @@ class _ShowAddBoxState extends State<ShowAddBox> {
             ),
             customTextField(
                 hinttext: "Gym Owner Id", addcontroller: _addgymownerid),
-            SizedBox(height: 15),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
+            const SizedBox(height: 15),
+            const Padding(
+              padding: EdgeInsets.all(8.0),
               child: Text('Branch:',
                   style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
             ),
@@ -655,7 +692,34 @@ class _ShowAddBoxState extends State<ShowAddBox> {
               child: Text('Gender:',
                   style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
             ),
-            customTextField(hinttext: "Gender", addcontroller: _addgender),
+            //customTextField(hinttext: "Gender", addcontroller: _addgender),
+
+            Container(
+              child:
+              DropdownButton(
+                  value: selectedValue,
+                  items:  [
+                    DropdownMenuItem(
+                      child: Text("Male"),
+                      value: "MALE",
+                    ),
+                    DropdownMenuItem(
+                      child: Text("Female"),
+                      value: "FEMALE",
+                    ),
+                    DropdownMenuItem(
+                        child: Text("Unisex"),
+                        value: "UNISEX"
+                    ),
+                  ],
+                  onChanged: (value) {
+                    setState(() {
+                      selectedValue = value as String ;
+                    });
+                  }),
+            ),
+
+
             SizedBox(height: 15),
             Padding(
               padding: const EdgeInsets.all(8.0),
@@ -796,7 +860,7 @@ class _ShowAddBoxState extends State<ShowAddBox> {
                         .set(
                       {
                         'address': _addaddress.text,
-                        'gender': _addgender.text,
+                        'gender': selectedValue,
                         'name': _addname.text,
                         'pincode': _addpincode.text,
                         'location': dataForGeoPint,
