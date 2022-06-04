@@ -40,6 +40,7 @@ class _ProductDetailsState extends State<ProductDetails> {
       .id
       .toString();
   CollectionReference? productStream;
+
   var image;
   String gender = 'male';
 
@@ -97,6 +98,7 @@ class _ProductDetailsState extends State<ProductDetails> {
   @override
   void initState() {
     productStream = FirebaseFirestore.instance.collection("product_details");
+
     super.initState();
   }
 
@@ -610,6 +612,12 @@ class ShowAddBox extends StatefulWidget {
 class _ShowAddBoxState extends State<ShowAddBox> {
   @override
   CollectionReference? productStream;
+ // CollectionReference? amenityStream;
+
+
+ // var nameValue =  FirebaseFirestore.instance.collection('amenities').doc('5vXo9H3JpTvgO6YZ1BA1').get();
+
+
   final TextEditingController _addaddress = TextEditingController();
   final TextEditingController _addgender = TextEditingController();
   final TextEditingController _addname = TextEditingController();
@@ -625,6 +633,10 @@ class _ShowAddBoxState extends State<ShowAddBox> {
   var multipic;
   var impath;
   var image;
+  bool isChecked = false;
+  bool isChecked1 = false;
+  bool isChecked2 = false;
+  bool isChecked3 = false;
 
    var selectedValue = "MALE";
   @override
@@ -634,6 +646,8 @@ class _ShowAddBoxState extends State<ShowAddBox> {
   }
 
   Widget build(BuildContext context) {
+
+
     return Scaffold(
       backgroundColor: Colors.white10,
         appBar: AppBar(
@@ -719,8 +733,70 @@ class _ShowAddBoxState extends State<ShowAddBox> {
                   }),
             ),
 
-
             SizedBox(height: 15),
+
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text('Amenities :',
+                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
+            ),
+
+           Container(
+             // child: StreamBuilder<QuerySnapshot>(
+             //   stream: amenityStream!.snapshots(),
+             //      builder: (context, AsyncSnapshot snapshot) {
+             //        return
+                     child:
+                         Row(
+                     children: [
+
+                       Text('Locker'),
+                       Checkbox(
+                         value: isChecked ,
+                         // title: Text('Locker'),
+                         onChanged: (bool? value) {
+                           setState(() {
+                             isChecked = value!;
+                             //print(nameValue);
+                           });
+                         },
+                       ),
+
+                       // Text('Parking'),
+                       // Checkbox(
+                       //   // title: Text('Parking '),
+                       //   value: isChecked1 ,
+                       //   onChanged: (bool? value) {
+                       //     setState(()=> isChecked1 = value!);
+                       //   },
+                       // ),
+                       //
+                       // Text('Shower'),
+                       // Checkbox(
+                       //   // title: Text('Shower'),
+                       //   value: isChecked2 ,
+                       //   onChanged: (bool? value) {
+                       //     setState(()=> isChecked2 = value!);
+                       //   },
+                       // ),
+                       //
+                       // Text('Elevator'),
+                       // Checkbox(
+                       //   // title: Text('Elevator'),
+                       //   value: isChecked3 ,
+                       //   onChanged: (bool? value) {
+                       //     setState(()=> isChecked3 = value!);
+                       //   },
+                       // ),
+
+               ]
+               ),
+           ),
+
+
+
+            SizedBox(height: 20),
+
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text('Latitude:',
@@ -729,8 +805,8 @@ class _ShowAddBoxState extends State<ShowAddBox> {
             customTextField(
                 hinttext: 'Latitude', addcontroller: _latitudeController),
             SizedBox(height: 15),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
+            const Padding(
+              padding: EdgeInsets.all(8.0),
               child: Text('Longitude:',
                   style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
             ),
