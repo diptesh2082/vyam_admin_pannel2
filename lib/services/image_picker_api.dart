@@ -110,7 +110,7 @@ class ImagePickerAPI {
     }
   }
 }
-=
+
 // <<<<<<< HEAD
 
 // <<<<<<< HEAD
@@ -335,35 +335,35 @@ uploadImageToPush(XFile? pickedFile, String? id) async {
   return uploadedPhotoUrl;
 }
 
-final _firebaseStoragee = FirebaseStorage.instance.ref().child("product_details");
-
-uploadImageToProduct(XFile? pickedFile, String? id) async {
-  var uploadedPhotoUrl = " ";
-  if (kIsWeb) {
-    Reference _reference = _firebaseStoragee
-        .child('product_details/${Path.basename(pickedFile!.path)}');
-    await _reference
-        .putData(
-      await pickedFile.readAsBytes(),
-      SettableMetadata(contentType: 'image/jpeg'),
-    )
-        .whenComplete(() async {
-      await _reference.getDownloadURL().then((value) async {
-        uploadedPhotoUrl = value;
-        print(value);
-        await FirebaseFirestore.instance
-            .collection("product_details")
-            .doc(id)
-            .update({
-          "images": FieldValue.arrayUnion([value])
-        });
-      });
-    });
-  } else {
-//write a code for android or ios
-  }
-  return uploadedPhotoUrl;
-}
+// final _firebaseStoragee = FirebaseStorage.instance.ref().child("product_details");
+//
+// uploadImageToProduct(XFile? pickedFile, String? id) async {
+//   var uploadedPhotoUrl = " ";
+//   if (kIsWeb) {
+//     Reference _reference = _firebaseStoragee
+//         .child('product_details/${Path.basename(pickedFile!.path)}');
+//     await _reference
+//         .putData(
+//       await pickedFile.readAsBytes(),
+//       SettableMetadata(contentType: 'image/jpeg'),
+//     )
+//         .whenComplete(() async {
+//       await _reference.getDownloadURL().then((value) async {
+//         uploadedPhotoUrl = value;
+//         print(value);
+//         await FirebaseFirestore.instance
+//             .collection("product_details")
+//             .doc(id)
+//             .update({
+//           "images": FieldValue.arrayUnion([value])
+//         });
+//       });
+//     });
+//   } else {
+// //write a code for android or ios
+//   }
+//   return uploadedPhotoUrl;
+// }
 
 // final _firebaseStorages = FirebaseStorage.instance.ref().child("amenities");
 //
@@ -391,33 +391,33 @@ uploadImageToProduct(XFile? pickedFile, String? id) async {
 //   }
 // }
 
-uploadImageToPush(XFile? pickedFile ,String? id) async {
-  if(kIsWeb){
-    Reference _reference = _firebaseStorage
-        .child('push_notifications/${Path.basename(pickedFile!.path)}');
-    await _reference
-        .putData(
-      await pickedFile.readAsBytes(),
-      SettableMetadata(contentType: 'image/jpeg'),
-    )
-        .whenComplete(() async {
-      await _reference.getDownloadURL().then((value) async {
-        var uploadedPhotoUrl = value;
-        print(value);
-        await FirebaseFirestore.instance.collection("push_notifications")
-            .doc(id)
-            .update({
-          //"display_picture": value,
-          "image": value
-        });
-
-      });
-    });
-  }else{
-//write a code for android or ios
-  }
-
-}
+// uploadImageToPush(XFile? pickedFile ,String? id) async {
+//   if(kIsWeb){
+//     Reference _reference = _firebaseStorage
+//         .child('push_notifications/${Path.basename(pickedFile!.path)}');
+//     await _reference
+//         .putData(
+//       await pickedFile.readAsBytes(),
+//       SettableMetadata(contentType: 'image/jpeg'),
+//     )
+//         .whenComplete(() async {
+//       await _reference.getDownloadURL().then((value) async {
+//         var uploadedPhotoUrl = value;
+//         print(value);
+//         await FirebaseFirestore.instance.collection("push_notifications")
+//             .doc(id)
+//             .update({
+//           //"display_picture": value,
+//           "image": value
+//         });
+//
+//       });
+//     });
+//   }else{
+// //write a code for android or ios
+//   }
+//
+// }
 
 
 // >>>>>>> 419576ed132f1f7631adea2357dfe8fbddca83b9
