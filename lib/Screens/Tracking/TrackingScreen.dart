@@ -246,6 +246,7 @@ class _TrackingScreenState extends State<TrackingScreen> {
           ? Text(durationEnd)
           : const Text("")),
 // <<<<<<< HEAD
+// <<<<<<< HEAD
 //       DataCell(Center(
 //         child: ElevatedButton(
 //           onPressed: () async {
@@ -282,6 +283,8 @@ class _TrackingScreenState extends State<TrackingScreen> {
         // : const Text("")
       ),
 // =======
+// =======
+// >>>>>>> 419576ed132f1f7631adea2357dfe8fbddca83b9
       // DataCell(Center(
       //   child: ElevatedButton(
       //     onPressed: () async {
@@ -300,10 +303,16 @@ class _TrackingScreenState extends State<TrackingScreen> {
       //         primary: paymentDoneBool ? Colors.green : Colors.red),
       //   ),
       // ),
-      // ),
-      // DataCell(data['package_type'] != null
-      //     ? Text(data['package_type'].toString())
-      //     : const Text("")),
+//       // ),
+// <<<<<<< HEAD
+//       // DataCell(data['package_type'] != null
+//       //     ? Text(data['package_type'].toString())
+//       //     : const Text("")),
+// // >>>>>>> 419576ed132f1f7631adea2357dfe8fbddca83b9
+// =======
+//       DataCell(data['package_type'] != null
+//           ? Text(data['package_type'].toString())
+//           : const Text("")),
 // >>>>>>> 419576ed132f1f7631adea2357dfe8fbddca83b9
       DataCell(data['order_date'] != null ? Text(orderDate) : const Text("")),
       // DataCell(data['gym_details']['name'] != null

@@ -42,56 +42,10 @@ class _ProductDetailsState extends State<ProductDetails> {
   CollectionReference? productStream;
   var image;
   String gender = 'male';
-
 // <<<<<<< HEAD
-//   File? image;
-//   Future pickImage() async {
-//     try{
-//       final image = await ImagePicker().pickImage(
-//           source: ImageSource.gallery,
-//           imageQuality: 60
-//       );
-//       if (image == null) return;
-//       final imageTemporary = File(image.path);
-//       setState(() {
-//         this.image = imageTemporary;
-//       });
-//     } on PlatformException catch (e) {
-//       // ignore: avoid_print
-//       print("Faild to pick image: $e");
-//     }
-//
-//   }
-//
-//
-//   saveData(gymId)async {
-//     // if (_globalKey.currentState!.validate()) {
-//       try{
-//         // _globalKey.currentState!.save();
-//         final ref =  FirebaseStorage.instance.ref().child("gs://vyam-f99ab.appspot.com/productDetails").child(gymId+".jpg");
-//         print(ref);
-//         await ref.putFile(image!);
-//         final url = await ref.getDownloadURL();
-//         await FirebaseFirestore.instance.collection("product_details")
-//             .doc(gymId).update({
-//           "display_picture": url
-//         });
-//         // setState(() {
-//         //   imageUrl=url;
-//         //   // isLoading=false;
-//         // }
-//         // );
-//       }catch (e){
-//         // imageUrl="";
-//       }
-//
-//       // print(imageUrl);
-//
-//     // }
-//   }
-// // =======
-// //   List<String> multiimages = [];
-// // >>>>>>> 2bd9314ce4369a0ee8841fb3648ac2b93b65ffa4
+// =======
+
+// >>>>>>> 419576ed132f1f7631adea2357dfe8fbddca83b9
 
   @override
   void initState() {
@@ -127,28 +81,19 @@ class _ProductDetailsState extends State<ProductDetails> {
                           ));
                         },
                         child: Text('Add Product'),
-                        // Container(
-                        //   width: 200,
-                        //   decoration: BoxDecoration(
-                        //       color: Colors.white,
-                        //       borderRadius: BorderRadius.circular(20.0)),
-                        //   child: Row(
-                        //     children: [
-                        //       const SizedBox(
-                        //         width: 20,
-                        //       ),
-                        //       Row(
-                        //         children: const [
-                        //           Icon(Icons.add),
-                        //           Text('Add Product',
-                        //               style:
-                        //                   TextStyle(fontWeight: FontWeight.w400)),
-                        //         ],
-                        //       ),
-                        //     ],
-                        //   ),
-                        // ),
+                        //
                       ),
+// <<<<<<< HEAD
+//                     Spacer(),
+//                     Padding(
+//                         padding: const EdgeInsets.only(top: 8.0, left: 8.0),
+//                         child: IconButton(
+//                           onPressed: () {
+//                             setState(() {});
+//                           },
+//                           icon: const Icon(Icons.search),
+//                         )),
+// =======
                     ),
                     Spacer(),
                     Padding(
@@ -159,6 +104,8 @@ class _ProductDetailsState extends State<ProductDetails> {
                           },
                           icon: const Icon(Icons.search),
                         )),
+
+// >>>>>>> 419576ed132f1f7631adea2357dfe8fbddca83b9
                   ],
                 ),
                 Center(
@@ -374,14 +321,15 @@ class _ProductDetailsState extends State<ProductDetails> {
       DataCell(data != null ? Text(gymId) : const Text("")),
       DataCell(data != null ? Text(data['gym_owner'] ?? "") : const Text("")),
       DataCell(data != null ? Text(data['gender'] ?? "") : const Text("")),
-// <<<<<<< HEAD
-      // DataCell(data != null ? Text(data['gym_type'] ?? "") : const Text("")),
+
+// >>>>>>> 419576ed132f1f7631adea2357dfe8fbddca83b9
       // DataCell(data != null
       //     ? GestureDetector(
       //         onTap: () async {
       //           await MapsLaucherApi().launchMaps(loc.latitude, loc.longitude);
       //         },
       //         child: Text(loctext))
+// <<<<<<< HEAD
       //     : const Text("")),
       DataCell(data != null ? Text(data['landmark'] ?? "") : const Text("")),
       DataCell(data != null ? Text(data['pincode'] ?? "") : const Text("")),
@@ -416,39 +364,6 @@ class _ProductDetailsState extends State<ProductDetails> {
           ),
         ),
       ),
-// =======
-      // DataCell(data != null
-      //     ? GestureDetector(
-      //         onTap: () async {
-      //           await MapsLaucherApi().launchMaps(loc.latitude, loc.longitude);
-      //         },
-      //         child: Text(loctext))
-      //: const Text("")),
-      // DataCell(data != null ? Text(data['landmark'] ?? "") : const Text("")),
-      // DataCell(data != null ? Text(data['pincode'] ?? "") : const Text("")),
-
-      // DataCell(const Text('Trainer',), onTap: (() {
-      //   Navigator.of(context).push(MaterialPageRoute(
-      //     builder: (context) => TrainerPage(tGymId: gymId),
-      //   ));
-      // })),
-
-//       DataCell(const Text('Package '), onTap: () {
-//         Navigator.of(context).push(MaterialPageRoute(
-//           builder: (context) => PackagesPage(
-//             pGymId: gymId,
-// >>>>>>> 419576ed132f1f7631adea2357dfe8fbddca83b9
-//           ),
-//         ),
-//       ),
-      // DataCell(const Text('Package '), onTap: () {
-      //   Navigator.of(context).push(MaterialPageRoute(
-      //     builder: (context) => PackagesPage(
-      //       pGymId: gymId,
-      //     ),
-      //   ));
-      // }
-      // ),
       DataCell(
         Center(
           child: GestureDetector(
@@ -460,26 +375,10 @@ class _ProductDetailsState extends State<ProductDetails> {
                   pGymId: gymId,
                 ),
               ));
-              // bool temp = online_pay;
-              // temp = !temp;
-              // DocumentReference documentReference = FirebaseFirestore.instance
-              //     .collection('product_details')
-              //     .doc(gymId);
-              // await documentReference
-              //     .update({'online_pay': temp})
-              //     .whenComplete(() => print("Legitimate toggled"))
-              //     .catchError((e) => print(e));
             },
             child: Container(child: Text("Extra Packages")),
           ),
         ),
-        //     const Text('Extra Package '), onTap: () {
-        //   Navigator.of(context).push(MaterialPageRoute(
-        //     builder: (context) => ExtraPackagesPage(
-        //       pGymId: gymId,
-        //     ),
-        //   ));
-        // }
       ),
       DataCell(
         Row(
@@ -504,8 +403,6 @@ class _ProductDetailsState extends State<ProductDetails> {
         Center(
           child: ElevatedButton(
             onPressed: () async {
-              // Adding timings +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++---------------------------------
-
               Get.to(() => Timings(
                     pGymId: gymId,
                   ));
@@ -693,10 +590,15 @@ class _ShowAddBoxState extends State<ShowAddBox> {
   var impath;
   var image;
 // <<<<<<< HEAD
+// <<<<<<< HEAD
   String gymtype = "Yoga";
 // =======
 
   var selectedValue = "MALE";
+// >>>>>>> 419576ed132f1f7631adea2357dfe8fbddca83b9
+// =======
+
+  // var selectedValue = "MALE";
 // >>>>>>> 419576ed132f1f7631adea2357dfe8fbddca83b9
   @override
   void initState() {
@@ -793,6 +695,7 @@ class _ShowAddBoxState extends State<ShowAddBox> {
                       }),
                 ),
 
+// <<<<<<< HEAD
                 SizedBox(height: 15),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -871,17 +774,6 @@ class _ShowAddBoxState extends State<ShowAddBox> {
                   addcontroller: _numberCon,
                   hinttext: "Number",
                 ),
-                SizedBox(
-                  height: 10,
-                ),
-                Text(
-                  'Upload Display Image',
-                  style: TextStyle(
-                      color: Colors.black, fontWeight: FontWeight.w700),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
                 Row(
                   children: [
                     ElevatedButton(
@@ -912,33 +804,6 @@ class _ShowAddBoxState extends State<ShowAddBox> {
                   ],
                 ),
                 SizedBox(height: 10),
-
-                // Text(
-                //   'Upload Display Image',
-                //   style:
-                //       TextStyle(color: Colors.black, fontWeight: FontWeight.w700),
-                // ),
-                // SizedBox(
-                //   height: 20,
-                // ),
-                // ElevatedButton(
-                //   onPressed: () async {
-                //     multipic = await multiimagepickerr();
-                //     impath = await multiimageuploader(multipic);
-                //   },
-                //   child: Text(
-                //     'Upload Image',
-                //     style:
-                //         TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
-                //   ),
-                // ),
-                // // Image(
-                // //   image: FileImage(vall, scale: 4),
-                // // ),
-                // SizedBox(
-                //   height: 20,
-                // ),
-
                 Row(
                   children: [
                     ElevatedButton(
@@ -1017,37 +882,6 @@ class _ShowAddBoxState extends State<ShowAddBox> {
         ));
   }
 
-  // Future<List<XFile>> multiimagepickerr() async {
-  //   List<XFile>? _images = await ImagePicker().pickMultiImage();
-  //   if (_images != null && _images.isNotEmpty) {
-  //     return _images;
-  //   }
-  //   return [];
-  // }
-
-  // Future<List<String>> multiimageuploader(List<XFile> list) async {
-  //   List<String> _path = [];
-  //   for (XFile _image in list) {
-  //     _path.add(await uploadimage(_image));
-  //   }
-  //   return _path;
-  // }
-  //
-  // Future<String> uploadimage(XFile image) async {
-  //   var x = Random().nextInt(9999);
-  //   if (x < 1000) {
-  //     x = x + 1000;
-  //   }
-  //   Reference db =
-  //       FirebaseStorage.instance.ref().child("product_image").child("${x}");
-  //   await db.putFile(File(image.path));
-  //   // await db.putFile(File(image.path));
-  //   return await db.getDownloadURL();
-  // }
-  //
-  // String getImageName(XFile image) {
-  //   return image.path.split("/").last;
-  // }
   uploadToStroagees() {
     InputElement input = FileUploadInputElement() as InputElement
       ..accept = 'image/*';
