@@ -744,6 +744,7 @@ class _EditBoxState extends State<EditBox> {
                             Navigator.pop(context);
                           },
                           child: const Text('Done'),
+
                         ),
                         SizedBox(
                           width: 20,
@@ -888,6 +889,7 @@ class _detailsaddState extends State<detailsadd> {
                           'name': _addname.text,
                           'email': _addemail.text,
                           'gender': gender,
+
                           'number': "+91${_addnumber.text}",
                           'locality': _addlocality.text,
                           'subLocality': _addsublocality.text,
