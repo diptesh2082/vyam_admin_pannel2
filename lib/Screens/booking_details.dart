@@ -100,12 +100,12 @@ class _BookingDetailsState extends State<BookingDetails> {
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
-                              DataColumn(
-                                label: Text(
-                                  'Tax Pay',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
-                              ),
+                              // DataColumn(
+                              //   label: Text(
+                              //     'Tax Pay',
+                              //     style: TextStyle(fontWeight: FontWeight.w600),
+                              //   ),
+                              // ),
                               DataColumn(
                                 label: Text(
                                   'Plan End',
@@ -130,12 +130,12 @@ class _BookingDetailsState extends State<BookingDetails> {
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
-                              DataColumn(
-                                label: Text(
-                                  'Gym Name',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
-                              ),
+                              // DataColumn(
+                              //   label: Text(
+                              //     'Gym Name',
+                              //     style: TextStyle(fontWeight: FontWeight.w600),
+                              //   ),
+                              // ),
                               // DataColumn(
                               //   label: Text(
                               //     'Gym Address',
@@ -154,12 +154,12 @@ class _BookingDetailsState extends State<BookingDetails> {
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
-                              DataColumn(
-                                label: Text(
-                                  'Days Left',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
-                              ),
+                              // DataColumn(
+                              //   label: Text(
+                              //     'Days Left',
+                              //     style: TextStyle(fontWeight: FontWeight.w600),
+                              //   ),
+                              // ),
                               DataColumn(
                                 label: Text(
                                   'Booking Status',
@@ -253,9 +253,9 @@ class _BookingDetailsState extends State<BookingDetails> {
       DataCell(data['totalDays'] != null
           ? Text(data['totalDays'].toString())
           : const Text("")),
-      DataCell(data['tax_pay'] != null
-          ? Text(data['tax_pay'].toString())
-          : const Text("")),
+      // DataCell(data['tax_pay'] != null
+      //     ? Text(data['tax_pay'].toString())
+      //     : const Text("")),
       DataCell(data['plan_end_duration'] != null
           ? Text(durationEnd)
           : const Text("")),
@@ -281,9 +281,9 @@ class _BookingDetailsState extends State<BookingDetails> {
           ? Text(data['package_type'].toString())
           : const Text("")),
       DataCell(data['order_date'] != null ? Text(orderDate) : const Text("")),
-      DataCell(data['gym_details']['name'] != null
-          ? Text(data['gym_details']['name'].toString())
-          : const Text("")),
+      // DataCell(data['gym_details']['name'] != null
+      //     ? Text(data['gym_details']['name'].toString())
+      //     : const Text("")),
       // DataCell(data['gym_address'] != null
       //     ? Text(data['gym_address'].toString())
       //     : const Text("")),
@@ -293,9 +293,9 @@ class _BookingDetailsState extends State<BookingDetails> {
       DataCell(data['discount'] != null
           ? Text(data['discount'].toString())
           : const Text("")),
-      DataCell(data['daysLeft'] != null
-          ? Text(data['daysLeft'].toString())
-          : const Text("")),
+      // DataCell(data['daysLeft'] != null
+      //     ? Text(data['daysLeft'].toString())
+      //     : const Text("")),
       DataCell(data['booking_status'] != null
           ? Text(data['booking_status'].toString())
           : const Text("")),
