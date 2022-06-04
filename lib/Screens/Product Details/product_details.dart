@@ -154,12 +154,12 @@ class _ProductDetailsState extends State<ProductDetails> {
                         // ),
 
                       ),
-                      onPressed: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => ShowAddBox(),
-                        ));
-                      },
-                      child: Text('Add Product'),
+                      // onPressed: () {
+                      //   Navigator.of(context).push(MaterialPageRoute(
+                      //     builder: (context) => ShowAddBox(),
+                      //   ));
+                      // },
+                      // child: Text('Add Product'),
                       // Container(
                       //   width: 200,
                       //   decoration: BoxDecoration(
@@ -450,7 +450,8 @@ class _ProductDetailsState extends State<ProductDetails> {
             child: const Text("Packages"),
             style: ElevatedButton.styleFrom(primary: Colors.blue),
           ),
-
+    ),
+      ),
       // DataCell(data != null
       //     ? GestureDetector(
       //         onTap: () async {
@@ -689,7 +690,8 @@ class _ProductDetailsState extends State<ProductDetails> {
       DataCell(const Icon(Icons.delete), onTap: () {
         deleteMethod(stream: productStream, uniqueDocId: gymId);
       })
-    ]);
+    ],
+    );
   }
 
 //Adding new data -----------------------------------------------------------------+++++++++++++++++++++++++++-------------------
@@ -1071,7 +1073,8 @@ class _ShowAddBoxState extends State<ShowAddBox> {
                     setState(() {
                       selectedValue = value as String ;
                     });
-                  }),
+                  },
+                ),
             ),
 
             SizedBox(height: 15),
