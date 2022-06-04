@@ -33,6 +33,7 @@ class _UserInformationState extends State<UserInformation> {
   }
 
   @override
+  var xs = "Yes";
   Widget build(BuildContext context) {
     return Scaffold(
 
@@ -99,11 +100,11 @@ class _UserInformationState extends State<UserInformation> {
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
-                              DataColumn(
-                                  label: Text(
-                                'UserId',
-                                style: TextStyle(fontWeight: FontWeight.w600),
-                              )),
+                              // DataColumn(
+                              //     label: Text(
+                              //   'UserId',
+                              //   style: TextStyle(fontWeight: FontWeight.w600),
+                              // )),
                               DataColumn(
                                 label: Text(
                                   'Name',
@@ -140,12 +141,12 @@ class _UserInformationState extends State<UserInformation> {
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
-                              DataColumn(
-                                label: Text(
-                                  'Sub Locality',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
-                              ),
+                              // DataColumn(
+                              //   label: Text(
+                              //     'Sub Locality',
+                              //     style: TextStyle(fontWeight: FontWeight.w600),
+                              //   ),
+                              // ),
                               DataColumn(
                                 label: Text(
                                   'Pincode',
@@ -231,14 +232,14 @@ class _UserInformationState extends State<UserInformation> {
                 child: Text('Null'),
               ),
       ),
-      DataCell(data != null ? Text(userIDData) : Text("")),
+      // DataCell(data != null ? Text(userIDData) : Text("")),
       DataCell(data != null ? Text(data['name'] ?? "") : Text("")),
       DataCell(data != null ? Text(data['email'] ?? "") : Text("")),
       DataCell(data != null ? Text(data['gender'] ?? "") : Text("")),
       DataCell(data != null ? Text(data['number'] ?? "") : Text("")),
       DataCell(data != null ? Text(data['address'] ?? "") : Text("")),
       DataCell(data != null ? Text(data['locality'] ?? "") : Text("")),
-      DataCell(data != null ? Text(data['subLocality'] ?? "") : Text("")),
+      // DataCell(data != null ? Text(data['subLocality'] ?? "") : Text("")),
       DataCell(data != null ? Text(data['pincode'] ?? "") : Text("")),
       DataCell(
         Center(
@@ -254,7 +255,7 @@ class _UserInformationState extends State<UserInformation> {
                   .whenComplete(() => print("Legitimate toggled"))
                   .catchError((e) => print(e));
             },
-            child: Text(legit.toString()),
+            child: Text(legit ? "Yes" : "No"),
             style: ElevatedButton.styleFrom(
                 primary: legit ? Colors.green : Colors.red),
           ),
@@ -743,6 +744,7 @@ class _EditBoxState extends State<EditBox> {
                             Navigator.pop(context);
                           },
                           child: const Text('Done'),
+
                         ),
                         SizedBox(
                           width: 20,
@@ -772,7 +774,7 @@ class detailsadd extends StatefulWidget {
 
 class _detailsaddState extends State<detailsadd> {
   final TextEditingController _addaddress = TextEditingController();
-  final TextEditingController _addgender = TextEditingController();
+  // final TextEditingController _addgender = TextEditingController();
   final TextEditingController _addemail = TextEditingController();
   // final TextEditingController _addlatitude = TextEditingController();
   // final TextEditingController _addlongitude = TextEditingController();
@@ -783,6 +785,7 @@ class _detailsaddState extends State<detailsadd> {
   final TextEditingController _addsublocality = TextEditingController();
   final TextEditingController _adduserid = TextEditingController();
   var profileImage;
+  String gender = "Male";
 
   @override
   Widget build(BuildContext context) {
@@ -831,7 +834,37 @@ class _detailsaddState extends State<detailsadd> {
               //     hinttext: "UserID", addcontroller: _adduserid),
               customTextField(hinttext: "Name", addcontroller: _addname),
               customTextField(hinttext: "Email", addcontroller: _addemail),
-              customTextField(hinttext: "Gender", addcontroller: _addgender),
+              Row(
+                children: [
+                  Text(
+                    "Gender: ",
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+                  ),
+                  SizedBox(
+                    width: 20,
+                  ),
+                  DropdownButton(
+                      value: gender,
+                      items: [
+                        DropdownMenuItem(
+                          child: Text("Male"),
+                          value: "Male",
+                        ),
+                        DropdownMenuItem(
+                          child: Text("Female"),
+                          value: "Female",
+                        ),
+                        DropdownMenuItem(
+                            child: Text("Unisex"), value: "Unisex"),
+                      ],
+                      onChanged: (value) {
+                        setState(() {
+                          gender = value as String;
+                        });
+                      }),
+                ],
+              ),
+              // customTextField(hinttext: "Gender", addcontroller: _addgender),
 
               customTextField(hinttext: "Address", addcontroller: _addaddress),
               customTextField(
@@ -855,7 +888,8 @@ class _detailsaddState extends State<detailsadd> {
                           'userId': "+91${_addnumber.text}",
                           'name': _addname.text,
                           'email': _addemail.text,
-                          'gender': _addgender.text,
+                          'gender': gender,
+
                           'number': "+91${_addnumber.text}",
                           'locality': _addlocality.text,
                           'subLocality': _addsublocality.text,
