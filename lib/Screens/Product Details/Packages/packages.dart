@@ -5,10 +5,15 @@ import '../../../services/CustomTextFieldClass.dart';
 import '../../../services/MatchIDMethod.dart';
 
 String globalGymId = '';
+String name = '';
 
 class PackagesPage extends StatefulWidget {
   String pGymId;
-  PackagesPage({Key? key, required this.pGymId}) : super(key: key);
+  String o, land;
+
+  PackagesPage(
+      {Key? key, required this.pGymId, required this.o, required this.land})
+      : super(key: key);
 
   @override
   State<PackagesPage> createState() => _PackagesPageState();
@@ -17,15 +22,16 @@ class PackagesPage extends StatefulWidget {
 class _PackagesPageState extends State<PackagesPage> {
   CollectionReference? packageStream;
   var catagory;
-  var drop=[];
+  var drop = [];
   var catagory_type;
-  void dropDownPackage(String? selecetValue){
+  void dropDownPackage(String? selecetValue) {
     // if(selecetValue is String){
     setState(() {
-      catagory_type=selecetValue;
+      catagory_type = selecetValue;
     });
     // }
   }
+
   // bool loadig=true;
   // catagoryStream()async{
   //   await FirebaseFirestore.instance.collection("category").snapshots()
@@ -42,7 +48,7 @@ class _PackagesPageState extends State<PackagesPage> {
   //         }
   //   });
   // }
-
+  var landmark;
   @override
   void initState() {
     super.initState();
@@ -51,11 +57,11 @@ class _PackagesPageState extends State<PackagesPage> {
         .collection('product_details')
         .doc(widget.pGymId)
         .collection('package')
-    .doc("normal_package")
-    .collection("gym")
-
-    ;
+        .doc("normal_package")
+        .collection("gym");
     globalGymId = widget.pGymId;
+    name = widget.o;
+    landmark = widget.land;
   }
 
   final finalPackID =
@@ -65,10 +71,18 @@ class _PackagesPageState extends State<PackagesPage> {
   Widget build(BuildContext context) {
     print(finalPackID);
     return
-      // loadig?
-      //   const Center(child: CircularProgressIndicator())
-      //   :
-      Scaffold(
+        // loadig?
+        //   const Center(child: CircularProgressIndicator())
+        //   :
+        Scaffold(
+      appBar: AppBar(
+        title: Center(
+          child: Text(
+            '${name.toUpperCase()}, ${landmark.toString().toUpperCase()}',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+        ),
+      ),
       body: SafeArea(
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 5),
@@ -117,25 +131,14 @@ class _PackagesPageState extends State<PackagesPage> {
                         child: DataTable(
                             dataRowHeight: 65,
                             columns: const [
-                              DataColumn(
-                                  label: Text(
-                                'Discount',
-                                style: TextStyle(fontWeight: FontWeight.w600),
-                              )),
-                              DataColumn(
-                                  label: Text(
-                                'package id',
-                                style: TextStyle(fontWeight: FontWeight.w600),
-                              )),
+                              // DataColumn(
+                              //     label: Text(
+                              //   'package id',
+                              //   style: TextStyle(fontWeight: FontWeight.w600),
+                              // )),
                               DataColumn(
                                 label: Text(
-                                  'Original Price',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
-                              ),
-                              DataColumn(
-                                label: Text(
-                                  'index',
+                                  'Index',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
@@ -145,6 +148,19 @@ class _PackagesPageState extends State<PackagesPage> {
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
+
+                              DataColumn(
+                                label: Text(
+                                  'Original Price',
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
+                              ),
+                              DataColumn(
+                                  label: Text(
+                                'Discount',
+                                style: TextStyle(fontWeight: FontWeight.w600),
+                              )),
+
                               DataColumn(
                                 label: Text(
                                   'Type',
@@ -185,12 +201,17 @@ class _PackagesPageState extends State<PackagesPage> {
   DataRow _buildListItem(BuildContext context, DocumentSnapshot data) {
     String packId = data['id'];
     return DataRow(cells: [
-      DataCell(data != null ? Text(data['discount'] ?? "") : Text("")),
-      DataCell(data != null ? Text(data['id'] ?? "") : Text("")),
-      DataCell(data != null ? Text(data['index'].toString() ) : Text("")),
+      // DataCell(data != null ? Text(data['id'] ?? "") : Text("")),
+      DataCell(data != null ? Text(data['index'].toString()) : Text("")),
+
+      DataCell(data != null
+          ? Text(data['title'].toString().toUpperCase())
+          : Text("")),
       DataCell(data != null ? Text(data['original_price'] ?? "") : Text("")),
-      DataCell(data != null ? Text(data['title'] ?? "") : Text("")),
-      DataCell(data != null ? Text(data['type'] ?? "") : Text("")),
+      DataCell(data != null ? Text(data['discount'] ?? "") : Text("")),
+      DataCell(data != null
+          ? Text(data['type'].toString().toUpperCase())
+          : Text("")),
       // DataCell(data != null ? Text(data['validity'] ?? "") : Text("")),
       DataCell(const Text(""), showEditIcon: true, onTap: () {
         showDialog(
@@ -201,7 +222,12 @@ class _PackagesPageState extends State<PackagesPage> {
                 child: SingleChildScrollView(
                   child: ProductEditBox(
                     gym_id: widget.pGymId,
-                    type: data['type'], index: data['index'], discount: data['discount'], title:  data['title'], originalprice: data['original_price'], id: packId,
+                    type: data['type'],
+                    index: data['index'],
+                    discount: data['discount'],
+                    title: data['title'],
+                    originalprice: data['original_price'],
+                    id: packId,
                   ),
                 ),
               );
@@ -215,7 +241,7 @@ class _PackagesPageState extends State<PackagesPage> {
 
   final TextEditingController _discount = TextEditingController();
   final TextEditingController _originalprice = TextEditingController();
-  final TextEditingController _index= TextEditingController();
+  final TextEditingController _index = TextEditingController();
   final TextEditingController _title = TextEditingController();
   final TextEditingController _type = TextEditingController();
   final TextEditingController _validity = TextEditingController();
@@ -240,17 +266,17 @@ class _PackagesPageState extends State<PackagesPage> {
                           fontWeight: FontWeight.w600,
                           fontSize: 14),
                     ),
-                    customTextField(hinttext: "discount", addcontroller: _discount),
-                    customTextField(hinttext: "original price", addcontroller: _originalprice),
+                    customTextField(
+                        hinttext: "discount", addcontroller: _discount),
+                    customTextField(
+                        hinttext: "original price",
+                        addcontroller: _originalprice),
                     customTextField(hinttext: "index", addcontroller: _index),
-                    customTextField(
-                        hinttext: "title", addcontroller: _title),
-                    customTextField(
-                        hinttext: "type", addcontroller: _type),
+                    customTextField(hinttext: "title", addcontroller: _title),
+                    customTextField(hinttext: "type", addcontroller: _type),
                     customTextField(
                         hinttext: "validity", addcontroller: _validity),
-                    customTextField(
-                        hinttext: "price", addcontroller: _price),
+                    customTextField(hinttext: "price", addcontroller: _price),
                     // Container(
                     //   color: Colors.yellowAccent,
                     //   width: 280,
@@ -268,25 +294,23 @@ class _PackagesPageState extends State<PackagesPage> {
                     Center(
                       child: ElevatedButton(
                         onPressed: () async {
-
-                          await
-                          FirebaseFirestore.instance
+                          await FirebaseFirestore.instance
                               .collection('product_details')
                               .doc(widget.pGymId)
                               .collection('package')
                               .doc("normal_package")
-                          .collection("gym")
-                          .doc(finalPackID)
+                              .collection("gym")
+                              .doc(finalPackID)
                               .set(
                             {
                               'discount': _discount.text,
                               "original_price": _originalprice.text,
                               'index': int.parse(_index.text),
                               'title': _title.text,
-                              "type":_type.text,
-                              "id":finalPackID,
-                              "validity":_validity.text,
-                              "price":_price.text,
+                              "type": _type.text,
+                              "id": finalPackID,
+                              "validity": _validity.text,
+                              "price": _price.text,
                             },
                           );
                           Navigator.pop(context);
@@ -308,7 +332,9 @@ class ProductEditBox extends StatefulWidget {
     required this.originalprice,
     required this.index,
     required this.title,
-    required this.type,required this.id,required this.gym_id,
+    required this.type,
+    required this.id,
+    required this.gym_id,
   }) : super(key: key);
 
   final String discount;
@@ -326,7 +352,7 @@ class ProductEditBox extends StatefulWidget {
 class _ProductEditBoxState extends State<ProductEditBox> {
   final TextEditingController _discount = TextEditingController();
   final TextEditingController _originalprice = TextEditingController();
-  final TextEditingController _index= TextEditingController();
+  final TextEditingController _index = TextEditingController();
   final TextEditingController _title = TextEditingController();
   final TextEditingController _type = TextEditingController();
   @override
@@ -336,7 +362,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
     _originalprice.text = widget.originalprice;
     _index.text = widget.index.toString();
     _title.text = widget.title;
-    _type.text=widget.type;
+    _type.text = widget.type;
   }
 
   @override
@@ -359,12 +385,11 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                     fontSize: 14),
               ),
               customTextField(hinttext: "discount", addcontroller: _discount),
-              customTextField(hinttext: "original price", addcontroller: _originalprice),
+              customTextField(
+                  hinttext: "original price", addcontroller: _originalprice),
               customTextField(hinttext: "index", addcontroller: _index),
-              customTextField(
-                  hinttext: "title", addcontroller: _title),
-              customTextField(
-                  hinttext: "type", addcontroller: _type),
+              customTextField(hinttext: "title", addcontroller: _title),
+              customTextField(hinttext: "type", addcontroller: _type),
               Padding(
                 padding: const EdgeInsets.all(12.0),
                 child: Center(
@@ -386,7 +411,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                         "original_price": _originalprice.text,
                         'index': int.parse(_index.text),
                         'title': _title.text,
-                        "type":_type.text
+                        "type": _type.text
                       };
                       await documentReference
                           .update(data)

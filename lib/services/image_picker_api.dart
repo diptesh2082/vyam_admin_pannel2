@@ -42,6 +42,34 @@ uploadImageToStorage(XFile? pickedFile, String? id) async {
   }
 }
 
+uploadImageToTrainer(XFile? pickedFile, String? id) async {
+  if (kIsWeb) {
+    Reference _reference = _firebaseStorage
+        .child('product_images/${Path.basename(pickedFile!.path)}');
+    await _reference
+        .putData(
+      await pickedFile.readAsBytes(),
+      SettableMetadata(contentType: 'image/jpeg'),
+    )
+        .whenComplete(() async {
+      await _reference.getDownloadURL().then((value) async {
+        var uploadedPhotoUrl = value;
+        print(value);
+        await FirebaseFirestore.instance
+            .collection("product_details")
+            .doc(id)
+            .collection('trainer')
+            .doc()
+            .update({
+          "display_picture": value,
+        });
+      });
+    });
+  } else {
+//write a code for android or ios
+  }
+}
+
 uploadImageToUser(XFile? pickedFile, String? id) async {
   if (kIsWeb) {
     Reference _reference = FirebaseStorage.instance
