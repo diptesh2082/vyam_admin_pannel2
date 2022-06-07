@@ -283,7 +283,7 @@ class _PackagesPageState extends State<PackagesPage> {
                               "original_price": _originalprice.text,
                               'index': int.parse(_index.text),
                               'title': _title.text,
-                              "type":_type.text,
+                              "type":_type.text.toLowerCase().trim(),
                               "id":finalPackID,
                               "validity":_validity.text,
                               "price":_price.text,
@@ -386,7 +386,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                         "original_price": _originalprice.text,
                         'index': int.parse(_index.text),
                         'title': _title.text,
-                        "type":_type.text
+                        "type":_type.text.toLowerCase().trim()
                       };
                       await documentReference
                           .update(data)
