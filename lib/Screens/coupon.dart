@@ -161,9 +161,11 @@ class _CouponState extends State<Coupon> {
       DataCell(data['discount'] != null
           ? Text(data['discount'] ?? "")
           : const Text("")),
+
       DataCell(data['max_dis'] != null
           ? Text(data['max_dis'] ?? "")
           : const Text("")),
+
       DataCell(data['tag'] != null ? Text(data['tag'] ?? "") : const Text("")),
       DataCell(const Text(""), showEditIcon: true, onTap: () {
         Navigator.push(
@@ -174,8 +176,10 @@ class _CouponState extends State<Coupon> {
                     discount: data['discount'],
                     title: data['title'],
                     code: data['code'],
+
                     couponId: data['coupon_id'],
                     max_dis: data['max_dis'])));
+
       }),
       DataCell(Icon(Icons.delete), onTap: () {
         deleteMethod(stream: couponStream, uniqueDocId: couponIdData);
@@ -508,7 +512,9 @@ class _ProductEditBoxState extends State<ProductEditBox> {
             customTextField(hinttext: "Detail", addcontroller: _detail),
             customTextField(hinttext: "Discount", addcontroller: _discount),
             customTextField(hinttext: "Title", addcontroller: _title),
+
             customTextField(hinttext: "Max Discount", addcontroller: _max_dis),
+
             Padding(
               padding: const EdgeInsets.all(12.0),
               child: Row(
@@ -528,7 +534,9 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                           'title': _title.text,
                           'tag': _title.text,
                           'coupon_id': widget.couponId,
+
                           'max_dis': _max_dis.text,
+
                         };
                         await documentReference
                             .update(data)

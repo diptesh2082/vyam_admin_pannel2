@@ -50,6 +50,11 @@ class _ProductDetailsState extends State<ProductDetails> {
   String gender = 'male';
 
 // <<<<<<< HEAD
+// =======
+
+// >>>>>>> cf1997613ff877c63a56c61e3009bdfe3639ccfa
+
+// <<<<<<< HEAD
 //   File? image;
 //   Future pickImage() async {
 //     try{
@@ -99,7 +104,10 @@ class _ProductDetailsState extends State<ProductDetails> {
 // //   List<String> multiimages = [];
 // // >>>>>>> 2bd9314ce4369a0ee8841fb3648ac2b93b65ffa4
   String searchGymName = '';
+// <<<<<<< HEAD
   String pswd = '';
+// =======
+// >>>>>>> cf1997613ff877c63a56c61e3009bdfe3639ccfa
 
   @override
   void initState() {
@@ -124,6 +132,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                 Row(
                   children: [
                     Padding(
+// <<<<<<< HEAD
                       padding: const EdgeInsets.only(top: 8.0, left: 8.0),
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
@@ -157,8 +166,20 @@ class _ProductDetailsState extends State<ProductDetails> {
                         //     ],
                         //   ),
                         // ),
+// =======
+//                     padding: const EdgeInsets.only(top: 8.0, left: 8.0),
+//                     child: ElevatedButton(
+//                       style: ElevatedButton.styleFrom(
+//                           //padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 20),
+//                           textStyle:
+//                           const TextStyle(fontSize: 15 ),
+// >>>>>>> cf1997613ff877c63a56c61e3009bdfe3639ccfa
                       ),
                     ),
+// <<<<<<< HEAD
+// =======
+//                   ),
+// >>>>>>> cf1997613ff877c63a56c61e3009bdfe3639ccfa
                     const Spacer(),
                     Container(
                       width: 500,
@@ -176,7 +197,27 @@ class _ProductDetailsState extends State<ProductDetails> {
                           textAlignVertical: TextAlignVertical.bottom,
                           onSubmitted: (value) async {
                             FocusScope.of(context).unfocus();
+// <<<<<<< HEAD
                           },
+                          // controller: searchController,
+//                           onChanged: (value) {
+//                             if (value.length == 0) {
+//                               // _node.canRequestFocus=false;
+//                               // FocusScope.of(context).unfocus();
+//                             }
+//                             if (mounted) {
+//                               setState(() {
+//                                 searchGymName = value.toString();
+//                               });
+//                             }
+//                           },
+//                           decoration: InputDecoration(
+//                             prefixIcon: const Icon(Icons.search),
+//                             hintText: 'Search',
+//                             hintStyle: GoogleFonts.poppins(
+//                                 fontSize: 16, fontWeight: FontWeight.w500),
+// =======
+//                           },
                           // controller: searchController,
                           onChanged: (value) {
                             if (value.length == 0) {
@@ -194,6 +235,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                             hintText: 'Search',
                             hintStyle: GoogleFonts.poppins(
                                 fontSize: 16, fontWeight: FontWeight.w500),
+// >>>>>>> cf1997613ff877c63a56c61e3009bdfe3639ccfa
                             border: InputBorder.none,
                             filled: true,
                             fillColor: Colors.white12,
@@ -201,6 +243,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                         ),
                       ),
                     ),
+// <<<<<<< HEAD
                     // Padding(
                     //   padding: const EdgeInsets.only(top: 8.0, left: 8.0),
                     //   child: IconButton(
@@ -215,6 +258,23 @@ class _ProductDetailsState extends State<ProductDetails> {
                     //   )
                     //
                     // ),
+// =======
+                    // Padding(
+                    //   padding: const EdgeInsets.only(top: 8.0, left: 8.0),
+                    //   child: IconButton(
+                    //
+                    //     onPressed: () {
+                    //       setState(() {
+                    //
+                    //       });
+                    //
+                    //     },
+                    //     icon: const Icon(Icons.search),
+                    //   )
+                    //
+                    // ),
+
+// >>>>>>> cf1997613ff877c63a56c61e3009bdfe3639ccfa
                   ],
                 ),
                 Center(
@@ -233,6 +293,22 @@ class _ProductDetailsState extends State<ProductDetails> {
                       if (searchGymName.length > 0) {
                         doc = doc.where((element) {
                           return element
+// <<<<<<< HEAD
+//                                   .get('name')
+//                                   .toString()
+//                                   .toLowerCase()
+//                                   .contains(searchGymName.toString()) ||
+//                               element
+//                                   .get('gym_id')
+//                                   .toString()
+//                                   .toLowerCase()
+//                                   .contains(searchGymName.toString()) ||
+//                               element
+//                                   .get('address')
+//                                   .toString()
+//                                   .toLowerCase()
+//                                   .contains(searchGymName.toString());
+// =======
                                   .get('name')
                                   .toString()
                                   .toLowerCase()
@@ -247,6 +323,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                                   .toString()
                                   .toLowerCase()
                                   .contains(searchGymName.toString());
+// >>>>>>> cf1997613ff877c63a56c61e3009bdfe3639ccfa
                         }).toList();
                       }
 
@@ -454,19 +531,28 @@ class _ProductDetailsState extends State<ProductDetails> {
       DataCell(data != null ? Text(data['address'] ?? "") : const Text("")),
       DataCell(data != null ? Text(gymId) : const Text("")),
       DataCell(data != null ? Text(data['gym_owner'] ?? "") : const Text("")),
-      DataCell(data != null
-          ? Text(data['gender'].toString().toUpperCase())
-          : const Text("")),
+// <<<<<<< HEAD
+//       DataCell(data != null
+//           ? Text(data['gender'].toString().toUpperCase())
+//           : const Text("")),
+// =======
+      DataCell(data != null ? Text(data['gender'] ?? "") : const Text("")),
+// >>>>>>> cf1997613ff877c63a56c61e3009bdfe3639ccfa
       // DataCell(data != null
       //     ? GestureDetector(
       //         onTap: () async {
       //           await MapsLaucherApi().launchMaps(loc.latitude, loc.longitude);
       //         },
       //         child: Text(loctext))
+// <<<<<<< HEAD
+//       //: const Text("")),
+//       DataCell(data != null
+//           ? Text(data['landmark'].toString().toUpperCase())
+//           : const Text("")),
+// =======
       //: const Text("")),
-      DataCell(data != null
-          ? Text(data['landmark'].toString().toUpperCase())
-          : const Text("")),
+      DataCell(data != null ? Text(data['landmark'] ?? "") : const Text("")),
+// >>>>>>> cf1997613ff877c63a56c61e3009bdfe3639ccfa
       DataCell(data != null ? Text(data['pincode'] ?? "") : const Text("")),
 
       DataCell(ElevatedButton(
@@ -490,10 +576,20 @@ class _ProductDetailsState extends State<ProductDetails> {
           ));
         },
       )),
+//       DataCell(const Text('Extra Package '), onTap: () {
+//         Navigator.of(context).push(MaterialPageRoute(
+//           builder: (context) => ExtraPackagesPage(
+//             pGymId: gymId,
+// // <<<<<<< HEAD
+// // =======
+//           ),
+//         ));
+//       }),
       DataCell(const Text('Extra Package '), onTap: () {
         Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => ExtraPackagesPage(
             pGymId: gymId,
+// >>>>>>> cf1997613ff877c63a56c61e3009bdfe3639ccfa
           ),
         ));
       }),
@@ -606,7 +702,11 @@ class _ProductDetailsState extends State<ProductDetails> {
                   .whenComplete(() => print("Legitimate toggled"))
                   .catchError((e) => print(e));
             },
+// <<<<<<< HEAD
+//             child: Text(x = status ? 'YES' : 'NO'),
+// =======
             child: Text(x = status ? 'YES' : 'NO'),
+// >>>>>>> cf1997613ff877c63a56c61e3009bdfe3639ccfa
             style: ElevatedButton.styleFrom(
                 primary: status ? Colors.green : Colors.red),
           ),
@@ -627,7 +727,11 @@ class _ProductDetailsState extends State<ProductDetails> {
                   .whenComplete(() => print("Legitimate toggled"))
                   .catchError((e) => print(e));
             },
+// <<<<<<< HEAD
+//             child: Text(y = legit ? 'YES' : 'NO'),
+// =======
             child: Text(y = legit ? 'YES' : 'NO'),
+// >>>>>>> cf1997613ff877c63a56c61e3009bdfe3639ccfa
             style: ElevatedButton.styleFrom(
                 primary: legit ? Colors.green : Colors.red),
           ),
@@ -741,10 +845,15 @@ class _ShowAddBoxState extends State<ShowAddBox> {
   var multipic;
   var impath;
   var image;
+// <<<<<<< HEAD
   var xs;
   bool selected = false;
   CollectionReference? amenitiesStream;
+  // var selectedValue = "MALE";
+// =======
+
   var selectedValue = "MALE";
+// >>>>>>> cf1997613ff877c63a56c61e3009bdfe3639ccfa
   @override
   void initState() {
     productStream = FirebaseFirestore.instance.collection("product_details");
@@ -758,6 +867,7 @@ class _ShowAddBoxState extends State<ShowAddBox> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white10,
+// <<<<<<< HEAD
       appBar: AppBar(
         title: const Text('Add Vendor Details'),
       ),
@@ -776,6 +886,25 @@ class _ShowAddBoxState extends State<ShowAddBox> {
                       fontWeight: FontWeight.w600,
                       fontSize: 14),
                 ),
+// =======
+//         appBar: AppBar(
+//           title: const Text('Add Vendor Details'),
+//         ),
+//         body: Container(
+//       padding: EdgeInsets.all(50),
+//       child: SingleChildScrollView(
+//         child: Column(
+//           crossAxisAlignment: CrossAxisAlignment.start,
+//           children: [
+//             Padding(
+//               padding: const EdgeInsets.only(left: 8.0, top: 2, right: 8),
+//               child: const Text(
+//                 'Add Records',
+//                 style: TextStyle(
+//                     fontFamily: 'poppins',
+//                     fontWeight: FontWeight.w600,
+//                     fontSize: 14),
+// // >>>>>>> cf1997613ff877c63a56c61e3009bdfe3639ccfa
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -816,6 +945,7 @@ class _ShowAddBoxState extends State<ShowAddBox> {
 
               //customTextField(hinttext: "Gender", addcontroller: _addgender),
 
+// <<<<<<< HEAD
               Container(
                 child: Row(
                   children: [
@@ -1109,37 +1239,6 @@ class _ShowAddBoxState extends State<ShowAddBox> {
     );
   }
 
-  // Future<List<XFile>> multiimagepickerr() async {
-  //   List<XFile>? _images = await ImagePicker().pickMultiImage();
-  //   if (_images != null && _images.isNotEmpty) {
-  //     return _images;
-  //   }
-  //   return [];
-  // }
-
-  // Future<List<String>> multiimageuploader(List<XFile> list) async {
-  //   List<String> _path = [];
-  //   for (XFile _image in list) {
-  //     _path.add(await uploadimage(_image));
-  //   }
-  //   return _path;
-  // }
-  //
-  // Future<String> uploadimage(XFile image) async {
-  //   var x = Random().nextInt(9999);
-  //   if (x < 1000) {
-  //     x = x + 1000;
-  //   }
-  //   Reference db =
-  //       FirebaseStorage.instance.ref().child("product_image").child("${x}");
-  //   await db.putFile(File(image.path));
-  //   // await db.putFile(File(image.path));
-  //   return await db.getDownloadURL();
-  // }
-  //
-  // String getImageName(XFile image) {
-  //   return image.path.split("/").last;
-  // }
   uploadToStroagees() {
     InputElement input = FileUploadInputElement() as InputElement
       ..accept = 'image/*';

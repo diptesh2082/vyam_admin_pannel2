@@ -140,6 +140,10 @@ class ImagePickerAPI {
 }
 // <<<<<<< HEAD
 // <<<<<<< HEAD
+// =======
+//
+// >>>>>>> cf1997613ff877c63a56c61e3009bdfe3639ccfa
+// <<<<<<< HEAD
 
 // <<<<<<< HEAD
 //
@@ -158,7 +162,11 @@ class ImagePickerAPI {
 
 uploadImageToBanner(XFile? pickedFile, String? id) async {
   if (kIsWeb) {
+// <<<<<<< HEAD
 // >>>>>>> /**/419576ed132f1f7631adea2357dfe8fbddca83b9
+// =======
+
+// >>>>>>> cf1997613ff877c63a56c61e3009bdfe3639ccfa
     Reference _reference = _firebaseStorage
         .child('banner_details/${Path.basename(pickedFile!.path)}');
     await _reference
@@ -185,6 +193,7 @@ uploadImageToBanner(XFile? pickedFile, String? id) async {
 }
 
 // <<<<<<< HEAD
+// <<<<<<< HEAD
 // // <<<<<<< HEAD
 // // // <<<<<<< HEAD
 // // // uploadImageToCateogry(PickedFile? pickedFile, String? id) async {
@@ -199,9 +208,14 @@ uploadImageToBanner(XFile? pickedFile, String? id) async {
 //   if (kIsWeb) {
 // // >>>>>>> 419576ed132f1f7631adea2357dfe8fbddca83b9
 // =======
+// uploadImageToCateogry(XFile? pickedFile, String? id) async {
+//   if (kIsWeb) {
+// // >>>>>>> 419576ed132f1f7631adea2357dfe8fbddca83b9
+// =======
+
 uploadImageToCateogry(XFile? pickedFile, String? id) async {
   if (kIsWeb) {
-// >>>>>>> 419576ed132f1f7631adea2357dfe8fbddca83b9
+// >>>>>>> cf1997613ff877c63a56c61e3009bdfe3639ccfa
     Reference _reference = _firebaseStorage
         .child('banner_details/${Path.basename(pickedFile!.path)}');
     await _reference
@@ -225,6 +239,10 @@ uploadImageToCateogry(XFile? pickedFile, String? id) async {
 }
 
 // <<<<<<< HEAD
+// =======
+//
+// >>>>>>> cf1997613ff877c63a56c61e3009bdfe3639ccfa
+// <<<<<<< HEAD
 // // <<<<<<< HEAD
 // // // <<<<<<< HEAD
 // // // final _firebaseStoragee =
@@ -245,6 +263,10 @@ uploadImageToCateogry(XFile? pickedFile, String? id) async {
 final _firebaseStorages = FirebaseStorage.instance.ref().child("amenities");
 uploadImageToAmenities(XFile? pickedFile, String? id) async {
 // >>>>>>> 419576ed132f1f7631adea2357dfe8fbddca83b9
+// <<<<<<< HEAD
+// =======
+//
+// >>>>>>> cf1997613ff877c63a56c61e3009bdfe3639ccfa
   if (kIsWeb) {
     Reference _reference =
         _firebaseStorages.child('amenities/${Path.basename(pickedFile!.path)}');
@@ -399,9 +421,12 @@ uploadImageToPush(XFile? pickedFile, String? id) async {
           "image": value
         });
 // <<<<<<< HEAD
+// <<<<<<< HEAD
 // =======
 //
 // >>>>>>> 419576ed132f1f7631adea2357dfe8fbddca83b9
+// =======
+// >>>>>>> cf1997613ff877c63a56c61e3009bdfe3639ccfa
       });
     });
   } else {
@@ -409,13 +434,102 @@ uploadImageToPush(XFile? pickedFile, String? id) async {
   }
 // <<<<<<< HEAD
 // <<<<<<< HEAD
+// =======
+// >>>>>>> cf1997613ff877c63a56c61e3009bdfe3639ccfa
+// <<<<<<< HEAD
   return uploadedPhotoUrl;
 }
-// =======
+
+// final _firebaseStoragee = FirebaseStorage.instance.ref().child("product_details");
+//
+// uploadImageToProduct(XFile? pickedFile, String? id) async {
+//   var uploadedPhotoUrl = " ";
+//   if (kIsWeb) {
+//     Reference _reference = _firebaseStoragee
+//         .child('product_details/${Path.basename(pickedFile!.path)}');
+//     await _reference
+//         .putData(
+//       await pickedFile.readAsBytes(),
+//       SettableMetadata(contentType: 'image/jpeg'),
+//     )
+//         .whenComplete(() async {
+//       await _reference.getDownloadURL().then((value) async {
+//         uploadedPhotoUrl = value;
+//         print(value);
+//         await FirebaseFirestore.instance
+//             .collection("product_details")
+//             .doc(id)
+//             .update({
+//           "images": FieldValue.arrayUnion([value])
+//         });
+//       });
+//     });
+//   } else {
+// //write a code for android or ios
+//   }
+//   return uploadedPhotoUrl;
+// }
+
+// final _firebaseStorages = FirebaseStorage.instance.ref().child("amenities");
+//
+// uploadImageToAmenities(XFile? pickedFile, String? id) async {
+//   if (kIsWeb) {
+//     Reference _reference =
+//         _firebaseStorages.child('amenities/${Path.basename(pickedFile!.path)}');
+//     await _reference
+//         .putData(
+//       await pickedFile.readAsBytes(),
+//       SettableMetadata(contentType: 'image/jpeg'),
+//     )
+//         .whenComplete(() async {
+//       await _reference.getDownloadURL().then((value) async {
+//         var uploadedPhotoUrl = value;
+//         print(value);
+//         await FirebaseFirestore.instance
+//             .collection("amenities")
+//             .doc(id)
+//             .update({"image": value});
+//       });
+//     });
+//   } else {
+// //write a code for android or ios
+//   }
+// }
+
+// uploadImageToPush(XFile? pickedFile ,String? id) async {
+//   if(kIsWeb){
+//     Reference _reference = _firebaseStorage
+//         .child('push_notifications/${Path.basename(pickedFile!.path)}');
+//     await _reference
+//         .putData(
+//       await pickedFile.readAsBytes(),
+//       SettableMetadata(contentType: 'image/jpeg'),
+//     )
+//         .whenComplete(() async {
+//       await _reference.getDownloadURL().then((value) async {
+//         var uploadedPhotoUrl = value;
+//         print(value);
+//         await FirebaseFirestore.instance.collection("push_notifications")
+//             .doc(id)
+//             .update({
+//           //"display_picture": value,
+//           "image": value
+//         });
+//
+//       });
+//     });
+//   }else{
+// //write a code for android or ios
+//   }
+//
+// }
 
 // >>>>>>> 419576ed132f1f7631adea2357dfe8fbddca83b9
+// <<<<<<< HEAD
 // // =======
 //
 // }
 //
 // >>>>>>> 419576ed132f1f7631adea2357dfe8fbddca83b9
+// =======
+// >>>>>>> cf1997613ff877c63a56c61e3009bdfe3639ccfa

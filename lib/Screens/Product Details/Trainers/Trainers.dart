@@ -385,20 +385,20 @@ class _TrainerPageState extends State<TrainerPage> {
                               focusNode: fn,
                               decoration: InputDecoration(
                                 isDense: true,
-                                border: OutlineInputBorder(
+                                border: const OutlineInputBorder(
                                   borderSide: BorderSide(
                                     color: Color.fromARGB(255, 74, 137, 92),
                                     width: 3.0,
                                   ),
                                 ),
-                                focusedBorder: OutlineInputBorder(
+                                focusedBorder: const OutlineInputBorder(
                                   borderSide: BorderSide(
                                     color: Color.fromARGB(255, 74, 137, 92),
                                     width: 3.0,
                                   ),
                                 ),
                                 helperText: 'Enter language...',
-                                helperStyle: TextStyle(
+                                helperStyle: const TextStyle(
                                   color: Color.fromARGB(255, 74, 137, 92),
                                 ),
                                 hintText: _tagsController!.hasTags

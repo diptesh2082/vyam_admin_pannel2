@@ -307,10 +307,17 @@ class _PackagesPageState extends State<PackagesPage> {
                               "original_price": _originalprice.text,
                               'index': int.parse(_index.text),
                               'title': _title.text,
-                              "type": _type.text,
+// <<<<<<< HEAD
+//                               "type": _type.text,
+//                               "id": finalPackID,
+//                               "validity": _validity.text,
+//                               "price": _price.text,
+// =======
+                              "type": _type.text.toLowerCase().trim(),
                               "id": finalPackID,
                               "validity": _validity.text,
                               "price": _price.text,
+// >>>>>>> cf1997613ff877c63a56c61e3009bdfe3639ccfa
                             },
                           );
                           Navigator.pop(context);
@@ -411,7 +418,11 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                         "original_price": _originalprice.text,
                         'index': int.parse(_index.text),
                         'title': _title.text,
-                        "type": _type.text
+// <<<<<<< HEAD
+//                         "type": _type.text
+// =======
+                        "type": _type.text.toLowerCase().trim()
+// >>>>>>> cf1997613ff877c63a56c61e3009bdfe3639ccfa
                       };
                       await documentReference
                           .update(data)
