@@ -43,15 +43,12 @@ class _AmenetiesScreenState extends State<AmenetiesScreen> {
                   padding: const EdgeInsets.only(top: 8.0, left: 8.0),
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      textStyle:
-                      const TextStyle(fontSize: 15 ),
+                      textStyle: const TextStyle(fontSize: 15),
                     ),
-                    onPressed:() {
+                    onPressed: () {
                       Get.to(() => newAmeneties());
                     },
-                     child: Text(
-                       'Add Product'
-                     ),
+                    child: Text('Add Product'),
                     // Container(
                     //   width: 120,
                     //   decoration: BoxDecoration(
@@ -69,7 +66,9 @@ class _AmenetiesScreenState extends State<AmenetiesScreen> {
                 ),
                 Center(
                   child: StreamBuilder<QuerySnapshot>(
-                    stream: amenityStream!.snapshots(),
+                    stream: amenityStream!
+                        .orderBy('id', descending: false)
+                        .snapshots(),
                     builder: (context, AsyncSnapshot snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return const CircularProgressIndicator();
@@ -156,7 +155,11 @@ class _AmenetiesScreenState extends State<AmenetiesScreen> {
         const Text(''),
         showEditIcon: true,
         onTap: () {
-          Get.to(()=>ProductEditBox(name: data['name'], image: data['image'], amenityId: data['id'], am: data['amenity_id']));
+          Get.to(() => ProductEditBox(
+              name: data['name'],
+              image: data['image'],
+              amenityId: data['id'],
+              am: data['amenity_id']));
           // showDialog(
           //   context: context,
           //   builder: (context) {
@@ -192,77 +195,77 @@ class _AmenetiesScreenState extends State<AmenetiesScreen> {
   //     builder: (context) => AlertDialog(
   //           shape: const RoundedRectangleBorder(
   //               borderRadius: BorderRadius.all(Radius.circular(30))),
-            // content: SizedBox(
-            //   height: 480,
-            //   width: 800,
-            //   child: SingleChildScrollView(
-            //     child: Column(
-            //       crossAxisAlignment: CrossAxisAlignment.start,
-            //       children: [
-            //         const Text(
-            //           'Add Records',
-            //           style: TextStyle(
-            //               fontFamily: 'poppins',
-            //               fontWeight: FontWeight.w600,
-            //               fontSize: 14),
-            //         ),
-            //         customTextField(hinttext: "Name", addcontroller: _addName),
-            //         // customTextField(
-            //         //     hinttext: "Image", addcontroller: _addImage),
-            //         Container(
-            //           padding: EdgeInsets.all(20),
-            //           child: Row(
-            //             children: [
-            //               Text(
-            //                 'Upload Image: ',
-            //                 style: TextStyle(
-            //                     color: Colors.grey,
-            //                     fontWeight: FontWeight.bold,
-            //                     fontSize: 15),
-            //               ),
-            //               const SizedBox(
-            //                 width: 20,
-            //               ),
-            //               InkWell(
-            //                 onTap: () async {
-            //                   image = await chooseImage();
-            //                 },
-            //                 child: const Icon(
-            //                   Icons.upload_file_outlined,
-            //                 ),
-            //               )
-            //             ],
-            //           ),
-            //         ),
-            //         customTextField(hinttext: "ID", addcontroller: _addId),
-            //         Center(
-            //           child: ElevatedButton(
-            //             onPressed: () async {
-            //               await FirebaseFirestore.instance
-            //                   .collection('amenities')
-            //                   .doc(amenityId)
-            //                   .set(
-            //                 {
-            //                   'name': _addName.text,
-            //                   // 'image': _addImage.text,
-            //                   'id': _addId.text,
-            //                   'amenity_id': amenityId,
-            //                   'gym_id': [],
-            //                 },
-            //               ).then((snapshot) async {
-            //                 await uploadImageToAmenities(image, amenityId);
-            //               });
-            //
-            //               Navigator.pop(context);
-            //             },
-            //             child: const Text('Done'),
-            //           ),
-            //         )
-            //       ],
-            //     ),
-            //   ),
-            // ),
-          // ));
+  // content: SizedBox(
+  //   height: 480,
+  //   width: 800,
+  //   child: SingleChildScrollView(
+  //     child: Column(
+  //       crossAxisAlignment: CrossAxisAlignment.start,
+  //       children: [
+  //         const Text(
+  //           'Add Records',
+  //           style: TextStyle(
+  //               fontFamily: 'poppins',
+  //               fontWeight: FontWeight.w600,
+  //               fontSize: 14),
+  //         ),
+  //         customTextField(hinttext: "Name", addcontroller: _addName),
+  //         // customTextField(
+  //         //     hinttext: "Image", addcontroller: _addImage),
+  //         Container(
+  //           padding: EdgeInsets.all(20),
+  //           child: Row(
+  //             children: [
+  //               Text(
+  //                 'Upload Image: ',
+  //                 style: TextStyle(
+  //                     color: Colors.grey,
+  //                     fontWeight: FontWeight.bold,
+  //                     fontSize: 15),
+  //               ),
+  //               const SizedBox(
+  //                 width: 20,
+  //               ),
+  //               InkWell(
+  //                 onTap: () async {
+  //                   image = await chooseImage();
+  //                 },
+  //                 child: const Icon(
+  //                   Icons.upload_file_outlined,
+  //                 ),
+  //               )
+  //             ],
+  //           ),
+  //         ),
+  //         customTextField(hinttext: "ID", addcontroller: _addId),
+  //         Center(
+  //           child: ElevatedButton(
+  //             onPressed: () async {
+  //               await FirebaseFirestore.instance
+  //                   .collection('amenities')
+  //                   .doc(amenityId)
+  //                   .set(
+  //                 {
+  //                   'name': _addName.text,
+  //                   // 'image': _addImage.text,
+  //                   'id': _addId.text,
+  //                   'amenity_id': amenityId,
+  //                   'gym_id': [],
+  //                 },
+  //               ).then((snapshot) async {
+  //                 await uploadImageToAmenities(image, amenityId);
+  //               });
+  //
+  //               Navigator.pop(context);
+  //             },
+  //             child: const Text('Done'),
+  //           ),
+  //         )
+  //       ],
+  //     ),
+  //   ),
+  // ),
+  // ));
 }
 
 //EDIT FEATURE
@@ -305,15 +308,13 @@ class _ProductEditBoxState extends State<ProductEditBox> {
 
   @override
   Widget build(BuildContext context) {
-    return
-    Scaffold(
+    return Scaffold(
       backgroundColor: Colors.white10,
       appBar: AppBar(
         title: Text('Edit Amenites'),
       ),
-      body:
-      Center(
-      child: SizedBox(
+      body: Center(
+        child: SizedBox(
           height: 580,
           width: 800,
           child: SingleChildScrollView(
@@ -406,7 +407,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
             ),
           ),
         ),
-    ),
+      ),
     );
   }
 }

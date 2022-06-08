@@ -85,18 +85,18 @@ class _FaqDetailsState extends State<FaqDetails> {
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
-                              DataColumn(
-                                label: Text(
-                                  'Gym ID',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
-                              ),
-                              DataColumn(
-                                label: Text(
-                                  'User ID',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
-                              ),
+                              // DataColumn(
+                              //   label: Text(
+                              //     'Gym ID',
+                              //     style: TextStyle(fontWeight: FontWeight.w600),
+                              //   ),
+                              // ),
+                              // DataColumn(
+                              //   label: Text(
+                              //     'User ID',
+                              //     style: TextStyle(fontWeight: FontWeight.w600),
+                              //   ),
+                              // ),
                               DataColumn(
                                 label: Text(
                                   'Edit',
@@ -136,11 +136,11 @@ class _FaqDetailsState extends State<FaqDetails> {
           : const Text("")),
       DataCell(
           data['answer'] != null ? Text(data['answer'] ?? "") : const Text("")),
-      DataCell(
-          data['gym_id'] != null ? Text(data['gym_id'] ?? "") : const Text("")),
-      DataCell(data['user_id'] != null
-          ? Text(data['user_id'] ?? "")
-          : const Text("")),
+      // DataCell(
+      //     data['gym_id'] != null ? Text(data['gym_id'] ?? "") : const Text("")),
+      // DataCell(data['user_id'] != null
+      //     ? Text(data['user_id'] ?? "")
+      //     : const Text("")),
       DataCell(const Text(""), showEditIcon: true, onTap: () {
         showDialog(
             context: context,
@@ -195,10 +195,10 @@ class _FaqDetailsState extends State<FaqDetails> {
                         hinttext: "Question", addcontroller: _addaquestion),
                     customTextField(
                         hinttext: "Answer", addcontroller: _addanswer),
-                    customTextField(
-                        hinttext: "Gym ID", addcontroller: _addgymid),
-                    customTextField(
-                        hinttext: "User ID", addcontroller: _adduserid),
+                    // customTextField(
+                    //     hinttext: "Gym ID", addcontroller: _addgymid),
+                    // customTextField(
+                    //     hinttext: "User ID", addcontroller: _adduserid),
                     Center(
                       child: ElevatedButton(
                         onPressed: () async {
