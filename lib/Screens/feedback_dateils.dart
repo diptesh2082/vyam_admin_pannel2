@@ -38,19 +38,13 @@ class _FeedBackInfoState extends State<FeedBackInfo> {
               columns: const [
                 DataColumn(
                   label: Text(
-                    'Name',
+                    'user ID',
                     style: TextStyle(fontWeight: FontWeight.w600),
                   ),
                 ),
-                // DataColumn(
-                //   label: Text(
-                //     'Images',
-                //     style: TextStyle(fontWeight: FontWeight.w600),
-                //   ),
-                // ),
                 DataColumn(
                   label: Text(
-                    'GYMID',
+                    'GYM ID',
                     style: TextStyle(fontWeight: FontWeight.w600),
                   ),
                 ),
@@ -68,19 +62,13 @@ class _FeedBackInfoState extends State<FeedBackInfo> {
                 ),
                 DataColumn(
                   label: Text(
-                    'user ID',
-                    style: TextStyle(fontWeight: FontWeight.w600),
-                  ),
-                ),
-                DataColumn(
-                  label: Text(
                     'Edit',
                     style: TextStyle(fontWeight: FontWeight.w600),
                   ),
                 ),
                 DataColumn(
                   label: Text(
-                    'Edit',
+                    'Delete',
                     style: TextStyle(fontWeight: FontWeight.w600),
                   ),
                 ),
@@ -103,13 +91,18 @@ class _FeedBackInfoState extends State<FeedBackInfo> {
     return DataRow(
       cells: [
         DataCell(
-          data['feedback_id'] != null
-              ? Text(data['feedback_id'] ?? "")
+          data['user_id'] != null
+              ? Text(data['user_id'] ?? "")
               : const Text(""),
         ),
+        // DataCell(
+        //   data['feedback_id'] != null
+        //       ? Text(data['feedback_id'] ?? "")
+        //       : const Text(""),
+        // ),
         DataCell(
           data['vendor_id'] != null
-              ? Text(data['vendor_id'] ?? "")
+              ? Text(data['vendor_id'].toString())
               : const Text(""),
         ),
         DataCell(
@@ -122,11 +115,7 @@ class _FeedBackInfoState extends State<FeedBackInfo> {
               ? Text(data['feedback_suggestion'] ?? "")
               : const Text(""),
         ),
-        DataCell(
-          data['user_id'] != null
-              ? Text(data['user_id'] ?? "")
-              : const Text(""),
-        ),
+
         // DataCell(
         //   data['image'] != null
         //       ? Image.network(

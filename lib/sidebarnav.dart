@@ -15,7 +15,6 @@ import 'package:admin_panel_vyam/Screens/feedback_dateils.dart';
 import 'package:admin_panel_vyam/Screens/payments_screen.dart';
 import 'package:admin_panel_vyam/Screens/push_n.dart';
 
-
 import 'package:admin_panel_vyam/services/image_picker_api.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -102,7 +101,7 @@ class _SideNavBar1State extends State<SideNavBar1> {
             ),
             ListTile(
               title: Text(
-                'Product Details',
+                'Vendor Details',
                 style: kTextStyle,
               ),
               onTap: () {
@@ -253,8 +252,6 @@ class _SideNavBar1State extends State<SideNavBar1> {
                 setState(() {});
               },
             ),
-
-
             ListTile(
               title: Text(
                 'Push Notification',
@@ -265,6 +262,7 @@ class _SideNavBar1State extends State<SideNavBar1> {
                 setState(() {});
               },
             ),
+
             ListTile(
               title: Text(
                 'Workouts',
@@ -275,6 +273,7 @@ class _SideNavBar1State extends State<SideNavBar1> {
                 setState(() {});
               },
             ),
+
 
 
 

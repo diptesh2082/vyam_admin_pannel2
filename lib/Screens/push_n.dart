@@ -60,11 +60,10 @@ class _PushState extends State<Push> {
                   padding: const EdgeInsets.only(top: 8.0, left: 8.0),
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      textStyle:
-                      const TextStyle(fontSize: 15 ),
+                      textStyle: const TextStyle(fontSize: 15),
                     ),
-                    onPressed: (){
-                      Get.to(()=>const pushNew());
+                    onPressed: () {
+                      Get.to(() => const pushNew());
                     },
                     child: Text('Add Push Notification'),
                     //Container(
@@ -167,7 +166,12 @@ class _PushState extends State<Push> {
           ? Text(data['timestamp'] ?? "")
           : const Text("")),
       DataCell(const Text(""), showEditIcon: true, onTap: () {
-        Get.to(()=>ProductEditBox(title: data['title'], definition: data['definition'], id: data['id'], timestamp: data['timestamp'], image: data['image']));
+        Get.to(() => ProductEditBox(
+            title: data['title'],
+            definition: data['definition'],
+            id: data['id'],
+            timestamp: data['timestamp'],
+            image: data['image']));
         // showDialog(
         //     context: context,
         //     builder: (context) {
@@ -338,56 +342,56 @@ class _ProductEditBoxState extends State<ProductEditBox> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-         backgroundColor: Colors.white10,
-        appBar: AppBar(
-          title: Text('Edit Push Notification'),
-        ),
-        body: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'Update Records for this doc',
-                style: TextStyle(
-                    fontFamily: 'poppins',
-                    fontWeight: FontWeight.w600,
-                    fontSize: 14),
-              ),
-              customTextField(hinttext: "Title", addcontroller: _title),
-              customTextField(
-                  hinttext: "Definition", addcontroller: _definition),
-              //
-              Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: Center(
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      date();
-                      print("/////");
-                      DocumentReference documentReference = FirebaseFirestore
-                          .instance
-                          .collection('push_notifications')
-                          .doc(widget.id);
-                      Map<String, dynamic> data = <String, dynamic>{
-                        'title': _title.text,
-                        'definition': _definition.text,
-                        'image': image,
-                        'timestamp': d12,
-                        'id': id,
-                      };
-                      await documentReference
-                          .update(data)
-                          .whenComplete(() => print("Item Updated"))
-                          .catchError((e) => print(e));
-                      Navigator.pop(context);
-                    },
-                    child: const Text('Done'),
-                  ),
+      backgroundColor: Colors.white10,
+      appBar: AppBar(
+        title: Text('Edit Push Notification'),
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Update Records for this doc',
+              style: TextStyle(
+                  fontFamily: 'poppins',
+                  fontWeight: FontWeight.w600,
+                  fontSize: 14),
+            ),
+            customTextField(hinttext: "Title", addcontroller: _title),
+            customTextField(
+                hinttext: "Description", addcontroller: _definition),
+            //
+            Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Center(
+                child: ElevatedButton(
+                  onPressed: () async {
+                    date();
+                    print("/////");
+                    DocumentReference documentReference = FirebaseFirestore
+                        .instance
+                        .collection('push_notifications')
+                        .doc(widget.id);
+                    Map<String, dynamic> data = <String, dynamic>{
+                      'title': _title.text,
+                      'definition': _definition.text,
+                      'image': image,
+                      'timestamp': d12,
+                      'id': id,
+                    };
+                    await documentReference
+                        .update(data)
+                        .whenComplete(() => print("Item Updated"))
+                        .catchError((e) => print(e));
+                    Navigator.pop(context);
+                  },
+                  child: const Text('Done'),
                 ),
-              )
-            ],
-          ),
+              ),
+            )
+          ],
         ),
-      );
+      ),
+    );
   }
 }

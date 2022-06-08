@@ -1,5 +1,3 @@
-
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -43,8 +41,6 @@ class _pushNewState extends State<pushNew> {
     d12 = DateFormat('dd/MMM/yyyy, hh:mm a').format(dt);
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,9 +48,7 @@ class _pushNewState extends State<pushNew> {
       appBar: AppBar(
         title: Text('New Push Notification'),
       ),
-
-      body:
-      Center(
+      body: Center(
         child: SizedBox(
           height: 480,
           width: 800,
@@ -69,10 +63,9 @@ class _pushNewState extends State<pushNew> {
                       fontWeight: FontWeight.w600,
                       fontSize: 14),
                 ),
+                customTextField(hinttext: "Title", addcontroller: _addtitle),
                 customTextField(
-                    hinttext: "Title", addcontroller: _addtitle),
-                customTextField(
-                    hinttext: "Definition", addcontroller: _adddefiniton),
+                    hinttext: "Description", addcontroller: _adddefiniton),
                 Container(
                   padding: EdgeInsets.all(20),
                   child: Row(
@@ -110,9 +103,7 @@ class _pushNewState extends State<pushNew> {
                     onPressed: () async {
                       date();
                       await matchID(
-                          newId: id,
-                          matchStream: pushStream,
-                          idField: 'id');
+                          newId: id, matchStream: pushStream, idField: 'id');
                       await FirebaseFirestore.instance
                           .collection('push_notifications')
                           .doc(id)
@@ -137,7 +128,6 @@ class _pushNewState extends State<pushNew> {
           ),
         ),
       ),
-
     );
   }
 }

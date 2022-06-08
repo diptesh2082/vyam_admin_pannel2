@@ -328,7 +328,11 @@ class _TrackingScreenState extends State<TrackingScreen> {
       DataCell(data['plan_end_duration'] != null
           ? Text(durationEnd)
           : const Text("")),
-
+// <<<<<<< HEAD
+// <<<<<<< HEAD
+// =======
+//
+// >>>>>>> cf1997613ff877c63a56c61e3009bdfe3639ccfa
 // <<<<<<< HEAD
 //       DataCell(Center(
 //         child: ElevatedButton(
@@ -366,7 +370,12 @@ class _TrackingScreenState extends State<TrackingScreen> {
         // : const Text("")
       ),
 // =======
+// <<<<<<< HEAD
+// =======
+// >>>>>>> 419576ed132f1f7631adea2357dfe8fbddca83b9
+// =======
 
+// >>>>>>> cf1997613ff877c63a56c61e3009bdfe3639ccfa
       // DataCell(Center(
       //   child: ElevatedButton(
       //     onPressed: () async {
@@ -385,8 +394,22 @@ class _TrackingScreenState extends State<TrackingScreen> {
       //         primary: paymentDoneBool ? Colors.green : Colors.red),
       //   ),
       // ),
+// <<<<<<< HEAD
+//       // ),
+// <<<<<<< HEAD
+//       // DataCell(data['package_type'] != null
+//       //     ? Text(data['package_type'].toString())
+//       //     : const Text("")),
+// // >>>>>>> 419576ed132f1f7631adea2357dfe8fbddca83b9
+// =======
+//       DataCell(data['package_type'] != null
+//           ? Text(data['package_type'].toString())
+//           : const Text("")),
+// >>>>>>> 419576ed132f1f7631adea2357dfe8fbddca83b9
+// =======
       // ),
 
+// >>>>>>> cf1997613ff877c63a56c61e3009bdfe3639ccfa
       DataCell(data['order_date'] != null ? Text(orderDate) : const Text("")),
       // DataCell(data['gym_details']['name'] != null
       //     ? Text(data['gym_details']['name'].toString())
