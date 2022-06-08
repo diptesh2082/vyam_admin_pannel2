@@ -41,7 +41,6 @@ class _ProductDetailsState extends State<ProductDetails> {
       .id
       .toString();
   CollectionReference? productStream;
-
   var image;
   String gender = 'male';
 
@@ -94,13 +93,11 @@ class _ProductDetailsState extends State<ProductDetails> {
 //   }
 // // =======
 // //   List<String> multiimages = [];
-// // >>>>>>> 2bd9314ce4369a0ee8841fb3648ac2b93b65ffa4
   String searchGymName = '';
 
   @override
   void initState() {
     productStream = FirebaseFirestore.instance.collection("product_details");
-
     super.initState();
   }
 
@@ -120,43 +117,42 @@ class _ProductDetailsState extends State<ProductDetails> {
                 Row(
                   children: [
                     Padding(
-                    padding: const EdgeInsets.only(top: 8.0, left: 8.0),
-                    child: ElevatedButton(
-                      child: Text('Add Product'),
-                      style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.only(top: 8.0, left: 8.0),
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
                           //padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 20),
                           textStyle:
                           const TextStyle(fontSize: 15 ),
+                        ),
+                        onPressed: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => ShowAddBox(),
+                          ));
+                        },
+                        child: Text('Add Product'),
+                        // Container(
+                        //   width: 200,
+                        //   decoration: BoxDecoration(
+                        //       color: Colors.white,
+                        //       borderRadius: BorderRadius.circular(20.0)),
+                        //   child: Row(
+                        //     children: [
+                        //       const SizedBox(
+                        //         width: 20,
+                        //       ),
+                        //       Row(
+                        //         children: const [
+                        //           Icon(Icons.add),
+                        //           Text('Add Product',
+                        //               style:
+                        //                   TextStyle(fontWeight: FontWeight.w400)),
+                        //         ],
+                        //       ),
+                        //     ],
+                        //   ),
+                        // ),
                       ),
-                      onPressed: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => ShowAddBox(),
-                        ));
-                      },
-                      // child: Text('Add Product'),
-                      // Container(
-                      //   width: 200,
-                      //   decoration: BoxDecoration(
-                      //       color: Colors.white,
-                      //       borderRadius: BorderRadius.circular(20.0)),
-                      //   child: Row(
-                      //     children: [
-                      //       const SizedBox(
-                      //         width: 20,
-                      //       ),
-                      //       Row(
-                      //         children: const [
-                      //           Icon(Icons.add),
-                      //           Text('Add Product',
-                      //               style:
-                      //                   TextStyle(fontWeight: FontWeight.w400)),
-                      //         ],
-                      //       ),
-                      //     ],
-                      //   ),
-                      // ),
                     ),
-                  ),
                     const Spacer(),
                     Container(
                       width: 500,
@@ -201,21 +197,6 @@ class _ProductDetailsState extends State<ProductDetails> {
                         ),
                       ),
                     ),
-                  // Padding(
-                  //   padding: const EdgeInsets.only(top: 8.0, left: 8.0),
-                  //   child: IconButton(
-                  //
-                  //     onPressed: () {
-                  //       setState(() {
-                  //
-                  //       });
-                  //
-                  //     },
-                  //     icon: const Icon(Icons.search),
-                  //   )
-                  //
-                  // ),
-
                   ],
                 ),
 
@@ -240,15 +221,15 @@ class _ProductDetailsState extends State<ProductDetails> {
                               .toLowerCase()
                               .contains(searchGymName.toString())
                               || element
-                              .get('gym_id')
-                              .toString()
-                              .toLowerCase()
-                              .contains(searchGymName.toString())
-                          || element
-                              .get('address')
-                              .toString()
-                              .toLowerCase()
-                              .contains(searchGymName.toString());
+                                  .get('gym_id')
+                                  .toString()
+                                  .toLowerCase()
+                                  .contains(searchGymName.toString())
+                              || element
+                                  .get('address')
+                                  .toString()
+                                  .toLowerCase()
+                                  .contains(searchGymName.toString());
                         }).toList();
                       }
 
@@ -256,14 +237,14 @@ class _ProductDetailsState extends State<ProductDetails> {
                       return SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
                         child: DataTable(
-                            // ? DATATABLE
+                          // ? DATATABLE
                             dataRowHeight: 65,
                             columns: const [
                               DataColumn(
                                   label: Text(
-                                'Name',
-                                style: TextStyle(fontWeight: FontWeight.w600),
-                              )),
+                                    'Name',
+                                    style: TextStyle(fontWeight: FontWeight.w600),
+                                  )),
                               DataColumn(
                                 label: Text(
                                   'Address',
@@ -459,7 +440,7 @@ class _ProductDetailsState extends State<ProductDetails> {
       //           await MapsLaucherApi().launchMaps(loc.latitude, loc.longitude);
       //         },
       //         child: Text(loctext))
-          //: const Text("")),
+      //: const Text("")),
       DataCell(data != null ? Text(data['landmark'] ?? "") : const Text("")),
       DataCell(data != null ? Text(data['pincode'] ?? "") : const Text("")),
 
@@ -481,78 +462,8 @@ class _ProductDetailsState extends State<ProductDetails> {
           builder: (context) => ExtraPackagesPage(
             pGymId: gymId,
           ),
-<<<<<<< HEAD
-    ),
-      ),
-      // DataCell(data != null
-      //     ? GestureDetector(
-      //         onTap: () async {
-      //           await MapsLaucherApi().launchMaps(loc.latitude, loc.longitude);
-      //         },
-      //         child: Text(loctext))
-      //: const Text("")),
-      // DataCell(data != null ? Text(data['landmark'] ?? "") : const Text("")),
-      // DataCell(data != null ? Text(data['pincode'] ?? "") : const Text("")),
-
-      // DataCell(const Text('Trainer',), onTap: (() {
-      //   Navigator.of(context).push(MaterialPageRoute(
-      //     builder: (context) => TrainerPage(tGymId: gymId),
-      //   ));
-      // })),
-
-//       DataCell(const Text('Package '), onTap: () {
-//         Navigator.of(context).push(MaterialPageRoute(
-//           builder: (context) => PackagesPage(
-//             pGymId: gymId,
-// >>>>>>> 419576ed132f1f7631adea2357dfe8fbddca83b9
-//           ),
-//         ),
-//       ),
-      // DataCell(const Text('Package '), onTap: () {
-      //   Navigator.of(context).push(MaterialPageRoute(
-      //     builder: (context) => PackagesPage(
-      //       pGymId: gymId,
-      //     ),
-      //   ));
-      // }
-      // ),
-      DataCell(
-        Center(
-          child: GestureDetector(
-            onTap: () async {
-              // Adding timings +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++---------------------------------
-
-              Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => ExtraPackagesPage(
-                  pGymId: gymId,
-                ),
-              ));
-              // bool temp = online_pay;
-              // temp = !temp;
-              // DocumentReference documentReference = FirebaseFirestore.instance
-              //     .collection('product_details')
-              //     .doc(gymId);
-              // await documentReference
-              //     .update({'online_pay': temp})
-              //     .whenComplete(() => print("Legitimate toggled"))
-              //     .catchError((e) => print(e));
-            },
-            child: Container(child: Text("Extra Packages")),
-          ),
-        ),
-        //     const Text('Extra Package '), onTap: () {
-        //   Navigator.of(context).push(MaterialPageRoute(
-        //     builder: (context) => ExtraPackagesPage(
-        //       pGymId: gymId,
-        //     ),
-        //   ));
-        // }
-      ),
-
-=======
         ));
       }),
->>>>>>> 2e1f675c614bd83e28062f397440cbd3463b5464
       DataCell(
         Row(
           children: [
@@ -579,8 +490,8 @@ class _ProductDetailsState extends State<ProductDetails> {
               // Adding timings +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++---------------------------------
 
               Get.to(() => Timings(
-                    pGymId: gymId,
-                  ));
+                pGymId: gymId,
+              ));
               // bool temp = online_pay;
               // temp = !temp;
               // DocumentReference documentReference = FirebaseFirestore.instance
@@ -707,23 +618,22 @@ class _ProductDetailsState extends State<ProductDetails> {
               context,
               MaterialPageRoute(
                   builder: (context) => ProductEditBox(
-                        address: data['address'],
-                        gender: data['gender'],
-                        name: data['name'],
-                        pincode: data['pincode'],
-                        gymId: data['gym_id'],
-                        gymOwner: data['gym_owner'],
-                        landmark: data['landmark'],
-                        location: data['location'],
-                      )));
+                    address: data['address'],
+                    gender: data['gender'],
+                    name: data['name'],
+                    pincode: data['pincode'],
+                    gymId: data['gym_id'],
+                    gymOwner: data['gym_owner'],
+                    landmark: data['landmark'],
+                    location: data['location'],
+                  )));
         },
       ),
 
       DataCell(const Icon(Icons.delete), onTap: () {
         deleteMethod(stream: productStream, uniqueDocId: gymId);
       })
-    ],
-    );
+    ]);
   }
 
 //Adding new data -----------------------------------------------------------------+++++++++++++++++++++++++++-------------------
@@ -750,12 +660,6 @@ class ShowAddBox extends StatefulWidget {
 class _ShowAddBoxState extends State<ShowAddBox> {
   @override
   CollectionReference? productStream;
- // CollectionReference? amenityStream;
-
-
- // var nameValue =  FirebaseFirestore.instance.collection('amenities').doc('5vXo9H3JpTvgO6YZ1BA1').get();
-
-
   final TextEditingController _addaddress = TextEditingController();
   final TextEditingController _addgender = TextEditingController();
   final TextEditingController _addname = TextEditingController();
@@ -771,12 +675,8 @@ class _ShowAddBoxState extends State<ShowAddBox> {
   var multipic;
   var impath;
   var image;
-  bool isChecked = false;
-  bool isChecked1 = false;
-  bool isChecked2 = false;
-  bool isChecked3 = false;
 
-   var selectedValue = "MALE";
+  var selectedValue = "MALE";
   @override
   void initState() {
     productStream = FirebaseFirestore.instance.collection("product_details");
@@ -784,353 +684,288 @@ class _ShowAddBoxState extends State<ShowAddBox> {
   }
 
   Widget build(BuildContext context) {
-
-
     return Scaffold(
-      backgroundColor: Colors.white10,
+        backgroundColor: Colors.white10,
         appBar: AppBar(
           title: const Text('Add Vendor Details'),
         ),
         body: Container(
-      padding: EdgeInsets.all(50),
-      child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 8.0, top: 2, right: 8),
-              child: const Text(
-                'Add Records',
-                style: TextStyle(
-                    fontFamily: 'poppins',
-                    fontWeight: FontWeight.w600,
-                    fontSize: 14),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text('Name:',
-                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
-            ),
-            customTextField(hinttext: "Name", addcontroller: _addname),
-            SizedBox(height: 15),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text('Address:',
-                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
-            ),
-            customTextField(hinttext: "Address", addcontroller: _addaddress),
-            SizedBox(height: 15),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text('Gym Owner Id:',
-                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
-            ),
-            customTextField(
-                hinttext: "Gym Owner Id", addcontroller: _addgymownerid),
-            const SizedBox(height: 15),
-            const Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Text('Branch:',
-                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
-            ),
-            customTextField(
-              addcontroller: _branchController,
-              hinttext: "branch",
-            ),
-            SizedBox(height: 15),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text('Gender:',
-                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
-            ),
-            //customTextField(hinttext: "Gender", addcontroller: _addgender),
-
-            Container(
-              child:
-              DropdownButton(
-                  value: selectedValue,
-                  items:  [
-                    DropdownMenuItem(
-                      child: Text("Male"),
-                      value: "MALE",
-                    ),
-                    DropdownMenuItem(
-                      child: Text("Female"),
-                      value: "FEMALE",
-                    ),
-                    DropdownMenuItem(
-                        child: Text("Unisex"),
-                        value: "UNISEX"
-                    ),
-                  ],
-                  onChanged: (value) {
-                    setState(() {
-                      selectedValue = value as String ;
-                    });
-                  },
-                ),
-            ),
-
-            SizedBox(height: 15),
-
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text('Amenities :',
-                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
-            ),
-
-           Container(
-             // child: StreamBuilder<QuerySnapshot>(
-             //   stream: amenityStream!.snapshots(),
-             //      builder: (context, AsyncSnapshot snapshot) {
-             //        return
-                     child:
-                         Row(
-                     children: [
-
-                       Text('Locker'),
-                       Checkbox(
-                         value: isChecked ,
-                         // title: Text('Locker'),
-                         onChanged: (bool? value) {
-                           setState(() {
-                             isChecked = value!;
-                             //print(nameValue);
-                           });
-                         },
-                       ),
-
-                       // Text('Parking'),
-                       // Checkbox(
-                       //   // title: Text('Parking '),
-                       //   value: isChecked1 ,
-                       //   onChanged: (bool? value) {
-                       //     setState(()=> isChecked1 = value!);
-                       //   },
-                       // ),
-                       //
-                       // Text('Shower'),
-                       // Checkbox(
-                       //   // title: Text('Shower'),
-                       //   value: isChecked2 ,
-                       //   onChanged: (bool? value) {
-                       //     setState(()=> isChecked2 = value!);
-                       //   },
-                       // ),
-                       //
-                       // Text('Elevator'),
-                       // Checkbox(
-                       //   // title: Text('Elevator'),
-                       //   value: isChecked3 ,
-                       //   onChanged: (bool? value) {
-                       //     setState(()=> isChecked3 = value!);
-                       //   },
-                       // ),
-
-               ]
-               ),
-           ),
-
-
-
-            SizedBox(height: 20),
-
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text('Latitude:',
-                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
-            ),
-            customTextField(
-                hinttext: 'Latitude', addcontroller: _latitudeController),
-            SizedBox(height: 15),
-            const Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Text('Longitude:',
-                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
-            ),
-            customTextField(
-                hinttext: 'Longitude', addcontroller: _longitudeController),
-            SizedBox(height: 15),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text('Landmark:',
-                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
-            ),
-            customTextField(hinttext: "Landmark", addcontroller: _addlandmark),
-            SizedBox(height: 15),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text('Pincode:',
-                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
-            ),
-            customTextField(
-              addcontroller: _addpincode,
-              hinttext: "Pincode",
-            ),
-            SizedBox(height: 15),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text('Description:',
-                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
-            ),
-            customTextField(
-              addcontroller: _descriptionCon,
-              hinttext: "Description",
-            ),
-            SizedBox(height: 15),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text('Number:',
-                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
-            ),
-            customTextField(
-              addcontroller: _numberCon,
-              hinttext: "Number",
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Text(
-              'Upload Display Image',
-              style:
-                  TextStyle(color: Colors.black, fontWeight: FontWeight.w700),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Row(
+          padding: EdgeInsets.all(50),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                ElevatedButton(
-                  onPressed: () async {
-                    // dic = await chooseImage();
-                    image = uploadToStroagees();
-                  },
-                  child: Text(
-                    'Upload Gym Image',
+                Padding(
+                  padding: const EdgeInsets.only(left: 8.0, top: 2, right: 8),
+                  child: const Text(
+                    'Add Records',
                     style: TextStyle(
-                        color: Colors.white, fontWeight: FontWeight.w700),
+                        fontFamily: 'poppins',
+                        fontWeight: FontWeight.w600,
+                        fontSize: 14),
                   ),
                 ),
-                SizedBox(
-                  width: 20,
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text('Name:',
+                      style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
                 ),
-                image != null
-                    ? Image(
-                        image: NetworkImage('$image'),
-                        height: 200,
-                        width: 200,
-                      )
-                    : Container(
-                        color: Colors.black,
-                        height: 200,
-                        width: 200,
-                      )
-              ],
-            ),
-            SizedBox(height: 10),
+                customTextField(hinttext: "Name", addcontroller: _addname),
+                SizedBox(height: 15),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text('Address:',
+                      style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
+                ),
+                customTextField(hinttext: "Address", addcontroller: _addaddress),
+                SizedBox(height: 15),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text('Gym Owner Id:',
+                      style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
+                ),
+                customTextField(
+                    hinttext: "Gym Owner Id", addcontroller: _addgymownerid),
+                const SizedBox(height: 15),
+                const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Text('Branch:',
+                      style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
+                ),
+                customTextField(
+                  addcontroller: _branchController,
+                  hinttext: "branch",
+                ),
+                SizedBox(height: 15),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text('Gender:',
+                      style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
+                ),
+                //customTextField(hinttext: "Gender", addcontroller: _addgender),
 
-            // Text(
-            //   'Upload Display Image',
-            //   style:
-            //       TextStyle(color: Colors.black, fontWeight: FontWeight.w700),
-            // ),
-            // SizedBox(
-            //   height: 20,
-            // ),
-            // ElevatedButton(
-            //   onPressed: () async {
-            //     multipic = await multiimagepickerr();
-            //     impath = await multiimageuploader(multipic);
-            //   },
-            //   child: Text(
-            //     'Upload Image',
-            //     style:
-            //         TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
-            //   ),
-            // ),
-            // // Image(
-            // //   image: FileImage(vall, scale: 4),
-            // // ),
-            // SizedBox(
-            //   height: 20,
-            // ),
+                Container(
+                  child:
+                  DropdownButton(
+                      value: selectedValue,
+                      items:  [
+                        DropdownMenuItem(
+                          child: Text("Male"),
+                          value: "MALE",
+                        ),
+                        DropdownMenuItem(
+                          child: Text("Female"),
+                          value: "FEMALE",
+                        ),
+                        DropdownMenuItem(
+                            child: Text("Unisex"),
+                            value: "UNISEX"
+                        ),
+                      ],
+                      onChanged: (value) {
+                        setState(() {
+                          selectedValue = value as String ;
+                        });
+                      }),
+                ),
 
-            Row(
-              children: [
-                ElevatedButton(
-                  onPressed: () async {
-                    print(dic);
-                    GeoPoint dataForGeoPint = GeoPoint(
-                        double.parse(_latitudeController.text),
-                        double.parse(_longitudeController.text));
 
-                    await matchID(
-                        newId: _addgymownerid.text,
-                        matchStream: productStream,
-                        idField: 'gym_id');
-                    FirebaseFirestore.instance
-                        .collection('product_details')
-                        .doc(_addgymownerid.text)
-                        .set(
-                      {
-                        'address': _addaddress.text,
-                        'gender': selectedValue,
-                        'name': _addname.text,
-                        'pincode': _addpincode.text,
-                        'location': dataForGeoPint,
-                        'gym_id': _addgymownerid.text,
-                        'gym_owner': _addgymownerid.text,
-                        'landmark': _addlandmark.text,
-                        'total_booking': "",
-                        'total_sales': "",
-                        'legit': false,
-                        "branch": _branchController.text,
-                        "description": _descriptionCon.text,
-                        "display_picture": image,
-                        "images": [],
-                        "locality": "",
-                        "number": _numberCon.text,
-                        "online_pay": true,
-                        "payment_due": "",
-                        "rating": 0.0,
-                        "service": [],
-                        "timings": [],
-                        "token": [],
-                        "view_count": 0.0,
-                        "gym_status": false,
+                SizedBox(height: 15),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text('Latitude:',
+                      style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
+                ),
+                customTextField(
+                    hinttext: 'Latitude', addcontroller: _latitudeController),
+                SizedBox(height: 15),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text('Longitude:',
+                      style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
+                ),
+                customTextField(
+                    hinttext: 'Longitude', addcontroller: _longitudeController),
+                SizedBox(height: 15),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text('Landmark:',
+                      style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
+                ),
+                customTextField(hinttext: "Landmark", addcontroller: _addlandmark),
+                SizedBox(height: 15),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text('Pincode:',
+                      style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
+                ),
+                customTextField(
+                  addcontroller: _addpincode,
+                  hinttext: "Pincode",
+                ),
+                SizedBox(height: 15),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text('Description:',
+                      style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
+                ),
+                customTextField(
+                  addcontroller: _descriptionCon,
+                  hinttext: "Description",
+                ),
+                SizedBox(height: 15),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text('Number:',
+                      style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
+                ),
+                customTextField(
+                  addcontroller: _numberCon,
+                  hinttext: "Number",
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  'Upload Display Image',
+                  style:
+                  TextStyle(color: Colors.black, fontWeight: FontWeight.w700),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Row(
+                  children: [
+                    ElevatedButton(
+                      onPressed: () async {
+                        // dic = await chooseImage();
+                        image = uploadToStroagees();
                       },
-                      // ).then((snapshot) async {
-                      //   await uploadImageToStorage(dic, _addgymownerid.text);
-                      //   await FirebaseFirestore.instance
-                      //       .collection('product_details')
-                      //       .doc(_addgymownerid.text)
-                      //       .update({'images': impath});
-                      // });
-                    );
-                    Navigator.pop(context);
-                  },
-                  child: const Text('Done'),
+                      child: Text(
+                        'Upload Gym Image',
+                        style: TextStyle(
+                            color: Colors.white, fontWeight: FontWeight.w700),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 20,
+                    ),
+                    image != null
+                        ? Image(
+                      image: NetworkImage('$image'),
+                      height: 200,
+                      width: 200,
+                    )
+                        : Container(
+                      color: Colors.black,
+                      height: 200,
+                      width: 200,
+                    )
+                  ],
                 ),
-                SizedBox(
-                  width: 50,
-                ),
-                ElevatedButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: Text('Close')),
+                SizedBox(height: 10),
+
+                // Text(
+                //   'Upload Display Image',
+                //   style:
+                //       TextStyle(color: Colors.black, fontWeight: FontWeight.w700),
+                // ),
+                // SizedBox(
+                //   height: 20,
+                // ),
                 // ElevatedButton(
-                //     onPressed: () {
-                //       print(impath);
-                //     },
-                //     child: Text('Press Me'))
+                //   onPressed: () async {
+                //     multipic = await multiimagepickerr();
+                //     impath = await multiimageuploader(multipic);
+                //   },
+                //   child: Text(
+                //     'Upload Image',
+                //     style:
+                //         TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
+                //   ),
+                // ),
+                // // Image(
+                // //   image: FileImage(vall, scale: 4),
+                // // ),
+                // SizedBox(
+                //   height: 20,
+                // ),
+
+                Row(
+                  children: [
+                    ElevatedButton(
+                      onPressed: () async {
+                        print(dic);
+                        GeoPoint dataForGeoPint = GeoPoint(
+                            double.parse(_latitudeController.text),
+                            double.parse(_longitudeController.text));
+
+                        await matchID(
+                            newId: _addgymownerid.text,
+                            matchStream: productStream,
+                            idField: 'gym_id');
+                        FirebaseFirestore.instance
+                            .collection('product_details')
+                            .doc(_addgymownerid.text)
+                            .set(
+                          {
+                            'address': _addaddress.text,
+                            'gender': selectedValue,
+                            'name': _addname.text,
+                            'pincode': _addpincode.text,
+                            'location': dataForGeoPint,
+                            'gym_id': _addgymownerid.text,
+                            'gym_owner': _addgymownerid.text,
+                            'landmark': _addlandmark.text,
+                            'total_booking': "",
+                            'total_sales': "",
+                            'legit': false,
+                            "branch": _branchController.text,
+                            "description": _descriptionCon.text,
+                            "display_picture": image,
+                            "images": [],
+                            "locality": "",
+                            "number": _numberCon.text,
+                            "online_pay": true,
+                            "payment_due": "",
+                            "rating": 0.0,
+                            "service": [],
+                            "timings": [],
+                            "token": [],
+                            "view_count": 0.0,
+                            "gym_status": false,
+                          },
+                          // ).then((snapshot) async {
+                          //   await uploadImageToStorage(dic, _addgymownerid.text);
+                          //   await FirebaseFirestore.instance
+                          //       .collection('product_details')
+                          //       .doc(_addgymownerid.text)
+                          //       .update({'images': impath});
+                          // });
+                        );
+                        Navigator.pop(context);
+                      },
+                      child: const Text('Done'),
+                    ),
+                    SizedBox(
+                      width: 50,
+                    ),
+                    ElevatedButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: Text('Close')),
+                    // ElevatedButton(
+                    //     onPressed: () {
+                    //       print(impath);
+                    //     },
+                    //     child: Text('Press Me'))
+                  ],
+                ),
               ],
             ),
-          ],
-        ),
-      ),
-    ));
+          ),
+        ));
   }
 
   // Future<List<XFile>> multiimagepickerr() async {

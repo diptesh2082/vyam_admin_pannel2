@@ -5,6 +5,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:image_picker/image_picker.dart';
@@ -13,6 +14,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../services/CustomTextFieldClass.dart';
 import '../../../services/deleteMethod.dart';
 import '../../../services/image_picker_api.dart';
+import 'package:path/path.dart' as Path;
 
 String globalGymId = '';
 
@@ -36,7 +38,8 @@ class _TrainerPageState extends State<TrainerPage> {
     _distanceToField = MediaQuery.of(context).size.width;
     super.didChangeDependencies();
   }
-
+   var image;
+  var imgUrl1;
   @override
   void initState() {
     super.initState();
@@ -320,7 +323,8 @@ class _TrainerPageState extends State<TrainerPage> {
                     ),
                     SizedBox(
                       width: 150,
-                      child: ListTile(
+                      child:
+                      ListTile(
                         leading: Icon(
                           Icons.file_upload_outlined,
                           size: 20,
@@ -333,10 +337,12 @@ class _TrainerPageState extends State<TrainerPage> {
                                   fontSize: 14,
                                   fontWeight: FontWeight.w600)),
                           onTap: () async {
-                            String res = await ImagePickerAPI()
-                                .pickImage(ImageSource.gallery);
-                            File file = File.fromUri(Uri.file(res));
-                            print(file.path);
+                            image = await chooseImage();
+                            await getUrlImage(image);
+                            // String res = await ImagePickerAPI()
+                            //     .pickImage(ImageSource.gallery);
+                            // File file = File.fromUri(Uri.file(res));
+                            // print(file.path);
                           },
                           // onTap: ()async {
                           //   String res = await ImagePickerAPI().pickImage(ImageSource.gallery);
@@ -346,6 +352,19 @@ class _TrainerPageState extends State<TrainerPage> {
                         ),
                       ),
                     ),
+
+                    SizedBox(
+                      width: 300,
+                      height: 200,
+                      child: Container(
+                        child:
+                        Image.network((imgUrl1 == null) ? ' ' : imgUrl1,
+                          fit: BoxFit.contain,),
+                      ),
+
+                    ),
+
+
                     customTextField(hinttext: "name", addcontroller: _addname),
                     customTextField(
                         hinttext: "about", addcontroller: _addabout),
@@ -495,7 +514,7 @@ class _TrainerPageState extends State<TrainerPage> {
                               .doc(id)
                               .set(
                             {
-                              'image': _addimages.text,
+                              'image': imgUrl1,
                               'gender': _addabout.text,
                               'name': _addexperience.text,
                               'pincode': _addclients.text,
@@ -513,7 +532,36 @@ class _TrainerPageState extends State<TrainerPage> {
                 ),
               ),
             ),
-          ));
+          ),);
+
+
+
+
+
+  getUrlImage(XFile? pickedFile) async {
+    if (kIsWeb) {
+      final _firebaseStorage = FirebaseStorage.instance
+          .ref().child('product_details').child('trainers');
+
+      Reference _reference = _firebaseStorage
+          .child('trainers/${Path.basename(pickedFile!.path)}');
+      await _reference
+          .putData(
+        await pickedFile.readAsBytes(),
+        SettableMetadata(contentType: 'image/jpeg'),
+      );
+
+      String imageUrl = await _reference.getDownloadURL();
+
+      setState(() {
+        imgUrl1 = imageUrl;
+      });
+
+    }
+  }
+
+
+
 }
 
 class StorageDatabase {
@@ -534,6 +582,10 @@ class StorageDatabase {
         .values
         .toList();
   }
+
+
+
+
 }
 
 class FirebaseFile {

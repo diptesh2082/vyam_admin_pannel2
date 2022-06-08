@@ -21,6 +21,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 //import 'package:flutter/painting.dart';
 import 'package:image_picker/image_picker.dart';
+import 'Screens/workouts.dart';
 import 'dashboard.dart';
 
 import 'Screens/Product Details/product_details.dart';
@@ -264,7 +265,16 @@ class _SideNavBar1State extends State<SideNavBar1> {
                 setState(() {});
               },
             ),
-
+            ListTile(
+              title: Text(
+                'Workouts',
+                style: kTextStyle,
+              ),
+              onTap: () {
+                index = 17;
+                setState(() {});
+              },
+            ),
 
 
 
@@ -300,12 +310,11 @@ class _SideNavBar1State extends State<SideNavBar1> {
           index == 12 ? const FaqDetails() : Container(),
           index == 13 ? const CancelationPage() : Container(),
           index == 14 ? const ReviewPage() : Container(),
-// <<<<<<< HEAD
           index == 16 ? const Push() : Container(),
-// =======
           index == 15 ? const BannerPage() : Container(),
+          index == 17 ? const workoutsGym() : Container(),
 
-          index == 16 ? const Push() : Container(),
+
 
         ],
       ),

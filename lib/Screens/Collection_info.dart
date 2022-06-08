@@ -5,6 +5,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../services/CustomTextFieldClass.dart';
 import '../services/image_picker_api.dart';
 
@@ -19,6 +20,7 @@ class UserInformation extends StatefulWidget {
 
 class _UserInformationState extends State<UserInformation> {
   CollectionReference? userDetailStream;
+  String searchUser = ' ';
   @override
   void initState() {
     userDetailStream = FirebaseFirestore.instance.collection("user_details");
@@ -61,21 +63,54 @@ class _UserInformationState extends State<UserInformation> {
                               builder: (context) => detailsadd()));
                     },
                      child: Text('Add User'),
-                    // Container(
-                    //   width: 90,
-                    //   decoration: BoxDecoration(
-                    //       color: Colors.white,
-                    //       borderRadius: BorderRadius.circular(20.0)),
-                    //   child: Row(
-                    //     children: const [
-                    //       Icon(Icons.add),
-                    //       Text('Add User',
-                    //           style: TextStyle(fontWeight: FontWeight.w400)),
-                    //     ],
-                    //   ),
-                    // ),
                   ),
                 ),
+
+                Container(
+                  width: 500,
+                  height: 51,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(14),
+                    color: Colors.white12,
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(15),
+                    child: TextField(
+                      // focusNode: _node,
+
+                      autofocus: false,
+                      textAlignVertical: TextAlignVertical.bottom,
+                      onSubmitted: (value) async {
+                        FocusScope.of(context).unfocus();
+                      },
+                      // controller: searchController,
+                      onChanged: (value) {
+                        if (value.length == 0) {
+                          // _node.canRequestFocus=false;
+                          // FocusScope.of(context).unfocus();
+                        }
+                        if (mounted) {
+                          setState(() {
+                            searchUser = value.toString();
+                          });
+                        }
+                      },
+                      decoration:  InputDecoration(
+                        prefixIcon: const Icon(Icons.search),
+                        hintText: 'Search',
+                        hintStyle: GoogleFonts.poppins(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500
+                        ),
+                        border: InputBorder.none,
+                        filled: true,
+                        fillColor: Colors.white12,
+                      ),
+                    ),
+                  ),
+                ),
+
+
                 Center(
                   child: StreamBuilder<QuerySnapshot>(
                     stream: userDetailStream!.snapshots(),
@@ -87,6 +122,28 @@ class _UserInformationState extends State<UserInformation> {
                         return Container();
                       }
                       print("-----------------------------------");
+
+                      var doc = snapshot.data.docs;
+
+                      if (searchUser.length > 0) {
+                        doc = doc.where((element) {
+                          return element
+                              .get('name')
+                              .toString()
+                              .toLowerCase()
+                              .contains(searchUser.toString())
+                              || element
+                                  .get('gender')
+                                  .toString()
+                                  .toLowerCase()
+                                  .contains(searchUser.toString())
+                              || element
+                                  .get('address')
+                                  .toString()
+                                  .toLowerCase()
+                                  .contains(searchUser.toString());
+                        }).toList();
+                      }
 
                       print(snapshot.data.docs);
                       return SingleChildScrollView(
@@ -185,7 +242,7 @@ class _UserInformationState extends State<UserInformation> {
                                 ),
                               )
                             ],
-                            rows: _buildlist(context, snapshot.data!.docs)),
+                            rows: _buildlist(context, doc)),
                       );
                     },
                   ),

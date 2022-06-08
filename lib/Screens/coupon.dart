@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
 import '../couponscreen.dart';
@@ -24,6 +25,7 @@ class _CouponState extends State<Coupon> {
       FirebaseFirestore.instance.collection('coupon').doc().id.toString();
 
   CollectionReference? couponStream;
+  String searchCoupon = '';
   @override
   void initState() {
     couponStream = FirebaseFirestore.instance.collection("coupon");
@@ -58,21 +60,59 @@ class _CouponState extends State<Coupon> {
                     },
                     child:
                     Text('Add Coupon'),
-                    // Container(
-                    //   width: 120,
-                    //   decoration: BoxDecoration(
-                    //       color: Colors.white,
-                    //       borderRadius: BorderRadius.circular(20.0)),
-                    //   child: Row(
-                    //     children: const [
-                    //       Icon(Icons.add),
-                    //       Text('Add Coupon',
-                    //           style: TextStyle(fontWeight: FontWeight.w400)),
-                    //     ],
-                    //   ),
-                    // ),
+
                   ),
                 ),
+
+                Container(
+                  width: 500,
+                  height: 51,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(14),
+                    color: Colors.white12,
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(15),
+                    child: TextField(
+                      // focusNode: _node,
+
+                      autofocus: false,
+                      textAlignVertical: TextAlignVertical.bottom,
+                      onSubmitted: (value) async {
+                        FocusScope.of(context).unfocus();
+                      },
+                      // controller: searchController,
+                      onChanged: (value) {
+                        if (value.length == 0) {
+                          // _node.canRequestFocus=false;
+                          // FocusScope.of(context).unfocus();
+                        }
+                        if (mounted) {
+                          setState(() {
+                            searchCoupon = value.toString();
+                          });
+                        }
+                      },
+                      decoration:  InputDecoration(
+                        prefixIcon: const Icon(Icons.search),
+                        hintText: 'Search',
+                        hintStyle: GoogleFonts.poppins(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500
+                        ),
+                        border: InputBorder.none,
+                        filled: true,
+                        fillColor: Colors.white12,
+                      ),
+                    ),
+                  ),
+                ),
+
+
+
+
+
+
                 Center(
                   child: StreamBuilder<QuerySnapshot>(
                     stream: couponStream!.snapshots(),
@@ -84,6 +124,25 @@ class _CouponState extends State<Coupon> {
                         return Container();
                       }
                       print("-----------------------------------");
+
+                      var doc = snapshot.data.docs;
+
+                      if (searchCoupon.length > 0) {
+                        doc = doc.where((element) {
+                          return element
+                              .get('code')
+                              .toString()
+                              .toLowerCase()
+                              .contains(searchCoupon.toString())
+                              ||element
+                                  .get('tag')
+                                  .toString()
+                                  .toLowerCase()
+                                  .contains(searchCoupon.toString());
+                        }).toList();
+                      }
+
+
 
                       print(snapshot.data.docs);
                       return SingleChildScrollView(
