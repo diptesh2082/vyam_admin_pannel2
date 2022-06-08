@@ -48,7 +48,7 @@ class _TrainerPageState extends State<TrainerPage> {
     trainerStream = FirebaseFirestore.instance
         .collection('product_details')
         .doc(widget.tGymId)
-        .collection('trainers');
+        .collection('trainer');
   }
 
   @override
@@ -123,33 +123,33 @@ class _TrainerPageState extends State<TrainerPage> {
                                 'Name',
                                 style: TextStyle(fontWeight: FontWeight.w600),
                               )),
+                              // DataColumn(
+                              //   label: Text(
+                              //     'About',
+                              //     style: TextStyle(fontWeight: FontWeight.w600),
+                              //   ),
+                              // ),
+                              // DataColumn(
+                              //   label: Text(
+                              //     'Experience',
+                              //     style: TextStyle(fontWeight: FontWeight.w600),
+                              //   ),
+                              // ),
                               DataColumn(
                                 label: Text(
-                                  'About',
+                                  'Gym_Id',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
                               DataColumn(
                                 label: Text(
-                                  'Experience',
+                                  'Pincode',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
                               DataColumn(
                                 label: Text(
-                                  'Clients',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
-                              ),
-                              DataColumn(
-                                label: Text(
-                                  'Reviews',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
-                              ),
-                              DataColumn(
-                                label: Text(
-                                  'Social Media',
+                                  'Location',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
@@ -187,8 +187,9 @@ class _TrainerPageState extends State<TrainerPage> {
   List certificationList = ['HI', 'NOOB', 'bye'];
 
   DataRow _buildListItem(BuildContext context, DocumentSnapshot data) {
-    String imageUrl = data['images'];
+    String imageUrl = data['image'];
     String trainerId = data['trainer_id'];
+    String gymid = data['gym_id'];
     return DataRow(cells: [
       DataCell(data != null
           ? CircleAvatar(backgroundImage: NetworkImage(imageUrl))
@@ -196,16 +197,16 @@ class _TrainerPageState extends State<TrainerPage> {
       DataCell(data != null ? Text(trainerId) : Text("")),
       DataCell(data != null ? Text(data['name'] ?? "") : Text("")),
       DataCell(data != null ? Text(data['about'] ?? "") : Text("")),
-      DataCell(data != null ? Text(data['experience'] ?? "") : Text("")),
-      DataCell(data != null ? Text(data['clients'] ?? "") : Text("")),
-      DataCell(data != null ? Text(data['review'] ?? "") : Text("")),
-      DataCell(data != null
-          ? IconButton(
-              onPressed: () {
-                launch(data['social_media']);
-              },
-              icon: Icon(FontAwesome.instagram))
-          : Text("")),
+      DataCell(data != null ? Text(data['gym_id'] ?? "") : Text("")),
+      DataCell(data != null ? Text(data['pincode'] ?? "") : Text("")),
+      DataCell(data != null ? Text(data['location'] ?? "") : Text("")),
+      // DataCell(data != null
+      //     ? IconButton(
+      //         onPressed: () {
+      //           launch(data['social_media']);
+      //         },
+      //         icon: Icon(FontAwesome.instagram))
+      //     : Text("")),
       DataCell(const Text(""), showEditIcon: true, onTap: () {
         showDialog(
             context: context,
@@ -300,7 +301,6 @@ class _TrainerPageState extends State<TrainerPage> {
   // final ref =  FirebaseStorage.instance.ref().child("user_images").child(number+".jpg");
   // await ref.putFile(image!);
   // final url = await ref.getDownloadURL();
-
 
   showAddbox() => showDialog(
       context: context,
@@ -404,20 +404,20 @@ class _TrainerPageState extends State<TrainerPage> {
                               focusNode: fn,
                               decoration: InputDecoration(
                                 isDense: true,
-                                border: OutlineInputBorder(
+                                border: const OutlineInputBorder(
                                   borderSide: BorderSide(
                                     color: Color.fromARGB(255, 74, 137, 92),
                                     width: 3.0,
                                   ),
                                 ),
-                                focusedBorder: OutlineInputBorder(
+                                focusedBorder: const OutlineInputBorder(
                                   borderSide: BorderSide(
                                     color: Color.fromARGB(255, 74, 137, 92),
                                     width: 3.0,
                                   ),
                                 ),
                                 helperText: 'Enter language...',
-                                helperStyle: TextStyle(
+                                helperStyle: const TextStyle(
                                   color: Color.fromARGB(255, 74, 137, 92),
                                 ),
                                 hintText: _tagsController!.hasTags

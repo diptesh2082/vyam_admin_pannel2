@@ -453,7 +453,7 @@ class _ProductDetailsState extends State<ProductDetails> {
       DataCell(const Text('Package '), onTap: () {
         Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => PackagesPage(
-            pGymId: gymId,
+            pGymId: gymId, o: '', land: '',
           ),
         ));
       }),
