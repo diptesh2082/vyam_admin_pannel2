@@ -51,6 +51,7 @@ class _bannerNewPageState extends State<bannerNewPage> {
   }
 
   late DropzoneViewController controller;
+  bool _saving = false;
 
 
 
@@ -103,7 +104,6 @@ class _bannerNewPageState extends State<bannerNewPage> {
                               onTap: () async {
                                  image = await chooseImage();
                                  await getUrlImage(image);
-                                //uploadToStroage();
                               },
                               child: const Icon(
                                 Icons.upload_file_outlined,
@@ -117,6 +117,7 @@ class _bannerNewPageState extends State<bannerNewPage> {
                                 Image.network((imgUrl1 == null) ? ' ' : imgUrl1,
                                   fit: BoxFit.contain,),
                               ),
+
                             ),
 
                           ],

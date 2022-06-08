@@ -1,13 +1,18 @@
 import 'package:admin_panel_vyam/Screens/ameneties_new_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../services/CustomTextFieldClass.dart';
 import '../services/MatchIDMethod.dart';
 import '../services/deleteMethod.dart';
 import '../services/image_picker_api.dart';
+import 'package:path/path.dart' as Path;
 
 class AmenetiesScreen extends StatefulWidget {
   const AmenetiesScreen({Key? key}) : super(key: key);
@@ -18,6 +23,7 @@ class AmenetiesScreen extends StatefulWidget {
 
 class _AmenetiesScreenState extends State<AmenetiesScreen> {
   CollectionReference? amenityStream;
+  String searchAmeneties = '';
 
   final amenityId = FirebaseFirestore.instance.collection('amenities').doc().id;
   @override
@@ -64,11 +70,58 @@ class _AmenetiesScreenState extends State<AmenetiesScreen> {
                     // ),
                   ),
                 ),
+
+                Container(
+                  width: 500,
+                  height: 51,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(14),
+                    color: Colors.white12,
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(15),
+                    child: TextField(
+                      // focusNode: _node,
+
+                      autofocus: false,
+                      textAlignVertical: TextAlignVertical.bottom,
+                      onSubmitted: (value) async {
+                        FocusScope.of(context).unfocus();
+                      },
+                      // controller: searchController,
+                      onChanged: (value) {
+                        if (value.length == 0) {
+                          // _node.canRequestFocus=false;
+                          // FocusScope.of(context).unfocus();
+                        }
+                        if (mounted) {
+                          setState(() {
+                            searchAmeneties = value.toString();
+                          });
+                        }
+                      },
+                      decoration:  InputDecoration(
+                        prefixIcon: const Icon(Icons.search),
+                        hintText: 'Search',
+                        hintStyle: GoogleFonts.poppins(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500
+                        ),
+                        border: InputBorder.none,
+                        filled: true,
+                        fillColor: Colors.white12,
+                      ),
+                    ),
+                  ),
+                ),
+
                 Center(
                   child: StreamBuilder<QuerySnapshot>(
+
                     stream: amenityStream!
                         .orderBy('id', descending: false)
                         .snapshots(),
+
                     builder: (context, AsyncSnapshot snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return const CircularProgressIndicator();
@@ -76,6 +129,20 @@ class _AmenetiesScreenState extends State<AmenetiesScreen> {
                       if (snapshot.data == null) {
                         return Container();
                       }
+
+                      var doc = snapshot.data.docs;
+
+                      if (searchAmeneties.length > 0) {
+                        doc = doc.where((element) {
+                          return element
+                              .get('name')
+                              .toString()
+                              .toLowerCase()
+                              .contains(searchAmeneties.toString());
+                        }).toList();
+                      }
+
+
 
                       return SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
@@ -113,7 +180,7 @@ class _AmenetiesScreenState extends State<AmenetiesScreen> {
                               ),
                             ),
                           ],
-                          rows: _buildlist(context, snapshot.data!.docs),
+                          rows: _buildlist(context, doc),
                         ),
                       );
                     },
@@ -293,6 +360,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
   final TextEditingController _image = TextEditingController();
   final TextEditingController _amenityId = TextEditingController();
   late String amm;
+  var imgUrl1;
 
   @override
   void initState() {
@@ -350,11 +418,22 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                             checker = (checker == false) ? true : false;
                           });
                           imagee = await chooseImage();
+                         await getUrlImage(imagee);
                         },
                         child: const Icon(
                           Icons.upload_file_outlined,
                         ),
-                      )
+                      ),
+
+                      SizedBox(
+                        width: 300,
+                        height: 200,
+                        child: Container(
+                          child:
+                          Image.network((imgUrl1 == null) ? ' ' : imgUrl1,
+                            fit: BoxFit.contain,),
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -372,14 +451,15 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                               .update(
                             {
                               'name': _name.text,
-                              // 'image': _image,
+                              'image': imgUrl1,
                               'id': _amenityId.text,
                               'amenity_id': amm,
                               'gym_id': [],
                             },
-                          ).then((snapshot) async {
-                            await uploadImageToAmenities(imagee, amm);
-                          });
+                          );
+                          //     .then((snapshot) async {
+                          //   await uploadImageToAmenities(imagee, amm);
+                          // });
 
                           Navigator.pop(context);
                         } else {
@@ -389,7 +469,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                               .update(
                             {
                               'name': _name.text,
-                              'image': _image.text,
+                              'image': imgUrl1,
                               'id': _amenityId.text,
                               'amenity_id': amm,
                               'gym_id': [],
@@ -410,4 +490,30 @@ class _ProductEditBoxState extends State<ProductEditBox> {
       ),
     );
   }
+
+  getUrlImage(XFile? pickedFile) async {
+    if (kIsWeb) {
+      final _firebaseStorage = FirebaseStorage.instance
+          .ref().child("banner");
+
+      Reference _reference = _firebaseStorage
+          .child('banner_details/${Path.basename(pickedFile!.path)}');
+      await _reference
+          .putData(
+        await pickedFile.readAsBytes(),
+        SettableMetadata(contentType: 'image/jpeg'),
+      );
+
+      String imageUrl = await _reference.getDownloadURL();
+
+      setState(() {
+        imgUrl1 = imageUrl;
+      });
+
+    }
+  }
+
+
+
+
 }

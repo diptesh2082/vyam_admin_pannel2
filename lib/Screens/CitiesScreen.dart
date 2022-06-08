@@ -91,13 +91,13 @@ class _CitiesScreenState extends State<CitiesScreen> {
                                 style: TextStyle(fontWeight: FontWeight.w600),
                               ),
                             ),
-                            DataColumn(
-                              label: Text(
-                                'ID',
-                                style: TextStyle(fontWeight: FontWeight.w600),
-                              ),
-                            ),
-                            DataColumn(
+                            // DataColumn(
+                            //   label: Text(
+                            //     'ID',
+                            //     style: TextStyle(fontWeight: FontWeight.w600),
+                            //   ),
+                            // ),
+                             DataColumn(
                               label: Text(
                                 'Edit',
                                 style: TextStyle(fontWeight: FontWeight.w600),
@@ -138,9 +138,9 @@ class _CitiesScreenState extends State<CitiesScreen> {
       DataCell(
         data['Status'] != null ? Text(data['Status']) : const Text(""),
       ),
-      DataCell(
-        data['id'] != null ? Text(data['id']) : const Text(""),
-      ),
+      // DataCell(
+      //   data['id'] != null ? Text(data['id']) : const Text(""),
+      // ),
       DataCell(
         const Text(''),
         showEditIcon: true,

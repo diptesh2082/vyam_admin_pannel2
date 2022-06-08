@@ -102,7 +102,6 @@ class _ProductDetailsState extends State<ProductDetails> {
 //   }
 // // =======
 // //   List<String> multiimages = [];
-// // >>>>>>> 2bd9314ce4369a0ee8841fb3648ac2b93b65ffa4
   String searchGymName = '';
 // <<<<<<< HEAD
   String pswd = '';
@@ -132,12 +131,14 @@ class _ProductDetailsState extends State<ProductDetails> {
                 Row(
                   children: [
                     Padding(
-// <<<<<<< HEAD
+
                       padding: const EdgeInsets.only(top: 8.0, left: 8.0),
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           //padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 20),
+
                           textStyle: const TextStyle(fontSize: 15),
+
                         ),
                         onPressed: () {
                           Navigator.of(context).push(MaterialPageRoute(
@@ -166,6 +167,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                         //     ],
                         //   ),
                         // ),
+
 // =======
 //                     padding: const EdgeInsets.only(top: 8.0, left: 8.0),
 //                     child: ElevatedButton(
@@ -180,6 +182,7 @@ class _ProductDetailsState extends State<ProductDetails> {
 // =======
 //                   ),
 // >>>>>>> cf1997613ff877c63a56c61e3009bdfe3639ccfa
+
                     const Spacer(),
                     Container(
                       width: 500,
@@ -243,6 +246,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                         ),
                       ),
                     ),
+
 // <<<<<<< HEAD
                     // Padding(
                     //   padding: const EdgeInsets.only(top: 8.0, left: 8.0),
@@ -275,6 +279,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                     // ),
 
 // >>>>>>> cf1997613ff877c63a56c61e3009bdfe3639ccfa
+
                   ],
                 ),
                 Center(
@@ -293,22 +298,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                       if (searchGymName.length > 0) {
                         doc = doc.where((element) {
                           return element
-// <<<<<<< HEAD
-//                                   .get('name')
-//                                   .toString()
-//                                   .toLowerCase()
-//                                   .contains(searchGymName.toString()) ||
-//                               element
-//                                   .get('gym_id')
-//                                   .toString()
-//                                   .toLowerCase()
-//                                   .contains(searchGymName.toString()) ||
-//                               element
-//                                   .get('address')
-//                                   .toString()
-//                                   .toLowerCase()
-//                                   .contains(searchGymName.toString());
-// =======
+
                                   .get('name')
                                   .toString()
                                   .toLowerCase()
@@ -319,11 +309,11 @@ class _ProductDetailsState extends State<ProductDetails> {
                                   .toLowerCase()
                                   .contains(searchGymName.toString()) ||
                               element
+
                                   .get('address')
                                   .toString()
                                   .toLowerCase()
                                   .contains(searchGymName.toString());
-// >>>>>>> cf1997613ff877c63a56c61e3009bdfe3639ccfa
                         }).toList();
                       }
 
@@ -331,14 +321,14 @@ class _ProductDetailsState extends State<ProductDetails> {
                       return SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
                         child: DataTable(
-                            // ? DATATABLE
+                          // ? DATATABLE
                             dataRowHeight: 65,
                             columns: const [
                               DataColumn(
                                   label: Text(
-                                'Name',
-                                style: TextStyle(fontWeight: FontWeight.w600),
-                              )),
+                                    'Name',
+                                    style: TextStyle(fontWeight: FontWeight.w600),
+                                  )),
                               DataColumn(
                                 label: Text(
                                   'Address',
@@ -544,12 +534,7 @@ class _ProductDetailsState extends State<ProductDetails> {
       //           await MapsLaucherApi().launchMaps(loc.latitude, loc.longitude);
       //         },
       //         child: Text(loctext))
-// <<<<<<< HEAD
-//       //: const Text("")),
-//       DataCell(data != null
-//           ? Text(data['landmark'].toString().toUpperCase())
-//           : const Text("")),
-// =======
+
       //: const Text("")),
       DataCell(data != null ? Text(data['landmark'] ?? "") : const Text("")),
 // >>>>>>> cf1997613ff877c63a56c61e3009bdfe3639ccfa
@@ -649,8 +634,8 @@ class _ProductDetailsState extends State<ProductDetails> {
               // Adding timings +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++---------------------------------
 
               Get.to(() => Timings(
-                    pGymId: gymId,
-                  ));
+                pGymId: gymId,
+              ));
               // bool temp = online_pay;
               // temp = !temp;
               // DocumentReference documentReference = FirebaseFirestore.instance
@@ -785,6 +770,7 @@ class _ProductDetailsState extends State<ProductDetails> {
               context,
               MaterialPageRoute(
                   builder: (context) => ProductEditBox(
+
                       address: data['address'],
                       gender: data['gender'],
                       name: data['name'],
@@ -796,6 +782,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                       arr2: arr2
                       // location: data['location'],
                       )));
+
         },
       ),
 
@@ -853,7 +840,7 @@ class _ShowAddBoxState extends State<ShowAddBox> {
 // =======
 
   var selectedValue = "MALE";
-// >>>>>>> cf1997613ff877c63a56c61e3009bdfe3639ccfa
+
   @override
   void initState() {
     productStream = FirebaseFirestore.instance.collection("product_details");
@@ -866,6 +853,7 @@ class _ShowAddBoxState extends State<ShowAddBox> {
 
   Widget build(BuildContext context) {
     return Scaffold(
+
       backgroundColor: Colors.white10,
 // <<<<<<< HEAD
       appBar: AppBar(
@@ -1237,6 +1225,7 @@ class _ShowAddBoxState extends State<ShowAddBox> {
         ),
       ),
     );
+
   }
 
   uploadToStroagees() {
