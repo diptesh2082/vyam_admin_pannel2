@@ -202,26 +202,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                             FocusScope.of(context).unfocus();
 // <<<<<<< HEAD
                           },
-                          // controller: searchController,
-//                           onChanged: (value) {
-//                             if (value.length == 0) {
-//                               // _node.canRequestFocus=false;
-//                               // FocusScope.of(context).unfocus();
-//                             }
-//                             if (mounted) {
-//                               setState(() {
-//                                 searchGymName = value.toString();
-//                               });
-//                             }
-//                           },
-//                           decoration: InputDecoration(
-//                             prefixIcon: const Icon(Icons.search),
-//                             hintText: 'Search',
-//                             hintStyle: GoogleFonts.poppins(
-//                                 fontSize: 16, fontWeight: FontWeight.w500),
-// =======
-//                           },
-                          // controller: searchController,
+
                           onChanged: (value) {
                             if (value.length == 0) {
                               // _node.canRequestFocus=false;
@@ -247,38 +228,6 @@ class _ProductDetailsState extends State<ProductDetails> {
                       ),
                     ),
 
-// <<<<<<< HEAD
-                    // Padding(
-                    //   padding: const EdgeInsets.only(top: 8.0, left: 8.0),
-                    //   child: IconButton(
-                    //
-                    //     onPressed: () {
-                    //       setState(() {
-                    //
-                    //       });
-                    //
-                    //     },
-                    //     icon: const Icon(Icons.search),
-                    //   )
-                    //
-                    // ),
-// =======
-                    // Padding(
-                    //   padding: const EdgeInsets.only(top: 8.0, left: 8.0),
-                    //   child: IconButton(
-                    //
-                    //     onPressed: () {
-                    //       setState(() {
-                    //
-                    //       });
-                    //
-                    //     },
-                    //     icon: const Icon(Icons.search),
-                    //   )
-                    //
-                    // ),
-
-// >>>>>>> cf1997613ff877c63a56c61e3009bdfe3639ccfa
 
                   ],
                 ),
@@ -865,9 +814,9 @@ class _ShowAddBoxState extends State<ShowAddBox> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 8.0, top: 2, right: 8),
-                child: const Text(
+              const Padding(
+                padding: EdgeInsets.only(left: 8.0, top: 2, right: 8),
+                child: Text(
                   'Add Records',
                   style: TextStyle(
                       fontFamily: 'poppins',
@@ -894,8 +843,8 @@ class _ShowAddBoxState extends State<ShowAddBox> {
 //                     fontSize: 14),
 // // >>>>>>> cf1997613ff877c63a56c61e3009bdfe3639ccfa
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
+              const Padding(
+                padding: EdgeInsets.all(8.0),
                 child: Text('Name:',
                     style:
                         TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
@@ -910,8 +859,8 @@ class _ShowAddBoxState extends State<ShowAddBox> {
               ),
               customTextField(hinttext: "Address", addcontroller: _addaddress),
               SizedBox(height: 15),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
+              const Padding(
+                padding: EdgeInsets.all(8.0),
                 child: Text('Gym Owner Id:',
                     style:
                         TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
@@ -937,12 +886,12 @@ class _ShowAddBoxState extends State<ShowAddBox> {
               Container(
                 child: Row(
                   children: [
-                    Text('Gender:',
+                    const Text('Gender:',
                         style: TextStyle(
                             fontWeight: FontWeight.w700, fontSize: 15)),
                     DropdownButton(
                         value: selectedValue,
-                        items: [
+                        items: const [
                           DropdownMenuItem(
                             child: Text("Male"),
                             value: "MALE",
@@ -963,12 +912,12 @@ class _ShowAddBoxState extends State<ShowAddBox> {
                 ),
               ),
 
-              SizedBox(height: 15),
+              const SizedBox(height: 15),
               Container(
                 child: Row(
-                  children: [
+                  children: const [
                     Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: EdgeInsets.all(8.0),
                       child: Text('Latitude:',
                           style: TextStyle(
                               fontWeight: FontWeight.w700, fontSize: 15)),
@@ -986,12 +935,12 @@ class _ShowAddBoxState extends State<ShowAddBox> {
                   ],
                 ),
               ),
-              SizedBox(height: 15),
+              const SizedBox(height: 15),
               Container(
                 child: Row(
-                  children: [
+                  children: const [
                     Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: EdgeInsets.all(8.0),
                       child: Text('Longitude:',
                           style: TextStyle(
                               fontWeight: FontWeight.w700, fontSize: 15)),
@@ -1205,7 +1154,7 @@ class _ShowAddBoxState extends State<ShowAddBox> {
                     },
                     child: const Text('Done'),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 50,
                   ),
                   ElevatedButton(
