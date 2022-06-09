@@ -4,9 +4,10 @@ import 'package:admin_panel_vyam/services/deleteMethod.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-
 import 'Screens/Product Details/product_details.dart';
 import 'Screens/booking_details.dart';
+
+
 
 class DashBoardScreen extends StatefulWidget {
   const DashBoardScreen({Key? key}) : super(key: key);
@@ -193,11 +194,12 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                         ),
                       ],
                     ),
+
                   ),
-                ],
+                   ],
+                  )
               ),
-            ),
-          );
+            );
         });
   }
 }
@@ -329,90 +331,6 @@ class _showLatestBookingState extends State<showLatestBooking> {
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
-                              // DataColumn(
-                              //   label: Text(
-                              //     'Order Date',
-                              //     style: TextStyle(fontWeight: FontWeight.w600),
-                              //   ),
-                              // ),
-                              // // DataColumn(
-                              // //   label: Text(
-                              // //     'Gym Name',
-                              // //     style: TextStyle(fontWeight: FontWeight.w600),
-                              // //   ),
-                              // // ),
-                              // // DataColumn(
-                              // //   label: Text(
-                              // //     'Gym Address',
-                              // //     style: TextStyle(fontWeight: FontWeight.w600),
-                              // //   ),
-                              // // ),
-                              // DataColumn(
-                              //   label: Text(
-                              //     'Grand Total',
-                              //     style: TextStyle(fontWeight: FontWeight.w600),
-                              //   ),
-                              // ),
-                              // DataColumn(
-                              //   label: Text(
-                              //     'Discount',
-                              //     style: TextStyle(fontWeight: FontWeight.w600),
-                              //   ),
-                              // ),
-                              // // DataColumn(
-                              // //   label: Text(
-                              // //     'Days Left',
-                              // //     style: TextStyle(fontWeight: FontWeight.w600),
-                              // //   ),
-                              // // ),
-                              // DataColumn(
-                              //   label: Text(
-                              //     'Booking Status',
-                              //     style: TextStyle(fontWeight: FontWeight.w600),
-                              //   ),
-                              // ),
-                              // // DataColumn(
-                              // //   label: Text(
-                              // //     'Booking Price',
-                              // //     style: TextStyle(fontWeight: FontWeight.w600),
-                              // //   ),
-                              // // ),
-                              // DataColumn(
-                              //   label: Text(
-                              //     'Booking Plan',
-                              //     style: TextStyle(fontWeight: FontWeight.w600),
-                              //   ),
-                              // ),
-                              // // DataColumn(
-                              // //   label: Text(
-                              // //     'Booking ID',
-                              // //     style: TextStyle(fontWeight: FontWeight.w600),
-                              // //   ),
-                              // // ),
-                              // DataColumn(
-                              //   label: Text(
-                              //     'Booking Date',
-                              //     style: TextStyle(fontWeight: FontWeight.w600),
-                              //   ),
-                              // ),
-                              // DataColumn(
-                              //   label: Text(
-                              //     'Booking Accepted',
-                              //     style: TextStyle(fontWeight: FontWeight.w600),
-                              //   ),
-                              // ),
-                              // DataColumn(
-                              //   label: Text(
-                              //     'Edit',
-                              //     style: TextStyle(fontWeight: FontWeight.w600),
-                              //   ),
-                              // ),
-                              // DataColumn(
-                              //   label: Text(
-                              //     'Delete',
-                              //     style: TextStyle(fontWeight: FontWeight.w600),
-                              //   ),
-                              // ),
                             ],
                             rows: _buildlist(context, doc)),
                       );
@@ -518,7 +436,6 @@ class _showLatestBookingState extends State<showLatestBooking> {
                     ],
                     onChanged: (value) async {
                       setState(() {
-
                         selectedValue = value as String;
                       });
                       await FirebaseFirestore.instance.collection('bookings').doc(bookingId)
@@ -529,10 +446,6 @@ class _showLatestBookingState extends State<showLatestBooking> {
           ),
         ),
       ),
-      //
-      // DataCell(Icon(Icons.delete), onTap: () {
-      //   deleteMethod(stream: bookingStream, uniqueDocId: bookingId);
-      // })
     ]);
   }
 }
