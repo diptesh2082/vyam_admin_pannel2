@@ -18,7 +18,7 @@ class GoogleMap extends StatelessWidget {
 
       final mapOptions = MapOptions()
         ..zoom = 10
-        ..center = LatLng(1.3521, 103.8198);
+        ..center = LatLng(22.3521, 88.4198);
 
       final elem = DivElement()
         ..id = htmlId

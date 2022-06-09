@@ -448,11 +448,6 @@ class _ProductDetailsState extends State<ProductDetails> {
   }
 
   DataRow _buildListItem(BuildContext context, DocumentSnapshot data) {
-    // morning.text=data['timings']["gym"]["Morning"];
-    // evening.text=data['timings']["gym"]["Evening"];
-    // closed.text=data['timings']["gym"]["Closed"];
-    // morning_days.text=data['timings']["gym"]["morning_days"];
-    // evening_days.text=data['timings']["gym"]["evening_days"];
     String gymId = data['gym_id'];
     GeoPoint loc = data['location'];
     String name = data['name'];
@@ -470,23 +465,11 @@ class _ProductDetailsState extends State<ProductDetails> {
       DataCell(data != null ? Text(data['address'] ?? "") : const Text("")),
       DataCell(data != null ? Text(gymId) : const Text("")),
       DataCell(data != null ? Text(data['gym_owner'] ?? "") : const Text("")),
-// <<<<<<< HEAD
-//       DataCell(data != null
-//           ? Text(data['gender'].toString().toUpperCase())
-//           : const Text("")),
-// =======
-      DataCell(data != null ? Text(data['gender'] ?? "") : const Text("")),
-// >>>>>>> cf1997613ff877c63a56c61e3009bdfe3639ccfa
-      // DataCell(data != null
-      //     ? GestureDetector(
-      //         onTap: () async {
-      //           await MapsLaucherApi().launchMaps(loc.latitude, loc.longitude);
-      //         },
-      //         child: Text(loctext))
 
-      //: const Text("")),
+      DataCell(data != null ? Text(data['gender'] ?? "") : const Text("")),
+
       DataCell(data != null ? Text(data['landmark'] ?? "") : const Text("")),
-// >>>>>>> cf1997613ff877c63a56c61e3009bdfe3639ccfa
+
       DataCell(data != null ? Text(data['pincode'] ?? "") : const Text("")),
 
       DataCell(ElevatedButton(
