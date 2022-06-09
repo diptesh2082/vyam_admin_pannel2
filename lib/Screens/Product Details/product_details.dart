@@ -28,6 +28,7 @@ import 'Trainers/Trainers.dart';
 import 'package:admin_panel_vyam/services/CustomTextFieldClass.dart';
 
 List<String> arr = [];
+List<String> workoutArray = [];
 
 class ProductDetails extends StatefulWidget {
   const ProductDetails({
@@ -48,65 +49,9 @@ class _ProductDetailsState extends State<ProductDetails> {
   CollectionReference? amenitiesStream;
   var image;
   String gender = 'male';
-
-// <<<<<<< HEAD
-// =======
-
-// >>>>>>> cf1997613ff877c63a56c61e3009bdfe3639ccfa
-
-// <<<<<<< HEAD
-//   File? image;
-//   Future pickImage() async {
-//     try{
-//       final image = await ImagePicker().pickImage(
-//           source: ImageSource.gallery,
-//           imageQuality: 60
-//       );
-//       if (image == null) return;
-//       final imageTemporary = File(image.path);
-//       setState(() {
-//         this.image = imageTemporary;
-//       });
-//     } on PlatformException catch (e) {
-//       // ignore: avoid_print
-//       print("Faild to pick image: $e");
-//     }
-//
-//   }
-//
-//
-//   saveData(gymId)async {
-//     // if (_globalKey.currentState!.validate()) {
-//       try{
-//         // _globalKey.currentState!.save();
-//         final ref =  FirebaseStorage.instance.ref().child("gs://vyam-f99ab.appspot.com/productDetails").child(gymId+".jpg");
-//         print(ref);
-//         await ref.putFile(image!);
-//         final url = await ref.getDownloadURL();
-//         await FirebaseFirestore.instance.collection("product_details")
-//             .doc(gymId).update({
-//           "display_picture": url
-//         });
-//         // setState(() {
-//         //   imageUrl=url;
-//         //   // isLoading=false;
-//         // }
-//         // );
-//       }catch (e){
-//         // imageUrl="";
-//       }
-//
-//       // print(imageUrl);
-//
-//     // }
-//   }
-// // =======
-// //   List<String> multiimages = [];
   String searchGymName = '';
-// <<<<<<< HEAD
   String pswd = '';
-// =======
-// >>>>>>> cf1997613ff877c63a56c61e3009bdfe3639ccfa
+
 
   @override
   void initState() {
@@ -199,8 +144,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                           autofocus: false,
                           textAlignVertical: TextAlignVertical.bottom,
                           onSubmitted: (value) async {
-                            FocusScope.of(context).unfocus();
-// <<<<<<< HEAD
+                            FocusScope.of(context).unfocus();// <<<<<<< HEAD
                           },
 
                           onChanged: (value) {
@@ -462,6 +406,7 @@ class _ProductDetailsState extends State<ProductDetails> {
     List imgList = data['images'];
     String landmark = data['landmark'];
     List<dynamic> arr2 = data['amenities'];
+    List<dynamic> WorkoutArray = data['workouts'];
 
     String x, y;
 
@@ -728,7 +673,9 @@ class _ProductDetailsState extends State<ProductDetails> {
                       gymOwner: data['gym_owner'],
                       landmark: data['landmark'],
                       imagee: data['display_picture'],
-                      arr2: arr2
+                      arr2: arr2,
+                      WorkoutArray:WorkoutArray,
+
                     // location: data['location'],
                   )));
 
@@ -785,6 +732,7 @@ class _ShowAddBoxState extends State<ShowAddBox> {
   var xs;
   bool selected = false;
   CollectionReference? amenitiesStream;
+  CollectionReference? workoutStream;
   // var selectedValue = "MALE";
 // =======
 
@@ -794,7 +742,7 @@ class _ShowAddBoxState extends State<ShowAddBox> {
   void initState() {
     productStream = FirebaseFirestore.instance.collection("product_details");
     amenitiesStream = FirebaseFirestore.instance.collection("amenities");
-
+    workoutStream  = FirebaseFirestore.instance.collection("workouts");
     RandomPasswordGenerator pswd = RandomPasswordGenerator();
     xs = pswd.randomPassword(letters: true, uppercase: true, numbers: true);
     super.initState();
@@ -882,7 +830,7 @@ class _ShowAddBoxState extends State<ShowAddBox> {
 
               //customTextField(hinttext: "Gender", addcontroller: _addgender),
 
-// <<<<<<< HEAD
+
               Container(
                 child: Row(
                   children: [
@@ -1007,6 +955,34 @@ class _ShowAddBoxState extends State<ShowAddBox> {
                     },
                   )),
               SizedBox(height: 15),
+
+              const Text('SELECT WORKOUTS', style: TextStyle(fontSize: 20),),
+              Container(
+                child: StreamBuilder<QuerySnapshot>(
+                  stream: FirebaseFirestore.instance.collection('workouts').snapshots(),
+                  builder: (context, AsyncSnapshot snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const CircularProgressIndicator();
+                    }
+                    if (snapshot.data == null) {
+                      return Container();
+                    }
+                    print("-----------------------------------");
+                    var document = snapshot.data.docs;
+                    print(document);
+
+                    return Container(
+                      width: 400,
+                      height: 500,
+                      child: ListView.builder(
+                          itemCount:document.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return CheckBoxx1(document[index]['type'], document[index]['id']);
+                          }),
+                    );
+                  },
+                ),
+              ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text('Description:',
@@ -1140,7 +1116,8 @@ class _ShowAddBoxState extends State<ShowAddBox> {
                           "token": [],
                           "view_count": 0.0,
                           "gym_status": false,
-                          "amenities": arr
+                          "amenities": arr,
+                          "workouts" : workoutArray,
                         },
                         // ).then((snapshot) async {
                         //   await uploadImageToStorage(dic, _addgymownerid.text);
@@ -1316,6 +1293,118 @@ class _ECheckBoxState extends State<ECheckBox> {
   }
 }
 
+class CheckBoxx1 extends StatefulWidget {
+  final String doc;
+  final String id;
+
+  CheckBoxx1(this.doc, this.id, {Key? key}) : super(key: key);
+
+  @override
+  State<CheckBoxx1> createState() => _CheckBoxxState1();
+}
+
+class _CheckBoxxState1 extends State<CheckBoxx1> {
+  bool check = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Column(
+        children: [
+          Container(
+            child: CheckboxListTile(
+              // bool selected=false;
+                value: check,
+                title: Text(widget.doc),
+                onChanged: (bool? selected) async {
+                  setState(() {
+                    check = selected!;
+                  });
+                  if (selected == true) workoutArray.add(widget.id);
+                  print(workoutArray);
+                  if (selected == false) workoutArray.remove(widget.id);
+                  print(workoutArray);
+                }),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class ECheckBoxWorkout extends StatefulWidget {
+
+  final String type;
+  final String id;
+  final worKoutArray;
+  final String gymid;
+
+  ECheckBoxWorkout( this.worKoutArray , this.type , this.id, this.gymid ,{Key? key }):super(key: key);
+
+  @override
+  State<ECheckBoxWorkout> createState() => _ECheckBoxWorkoutState();
+}
+
+class _ECheckBoxWorkoutState extends State<ECheckBoxWorkout> {
+  bool check = false;
+
+  checkBoxWorkout() async {
+    if (widget.worKoutArray.contains(widget.id)) {
+      setState(() {
+        check = true;
+      });
+    } else {
+      setState(() {
+        check = false;
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    checkBoxWorkout();
+    print(widget.worKoutArray);
+    super.initState();
+  }
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Column(
+        children: [
+          CheckboxListTile(
+            // bool selected=false;
+              value: check,
+              title: Text(widget.type),
+              onChanged: (bool? selected) async {
+                setState(() {
+                  check = selected!;
+                });
+                if (selected == true) {
+                  await FirebaseFirestore.instance
+                      .collection('product_details')
+                      .doc(widget.gymid)
+                      .update({
+                    'workouts': FieldValue.arrayUnion([widget.id])
+                  });
+                }
+                // print(widget.arr2);
+                if (selected == false) {
+                  await FirebaseFirestore.instance
+                      .collection('product_details')
+                      .doc(widget.gymid)
+                      .update({
+                    'workouts': FieldValue.arrayRemove([widget.id])
+                  });
+                }
+                // print(widget.arr2);
+              }),
+        ],
+      ),
+    );
+  }
+}
+
+
 class ProductEditBox extends StatefulWidget {
   const ProductEditBox({
     Key? key,
@@ -1329,6 +1418,7 @@ class ProductEditBox extends StatefulWidget {
     required this.pincode,
     required this.imagee,
     this.arr2,
+    this.WorkoutArray,
   }) : super(key: key);
 
   final String name;
@@ -1341,6 +1431,7 @@ class ProductEditBox extends StatefulWidget {
   final String pincode;
   final imagee;
   final arr2;
+  final WorkoutArray;
 
   @override
   _ProductEditBoxState createState() => _ProductEditBoxState();
@@ -1359,6 +1450,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
   final TextEditingController _longitudeController = TextEditingController();
   String image = '';
   CollectionReference? amenitiesStream;
+  CollectionReference? workoutStream;
   @override
   void initState() {
     super.initState();
@@ -1372,7 +1464,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
     _landmark.text = widget.landmark;
     image = widget.imagee;
     amenitiesStream = FirebaseFirestore.instance.collection("amenities");
-
+    workoutStream = FirebaseFirestore.instance.collection("workouts");
     // _location.text = "${widget.location.latitude}, ${widget.location.latitude}";
     // _latitudeController.text = widget.location.latitude.toString();
     // _longitudeController.text = widget.location.longitude.toString();
@@ -1440,6 +1532,41 @@ class _ProductEditBoxState extends State<ProductEditBox> {
               SizedBox(
                 height: 20,
               ),
+
+              Container(
+                child: StreamBuilder<QuerySnapshot>(
+                    stream:  workoutStream!.snapshots(),
+                    builder: (context, AsyncSnapshot snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const CircularProgressIndicator();
+                      }
+                      if (snapshot.data == null) {
+                        return Container();
+                      }
+                      print("-----------------------------------");
+                      var doc = snapshot.data.docs;
+
+                      return Container(
+                        width: 400,
+                        height: 500,
+                        child: ListView.builder(
+                          itemCount: doc.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            bool check = false;
+                            return ECheckBoxWorkout(
+                                widget.WorkoutArray,
+                                doc[index]['type'],
+                                doc[index]['id'],
+                                _gymiid.text
+                            );
+                          },
+                        ),
+                      );
+                    }
+                ),
+              ),
+
+
               // Text(image),
               Image.network(image.toString()),
               Padding(
