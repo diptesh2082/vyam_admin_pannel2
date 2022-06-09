@@ -18,6 +18,7 @@ class _BookingDetailsState extends State<BookingDetails> {
   CollectionReference bookingStream =
       FirebaseFirestore.instance.collection('bookings');
   String searchVendorId = '';
+
   @override
   void initState() {
     super.initState();
@@ -131,11 +132,11 @@ class _BookingDetailsState extends State<BookingDetails> {
                                 'Vendor ID',
                                 style: TextStyle(fontWeight: FontWeight.w600),
                               )),
-                              DataColumn(
-                                  label: Text(
-                                'Booking ID',
-                                style: TextStyle(fontWeight: FontWeight.w600),
-                              )),
+                              // DataColumn(
+                              //     label: Text(
+                              //   'Booking ID',
+                              //   style: TextStyle(fontWeight: FontWeight.w600),
+                              // )),
                               DataColumn(
                                 label: Text(
                                   'User Name',
@@ -304,9 +305,9 @@ class _BookingDetailsState extends State<BookingDetails> {
       DataCell(data["vendorId"] != null
           ? Text(data['vendorId'].toString())
           : const Text("")),
-      DataCell(data["booking_id"] != null
-          ? Text(data['booking_id'].toString())
-          : const Text("")),
+      // DataCell(data["booking_id"] != null
+      //     ? Text(data['booking_id'].toString())
+      //     : const Text("")),
       DataCell(data['user_name'] != null
           ? Text(data['user_name'].toString())
           : const Text("")),
