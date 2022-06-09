@@ -1,11 +1,18 @@
 
 
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
+// import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../services/CustomTextFieldClass.dart';
 import '../services/MatchIDMethod.dart';
+import 'package:geocoding/geocoding.dart' as geocoding;
+
+import 'map.dart';
+
 
 class citiesAdd extends StatefulWidget {
   const citiesAdd({Key? key}) : super(key: key);
@@ -45,9 +52,27 @@ final _formKey = GlobalKey<FormState>();
     "Ahmedabad",
 
   ];
+  // Completer<GoogleMapController> _controller = Completer();
+  // geocoding.Location? _currentPosition;
+  // LatLng? _latLong;
+  // bool? _locating = false;
+  // geocoding.Placemark? _placeMark;
 
+// getUserAddress() async {
+//   List<geocoding.Placemark> placemarks = await geocoding
+//       .placemarkFromCoordinates(_latLong!.latitude, _latLong!.longitude);
+//   setState(() {
+//     _placeMark = placemarks.first;
+//   });
+// }
+//
+//
+// static const CameraPosition _kGooglePlex = CameraPosition(
+//   target: LatLng(37.42796133580664, -122.085749655962),
+//   zoom: 14.4746,
+// );
 
-  @override
+@override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white10,
@@ -73,7 +98,29 @@ final _formKey = GlobalKey<FormState>();
               SizedBox(width: 15),
 
               Text('Address'),
+                Stack(
+                  children: [
+                    Container(
+                      height: MediaQuery.of(context).size.height * .75,
+                      decoration: const BoxDecoration(
+                          border:
+                          const Border(bottom: BorderSide(color: Colors.grey))),
+                      child: Stack(
+                        children: [
+                          GoogleMap(
 
+                          ),
+                          Center(
+                              child: Icon(
+                                Icons.location_on_rounded,
+                                size: 40,
+                                color: Colors.black,
+                              )),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               const SizedBox(
                 height: 20,
               ),

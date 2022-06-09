@@ -8,6 +8,38 @@ import 'package:intl/intl.dart';
 import 'Screens/Product Details/product_details.dart';
 import 'Screens/booking_details.dart';
 
+class Classa extends StatefulWidget {
+  const Classa({Key? key}) : super(key: key);
+
+  @override
+  State<Classa> createState() => _ClassaState();
+}
+
+class _ClassaState extends State<Classa> {
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      scrollDirection: Axis.vertical,
+      child: Column(
+        children: [
+          Container(
+              height: MediaQuery.of(context).size.height * .50,
+              width: double.infinity,
+              child: DashBoardScreen()),
+          SizedBox(
+            height: 100,
+          ),
+          Container(
+            height: MediaQuery.of(context).size.height * .50,
+            width: double.infinity,
+            color: Colors.black,
+          )
+        ],
+      ),
+    );
+  }
+}
+
 class DashBoardScreen extends StatefulWidget {
   const DashBoardScreen({Key? key}) : super(key: key);
   @override
@@ -179,6 +211,7 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                           style: const TextStyle(
                             color: Colors.white,
                             fontSize: 14,
+
                           ),
                         ),
                         const SizedBox(
@@ -194,6 +227,7 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                       ],
                     ),
                   ),
+
                 ],
               ),
             ),

@@ -295,7 +295,9 @@ class _SideNavBar1State extends State<SideNavBar1> {
       ),
       body: Stack(
         children: [
+
           index == 1 ? const showLatestBooking() : Container(),
+
           index == 2 ? const ProductDetails() : Container(),
           index == 3 ? const UserInformation() : Container(),
           index == 4 ? const BookingDetails() : Container(),

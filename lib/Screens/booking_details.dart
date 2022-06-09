@@ -421,7 +421,7 @@ class _BookingDetailsState extends State<BookingDetails> {
                   orderyear: data['order_date'].toDate().year.toString(),
                   ordermonth: data['order_date'].toDate().month.toString(),
                   orderday: data['order_date'].toDate().day.toString(),
-                  gymname: data['gym_name'],
+                  gymname: data["gym_details"]['name'],
                   gymaddress: data['gym_address'].toString(),
                   grandtotal: data['grand_total'].toString(),
                   discount: data['discount'].toString(),
