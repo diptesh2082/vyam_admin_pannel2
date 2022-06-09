@@ -180,6 +180,7 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                           style: const TextStyle(
                             color: Colors.white,
                             fontSize: 14,
+
                           ),
                         ),
                         const SizedBox(
@@ -194,12 +195,12 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                         ),
                       ],
                     ),
-
                   ),
                    ],
-                  )
-              ),
-            );
+                  ),
+                  ),
+              );
+
         });
   }
 }

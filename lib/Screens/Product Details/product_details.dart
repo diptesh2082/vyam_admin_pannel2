@@ -665,6 +665,7 @@ class _ProductDetailsState extends State<ProductDetails> {
               MaterialPageRoute(
                   builder: (context) => ProductEditBox(
 
+<<<<<<< HEAD
                       address: data['address'],
                       gender: data['gender'],
                       name: data['name'],
@@ -675,6 +676,18 @@ class _ProductDetailsState extends State<ProductDetails> {
                       imagee: data['display_picture'],
                       arr2: arr2,
                       WorkoutArray:WorkoutArray,
+=======
+                    address: data['address'],
+                    gender: data['gender'],
+                    name: data['name'],
+                    pincode: data['pincode'],
+                    gymId: data['gym_id'],
+                    gymOwner: data['gym_owner'],
+                    landmark: data['landmark'],
+                    imagee: data['display_picture'],
+                    arr2: arr2,
+                    WorkoutArray:WorkoutArray,
+>>>>>>> 33994eef3234fdebacc5a3ca4346a5188eb866e9
 
                     // location: data['location'],
                   )));
