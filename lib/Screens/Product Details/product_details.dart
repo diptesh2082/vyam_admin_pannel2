@@ -28,6 +28,7 @@ import 'Trainers/Trainers.dart';
 import 'package:admin_panel_vyam/services/CustomTextFieldClass.dart';
 
 List<String> arr = [];
+List<String> cat = [];
 
 class ProductDetails extends StatefulWidget {
   const ProductDetails({
@@ -394,12 +395,12 @@ class _ProductDetailsState extends State<ProductDetails> {
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ), //!For Package
-                              DataColumn(
-                                label: Text(
-                                  'Extra Packages',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
-                              ),
+                              // DataColumn(
+                              //   label: Text(
+                              //     'Extra Packages',
+                              //     style: TextStyle(fontWeight: FontWeight.w600),
+                              //   ),
+                              // ),
                               DataColumn(
                                 label: Text(
                                   'Upload Image',
@@ -523,6 +524,7 @@ class _ProductDetailsState extends State<ProductDetails> {
     List imgList = data['images'];
     String landmark = data['landmark'];
     List<dynamic> arr2 = data['amenities'];
+    List<dynamic> cat2 = data['service'];
 
     String x, y;
 
@@ -585,14 +587,14 @@ class _ProductDetailsState extends State<ProductDetails> {
 //           ),
 //         ));
 //       }),
-      DataCell(const Text('Extra Package '), onTap: () {
-        Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => ExtraPackagesPage(
-            pGymId: gymId,
-// >>>>>>> cf1997613ff877c63a56c61e3009bdfe3639ccfa
-          ),
-        ));
-      }),
+//       DataCell(const Text('Extra Package '), onTap: () {
+//         Navigator.of(context).push(MaterialPageRoute(
+//           builder: (context) => ExtraPackagesPage(
+//             pGymId: gymId,
+// // >>>>>>> cf1997613ff877c63a56c61e3009bdfe3639ccfa
+//           ),
+//         ));
+//       }),
       DataCell(
         Row(
           children: [
@@ -629,8 +631,16 @@ class _ProductDetailsState extends State<ProductDetails> {
                           scrollDirection: Axis.vertical,
                           itemCount: imgList.length,
                           itemBuilder: (BuildContext context, int index) {
-                            return ListTile(
-                              leading: Image.network(imgList[index].toString()),
+                            return SizedBox(
+                              height: MediaQuery.of(context).size.height * .75,
+                              child: Container(
+                                height: 500,
+                                width: 500,
+                                child: Image.network(
+                                  imgList[index].toString(),
+                                ),
+                              ),
+
                               // minLeadin≥gWidth: double.infinity,
                             );
                           }),
@@ -793,7 +803,8 @@ class _ProductDetailsState extends State<ProductDetails> {
                       gymOwner: data['gym_owner'],
                       landmark: data['landmark'],
                       imagee: data['display_picture'],
-                      arr2: arr2
+                      arr2: arr2,
+                      cat2: cat2
                       // location: data['location'],
                       )));
         },
@@ -849,6 +860,8 @@ class _ShowAddBoxState extends State<ShowAddBox> {
   var xs;
   bool selected = false;
   CollectionReference? amenitiesStream;
+  CollectionReference? categoryStream;
+
   // var selectedValue = "MALE";
 // =======
 
@@ -858,6 +871,7 @@ class _ShowAddBoxState extends State<ShowAddBox> {
   void initState() {
     productStream = FirebaseFirestore.instance.collection("product_details");
     amenitiesStream = FirebaseFirestore.instance.collection("amenities");
+    categoryStream = FirebaseFirestore.instance.collection("category");
 
     RandomPasswordGenerator pswd = RandomPasswordGenerator();
     xs = pswd.randomPassword(letters: true, uppercase: true, numbers: true);
@@ -1042,7 +1056,7 @@ class _ShowAddBoxState extends State<ShowAddBox> {
                 hinttext: "Pincode",
               ),
               SizedBox(
-                height: 15,
+                height: 30,
               ),
               Container(
                   child: StreamBuilder<QuerySnapshot>(
@@ -1069,7 +1083,35 @@ class _ShowAddBoxState extends State<ShowAddBox> {
                   );
                 },
               )),
-              SizedBox(height: 15),
+              SizedBox(height: 30),
+              Container(
+                  child: StreamBuilder<QuerySnapshot>(
+                stream: categoryStream!.snapshots(),
+                builder: (context, AsyncSnapshot snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const CircularProgressIndicator();
+                  }
+                  if (snapshot.data == null) {
+                    return Container();
+                  }
+                  print("-----------------------------------");
+                  var doc = snapshot.data.docs;
+                  return Container(
+                    width: 400,
+                    height: 500,
+                    child: ListView.builder(
+                        itemCount: doc.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          bool check = false;
+                          return catCheck(
+                              doc[index]['name'], doc[index]['category_id']);
+                        }),
+                  );
+                },
+              )),
+
+              SizedBox(height: 30),
+
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text('Description:',
@@ -1198,7 +1240,7 @@ class _ShowAddBoxState extends State<ShowAddBox> {
                           "online_pay": true,
                           "payment_due": "",
                           "rating": 0.0,
-                          "service": [],
+                          "service": cat,
                           "timings": [],
                           "token": [],
                           "view_count": 0.0,
@@ -1261,6 +1303,44 @@ class _ShowAddBoxState extends State<ShowAddBox> {
         });
       });
     });
+  }
+}
+
+class catCheck extends StatefulWidget {
+  final String name;
+  final String cat_id;
+  const catCheck(this.name, this.cat_id, {Key? key}) : super(key: key);
+
+  @override
+  State<catCheck> createState() => _catCheckState();
+}
+
+class _catCheckState extends State<catCheck> {
+  bool check = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Column(
+        children: [
+          Container(
+            child: CheckboxListTile(
+                // bool selected=false;
+                value: check,
+                title: Text(widget.name),
+                onChanged: (bool? selected) async {
+                  setState(() {
+                    check = selected!;
+                  });
+                  if (selected == true) cat.add(widget.cat_id);
+                  print(cat);
+                  if (selected == false) cat.remove(widget.cat_id);
+                  print(cat);
+                }),
+          ),
+        ],
+      ),
+    );
   }
 }
 
@@ -1378,6 +1458,80 @@ class _ECheckBoxState extends State<ECheckBox> {
   }
 }
 
+class catecheck extends StatefulWidget {
+  final name;
+  final cat_id;
+  final cat2;
+  final gym_id;
+  const catecheck(this.name, this.cat_id, this.cat2, this.gym_id, {Key? key})
+      : super(key: key);
+
+  @override
+  State<catecheck> createState() => _catecheckState();
+}
+
+class _catecheckState extends State<catecheck> {
+  bool check = false;
+  checkboxstatus() async {
+    if (widget.cat2.contains(widget.cat_id)) {
+      setState(() {
+        check = true;
+      });
+    } else {
+      setState(() {
+        check = false;
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    checkboxstatus();
+    print(widget.cat2);
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Column(
+        children: [
+          Container(
+            child: CheckboxListTile(
+                // bool selected=false;
+                value: check,
+                title: Text(widget.name),
+                onChanged: (bool? selected) async {
+                  setState(() {
+                    check = selected!;
+                  });
+                  if (selected == true) {
+                    await FirebaseFirestore.instance
+                        .collection('product_details')
+                        .doc(widget.gym_id)
+                        .update({
+                      'service': FieldValue.arrayUnion([widget.cat_id])
+                    });
+                  }
+                  // print(widget.arr2);
+                  if (selected == false) {
+                    await FirebaseFirestore.instance
+                        .collection('product_details')
+                        .doc(widget.gym_id)
+                        .update({
+                      'service': FieldValue.arrayRemove([widget.cat_id])
+                    });
+                  }
+                  // print(widget.arr2);
+                }),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class ProductEditBox extends StatefulWidget {
   const ProductEditBox({
     Key? key,
@@ -1391,6 +1545,7 @@ class ProductEditBox extends StatefulWidget {
     required this.pincode,
     required this.imagee,
     this.arr2,
+    this.cat2,
   }) : super(key: key);
 
   final String name;
@@ -1403,6 +1558,7 @@ class ProductEditBox extends StatefulWidget {
   final String pincode;
   final imagee;
   final arr2;
+  final cat2;
 
   @override
   _ProductEditBoxState createState() => _ProductEditBoxState();
@@ -1421,6 +1577,8 @@ class _ProductEditBoxState extends State<ProductEditBox> {
   final TextEditingController _longitudeController = TextEditingController();
   String image = '';
   CollectionReference? amenitiesStream;
+  CollectionReference? categoryStream;
+
   @override
   void initState() {
     super.initState();
@@ -1434,6 +1592,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
     _landmark.text = widget.landmark;
     image = widget.imagee;
     amenitiesStream = FirebaseFirestore.instance.collection("amenities");
+    categoryStream = FirebaseFirestore.instance.collection("category");
 
     // _location.text = "${widget.location.latitude}, ${widget.location.latitude}";
     // _latitudeController.text = widget.location.latitude.toString();
@@ -1502,8 +1661,73 @@ class _ProductEditBoxState extends State<ProductEditBox> {
               SizedBox(
                 height: 20,
               ),
+              Container(
+                  child: StreamBuilder<QuerySnapshot>(
+                stream: categoryStream!.snapshots(),
+                builder: (context, AsyncSnapshot snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const CircularProgressIndicator();
+                  }
+                  if (snapshot.data == null) {
+                    return Container();
+                  }
+                  print("-----------------------------------");
+                  var doc = snapshot.data.docs;
+                  return Container(
+                    width: 400,
+                    height: 500,
+                    child: ListView.builder(
+                        itemCount: doc.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          bool check = false;
+                          return catecheck(
+                              doc[index]['name'],
+                              doc[index]['category_id'],
+                              widget.cat2,
+                              _gymiid.text);
+                        }),
+                  );
+                },
+              )),
+
+              SizedBox(height: 20),
               // Text(image),
-              Image.network(image.toString()),
+              Text(
+                'Upload Display Image',
+                style:
+                    TextStyle(color: Colors.black, fontWeight: FontWeight.w700),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Row(
+                children: [
+                  ElevatedButton(
+                    onPressed: () async {
+                      // dic = await chooseImage();
+                      image = uploadToStroagees();
+                    },
+                    child: Text(
+                      'Upload Gym Image',
+                      style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.w700),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 20,
+                  ),
+                  image != null
+                      ? Image(
+                          image: NetworkImage(image.toString()),
+                          height: 200,
+                          width: 200,
+                        )
+                      : SizedBox(
+                          height: 300,
+                          width: 300,
+                          child: Image.network(image.toString())),
+                ],
+              ),
               Padding(
                 padding: const EdgeInsets.all(12.0),
                 child: Center(
@@ -1525,6 +1749,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                         'name': _name.text,
                         'pincode': _pincode.text,
                         // 'location': dataForGeoPint,
+                        'display_picture': image,
                         'gym_id': _gymiid.text,
                         'gym_owner': _gymowner.text,
                         'landmark': _landmark.text
@@ -1544,5 +1769,27 @@ class _ProductEditBoxState extends State<ProductEditBox> {
         ),
       ),
     );
+  }
+
+  uploadToStroagees() {
+    InputElement input = FileUploadInputElement() as InputElement
+      ..accept = 'image/*';
+    FirebaseStorage fs = FirebaseStorage.instance;
+
+    input.click();
+    input.onChange.listen((event) {
+      final file = input.files?.first;
+      final reader = FileReader();
+
+      reader.readAsDataUrl(file!);
+      reader.onLoadEnd.listen((event) async {
+        var snapshot =
+            await fs.ref().child('produt_image/${_gymiid.text}').putBlob(file);
+        String downloadUrl = await snapshot.ref.getDownloadURL();
+        setState(() {
+          image = downloadUrl;
+        });
+      });
+    });
   }
 }

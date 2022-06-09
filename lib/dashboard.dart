@@ -5,6 +5,38 @@ import 'package:flutter/material.dart';
 import 'Screens/Product Details/product_details.dart';
 import 'Screens/booking_details.dart';
 
+class Classa extends StatefulWidget {
+  const Classa({Key? key}) : super(key: key);
+
+  @override
+  State<Classa> createState() => _ClassaState();
+}
+
+class _ClassaState extends State<Classa> {
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      scrollDirection: Axis.vertical,
+      child: Column(
+        children: [
+          Container(
+              height: MediaQuery.of(context).size.height * .50,
+              width: double.infinity,
+              child: DashBoardScreen()),
+          SizedBox(
+            height: 100,
+          ),
+          Container(
+            height: MediaQuery.of(context).size.height * .50,
+            width: double.infinity,
+            color: Colors.black,
+          )
+        ],
+      ),
+    );
+  }
+}
+
 class DashBoardScreen extends StatefulWidget {
   const DashBoardScreen({Key? key}) : super(key: key);
 
@@ -21,12 +53,10 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
       itemCount: 11,
       itemBuilder: (ctx, i) {
         if (i == 0) {
-        
           //Intial Commit
           return InkWell(
             hoverColor: Colors.blue,
             splashColor: Colors.amber,
-           
             onTap: () {
               Navigator.push(
                   context,
@@ -34,10 +64,10 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                       builder: (context) => CategoryInfoScreen()));
             },
             child: buildDashBoardCard(
-                title: 'Categories',
-                count: 4,
-                collectionID: 'category',
-          ),
+              title: 'Categories',
+              count: 4,
+              collectionID: 'category',
+            ),
           );
         }
         if (i == 1) {
@@ -151,54 +181,53 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
           }
 
           return InkWell(
-              hoverColor: isHovering == true ? Colors.green : Colors.amber,  
-              child: Container(
-                padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                width: 300,
-                height: 100,
-                decoration: BoxDecoration(
-                  color: count!.isEven ? Colors.red : Colors.lightBlueAccent,
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    CircleAvatar(
-                      backgroundColor: Colors.white,
-                      radius: 30,
-                      child: Icon(
-                        iconData!,
-                        color: Colors.blue,
-                      ),
-                    ),
-                    FittedBox(
-                      child: Column(
-                        // mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Text(
-                            title!,
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 14,
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 8,
-                          ),
-                          Text(
-                            snapshot.data.docs.length.toString(),
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 25,
-                            ),
-                          ),
-                        ],
-                      ),
-                    )
-                  ],
-                ),
+            hoverColor: isHovering == true ? Colors.green : Colors.amber,
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+              width: 300,
+              height: 100,
+              decoration: BoxDecoration(
+                color: count!.isEven ? Colors.red : Colors.lightBlueAccent,
               ),
-            );
-          
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  CircleAvatar(
+                    backgroundColor: Colors.white,
+                    radius: 30,
+                    child: Icon(
+                      iconData!,
+                      color: Colors.blue,
+                    ),
+                  ),
+                  FittedBox(
+                    child: Column(
+                      // mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Text(
+                          title!,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 8,
+                        ),
+                        Text(
+                          snapshot.data.docs.length.toString(),
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 25,
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            ),
+          );
         });
   }
 }
