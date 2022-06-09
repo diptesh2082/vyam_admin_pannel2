@@ -164,7 +164,7 @@ class _PaymentsPageState extends State<PaymentsPage> {
       DataCell(data != null ? Text(data['amount'] ?? "") : Text("")),
       // DataCell(data != null ? Text(data['place'] ?? "") : Text("")),
       DataCell(data != null
-          ? Text(data['type'].toString().toUpperCase() ?? "")
+          ? Text(data['type'].toString().toUpperCase() )
           : Text("")),
       DataCell(data != null ? Text(d122) : Text("")),
       DataCell(

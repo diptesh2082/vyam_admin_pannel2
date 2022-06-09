@@ -262,7 +262,7 @@ class _SideNavBar1State extends State<SideNavBar1> {
                 setState(() {});
               },
             ),
-<<<<<<< HEAD
+
             ListTile(
               title: Text(
                 'Workouts',
@@ -277,8 +277,7 @@ class _SideNavBar1State extends State<SideNavBar1> {
 
 
 
-=======
->>>>>>> 19382c55703e8d18447396a2ff0347af09f359ae
+
             ListTile(
               title: Text(
                 'Logout',
@@ -296,7 +295,7 @@ class _SideNavBar1State extends State<SideNavBar1> {
       ),
       body: Stack(
         children: [
-          index == 1 ? const DashBoardScreen() : Container(),
+          index == 1 ? const showLatestBooking() : Container(),
           index == 2 ? const ProductDetails() : Container(),
           index == 3 ? const UserInformation() : Container(),
           index == 4 ? const BookingDetails() : Container(),
@@ -314,12 +313,6 @@ class _SideNavBar1State extends State<SideNavBar1> {
           index == 15 ? const BannerPage() : Container(),
           index == 17 ? const workoutsGym() : Container(),
 
-
-<<<<<<< HEAD
-
-=======
-          index == 16 ? const Push() : Container(),
->>>>>>> 19382c55703e8d18447396a2ff0347af09f359ae
         ],
       ),
     );

@@ -117,13 +117,10 @@ class _AmenetiesScreenState extends State<AmenetiesScreen> {
 
                 Center(
                   child: StreamBuilder<QuerySnapshot>(
-<<<<<<< HEAD
-                    stream: amenityStream!.orderBy('id').snapshots(),
-=======
                     stream: amenityStream!
                         .orderBy('id', descending: false)
                         .snapshots(),
->>>>>>> 19382c55703e8d18447396a2ff0347af09f359ae
+
                     builder: (context, AsyncSnapshot snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return const CircularProgressIndicator();
