@@ -255,7 +255,7 @@ class _showLatestBookingState extends State<showLatestBooking> {
                     stream: FirebaseFirestore.instance
                         .collection('bookings')
                         .where('booking_status',
-                            whereIn: ['active'])
+                            whereIn: ['upcoming'])
                         .orderBy("id", descending: true)
                         .snapshots(),
                     builder: (context, AsyncSnapshot snapshot) {

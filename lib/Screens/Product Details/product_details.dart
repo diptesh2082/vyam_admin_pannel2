@@ -3,6 +3,7 @@ import 'dart:io';
 // import 'dart:html';
 import 'dart:math';
 import 'package:admin_panel_vyam/Screens/banners.dart';
+import 'package:admin_panel_vyam/Screens/map_view.dart';
 import 'package:admin_panel_vyam/Screens/timings.dart';
 import 'package:flutter/widgets.dart';
 import 'package:random_password_generator/random_password_generator.dart';
@@ -22,6 +23,7 @@ import 'package:image_picker/image_picker.dart';
 import '../../services/MatchIDMethod.dart';
 import '../../services/deleteMethod.dart';
 import '../../services/image_picker_api.dart';
+import '../globalVar.dart';
 import 'Packages/Extra_package.dart';
 import 'Packages/packages.dart';
 import 'Trainers/Trainers.dart';
@@ -52,7 +54,6 @@ class _ProductDetailsState extends State<ProductDetails> {
   String searchGymName = '';
   String pswd = '';
 
-
   @override
   void initState() {
     productStream = FirebaseFirestore.instance.collection("product_details");
@@ -76,14 +77,12 @@ class _ProductDetailsState extends State<ProductDetails> {
                 Row(
                   children: [
                     Padding(
-
                       padding: const EdgeInsets.only(top: 8.0, left: 8.0),
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           //padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 20),
 
                           textStyle: const TextStyle(fontSize: 15),
-
                         ),
                         onPressed: () {
                           Navigator.of(context).push(MaterialPageRoute(
@@ -144,7 +143,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                           autofocus: false,
                           textAlignVertical: TextAlignVertical.bottom,
                           onSubmitted: (value) async {
-                            FocusScope.of(context).unfocus();// <<<<<<< HEAD
+                            FocusScope.of(context).unfocus(); // <<<<<<< HEAD
                           },
 
                           onChanged: (value) {
@@ -171,8 +170,6 @@ class _ProductDetailsState extends State<ProductDetails> {
                         ),
                       ),
                     ),
-
-
                   ],
                 ),
                 Center(
@@ -191,18 +188,16 @@ class _ProductDetailsState extends State<ProductDetails> {
                       if (searchGymName.length > 0) {
                         doc = doc.where((element) {
                           return element
-
-                              .get('name')
-                              .toString()
-                              .toLowerCase()
-                              .contains(searchGymName.toString()) ||
+                                  .get('name')
+                                  .toString()
+                                  .toLowerCase()
+                                  .contains(searchGymName.toString()) ||
                               element
                                   .get('gym_id')
                                   .toString()
                                   .toLowerCase()
                                   .contains(searchGymName.toString()) ||
                               element
-
                                   .get('address')
                                   .toString()
                                   .toLowerCase()
@@ -214,14 +209,14 @@ class _ProductDetailsState extends State<ProductDetails> {
                       return SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
                         child: DataTable(
-                          // ? DATATABLE
+                            // ? DATATABLE
                             dataRowHeight: 65,
                             columns: const [
                               DataColumn(
                                   label: Text(
-                                    'Name',
-                                    style: TextStyle(fontWeight: FontWeight.w600),
-                                  )),
+                                'Name',
+                                style: TextStyle(fontWeight: FontWeight.w600),
+                              )),
                               DataColumn(
                                 label: Text(
                                   'Address',
@@ -528,8 +523,8 @@ class _ProductDetailsState extends State<ProductDetails> {
               // Adding timings +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++---------------------------------
 
               Get.to(() => Timings(
-                pGymId: gymId,
-              ));
+                    pGymId: gymId,
+                  ));
               // bool temp = online_pay;
               // temp = !temp;
               // DocumentReference documentReference = FirebaseFirestore.instance
@@ -664,21 +659,19 @@ class _ProductDetailsState extends State<ProductDetails> {
               context,
               MaterialPageRoute(
                   builder: (context) => ProductEditBox(
+                        address: data['address'],
+                        gender: data['gender'],
+                        name: data['name'],
+                        pincode: data['pincode'],
+                        gymId: data['gym_id'],
+                        gymOwner: data['gym_owner'],
+                        landmark: data['landmark'],
+                        imagee: data['display_picture'],
+                        arr2: arr2,
+                        WorkoutArray: WorkoutArray,
 
-                      address: data['address'],
-                      gender: data['gender'],
-                      name: data['name'],
-                      pincode: data['pincode'],
-                      gymId: data['gym_id'],
-                      gymOwner: data['gym_owner'],
-                      landmark: data['landmark'],
-                      imagee: data['display_picture'],
-                      arr2: arr2,
-                      WorkoutArray:WorkoutArray,
-
-                    // location: data['location'],
-                  )));
-
+                        // location: data['location'],
+                      )));
         },
       ),
 
@@ -720,6 +713,7 @@ class _ShowAddBoxState extends State<ShowAddBox> {
   final TextEditingController _addgymownerid = TextEditingController();
   final _latitudeController = 0;
   final _longitudeController = 0;
+  String addressVendor = '';
 
   final TextEditingController _branchController = TextEditingController();
   final TextEditingController _descriptionCon = TextEditingController();
@@ -728,13 +722,11 @@ class _ShowAddBoxState extends State<ShowAddBox> {
   var multipic;
   var impath;
   var image;
-// <<<<<<< HEAD
+
   var xs;
   bool selected = false;
   CollectionReference? amenitiesStream;
   CollectionReference? workoutStream;
-  // var selectedValue = "MALE";
-// =======
 
   var selectedValue = "MALE";
 
@@ -742,7 +734,7 @@ class _ShowAddBoxState extends State<ShowAddBox> {
   void initState() {
     productStream = FirebaseFirestore.instance.collection("product_details");
     amenitiesStream = FirebaseFirestore.instance.collection("amenities");
-    workoutStream  = FirebaseFirestore.instance.collection("workouts");
+    workoutStream = FirebaseFirestore.instance.collection("workouts");
     RandomPasswordGenerator pswd = RandomPasswordGenerator();
     xs = pswd.randomPassword(letters: true, uppercase: true, numbers: true);
     super.initState();
@@ -750,9 +742,7 @@ class _ShowAddBoxState extends State<ShowAddBox> {
 
   Widget build(BuildContext context) {
     return Scaffold(
-
       backgroundColor: Colors.white10,
-// <<<<<<< HEAD
       appBar: AppBar(
         title: const Text('Add Vendor Details'),
       ),
@@ -771,31 +761,12 @@ class _ShowAddBoxState extends State<ShowAddBox> {
                       fontWeight: FontWeight.w600,
                       fontSize: 14),
                 ),
-// =======
-//         appBar: AppBar(
-//           title: const Text('Add Vendor Details'),
-//         ),
-//         body: Container(
-//       padding: EdgeInsets.all(50),
-//       child: SingleChildScrollView(
-//         child: Column(
-//           crossAxisAlignment: CrossAxisAlignment.start,
-//           children: [
-//             Padding(
-//               padding: const EdgeInsets.only(left: 8.0, top: 2, right: 8),
-//               child: const Text(
-//                 'Add Records',
-//                 style: TextStyle(
-//                     fontFamily: 'poppins',
-//                     fontWeight: FontWeight.w600,
-//                     fontSize: 14),
-// // >>>>>>> cf1997613ff877c63a56c61e3009bdfe3639ccfa
               ),
               const Padding(
                 padding: EdgeInsets.all(8.0),
                 child: Text('Name:',
                     style:
-                    TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
+                        TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
               ),
               customTextField(hinttext: "Name", addcontroller: _addname),
               SizedBox(height: 15),
@@ -803,15 +774,17 @@ class _ShowAddBoxState extends State<ShowAddBox> {
                 padding: const EdgeInsets.all(8.0),
                 child: Text('Address:',
                     style:
-                    TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
+                        TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
               ),
+
               customTextField(hinttext: "Address", addcontroller: _addaddress),
+
               SizedBox(height: 15),
               const Padding(
                 padding: EdgeInsets.all(8.0),
                 child: Text('Gym Owner Id:',
                     style:
-                    TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
+                        TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
               ),
               customTextField(
                   hinttext: "Gym Owner Id", addcontroller: _addgymownerid),
@@ -820,7 +793,7 @@ class _ShowAddBoxState extends State<ShowAddBox> {
                 padding: EdgeInsets.all(8.0),
                 child: Text('Branch:',
                     style:
-                    TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
+                        TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
               ),
               customTextField(
                 addcontroller: _branchController,
@@ -829,7 +802,6 @@ class _ShowAddBoxState extends State<ShowAddBox> {
               SizedBox(height: 15),
 
               //customTextField(hinttext: "Gender", addcontroller: _addgender),
-
 
               Container(
                 child: Row(
@@ -886,7 +858,7 @@ class _ShowAddBoxState extends State<ShowAddBox> {
               const SizedBox(height: 15),
               Container(
                 child: Row(
-                  children: const [
+                  children: [
                     Padding(
                       padding: EdgeInsets.all(8.0),
                       child: Text('Longitude:',
@@ -903,6 +875,30 @@ class _ShowAddBoxState extends State<ShowAddBox> {
                           fontWeight: FontWeight.bold,
                           fontStyle: FontStyle.italic),
                     ),
+                    SizedBox(height: 15,),
+                    Stack(
+                      children: [
+                        Container(
+                          height: MediaQuery.of(context).size.height * .75,
+                          width: 900 ,
+                          decoration: const BoxDecoration(
+                              border: Border(
+                                  bottom: BorderSide(color: Colors.grey))),
+                          child: Stack(
+                            children: [
+                              MapView(address_con: _addaddress,),
+                              const Center(
+                                child: Icon(
+                                  Icons.location_on_rounded,
+                                  size: 40,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
                   ],
                 ),
               ),
@@ -911,7 +907,7 @@ class _ShowAddBoxState extends State<ShowAddBox> {
                 padding: const EdgeInsets.all(8.0),
                 child: Text('Landmark:',
                     style:
-                    TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
+                        TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
               ),
               customTextField(
                   hinttext: "Landmark", addcontroller: _addlandmark),
@@ -920,7 +916,7 @@ class _ShowAddBoxState extends State<ShowAddBox> {
                 padding: const EdgeInsets.all(8.0),
                 child: Text('Pincode:',
                     style:
-                    TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
+                        TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
               ),
               customTextField(
                 addcontroller: _addpincode,
@@ -931,35 +927,40 @@ class _ShowAddBoxState extends State<ShowAddBox> {
               ),
               Container(
                   child: StreamBuilder<QuerySnapshot>(
-                    stream: amenitiesStream!.snapshots(),
-                    builder: (context, AsyncSnapshot snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const CircularProgressIndicator();
-                      }
-                      if (snapshot.data == null) {
-                        return Container();
-                      }
-                      print("-----------------------------------");
-                      var doc = snapshot.data.docs;
-                      return Container(
-                        width: 400,
-                        height: 500,
-                        child: ListView.builder(
-                            itemCount: doc.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              bool check = false;
-                              return CheckBoxx(
-                                  doc[index]['name'], doc[index]['amenity_id']);
-                            }),
-                      );
-                    },
-                  )),
+                stream: amenitiesStream!.snapshots(),
+                builder: (context, AsyncSnapshot snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const CircularProgressIndicator();
+                  }
+                  if (snapshot.data == null) {
+                    return Container();
+                  }
+                  print("-----------------------------------");
+                  var doc = snapshot.data.docs;
+                  return Container(
+                    width: 400,
+                    height: 500,
+                    child: ListView.builder(
+                        itemCount: doc.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          bool check = false;
+                          return CheckBoxx(
+                              doc[index]['name'], doc[index]['amenity_id']);
+                        }),
+                  );
+                },
+              )),
               SizedBox(height: 15),
 
-              const Text('SELECT WORKOUTS', style: TextStyle(fontSize: 20),),
+              const Text(
+                'SELECT WORKOUTS',
+                style: TextStyle(fontSize: 20),
+              ),
               Container(
                 child: StreamBuilder<QuerySnapshot>(
-                  stream: FirebaseFirestore.instance.collection('workouts').snapshots(),
+                  stream: FirebaseFirestore.instance
+                      .collection('workouts')
+                      .snapshots(),
                   builder: (context, AsyncSnapshot snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return const CircularProgressIndicator();
@@ -975,9 +976,10 @@ class _ShowAddBoxState extends State<ShowAddBox> {
                       width: 400,
                       height: 500,
                       child: ListView.builder(
-                          itemCount:document.length,
+                          itemCount: document.length,
                           itemBuilder: (BuildContext context, int index) {
-                            return CheckBoxx1(document[index]['type'], document[index]['id']);
+                            return CheckBoxx1(
+                                document[index]['type'], document[index]['id']);
                           }),
                     );
                   },
@@ -987,7 +989,7 @@ class _ShowAddBoxState extends State<ShowAddBox> {
                 padding: const EdgeInsets.all(8.0),
                 child: Text('Description:',
                     style:
-                    TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
+                        TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
               ),
               customTextField(
                 addcontroller: _descriptionCon,
@@ -998,7 +1000,7 @@ class _ShowAddBoxState extends State<ShowAddBox> {
                 padding: const EdgeInsets.all(8.0),
                 child: Text('Number:',
                     style:
-                    TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
+                        TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
               ),
               customTextField(
                 addcontroller: _numberCon,
@@ -1010,7 +1012,7 @@ class _ShowAddBoxState extends State<ShowAddBox> {
               Text(
                 'Upload Display Image',
                 style:
-                TextStyle(color: Colors.black, fontWeight: FontWeight.w700),
+                    TextStyle(color: Colors.black, fontWeight: FontWeight.w700),
               ),
               SizedBox(
                 height: 20,
@@ -1033,15 +1035,15 @@ class _ShowAddBoxState extends State<ShowAddBox> {
                   ),
                   image != null
                       ? Image(
-                    image: NetworkImage('$image'),
-                    height: 200,
-                    width: 200,
-                  )
+                          image: NetworkImage('$image'),
+                          height: 200,
+                          width: 200,
+                        )
                       : Container(
-                    color: Colors.black,
-                    height: 200,
-                    width: 200,
-                  )
+                          color: Colors.black,
+                          height: 200,
+                          width: 200,
+                        )
                 ],
               ),
 
@@ -1075,6 +1077,17 @@ class _ShowAddBoxState extends State<ShowAddBox> {
 
               Row(
                 children: [
+                  // ElevatedButton(onPressed: (){
+                  //     if(addressVendor!='')
+                  //     {
+                  //       setState(() {
+                  //         _addaddress.text = getAddress();
+                  //       });
+                  //
+                  //     }
+                  //     print(_addaddress.text);
+                  //
+                  // }, child: Text('HELLO')),
                   ElevatedButton(
                     onPressed: () async {
                       print(dic);
@@ -1117,7 +1130,7 @@ class _ShowAddBoxState extends State<ShowAddBox> {
                           "view_count": 0.0,
                           "gym_status": false,
                           "amenities": arr,
-                          "workouts" : workoutArray,
+                          "workouts": workoutArray,
                         },
                         // ).then((snapshot) async {
                         //   await uploadImageToStorage(dic, _addgymownerid.text);
@@ -1151,8 +1164,18 @@ class _ShowAddBoxState extends State<ShowAddBox> {
         ),
       ),
     );
-
   }
+
+  // String getAddress()
+  // {
+  //   addressVendor = address;
+  //  // _addaddress.text = address;
+  //   print('/////////////////////////////////===========++++++++');
+  //   print(addressVendor);
+  //   //print(_addaddress.text);
+  //   return addressVendor;
+  //
+  // }
 
   uploadToStroagees() {
     InputElement input = FileUploadInputElement() as InputElement
@@ -1199,7 +1222,7 @@ class _CheckBoxxState extends State<CheckBoxx> {
         children: [
           Container(
             child: CheckboxListTile(
-              // bool selected=false;
+                // bool selected=false;
                 value: check,
                 title: Text(widget.doc),
                 onChanged: (bool? selected) async {
@@ -1260,7 +1283,7 @@ class _ECheckBoxState extends State<ECheckBox> {
         children: [
           Container(
             child: CheckboxListTile(
-              // bool selected=false;
+                // bool selected=false;
                 value: check,
                 title: Text(widget.doc),
                 onChanged: (bool? selected) async {
@@ -1313,7 +1336,7 @@ class _CheckBoxxState1 extends State<CheckBoxx1> {
         children: [
           Container(
             child: CheckboxListTile(
-              // bool selected=false;
+                // bool selected=false;
                 value: check,
                 title: Text(widget.doc),
                 onChanged: (bool? selected) async {
@@ -1333,13 +1356,14 @@ class _CheckBoxxState1 extends State<CheckBoxx1> {
 }
 
 class ECheckBoxWorkout extends StatefulWidget {
-
   final String type;
   final String id;
   final worKoutArray;
   final String gymid;
 
-  ECheckBoxWorkout( this.worKoutArray , this.type , this.id, this.gymid ,{Key? key }):super(key: key);
+  ECheckBoxWorkout(this.worKoutArray, this.type, this.id, this.gymid,
+      {Key? key})
+      : super(key: key);
 
   @override
   State<ECheckBoxWorkout> createState() => _ECheckBoxWorkoutState();
@@ -1366,13 +1390,14 @@ class _ECheckBoxWorkoutState extends State<ECheckBoxWorkout> {
     print(widget.worKoutArray);
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return Container(
       child: Column(
         children: [
           CheckboxListTile(
-            // bool selected=false;
+              // bool selected=false;
               value: check,
               title: Text(widget.type),
               onChanged: (bool? selected) async {
@@ -1403,7 +1428,6 @@ class _ECheckBoxWorkoutState extends State<ECheckBoxWorkout> {
     );
   }
 }
-
 
 class ProductEditBox extends StatefulWidget {
   const ProductEditBox({
@@ -1503,39 +1527,39 @@ class _ProductEditBoxState extends State<ProductEditBox> {
               customTextField(hinttext: "Pincode", addcontroller: _pincode),
               Container(
                   child: StreamBuilder<QuerySnapshot>(
-                    stream: amenitiesStream!.snapshots(),
-                    builder: (context, AsyncSnapshot snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const CircularProgressIndicator();
-                      }
-                      if (snapshot.data == null) {
-                        return Container();
-                      }
-                      print("-----------------------------------");
-                      var doc = snapshot.data.docs;
-                      return Container(
-                        width: 400,
-                        height: 500,
-                        child: ListView.builder(
-                            itemCount: doc.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              bool check = false;
-                              return ECheckBox(
-                                  doc[index]['name'],
-                                  doc[index]['amenity_id'],
-                                  widget.arr2,
-                                  _gymiid.text);
-                            }),
-                      );
-                    },
-                  )),
+                stream: amenitiesStream!.snapshots(),
+                builder: (context, AsyncSnapshot snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const CircularProgressIndicator();
+                  }
+                  if (snapshot.data == null) {
+                    return Container();
+                  }
+                  print("-----------------------------------");
+                  var doc = snapshot.data.docs;
+                  return Container(
+                    width: 400,
+                    height: 500,
+                    child: ListView.builder(
+                        itemCount: doc.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          bool check = false;
+                          return ECheckBox(
+                              doc[index]['name'],
+                              doc[index]['amenity_id'],
+                              widget.arr2,
+                              _gymiid.text);
+                        }),
+                  );
+                },
+              )),
               SizedBox(
                 height: 20,
               ),
 
               Container(
                 child: StreamBuilder<QuerySnapshot>(
-                    stream:  workoutStream!.snapshots(),
+                    stream: workoutStream!.snapshots(),
                     builder: (context, AsyncSnapshot snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return const CircularProgressIndicator();
@@ -1557,15 +1581,12 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                                 widget.WorkoutArray,
                                 doc[index]['type'],
                                 doc[index]['id'],
-                                _gymiid.text
-                            );
+                                _gymiid.text);
                           },
                         ),
                       );
-                    }
-                ),
+                    }),
               ),
-
 
               // Text(image),
               Image.network(image.toString()),

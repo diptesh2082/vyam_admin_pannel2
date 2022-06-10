@@ -61,6 +61,10 @@ dependencies:
 
   random_password_generator: ^0.2.1
   google_maps: ^6.1.0
+  map:
+  easy_localization:
+  geocode:
+
 
 
 
