@@ -87,30 +87,34 @@ class _TimingsState extends State<Timings> {
                             columns: const [
                               DataColumn(
                                   label: Text(
-                                    'Morning Timings',
-                                    style: TextStyle(fontWeight: FontWeight.w600),
-                                  )),
+                                'Type',
+                                style: TextStyle(fontWeight: FontWeight.w600),
+                              )),
                               DataColumn(
                                   label: Text(
-                                    'Evening Timings',
-                                    style: TextStyle(fontWeight: FontWeight.w600),
-                                  )),
+                                'Morning Timings',
+                                style: TextStyle(fontWeight: FontWeight.w600),
+                              )),
                               DataColumn(
                                   label: Text(
-                                    'Closed',
-                                    style: TextStyle(fontWeight: FontWeight.w600),
-                                  )),
+                                'Evening Timings',
+                                style: TextStyle(fontWeight: FontWeight.w600),
+                              )),
                               DataColumn(
                                   label: Text(
-                                    'Morning Days',
-                                    style: TextStyle(fontWeight: FontWeight.w600),
-                                  )),
+                                'Closed',
+                                style: TextStyle(fontWeight: FontWeight.w600),
+                              )),
                               DataColumn(
                                   label: Text(
-                                    'Evening Days',
-                                    style: TextStyle(fontWeight: FontWeight.w600),
-                                  )),
-
+                                'Morning Days',
+                                style: TextStyle(fontWeight: FontWeight.w600),
+                              )),
+                              DataColumn(
+                                  label: Text(
+                                'Evening Days',
+                                style: TextStyle(fontWeight: FontWeight.w600),
+                              )),
                               DataColumn(
                                 label: Text(
                                   'Edit',
@@ -146,6 +150,7 @@ class _TimingsState extends State<Timings> {
     String timeId = data['timing_id'];
     print(timeId);
     return DataRow(cells: [
+      DataCell(data != null ? Text(data["timing_id"] ?? "") : Text("")),
       DataCell(data != null ? Text(data["Morning"] ?? "") : Text("")),
       DataCell(data != null ? Text(data['Evening'] ?? "") : Text("")),
       DataCell(data != null ? Text(data['closed'] ?? "") : Text("")),
@@ -158,8 +163,14 @@ class _TimingsState extends State<Timings> {
               return GestureDetector(
                 onTap: () => Navigator.pop(context),
                 child: SingleChildScrollView(
-                  child: ProductEditBox(gymId:widget.pGymId,typeId: timeId, closed: data['closed'] , eveninging_days: data['evening_days'] , morning: data["Morning"], morning_days: data['morning_days'], evening: data['Evening'],
-
+                  child: ProductEditBox(
+                    gymId: widget.pGymId,
+                    typeId: timeId,
+                    closed: data['closed'],
+                    eveninging_days: data['evening_days'],
+                    morning: data["Morning"],
+                    morning_days: data['morning_days'],
+                    evening: data['Evening'],
                   ),
                 ),
               );
@@ -181,75 +192,80 @@ class _TimingsState extends State<Timings> {
   showAddbox() => showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(30))),
-        content: SizedBox(
-          height: 480,
-          width: 800,
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  'Add Timings Records',
-                  style: TextStyle(
-                      fontFamily: 'poppins',
-                      fontWeight: FontWeight.w600,
-                      fontSize: 14),
-                ),
-                customTextField(
-                    hinttext: "Timing Type", addcontroller: typecon),
-                customTextField(hinttext: "Morning timings :6.00AM-12.00PM ", addcontroller: morning),
-                customTextField(
-                    hinttext: "Evening Timings : 5.00PM-10.00PM", addcontroller: evening),
-                customTextField(
-                    hinttext: "Closed : Saturday and Sunday", addcontroller: closed),
-                customTextField(
-                  addcontroller: morning_days,
-                  hinttext: "Morning Days : Morning(mon-fri)",
-                ),
-                customTextField(
-                    hinttext: "Evening Days : Evening(mon-fri)", addcontroller: evening_days),
-                Center(
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      await
-                      FirebaseFirestore.instance
-                          .collection('product_details')
-                          .doc(widget.pGymId)
-                          .collection('timings')
-                          .doc(typecon.text)
-                          .set(
-                        {
-                          "Morning":morning.text,
-                          "Evening":evening.text,
-                          "closed":closed.text,
-                          "morning_days":morning_days.text,
-                          "evening_days":evening_days.text,
-                          'timing_id': typecon.text,
+            shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(30))),
+            content: SizedBox(
+              height: 480,
+              width: 800,
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Add Timings Records',
+                      style: TextStyle(
+                          fontFamily: 'poppins',
+                          fontWeight: FontWeight.w600,
+                          fontSize: 14),
+                    ),
+                    customTextField(
+                        hinttext: "Timing Type", addcontroller: typecon),
+                    customTextField(
+                        hinttext: "Morning timings :6.00AM-12.00PM ",
+                        addcontroller: morning),
+                    customTextField(
+                        hinttext: "Evening Timings : 5.00PM-10.00PM",
+                        addcontroller: evening),
+                    customTextField(
+                        hinttext: "Closed : Saturday and Sunday",
+                        addcontroller: closed),
+                    customTextField(
+                      addcontroller: morning_days,
+                      hinttext: "Morning Days : Morning(mon-fri)",
+                    ),
+                    customTextField(
+                        hinttext: "Evening Days : Evening(mon-fri)",
+                        addcontroller: evening_days),
+                    Center(
+                      child: ElevatedButton(
+                        onPressed: () async {
+                          await FirebaseFirestore.instance
+                              .collection('product_details')
+                              .doc(widget.pGymId)
+                              .collection('timings')
+                              .doc(typecon.text)
+                              .set(
+                            {
+                              "Morning": morning.text,
+                              "Evening": evening.text,
+                              "closed": closed.text,
+                              "morning_days": morning_days.text,
+                              "evening_days": evening_days.text,
+                              'timing_id': typecon.text,
+                            },
+                          );
+                          Navigator.pop(context);
                         },
-                      );
-                      Navigator.pop(context);
-                    },
-                    child: const Text('Done'),
-                  ),
-                )
-              ],
+                        child: const Text('Done'),
+                      ),
+                    )
+                  ],
+                ),
+              ),
             ),
-          ),
-        ),
-      ));
+          ));
 }
 
 class ProductEditBox extends StatefulWidget {
   const ProductEditBox({
-    Key? key,required this.morning,
+    Key? key,
+    required this.morning,
     required this.evening,
     required this.closed,
     required this.morning_days,
     required this.eveninging_days,
-    required this.typeId,required this.gymId,
-
+    required this.typeId,
+    required this.gymId,
   }) : super(key: key);
 
   final String morning;
@@ -274,12 +290,12 @@ class _ProductEditBoxState extends State<ProductEditBox> {
   @override
   void initState() {
     super.initState();
-    typecon.text=widget.typeId;
-    morning.text=widget.morning;
-    evening.text=widget.evening;
-    closed.text=widget.closed;
-    morning_days.text=widget.morning_days;
-    evening_days.text=widget.eveninging_days;
+    typecon.text = widget.typeId;
+    morning.text = widget.morning;
+    evening.text = widget.evening;
+    closed.text = widget.closed;
+    morning_days.text = widget.morning_days;
+    evening_days.text = widget.eveninging_days;
   }
 
   @override
@@ -303,19 +319,23 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                     fontWeight: FontWeight.w600,
                     fontSize: 14),
               ),
+              customTextField(hinttext: "Timing Type", addcontroller: typecon),
               customTextField(
-                  hinttext: "Timing Type", addcontroller: typecon),
-              customTextField(hinttext: "Morning timings :6.00AM-12.00PM ", addcontroller: morning),
+                  hinttext: "Morning timings :6.00AM-12.00PM ",
+                  addcontroller: morning),
               customTextField(
-                  hinttext: "Evening Timings : 5.00PM-10.00PM", addcontroller: evening),
+                  hinttext: "Evening Timings : 5.00PM-10.00PM",
+                  addcontroller: evening),
               customTextField(
-                  hinttext: "Closed : Saturday and Sunday", addcontroller: closed),
+                  hinttext: "Closed : Saturday and Sunday",
+                  addcontroller: closed),
               customTextField(
                 addcontroller: morning_days,
                 hinttext: "Morning Days : Morning(mon-fri)",
               ),
               customTextField(
-                  hinttext: "Evening Days : Evening(mon-fri)", addcontroller: evening_days),
+                  hinttext: "Evening Days : Evening(mon-fri)",
+                  addcontroller: evening_days),
               Padding(
                 padding: const EdgeInsets.all(12.0),
                 child: Center(
@@ -328,12 +348,12 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                           .doc(widget.gymId)
                           .collection('timings')
                           .doc(typecon.text);
-                      Map<String, dynamic> data = <String, dynamic> {
-                        "Morning":morning.text,
-                        "Evening":evening.text,
-                        "closed":closed.text,
-                        "morning_days":morning_days.text,
-                        "evening_days":evening_days.text,
+                      Map<String, dynamic> data = <String, dynamic>{
+                        "Morning": morning.text,
+                        "Evening": evening.text,
+                        "closed": closed.text,
+                        "morning_days": morning_days.text,
+                        "evening_days": evening_days.text,
                         'timing_id': typecon.text,
                       };
                       await documentReference
