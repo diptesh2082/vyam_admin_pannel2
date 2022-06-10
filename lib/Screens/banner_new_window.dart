@@ -21,16 +21,11 @@ class bannerNewPage extends StatefulWidget {
 }
 
 class _bannerNewPageState extends State<bannerNewPage> {
-
-  final id = FirebaseFirestore.instance
-      .collection('banner_details')
-      .doc()
-      .id;
+  final id = FirebaseFirestore.instance.collection('banner_details').doc().id;
   final TextEditingController _addname = TextEditingController();
   final bool _accesible = false;
   var image;
   var imgUrl1;
-
 
   final _formKey = GlobalKey<FormState>();
   String? selectedType;
@@ -51,8 +46,6 @@ class _bannerNewPageState extends State<bannerNewPage> {
   }
 
   late DropzoneViewController controller;
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -101,8 +94,8 @@ class _bannerNewPageState extends State<bannerNewPage> {
                             ),
                             InkWell(
                               onTap: () async {
-                                 image = await chooseImage();
-                                 await getUrlImage(image);
+                                image = await chooseImage();
+                                await getUrlImage(image);
                                 //uploadToStroage();
                               },
                               child: const Icon(
@@ -110,19 +103,29 @@ class _bannerNewPageState extends State<bannerNewPage> {
                               ),
                             ),
                             SizedBox(
+                              width: 20,
+                            ),
+                            SizedBox(
                               width: 300,
                               height: 200,
                               child: Container(
-                                child:
-                                Image.network((imgUrl1 == null) ? ' ' : imgUrl1,
-                                  fit: BoxFit.contain,),
-                              ),
+                                  child: imgUrl1 != null
+                                      ? Image.network(imgUrl1)
+                                      : Container(
+                                          child: Center(
+                                            child: Text(
+                                              'Please Upload Image',
+                                              style: TextStyle(
+                                                  color: Colors.black,
+                                                  fontSize: 20,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          ),
+                                        )),
                             ),
-
                           ],
                         ),
                       ),
-
 
                       Column(
                         children: [
@@ -185,7 +188,6 @@ class _bannerNewPageState extends State<bannerNewPage> {
                       )
                     ],
                   ),
-
                 ),
               ),
             ),
@@ -195,30 +197,22 @@ class _bannerNewPageState extends State<bannerNewPage> {
     );
   }
 
-
-
-
   getUrlImage(XFile? pickedFile) async {
     if (kIsWeb) {
-      final _firebaseStorage = FirebaseStorage.instance
-          .ref().child("banner");
+      final _firebaseStorage = FirebaseStorage.instance.ref().child("banner");
 
       Reference _reference = _firebaseStorage
           .child('banner_details/${Path.basename(pickedFile!.path)}');
-      await _reference
-          .putData(
-          await pickedFile.readAsBytes(),
-    SettableMetadata(contentType: 'image/jpeg'),
-    );
+      await _reference.putData(
+        await pickedFile.readAsBytes(),
+        SettableMetadata(contentType: 'image/jpeg'),
+      );
 
       String imageUrl = await _reference.getDownloadURL();
 
       setState(() {
         imgUrl1 = imageUrl;
       });
-
     }
   }
-
 }
-
