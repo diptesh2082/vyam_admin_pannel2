@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
 import '../services/deleteMethod.dart';
@@ -16,6 +17,8 @@ class BookingDetails extends StatefulWidget {
 class _BookingDetailsState extends State<BookingDetails> {
   CollectionReference bookingStream =
       FirebaseFirestore.instance.collection('bookings');
+  String searchVendorId = '';
+
   @override
   void initState() {
     super.initState();
@@ -34,6 +37,52 @@ class _BookingDetailsState extends State<BookingDetails> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+
+                Container(
+                  width: 500,
+                  height: 51,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(14),
+                    color: Colors.white12,
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(15),
+                    child: TextField(
+                      // focusNode: _node,
+
+                      autofocus: false,
+                      textAlignVertical: TextAlignVertical.bottom,
+                      onSubmitted: (value) async {
+                        FocusScope.of(context).unfocus();
+                      },
+                      // controller: searchController,
+                      onChanged: (value) {
+                        if (value.length == 0) {
+                          // _node.canRequestFocus=false;
+                          // FocusScope.of(context).unfocus();
+                        }
+                        if (mounted) {
+                          setState(() {
+                            searchVendorId = value.toString();
+                          });
+                        }
+                      },
+                      decoration:  InputDecoration(
+                        prefixIcon: const Icon(Icons.search),
+                        hintText: 'Search',
+                        hintStyle: GoogleFonts.poppins(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500
+                        ),
+                        border: InputBorder.none,
+                        filled: true,
+                        fillColor: Colors.white12,
+                      ),
+                    ),
+                  ),
+                ),
+
+
                 Center(
                   child: StreamBuilder<QuerySnapshot>(
                     stream: FirebaseFirestore.instance
@@ -54,14 +103,25 @@ class _BookingDetailsState extends State<BookingDetails> {
                         print(snapshot.error);
                         return Container();
                       }
-                      var document = snapshot.data!.docs;
-                      // document.sort();
-                      //   document = document.where((element) {
-                      //     return element
-                      //         .get('booking_status')
-                      //         .toString()
-                      //         .contains("active" || "upcomming");
-                      //   }).toList();
+                      // var document = snapshot.data!.docs;
+
+                      var doc = snapshot.data.docs;
+
+                      if (searchVendorId.length > 0) {
+                        doc = doc.where((element) {
+                          return element
+                              .get('user_name')
+                              .toString()
+                              .toLowerCase()
+                              .contains(searchVendorId.toString())
+                          ||element
+                              .get('userId')
+                              .toString()
+                              .toLowerCase()
+                              .contains(searchVendorId.toString());
+                        }).toList();
+                      }
+
                       return SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
                         child: DataTable(
@@ -72,11 +132,11 @@ class _BookingDetailsState extends State<BookingDetails> {
                                 'Vendor ID',
                                 style: TextStyle(fontWeight: FontWeight.w600),
                               )),
-                              DataColumn(
-                                  label: Text(
-                                'Booking ID',
-                                style: TextStyle(fontWeight: FontWeight.w600),
-                              )),
+                              // DataColumn(
+                              //     label: Text(
+                              //   'Booking ID',
+                              //   style: TextStyle(fontWeight: FontWeight.w600),
+                              // )),
                               DataColumn(
                                 label: Text(
                                   'User Name',
@@ -210,7 +270,7 @@ class _BookingDetailsState extends State<BookingDetails> {
                                 ),
                               ),
                             ],
-                            rows: _buildlist(context, snapshot.data!.docs)),
+                            rows: _buildlist(context, doc)),
                       );
                     },
                   ),
@@ -245,9 +305,9 @@ class _BookingDetailsState extends State<BookingDetails> {
       DataCell(data["vendorId"] != null
           ? Text(data['vendorId'].toString())
           : const Text("")),
-      DataCell(data["booking_id"] != null
-          ? Text(data['booking_id'].toString())
-          : const Text("")),
+      // DataCell(data["booking_id"] != null
+      //     ? Text(data['booking_id'].toString())
+      //     : const Text("")),
       DataCell(data['user_name'] != null
           ? Text(data['user_name'].toString())
           : const Text("")),
@@ -361,7 +421,7 @@ class _BookingDetailsState extends State<BookingDetails> {
                   orderyear: data['order_date'].toDate().year.toString(),
                   ordermonth: data['order_date'].toDate().month.toString(),
                   orderday: data['order_date'].toDate().day.toString(),
-                  gymname: data['gym_name'],
+                  gymname: data["gym_details"]['name'],
                   gymaddress: data['gym_address'].toString(),
                   grandtotal: data['grand_total'].toString(),
                   discount: data['discount'].toString(),

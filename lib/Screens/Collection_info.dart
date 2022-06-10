@@ -3,10 +3,15 @@ import 'dart:io';
 import 'package:admin_panel_vyam/services/deleteMethod.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/foundation.dart';
 
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:image_picker/image_picker.dart';
 import '../services/CustomTextFieldClass.dart';
 import '../services/image_picker_api.dart';
+import 'package:path/path.dart' as Path;
 
 class UserInformation extends StatefulWidget {
   const UserInformation({
@@ -19,6 +24,7 @@ class UserInformation extends StatefulWidget {
 
 class _UserInformationState extends State<UserInformation> {
   CollectionReference? userDetailStream;
+  String searchUser = ' ';
   @override
   void initState() {
     userDetailStream = FirebaseFirestore.instance.collection("user_details");
@@ -61,21 +67,54 @@ class _UserInformationState extends State<UserInformation> {
                               builder: (context) => detailsadd()));
                     },
                      child: Text('Add User'),
-                    // Container(
-                    //   width: 90,
-                    //   decoration: BoxDecoration(
-                    //       color: Colors.white,
-                    //       borderRadius: BorderRadius.circular(20.0)),
-                    //   child: Row(
-                    //     children: const [
-                    //       Icon(Icons.add),
-                    //       Text('Add User',
-                    //           style: TextStyle(fontWeight: FontWeight.w400)),
-                    //     ],
-                    //   ),
-                    // ),
                   ),
                 ),
+
+                Container(
+                  width: 500,
+                  height: 51,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(14),
+                    color: Colors.white12,
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(15),
+                    child: TextField(
+                      // focusNode: _node,
+
+                      autofocus: false,
+                      textAlignVertical: TextAlignVertical.bottom,
+                      onSubmitted: (value) async {
+                        FocusScope.of(context).unfocus();
+                      },
+                      // controller: searchController,
+                      onChanged: (value) {
+                        if (value.length == 0) {
+                          // _node.canRequestFocus=false;
+                          // FocusScope.of(context).unfocus();
+                        }
+                        if (mounted) {
+                          setState(() {
+                            searchUser = value.toString();
+                          });
+                        }
+                      },
+                      decoration:  InputDecoration(
+                        prefixIcon: const Icon(Icons.search),
+                        hintText: 'Search',
+                        hintStyle: GoogleFonts.poppins(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500
+                        ),
+                        border: InputBorder.none,
+                        filled: true,
+                        fillColor: Colors.white12,
+                      ),
+                    ),
+                  ),
+                ),
+
+
                 Center(
                   child: StreamBuilder<QuerySnapshot>(
                     stream: userDetailStream!.snapshots(),
@@ -87,6 +126,28 @@ class _UserInformationState extends State<UserInformation> {
                         return Container();
                       }
                       print("-----------------------------------");
+
+                      var doc = snapshot.data.docs;
+
+                      if (searchUser.length > 0) {
+                        doc = doc.where((element) {
+                          return element
+                              .get('name')
+                              .toString()
+                              .toLowerCase()
+                              .contains(searchUser.toString())
+                              || element
+                                  .get('gender')
+                                  .toString()
+                                  .toLowerCase()
+                                  .contains(searchUser.toString())
+                              || element
+                                  .get('address')
+                                  .toString()
+                                  .toLowerCase()
+                                  .contains(searchUser.toString());
+                        }).toList();
+                      }
 
                       print(snapshot.data.docs);
                       return SingleChildScrollView(
@@ -185,7 +246,7 @@ class _UserInformationState extends State<UserInformation> {
                                 ),
                               )
                             ],
-                            rows: _buildlist(context, snapshot.data!.docs)),
+                            rows: _buildlist(context, doc)),
                       );
                     },
                   ),
@@ -266,7 +327,7 @@ class _UserInformationState extends State<UserInformation> {
             context,
             MaterialPageRoute(
               builder: (conext) => EditBox(
-                imageurl: 'url',
+                imageurl: data['image'],
                 address: data['address'],
                 gender: data['gender'],
                 email: data['email'],
@@ -436,6 +497,8 @@ class _EditBoxState extends State<EditBox> {
   TextEditingController _pincode = TextEditingController();
   TextEditingController _sublocality = TextEditingController();
   TextEditingController _userid = TextEditingController();
+  var imgUrl1;
+  var img;
   @override
   var x;
   void initState() {
@@ -453,6 +516,8 @@ class _EditBoxState extends State<EditBox> {
     _sublocality.text = widget.subLocality;
     _userid.text = widget.userid;
     x = widget.number;
+    img = widget.imageurl;
+
   }
 
   @override
@@ -709,6 +774,29 @@ class _EditBoxState extends State<EditBox> {
                   //         hintText: 'Longitude'),
                   //   )),
                   // ),
+                  const SizedBox(
+                    width: 20,
+                  ),
+                  InkWell(
+                    onTap: () async {
+                      img = await chooseImage();
+                      await getUrlImage(img);
+                    },
+                    child: const Icon(
+                      Icons.upload_file_outlined,
+                    ),
+                  ),
+
+                  SizedBox(
+                    width: 300,
+                    height: 200,
+                    child: Container(
+                      child:
+                      Image.network((imgUrl1 == null) ? ' ' : imgUrl1,
+                        fit: BoxFit.contain,),
+                    ),
+                  ),
+
                   Padding(
                     padding: const EdgeInsets.all(12.0),
                     child: Row(
@@ -726,7 +814,7 @@ class _EditBoxState extends State<EditBox> {
                             Map<String, dynamic> data = <String, dynamic>{
                               'address': _address.text,
                               'gender': _gender.text,
-                              'image': 'imageurl',
+                              'image': imgUrl1,
                               // 'lat': _latitude.text,
                               // 'long': _longitude.text,
                               'name': _name.text,
@@ -763,6 +851,31 @@ class _EditBoxState extends State<EditBox> {
           ),
         ));
   }
+
+  getUrlImage(XFile? pickedFile) async {
+    if (kIsWeb) {
+      final _firebaseStorage = FirebaseStorage.instance
+          .ref().child("category");
+
+      Reference _reference = _firebaseStorage
+          .child('category/${Path.basename(pickedFile!.path)}');
+      await _reference
+          .putData(
+        await pickedFile.readAsBytes(),
+        SettableMetadata(contentType: 'image/jpeg'),
+      );
+
+      String imageUrl = await _reference.getDownloadURL();
+
+      setState(() {
+        imgUrl1 = imageUrl;
+      });
+
+    }
+  }
+
+
+
 }
 
 class detailsadd extends StatefulWidget {
@@ -786,6 +899,7 @@ class _detailsaddState extends State<detailsadd> {
   final TextEditingController _adduserid = TextEditingController();
   var profileImage;
   String gender = "Male";
+  var imgUrl1;
 
   @override
   Widget build(BuildContext context) {
@@ -820,11 +934,19 @@ class _detailsaddState extends State<detailsadd> {
                     child: Icon(Icons.camera_alt),
                     onTap: () async {
                       profileImage = await chooseImage();
+                      getUrlImage(profileImage);
+
                     },
                   ),
-
-                  // if(profileImage != null)
-                  // Image.file();
+                  SizedBox(
+                    width: 300,
+                    height: 200,
+                    child: Container(
+                      child:
+                      Image.network((imgUrl1 == null) ? ' ' : imgUrl1,
+                        fit: BoxFit.contain,),
+                    ),
+                  ),
                 ],
               ),
               customTextField(
@@ -889,7 +1011,7 @@ class _detailsaddState extends State<detailsadd> {
                           'name': _addname.text,
                           'email': _addemail.text,
                           'gender': gender,
-
+                          'image': imgUrl1,
                           'number': "+91${_addnumber.text}",
                           'locality': _addlocality.text,
                           'subLocality': _addsublocality.text,
@@ -899,10 +1021,11 @@ class _detailsaddState extends State<detailsadd> {
                           'legit': true
                           // 'image': ""
                         },
-                      ).then((value) async {
-                        await uploadImageToUser(
-                            profileImage, "+91${_addnumber.text}");
-                      });
+                      );
+                      //     .then((value) async {
+                      //   await uploadImageToUser(
+                      //       profileImage, "+91${_addnumber.text}");
+                      // });
                       Navigator.pop(context);
                     },
                     child: const Text('Done'),
@@ -922,5 +1045,27 @@ class _detailsaddState extends State<detailsadd> {
         ),
       ),
     );
+  }
+
+  getUrlImage(XFile? pickedFile) async {
+    if (kIsWeb) {
+      final _firebaseStorage = FirebaseStorage.instance
+          .ref().child("banner");
+
+      Reference _reference = _firebaseStorage
+          .child('banner_details/${Path.basename(pickedFile!.path)}');
+      await _reference
+          .putData(
+        await pickedFile.readAsBytes(),
+        SettableMetadata(contentType: 'image/jpeg'),
+      );
+
+      String imageUrl = await _reference.getDownloadURL();
+
+      setState(() {
+        imgUrl1 = imageUrl;
+      });
+
+    }
   }
 }

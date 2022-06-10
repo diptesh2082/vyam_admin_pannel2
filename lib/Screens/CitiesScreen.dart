@@ -7,6 +7,7 @@ import 'package:get/get_core/src/get_main.dart';
 import '../services/CustomTextFieldClass.dart';
 import '../services/MatchIDMethod.dart';
 import '../services/deleteMethod.dart';
+import 'package:admin_panel_vyam/Screens/map_view.dart';
 
 class CitiesScreen extends StatefulWidget {
   const CitiesScreen({Key? key}) : super(key: key);
@@ -91,13 +92,13 @@ class _CitiesScreenState extends State<CitiesScreen> {
                                 style: TextStyle(fontWeight: FontWeight.w600),
                               ),
                             ),
-                            DataColumn(
-                              label: Text(
-                                'ID',
-                                style: TextStyle(fontWeight: FontWeight.w600),
-                              ),
-                            ),
-                            DataColumn(
+                            // DataColumn(
+                            //   label: Text(
+                            //     'ID',
+                            //     style: TextStyle(fontWeight: FontWeight.w600),
+                            //   ),
+                            // ),
+                             DataColumn(
                               label: Text(
                                 'Edit',
                                 style: TextStyle(fontWeight: FontWeight.w600),
@@ -138,29 +139,14 @@ class _CitiesScreenState extends State<CitiesScreen> {
       DataCell(
         data['Status'] != null ? Text(data['Status']) : const Text(""),
       ),
-      DataCell(
-        data['id'] != null ? Text(data['id']) : const Text(""),
-      ),
+      // DataCell(
+      //   data['id'] != null ? Text(data['id']) : const Text(""),
+      // ),
       DataCell(
         const Text(''),
         showEditIcon: true,
         onTap: () {
           Get.to(()=>ProductEditBox(address: data['Address'], status:  data['Status'], cityId: data['id']));
-          // showDialog(
-          //   context: context,
-          //   builder: (context) {
-          //     return GestureDetector(
-          //       onTap: () => Navigator.pop(context),
-          //       child: SingleChildScrollView(
-          //         child: ProductEditBox(
-          //           address: data['Address'],
-          //           status: data['Status'],
-          //           cityId: data['id'],
-          //         ),
-          //       ),
-          //     );
-          //   },
-          // );
         },
       ),
       DataCell(const Icon(Icons.delete), onTap: () {

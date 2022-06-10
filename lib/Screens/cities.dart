@@ -37,7 +37,7 @@ class _AmenetiesScreenState extends State<AmenetiesScreen> {
               columns: const [
                 DataColumn(
                   label: Text(
-                    'ID',
+                    'Index',
                     style: TextStyle(fontWeight: FontWeight.w600),
                   ),
                 ),
