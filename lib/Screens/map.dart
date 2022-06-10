@@ -11,6 +11,7 @@ class GoogleMap extends StatelessWidget {
 
     // ignore: undefined_prefixed_name
     ui.platformViewRegistry.registerViewFactory(htmlId, (int viewId) {
+
       final myLatlng = LatLng(1.3521, 103.8198);
 
       // another location

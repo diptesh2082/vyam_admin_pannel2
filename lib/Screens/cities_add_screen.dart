@@ -1,34 +1,43 @@
 
 
+
 import 'dart:async';
 
+import 'package:admin_panel_vyam/Screens/map_view.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 // import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../services/CustomTextFieldClass.dart';
 import '../services/MatchIDMethod.dart';
 import 'package:geocoding/geocoding.dart' as geocoding;
 
+import 'globalVar.dart';
 import 'map.dart';
+
 
 
 class citiesAdd extends StatefulWidget {
   const citiesAdd({Key? key}) : super(key: key);
-
   @override
   State<citiesAdd> createState() => _citiesAddState();
 }
 
 class _citiesAddState extends State<citiesAdd> {
+
 final _formKey = GlobalKey<FormState>();
   CollectionReference? cityStream;
+  MapView mapView = MapView();
+  String address1 = '';
+
+
 
 
   @override
   void initState() {
-
     cityStream = FirebaseFirestore.instance.collection('Cities');
     super.initState();
   }
@@ -107,10 +116,8 @@ final _formKey = GlobalKey<FormState>();
                           const Border(bottom: BorderSide(color: Colors.grey))),
                       child: Stack(
                         children: [
-                          GoogleMap(
-
-                          ),
-                          Center(
+                          MapView(),
+                          const Center(
                               child: Icon(
                                 Icons.location_on_rounded,
                                 size: 40,
@@ -140,7 +147,7 @@ final _formKey = GlobalKey<FormState>();
                     getImmediateSuggestions: true,
                     hideSuggestionsOnKeyboardHide: false,
                     hideOnEmpty: false,
-                    noItemsFoundBuilder: (context) => Padding(padding: const EdgeInsets.all(8.0),
+                    noItemsFoundBuilder: (context) => const Padding(padding: EdgeInsets.all(8.0),
                     child: Text('No Item Found'),
                     ),
                     textFieldConfiguration: TextFieldConfiguration(
@@ -169,7 +176,7 @@ final _formKey = GlobalKey<FormState>();
                           .doc(id)
                           .set(
                         {
-                          'Address': _addAddress.text,
+                          'Address': getAddress(),
                           'Status': _addStatus.text,
                           'id': id,
                           //'index' : _addIndex,
@@ -187,4 +194,12 @@ final _formKey = GlobalKey<FormState>();
       ),
     );
   }
+
+String getAddress()
+{
+  address1 = address;
+  print(address1);
+  return address1;
+
+}
 }

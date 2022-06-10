@@ -7,6 +7,7 @@ import 'package:get/get_core/src/get_main.dart';
 import '../services/CustomTextFieldClass.dart';
 import '../services/MatchIDMethod.dart';
 import '../services/deleteMethod.dart';
+import 'package:admin_panel_vyam/Screens/map_view.dart';
 
 class CitiesScreen extends StatefulWidget {
   const CitiesScreen({Key? key}) : super(key: key);
@@ -146,21 +147,6 @@ class _CitiesScreenState extends State<CitiesScreen> {
         showEditIcon: true,
         onTap: () {
           Get.to(()=>ProductEditBox(address: data['Address'], status:  data['Status'], cityId: data['id']));
-          // showDialog(
-          //   context: context,
-          //   builder: (context) {
-          //     return GestureDetector(
-          //       onTap: () => Navigator.pop(context),
-          //       child: SingleChildScrollView(
-          //         child: ProductEditBox(
-          //           address: data['Address'],
-          //           status: data['Status'],
-          //           cityId: data['id'],
-          //         ),
-          //       ),
-          //     );
-          //   },
-          // );
         },
       ),
       DataCell(const Icon(Icons.delete), onTap: () {
