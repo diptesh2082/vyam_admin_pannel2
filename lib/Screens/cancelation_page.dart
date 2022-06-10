@@ -54,7 +54,6 @@ class _CancelationPageState extends State<CancelationPage> {
                         child: DataTable(
                           // dataRowHeight: 75.0,
                           columns: const [
-
                             // DataColumn(
                             //   label: Text(
                             //     'User Name',

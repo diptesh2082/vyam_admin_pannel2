@@ -1,6 +1,8 @@
 import 'package:admin_panel_vyam/Screens/banner_edit.dart';
 import 'package:admin_panel_vyam/Screens/banner_new_window.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
@@ -9,6 +11,7 @@ import '../services/CustomTextFieldClass.dart';
 import 'package:admin_panel_vyam/services/deleteMethod.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:get/get.dart';
+import 'package:path/path.dart' as Path;
 
 class BannerPage extends StatefulWidget {
   const BannerPage({
@@ -455,6 +458,7 @@ class _EditBoxState extends State<EditBox> {
   final TextEditingController _name = TextEditingController();
   var id;
   var image;
+  var imgUrl1;
   bool access = false;
 
   // final TextEditingController _image = TextEditingController();
@@ -514,11 +518,23 @@ class _EditBoxState extends State<EditBox> {
                           InkWell(
                             onTap: () async {
                               image = await chooseImage();
+                              getUrlImage(image);
                             },
                             child: const Icon(
                               Icons.upload_file_outlined,
                             ),
-                          )
+                          ),
+                          SizedBox(
+                            width: 300,
+                            height: 200,
+                            child: Container(
+                              child:
+                              Image.network((imgUrl1 == null) ? ' ' : imgUrl1,
+                                fit: BoxFit.contain,),
+                            ),
+
+                          ),
+
                         ],
                       ),
                     ),
@@ -537,13 +553,11 @@ class _EditBoxState extends State<EditBox> {
                               .update(
                             {
                               'name': _name.text,
-                              //'image': image,
+                              'image': imgUrl1,
                               'id': id,
                               'access': access,
                             },
-                          ).then((snapshot) async {
-                            await uploadImageToBanner(image, id);
-                          });
+                          );
                           Navigator.pop(context);
                         },
                         child: const Text('Done'),
@@ -563,4 +577,28 @@ class _EditBoxState extends State<EditBox> {
           ),
         ));
   }
+
+  getUrlImage(XFile? pickedFile) async {
+    if (kIsWeb) {
+      final _firebaseStorage = FirebaseStorage.instance
+          .ref().child("banner");
+
+      Reference _reference = _firebaseStorage
+          .child('banner_details/${Path.basename(pickedFile!.path)}');
+      await _reference
+          .putData(
+        await pickedFile.readAsBytes(),
+        SettableMetadata(contentType: 'image/jpeg'),
+      );
+
+      String imageUrl = await _reference.getDownloadURL();
+
+      setState(() {
+        imgUrl1 = imageUrl;
+      });
+
+    }
+  }
+
+
 }

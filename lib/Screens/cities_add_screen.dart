@@ -1,27 +1,43 @@
 
 
+
+import 'dart:async';
+
+import 'package:admin_panel_vyam/Screens/map_view.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+// import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../services/CustomTextFieldClass.dart';
 import '../services/MatchIDMethod.dart';
+import 'package:geocoding/geocoding.dart' as geocoding;
+
+import 'globalVar.dart';
+import 'map.dart';
+
+
 
 class citiesAdd extends StatefulWidget {
   const citiesAdd({Key? key}) : super(key: key);
-
   @override
   State<citiesAdd> createState() => _citiesAddState();
 }
 
 class _citiesAddState extends State<citiesAdd> {
+
 final _formKey = GlobalKey<FormState>();
   CollectionReference? cityStream;
+  MapView mapView = MapView();
+  String address1 = '';
+
+
 
 
   @override
   void initState() {
-
     cityStream = FirebaseFirestore.instance.collection('Cities');
     super.initState();
   }
@@ -45,9 +61,27 @@ final _formKey = GlobalKey<FormState>();
     "Ahmedabad",
 
   ];
+  // Completer<GoogleMapController> _controller = Completer();
+  // geocoding.Location? _currentPosition;
+  // LatLng? _latLong;
+  // bool? _locating = false;
+  // geocoding.Placemark? _placeMark;
 
+// getUserAddress() async {
+//   List<geocoding.Placemark> placemarks = await geocoding
+//       .placemarkFromCoordinates(_latLong!.latitude, _latLong!.longitude);
+//   setState(() {
+//     _placeMark = placemarks.first;
+//   });
+// }
+//
+//
+// static const CameraPosition _kGooglePlex = CameraPosition(
+//   target: LatLng(37.42796133580664, -122.085749655962),
+//   zoom: 14.4746,
+// );
 
-  @override
+@override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white10,
@@ -73,7 +107,27 @@ final _formKey = GlobalKey<FormState>();
               SizedBox(width: 15),
 
               Text('Address'),
-
+                Stack(
+                  children: [
+                    Container(
+                      height: MediaQuery.of(context).size.height * .75,
+                      decoration: const BoxDecoration(
+                          border:
+                          const Border(bottom: BorderSide(color: Colors.grey))),
+                      child: Stack(
+                        children: [
+                          MapView(),
+                          const Center(
+                              child: Icon(
+                                Icons.location_on_rounded,
+                                size: 40,
+                                color: Colors.black,
+                              )),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               const SizedBox(
                 height: 20,
               ),
@@ -93,7 +147,7 @@ final _formKey = GlobalKey<FormState>();
                     getImmediateSuggestions: true,
                     hideSuggestionsOnKeyboardHide: false,
                     hideOnEmpty: false,
-                    noItemsFoundBuilder: (context) => Padding(padding: const EdgeInsets.all(8.0),
+                    noItemsFoundBuilder: (context) => const Padding(padding: EdgeInsets.all(8.0),
                     child: Text('No Item Found'),
                     ),
                     textFieldConfiguration: TextFieldConfiguration(
@@ -122,7 +176,7 @@ final _formKey = GlobalKey<FormState>();
                           .doc(id)
                           .set(
                         {
-                          'Address': _addAddress.text,
+                          'Address': getAddress(),
                           'Status': _addStatus.text,
                           'id': id,
                           //'index' : _addIndex,
@@ -140,4 +194,12 @@ final _formKey = GlobalKey<FormState>();
       ),
     );
   }
+
+String getAddress()
+{
+  address1 = address;
+  print(address1);
+  return address1;
+
+}
 }

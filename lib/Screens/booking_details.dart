@@ -22,6 +22,7 @@ class _BookingDetailsState extends State<BookingDetails> {
   CollectionReference bookingStream =
       FirebaseFirestore.instance.collection('bookings');
   String searchVendorId = '';
+
   @override
   void initState() {
     super.initState();
