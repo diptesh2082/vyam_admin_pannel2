@@ -1,6 +1,7 @@
 import 'package:admin_panel_vyam/services/deleteMethod.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class TrackingScreen extends StatefulWidget {
   const TrackingScreen({
@@ -14,6 +15,9 @@ class TrackingScreen extends StatefulWidget {
 class _TrackingScreenState extends State<TrackingScreen> {
   CollectionReference bookingStream =
       FirebaseFirestore.instance.collection('bookings');
+
+  String searchByTracking = '';
+
   @override
   void initState() {
     super.initState();
@@ -32,6 +36,56 @@ class _TrackingScreenState extends State<TrackingScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+
+                Container(
+                  width: 500,
+                  height: 51,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(14),
+                    color: Colors.white12,
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(15),
+                    child: TextField(
+                      // focusNode: _node,
+
+                      autofocus: false,
+                      textAlignVertical: TextAlignVertical.bottom,
+                      onSubmitted: (value) async {
+                        FocusScope.of(context).unfocus();
+                      },
+                      // controller: searchController,
+                      onChanged: (value) {
+                        if (value.length == 0) {
+                          // _node.canRequestFocus=false;
+                          // FocusScope.of(context).unfocus();
+                        }
+                        if (mounted) {
+                          setState(() {
+                            searchByTracking = value.toString();
+                          });
+                        }
+                      },
+                      decoration:  InputDecoration(
+                        prefixIcon: const Icon(Icons.search),
+                        hintText: 'Search',
+                        hintStyle: GoogleFonts.poppins(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500
+                        ),
+                        border: InputBorder.none,
+                        filled: true,
+                        fillColor: Colors.white12,
+                      ),
+                    ),
+                  ),
+                ),
+
+
+
+
+
+
                 Center(
                   child: StreamBuilder<QuerySnapshot>(
                     stream: FirebaseFirestore.instance
@@ -52,6 +106,35 @@ class _TrackingScreenState extends State<TrackingScreen> {
                       //         .toString()
                       //         .contains("active" || "upcomming");
                       //   }).toList();
+
+                      var doc = snapshot.data.docs;
+
+                      if (searchByTracking.length > 0) {
+                        doc = doc.where((element) {
+                          return element
+                              .get('name')
+                              .toString()
+                              .toLowerCase()
+                              .contains(searchByTracking.toString())
+                              || element
+                                  .get('gym_id')
+                                  .toString()
+                                  .toLowerCase()
+                                  .contains(searchByTracking.toString())
+                              || element
+                                  .get('address')
+                                  .toString()
+                                  .toLowerCase()
+                                  .contains(searchByTracking.toString());
+                        }).toList();
+                      }
+
+
+
+
+
+
+
                       return SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
                         child: DataTable(

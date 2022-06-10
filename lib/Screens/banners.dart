@@ -1,13 +1,17 @@
 import 'package:admin_panel_vyam/Screens/banner_edit.dart';
 import 'package:admin_panel_vyam/Screens/banner_new_window.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../services/image_picker_api.dart';
 import '../services/CustomTextFieldClass.dart';
 import 'package:admin_panel_vyam/services/deleteMethod.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:get/get.dart';
+import 'package:path/path.dart' as Path;
 
 class BannerPage extends StatefulWidget {
   const BannerPage({
@@ -26,7 +30,7 @@ class _BannerPageState extends State<BannerPage> {
     final review = FirebaseFirestore.instance.collection('banner_details');
     review.doc(nid).set({'id': nid});
   }
-
+  String searchBannerName = '';
   @override
   void initState() {
     bannerStream = FirebaseFirestore.instance.collection('banner_details');
@@ -57,21 +61,54 @@ class _BannerPageState extends State<BannerPage> {
                       Get.to(const bannerNewPage()); //showAddbox,
                     },
                     child: Text('Add Banner')
-                    // Container(
-                    //   width: 120,
-                    //   decoration: BoxDecoration(
-                    //       color: Colors.white,
-                    //       borderRadius: BorderRadius.circular(20.0)),
-                    //   child: Row(
-                    //     children: const [
-                    //       Icon(Icons.add),
-                    //       Text('Add Banner',
-                    //           style: TextStyle(fontWeight: FontWeight.w400)),
-                    //     ],
-                    //   ),
-                    // ),
                   ),
                 ),
+
+                Container(
+                  width: 500,
+                  height: 51,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(14),
+                    color: Colors.white12,
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(15),
+                    child: TextField(
+                      // focusNode: _node,
+                      autofocus: false,
+                      textAlignVertical: TextAlignVertical.bottom,
+                      onSubmitted: (value) async {
+                        FocusScope.of(context).unfocus();
+                      },
+                      // controller: searchController,
+                      onChanged: (value) {
+                        if (value.length == 0) {
+                          // _node.canRequestFocus=false;
+                          // FocusScope.of(context).unfocus();
+                        }
+                        if (mounted) {
+                          setState(() {
+                            searchBannerName = value.toString();
+                          });
+                        }
+                      },
+                      decoration:  InputDecoration(
+                        prefixIcon: const Icon(Icons.search),
+                        hintText: 'Search',
+                        hintStyle: GoogleFonts.poppins(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500
+                        ),
+                        border: InputBorder.none,
+                        filled: true,
+                        fillColor: Colors.white12,
+                      ),
+                    ),
+                  ),
+                ),
+
+
+
                 Center(
                   child: StreamBuilder<QuerySnapshot>(
                     stream: FirebaseFirestore.instance
@@ -85,6 +122,22 @@ class _BannerPageState extends State<BannerPage> {
                         return Container();
                       }
                       print("-----------------------------------");
+
+                      var doc = snapshot.data.docs;
+
+                      if (searchBannerName.length > 0) {
+                        doc = doc.where((element) {
+                          return element
+                              .get('name')
+                              .toString()
+                              .toLowerCase()
+                              .contains(searchBannerName.toString());
+
+                        }).toList();
+                      }
+
+
+
 
                       print(snapshot.data.docs);
                       return SingleChildScrollView(
@@ -122,7 +175,7 @@ class _BannerPageState extends State<BannerPage> {
                                 ),
                               ),
                             ],
-                            rows: _buildlist(context, snapshot.data!.docs)),
+                            rows: _buildlist(context, doc)),
                       );
                     },
                   ),
@@ -405,6 +458,7 @@ class _EditBoxState extends State<EditBox> {
   final TextEditingController _name = TextEditingController();
   var id;
   var image;
+  var imgUrl1;
   bool access = false;
 
   // final TextEditingController _image = TextEditingController();
@@ -464,11 +518,23 @@ class _EditBoxState extends State<EditBox> {
                           InkWell(
                             onTap: () async {
                               image = await chooseImage();
+                              getUrlImage(image);
                             },
                             child: const Icon(
                               Icons.upload_file_outlined,
                             ),
-                          )
+                          ),
+                          SizedBox(
+                            width: 300,
+                            height: 200,
+                            child: Container(
+                              child:
+                              Image.network((imgUrl1 == null) ? ' ' : imgUrl1,
+                                fit: BoxFit.contain,),
+                            ),
+
+                          ),
+
                         ],
                       ),
                     ),
@@ -487,13 +553,11 @@ class _EditBoxState extends State<EditBox> {
                               .update(
                             {
                               'name': _name.text,
-                              //'image': image,
+                              'image': imgUrl1,
                               'id': id,
                               'access': access,
                             },
-                          ).then((snapshot) async {
-                            await uploadImageToBanner(image, id);
-                          });
+                          );
                           Navigator.pop(context);
                         },
                         child: const Text('Done'),
@@ -513,4 +577,28 @@ class _EditBoxState extends State<EditBox> {
           ),
         ));
   }
+
+  getUrlImage(XFile? pickedFile) async {
+    if (kIsWeb) {
+      final _firebaseStorage = FirebaseStorage.instance
+          .ref().child("banner");
+
+      Reference _reference = _firebaseStorage
+          .child('banner_details/${Path.basename(pickedFile!.path)}');
+      await _reference
+          .putData(
+        await pickedFile.readAsBytes(),
+        SettableMetadata(contentType: 'image/jpeg'),
+      );
+
+      String imageUrl = await _reference.getDownloadURL();
+
+      setState(() {
+        imgUrl1 = imageUrl;
+      });
+
+    }
+  }
+
+
 }

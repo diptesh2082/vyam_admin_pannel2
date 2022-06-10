@@ -3,6 +3,7 @@ import 'dart:io';
 // import 'dart:html';
 import 'dart:math';
 import 'package:admin_panel_vyam/Screens/banners.dart';
+import 'package:admin_panel_vyam/Screens/map_view.dart';
 import 'package:admin_panel_vyam/Screens/timings.dart';
 import 'package:flutter/widgets.dart';
 import 'package:random_password_generator/random_password_generator.dart';
@@ -22,13 +23,14 @@ import 'package:image_picker/image_picker.dart';
 import '../../services/MatchIDMethod.dart';
 import '../../services/deleteMethod.dart';
 import '../../services/image_picker_api.dart';
+import '../globalVar.dart';
 import 'Packages/Extra_package.dart';
 import 'Packages/packages.dart';
 import 'Trainers/Trainers.dart';
 import 'package:admin_panel_vyam/services/CustomTextFieldClass.dart';
 
 List<String> arr = [];
-List<String> cat = [];
+List<String> workoutArray = [];
 
 class ProductDetails extends StatefulWidget {
   const ProductDetails({
@@ -49,66 +51,8 @@ class _ProductDetailsState extends State<ProductDetails> {
   CollectionReference? amenitiesStream;
   var image;
   String gender = 'male';
-
-// <<<<<<< HEAD
-// =======
-
-// >>>>>>> cf1997613ff877c63a56c61e3009bdfe3639ccfa
-
-// <<<<<<< HEAD
-//   File? image;
-//   Future pickImage() async {
-//     try{
-//       final image = await ImagePicker().pickImage(
-//           source: ImageSource.gallery,
-//           imageQuality: 60
-//       );
-//       if (image == null) return;
-//       final imageTemporary = File(image.path);
-//       setState(() {
-//         this.image = imageTemporary;
-//       });
-//     } on PlatformException catch (e) {
-//       // ignore: avoid_print
-//       print("Faild to pick image: $e");
-//     }
-//
-//   }
-//
-//
-//   saveData(gymId)async {
-//     // if (_globalKey.currentState!.validate()) {
-//       try{
-//         // _globalKey.currentState!.save();
-//         final ref =  FirebaseStorage.instance.ref().child("gs://vyam-f99ab.appspot.com/productDetails").child(gymId+".jpg");
-//         print(ref);
-//         await ref.putFile(image!);
-//         final url = await ref.getDownloadURL();
-//         await FirebaseFirestore.instance.collection("product_details")
-//             .doc(gymId).update({
-//           "display_picture": url
-//         });
-//         // setState(() {
-//         //   imageUrl=url;
-//         //   // isLoading=false;
-//         // }
-//         // );
-//       }catch (e){
-//         // imageUrl="";
-//       }
-//
-//       // print(imageUrl);
-//
-//     // }
-//   }
-// // =======
-// //   List<String> multiimages = [];
-// // >>>>>>> 2bd9314ce4369a0ee8841fb3648ac2b93b65ffa4
   String searchGymName = '';
-// <<<<<<< HEAD
   String pswd = '';
-// =======
-// >>>>>>> cf1997613ff877c63a56c61e3009bdfe3639ccfa
 
   @override
   void initState() {
@@ -133,11 +77,11 @@ class _ProductDetailsState extends State<ProductDetails> {
                 Row(
                   children: [
                     Padding(
-// <<<<<<< HEAD
                       padding: const EdgeInsets.only(top: 8.0, left: 8.0),
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           //padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 20),
+
                           textStyle: const TextStyle(fontSize: 15),
                         ),
                         onPressed: () {
@@ -167,6 +111,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                         //     ],
                         //   ),
                         // ),
+
 // =======
 //                     padding: const EdgeInsets.only(top: 8.0, left: 8.0),
 //                     child: ElevatedButton(
@@ -181,6 +126,7 @@ class _ProductDetailsState extends State<ProductDetails> {
 // =======
 //                   ),
 // >>>>>>> cf1997613ff877c63a56c61e3009bdfe3639ccfa
+
                     const Spacer(),
                     Container(
                       width: 500,
@@ -197,29 +143,9 @@ class _ProductDetailsState extends State<ProductDetails> {
                           autofocus: false,
                           textAlignVertical: TextAlignVertical.bottom,
                           onSubmitted: (value) async {
-                            FocusScope.of(context).unfocus();
-// <<<<<<< HEAD
+                            FocusScope.of(context).unfocus(); // <<<<<<< HEAD
                           },
-                          // controller: searchController,
-//                           onChanged: (value) {
-//                             if (value.length == 0) {
-//                               // _node.canRequestFocus=false;
-//                               // FocusScope.of(context).unfocus();
-//                             }
-//                             if (mounted) {
-//                               setState(() {
-//                                 searchGymName = value.toString();
-//                               });
-//                             }
-//                           },
-//                           decoration: InputDecoration(
-//                             prefixIcon: const Icon(Icons.search),
-//                             hintText: 'Search',
-//                             hintStyle: GoogleFonts.poppins(
-//                                 fontSize: 16, fontWeight: FontWeight.w500),
-// =======
-//                           },
-                          // controller: searchController,
+
                           onChanged: (value) {
                             if (value.length == 0) {
                               // _node.canRequestFocus=false;
@@ -244,38 +170,6 @@ class _ProductDetailsState extends State<ProductDetails> {
                         ),
                       ),
                     ),
-// <<<<<<< HEAD
-                    // Padding(
-                    //   padding: const EdgeInsets.only(top: 8.0, left: 8.0),
-                    //   child: IconButton(
-                    //
-                    //     onPressed: () {
-                    //       setState(() {
-                    //
-                    //       });
-                    //
-                    //     },
-                    //     icon: const Icon(Icons.search),
-                    //   )
-                    //
-                    // ),
-// =======
-                    // Padding(
-                    //   padding: const EdgeInsets.only(top: 8.0, left: 8.0),
-                    //   child: IconButton(
-                    //
-                    //     onPressed: () {
-                    //       setState(() {
-                    //
-                    //       });
-                    //
-                    //     },
-                    //     icon: const Icon(Icons.search),
-                    //   )
-                    //
-                    // ),
-
-// >>>>>>> cf1997613ff877c63a56c61e3009bdfe3639ccfa
                   ],
                 ),
                 Center(
@@ -294,22 +188,6 @@ class _ProductDetailsState extends State<ProductDetails> {
                       if (searchGymName.length > 0) {
                         doc = doc.where((element) {
                           return element
-// <<<<<<< HEAD
-//                                   .get('name')
-//                                   .toString()
-//                                   .toLowerCase()
-//                                   .contains(searchGymName.toString()) ||
-//                               element
-//                                   .get('gym_id')
-//                                   .toString()
-//                                   .toLowerCase()
-//                                   .contains(searchGymName.toString()) ||
-//                               element
-//                                   .get('address')
-//                                   .toString()
-//                                   .toLowerCase()
-//                                   .contains(searchGymName.toString());
-// =======
                                   .get('name')
                                   .toString()
                                   .toLowerCase()
@@ -324,7 +202,6 @@ class _ProductDetailsState extends State<ProductDetails> {
                                   .toString()
                                   .toLowerCase()
                                   .contains(searchGymName.toString());
-// >>>>>>> cf1997613ff877c63a56c61e3009bdfe3639ccfa
                         }).toList();
                       }
 
@@ -395,12 +272,12 @@ class _ProductDetailsState extends State<ProductDetails> {
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ), //!For Package
-                              // DataColumn(
-                              //   label: Text(
-                              //     'Extra Packages',
-                              //     style: TextStyle(fontWeight: FontWeight.w600),
-                              //   ),
-                              // ),
+                              DataColumn(
+                                label: Text(
+                                  'Extra Packages',
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
+                              ),
                               DataColumn(
                                 label: Text(
                                   'Upload Image',
@@ -524,7 +401,7 @@ class _ProductDetailsState extends State<ProductDetails> {
     List imgList = data['images'];
     String landmark = data['landmark'];
     List<dynamic> arr2 = data['amenities'];
-    List<dynamic> cat2 = data['service'];
+    List<dynamic> WorkoutArray = data['workouts'];
 
     String x, y;
 
@@ -546,12 +423,7 @@ class _ProductDetailsState extends State<ProductDetails> {
       //           await MapsLaucherApi().launchMaps(loc.latitude, loc.longitude);
       //         },
       //         child: Text(loctext))
-// <<<<<<< HEAD
-//       //: const Text("")),
-//       DataCell(data != null
-//           ? Text(data['landmark'].toString().toUpperCase())
-//           : const Text("")),
-// =======
+
       //: const Text("")),
       DataCell(data != null ? Text(data['landmark'] ?? "") : const Text("")),
 // >>>>>>> cf1997613ff877c63a56c61e3009bdfe3639ccfa
@@ -587,14 +459,14 @@ class _ProductDetailsState extends State<ProductDetails> {
 //           ),
 //         ));
 //       }),
-//       DataCell(const Text('Extra Package '), onTap: () {
-//         Navigator.of(context).push(MaterialPageRoute(
-//           builder: (context) => ExtraPackagesPage(
-//             pGymId: gymId,
-// // >>>>>>> cf1997613ff877c63a56c61e3009bdfe3639ccfa
-//           ),
-//         ));
-//       }),
+      DataCell(const Text('Extra Package '), onTap: () {
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => ExtraPackagesPage(
+            pGymId: gymId,
+// >>>>>>> cf1997613ff877c63a56c61e3009bdfe3639ccfa
+          ),
+        ));
+      }),
       DataCell(
         Row(
           children: [
@@ -627,6 +499,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                       // >>>>>>> 39301b603a430fc9803df29ba70b59135c783388
                       height: MediaQuery.of(context).size.height * .90,
                       width: MediaQuery.of(context).size.width * .92,
+// <<<<<<< HEAD
                       child: StreamBuilder<Object>(
                           stream: productStream!.snapshots(),
                           builder: (context, AsyncSnapshot snapshot) {
@@ -641,14 +514,14 @@ class _ProductDetailsState extends State<ProductDetails> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       children: [
-                                        Container(
+                                        SizedBox(
                                           height: 500,
                                           width: 500,
                                           child: Image.network(
                                             data['images'][index].toString(),
                                           ),
                                         ),
-                                        SizedBox(width: 20),
+                                        const SizedBox(width: 20),
                                         IconButton(
                                           onPressed: () async {
                                             print(data['images'].length);
@@ -665,7 +538,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                                             });
                                             print("Delete!");
                                           },
-                                          icon: Icon(Icons.delete),
+                                          icon: const Icon(Icons.delete),
                                         )
                                       ],
                                     ),
@@ -673,6 +546,16 @@ class _ProductDetailsState extends State<ProductDetails> {
                                     // minLeadin≥gWidth: double.infinity,
                                   );
                                 });
+// =======
+//                       child: ListView.builder(
+//                           scrollDirection: Axis.vertical,
+//                           itemCount: imgList.length,
+//                           itemBuilder: (BuildContext context, int index) {
+//                             return ListTile(
+//                               leading: Image.network(imgList[index].toString()),
+//                               // minLeadin≥gWidth: double.infinity,
+//                             );
+// >>>>>>> 4b8eeb3ff2a6cfa9a4d0218f27f80501132bdf71
                           }),
                     ),
                   ),
@@ -825,17 +708,18 @@ class _ProductDetailsState extends State<ProductDetails> {
               context,
               MaterialPageRoute(
                   builder: (context) => ProductEditBox(
-                      address: data['address'],
-                      gender: data['gender'],
-                      name: data['name'],
-                      pincode: data['pincode'],
-                      gymId: data['gym_id'],
-                      gymOwner: data['gym_owner'],
-                      landmark: data['landmark'],
-                      imagee: data['display_picture'],
-                      arr2: arr2,
-                      cat2: cat2
-                      // location: data['location'],
+                        address: data['address'],
+                        gender: data['gender'],
+                        name: data['name'],
+                        pincode: data['pincode'],
+                        gymId: data['gym_id'],
+                        gymOwner: data['gym_owner'],
+                        landmark: data['landmark'],
+                        imagee: data['display_picture'],
+                        arr2: arr2,
+                        WorkoutArray: WorkoutArray,
+
+                        // location: data['location'],
                       )));
         },
       ),
@@ -884,6 +768,7 @@ class _ShowAddBoxState extends State<ShowAddBox> {
   final TextEditingController _addgymownerid = TextEditingController();
   final _latitudeController = 0;
   final _longitudeController = 0;
+  String addressVendor = '';
 
   final TextEditingController _branchController = TextEditingController();
   final TextEditingController _descriptionCon = TextEditingController();
@@ -892,23 +777,19 @@ class _ShowAddBoxState extends State<ShowAddBox> {
   var multipic;
   var impath;
   var image;
-// <<<<<<< HEAD
+
   var xs;
   bool selected = false;
   CollectionReference? amenitiesStream;
-  CollectionReference? categoryStream;
-
-  // var selectedValue = "MALE";
-// =======
+  CollectionReference? workoutStream;
 
   var selectedValue = "MALE";
-// >>>>>>> cf1997613ff877c63a56c61e3009bdfe3639ccfa
+
   @override
   void initState() {
     productStream = FirebaseFirestore.instance.collection("product_details");
     amenitiesStream = FirebaseFirestore.instance.collection("amenities");
-    categoryStream = FirebaseFirestore.instance.collection("category");
-
+    workoutStream = FirebaseFirestore.instance.collection("workouts");
     RandomPasswordGenerator pswd = RandomPasswordGenerator();
     xs = pswd.randomPassword(letters: true, uppercase: true, numbers: true);
     super.initState();
@@ -917,7 +798,6 @@ class _ShowAddBoxState extends State<ShowAddBox> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white10,
-// <<<<<<< HEAD
       appBar: AppBar(
         title: const Text('Add Vendor Details'),
       ),
@@ -927,37 +807,18 @@ class _ShowAddBoxState extends State<ShowAddBox> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 8.0, top: 2, right: 8),
-                child: const Text(
+              const Padding(
+                padding: EdgeInsets.only(left: 8.0, top: 2, right: 8),
+                child: Text(
                   'Add Records',
                   style: TextStyle(
                       fontFamily: 'poppins',
                       fontWeight: FontWeight.w600,
                       fontSize: 14),
                 ),
-// =======
-//         appBar: AppBar(
-//           title: const Text('Add Vendor Details'),
-//         ),
-//         body: Container(
-//       padding: EdgeInsets.all(50),
-//       child: SingleChildScrollView(
-//         child: Column(
-//           crossAxisAlignment: CrossAxisAlignment.start,
-//           children: [
-//             Padding(
-//               padding: const EdgeInsets.only(left: 8.0, top: 2, right: 8),
-//               child: const Text(
-//                 'Add Records',
-//                 style: TextStyle(
-//                     fontFamily: 'poppins',
-//                     fontWeight: FontWeight.w600,
-//                     fontSize: 14),
-// // >>>>>>> cf1997613ff877c63a56c61e3009bdfe3639ccfa
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
+              const Padding(
+                padding: EdgeInsets.all(8.0),
                 child: Text('Name:',
                     style:
                         TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
@@ -970,10 +831,12 @@ class _ShowAddBoxState extends State<ShowAddBox> {
                     style:
                         TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
               ),
+
               customTextField(hinttext: "Address", addcontroller: _addaddress),
+
               SizedBox(height: 15),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
+              const Padding(
+                padding: EdgeInsets.all(8.0),
                 child: Text('Gym Owner Id:',
                     style:
                         TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
@@ -995,16 +858,15 @@ class _ShowAddBoxState extends State<ShowAddBox> {
 
               //customTextField(hinttext: "Gender", addcontroller: _addgender),
 
-// <<<<<<< HEAD
               Container(
                 child: Row(
                   children: [
-                    Text('Gender:',
+                    const Text('Gender:',
                         style: TextStyle(
                             fontWeight: FontWeight.w700, fontSize: 15)),
                     DropdownButton(
                         value: selectedValue,
-                        items: [
+                        items: const [
                           DropdownMenuItem(
                             child: Text("Male"),
                             value: "MALE",
@@ -1025,12 +887,12 @@ class _ShowAddBoxState extends State<ShowAddBox> {
                 ),
               ),
 
-              SizedBox(height: 15),
+              const SizedBox(height: 15),
               Container(
                 child: Row(
-                  children: [
+                  children: const [
                     Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: EdgeInsets.all(8.0),
                       child: Text('Latitude:',
                           style: TextStyle(
                               fontWeight: FontWeight.w700, fontSize: 15)),
@@ -1048,12 +910,12 @@ class _ShowAddBoxState extends State<ShowAddBox> {
                   ],
                 ),
               ),
-              SizedBox(height: 15),
+              const SizedBox(height: 15),
               Container(
                 child: Row(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: EdgeInsets.all(8.0),
                       child: Text('Longitude:',
                           style: TextStyle(
                               fontWeight: FontWeight.w700, fontSize: 15)),
@@ -1067,6 +929,34 @@ class _ShowAddBoxState extends State<ShowAddBox> {
                           color: Colors.red,
                           fontWeight: FontWeight.bold,
                           fontStyle: FontStyle.italic),
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    Stack(
+                      children: [
+                        Container(
+                          height: MediaQuery.of(context).size.height * .75,
+                          width: 900,
+                          decoration: const BoxDecoration(
+                              border: Border(
+                                  bottom: BorderSide(color: Colors.grey))),
+                          child: Stack(
+                            children: [
+                              MapView(
+                                address_con: _addaddress,
+                              ),
+                              const Center(
+                                child: Icon(
+                                  Icons.location_on_rounded,
+                                  size: 40,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                      ],
                     ),
                   ],
                 ),
@@ -1092,7 +982,7 @@ class _ShowAddBoxState extends State<ShowAddBox> {
                 hinttext: "Pincode",
               ),
               SizedBox(
-                height: 30,
+                height: 15,
               ),
               Container(
                   child: StreamBuilder<QuerySnapshot>(
@@ -1119,35 +1009,41 @@ class _ShowAddBoxState extends State<ShowAddBox> {
                   );
                 },
               )),
-              SizedBox(height: 30),
+              SizedBox(height: 15),
+
+              const Text(
+                'SELECT WORKOUTS',
+                style: TextStyle(fontSize: 20),
+              ),
               Container(
-                  child: StreamBuilder<QuerySnapshot>(
-                stream: categoryStream!.snapshots(),
-                builder: (context, AsyncSnapshot snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const CircularProgressIndicator();
-                  }
-                  if (snapshot.data == null) {
-                    return Container();
-                  }
-                  print("-----------------------------------");
-                  var doc = snapshot.data.docs;
-                  return Container(
-                    width: 400,
-                    height: 500,
-                    child: ListView.builder(
-                        itemCount: doc.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          bool check = false;
-                          return catCheck(
-                              doc[index]['name'], doc[index]['category_id']);
-                        }),
-                  );
-                },
-              )),
+                child: StreamBuilder<QuerySnapshot>(
+                  stream: FirebaseFirestore.instance
+                      .collection('workouts')
+                      .snapshots(),
+                  builder: (context, AsyncSnapshot snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const CircularProgressIndicator();
+                    }
+                    if (snapshot.data == null) {
+                      return Container();
+                    }
+                    print("-----------------------------------");
+                    var document = snapshot.data.docs;
+                    print(document);
 
-              SizedBox(height: 30),
-
+                    return Container(
+                      width: 400,
+                      height: 500,
+                      child: ListView.builder(
+                          itemCount: document.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return CheckBoxx1(
+                                document[index]['type'], document[index]['id']);
+                          }),
+                    );
+                  },
+                ),
+              ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text('Description:',
@@ -1239,6 +1135,17 @@ class _ShowAddBoxState extends State<ShowAddBox> {
 
               Row(
                 children: [
+                  // ElevatedButton(onPressed: (){
+                  //     if(addressVendor!='')
+                  //     {
+                  //       setState(() {
+                  //         _addaddress.text = getAddress();
+                  //       });
+                  //
+                  //     }
+                  //     print(_addaddress.text);
+                  //
+                  // }, child: Text('HELLO')),
                   ElevatedButton(
                     onPressed: () async {
                       print(dic);
@@ -1253,42 +1160,83 @@ class _ShowAddBoxState extends State<ShowAddBox> {
                       FirebaseFirestore.instance
                           .collection('product_details')
                           .doc(_addgymownerid.text)
-                          .set({
-                        'address': _addaddress.text,
-                        'gender': selectedValue,
-                        'name': _addname.text,
-                        'pincode': _addpincode.text,
-                        'location': dataForGeoPint,
-                        'gym_id': _addgymownerid.text,
-                        'gym_owner': _addgymownerid.text,
-                        'landmark': _addlandmark.text,
-                        'total_booking': "",
-                        'total_sales': "",
-                        'legit': false,
-                        "branch": _branchController.text,
-                        "description": _descriptionCon.text,
-                        "display_picture": image,
-                        "images": [],
-                        "locality": "",
-                        "number": _numberCon.text,
-                        "online_pay": true,
-                        "payment_due": "",
-                        "rating": 0.0,
-                        "service": cat,
-                        "timings": [],
-                        "token": [],
-                        "view_count": 0.0,
-                        "gym_status": false,
-                        "amenities": arr
-                      });
-                      // }).then((snapshot) async {
-                      //   await uploadImageToStorage(image, _addgymownerid.text);
-                      // });
+// <<<<<<< HEAD
+//                           .set({
+//                         'address': _addaddress.text,
+//                         'gender': selectedValue,
+//                         'name': _addname.text,
+//                         'pincode': _addpincode.text,
+//                         'location': dataForGeoPint,
+//                         'gym_id': _addgymownerid.text,
+//                         'gym_owner': _addgymownerid.text,
+//                         'landmark': _addlandmark.text,
+//                         'total_booking': "",
+//                         'total_sales': "",
+//                         'legit': false,
+//                         "branch": _branchController.text,
+//                         "description": _descriptionCon.text,
+//                         "display_picture": image,
+//                         "images": [],
+//                         "locality": "",
+//                         "number": _numberCon.text,
+//                         "online_pay": true,
+//                         "payment_due": "",
+//                         "rating": 0.0,
+//                         "service": cat,
+//                         "timings": [],
+//                         "token": [],
+//                         "view_count": 0.0,
+//                         "gym_status": false,
+//                         "amenities": arr
+//                       });
+//                       // }).then((snapshot) async {
+//                       //   await uploadImageToStorage(image, _addgymownerid.text);
+//                       // });
+// =======
+                          .set(
+                        {
+                          'address': _addaddress.text,
+                          'gender': selectedValue,
+                          'name': _addname.text,
+                          'pincode': _addpincode.text,
+                          'location': dataForGeoPint,
+                          'gym_id': _addgymownerid.text,
+                          'gym_owner': _addgymownerid.text,
+                          'landmark': _addlandmark.text,
+                          'total_booking': "",
+                          'total_sales': "",
+                          'legit': false,
+                          "branch": _branchController.text,
+                          "description": _descriptionCon.text,
+                          "display_picture": image,
+                          "images": [],
+                          "locality": "",
+                          "number": _numberCon.text,
+                          "online_pay": true,
+                          "payment_due": "",
+                          "rating": 0.0,
+                          "service": [],
+                          "timings": [],
+                          "token": [],
+                          "view_count": 0.0,
+                          "gym_status": false,
+                          "amenities": arr,
+                          "workouts": workoutArray,
+                        },
+                        // ).then((snapshot) async {
+                        //   await uploadImageToStorage(dic, _addgymownerid.text);
+                        //   await FirebaseFirestore.instance
+                        //       .collection('product_details')
+                        //       .doc(_addgymownerid.text)
+                        //       .update({'images': impath});
+                        // });
+                      );
+// >>>>>>> 4b8eeb3ff2a6cfa9a4d0218f27f80501132bdf71
                       Navigator.pop(context);
                     },
                     child: const Text('Done'),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 50,
                   ),
                   ElevatedButton(
@@ -1309,6 +1257,17 @@ class _ShowAddBoxState extends State<ShowAddBox> {
       ),
     );
   }
+
+  // String getAddress()
+  // {
+  //   addressVendor = address;
+  //  // _addaddress.text = address;
+  //   print('/////////////////////////////////===========++++++++');
+  //   print(addressVendor);
+  //   //print(_addaddress.text);
+  //   return addressVendor;
+  //
+  // }
 
   uploadToStroagees() {
     InputElement input = FileUploadInputElement() as InputElement
@@ -1332,44 +1291,6 @@ class _ShowAddBoxState extends State<ShowAddBox> {
         });
       });
     });
-  }
-}
-
-class catCheck extends StatefulWidget {
-  final String name;
-  final String cat_id;
-  const catCheck(this.name, this.cat_id, {Key? key}) : super(key: key);
-
-  @override
-  State<catCheck> createState() => _catCheckState();
-}
-
-class _catCheckState extends State<catCheck> {
-  bool check = false;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        children: [
-          Container(
-            child: CheckboxListTile(
-                // bool selected=false;
-                value: check,
-                title: Text(widget.name),
-                onChanged: (bool? selected) async {
-                  setState(() {
-                    check = selected!;
-                  });
-                  if (selected == true) cat.add(widget.cat_id);
-                  print(cat);
-                  if (selected == false) cat.remove(widget.cat_id);
-                  print(cat);
-                }),
-          ),
-        ],
-      ),
-    );
   }
 }
 
@@ -1487,22 +1408,64 @@ class _ECheckBoxState extends State<ECheckBox> {
   }
 }
 
-class catecheck extends StatefulWidget {
-  final name;
-  final cat_id;
-  final cat2;
-  final gym_id;
-  const catecheck(this.name, this.cat_id, this.cat2, this.gym_id, {Key? key})
+class CheckBoxx1 extends StatefulWidget {
+  final String doc;
+  final String id;
+
+  CheckBoxx1(this.doc, this.id, {Key? key}) : super(key: key);
+
+  @override
+  State<CheckBoxx1> createState() => _CheckBoxxState1();
+}
+
+class _CheckBoxxState1 extends State<CheckBoxx1> {
+  bool check = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Column(
+        children: [
+          Container(
+            child: CheckboxListTile(
+                // bool selected=false;
+                value: check,
+                title: Text(widget.doc),
+                onChanged: (bool? selected) async {
+                  setState(() {
+                    check = selected!;
+                  });
+                  if (selected == true) workoutArray.add(widget.id);
+                  print(workoutArray);
+                  if (selected == false) workoutArray.remove(widget.id);
+                  print(workoutArray);
+                }),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class ECheckBoxWorkout extends StatefulWidget {
+  final String type;
+  final String id;
+  final worKoutArray;
+  final String gymid;
+
+  ECheckBoxWorkout(this.worKoutArray, this.type, this.id, this.gymid,
+      {Key? key})
       : super(key: key);
 
   @override
-  State<catecheck> createState() => _catecheckState();
+  State<ECheckBoxWorkout> createState() => _ECheckBoxWorkoutState();
 }
 
-class _catecheckState extends State<catecheck> {
+class _ECheckBoxWorkoutState extends State<ECheckBoxWorkout> {
   bool check = false;
-  checkboxstatus() async {
-    if (widget.cat2.contains(widget.cat_id)) {
+
+  checkBoxWorkout() async {
+    if (widget.worKoutArray.contains(widget.id)) {
       setState(() {
         check = true;
       });
@@ -1515,9 +1478,8 @@ class _catecheckState extends State<catecheck> {
 
   @override
   void initState() {
-    // TODO: implement initState
-    checkboxstatus();
-    print(widget.cat2);
+    checkBoxWorkout();
+    print(widget.worKoutArray);
     super.initState();
   }
 
@@ -1526,35 +1488,33 @@ class _catecheckState extends State<catecheck> {
     return Container(
       child: Column(
         children: [
-          Container(
-            child: CheckboxListTile(
-                // bool selected=false;
-                value: check,
-                title: Text(widget.name),
-                onChanged: (bool? selected) async {
-                  setState(() {
-                    check = selected!;
+          CheckboxListTile(
+              // bool selected=false;
+              value: check,
+              title: Text(widget.type),
+              onChanged: (bool? selected) async {
+                setState(() {
+                  check = selected!;
+                });
+                if (selected == true) {
+                  await FirebaseFirestore.instance
+                      .collection('product_details')
+                      .doc(widget.gymid)
+                      .update({
+                    'workouts': FieldValue.arrayUnion([widget.id])
                   });
-                  if (selected == true) {
-                    await FirebaseFirestore.instance
-                        .collection('product_details')
-                        .doc(widget.gym_id)
-                        .update({
-                      'service': FieldValue.arrayUnion([widget.cat_id])
-                    });
-                  }
-                  // print(widget.arr2);
-                  if (selected == false) {
-                    await FirebaseFirestore.instance
-                        .collection('product_details')
-                        .doc(widget.gym_id)
-                        .update({
-                      'service': FieldValue.arrayRemove([widget.cat_id])
-                    });
-                  }
-                  // print(widget.arr2);
-                }),
-          ),
+                }
+                // print(widget.arr2);
+                if (selected == false) {
+                  await FirebaseFirestore.instance
+                      .collection('product_details')
+                      .doc(widget.gymid)
+                      .update({
+                    'workouts': FieldValue.arrayRemove([widget.id])
+                  });
+                }
+                // print(widget.arr2);
+              }),
         ],
       ),
     );
@@ -1574,7 +1534,7 @@ class ProductEditBox extends StatefulWidget {
     required this.pincode,
     required this.imagee,
     this.arr2,
-    this.cat2,
+    this.WorkoutArray,
   }) : super(key: key);
 
   final String name;
@@ -1587,7 +1547,7 @@ class ProductEditBox extends StatefulWidget {
   final String pincode;
   final imagee;
   final arr2;
-  final cat2;
+  final WorkoutArray;
 
   @override
   _ProductEditBoxState createState() => _ProductEditBoxState();
@@ -1606,8 +1566,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
   final TextEditingController _longitudeController = TextEditingController();
   String image = '';
   CollectionReference? amenitiesStream;
-  CollectionReference? categoryStream;
-
+  CollectionReference? workoutStream;
   @override
   void initState() {
     super.initState();
@@ -1621,8 +1580,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
     _landmark.text = widget.landmark;
     image = widget.imagee;
     amenitiesStream = FirebaseFirestore.instance.collection("amenities");
-    categoryStream = FirebaseFirestore.instance.collection("category");
-
+    workoutStream = FirebaseFirestore.instance.collection("workouts");
     // _location.text = "${widget.location.latitude}, ${widget.location.latitude}";
     // _latitudeController.text = widget.location.latitude.toString();
     // _longitudeController.text = widget.location.longitude.toString();
@@ -1690,73 +1648,40 @@ class _ProductEditBoxState extends State<ProductEditBox> {
               SizedBox(
                 height: 20,
               ),
-              Container(
-                  child: StreamBuilder<QuerySnapshot>(
-                stream: categoryStream!.snapshots(),
-                builder: (context, AsyncSnapshot snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const CircularProgressIndicator();
-                  }
-                  if (snapshot.data == null) {
-                    return Container();
-                  }
-                  print("-----------------------------------");
-                  var doc = snapshot.data.docs;
-                  return Container(
-                    width: 400,
-                    height: 500,
-                    child: ListView.builder(
-                        itemCount: doc.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          bool check = false;
-                          return catecheck(
-                              doc[index]['name'],
-                              doc[index]['category_id'],
-                              widget.cat2,
-                              _gymiid.text);
-                        }),
-                  );
-                },
-              )),
 
-              SizedBox(height: 20),
+              Container(
+                child: StreamBuilder<QuerySnapshot>(
+                    stream: workoutStream!.snapshots(),
+                    builder: (context, AsyncSnapshot snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const CircularProgressIndicator();
+                      }
+                      if (snapshot.data == null) {
+                        return Container();
+                      }
+                      print("-----------------------------------");
+                      var doc = snapshot.data.docs;
+
+                      return Container(
+                        width: 400,
+                        height: 500,
+                        child: ListView.builder(
+                          itemCount: doc.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            bool check = false;
+                            return ECheckBoxWorkout(
+                                widget.WorkoutArray,
+                                doc[index]['type'],
+                                doc[index]['id'],
+                                _gymiid.text);
+                          },
+                        ),
+                      );
+                    }),
+              ),
+
               // Text(image),
-              Text(
-                'Upload Display Image',
-                style:
-                    TextStyle(color: Colors.black, fontWeight: FontWeight.w700),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              Row(
-                children: [
-                  ElevatedButton(
-                    onPressed: () async {
-                      // dic = await chooseImage();
-                      image = uploadToStroagees();
-                    },
-                    child: Text(
-                      'Upload Gym Image',
-                      style: TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.w700),
-                    ),
-                  ),
-                  SizedBox(
-                    width: 20,
-                  ),
-                  image != null
-                      ? Image(
-                          image: NetworkImage(image.toString()),
-                          height: 200,
-                          width: 200,
-                        )
-                      : SizedBox(
-                          height: 300,
-                          width: 300,
-                          child: Image.network(image.toString())),
-                ],
-              ),
+              Image.network(image.toString()),
               Padding(
                 padding: const EdgeInsets.all(12.0),
                 child: Center(
@@ -1778,7 +1703,6 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                         'name': _name.text,
                         'pincode': _pincode.text,
                         // 'location': dataForGeoPint,
-                        'display_picture': image,
                         'gym_id': _gymiid.text,
                         'gym_owner': _gymowner.text,
                         'landmark': _landmark.text
@@ -1798,27 +1722,5 @@ class _ProductEditBoxState extends State<ProductEditBox> {
         ),
       ),
     );
-  }
-
-  uploadToStroagees() {
-    InputElement input = FileUploadInputElement() as InputElement
-      ..accept = 'image/*';
-    FirebaseStorage fs = FirebaseStorage.instance;
-
-    input.click();
-    input.onChange.listen((event) {
-      final file = input.files?.first;
-      final reader = FileReader();
-
-      reader.readAsDataUrl(file!);
-      reader.onLoadEnd.listen((event) async {
-        var snapshot =
-            await fs.ref().child('produt_image/${_gymiid.text}').putBlob(file);
-        String downloadUrl = await snapshot.ref.getDownloadURL();
-        setState(() {
-          image = downloadUrl;
-        });
-      });
-    });
   }
 }

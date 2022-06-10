@@ -46,6 +46,7 @@ class _bannerNewPageState extends State<bannerNewPage> {
   }
 
   late DropzoneViewController controller;
+  bool _saving = false;
 
   @override
   Widget build(BuildContext context) {
@@ -94,9 +95,14 @@ class _bannerNewPageState extends State<bannerNewPage> {
                             ),
                             InkWell(
                               onTap: () async {
+// <<<<<<< HEAD
+//                                 image = await chooseImage();
+//                                 await getUrlImage(image);
+//                                 //uploadToStroage();
+// =======
                                 image = await chooseImage();
                                 await getUrlImage(image);
-                                //uploadToStroage();
+// >>>>>>> 4b8eeb3ff2a6cfa9a4d0218f27f80501132bdf71
                               },
                               child: const Icon(
                                 Icons.upload_file_outlined,
@@ -109,6 +115,7 @@ class _bannerNewPageState extends State<bannerNewPage> {
                               width: 300,
                               height: 200,
                               child: Container(
+// <<<<<<< HEAD
                                   child: imgUrl1 != null
                                       ? Image.network(imgUrl1)
                                       : Container(
@@ -122,6 +129,13 @@ class _bannerNewPageState extends State<bannerNewPage> {
                                             ),
                                           ),
                                         )),
+// =======
+//                                 child:
+//                                 Image.network((imgUrl1 == null) ? ' ' : imgUrl1,
+//                                   fit: BoxFit.contain,),
+//                               ),
+//
+// >>>>>>> 4b8eeb3ff2a6cfa9a4d0218f27f80501132bdf71
                             ),
                           ],
                         ),

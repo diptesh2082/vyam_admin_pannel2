@@ -3,10 +3,13 @@ import 'package:admin_panel_vyam/dashboard.dart';
 import 'package:admin_panel_vyam/services/deleteMethod.dart';
 import 'package:admin_panel_vyam/services/image_picker_api.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
-
+import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart' as Path;
 import '../services/CustomTextFieldClass.dart';
 import '../services/MatchIDMethod.dart';
 
@@ -27,6 +30,7 @@ class _CategoryInfoScreenState extends State<CategoryInfoScreen> {
     categoryStream = FirebaseFirestore.instance.collection('category');
     super.initState();
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -141,6 +145,8 @@ class _CategoryInfoScreenState extends State<CategoryInfoScreen> {
 
   DataRow _buildListItem(BuildContext context, DocumentSnapshot data) {
     String categoryID = data['category_id'];
+    String x;
+    bool status = data['status'];
     return DataRow(cells: [
       DataCell(
         data['name'] != null ? Text(data['name'] ?? "") : const Text(""),
@@ -156,9 +162,25 @@ class _CategoryInfoScreenState extends State<CategoryInfoScreen> {
             : const Text(""),
       ),
       DataCell(
-        data['status'] == 'true'
-            ? const Text("Enabled")
-            : const Text("Disabled"),
+        Center(
+          child: ElevatedButton(
+            onPressed: () async {
+              bool temp = status;
+              temp = !temp;
+
+              DocumentReference documentReference = FirebaseFirestore.instance
+                  .collection('category')
+                  .doc(catId);
+              await documentReference
+                  .update({'status': temp})
+                  .whenComplete(() => print("Legitimate toggled"))
+                  .catchError((e) => print(e));
+            },
+            child: Text( x = status ? 'ENABLED':'DISABLED'),
+            style: ElevatedButton.styleFrom(
+                primary: status ? Colors.green : Colors.red),
+          ),
+        ),
       ),
       DataCell(
         data['position'] != null
@@ -169,7 +191,7 @@ class _CategoryInfoScreenState extends State<CategoryInfoScreen> {
         const Text(''),
         showEditIcon: true,
         onTap: () {
-          Get.to(()=>ProductEditBox(name: data['name'], status:data['status'], image: data['image'], categoryId: data['category_id']));
+          Get.to(()=>ProductEditBox(name: data['name'], status:data['status'], image: data['image'], categoryId: data['category_id'] , position: data['position']));
           // showDialog(
           //     context: context,
           //     builder: (context) {
@@ -194,7 +216,7 @@ class _CategoryInfoScreenState extends State<CategoryInfoScreen> {
     ]);
   }
 
-//MOVED TO ANOTHER FILE category_add_screen
+//MOVED TO ANOTHER FILE category_add_screen//
 
 }
 
@@ -206,12 +228,14 @@ class ProductEditBox extends StatefulWidget {
     required this.status,
     required this.image,
     required this.categoryId,
+    required this.position,
   }) : super(key: key);
 
   final String name;
   final bool status;
   final String image;
   final String categoryId;
+  final String position;
 
   @override
   _ProductEditBoxState createState() => _ProductEditBoxState();
@@ -219,11 +243,12 @@ class ProductEditBox extends StatefulWidget {
 
 class _ProductEditBoxState extends State<ProductEditBox> {
   final TextEditingController _name = TextEditingController();
-  //final TextEditingController _status = TextEditingController();
+  final TextEditingController _position = TextEditingController();
  // final TextEditingController _image = TextEditingController();
   var categoryId;
   var image;
-  bool status = true;
+  var imgUrl1;
+
 
   @override
   void initState() {
@@ -231,6 +256,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
     image = widget.image;
     categoryId = widget.categoryId;
     _name.text = widget.name;
+    _position.text = widget.position;
   }
 
   @override
@@ -257,7 +283,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                       fontSize: 14),
                 ),
                 customTextField(hinttext: "Name", addcontroller: _name),
-               // customTextField(hinttext: "Status", addcontroller: _status),
+               customTextField(hinttext: "Position", addcontroller: _position),
                 //customTextField(hinttext: "Image", addcontroller: _image),
 
                 Container(
@@ -269,7 +295,8 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                         style: TextStyle(
                             color: Colors.grey,
                             fontWeight: FontWeight.bold,
-                            fontSize: 15),
+                            fontSize: 15
+                        ),
                       ),
                       const SizedBox(
                         width: 20,
@@ -277,11 +304,22 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                       InkWell(
                         onTap: () async {
                           image = await chooseImage();
+                          await getUrlImage(image);
                         },
                         child: const Icon(
                           Icons.upload_file_outlined,
                         ),
-                      )
+                      ),
+
+                      SizedBox(
+                        width: 300,
+                        height: 200,
+                        child: Container(
+                          child:
+                          Image.network((imgUrl1 == null) ? ' ' : imgUrl1,
+                            fit: BoxFit.contain,),
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -302,16 +340,16 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                             .update(
                           {
 
-                            'status': status,
-                            //'image': _addImage.text,
+                            'image': imgUrl1,
                             'name': _name.text,
                             'category_id': categoryId,
-                            'position': categoryId,
+                            'position': _position.text,
 
                           },
-                        ).then((snapshot) async {
-                          await uploadImageToBanner(image, categoryId);
-                        });
+                        );
+                        //     .then((snapshot) async {
+                        //   await uploadImageToBanner(image, categoryId);
+                        // });
 
 
                         Navigator.pop(context);
@@ -327,4 +365,27 @@ class _ProductEditBoxState extends State<ProductEditBox> {
       ),
     );
   }
+
+  getUrlImage(XFile? pickedFile) async {
+    if (kIsWeb) {
+      final _firebaseStorage = FirebaseStorage.instance
+          .ref().child("category");
+
+      Reference _reference = _firebaseStorage
+          .child('category/${Path.basename(pickedFile!.path)}');
+      await _reference
+          .putData(
+        await pickedFile.readAsBytes(),
+        SettableMetadata(contentType: 'image/jpeg'),
+      );
+
+      String imageUrl = await _reference.getDownloadURL();
+
+      setState(() {
+        imgUrl1 = imageUrl;
+      });
+
+    }
+  }
+
 }
