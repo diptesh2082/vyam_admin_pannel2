@@ -1580,10 +1580,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                           .collection('product_details')
                           .doc(_gymiid.text);
 
-                      // GeoPoint dataForGeoPint = GeoPoint(
-                      //     double.parse(_latitudeController.text),
-                      //     double.parse(_longitudeController.text));
-                      //
+
                       Map<String, dynamic> data = <String, dynamic>{
                         'address': _address.text,
                         'gender': _gender.text,
