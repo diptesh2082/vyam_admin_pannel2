@@ -774,6 +774,7 @@ class _ShowAddBoxState extends State<ShowAddBox> {
   CollectionReference? amenitiesStream;
   CollectionReference? workoutStream;
 
+
   var selectedValue = "MALE";
 
   @override
@@ -971,6 +972,12 @@ class _ShowAddBoxState extends State<ShowAddBox> {
               SizedBox(
                 height: 15,
               ),
+              const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Text('Amenities:',
+                    style:
+                        TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
+              ),
               Container(
                   child: StreamBuilder<QuerySnapshot>(
                 stream: amenitiesStream!.snapshots(),
@@ -997,6 +1004,14 @@ class _ShowAddBoxState extends State<ShowAddBox> {
                 },
               )),
               SizedBox(height: 15),
+
+              const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Text('SELECT WORKOUTS:',
+                    style:
+                        TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
+              ),
+
 
               const Text(
                 'SELECT WORKOUTS',

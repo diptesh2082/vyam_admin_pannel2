@@ -1,8 +1,12 @@
+import 'package:admin_panel_vyam/Screens/Product%20Details/Packages/packages.dart';
+import 'package:admin_panel_vyam/Screens/Product%20Details/product_details.dart';
+import 'package:admin_panel_vyam/Screens/booking_add.dart';
+import 'package:admin_panel_vyam/services/CustomTextFieldClass.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-
+import 'package:get/get.dart';
 import '../services/deleteMethod.dart';
 
 class BookingDetails extends StatefulWidget {
@@ -37,7 +41,17 @@ class _BookingDetailsState extends State<BookingDetails> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-
+                Padding(
+                  padding: const EdgeInsets.only(top: 8.0, left: 8.0),
+                  child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        textStyle: const TextStyle(fontSize: 15),
+                      ),
+                      onPressed: () {
+                        Get.to(const addbookings()); //showAddbox,
+                      },
+                      child: Text('Add Booking')),
+                ),
                 Container(
                   width: 500,
                   height: 51,
@@ -67,13 +81,11 @@ class _BookingDetailsState extends State<BookingDetails> {
                           });
                         }
                       },
-                      decoration:  InputDecoration(
+                      decoration: InputDecoration(
                         prefixIcon: const Icon(Icons.search),
                         hintText: 'Search',
                         hintStyle: GoogleFonts.poppins(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500
-                        ),
+                            fontSize: 16, fontWeight: FontWeight.w500),
                         border: InputBorder.none,
                         filled: true,
                         fillColor: Colors.white12,
@@ -81,8 +93,6 @@ class _BookingDetailsState extends State<BookingDetails> {
                     ),
                   ),
                 ),
-
-
                 Center(
                   child: StreamBuilder<QuerySnapshot>(
                     stream: FirebaseFirestore.instance
@@ -110,15 +120,15 @@ class _BookingDetailsState extends State<BookingDetails> {
                       if (searchVendorId.length > 0) {
                         doc = doc.where((element) {
                           return element
-                              .get('user_name')
-                              .toString()
-                              .toLowerCase()
-                              .contains(searchVendorId.toString())
-                          ||element
-                              .get('userId')
-                              .toString()
-                              .toLowerCase()
-                              .contains(searchVendorId.toString());
+                                  .get('user_name')
+                                  .toString()
+                                  .toLowerCase()
+                                  .contains(searchVendorId.toString()) ||
+                              element
+                                  .get('userId')
+                                  .toString()
+                                  .toLowerCase()
+                                  .contains(searchVendorId.toString());
                         }).toList();
                       }
 
@@ -400,43 +410,74 @@ class _BookingDetailsState extends State<BookingDetails> {
         ),
       )),
       DataCell(const Text(""), showEditIcon: true, onTap: () {
-        showDialog(
-            context: context,
-            builder: (context) {
-              return SingleChildScrollView(
-                child: ProductEditBox(
-                  vendorid: data['vendorId'],
-                  username: data['user_name'],
-                  userid: data['userId'],
-                  totalprice: data['total_price'].toString(),
-                  totaldays: data['totalDays'].toString(),
-                  taxpay: data['tax_pay'].toString(),
-                  planendyear:
-                      data['plan_end_duration'].toDate().year.toString(),
-                  planendmonth:
-                      data['plan_end_duration'].toDate().month.toString(),
-                  planendday: data['plan_end_duration'].toDate().day.toString(),
-                  paymentdone: data['payment_done'].toString(),
-                  packagetype: data['package_type'],
-                  orderyear: data['order_date'].toDate().year.toString(),
-                  ordermonth: data['order_date'].toDate().month.toString(),
-                  orderday: data['order_date'].toDate().day.toString(),
-                  gymname: data["gym_details"]['name'],
-                  gymaddress: data['gym_address'].toString(),
-                  grandtotal: data['grand_total'].toString(),
-                  discount: data['discount'].toString(),
-                  daysleft: data['daysLeft'],
-                  bookingstatus: data['booking_status'],
-                  bookingprice: data['booking_price'].toString(),
-                  bookingplan: data['booking_plan'],
-                  bookingid: data['booking_id'],
-                  bookingyear: data['booking_date'].toDate().year.toString(),
-                  bookingmonth: data['booking_date'].toDate().month.toString(),
-                  bookingday: data['booking_date'].toDate().day.toString(),
-                  bookingaccepted: data['booking_accepted'].toString(),
-                ),
-              );
-            });
+        Get.to(
+          () => ProductEditBox(
+            vendorid: data['vendorId'],
+            username: data['user_name'],
+            userid: data['userId'],
+            totalprice: data['total_price'].toString(),
+            totaldays: data['totalDays'].toString(),
+            taxpay: data['tax_pay'].toString(),
+            planendyear: data['plan_end_duration'].toDate().year.toString(),
+            planendmonth: data['plan_end_duration'].toDate().month.toString(),
+            planendday: data['plan_end_duration'].toDate().day.toString(),
+            paymentdone: data['payment_done'].toString(),
+            packagetype: data['package_type'],
+            orderyear: data['order_date'].toDate().year.toString(),
+            ordermonth: data['order_date'].toDate().month.toString(),
+            orderday: data['order_date'].toDate().day.toString(),
+            gymname: data["gym_details"]['name'],
+            gymaddress: data['gym_address'].toString(),
+            grandtotal: data['grand_total'].toString(),
+            discount: data['discount'].toString(),
+            daysleft: data['daysLeft'],
+            bookingstatus: data['booking_status'],
+            bookingprice: data['booking_price'].toString(),
+            bookingplan: data['booking_plan'],
+            bookingid: data['booking_id'],
+            bookingyear: data['booking_date'].toDate().year.toString(),
+            bookingmonth: data['booking_date'].toDate().month.toString(),
+            bookingday: data['booking_date'].toDate().day.toString(),
+            bookingaccepted: data['booking_accepted'].toString(),
+          ),
+        );
+        // showDialog(
+        //     context: context,
+        //     builder: (context) {
+        //       return SingleChildScrollView(
+        //         child: ProductEditBox(
+        //           vendorid: data['vendorId'],
+        //           username: data['user_name'],
+        //           userid: data['userId'],
+        //           totalprice: data['total_price'].toString(),
+        //           totaldays: data['totalDays'].toString(),
+        //           taxpay: data['tax_pay'].toString(),
+        //           planendyear:
+        //               data['plan_end_duration'].toDate().year.toString(),
+        //           planendmonth:
+        //               data['plan_end_duration'].toDate().month.toString(),
+        //           planendday: data['plan_end_duration'].toDate().day.toString(),
+        //           paymentdone: data['payment_done'].toString(),
+        //           packagetype: data['package_type'],
+        //           orderyear: data['order_date'].toDate().year.toString(),
+        //           ordermonth: data['order_date'].toDate().month.toString(),
+        //           orderday: data['order_date'].toDate().day.toString(),
+        //           gymname: data["gym_details"]['name'],
+        //           gymaddress: data['gym_address'].toString(),
+        //           grandtotal: data['grand_total'].toString(),
+        //           discount: data['discount'].toString(),
+        //           daysleft: data['daysLeft'],
+        //           bookingstatus: data['booking_status'],
+        //           bookingprice: data['booking_price'].toString(),
+        //           bookingplan: data['booking_plan'],
+        //           bookingid: data['booking_id'],
+        //           bookingyear: data['booking_date'].toDate().year.toString(),
+        //           bookingmonth: data['booking_date'].toDate().month.toString(),
+        //           bookingday: data['booking_date'].toDate().day.toString(),
+        //           bookingaccepted: data['booking_accepted'].toString(),
+        //         ),
+        //       );
+        // }
       }),
       DataCell(Icon(Icons.delete), onTap: () {
         deleteMethod(stream: bookingStream, uniqueDocId: bookingId);
@@ -578,7 +619,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
           child: TextField(
         autofocus: true,
         style: const TextStyle(
-          fontSize: 14,
+          fontSize: 20,
           fontFamily: 'poppins',
           fontWeight: FontWeight.w400,
         ),
@@ -587,7 +628,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
         decoration: InputDecoration(
             border: InputBorder.none,
             hintStyle: const TextStyle(
-              fontSize: 14,
+              fontSize: 20,
               fontFamily: 'poppins',
               fontWeight: FontWeight.w400,
             ),
@@ -666,7 +707,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
   final TextEditingController _addvendorid = TextEditingController();
   final TextEditingController _addusername = TextEditingController();
   final TextEditingController _adduserid = TextEditingController();
-  final TextEditingController _addtotalprice = TextEditingController();
+  //final TextEditingController _addtotalprice = TextEditingController();
   final TextEditingController _addtotaldays = TextEditingController();
   final TextEditingController _addtaxpay = TextEditingController();
   final TextEditingController _addplanendyear = TextEditingController();
@@ -690,14 +731,37 @@ class _ProductEditBoxState extends State<ProductEditBox> {
   final TextEditingController _addbookingmonth = TextEditingController();
   final TextEditingController _addbookingday = TextEditingController();
   final TextEditingController _addbookingaccepted = TextEditingController();
-
+  DateTime bookingtimedata = DateTime.now();
+  DateTime ordertimedata = DateTime.now();
+  DateTime endtimedata = DateTime.now();
+  DateTime? date;
+  DateTime? plandate;
+  TimeOfDay? time;
+  TimeOfDay? ptime;
+  TimeOfDay? otime;
+  DateTime? dateTime;
+  DateTime? pdateTime;
+  DateTime? orderdate;
+  List<String> _bookstatus = ['active', 'upcoming', 'completed'];
+  List<String> _do = ['true', 'false'];
+  String _dropdownValue = 'true';
+  String dropdownstatusvalue = 'active';
+  CollectionReference? categoryStream;
+  CollectionReference? vendorIdStream;
+  String catdropdown = 'calisthenics';
+  String dropdownvalue = "select";
+  String abc = 'false';
+  String abc2 = 'false';
+  String abc3 = 'false';
+  String? value;
+  Color a = Colors.white;
   @override
   void initState() {
     super.initState();
     _addvendorid.text = widget.vendorid;
     _addusername.text = widget.username;
     _adduserid.text = widget.userid;
-    _addtotalprice.text = widget.totalprice;
+    // _addtotalprice.text = widget.totalprice;
     _addtotaldays.text = widget.totaldays;
     _addtaxpay.text = widget.taxpay;
     _addplanendyear.text = widget.planendyear;
@@ -733,134 +797,771 @@ class _ProductEditBoxState extends State<ProductEditBox> {
     // _latitudeController.text = widget.location.latitude.toString();
     // _longitudeController.text = widget.location.longitude.toString();
     // print(widget.location.latitude);
+    categoryStream = FirebaseFirestore.instance.collection("category");
+    vendorIdStream = FirebaseFirestore.instance.collection("product_details");
   }
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(30))),
-      content: SizedBox(
-        height: 480,
-        width: 800,
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'Update Records for this doc',
-                style: TextStyle(
-                    fontFamily: 'poppins',
-                    fontWeight: FontWeight.w600,
-                    fontSize: 14),
-              ),
-              CustomTextField(
-                  hinttext: "Vendor ID", addcontroller: _addvendorid),
-              CustomTextField(
-                  hinttext: "User Name", addcontroller: _addusername),
-              CustomTextField(hinttext: "User ID", addcontroller: _adduserid),
-              CustomTextField(
-                  hinttext: "Total Price", addcontroller: _addtotalprice),
-              CustomTextField(
-                  hinttext: "Total Days", addcontroller: _addtotaldays),
-              CustomTextField(hinttext: "Tax Pay", addcontroller: _addtaxpay),
-              CustomTextField(
-                  hinttext: "Plan End Y", addcontroller: _addplanendyear),
-              CustomTextField(
-                  hinttext: "Plan End M", addcontroller: _addplanendmonth),
-              CustomTextField(
-                  hinttext: "Plan End D", addcontroller: _addplanendday),
-              CustomTextField(
-                  hinttext: "Payment Done", addcontroller: _addpaymentdone),
-              CustomTextField(
-                  hinttext: "Package Type", addcontroller: _addpackagetype),
-              CustomTextField(
-                  hinttext: "Order Date Y", addcontroller: _addorderyear),
-              CustomTextField(
-                  hinttext: "Order Date M", addcontroller: _addordermonth),
-              CustomTextField(
-                  hinttext: "Order Date D", addcontroller: _addorderday),
-              CustomTextField(hinttext: "Gym Name", addcontroller: _addgymname),
-              CustomTextField(
-                  hinttext: "Gym Address", addcontroller: _addgymaddress),
-              CustomTextField(
-                  hinttext: "Grand Total", addcontroller: _addgrandtotal),
-              CustomTextField(
-                  hinttext: "Discount", addcontroller: _adddiscount),
-              CustomTextField(
-                  hinttext: "Days Left", addcontroller: _adddaysletf),
-              CustomTextField(
-                  hinttext: "Booking Status", addcontroller: _addbookingstatus),
-              CustomTextField(
-                  hinttext: "Booking Price", addcontroller: _addbookingprice),
-              CustomTextField(
-                  hinttext: "Booking Plan", addcontroller: _addbookingplan),
-              CustomTextField(
-                  hinttext: "booking ID", addcontroller: _addbookingid),
-              CustomTextField(
-                  hinttext: "Booking Date Y", addcontroller: _addbookingyear),
-              CustomTextField(
-                  hinttext: "Booking Date M", addcontroller: _addbookingmonth),
-              CustomTextField(
-                  hinttext: "Booking Date D", addcontroller: _addbookingday),
-              CustomTextField(
-                  hinttext: "Booking Accepted",
-                  addcontroller: _addbookingaccepted),
-              Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: Center(
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      DocumentReference documentReference = FirebaseFirestore
-                          .instance
-                          .collection('bookings')
-                          .doc(_addbookingid.text);
-                      DateTime endtimedata = DateTime.parse(
-                          '${_addplanendyear.text}-${isLess(_addplanendmonth.text) ? '0' + _addplanendmonth.text : _addplanendday.text}-${isLess(_addplanendday.text) ? '0' + _addplanendday.text : _addplanendday.text} 00:00:04Z');
-                      DateTime ordertimedata = DateTime.parse(
-                          '${_addorderyear.text}-${isLess(_addordermonth.text) ? '0' + _addordermonth.text : _addordermonth.text}-${isLess(_addorderday.text) ? '0' + _addorderday.text : _addorderday.text} 00:00:04Z');
-                      DateTime bookingtimedata = DateTime.parse(
-                          '${_addbookingyear.text}-${isLess(_addbookingmonth.text) ? '0' + _addbookingmonth.text : _addbookingmonth.text}-${isLess(_addbookingday.text) ? '0' + _addbookingday.text : _addbookingday.text} 00:00:04Z');
-
-                      Map<String, dynamic> data = <String, dynamic>{
-                        'vandorId': _addvendorid.text,
-                        'user_name': _addusername.text,
-                        'userId': _adduserid.text,
-                        'total_price': _addtotalprice.text,
-                        'totalDays': _addtotalprice.text,
-                        'tax_pay': _addtaxpay.text,
-                        'plan_end_duration': endtimedata,
-                        'payment_done':
-                            _addpaymentdone.text == 'true' ? true : false,
-                        'package_type': _addpackagetype.text,
-                        'order_date': ordertimedata,
-                        'gym_name': _addgymname.text,
-                        'gym_address': _addgymaddress.text,
-                        'grand_total': _addgrandtotal.text,
-                        'discount': _adddiscount.text,
-                        'daysLeft': _adddaysletf.text,
-                        'booking_status': _addbookingstatus.text,
-                        'booking_price': _addbookingprice.text,
-                        'booking_plan': _addbookingplan.text,
-                        'booking_id': _addbookingid.text,
-                        'booking_date': bookingtimedata,
-                        'booking_accepted':
-                            _addbookingaccepted.text == 'true' ? true : false,
-                      };
-                      await documentReference
-                          .update(data)
-                          .whenComplete(() => print("Item Updated"))
-                          .catchError((e) => print(e));
-                      Navigator.pop(context);
-                    },
-                    child: const Text('Done'),
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        title: Text('Edit Booking'),
+      ),
+      body: Container(
+        margin: EdgeInsets.all(15.0),
+        child: Center(
+          child: SizedBox(
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Center(
+                    child: Text(
+                      'Update Records for this doc',
+                      style: TextStyle(
+                          fontFamily: 'poppins',
+                          fontWeight: FontWeight.w600,
+                          fontSize: 25),
+                    ),
                   ),
-                ),
-              )
-            ],
+                  const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Text('Vendor ID:',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 15)),
+                  ),
+                  Container(
+                      child: StreamBuilder<QuerySnapshot>(
+                    stream: vendorIdStream!.snapshots(),
+                    builder: (context, AsyncSnapshot snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const CircularProgressIndicator();
+                      }
+                      if (snapshot.data == null) {
+                        return Container();
+                      }
+                      print("-----------------------------------");
+                      var doc = snapshot.data.docs;
+                      return Container(
+                        width: 500,
+                        height: 200,
+                        child: ListView.builder(
+                            itemCount: doc.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              bool check = false;
+                              return RadioListTile<String>(
+                                value: doc[index]["gym_id"],
+                                groupValue: abc3,
+                                onChanged: (val) => setState(
+                                  () {
+                                    abc3 = val!;
+                                  },
+                                ),
+                                title: Text(doc[index]["gym_id"]),
+                              );
+                              // ListTile(
+                              //   title: Text(doc[index]["name"]),
+                              //   onTap: () {
+                              //     _addgymname.text = doc[index]["name"];
+                              //   },
+                              // );
+                            }),
+                      );
+                    },
+                  )),
+                  const SizedBox(height: 15),
+                  // customTextField(
+                  //     hinttext: "Vendor ID", addcontroller: _addvendorid),
+                  customTextField(
+                      hinttext: "User Name", addcontroller: _addusername),
+                  customTextField(
+                      hinttext: "User ID", addcontroller: _adduserid),
+                  // CustomTextField(
+                  //     hinttext: "Total Price", addcontroller: _addtotalprice),
+                  customTextField(
+                      hinttext: "Total Days", addcontroller: _addtotaldays),
+                  // CustomTextField(
+                  //     hinttext: "Tax Pay", addcontroller: _addtaxpay),
+                  // Container(
+                  //   child: Row(
+                  //     children: [
+                  //       ElevatedButton(
+                  //         child: const Text('Select Date & Time for Plan'),
+                  //         onPressed: () => pickDateTime(context, endtimedata),
+                  //       ),
+                  //       SizedBox(width: 15),
+                  //     ],
+                  //   ),
+                  // ),
+                  Container(
+                    child: Row(
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Text('Select Date & Time For Plan:',
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              )),
+                        ),
+                        ElevatedButton(
+                          child: const Text('Select Date & Time For Plan'),
+                          onPressed: () => pickplanDateTime(context),
+                        ),
+                        SizedBox(width: 15),
+                      ],
+                    ),
+                  ),
+                  // customTextField(
+                  //     hinttext: "Plan End Y", addcontroller: _addplanendyear),
+                  // customTextField(
+                  //     hinttext: "Plan End M", addcontroller: _addplanendmonth),
+                  // customTextField(
+                  //     hinttext: "Plan End D", addcontroller: _addplanendday),
+                  const SizedBox(height: 15),
+                  const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Text('Payment Done:',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 15)),
+                  ),
+                  DropdownButton<String>(
+                    isExpanded: true,
+                    hint: Text("Payment Done"),
+                    items: _do.map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        this._dropdownValue = newValue!;
+                        _addpaymentdone.text = _dropdownValue;
+                        print(_dropdownValue);
+                      });
+                    },
+                    value: _dropdownValue,
+                  ),
+                  // customTextField(
+                  //     hinttext: "Payment Done", addcontroller: _addpaymentdone),
+                  customTextField(
+                      hinttext: "Package Type", addcontroller: _addpackagetype),
+                  const SizedBox(height: 15),
+                  const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Text('Package Type:',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 15)),
+                  ),
+                  Container(
+                    child: StreamBuilder<QuerySnapshot>(
+                      stream: categoryStream!.snapshots(),
+                      builder: (context, AsyncSnapshot snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const CircularProgressIndicator();
+                        }
+                        if (snapshot.data == null) {
+                          return Container();
+                        }
+                        print("-----------------------------------");
+                        var doc = snapshot.data.docs;
+                        return Container(
+                          width: 400,
+                          height: 200,
+                          child: ListView.builder(
+                              itemCount: doc.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                bool check = false;
+                                return
+                                    // RadioBoxx(
+                                    //   doc[index]["name"],
+                                    //   doc[index]["category_id"],
+                                    //   _addpackagetype.text,
+                                    // );
+                                    RadioListTile<String>(
+                                  value: doc[index]["name"],
+                                  groupValue: abc,
+                                  onChanged: (val) => setState(
+                                    () {
+                                      abc = val!;
+                                    },
+                                  ),
+                                  title: Text(doc[index]["name"]),
+                                );
+                                //     ListTile(
+                                //   tileColor: a,
+                                //   title: Text(doc[index]["name"]),
+                                //   onTap: () {
+                                //     _addpackagetype.text = doc[index]["name"];
+                                //     print(doc[index]["name"]);
+                                //     setState(() {
+                                //       a = Colors.black12;
+                                //     });
+                                //   },
+                                // );
+                              }),
+                        );
+                      },
+                    ),
+                  ),
+                  // )),
+                  // Container(
+                  //   child: Row(
+                  //     children: [
+                  //       ElevatedButton(
+                  //         child: const Text('Select Date & Time for Order'),
+                  //         onPressed: () => pickDateTime(context, ordertimedata),
+                  //       ),
+                  //       SizedBox(width: 15),
+                  //     ],
+                  //   ),
+                  // ),
+                  Container(
+                    child: Row(
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Text('Select Date & Time For Order:',
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              )),
+                        ),
+                        ElevatedButton(
+                          child: const Text('Select Date & Time For Order'),
+                          onPressed: () => pickorderDateTime(context),
+                        ),
+                        SizedBox(width: 20),
+                      ],
+                    ),
+                  ),
+                  // customTextField(
+                  //     hinttext: "Order Date Y", addcontroller: _addorderyear),
+                  // customTextField(
+                  //     hinttext: "Order Date M", addcontroller: _addordermonth),
+                  // customTextField(
+                  //     hinttext: "Order Date D", addcontroller: _addorderday),
+                  const SizedBox(height: 15),
+                  const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Text('Gym Name:',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 15)),
+                  ),
+                  Container(
+                      child: StreamBuilder<QuerySnapshot>(
+                    stream: vendorIdStream!.snapshots(),
+                    builder: (context, AsyncSnapshot snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const CircularProgressIndicator();
+                      }
+                      if (snapshot.data == null) {
+                        return Container();
+                      }
+                      print("-----------------------------------");
+                      var doc = snapshot.data.docs;
+                      return Container(
+                        width: 400,
+                        height: 300,
+                        child: ListView.builder(
+                            itemCount: doc.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              bool check = false;
+                              return RadioListTile<String>(
+                                value: doc[index]["name"],
+                                groupValue: abc2,
+                                onChanged: (val) => setState(
+                                  () {
+                                    abc2 = val!;
+                                  },
+                                ),
+                                title: Text(doc[index]["name"]),
+                              );
+                              // ListTile(
+                              //   title: Text(doc[index]["name"]),
+                              //   onTap: () {
+                              //     _addgymname.text = doc[index]["name"];
+                              //   },
+                              // );
+                            }),
+                      );
+                    },
+                  )),
+                  // customTextField(
+                  //     hinttext: "Gym Name", addcontroller: _addgymname),
+                  customTextField(
+                      hinttext: "Gym Address", addcontroller: _addgymaddress),
+                  customTextField(
+                      hinttext: "Grand Total", addcontroller: _addgrandtotal),
+                  customTextField(
+                      hinttext: "Discount", addcontroller: _adddiscount),
+                  customTextField(
+                      hinttext: "Days Left", addcontroller: _adddaysletf),
+                  const SizedBox(height: 15),
+                  const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Text('Booking Status:',
+                        style: TextStyle(
+                            fontWeight: FontWeight.w700, fontSize: 15)),
+                  ),
+                  DropdownButton(
+                    value: dropdownstatusvalue,
+                    icon: const Icon(Icons.keyboard_arrow_down),
+                    items: _bookstatus.map((String items) {
+                      return DropdownMenuItem(
+                        value: items,
+                        child: Text(items),
+                      );
+                    }).toList(),
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        dropdownstatusvalue = newValue!;
+                        _addbookingstatus.text = dropdownstatusvalue;
+                      });
+                    },
+                  ),
+                  // customTextField(
+                  //     hinttext: "Booking Status",
+                  //     addcontroller: _addbookingstatus),
+                  customTextField(
+                      hinttext: "Booking Price",
+                      addcontroller: _addbookingprice),
+                  customTextField(
+                      hinttext: "Booking Plan", addcontroller: _addbookingplan),
+                  // CustomTextField(
+                  //     hinttext: "booking ID", addcontroller: _addbookingid),
+
+                  Container(
+                    child: Row(
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Text('Select Date & Time For Bookings:',
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              )),
+                        ),
+                        ElevatedButton(
+                          child: const Text('Select Date & Time For Bookings'),
+                          onPressed: () => pickDateTime(context),
+                        ),
+                        SizedBox(width: 15),
+                      ],
+                    ),
+                  ),
+                  // customTextField(
+                  //     hinttext: "Booking Date Y",
+                  //     addcontroller: _addbookingyear),
+                  // customTextField(
+                  //     hinttext: "Booking Date M",
+                  //     addcontroller: _addbookingmonth),
+                  // customTextField(
+                  //     hinttext: "Booking Date D",
+                  //     addcontroller: _addbookingday),
+                  const SizedBox(height: 15),
+                  const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Text('Booking Accepted:',
+                        style: TextStyle(
+                            fontWeight: FontWeight.w700, fontSize: 15)),
+                  ),
+                  DropdownButton<String>(
+                    isExpanded: true,
+                    hint: Text("Booking Accepted"),
+                    items: _do.map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        this._dropdownValue = newValue!;
+                        _addbookingaccepted.text = _dropdownValue;
+                        print(_dropdownValue);
+                      });
+                    },
+                    value: _dropdownValue,
+                  ),
+                  // customTextField(
+                  //     hinttext: "Booking Accepted",
+                  //     addcontroller: _addbookingaccepted),
+                  Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Center(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          ElevatedButton(
+                            onPressed: () async {
+                              DocumentReference documentReference =
+                                  FirebaseFirestore.instance
+                                      .collection('bookings')
+                                      .doc(_addbookingid.text);
+                              // DateTime endtimedata = DateTime.parse(
+                              //     '${_addplanendyear.text}-${isLess(_addplanendmonth.text) ? '0' + _addplanendmonth.text : _addplanendday.text}-${isLess(_addplanendday.text) ? '0' + _addplanendday.text : _addplanendday.text} 00:00:04Z');
+                              // DateTime ordertimedata = DateTime.parse(
+                              //     '${_addorderyear.text}-${isLess(_addordermonth.text) ? '0' + _addordermonth.text : _addordermonth.text}-${isLess(_addorderday.text) ? '0' + _addorderday.text : _addorderday.text} 00:00:04Z');
+                              // DateTime bookingtimedata = DateTime.parse(
+                              //     '${_addbookingyear.text}-${isLess(_addbookingmonth.text) ? '0' + _addbookingmonth.text : _addbookingmonth.text}-${isLess(_addbookingday.text) ? '0' + _addbookingday.text : _addbookingday.text} 00:00:04Z');
+
+                              Map<String, dynamic> data = <String, dynamic>{
+                                'vandorId': abc3,
+                                'user_name': _addusername.text,
+                                'userId': _adduserid.text,
+                                // 'total_price': _addtotalprice.text,
+                                'totalDays': _addtotaldays.text,
+                                'tax_pay': _addtaxpay.text,
+                                'plan_end_duration': endtimedata,
+                                'payment_done': _addpaymentdone.text == 'true'
+                                    ? true
+                                    : false,
+                                'package_type': abc,
+                                'order_date': ordertimedata,
+                                'gym_name': abc2,
+                                'gym_address': _addgymaddress.text,
+                                'grand_total': _addgrandtotal.text,
+                                'discount': _adddiscount.text,
+                                'daysLeft': _adddaysletf.text,
+                                'booking_status': _addbookingstatus.text,
+                                'booking_price': _addbookingprice.text,
+                                'booking_plan': _addbookingplan.text,
+                                'booking_id': _addbookingid.text,
+                                'booking_date': bookingtimedata,
+                                'booking_accepted':
+                                    _addbookingaccepted.text == 'true'
+                                        ? true
+                                        : false,
+                              };
+                              await documentReference
+                                  .update(data)
+                                  .whenComplete(() => print("Item Updated"))
+                                  .catchError((e) => print(e));
+                              Navigator.pop(context);
+                            },
+                            child: const Text('Done'),
+                          ),
+                          ElevatedButton(
+                            onPressed: () async {
+                              Navigator.pop(context);
+                            },
+                            child: const Text('Close'),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
         ),
       ),
+    );
+    // AlertDialog(
+    //   shape: const RoundedRectangleBorder(
+    //       borderRadius: BorderRadius.all(Radius.circular(30))),
+    //   content: SizedBox(
+    //     height: 480,
+    //     width: 800,
+    //     child: SingleChildScrollView(
+    //       child: Column(
+    //         crossAxisAlignment: CrossAxisAlignment.start,
+    //         children: [
+    //           const Text(
+    //             'Update Records for this doc',
+    //             style: TextStyle(
+    //                 fontFamily: 'poppins',
+    //                 fontWeight: FontWeight.w600,
+    //                 fontSize: 14),
+    //           ),
+    //           CustomTextField(
+    //               hinttext: "Vendor ID", addcontroller: _addvendorid),
+    //           CustomTextField(
+    //               hinttext: "User Name", addcontroller: _addusername),
+    //           CustomTextField(hinttext: "User ID", addcontroller: _adduserid),
+    //           CustomTextField(
+    //               hinttext: "Total Price", addcontroller: _addtotalprice),
+    //           CustomTextField(
+    //               hinttext: "Total Days", addcontroller: _addtotaldays),
+    //           CustomTextField(hinttext: "Tax Pay", addcontroller: _addtaxpay),
+    //           CustomTextField(
+    //               hinttext: "Plan End Y", addcontroller: _addplanendyear),
+    //           CustomTextField(
+    //               hinttext: "Plan End M", addcontroller: _addplanendmonth),
+    //           CustomTextField(
+    //               hinttext: "Plan End D", addcontroller: _addplanendday),
+    //           CustomTextField(
+    //               hinttext: "Payment Done", addcontroller: _addpaymentdone),
+    //           CustomTextField(
+    //               hinttext: "Package Type", addcontroller: _addpackagetype),
+    //           CustomTextField(
+    //               hinttext: "Order Date Y", addcontroller: _addorderyear),
+    //           CustomTextField(
+    //               hinttext: "Order Date M", addcontroller: _addordermonth),
+    //           CustomTextField(
+    //               hinttext: "Order Date D", addcontroller: _addorderday),
+    //           CustomTextField(hinttext: "Gym Name", addcontroller: _addgymname),
+    //           CustomTextField(
+    //               hinttext: "Gym Address", addcontroller: _addgymaddress),
+    //           CustomTextField(
+    //               hinttext: "Grand Total", addcontroller: _addgrandtotal),
+    //           CustomTextField(
+    //               hinttext: "Discount", addcontroller: _adddiscount),
+    //           CustomTextField(
+    //               hinttext: "Days Left", addcontroller: _adddaysletf),
+    //           CustomTextField(
+    //               hinttext: "Booking Status", addcontroller: _addbookingstatus),
+    //           CustomTextField(
+    //               hinttext: "Booking Price", addcontroller: _addbookingprice),
+    //           CustomTextField(
+    //               hinttext: "Booking Plan", addcontroller: _addbookingplan),
+    //           CustomTextField(
+    //               hinttext: "booking ID", addcontroller: _addbookingid),
+    //           CustomTextField(
+    //               hinttext: "Booking Date Y", addcontroller: _addbookingyear),
+    //           CustomTextField(
+    //               hinttext: "Booking Date M", addcontroller: _addbookingmonth),
+    //           CustomTextField(
+    //               hinttext: "Booking Date D", addcontroller: _addbookingday),
+    //           CustomTextField(
+    //               hinttext: "Booking Accepted",
+    //               addcontroller: _addbookingaccepted),
+    //           Padding(
+    //             padding: const EdgeInsets.all(12.0),
+    //             child: Center(
+    //               child: ElevatedButton(
+    //                 onPressed: () async {
+    //                   DocumentReference documentReference = FirebaseFirestore
+    //                       .instance
+    //                       .collection('bookings')
+    //                       .doc(_addbookingid.text);
+    //                   DateTime endtimedata = DateTime.parse(
+    //                       '${_addplanendyear.text}-${isLess(_addplanendmonth.text) ? '0' + _addplanendmonth.text : _addplanendday.text}-${isLess(_addplanendday.text) ? '0' + _addplanendday.text : _addplanendday.text} 00:00:04Z');
+    //                   DateTime ordertimedata = DateTime.parse(
+    //                       '${_addorderyear.text}-${isLess(_addordermonth.text) ? '0' + _addordermonth.text : _addordermonth.text}-${isLess(_addorderday.text) ? '0' + _addorderday.text : _addorderday.text} 00:00:04Z');
+    //                   DateTime bookingtimedata = DateTime.parse(
+    //                       '${_addbookingyear.text}-${isLess(_addbookingmonth.text) ? '0' + _addbookingmonth.text : _addbookingmonth.text}-${isLess(_addbookingday.text) ? '0' + _addbookingday.text : _addbookingday.text} 00:00:04Z');
+
+    //                   Map<String, dynamic> data = <String, dynamic>{
+    //                     'vandorId': _addvendorid.text,
+    //                     'user_name': _addusername.text,
+    //                     'userId': _adduserid.text,
+    //                     'total_price': _addtotalprice.text,
+    //                     'totalDays': _addtotalprice.text,
+    //                     'tax_pay': _addtaxpay.text,
+    //                     'plan_end_duration': endtimedata,
+    //                     'payment_done':
+    //                         _addpaymentdone.text == 'true' ? true : false,
+    //                     'package_type': _addpackagetype.text,
+    //                     'order_date': ordertimedata,
+    //                     'gym_name': _addgymname.text,
+    //                     'gym_address': _addgymaddress.text,
+    //                     'grand_total': _addgrandtotal.text,
+    //                     'discount': _adddiscount.text,
+    //                     'daysLeft': _adddaysletf.text,
+    //                     'booking_status': _addbookingstatus.text,
+    //                     'booking_price': _addbookingprice.text,
+    //                     'booking_plan': _addbookingplan.text,
+    //                     'booking_id': _addbookingid.text,
+    //                     'booking_date': bookingtimedata,
+    //                     'booking_accepted':
+    //                         _addbookingaccepted.text == 'true' ? true : false,
+    //                   };
+    //                   await documentReference
+    //                       .update(data)
+    //                       .whenComplete(() => print("Item Updated"))
+    //                       .catchError((e) => print(e));
+    //                   Navigator.pop(context);
+    //                 },
+    //                 child: const Text('Done'),
+    //               ),
+    //             ),
+    //           )
+    //         ],
+    //       ),
+    //     ),
+    //   ),
+    // );
+  }
+
+  //for 'booking_date'
+  Future pickDateTime(BuildContext context) async {
+    final date = await pickDate(context);
+    if (date == null) return;
+
+    final time = await pickTime(context);
+    if (time == null) return;
+
+    setState(() {
+      bookingtimedata = DateTime(
+        date.year,
+        date.month,
+        date.day,
+        time.hour,
+        time.minute,
+      );
+    });
+  }
+
+  Future pickDate(BuildContext context) async {
+    final intialDate = DateTime.now();
+    final newDate = await showDatePicker(
+      context: context,
+      initialDate: intialDate,
+      firstDate: DateTime(DateTime.now().year - 5),
+      lastDate: DateTime(DateTime.now().year + 5),
+    );
+
+    if (newDate == null) return;
+
+    setState(() {
+      date = newDate;
+    });
+
+    return newDate;
+  }
+
+  Future pickTime(BuildContext context) async {
+    final intialTime = TimeOfDay(hour: 9, minute: 0);
+    final newTime =
+        await showTimePicker(context: context, initialTime: time ?? intialTime);
+
+    if (newTime == null) return;
+
+    setState(() {
+      time = newTime;
+    });
+
+    return newTime;
+  }
+
+  //for 'plan_end_duration'
+  Future pickplanDateTime(BuildContext context) async {
+    final plandate = await pickplanDate(context);
+    if (plandate == null) return;
+
+    final ptime = await pickplanTime(context);
+    if (ptime == null) return;
+
+    setState(() {
+      endtimedata = DateTime(
+        plandate.year,
+        plandate.month,
+        plandate.day,
+        ptime.hour,
+        ptime.minute,
+      );
+    });
+  }
+
+  Future pickplanDate(BuildContext context) async {
+    final intialDate = DateTime.now();
+    final newDate = await showDatePicker(
+      context: context,
+      initialDate: intialDate,
+      firstDate: DateTime(DateTime.now().year - 5),
+      lastDate: DateTime(DateTime.now().year + 5),
+    );
+
+    if (newDate == null) return;
+
+    setState(() {
+      plandate = newDate;
+    });
+
+    return newDate;
+  }
+
+  Future pickplanTime(BuildContext context) async {
+    final intialTime = TimeOfDay(hour: 9, minute: 0);
+    final newTime =
+        await showTimePicker(context: context, initialTime: time ?? intialTime);
+
+    if (newTime == null) return;
+
+    setState(() {
+      time = newTime;
+    });
+
+    return newTime;
+  }
+
+  //for 'order_date'
+  Future pickorderDateTime(BuildContext context) async {
+    final orderdate = await pickorderDate(context);
+    if (orderdate == null) return;
+
+    final otime = await pickorderTime(context);
+    if (otime == null) return;
+
+    setState(() {
+      ordertimedata = DateTime(
+        orderdate.year,
+        orderdate.month,
+        orderdate.day,
+        otime.hour,
+        otime.minute,
+      );
+    });
+  }
+
+  Future pickorderDate(BuildContext context) async {
+    final intialDate = DateTime.now();
+    final newDate = await showDatePicker(
+      context: context,
+      initialDate: intialDate,
+      firstDate: DateTime(DateTime.now().year - 5),
+      lastDate: DateTime(DateTime.now().year + 5),
+    );
+
+    if (newDate == null) return;
+
+    setState(() {
+      orderdate = newDate;
+    });
+
+    return newDate;
+  }
+
+  Future pickorderTime(BuildContext context) async {
+    final intialTime = TimeOfDay(hour: 9, minute: 0);
+    final newTime =
+        await showTimePicker(context: context, initialTime: time ?? intialTime);
+
+    if (newTime == null) return;
+
+    setState(() {
+      time = newTime;
+    });
+
+    return newTime;
+  }
+}
+
+class dropdownvaluena extends StatefulWidget {
+  const dropdownvaluena({
+    required this.name,
+    required this.id,
+    Key? key,
+  }) : super(key: key);
+  final String name;
+  final String id;
+
+  @override
+  State<dropdownvaluena> createState() => _dropdownvaluenaState();
+}
+
+class _dropdownvaluenaState extends State<dropdownvaluena> {
+  @override
+  Widget build(BuildContext context) {
+    return DropdownMenuItem(
+      value: widget.id,
+      child: Text(widget.name),
     );
   }
 }
@@ -888,5 +1589,42 @@ bool isLess(String txt) {
     return true;
   } else {
     return false;
+  }
+}
+
+class RadioBoxx extends StatefulWidget {
+  final String name;
+  final String id;
+  String? cat;
+
+  RadioBoxx(this.name, this.id, this.cat, {Key? key}) : super(key: key);
+
+  @override
+  _RadioBoxxState createState() => _RadioBoxxState();
+}
+
+class _RadioBoxxState extends State<RadioBoxx> {
+  String check = "calisthenics";
+  String? value;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Column(
+        children: [
+          Container(
+            child: RadioListTile<String>(
+              value: check,
+              groupValue: value,
+              onChanged: (String? abcd) {
+                widget.cat = abcd;
+                print(abcd);
+              },
+              title: Text(widget.name),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

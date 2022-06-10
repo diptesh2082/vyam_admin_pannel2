@@ -164,7 +164,7 @@ class _PaymentsPageState extends State<PaymentsPage> {
       DataCell(data != null ? Text(data['amount'] ?? "") : Text("")),
       // DataCell(data != null ? Text(data['place'] ?? "") : Text("")),
       DataCell(data != null
-          ? Text(data['type'].toString().toUpperCase() )
+          ? Text(data['type'].toString().toUpperCase())
           : Text("")),
       DataCell(data != null ? Text(d122) : Text("")),
       DataCell(
@@ -269,7 +269,6 @@ class _PaymentScreenState extends State<PaymentScreen> {
                         onPressed: () => pickDateTime(context),
                       ),
                       SizedBox(width: 15),
-
                     ],
                   ),
                 ),
@@ -279,25 +278,24 @@ class _PaymentScreenState extends State<PaymentScreen> {
                     children: [
                       const Text('Payment Type'),
                       const SizedBox(width: 15),
-
                       DropdownButton(
-                        value: selectedValue,
-                        items: const [
-                          DropdownMenuItem(
-                            child: Text("Online"),
-                            value: "ONLINE",
-                          ),
-                          DropdownMenuItem(
-                            child: Text("Cash"),
-                            value: "Cash",
-                          ),
-                        ],
-                        onChanged: (value) {
-                          setState(() {
-                            selectedValue = value as String;
-                          });
-                        }),
-                  ],
+                          value: selectedValue,
+                          items: const [
+                            DropdownMenuItem(
+                              child: Text("Online"),
+                              value: "ONLINE",
+                            ),
+                            DropdownMenuItem(
+                              child: Text("Cash"),
+                              value: "Cash",
+                            ),
+                          ],
+                          onChanged: (value) {
+                            setState(() {
+                              selectedValue = value as String;
+                            });
+                          }),
+                    ],
                   ),
                 ),
 
@@ -364,23 +362,22 @@ class _PaymentScreenState extends State<PaymentScreen> {
   }
 
   Future pickDateTime(BuildContext context) async {
-   final date = await pickDate(context);
-   if(date == null) return;
+    final date = await pickDate(context);
+    if (date == null) return;
 
-   final time = await pickTime(context);
-   if(time == null) return ;
+    final time = await pickTime(context);
+    if (time == null) return;
 
-   setState(() {
-     dateTime = DateTime(
-       date.year,
-       date.month,
-       date.day,
-       time.hour,
-       time.minute,
-     );
-   });
+    setState(() {
+      dateTime = DateTime(
+        date.year,
+        date.month,
+        date.day,
+        time.hour,
+        time.minute,
+      );
+    });
   }
-
 
   Future pickDate(BuildContext context) async {
     final intialDate = DateTime.now();
@@ -400,20 +397,19 @@ class _PaymentScreenState extends State<PaymentScreen> {
     return newDate;
   }
 
-   Future pickTime(BuildContext context) async{
-     final intialTime = TimeOfDay(hour: 9,
-         minute: 0);
-     final newTime = await showTimePicker(context: context,
-         initialTime: time ?? intialTime);
+  Future pickTime(BuildContext context) async {
+    final intialTime = TimeOfDay(hour: 9, minute: 0);
+    final newTime =
+        await showTimePicker(context: context, initialTime: time ?? intialTime);
 
-     if(newTime == null) return ;
+    if (newTime == null) return;
 
-     setState(() {
-       time = newTime;
-     });
+    setState(() {
+      time = newTime;
+    });
 
-     return newTime;
-   }
+    return newTime;
+  }
 }
 
 // *Updating Item list Class
@@ -501,27 +497,26 @@ class _ProductEditBoxState extends State<ProductEditBox> {
 
                 Container(
                   child: Row(
-
-                    children:[
+                    children: [
                       Text('Payment Type : '),
                       DropdownButton(
-                        value: selectedValue,
-                        items: const [
-                          DropdownMenuItem(
-                            child: Text("Online"),
-                            value: "ONLINE",
-                          ),
-                          DropdownMenuItem(
-                            child: Text("Cash"),
-                            value: "Cash",
-                          ),
-                        ],
-                        onChanged: (value) {
-                          setState(() {
-                            selectedValue = value as String;
-                          });
-                        }),
-                  ],
+                          value: selectedValue,
+                          items: const [
+                            DropdownMenuItem(
+                              child: Text("Online"),
+                              value: "ONLINE",
+                            ),
+                            DropdownMenuItem(
+                              child: Text("Cash"),
+                              value: "Cash",
+                            ),
+                          ],
+                          onChanged: (value) {
+                            setState(() {
+                              selectedValue = value as String;
+                            });
+                          }),
+                    ],
                   ),
                 ),
 
