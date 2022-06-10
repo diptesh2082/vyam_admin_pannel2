@@ -499,14 +499,54 @@ class _ProductDetailsState extends State<ProductDetails> {
                       // >>>>>>> 39301b603a430fc9803df29ba70b59135c783388
                       height: MediaQuery.of(context).size.height * .90,
                       width: MediaQuery.of(context).size.width * .92,
-                      child: ListView.builder(
-                          scrollDirection: Axis.vertical,
-                          itemCount: imgList.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            return ListTile(
-                              leading: Image.network(imgList[index].toString()),
-                              // minLeadin≥gWidth: double.infinity,
-                            );
+
+                      child: StreamBuilder<Object>(
+                          stream: productStream!.snapshots(),
+                          builder: (context, AsyncSnapshot snapshot) {
+                            return ListView.builder(
+                                scrollDirection: Axis.vertical,
+                                itemCount: data['images'].length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  return SizedBox(
+                                    height: MediaQuery.of(context).size.height *
+                                        .75,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Container(
+                                          height: 500,
+                                          width: 500,
+                                          child: Image.network(
+                                            data['images'][index].toString(),
+                                          ),
+                                        ),
+                                        SizedBox(width: 20),
+                                        IconButton(
+                                          onPressed: () async {
+                                            print(data['images'].length);
+                                            await deletee(
+                                                // '12.jpeg',
+                                                imgList[index].toString(),
+                                                data['images']);
+                                            await FirebaseFirestore.instance
+                                                .collection('product_details')
+                                                .doc(gymId)
+                                                .update({
+                                              'images': FieldValue.arrayRemove(
+                                                  [imgList[index]])
+                                            });
+                                            print("Delete!");
+                                          },
+                                          icon: Icon(Icons.delete),
+                                        )
+                                      ],
+                                    ),
+
+                                    // minLeadin≥gWidth: double.infinity,
+                                  );
+                                });
+
                           }),
                     ),
                   ),
@@ -693,6 +733,12 @@ class _ProductDetailsState extends State<ProductDetails> {
   final TextEditingController _branchController = TextEditingController();
   final TextEditingController _descriptionCon = TextEditingController();
   final TextEditingController _numberCon = TextEditingController();
+
+  Future<void> deletee(String reff, var s) async {
+    // var pictureref = FirebaseFirestore.refFromURL(reff);
+    await FirebaseStorage.instance.ref().child(reff).delete();
+    print(s.length);
+  }
 }
 
 class ShowAddBox extends StatefulWidget {
@@ -1059,8 +1105,7 @@ class _ShowAddBoxState extends State<ShowAddBox> {
               // ),
               // ElevatedButton(
               //   onPressed: () async {
-              //     multipic = await multiimagepickerr();
-              //     impath = await multiimageuploader(multipic);
+              //     image = uploadToStroagesss();
               //   },
               //   child: Text(
               //     'Upload Image',
@@ -1102,6 +1147,7 @@ class _ShowAddBoxState extends State<ShowAddBox> {
                       FirebaseFirestore.instance
                           .collection('product_details')
                           .doc(_addgymownerid.text)
+
                           .set(
                         {
                           'address': _addaddress.text,
@@ -1140,6 +1186,7 @@ class _ShowAddBoxState extends State<ShowAddBox> {
                         //       .update({'images': impath});
                         // });
                       );
+
                       Navigator.pop(context);
                     },
                     child: const Text('Done'),
@@ -1191,7 +1238,7 @@ class _ShowAddBoxState extends State<ShowAddBox> {
       reader.onLoadEnd.listen((event) async {
         var snapshot = await fs
             .ref()
-            .child('produt_image/${_addgymownerid.text}')
+            .child('product_image/${_addgymownerid.text}')
             .putBlob(file);
         String downloadUrl = await snapshot.ref.getDownloadURL();
         setState(() {
