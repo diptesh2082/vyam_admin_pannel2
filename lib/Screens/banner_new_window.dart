@@ -97,20 +97,26 @@ class _bannerNewPageState extends State<bannerNewPage> {
                               onTap: () async {
 // <<<<<<< HEAD
 // <<<<<<< HEAD
+// <<<<<<< HEAD
 //                                 image = await chooseImage();
 //                                 await getUrlImage(image);
 //                                 //uploadToStroage();
 // =======
-                                image = await chooseImage();
-                                await getUrlImage(image);
-// >>>>>>> 4b8eeb3ff2a6cfa9a4d0218f27f80501132bdf71
+//                                 image = await chooseImage();
+//                                 await getUrlImage(image);
+// // >>>>>>> 4b8eeb3ff2a6cfa9a4d0218f27f80501132bdf71
 // =======
+// =======
+// >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
 
                                 image = await chooseImage();
                                 await getUrlImage(image);
                                 //uploadToStroage();
 
+// <<<<<<< HEAD
 // >>>>>>> e2bea5635554890f907c9d88c8a5b0f830f5efe4
+// =======
+// >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
                               },
                               child: const Icon(
                                 Icons.upload_file_outlined,
@@ -125,9 +131,13 @@ class _bannerNewPageState extends State<bannerNewPage> {
                               child: Container(
 // <<<<<<< HEAD
 // <<<<<<< HEAD
+// <<<<<<< HEAD
 // =======
 
 // >>>>>>> e2bea5635554890f907c9d88c8a5b0f830f5efe4
+// =======
+//
+// >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
                                   child: imgUrl1 != null
                                       ? Image.network(imgUrl1)
                                       : Container(
@@ -142,6 +152,7 @@ class _bannerNewPageState extends State<bannerNewPage> {
                                           ),
                                         )),
 // <<<<<<< HEAD
+// <<<<<<< HEAD
 // =======
 //                                 child:
 //                                 Image.network((imgUrl1 == null) ? ' ' : imgUrl1,
@@ -152,6 +163,9 @@ class _bannerNewPageState extends State<bannerNewPage> {
 // =======
 
 // >>>>>>> e2bea5635554890f907c9d88c8a5b0f830f5efe4
+// =======
+
+// >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
                             ),
                           ],
                         ),

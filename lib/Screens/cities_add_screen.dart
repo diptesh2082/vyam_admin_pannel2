@@ -36,11 +36,17 @@ class _citiesAddState extends State<citiesAdd> {
   var id = FirebaseFirestore.instance.collection('Cities').doc().id;
 
   final TextEditingController _addAddress = TextEditingController();
+// <<<<<<< HEAD
   // final TextEditingController _addStatus = TextEditingController();
   //final TextEditingController _addId = TextEditingController();
   final TextEditingController _addIndex = TextEditingController();
 
   static const cities_list = [
+// =======
+
+    // static const cities_list =[
+//
+// >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
     "New Delhi",
     "Mumbai",
     "Delhi",
@@ -103,7 +109,9 @@ class _citiesAddState extends State<citiesAdd> {
                               bottom: BorderSide(color: Colors.grey))),
                       child: Stack(
                         children: [
-                          MapView(),
+                          MapView(
+                            address_con: _addAddress,
+                          ),
                           const Center(
                               child: Icon(
                             Icons.location_on_rounded,
@@ -150,6 +158,7 @@ class _citiesAddState extends State<citiesAdd> {
                     ),
                   ),
                 ),
+// <<<<<<< HEAD
                 // customTextField(
                 //     hinttext: "Address", addcontroller: _addAddress),
                 Container(
@@ -180,6 +189,9 @@ class _citiesAddState extends State<citiesAdd> {
                 ),
                 //customTextField(hinttext: "ID", addcontroller: _addId),
                 //customTextField(hinttext: "Index", addcontroller: _addIndex),
+// =======
+//               ),
+// >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
                 Center(
                   child: ElevatedButton(
                     onPressed: () async {
@@ -190,8 +202,13 @@ class _citiesAddState extends State<citiesAdd> {
                           .doc(id)
                           .set(
                         {
+// <<<<<<< HEAD
                           'Address': getAddress(),
                           'Status': selectedValue,
+// =======
+//                           'Address': _addAddress.text,
+//                           'Status': true,
+// >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
                           'id': id,
                           //'index' : _addIndex,
                         },

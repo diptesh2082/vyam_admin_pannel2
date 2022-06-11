@@ -1,8 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-
+import 'package:path/path.dart' as Path;
 import '../services/CustomTextFieldClass.dart';
 import '../services/MatchIDMethod.dart';
 import '../services/image_picker_api.dart';
@@ -83,11 +86,34 @@ class _pushNewState extends State<pushNew> {
                       InkWell(
                         onTap: () async {
                           image = await chooseImage();
+                          getUrlImage(image);
+
                         },
                         child: Icon(
                           Icons.upload_file_outlined,
                         ),
-                      )
+                      ),
+
+                      SizedBox(
+                          width: 300,
+                          height: 200,
+                          child: image != null
+                              ? Container(
+                            child: Image.network(image),
+                          )
+                              : Container(
+                            color: Colors.white,
+                            child: Center(
+                                child: Text(
+                                  'Please Upload Image',
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 24),
+                                )),
+                          )),
+
+
                     ],
                   ),
                 ),
@@ -111,13 +137,11 @@ class _pushNewState extends State<pushNew> {
                         {
                           'title': _addtitle.text,
                           'definition': _adddefiniton.text,
-                          // 'image': ,
+                          'image': image ,
                           'id': id,
                           'timestamp': d12,
                         },
-                      ).then((snapshot) async {
-                        await uploadImageToPush(image, id);
-                      });
+                      );
                       Navigator.pop(context);
                     },
                     child: const Text('Done'),
@@ -130,4 +154,26 @@ class _pushNewState extends State<pushNew> {
       ),
     );
   }
+
+  getUrlImage(XFile? pickedFile) async {
+    if (kIsWeb) {
+      final _firebaseStorage =
+      FirebaseStorage.instance.ref().child("amenities");
+
+      Reference _reference = _firebaseStorage
+          .child('amenities/${Path.basename(pickedFile!.path)}');
+      await _reference.putData(
+        await pickedFile.readAsBytes(),
+        SettableMetadata(contentType: 'image/jpeg'),
+      );
+
+      String imageUrl = await _reference.getDownloadURL();
+
+      setState(() {
+        image = imageUrl;
+      });
+    }
+  }
+
+
 }

@@ -158,6 +158,7 @@ class _PaymentsPageState extends State<PaymentsPage> {
     dss = DateTime.fromMillisecondsSinceEpoch(timestamp.millisecondsSinceEpoch);
     d122 = DateFormat('dd/MM/yyyy, HH:mm').format(dss);
     String stamp = timestamp.toString();
+    String id = data['userid'];
     // var dtt = DateTime.fromMillisecondsSinceEpoch(stamp.millisecondsSinceEpoch);
     // var d122 = DateFormat('dd/MM/yyyy, HH:mm').format(dt);
     // String paymentID = data['payment_id'];
@@ -193,7 +194,11 @@ class _PaymentsPageState extends State<PaymentsPage> {
         },
       ),
       DataCell(Icon(Icons.delete), onTap: () {
+// <<<<<<< HEAD
         deleteMethod(stream: paymentStream, uniqueDocId: data['userid']);
+// =======
+//         deleteMethod(stream: paymentStream, uniqueDocId: id);
+// >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
       })
     ]);
   }

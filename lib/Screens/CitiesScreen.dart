@@ -47,19 +47,8 @@ class _CitiesScreenState extends State<CitiesScreen> {
                       Get.to(() => const citiesAdd());
                     },
                     child: Text('Add Cities'),
-                    // Container(
-                    //   width: 120,
-                    //   decoration: BoxDecoration(
-                    //       color: Colors.white,
-                    //       borderRadius: BorderRadius.circular(20.0)),
-                    //   child: Row(
-                    //     children: const [
-                    //       Icon(Icons.add),
-                    //       Text('Add Product',
-                    //           style: TextStyle(fontWeight: FontWeight.w400)),
-                    //     ],
-                    //   ),
-                    // ),
+
+// >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
                   ),
                 ),
                 Center(
@@ -136,7 +125,11 @@ class _CitiesScreenState extends State<CitiesScreen> {
         data['Address'] != null ? Text(data['Address'] ?? "") : const Text(""),
       ),
       DataCell(
+// <<<<<<< HEAD
         status ? Text("True") : Text("False"),
+// =======
+//         data['Status'] != null ? Text(data['Status'].toString()) : const Text(""),
+// >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
       ),
       // DataCell(
       //   data['id'] != null ? Text(data['id']) : const Text(""),
@@ -145,10 +138,19 @@ class _CitiesScreenState extends State<CitiesScreen> {
         const Text(''),
         showEditIcon: true,
         onTap: () {
+// <<<<<<< HEAD
+//           Get.to(() => ProductEditBox(
+//               address: data['Address'],
+//               status: data['Status'],
+//               cityId: data['id']));
+// =======
+
           Get.to(() => ProductEditBox(
               address: data['Address'],
               status: data['Status'],
               cityId: data['id']));
+
+// >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
         },
       ),
       DataCell(const Icon(Icons.delete), onTap: () {
@@ -158,10 +160,6 @@ class _CitiesScreenState extends State<CitiesScreen> {
       })
     ]);
   }
-
-  final TextEditingController _addAddress = TextEditingController();
-  final TextEditingController _addStatus = TextEditingController();
-  final TextEditingController _addId = TextEditingController();
 
   // showAddbox() => showDialog(
   //     context: context,
@@ -237,8 +235,13 @@ class ProductEditBox extends StatefulWidget {
 class _ProductEditBoxState extends State<ProductEditBox> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _address = TextEditingController();
-  // final TextEditingController _status = TextEditingController();
-  // final TextEditingController _cityId = TextEditingController();
+// <<<<<<< HEAD
+  final TextEditingController _status = TextEditingController();
+  final TextEditingController _cityId = TextEditingController();
+// =======
+//   final TextEditingController _status = TextEditingController();
+//   final TextEditingController _cityId = TextEditingController();
+// >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
   final TextEditingController _addAddress = TextEditingController();
   static const cities_list = [
     "New Delhi",
@@ -280,7 +283,13 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                       fontSize: 14),
                 ),
                 SizedBox(width: 15),
+// <<<<<<< HEAD
+//                 Text('Address'),
+// =======
+//
                 Text('Address'),
+
+// >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
                 const SizedBox(
                   height: 20,
                 ),
@@ -315,6 +324,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                     ),
                   ),
                 ),
+// <<<<<<< HEAD
                 // customTextField3(hinttext: "ID", addcontroller: _cityId),
                 Container(
                   child: Row(
@@ -342,11 +352,17 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                     ],
                   ),
                 ),
+// =======
+                // customTextField3(hinttext: "Name", addcontroller: _address),
+                // customTextField3(hinttext: "Image", addcontroller: _status),
+                // customTextField3(hinttext: "ID", addcontroller: _cityId),
+// >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
                 Padding(
                   padding: const EdgeInsets.all(12.0),
                   child: Center(
                     child: ElevatedButton(
                       onPressed: () async {
+// <<<<<<< HEAD
                         print("The Gym id is : ${widget.cityId}");
                         DocumentReference documentReference = FirebaseFirestore
                             .instance
@@ -359,6 +375,20 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                         };
                         await documentReference
                             .update(data)
+// =======
+//                         print("The Gym id is : ${_cityId.text}");
+//                         DocumentReference documentReference = FirebaseFirestore
+//                             .instance
+//                             .collection('Cities')
+//                             .doc(_cityId.text);
+//                         Map<String, dynamic> data = <String, dynamic>{
+//                           'Address': _addAddress.text,
+//                           'id': _cityId.text,
+//                           'Status': _status.text,
+//                         };
+//                         await documentReference
+//                             .set(data)
+// >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
                             .whenComplete(() => print("Item Updated"))
                             .catchError((e) => print(e));
                         Navigator.pop(context);
