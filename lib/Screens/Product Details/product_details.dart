@@ -437,7 +437,8 @@ class _ProductDetailsState extends State<ProductDetails> {
           style: ElevatedButton.styleFrom(primary: Colors.yellowAccent),
           onPressed: (() {
             Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => TrainerPage(tGymId: gymId),
+              builder: (context) =>
+                  TrainerPage(gymId, data['name'], data['branch']),
             ));
           }))),
 
@@ -499,7 +500,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                       // >>>>>>> 39301b603a430fc9803df29ba70b59135c783388
                       height: MediaQuery.of(context).size.height * .90,
                       width: MediaQuery.of(context).size.width * .92,
-// <<<<<<< HEAD
+
                       child: StreamBuilder<Object>(
                           stream: productStream!.snapshots(),
                           builder: (context, AsyncSnapshot snapshot) {
@@ -546,16 +547,6 @@ class _ProductDetailsState extends State<ProductDetails> {
                                     // minLeadin≥gWidth: double.infinity,
                                   );
                                 });
-// =======
-//                       child: ListView.builder(
-//                           scrollDirection: Axis.vertical,
-//                           itemCount: imgList.length,
-//                           itemBuilder: (BuildContext context, int index) {
-//                             return ListTile(
-//                               leading: Image.network(imgList[index].toString()),
-//                               // minLeadin≥gWidth: double.infinity,
-//                             );
-// >>>>>>> 4b8eeb3ff2a6cfa9a4d0218f27f80501132bdf71
                           }),
                     ),
                   ),
@@ -984,6 +975,12 @@ class _ShowAddBoxState extends State<ShowAddBox> {
               SizedBox(
                 height: 15,
               ),
+              const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Text('Amenities:',
+                    style:
+                        TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
+              ),
               Container(
                   child: StreamBuilder<QuerySnapshot>(
                 stream: amenitiesStream!.snapshots(),
@@ -1010,6 +1007,13 @@ class _ShowAddBoxState extends State<ShowAddBox> {
                 },
               )),
               SizedBox(height: 15),
+
+              const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Text('SELECT WORKOUTS:',
+                    style:
+                        TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
+              ),
 
               const Text(
                 'SELECT WORKOUTS',
@@ -1161,6 +1165,7 @@ class _ShowAddBoxState extends State<ShowAddBox> {
                           .collection('product_details')
                           .doc(_addgymownerid.text)
 // <<<<<<< HEAD
+// <<<<<<< HEAD
 //                           .set({
 //                         'address': _addaddress.text,
 //                         'gender': selectedValue,
@@ -1193,6 +1198,9 @@ class _ShowAddBoxState extends State<ShowAddBox> {
 //                       //   await uploadImageToStorage(image, _addgymownerid.text);
 //                       // });
 // =======
+// =======
+//
+// >>>>>>> e2bea5635554890f907c9d88c8a5b0f830f5efe4
                           .set(
                         {
                           'address': _addaddress.text,
@@ -1231,7 +1239,7 @@ class _ShowAddBoxState extends State<ShowAddBox> {
                         //       .update({'images': impath});
                         // });
                       );
-// >>>>>>> 4b8eeb3ff2a6cfa9a4d0218f27f80501132bdf71
+
                       Navigator.pop(context);
                     },
                     child: const Text('Done'),
@@ -1257,17 +1265,6 @@ class _ShowAddBoxState extends State<ShowAddBox> {
       ),
     );
   }
-
-  // String getAddress()
-  // {
-  //   addressVendor = address;
-  //  // _addaddress.text = address;
-  //   print('/////////////////////////////////===========++++++++');
-  //   print(addressVendor);
-  //   //print(_addaddress.text);
-  //   return addressVendor;
-  //
-  // }
 
   uploadToStroagees() {
     InputElement input = FileUploadInputElement() as InputElement
@@ -1693,10 +1690,6 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                           .collection('product_details')
                           .doc(_gymiid.text);
 
-                      // GeoPoint dataForGeoPint = GeoPoint(
-                      //     double.parse(_latitudeController.text),
-                      //     double.parse(_longitudeController.text));
-                      //
                       Map<String, dynamic> data = <String, dynamic>{
                         'address': _address.text,
                         'gender': _gender.text,

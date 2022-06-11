@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
-
+import 'package:flutter_typeahead/flutter_typeahead.dart';
 import '../services/CustomTextFieldClass.dart';
 import '../services/MatchIDMethod.dart';
 import '../services/deleteMethod.dart';
@@ -41,14 +41,12 @@ class _CitiesScreenState extends State<CitiesScreen> {
                   padding: const EdgeInsets.only(top: 8.0, left: 8.0),
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      textStyle:
-                      const TextStyle(fontSize: 15 ),
+                      textStyle: const TextStyle(fontSize: 15),
                     ),
-                    onPressed: ()
-                    {
-                      Get.to(()=>const citiesAdd());
+                    onPressed: () {
+                      Get.to(() => const citiesAdd());
                     },
-                     child: Text('Add Cities'),
+                    child: Text('Add Cities'),
                     // Container(
                     //   width: 120,
                     //   decoration: BoxDecoration(
@@ -98,7 +96,7 @@ class _CitiesScreenState extends State<CitiesScreen> {
                             //     style: TextStyle(fontWeight: FontWeight.w600),
                             //   ),
                             // ),
-                             DataColumn(
+                            DataColumn(
                               label: Text(
                                 'Edit',
                                 style: TextStyle(fontWeight: FontWeight.w600),
@@ -132,12 +130,13 @@ class _CitiesScreenState extends State<CitiesScreen> {
 
   DataRow _buildListItem(BuildContext context, DocumentSnapshot data) {
     String cityId = data['id'];
+    bool status = data['Status'];
     return DataRow(cells: [
       DataCell(
         data['Address'] != null ? Text(data['Address'] ?? "") : const Text(""),
       ),
       DataCell(
-        data['Status'] != null ? Text(data['Status']) : const Text(""),
+        status ? Text("True") : Text("False"),
       ),
       // DataCell(
       //   data['id'] != null ? Text(data['id']) : const Text(""),
@@ -146,7 +145,10 @@ class _CitiesScreenState extends State<CitiesScreen> {
         const Text(''),
         showEditIcon: true,
         onTap: () {
-          Get.to(()=>ProductEditBox(address: data['Address'], status:  data['Status'], cityId: data['id']));
+          Get.to(() => ProductEditBox(
+              address: data['Address'],
+              status: data['Status'],
+              cityId: data['id']));
         },
       ),
       DataCell(const Icon(Icons.delete), onTap: () {
@@ -225,7 +227,7 @@ class ProductEditBox extends StatefulWidget {
   }) : super(key: key);
 
   final String address;
-  final String status;
+  final bool status;
   final String cityId;
 
   @override
@@ -233,75 +235,143 @@ class ProductEditBox extends StatefulWidget {
 }
 
 class _ProductEditBoxState extends State<ProductEditBox> {
+  final _formKey = GlobalKey<FormState>();
   final TextEditingController _address = TextEditingController();
-  final TextEditingController _status = TextEditingController();
-  final TextEditingController _cityId = TextEditingController();
-
+  // final TextEditingController _status = TextEditingController();
+  // final TextEditingController _cityId = TextEditingController();
+  final TextEditingController _addAddress = TextEditingController();
+  static const cities_list = [
+    "New Delhi",
+    "Mumbai",
+    "Delhi",
+    "Bengaluru",
+    "Hyderbad",
+    "Chennai",
+    "Ahmedabad",
+  ];
   @override
   void initState() {
     super.initState();
     _address.text = widget.address;
-    _cityId.text = widget.cityId;
-    _status.text = widget.status;
+    // _cityId.text = widget.cityId;
   }
 
   @override
   Widget build(BuildContext context) {
+    bool selectedValue = widget.status;
     return Scaffold(
-    backgroundColor: Colors.white10,
-          appBar: AppBar(
-            title: Text('Edit Cities'),
-          ),
-
-          body :
-          Center(
-            child: SizedBox(
-              width: 600,
-              height: 800,
-              child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'Update Records for this doc',
-                    style: TextStyle(
-                        fontFamily: 'poppins',
-                        fontWeight: FontWeight.w600,
-                        fontSize: 14),
-                  ),
-                  customTextField3(hinttext: "Name", addcontroller: _address),
-                  customTextField3(hinttext: "Image", addcontroller: _status),
-                  customTextField3(hinttext: "ID", addcontroller: _cityId),
-                  Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: Center(
-                      child: ElevatedButton(
-                        onPressed: () async {
-                          print("The Gym id is : ${_cityId.text}");
-                          DocumentReference documentReference = FirebaseFirestore
-                              .instance
-                              .collection('Cities')
-                              .doc(_cityId.text);
-                          Map<String, dynamic> data = <String, dynamic>{
-                            'Address': _address.text,
-                            'id': _cityId.text,
-                            'Status': _status.text,
-                          };
-                          await documentReference
-                              .set(data)
-                              .whenComplete(() => print("Item Updated"))
-                              .catchError((e) => print(e));
-                          Navigator.pop(context);
-                        },
-                        child: const Text('Done'),
+      backgroundColor: Colors.white10,
+      appBar: AppBar(
+        title: Text('Edit Cities'),
+      ),
+      body: Center(
+        child: SizedBox(
+          width: 600,
+          height: 800,
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Update Records for this doc',
+                  style: TextStyle(
+                      fontFamily: 'poppins',
+                      fontWeight: FontWeight.w600,
+                      fontSize: 14),
+                ),
+                SizedBox(width: 15),
+                Text('Address'),
+                const SizedBox(
+                  height: 20,
+                ),
+                Form(
+                  key: _formKey,
+                  child: Container(
+                    height: 7,
+                    margin: const EdgeInsets.symmetric(vertical: 7),
+                    child: TypeAheadFormField(
+                      suggestionsCallback: ((pattern) => cities_list.where(
+                          (item) => item
+                              .toLowerCase()
+                              .contains(pattern.toLowerCase()))),
+                      itemBuilder: (_, String item) =>
+                          ListTile(title: Text(item)),
+                      onSuggestionSelected: (String val) {
+                        _addAddress.text = val;
+                        print(val);
+                      },
+                      getImmediateSuggestions: true,
+                      hideSuggestionsOnKeyboardHide: false,
+                      hideOnEmpty: false,
+                      noItemsFoundBuilder: (context) => Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text('No Item Found'),
+                      ),
+                      textFieldConfiguration: TextFieldConfiguration(
+                        scrollPadding: EdgeInsets.all(20),
+                        cursorWidth: 2.0,
+                        controller: _addAddress,
                       ),
                     ),
-                  )
-                ],
-              ),
-        ),
+                  ),
+                ),
+                // customTextField3(hinttext: "ID", addcontroller: _cityId),
+                Container(
+                  child: Row(
+                    children: [
+                      const Text('Status :',
+                          style: TextStyle(
+                              fontWeight: FontWeight.w700, fontSize: 15)),
+                      DropdownButton(
+                          value: selectedValue,
+                          items: const [
+                            DropdownMenuItem(
+                              child: Text("TRUE"),
+                              value: true,
+                            ),
+                            DropdownMenuItem(
+                              child: Text("FALSE"),
+                              value: false,
+                            ),
+                          ],
+                          onChanged: (bool? value) {
+                            setState(() {
+                              selectedValue = value!;
+                            });
+                          }),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Center(
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        print("The Gym id is : ${widget.cityId}");
+                        DocumentReference documentReference = FirebaseFirestore
+                            .instance
+                            .collection('Cities')
+                            .doc(widget.cityId);
+                        Map<String, dynamic> data = <String, dynamic>{
+                          // 'Address': _addAddress.text,
+                          // 'id': _cityId.text,
+                          'Status': selectedValue,
+                        };
+                        await documentReference
+                            .update(data)
+                            .whenComplete(() => print("Item Updated"))
+                            .catchError((e) => print(e));
+                        Navigator.pop(context);
+                      },
+                      child: const Text('Done'),
+                    ),
+                  ),
+                )
+              ],
             ),
           ),
-      );
+        ),
+      ),
+    );
   }
 }

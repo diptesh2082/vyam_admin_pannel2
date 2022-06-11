@@ -96,6 +96,7 @@ class _bannerNewPageState extends State<bannerNewPage> {
                             InkWell(
                               onTap: () async {
 // <<<<<<< HEAD
+// <<<<<<< HEAD
 //                                 image = await chooseImage();
 //                                 await getUrlImage(image);
 //                                 //uploadToStroage();
@@ -103,6 +104,13 @@ class _bannerNewPageState extends State<bannerNewPage> {
                                 image = await chooseImage();
                                 await getUrlImage(image);
 // >>>>>>> 4b8eeb3ff2a6cfa9a4d0218f27f80501132bdf71
+// =======
+
+                                image = await chooseImage();
+                                await getUrlImage(image);
+                                //uploadToStroage();
+
+// >>>>>>> e2bea5635554890f907c9d88c8a5b0f830f5efe4
                               },
                               child: const Icon(
                                 Icons.upload_file_outlined,
@@ -116,6 +124,10 @@ class _bannerNewPageState extends State<bannerNewPage> {
                               height: 200,
                               child: Container(
 // <<<<<<< HEAD
+// <<<<<<< HEAD
+// =======
+
+// >>>>>>> e2bea5635554890f907c9d88c8a5b0f830f5efe4
                                   child: imgUrl1 != null
                                       ? Image.network(imgUrl1)
                                       : Container(
@@ -129,6 +141,7 @@ class _bannerNewPageState extends State<bannerNewPage> {
                                             ),
                                           ),
                                         )),
+// <<<<<<< HEAD
 // =======
 //                                 child:
 //                                 Image.network((imgUrl1 == null) ? ' ' : imgUrl1,
@@ -136,6 +149,9 @@ class _bannerNewPageState extends State<bannerNewPage> {
 //                               ),
 //
 // >>>>>>> 4b8eeb3ff2a6cfa9a4d0218f27f80501132bdf71
+// =======
+
+// >>>>>>> e2bea5635554890f907c9d88c8a5b0f830f5efe4
                             ),
                           ],
                         ),

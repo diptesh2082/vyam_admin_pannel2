@@ -16,8 +16,7 @@ Future main() async {
         storageBucket: "vyam-f99ab.appspot.com",
         messagingSenderId: "307925634075",
         appId: "1:307925634075:web:a895e0e16b2db1ae08fcbe",
-        measurementId: "G-N5WNBKEP64"
-    ),
+        measurementId: "G-N5WNBKEP64"),
   );
   runApp(const HomePage());
 }
@@ -29,7 +28,12 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       scrollBehavior: const MaterialScrollBehavior().copyWith(
-        dragDevices: {PointerDeviceKind.mouse,PointerDeviceKind.touch,PointerDeviceKind.stylus,PointerDeviceKind.unknown},
+        dragDevices: {
+          PointerDeviceKind.mouse,
+          PointerDeviceKind.touch,
+          PointerDeviceKind.stylus,
+          PointerDeviceKind.unknown
+        },
       ),
       title: 'Vyam Admin Panel',
       debugShowCheckedModeBanner: false,
