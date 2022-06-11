@@ -107,11 +107,9 @@ class _FeedBackInfoState extends State<FeedBackInfo> {
               ? Text(data['feedback_name'] ?? "")
               : const Text(""),
         ),
-        DataCell(
-          data['user_id'] != null
-              ? Text(data['user_id'] ?? "")
-              : const Text(""),
-        ),
+        DataCell(data['user_id'] != null
+            ? Text(data['user_id'].toString().substring(3, 13))
+            : Text("")),
         DataCell(
           data['vendor_id'] != null
               ? Text(data['vendor_id'] ?? "")

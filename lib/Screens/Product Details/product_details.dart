@@ -546,7 +546,6 @@ class _ProductDetailsState extends State<ProductDetails> {
                                     // minLeadin≥gWidth: double.infinity,
                                   );
                                 });
-
                           }),
                     ),
                   ),
@@ -774,7 +773,6 @@ class _ShowAddBoxState extends State<ShowAddBox> {
   CollectionReference? amenitiesStream;
   CollectionReference? workoutStream;
 
-
   var selectedValue = "MALE";
 
   @override
@@ -922,18 +920,22 @@ class _ShowAddBoxState extends State<ShowAddBox> {
                           fontWeight: FontWeight.bold,
                           fontStyle: FontStyle.italic),
                     ),
-                    SizedBox(height: 15,),
+                    SizedBox(
+                      height: 15,
+                    ),
                     Stack(
                       children: [
                         Container(
                           height: MediaQuery.of(context).size.height * .75,
-                          width: 900 ,
+                          width: 900,
                           decoration: const BoxDecoration(
                               border: Border(
                                   bottom: BorderSide(color: Colors.grey))),
                           child: Stack(
                             children: [
-                              MapView(address_con: _addaddress,),
+                              MapView(
+                                address_con: _addaddress,
+                              ),
                               const Center(
                                 child: Icon(
                                   Icons.location_on_rounded,
@@ -1010,12 +1012,6 @@ class _ShowAddBoxState extends State<ShowAddBox> {
                 child: Text('SELECT WORKOUTS:',
                     style:
                         TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
-              ),
-
-
-              const Text(
-                'SELECT WORKOUTS',
-                style: TextStyle(fontSize: 20),
               ),
               Container(
                 child: StreamBuilder<QuerySnapshot>(
@@ -1162,7 +1158,6 @@ class _ShowAddBoxState extends State<ShowAddBox> {
                       FirebaseFirestore.instance
                           .collection('product_details')
                           .doc(_addgymownerid.text)
-
                           .set(
                         {
                           'address': _addaddress.text,
@@ -1662,7 +1657,6 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                           .instance
                           .collection('product_details')
                           .doc(_gymiid.text);
-
 
                       Map<String, dynamic> data = <String, dynamic>{
                         'address': _address.text,

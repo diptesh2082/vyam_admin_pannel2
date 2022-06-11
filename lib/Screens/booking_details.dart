@@ -322,8 +322,8 @@ class _BookingDetailsState extends State<BookingDetails> {
           ? Text(data['user_name'].toString())
           : const Text("")),
       DataCell(data['userId'] != null
-          ? Text(data['userId'].toString())
-          : const Text("")),
+          ? Text(data['userId'].toString().substring(3, 13))
+          : Text("")),
       // DataCell(data['total_price'] != null
       //     ? Text(data['total_price'].toString())
       //     : const Text("")),
@@ -365,10 +365,20 @@ class _BookingDetailsState extends State<BookingDetails> {
       //     ? Text(data['gym_address'].toString())
       //     : const Text("")),
       DataCell(data['grand_total'] != null
-          ? Text(data['grand_total'].toString())
+          ? Row(
+              children: [
+                Text('₹'),
+                Text(data['grand_total'].toString()),
+              ],
+            )
           : const Text("")),
       DataCell(data['discount'] != null
-          ? Text(data['discount'].toString())
+          ? Row(
+              children: [
+                Text('₹'),
+                Text(data['discount'].toString()),
+              ],
+            )
           : const Text("")),
       // DataCell(data['daysLeft'] != null
       //     ? Text(data['daysLeft'].toString())
@@ -1095,9 +1105,10 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                   customTextField(
                       hinttext: "Gym Address", addcontroller: _addgymaddress),
                   customTextField(
-                      hinttext: "Grand Total", addcontroller: _addgrandtotal),
+                      hinttext: "Grand Total (₹)",
+                      addcontroller: _addgrandtotal),
                   customTextField(
-                      hinttext: "Discount", addcontroller: _adddiscount),
+                      hinttext: "Discount (₹)", addcontroller: _adddiscount),
                   customTextField(
                       hinttext: "Days Left", addcontroller: _adddaysletf),
                   const SizedBox(height: 15),
@@ -1127,7 +1138,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                   //     hinttext: "Booking Status",
                   //     addcontroller: _addbookingstatus),
                   customTextField(
-                      hinttext: "Booking Price",
+                      hinttext: "Booking Price (₹)",
                       addcontroller: _addbookingprice),
                   customTextField(
                       hinttext: "Booking Plan", addcontroller: _addbookingplan),

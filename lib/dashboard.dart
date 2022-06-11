@@ -7,8 +7,6 @@ import 'package:intl/intl.dart';
 import 'Screens/Product Details/product_details.dart';
 import 'Screens/booking_details.dart';
 
-
-
 class DashBoardScreen extends StatefulWidget {
   const DashBoardScreen({Key? key}) : super(key: key);
   @override
@@ -180,7 +178,6 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                           style: const TextStyle(
                             color: Colors.white,
                             fontSize: 14,
-
                           ),
                         ),
                         const SizedBox(
@@ -196,11 +193,10 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                       ],
                     ),
                   ),
-                   ],
-                  ),
-                  ),
-              );
-
+                ],
+              ),
+            ),
+          );
         });
   }
 }
@@ -218,10 +214,10 @@ class _showLatestBookingState extends State<showLatestBooking> {
   CollectionReference bookingStream =
       FirebaseFirestore.instance.collection('bookings');
   String searchVendorId = '';
-  DateTime ?now;
+  DateTime? now;
 
   String x = '';
-  bool y  = false;
+  bool y = false;
   var selectedValue = 'active';
 
   @override
@@ -249,13 +245,11 @@ class _showLatestBookingState extends State<showLatestBooking> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-
                 Center(
                   child: StreamBuilder<QuerySnapshot>(
                     stream: FirebaseFirestore.instance
                         .collection('bookings')
-                        .where('booking_status',
-                            whereIn: ['upcoming'])
+                        .where('booking_status', whereIn: ['upcoming'])
                         .orderBy("id", descending: true)
                         .snapshots(),
                     builder: (context, AsyncSnapshot snapshot) {
@@ -279,16 +273,16 @@ class _showLatestBookingState extends State<showLatestBooking> {
                             dataRowHeight: 65,
                             columns: const [
                               DataColumn(
-                                  label: Text(
-                                'Order ID',
-                                style: TextStyle(fontWeight: FontWeight.w600),
-                              ),
+                                label: Text(
+                                  'Order ID',
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
                               ),
                               DataColumn(
-                                  label: Text(
-                                'User Name',
-                                style: TextStyle(fontWeight: FontWeight.w600),
-                              ),
+                                label: Text(
+                                  'User Name',
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
                               ),
                               DataColumn(
                                 label: Text(
@@ -348,11 +342,11 @@ class _showLatestBookingState extends State<showLatestBooking> {
 
   List<DataRow> _buildlist(
       BuildContext context, List<DocumentSnapshot> snapshot) {
-    var d=[];
-    int count=0;
+    var d = [];
+    int count = 0;
     snapshot.forEach((element) {
-      count+=1;
-      if (count<=10){
+      count += 1;
+      if (count <= 10) {
         d.add(element);
       }
     });
@@ -364,33 +358,30 @@ class _showLatestBookingState extends State<showLatestBooking> {
     bool bookingAccepted = data["booking_accepted"];
 
     return DataRow(cells: [
-      DataCell(data["id"] != null
-          ? Text(data['id'].toString())
-          : const Text("")),
+      DataCell(
+          data["id"] != null ? Text(data['id'].toString()) : const Text("")),
       DataCell(data["user_name"] != null
           ? Text(data['user_name'].toString())
           : const Text("")),
       DataCell(data['userId'] != null
-          ? Text(data['userId'].toString())
-          : const Text("")),
+          ? Text(data['userId'].toString().substring(3, 13))
+          : Text("")),
       DataCell(data['booking_plan'] != null
           ? Text(data['booking_plan'].toString())
           : const Text("")),
-
       DataCell(data['gym_details']['name'] != null
           ? Text(data['gym_details']['name'].toString())
           : const Text("")),
-
-      DataCell(data['booking_date']!= null
-          ? Text(DateFormat('dd MMM , yyyy').format(data['booking_date'].toDate()).toString())
+      DataCell(data['booking_date'] != null
+          ? Text(DateFormat('dd MMM , yyyy')
+              .format(data['booking_date'].toDate())
+              .toString())
           : const Text("")),
-
-      DataCell(data['plan_end_duration']!= null
-          ? Text(DateFormat('dd MMM , yyyy').format(data['plan_end_duration'].toDate()).toString())
+      DataCell(data['plan_end_duration'] != null
+          ? Text(DateFormat('dd MMM , yyyy')
+              .format(data['plan_end_duration'].toDate())
+              .toString())
           : const Text("")),
-
-
-
       DataCell(
         Center(
           child: ElevatedButton(
@@ -412,11 +403,9 @@ class _showLatestBookingState extends State<showLatestBooking> {
           ),
         ),
       ),
-
-
       DataCell(
         Center(
-          child:  Container(
+          child: Container(
             child: Row(
               children: [
                 DropdownButton(
@@ -432,15 +421,16 @@ class _showLatestBookingState extends State<showLatestBooking> {
                         value: "upcoming",
                       ),
                       DropdownMenuItem(
-                          child: Text("Incomplete"),
-                          value: "incomplete"),
+                          child: Text("Incomplete"), value: "incomplete"),
                     ],
                     onChanged: (value) async {
                       setState(() {
                         selectedValue = value as String;
                       });
-                      await FirebaseFirestore.instance.collection('bookings').doc(bookingId)
-                      .update({'booking_status': value});
+                      await FirebaseFirestore.instance
+                          .collection('bookings')
+                          .doc(bookingId)
+                          .update({'booking_status': value});
                     }),
               ],
             ),
