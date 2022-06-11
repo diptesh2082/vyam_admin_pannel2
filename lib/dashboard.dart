@@ -383,10 +383,6 @@ class _showLatestBookingState extends State<showLatestBooking> {
           ? Text(DateFormat('dd MMM , yyyy').format(data['plan_end_duration'].toDate()).toString())
           : const Text("")),
 
-
-
-
-
       DataCell(
         Center(
           child:  Container(
