@@ -1,6 +1,9 @@
+import 'dart:html';
+
 import 'package:admin_panel_vyam/services/deleteMethod.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class CancelationPage extends StatefulWidget {
   const CancelationPage({Key? key}) : super(key: key);
@@ -16,6 +19,8 @@ class _CancelationPageState extends State<CancelationPage> {
       .doc()
       .id
       .toString();
+
+  String searchGymName = '';
 
   @override
   void initState() {
@@ -38,6 +43,47 @@ class _CancelationPageState extends State<CancelationPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                Container(
+                  width: 500,
+                  height: 51,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(14),
+                    color: Colors.white12,
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(15),
+                    child: TextField(
+                      // focusNode: _node,
+
+                      autofocus: false,
+                      textAlignVertical: TextAlignVertical.bottom,
+                      onSubmitted: (value) async {
+                        FocusScope.of(context).unfocus();
+                      },
+                      // controller: searchController,
+                      onChanged: (value) {
+                        if (value.length == 0) {
+                          // _node.canRequestFocus=false;
+                          // FocusScope.of(context).unfocus();
+                        }
+                        if (mounted) {
+                          setState(() {
+                            searchGymName = value.toString();
+                          });
+                        }
+                      },
+                      decoration: InputDecoration(
+                        prefixIcon: const Icon(Icons.search),
+                        hintText: 'Search',
+                        hintStyle: GoogleFonts.poppins(
+                            fontSize: 16, fontWeight: FontWeight.w500),
+                        border: InputBorder.none,
+                        filled: true,
+                        fillColor: Colors.white12,
+                      ),
+                    ),
+                  ),
+                ),
                 Center(
                   child: StreamBuilder<QuerySnapshot>(
                     stream: cancellationStream?.snapshots(),
@@ -48,20 +94,45 @@ class _CancelationPageState extends State<CancelationPage> {
                       if (snapshot.data == null) {
                         return Container();
                       }
+                      var doc = snapshot.data.docs;
+
+                      if (searchGymName.length > 0) {
+                        doc = doc.where((element) {
+                          return element
+                                  .get('cancel_choice')
+                                  .toString()
+                                  .toLowerCase()
+                                  .contains(searchGymName.toString()) ||
+                              element
+                                  .get('user_name')
+                                  .toString()
+                                  .toLowerCase()
+                                  .contains(searchGymName.toString()) ||
+                              element
+                                  .get('cancel_remark')
+                                  .toString()
+                                  .toLowerCase()
+                                  .contains(searchGymName.toString());
+                        }).toList();
+                      }
 
                       return SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
                         child: DataTable(
                           // dataRowHeight: 75.0,
                           columns: const [
-
-                            // DataColumn(
-                            //   label: Text(
-                            //     'User Name',
-                            //     style: TextStyle(fontWeight: FontWeight.w600),
-                            //   ),
-                            // ),
-
+                            DataColumn(
+                              label: Text(
+                                'User Name',
+                                style: TextStyle(fontWeight: FontWeight.w600),
+                              ),
+                            ),
+                            DataColumn(
+                              label: Text(
+                                'Phone number',
+                                style: TextStyle(fontWeight: FontWeight.w600),
+                              ),
+                            ),
                             DataColumn(
                               label: Text(
                                 'Cancel Choice',
@@ -87,7 +158,7 @@ class _CancelationPageState extends State<CancelationPage> {
                               ),
                             ),
                           ],
-                          rows: _buildlist(context, snapshot.data!.docs),
+                          rows: _buildlist(context, doc),
                         ),
                       );
                     },
@@ -110,6 +181,22 @@ class _CancelationPageState extends State<CancelationPage> {
     String Id = data['Id'];
     return DataRow(
       cells: [
+        DataCell(
+          data['user_name'] != null
+              ? SizedBox(
+                  width: 100.0,
+                  child: Text(data['user_name'] ?? ""),
+                )
+              : const Text(""),
+        ),
+        DataCell(
+          data['user_number'] != null
+              ? SizedBox(
+                  width: 100.0,
+                  child: Text(data['user_number'] ?? ""),
+                )
+              : const Text(""),
+        ),
         DataCell(
           data['cancel_choice'] != null
               ? SizedBox(
@@ -138,6 +225,8 @@ class _CancelationPageState extends State<CancelationPage> {
                   return GestureDetector(
                     child: SingleChildScrollView(
                       child: CancelationEditBox(
+                        user_name: data['user_name'],
+                        user_number: data['user_number'],
                         cancel_choice: data['cancel_choice'],
                         cancel_remark: data['cancel_remark'],
                         Id: data['Id'],
@@ -167,11 +256,15 @@ class CancelationEditBox extends StatefulWidget {
     required this.Id,
     required this.cancel_choice,
     required this.cancel_remark,
+    required this.user_name,
+    required this.user_number,
   }) : super(key: key);
 
   final String cancel_choice;
   final String cancel_remark;
   final String Id;
+  final String user_name;
+  final String user_number;
 
   @override
   State<CancelationEditBox> createState() => _CancelationEditBoxState();
@@ -180,10 +273,14 @@ class CancelationEditBox extends StatefulWidget {
 class _CancelationEditBoxState extends State<CancelationEditBox> {
   final TextEditingController _cancel_choice = TextEditingController();
   final TextEditingController _cancel_remark = TextEditingController();
+  final TextEditingController _user_name = TextEditingController();
+  final TextEditingController _user_number = TextEditingController();
 
   @override
   void initState() {
     super.initState();
+    _user_name.text = widget.user_name;
+    _user_number.text = widget.user_number;
     _cancel_choice.text = widget.cancel_choice;
     _cancel_remark.text = widget.cancel_remark;
   }
@@ -206,6 +303,52 @@ class _CancelationEditBoxState extends State<CancelationEditBox> {
                     fontFamily: 'poppins',
                     fontWeight: FontWeight.w600,
                     fontSize: 14),
+              ),
+              SizedBox(
+                height: 50,
+                child: Card(
+                    child: TextField(
+                  autofocus: true,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontFamily: 'Poppins',
+                    fontWeight: FontWeight.w400,
+                  ),
+                  controller: _user_name,
+                  maxLines: 3,
+                  decoration: const InputDecoration(
+                      border: InputBorder.none,
+                      hintStyle: TextStyle(
+                        fontSize: 14,
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w400,
+                      ),
+                      hintMaxLines: 2,
+                      hintText: 'User Name'),
+                )),
+              ),
+              SizedBox(
+                height: 50,
+                child: Card(
+                    child: TextField(
+                  autofocus: true,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontFamily: 'Poppins',
+                    fontWeight: FontWeight.w400,
+                  ),
+                  controller: _user_number,
+                  maxLines: 3,
+                  decoration: const InputDecoration(
+                      border: InputBorder.none,
+                      hintStyle: TextStyle(
+                        fontSize: 14,
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w400,
+                      ),
+                      hintMaxLines: 2,
+                      hintText: 'Phone number'),
+                )),
               ),
               SizedBox(
                 height: 50,
@@ -266,6 +409,8 @@ class _CancelationEditBoxState extends State<CancelationEditBox> {
                           .collection('Cancellation Data')
                           .doc(widget.Id);
                       Map<String, dynamic> data = {
+                        'user_name': _user_name.text,
+                        'user_number': _user_number.text,
                         'cancel_choice': _cancel_choice.text,
                         'cancel_remark': _cancel_remark.text,
                       };
