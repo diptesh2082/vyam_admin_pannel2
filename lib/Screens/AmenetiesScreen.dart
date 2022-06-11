@@ -117,7 +117,6 @@ class _AmenetiesScreenState extends State<AmenetiesScreen> {
 
                 Center(
                   child: StreamBuilder<QuerySnapshot>(
-
                     stream: amenityStream!
                         .orderBy('id', descending: false)
                         .snapshots(),

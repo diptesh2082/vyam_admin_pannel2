@@ -32,8 +32,8 @@ uploadImageToStorage(XFile? pickedFile, String? id) async {
         await FirebaseFirestore.instance
             .collection("product_details")
             .doc(id)
-            .update({
-          "display_picture": value,
+            .set({
+          "images": FieldValue.arrayUnion([value]),
         });
       });
     });

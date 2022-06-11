@@ -246,6 +246,7 @@ class _PackagesPageState extends State<PackagesPage> {
   final TextEditingController _type = TextEditingController();
   final TextEditingController _validity = TextEditingController();
   final TextEditingController _price = TextEditingController();
+  var selectedvaluee = 'pay per session';
 
   showAddbox() => showDialog(
       context: context,
@@ -273,7 +274,36 @@ class _PackagesPageState extends State<PackagesPage> {
                         addcontroller: _originalprice),
                     customTextField(hinttext: "index", addcontroller: _index),
                     customTextField(hinttext: "title", addcontroller: _title),
-                    customTextField(hinttext: "type", addcontroller: _type),
+                    Container(
+                      child: Row(
+                        children: [
+                          Text('Type:',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w700, fontSize: 15)),
+                          SizedBox(
+                            width: 20,
+                          ),
+                          DropdownButton(
+                              value: selectedvaluee,
+                              items: [
+                                DropdownMenuItem(
+                                  child: Text("pay per session"),
+                                  value: "pay per session",
+                                ),
+                                DropdownMenuItem(
+                                  child: Text("package"),
+                                  value: "package",
+                                ),
+                              ],
+                              onChanged: (value) {
+                                print(selectedvaluee);
+                                setState(() {
+                                  selectedvaluee = value as String;
+                                });
+                              }),
+                        ],
+                      ),
+                    ),
                     customTextField(
                         hinttext: "validity", addcontroller: _validity),
                     customTextField(hinttext: "price", addcontroller: _price),
@@ -313,7 +343,7 @@ class _PackagesPageState extends State<PackagesPage> {
 //                               "validity": _validity.text,
 //                               "price": _price.text,
 // =======
-                              "type": _type.text.toLowerCase().trim(),
+                              "type": selectedvaluee,
                               "id": finalPackID,
                               "validity": _validity.text,
                               "price": _price.text,
@@ -335,13 +365,13 @@ class _PackagesPageState extends State<PackagesPage> {
 class ProductEditBox extends StatefulWidget {
   const ProductEditBox({
     Key? key,
-    required this.discount,
-    required this.originalprice,
-    required this.index,
-    required this.title,
-    required this.type,
-    required this.id,
     required this.gym_id,
+    required this.type,
+    required this.index,
+    required this.discount,
+    required this.title,
+    required this.originalprice,
+    required this.id,
   }) : super(key: key);
 
   final String discount;
@@ -361,7 +391,8 @@ class _ProductEditBoxState extends State<ProductEditBox> {
   final TextEditingController _originalprice = TextEditingController();
   final TextEditingController _index = TextEditingController();
   final TextEditingController _title = TextEditingController();
-  final TextEditingController _type = TextEditingController();
+  // final TextEditingController _type = TextEditingController();
+  var selectedvaluee;
   @override
   void initState() {
     super.initState();
@@ -369,7 +400,8 @@ class _ProductEditBoxState extends State<ProductEditBox> {
     _originalprice.text = widget.originalprice;
     _index.text = widget.index.toString();
     _title.text = widget.title;
-    _type.text = widget.type;
+    selectedvaluee = widget.type;
+    // _type.text = widget.type;
   }
 
   @override
@@ -396,7 +428,37 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                   hinttext: "original price", addcontroller: _originalprice),
               customTextField(hinttext: "index", addcontroller: _index),
               customTextField(hinttext: "title", addcontroller: _title),
-              customTextField(hinttext: "type", addcontroller: _type),
+              // customTextField(hinttext: "type", addcontroller: _type),
+              Container(
+                child: Row(
+                  children: [
+                    Text('Type:',
+                        style: TextStyle(
+                            fontWeight: FontWeight.w700, fontSize: 15)),
+                    SizedBox(
+                      width: 20,
+                    ),
+                    DropdownButton(
+                        value: selectedvaluee,
+                        items: [
+                          DropdownMenuItem(
+                            child: Text("pay per session"),
+                            value: "pay per session",
+                          ),
+                          DropdownMenuItem(
+                            child: Text("package"),
+                            value: "package",
+                          ),
+                        ],
+                        onChanged: (value) {
+                          print(selectedvaluee);
+                          setState(() {
+                            selectedvaluee = value as String;
+                          });
+                        }),
+                  ],
+                ),
+              ),
               Padding(
                 padding: const EdgeInsets.all(12.0),
                 child: Center(
@@ -421,7 +483,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
 // <<<<<<< HEAD
 //                         "type": _type.text
 // =======
-                        "type": _type.text.toLowerCase().trim()
+                        "type": selectedvaluee,
 // >>>>>>> cf1997613ff877c63a56c61e3009bdfe3639ccfa
                       };
                       await documentReference
