@@ -233,7 +233,7 @@ class _CouponState extends State<Coupon> {
                 builder: (context) => ProductEditBox(
                     details: data['detail'],
                     discount: data['discount'],
-                    title: data['title'],
+                    title: data['tag'],
                     code: data['code'],
 
                     couponId: data['coupon_id'],
@@ -570,7 +570,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
             customTextField(hinttext: "Code", addcontroller: _code),
             customTextField(hinttext: "Detail", addcontroller: _detail),
             customTextField(hinttext: "Discount", addcontroller: _discount),
-            customTextField(hinttext: "Title", addcontroller: _title),
+            customTextField(hinttext: "Tag", addcontroller: _title),
 
             customTextField(hinttext: "Max Discount", addcontroller: _max_dis),
 
@@ -590,7 +590,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                           'code': _code.text,
                           'detail': _detail.text,
                           'discount': _discount.text,
-                          'title': _title.text,
+                          // 'title': _title.text,
                           'tag': _title.text,
                           'coupon_id': widget.couponId,
 

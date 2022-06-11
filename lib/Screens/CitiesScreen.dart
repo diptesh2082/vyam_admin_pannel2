@@ -47,19 +47,7 @@ class _CitiesScreenState extends State<CitiesScreen> {
                       Get.to(() => const citiesAdd());
                     },
                     child: Text('Add Cities'),
-                    // Container(
-                    //   width: 120,
-                    //   decoration: BoxDecoration(
-                    //       color: Colors.white,
-                    //       borderRadius: BorderRadius.circular(20.0)),
-                    //   child: Row(
-                    //     children: const [
-                    //       Icon(Icons.add),
-                    //       Text('Add Product',
-                    //           style: TextStyle(fontWeight: FontWeight.w400)),
-                    //     ],
-                    //   ),
-                    // ),
+
                   ),
                 ),
                 Center(
@@ -135,7 +123,7 @@ class _CitiesScreenState extends State<CitiesScreen> {
         data['Address'] != null ? Text(data['Address'] ?? "") : const Text(""),
       ),
       DataCell(
-        data['Status'] != null ? Text(data['Status']) : const Text(""),
+        data['Status'] != null ? Text(data['Status'].toString()) : const Text(""),
       ),
       // DataCell(
       //   data['id'] != null ? Text(data['id']) : const Text(""),
@@ -157,9 +145,7 @@ class _CitiesScreenState extends State<CitiesScreen> {
     ]);
   }
 
-  final TextEditingController _addAddress = TextEditingController();
-  final TextEditingController _addStatus = TextEditingController();
-  final TextEditingController _addId = TextEditingController();
+
 
   // showAddbox() => showDialog(
   //     context: context,

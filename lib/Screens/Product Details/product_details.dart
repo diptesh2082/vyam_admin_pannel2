@@ -709,6 +709,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                         imagee: data['display_picture'],
                         arr2: arr2,
                         WorkoutArray: WorkoutArray,
+                        description: data['description'],
 
                         // location: data['location'],
                       )));
@@ -1010,12 +1011,6 @@ class _ShowAddBoxState extends State<ShowAddBox> {
                 child: Text('SELECT WORKOUTS:',
                     style:
                         TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
-              ),
-
-
-              const Text(
-                'SELECT WORKOUTS',
-                style: TextStyle(fontSize: 20),
               ),
               Container(
                 child: StreamBuilder<QuerySnapshot>(
@@ -1505,6 +1500,7 @@ class ProductEditBox extends StatefulWidget {
     required this.imagee,
     this.arr2,
     this.WorkoutArray,
+    this.description,
   }) : super(key: key);
 
   final String name;
@@ -1518,6 +1514,7 @@ class ProductEditBox extends StatefulWidget {
   final imagee;
   final arr2;
   final WorkoutArray;
+  final description;
 
   @override
   _ProductEditBoxState createState() => _ProductEditBoxState();
@@ -1532,6 +1529,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
   // final TextEditingController _location = TextEditingController();
   final TextEditingController _landmark = TextEditingController();
   final TextEditingController _pincode = TextEditingController();
+   final TextEditingController _description = TextEditingController();
   final TextEditingController _latitudeController = TextEditingController();
   final TextEditingController _longitudeController = TextEditingController();
   String image = '';
@@ -1549,6 +1547,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
     _gymowner.text = widget.gymOwner;
     _landmark.text = widget.landmark;
     image = widget.imagee;
+    _description.text = widget.description;
     amenitiesStream = FirebaseFirestore.instance.collection("amenities");
     workoutStream = FirebaseFirestore.instance.collection("workouts");
     // _location.text = "${widget.location.latitude}, ${widget.location.latitude}";
@@ -1581,6 +1580,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
               customTextField(hinttext: "Gym ID", addcontroller: _gymiid),
               customTextField(hinttext: "Gym Owner", addcontroller: _gymowner),
               customTextField(hinttext: "Gender", addcontroller: _gender),
+              customTextField(hinttext: "Description", addcontroller: _description),
               // customTextField(
               //     hinttext: 'Latitude', addcontroller: _latitudeController),
               // customTextField(
@@ -1672,7 +1672,8 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                         // 'location': dataForGeoPint,
                         'gym_id': _gymiid.text,
                         'gym_owner': _gymowner.text,
-                        'landmark': _landmark.text
+                        'landmark': _landmark.text,
+                        'description':_description.text,
                       };
                       await documentReference
                           .update(data)

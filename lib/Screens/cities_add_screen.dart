@@ -45,10 +45,6 @@ final _formKey = GlobalKey<FormState>();
       FirebaseFirestore.instance.collection('Cities').doc().id;
 
   final TextEditingController _addAddress = TextEditingController();
-  final TextEditingController _addStatus = TextEditingController();
-  //final TextEditingController _addId = TextEditingController();
-  final TextEditingController _addIndex = TextEditingController();
-
 
   static const cities_list =[
 
@@ -116,7 +112,7 @@ final _formKey = GlobalKey<FormState>();
                           const Border(bottom: BorderSide(color: Colors.grey))),
                       child: Stack(
                         children: [
-                          MapView(),
+                          MapView(address_con: _addAddress,),
                           const Center(
                               child: Icon(
                                 Icons.location_on_rounded,
@@ -158,12 +154,6 @@ final _formKey = GlobalKey<FormState>();
                   ),
                 ),
               ),
-                // customTextField(
-                //     hinttext: "Address", addcontroller: _addAddress),
-                customTextField(
-                    hinttext: "Status", addcontroller: _addStatus),
-               //customTextField(hinttext: "ID", addcontroller: _addId),
-                //customTextField(hinttext: "Index", addcontroller: _addIndex),
                 Center(
                   child: ElevatedButton(
                     onPressed: () async {
@@ -176,8 +166,8 @@ final _formKey = GlobalKey<FormState>();
                           .doc(id)
                           .set(
                         {
-                          'Address': getAddress(),
-                          'Status': _addStatus.text,
+                          'Address': _addAddress.text,
+                          'Status': true,
                           'id': id,
                           //'index' : _addIndex,
                         },

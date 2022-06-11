@@ -8,6 +8,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as Path;
 import '../services/CustomTextFieldClass.dart';
@@ -24,6 +25,7 @@ class _CategoryInfoScreenState extends State<CategoryInfoScreen> {
   CollectionReference? categoryStream;
   var catId =
       FirebaseFirestore.instance.collection('category').doc().id;
+  String searchCateogryName = '';
 
   @override
   void initState() {
@@ -55,7 +57,7 @@ class _CategoryInfoScreenState extends State<CategoryInfoScreen> {
                     onPressed: (){
                       Get.to(()=>const categoryAddScreen());
                     },
-                    child:Text('Add Product'),
+                    child:const Text('Add Product'),
                     // Container(
                     //   width: 120,
                     //   decoration: BoxDecoration(
@@ -71,6 +73,50 @@ class _CategoryInfoScreenState extends State<CategoryInfoScreen> {
                     // ),
                   ),
                 ),
+
+                Container(
+                  width: 500,
+                  height: 51,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(14),
+                    color: Colors.white12,
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(15),
+                    child: TextField(
+                      // focusNode: _node,
+                      autofocus: false,
+                      textAlignVertical: TextAlignVertical.bottom,
+                      onSubmitted: (value) async {
+                        FocusScope.of(context).unfocus();
+                      },
+                      // controller: searchController,
+                      onChanged: (value) {
+                        if (value.length == 0) {
+                          // _node.canRequestFocus=false;
+                          // FocusScope.of(context).unfocus();
+                        }
+                        if (mounted) {
+                          setState(() {
+                            searchCateogryName = value.toString();
+                          });
+                        }
+                      },
+                      decoration:  InputDecoration(
+                        prefixIcon: const Icon(Icons.search),
+                        hintText: 'Search',
+                        hintStyle: GoogleFonts.poppins(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500
+                        ),
+                        border: InputBorder.none,
+                        filled: true,
+                        fillColor: Colors.white12,
+                      ),
+                    ),
+                  ),
+                ),
+
                 Center(
                   child: StreamBuilder<QuerySnapshot>(
                     stream: categoryStream!.snapshots(),
@@ -81,6 +127,22 @@ class _CategoryInfoScreenState extends State<CategoryInfoScreen> {
                       if (snapshot.data == null) {
                         return Container();
                       }
+
+
+                      var doc = snapshot.data.docs;
+
+                      if (searchCateogryName.length > 0) {
+                        doc = doc.where((element) {
+                          return element
+                              .get('name')
+                              .toString()
+                              .toLowerCase()
+                              .contains(searchCateogryName.toString());
+
+                        }).toList();
+                      }
+
+
 
                       return SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
@@ -124,7 +186,7 @@ class _CategoryInfoScreenState extends State<CategoryInfoScreen> {
                               ),
                             ),
                           ],
-                          rows: _buildlist(context, snapshot.data!.docs),
+                          rows: _buildlist(context, doc),
                         ),
                       );
                     },
@@ -264,7 +326,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
     return Scaffold(
       backgroundColor: Colors.white10,
       appBar: AppBar(
-        title: Text('Edit Category'),
+        title: const Text('Edit Category'),
       ),
       body:
       Center(
@@ -339,7 +401,6 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                             .doc(categoryId)
                             .update(
                           {
-
                             'image': imgUrl1,
                             'name': _name.text,
                             'category_id': categoryId,
@@ -347,10 +408,6 @@ class _ProductEditBoxState extends State<ProductEditBox> {
 
                           },
                         );
-                        //     .then((snapshot) async {
-                        //   await uploadImageToBanner(image, categoryId);
-                        // });
-
 
                         Navigator.pop(context);
                       },
