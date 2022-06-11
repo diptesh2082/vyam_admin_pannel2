@@ -616,11 +616,8 @@ class _ProductDetailsState extends State<ProductDetails> {
                   .whenComplete(() => print("Legitimate toggled"))
                   .catchError((e) => print(e));
             },
-// <<<<<<< HEAD
-//             child: Text(x = status ? 'YES' : 'NO'),
-// =======
             child: Text(x = status ? 'YES' : 'NO'),
-// >>>>>>> cf1997613ff877c63a56c61e3009bdfe3639ccfa
+
             style: ElevatedButton.styleFrom(
                 primary: status ? Colors.green : Colors.red),
           ),
