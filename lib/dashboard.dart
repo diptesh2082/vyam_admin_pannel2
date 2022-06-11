@@ -255,7 +255,7 @@ class _showLatestBookingState extends State<showLatestBooking> {
                     stream: FirebaseFirestore.instance
                         .collection('bookings')
                         .where('booking_status',
-                            whereIn: ['upcoming'])
+                            whereIn: ['upcoming' , 'active' , 'incomplete'])
                         .orderBy("id", descending: true)
                         .snapshots(),
                     builder: (context, AsyncSnapshot snapshot) {
@@ -317,12 +317,6 @@ class _showLatestBookingState extends State<showLatestBooking> {
                               DataColumn(
                                 label: Text(
                                   'End Date',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
-                              ),
-                              DataColumn(
-                                label: Text(
-                                  'Booking Accepted',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
@@ -391,27 +385,6 @@ class _showLatestBookingState extends State<showLatestBooking> {
 
 
 
-      DataCell(
-        Center(
-          child: ElevatedButton(
-            onPressed: () async {
-              bool temp = bookingAccepted;
-              temp = !temp;
-
-              DocumentReference documentReference = FirebaseFirestore.instance
-                  .collection('bookings')
-                  .doc(bookingId);
-              await documentReference
-                  .update({'booking_accepted': temp})
-                  .whenComplete(() => print("Legitimate toggled"))
-                  .catchError((e) => print(e));
-            },
-            child: Text(x = bookingAccepted ? 'YES' : 'NO'),
-            style: ElevatedButton.styleFrom(
-                primary: bookingAccepted ? Colors.green : Colors.red),
-          ),
-        ),
-      ),
 
 
       DataCell(
@@ -434,6 +407,9 @@ class _showLatestBookingState extends State<showLatestBooking> {
                       DropdownMenuItem(
                           child: Text("Incomplete"),
                           value: "incomplete"),
+                      DropdownMenuItem(
+                          child: Text("Cancelled"),
+                          value: "cancelled"),
                     ],
                     onChanged: (value) async {
                       setState(() {

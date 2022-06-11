@@ -66,19 +66,6 @@ class _PushState extends State<Push> {
                       Get.to(() => const pushNew());
                     },
                     child: Text('Add Push Notification'),
-                    //Container(
-                    //   width: 220,
-                    //   decoration: BoxDecoration(
-                    //       color: Colors.white,
-                    //       borderRadius: BorderRadius.circular(20.0)),
-                    //   child: Row(
-                    //     children: const [
-                    //       Icon(Icons.add),
-                    //       Text('Add Push Notifications',
-                    //           style: TextStyle(fontWeight: FontWeight.w400)),
-                    //     ],
-                    //   ),
-                    // ),
                   ),
                 ),
                 Center(
@@ -172,24 +159,6 @@ class _PushState extends State<Push> {
             id: data['id'],
             timestamp: data['timestamp'],
             image: data['image']));
-        // showDialog(
-        //     context: context,
-        //     builder: (context) {
-        //       return GestureDetector(
-        //         child: SingleChildScrollView(
-        //           child: ProductEditBox(
-        //             title: data['title'],
-        //             definition: data['definition'],
-        //             id: data['id'],
-        //             image: data['image'],
-        //             timestamp: data['timestamp'],
-        //           ),
-        //         ),
-        //         onTap: () {
-        //           Navigator.pop(context);
-        //         },
-        //       );
-        //     });
       }),
       DataCell(Icon(Icons.delete), onTap: () {
         deleteMethod(stream: pushStream, uniqueDocId: pushIdData);
