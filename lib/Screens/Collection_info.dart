@@ -815,8 +815,10 @@ class _EditBoxState extends State<EditBox> {
                               'name': _name.text,
                               'pincode': _pincode.text,
                               'userId': _userid.text,
-                              // 'locality': _locality.text,
-                              // 'subLocality': _sublocality.text,
+
+                              'locality': "",
+                              'subLocality': "",
+
                               'email': _email.text,
                               'number': _number.text,
                             };
@@ -955,7 +957,7 @@ class _detailsaddState extends State<detailsadd> {
                   ),
                   DropdownButton(
                       value: gender,
-                      items: [
+                      items: const [
                         DropdownMenuItem(
                           child: Text("Male"),
                           value: "Male",
@@ -976,7 +978,8 @@ class _detailsaddState extends State<detailsadd> {
               ),
               // customTextField(hinttext: "Gender", addcontroller: _addgender),
 
-              // customTextField(hinttext: "Address", addcontroller: _addaddress),
+              customTextField(hinttext: "Address", addcontroller: _addaddress),
+
               // customTextField(
               //     hinttext: "Locality", addcontroller: _addlocality),
               // customTextField(
@@ -1001,8 +1004,10 @@ class _detailsaddState extends State<detailsadd> {
                           'gender': gender,
                           'image': imgUrl1,
                           'number': "+91${_addnumber.text}",
-                          'locality': " ",
-                          'subLocality': " ",
+
+                          'locality': "",
+                          'subLocality': "",
+
                           'pincode': _addpincode.text,
                           'long': " ",
                           'lat': " ",

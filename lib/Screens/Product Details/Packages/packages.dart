@@ -522,35 +522,35 @@ class _ProductEditBoxState extends State<ProductEditBox> {
               customTextField(hinttext: "index", addcontroller: _index),
               customTextField(hinttext: "title", addcontroller: _title),
               // customTextField(hinttext: "type", addcontroller: _type),
-              Container(
-                child: Row(
-                  children: [
-                    Text('Type:',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w700, fontSize: 15)),
-                    SizedBox(
-                      width: 20,
-                    ),
-                    DropdownButton(
-                        value: selectedvalue,
-                        items: [
-                          DropdownMenuItem(
-                            child: Text("pay per session"),
-                            value: "pay per session",
-                          ),
-                          DropdownMenuItem(
-                            child: Text("package"),
-                            value: "package",
-                          ),
-                        ],
-                        onChanged: (String? x) {
-                          setState(() {
-                            selectedvalue = x!;
-                          });
-                        }),
-                  ],
-                ),
-              ),
+              // Container(
+              //   child: Row(
+              //     children: [
+              //       Text('Type:',
+              //           style: TextStyle(
+              //               fontWeight: FontWeight.w700, fontSize: 15)),
+              //       SizedBox(
+              //         width: 20,
+              //       ),
+              //       DropdownButton(
+              //           value: selectedvaluee,
+              //           items: const [
+              //             DropdownMenuItem(
+              //               child: Text("pay per session"),
+              //               value: "pay per session",
+              //             ),
+              //             DropdownMenuItem(
+              //               child: Text("package"),
+              //               value: "package",
+              //             ),
+              //           ],
+              //           onChanged: (String? x) {
+              //             setState(() {
+              //               selectedvaluee = x!;
+              //             });
+              //           }),
+              //     ],
+              //   ),
+              // ),
               Padding(
                 padding: const EdgeInsets.all(12.0),
                 child: Center(
@@ -573,11 +573,9 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                         'index': int.parse(_index.text),
                         'title': _title.text,
 
-// <<<<<<< HEAD
 //                         "type": _type.text
 // =======
-                        "type": selectedvalue,
-// >>>>>>> cf1997613ff877c63a56c61e3009bdfe3639ccfa
+//                         "type": selectedvaluee,
                       };
                       await documentReference
                           .update(data)

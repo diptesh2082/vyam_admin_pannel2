@@ -7,24 +7,16 @@ import 'package:admin_panel_vyam/Screens/map_view.dart';
 import 'package:admin_panel_vyam/Screens/timings.dart';
 import 'package:flutter/widgets.dart';
 import 'package:random_password_generator/random_password_generator.dart';
-import 'package:admin_panel_vyam/routing/showadd.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:path/path.dart' as Path;
-import 'package:admin_panel_vyam/services/maps_api.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-
-import 'package:flutter/services.dart';
-
-import 'package:image_picker/image_picker.dart';
 import '../../services/MatchIDMethod.dart';
 import '../../services/deleteMethod.dart';
 import '../../services/image_picker_api.dart';
 import '../globalVar.dart';
-import 'Packages/Extra_package.dart';
 import 'Packages/packages.dart';
 import 'Trainers/Trainers.dart';
 import 'package:admin_panel_vyam/services/CustomTextFieldClass.dart';
@@ -90,43 +82,8 @@ class _ProductDetailsState extends State<ProductDetails> {
                           ));
                         },
                         child: Text('Add Product'),
-                        // Container(
-                        //   width: 200,
-                        //   decoration: BoxDecoration(
-                        //       color: Colors.white,
-                        //       borderRadius: BorderRadius.circular(20.0)),
-                        //   child: Row(
-                        //     children: [
-                        //       const SizedBox(
-                        //         width: 20,
-                        //       ),
-                        //       Row(
-                        //         children: const [
-                        //           Icon(Icons.add),
-                        //           Text('Add Product',
-                        //               style:
-                        //                   TextStyle(fontWeight: FontWeight.w400)),
-                        //         ],
-                        //       ),
-                        //     ],
-                        //   ),
-                        // ),
-
-// =======
-//                     padding: const EdgeInsets.only(top: 8.0, left: 8.0),
-//                     child: ElevatedButton(
-//                       style: ElevatedButton.styleFrom(
-//                           //padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 20),
-//                           textStyle:
-//                           const TextStyle(fontSize: 15 ),
-// >>>>>>> cf1997613ff877c63a56c61e3009bdfe3639ccfa
                       ),
                     ),
-// <<<<<<< HEAD
-// =======
-//                   ),
-// >>>>>>> cf1997613ff877c63a56c61e3009bdfe3639ccfa
-
                     const Spacer(),
                     Container(
                       width: 500,
@@ -147,7 +104,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                           },
 
                           onChanged: (value) {
-                            if (value.length == 0) {
+                            if (value.isEmpty) {
                               // _node.canRequestFocus=false;
                               // FocusScope.of(context).unfocus();
                             }
@@ -162,7 +119,6 @@ class _ProductDetailsState extends State<ProductDetails> {
                             hintText: 'Search',
                             hintStyle: GoogleFonts.poppins(
                                 fontSize: 16, fontWeight: FontWeight.w500),
-// >>>>>>> cf1997613ff877c63a56c61e3009bdfe3639ccfa
                             border: InputBorder.none,
                             filled: true,
                             fillColor: Colors.white12,
@@ -185,7 +141,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                       print("-----------------------------------");
                       var doc = snapshot.data.docs;
 
-                      if (searchGymName.length > 0) {
+                      if (searchGymName.isNotEmpty) {
                         doc = doc.where((element) {
                           return element
                                   .get('name')
@@ -272,12 +228,12 @@ class _ProductDetailsState extends State<ProductDetails> {
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ), //!For Package
-                              DataColumn(
-                                label: Text(
-                                  'Extra Packages',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
-                              ),
+                              // DataColumn(
+                              //   label: Text(
+                              //     'Extra Packages',
+                              //     style: TextStyle(fontWeight: FontWeight.w600),
+                              //   ),
+                              // ),
                               DataColumn(
                                 label: Text(
                                   'Upload Image',
@@ -461,14 +417,13 @@ class _ProductDetailsState extends State<ProductDetails> {
 //           ),
 //         ));
 //       }),
-      DataCell(const Text('Extra Package '), onTap: () {
-        Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => ExtraPackagesPage(
-            pGymId: gymId,
-// >>>>>>> cf1997613ff877c63a56c61e3009bdfe3639ccfa
-          ),
-        ));
-      }),
+//       DataCell(const Text('Extra Package '), onTap: () {
+//         Navigator.of(context).push(MaterialPageRoute(
+//           builder: (context) => ExtraPackagesPage(
+//             pGymId: gymId,
+//           ),
+//         ));
+//       }),
       DataCell(
         Row(
           children: [
@@ -1161,39 +1116,39 @@ class _ShowAddBoxState extends State<ShowAddBox> {
                 style: GoogleFonts.poppins(
                     fontSize: 25, fontWeight: FontWeight.w700),
               ),
-              // Container(
-              //   child: StreamBuilder<QuerySnapshot>(
-              //       stream: FirebaseFirestore.instance
-              //           .collection("category")
-              //           .snapshots(),
-              //       builder: (context, AsyncSnapshot snapshot) {
-              //         if (snapshot.connectionState == ConnectionState.waiting) {
-              //           return const CircularProgressIndicator();
-              //         }
-              //         if (snapshot.data == null) {
-              //           return Container();
-              //         }
-              //         print("-----------------------------------");
-              //         var doc = snapshot.data.docs;
-              //
-              //         return Container(
-              //           width: 400,
-              //           height: 500,
-              //           child: ListView.builder(
-              //             itemCount: doc.length,
-              //             itemBuilder: (BuildContext context, int index) {
-              //               bool check = false;
-              //               return ECheckService(
-              //                 type: doc[index]['name'],
-              //                 id: doc[index]['category_id'],
-              //                 gymid: _addgymownerid.text,
-              //                 // serviceArray: widget.serviceArray,
-              //               );
-              //             },
-              //           ),
-              //         );
-              //       }),
-              // ),
+              Container(
+                child: StreamBuilder<QuerySnapshot>(
+                    stream: FirebaseFirestore.instance
+                        .collection("category")
+                        .snapshots(),
+                    builder: (context, AsyncSnapshot snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const CircularProgressIndicator();
+                      }
+                      if (snapshot.data == null) {
+                        return Container();
+                      }
+                      print("-----------------------------------");
+                      var doc = snapshot.data.docs;
+
+                      return Container(
+                        width: 400,
+                        height: 500,
+                        child: ListView.builder(
+                          itemCount: doc.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            bool check = false;
+                            return Echecka(
+                              type: doc[index]['name'],
+                              id: doc[index]['category_id'],
+                              gymid: _addgymownerid.text,
+                              // serviceArray: widget.serviceArray,
+                            );
+                          },
+                        ),
+                      );
+                    }),
+              ),
 
               // Text(
               //   'Upload Display Image',
@@ -1486,6 +1441,58 @@ class _CheckBoxxState1 extends State<CheckBoxx1> {
                   print(workoutArray);
                 }),
           ),
+        ],
+      ),
+    );
+  }
+}
+
+class Echecka extends StatefulWidget {
+  const Echecka(
+      {Key? key, required this.type, required this.id, required this.gymid})
+      : super(key: key);
+  final String type;
+  final String id;
+  final String gymid;
+  @override
+  State<Echecka> createState() => _EcheckaState();
+}
+
+class _EcheckaState extends State<Echecka> {
+  bool check = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Column(
+        children: [
+          CheckboxListTile(
+              // bool selected=false;
+              value: check,
+              title: Text(widget.type),
+              onChanged: (bool? selected) async {
+                setState(() {
+                  check = selected!;
+                });
+                if (selected == true) {
+                  await FirebaseFirestore.instance
+                      .collection('product_details')
+                      .doc(widget.gymid)
+                      .update({
+                    'service': FieldValue.arrayUnion([widget.type])
+                  });
+                }
+                // print(widget.arr2);
+                if (selected == false) {
+                  await FirebaseFirestore.instance
+                      .collection('product_details')
+                      .doc(widget.gymid)
+                      .update({
+                    'service': FieldValue.arrayRemove([widget.type])
+                  });
+                }
+                // print(widget.arr2);
+              }),
         ],
       ),
     );
@@ -1812,6 +1819,10 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                     }),
               ),
 // <<<<<<< HEAD
+// <<<<<<< HEAD
+// =======
+//
+// >>>>>>> db16c184745ea062b80bb6d62b73b5f64792dc9e
               Row(
                 children: [
                   ElevatedButton(
@@ -1840,7 +1851,16 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                           width: 200,
                         )
                 ],
+// <<<<<<< HEAD
+// =======
               ),
+//
+//                Text("Services",
+//               style: GoogleFonts.poppins(
+//                 fontSize: 25,
+//                 fontWeight: FontWeight.w700
+// // >>>>>>> db16c184745ea062b80bb6d62b73b5f64792dc9e
+//               ),
 // =======
               Text(
                 "Services",
@@ -1881,7 +1901,11 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                     }),
               ),
 
+// <<<<<<< HEAD
 // >>>>>>> 1f09f104c279e9107f7b92c5d9c2cf410db6e92c
+// =======
+
+// >>>>>>> db16c184745ea062b80bb6d62b73b5f64792dc9e
               // Text(image),
               Padding(
                 padding: const EdgeInsets.all(12.0),
