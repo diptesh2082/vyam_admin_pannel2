@@ -363,7 +363,7 @@ class _BookingDetailsState extends State<BookingDetails> {
       DataCell(data['grand_total'] != null
           ? Row(
               children: [
-                Text('₹'),
+                const Text('₹'),
                 Text(data['grand_total'].toString()),
               ],
             )
@@ -371,7 +371,7 @@ class _BookingDetailsState extends State<BookingDetails> {
       DataCell(data['discount'] != null
           ? Row(
               children: [
-                Text('₹'),
+                const Text('₹'),
                 Text(data['discount'].toString()),
               ],
             )
@@ -438,28 +438,7 @@ class _BookingDetailsState extends State<BookingDetails> {
       DataCell(data['grand_total'] != null
           ? Text(data['grand_total'].toString())
           : const Text("")),
-      // DataCell(Center(
-      //   child: ElevatedButton(
-      //     onPressed: () async {
-      //       bool temp = bookingAccepted;
-      //       temp = !temp;
-      //       DocumentReference documentReference = FirebaseFirestore.instance
-      //           .collection('bookings')
-      //           .doc(bookingId);
-      //       await documentReference
-      //           .update({
-      //         'booking_accepted': temp,
-      //         "booking_status": temp ? "active" : "cancelled",
-      //         "payment_done": temp
-      //       })
-      //           .whenComplete(() => print("booking accepted updated"))
-      //           .catchError((e) => print(e));
-      //     },
-      //     child: Text(bookingAccepted.toString()),
-      //     style: ElevatedButton.styleFrom(
-      //         primary: bookingAccepted ? Colors.green : Colors.red),
-      //   ),
-      // )),
+
       DataCell(const Text(""), showEditIcon: true, onTap: () {
         Get.to(
 // <<<<<<< HEAD
