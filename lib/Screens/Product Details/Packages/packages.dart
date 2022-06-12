@@ -429,6 +429,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
               customTextField(hinttext: "index", addcontroller: _index),
               customTextField(hinttext: "title", addcontroller: _title),
               // customTextField(hinttext: "type", addcontroller: _type),
+
               Container(
                 child: Row(
                   children: [
@@ -459,6 +460,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                   ],
                 ),
               ),
+
               Padding(
                 padding: const EdgeInsets.all(12.0),
                 child: Center(
@@ -482,8 +484,9 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                         'title': _title.text,
 
 //                         "type": _type.text
-// =======
+
                         "type": selectedvaluee,
+
                       };
                       await documentReference
                           .update(data)
