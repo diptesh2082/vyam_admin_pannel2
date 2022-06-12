@@ -30,6 +30,7 @@ class _BannerPageState extends State<BannerPage> {
     final review = FirebaseFirestore.instance.collection('banner_details');
     review.doc(nid).set({'id': nid});
   }
+
   String searchBannerName = '';
   @override
   void initState() {
@@ -54,16 +55,13 @@ class _BannerPageState extends State<BannerPage> {
                   padding: const EdgeInsets.only(top: 8.0, left: 8.0),
                   child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        textStyle:
-                        const TextStyle(fontSize: 15 ),
+                        textStyle: const TextStyle(fontSize: 15),
                       ),
-                    onPressed: () {
-                      Get.to(const bannerNewPage()); //showAddbox,
-                    },
-                    child: Text('Add Banner')
-                  ),
+                      onPressed: () {
+                        Get.to(const bannerNewPage()); //showAddbox,
+                      },
+                      child: Text('Add Banner')),
                 ),
-
                 Container(
                   width: 500,
                   height: 51,
@@ -92,13 +90,11 @@ class _BannerPageState extends State<BannerPage> {
                           });
                         }
                       },
-                      decoration:  InputDecoration(
+                      decoration: InputDecoration(
                         prefixIcon: const Icon(Icons.search),
                         hintText: 'Search',
                         hintStyle: GoogleFonts.poppins(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500
-                        ),
+                            fontSize: 16, fontWeight: FontWeight.w500),
                         border: InputBorder.none,
                         filled: true,
                         fillColor: Colors.white12,
@@ -106,9 +102,6 @@ class _BannerPageState extends State<BannerPage> {
                     ),
                   ),
                 ),
-
-
-
                 Center(
                   child: StreamBuilder<QuerySnapshot>(
                     stream: FirebaseFirestore.instance
@@ -132,12 +125,8 @@ class _BannerPageState extends State<BannerPage> {
                               .toString()
                               .toLowerCase()
                               .contains(searchBannerName.toString());
-
                         }).toList();
                       }
-
-
-
 
                       print(snapshot.data.docs);
                       return SingleChildScrollView(
@@ -215,7 +204,7 @@ class _BannerPageState extends State<BannerPage> {
                   .whenComplete(() => print("Legitimate toggled"))
                   .catchError((e) => print(e));
             },
-            child: Text(access.toString()),
+            child: Text(access ? "Clickable" : "Non-Clickable"),
             style: ElevatedButton.styleFrom(
                 primary: access ? Colors.green : Colors.red),
           ),
@@ -528,13 +517,12 @@ class _EditBoxState extends State<EditBox> {
                             width: 300,
                             height: 200,
                             child: Container(
-                              child:
-                              Image.network((imgUrl1 == null) ? ' ' : imgUrl1,
-                                fit: BoxFit.contain,),
+                              child: Image.network(
+                                (imgUrl1 == null) ? ' ' : imgUrl1,
+                                fit: BoxFit.contain,
+                              ),
                             ),
-
                           ),
-
                         ],
                       ),
                     ),
@@ -580,13 +568,11 @@ class _EditBoxState extends State<EditBox> {
 
   getUrlImage(XFile? pickedFile) async {
     if (kIsWeb) {
-      final _firebaseStorage = FirebaseStorage.instance
-          .ref().child("banner");
+      final _firebaseStorage = FirebaseStorage.instance.ref().child("banner");
 
       Reference _reference = _firebaseStorage
           .child('banner_details/${Path.basename(pickedFile!.path)}');
-      await _reference
-          .putData(
+      await _reference.putData(
         await pickedFile.readAsBytes(),
         SettableMetadata(contentType: 'image/jpeg'),
       );
@@ -596,9 +582,6 @@ class _EditBoxState extends State<EditBox> {
       setState(() {
         imgUrl1 = imageUrl;
       });
-
     }
   }
-
-
 }
