@@ -23,6 +23,7 @@ class bannerNewPage extends StatefulWidget {
 class _bannerNewPageState extends State<bannerNewPage> {
   final id = FirebaseFirestore.instance.collection('banner_details').doc().id;
   final TextEditingController _addname = TextEditingController();
+  final TextEditingController _addposition = TextEditingController();
   final bool _accesible = false;
   var image;
   var imgUrl1;
@@ -75,6 +76,8 @@ class _bannerNewPageState extends State<bannerNewPage> {
                             fontSize: 14),
                       ),
                       CustomTextField(
+                          hinttext: "Position", addcontroller: _addposition),
+                      CustomTextField(
                           hinttext: "Name", addcontroller: _addname),
                       //CustomTextField(
                       //hinttext: "Image url", addcontroller: _addimage),
@@ -96,11 +99,11 @@ class _bannerNewPageState extends State<bannerNewPage> {
                             InkWell(
                               onTap: () async {
 
+
                                 image = await chooseImage();
                                 await getUrlImage(image);
                                 //uploadToStroage();
-
-                              },
+            },
                               child: const Icon(
                                 Icons.upload_file_outlined,
                               ),
@@ -173,6 +176,7 @@ class _bannerNewPageState extends State<bannerNewPage> {
                                   .doc(id)
                                   .set(
                                 {
+                                  'position_id': _addposition.text,
                                   'name': _addname.text,
                                   'image': imgUrl1,
                                   'access': _accesible,

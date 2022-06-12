@@ -47,19 +47,7 @@ class _CitiesScreenState extends State<CitiesScreen> {
                       Get.to(() => const citiesAdd());
                     },
                     child: Text('Add Cities'),
-                    // Container(
-                    //   width: 120,
-                    //   decoration: BoxDecoration(
-                    //       color: Colors.white,
-                    //       borderRadius: BorderRadius.circular(20.0)),
-                    //   child: Row(
-                    //     children: const [
-                    //       Icon(Icons.add),
-                    //       Text('Add Product',
-                    //           style: TextStyle(fontWeight: FontWeight.w400)),
-                    //     ],
-                    //   ),
-                    // ),
+
                   ),
                 ),
                 Center(
@@ -130,12 +118,17 @@ class _CitiesScreenState extends State<CitiesScreen> {
 
   DataRow _buildListItem(BuildContext context, DocumentSnapshot data) {
     String cityId = data['id'];
+    bool status = data['Status'];
     return DataRow(cells: [
       DataCell(
         data['Address'] != null ? Text(data['Address'] ?? "") : const Text(""),
       ),
       DataCell(
-        data['Status'] != null ? Text(data['Status']) : const Text(""),
+
+        data['Status'] != null
+            ? Text(data['Status'].toString())
+            : const Text(""),
+
       ),
       // DataCell(
       //   data['id'] != null ? Text(data['id']) : const Text(""),
@@ -145,7 +138,10 @@ class _CitiesScreenState extends State<CitiesScreen> {
         showEditIcon: true,
         onTap: () {
 
-          Get.to(()=>ProductEditBox(address: data['Address'], status:  data['Status'], cityId: data['id']));
+          Get.to(() => ProductEditBox(
+              address: data['Address'],
+              status: data['Status'],
+              cityId: data['id']));
 
         },
       ),
@@ -156,10 +152,6 @@ class _CitiesScreenState extends State<CitiesScreen> {
       })
     ]);
   }
-
-  final TextEditingController _addAddress = TextEditingController();
-  final TextEditingController _addStatus = TextEditingController();
-  final TextEditingController _addId = TextEditingController();
 
   // showAddbox() => showDialog(
   //     context: context,
@@ -225,7 +217,7 @@ class ProductEditBox extends StatefulWidget {
   }) : super(key: key);
 
   final String address;
-  final String status;
+  final bool status;
   final String cityId;
 
   @override
@@ -235,8 +227,13 @@ class ProductEditBox extends StatefulWidget {
 class _ProductEditBoxState extends State<ProductEditBox> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _address = TextEditingController();
+// <<<<<<< HEAD
   final TextEditingController _status = TextEditingController();
   final TextEditingController _cityId = TextEditingController();
+// =======
+//   final TextEditingController _status = TextEditingController();
+//   final TextEditingController _cityId = TextEditingController();
+// >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
   final TextEditingController _addAddress = TextEditingController();
   static const cities_list = [
     "New Delhi",
@@ -251,12 +248,12 @@ class _ProductEditBoxState extends State<ProductEditBox> {
   void initState() {
     super.initState();
     _address.text = widget.address;
-    _cityId.text = widget.cityId;
-    _status.text = widget.status;
+    // _cityId.text = widget.cityId;
   }
 
   @override
   Widget build(BuildContext context) {
+    bool selectedValue = widget.status;
     return Scaffold(
       backgroundColor: Colors.white10,
       appBar: AppBar(
@@ -278,9 +275,13 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                       fontSize: 14),
                 ),
                 SizedBox(width: 15),
-
+// <<<<<<< HEAD
+//                 Text('Address'),
+// =======
+//
                 Text('Address'),
 
+// >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
                 const SizedBox(
                   height: 20,
                 ),
@@ -315,26 +316,71 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                     ),
                   ),
                 ),
+// <<<<<<< HEAD
+                // customTextField3(hinttext: "ID", addcontroller: _cityId),
+                Container(
+                  child: Row(
+                    children: [
+                      const Text('Status :',
+                          style: TextStyle(
+                              fontWeight: FontWeight.w700, fontSize: 15)),
+                      DropdownButton(
+                          value: selectedValue,
+                          items: const [
+                            DropdownMenuItem(
+                              child: Text("TRUE"),
+                              value: true,
+                            ),
+                            DropdownMenuItem(
+                              child: Text("FALSE"),
+                              value: false,
+                            ),
+                          ],
+                          onChanged: (bool? value) {
+                            setState(() {
+                              selectedValue = value!;
+                            });
+                          }),
+                    ],
+                  ),
+                ),
+// =======
                 // customTextField3(hinttext: "Name", addcontroller: _address),
-                customTextField3(hinttext: "Image", addcontroller: _status),
-                customTextField3(hinttext: "ID", addcontroller: _cityId),
+                // customTextField3(hinttext: "Image", addcontroller: _status),
+                // customTextField3(hinttext: "ID", addcontroller: _cityId),
+// >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
                 Padding(
                   padding: const EdgeInsets.all(12.0),
                   child: Center(
                     child: ElevatedButton(
                       onPressed: () async {
-                        print("The Gym id is : ${_cityId.text}");
+// <<<<<<< HEAD
+                        print("The Gym id is : ${widget.cityId}");
                         DocumentReference documentReference = FirebaseFirestore
                             .instance
                             .collection('Cities')
-                            .doc(_cityId.text);
+                            .doc(widget.cityId);
                         Map<String, dynamic> data = <String, dynamic>{
-                          'Address': _addAddress.text,
-                          'id': _cityId.text,
-                          'Status': _status.text,
+                          // 'Address': _addAddress.text,
+                          // 'id': _cityId.text,
+                          'Status': selectedValue,
                         };
                         await documentReference
-                            .set(data)
+                            .update(data)
+// =======
+//                         print("The Gym id is : ${_cityId.text}");
+//                         DocumentReference documentReference = FirebaseFirestore
+//                             .instance
+//                             .collection('Cities')
+//                             .doc(_cityId.text);
+//                         Map<String, dynamic> data = <String, dynamic>{
+//                           'Address': _addAddress.text,
+//                           'id': _cityId.text,
+//                           'Status': _status.text,
+//                         };
+//                         await documentReference
+//                             .set(data)
+// >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
                             .whenComplete(() => print("Item Updated"))
                             .catchError((e) => print(e));
                         Navigator.pop(context);

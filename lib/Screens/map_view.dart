@@ -23,7 +23,7 @@ class _MapViewState extends State<MapView> {
 
   Offset? _dragStart;
   double _scaleStart = 1.0;
-  double lat = 22.572646, long = 88.363895;
+
 
 
 

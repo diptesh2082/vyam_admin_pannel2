@@ -18,6 +18,8 @@ class PaymentsPage extends StatefulWidget {
 
 class _PaymentsPageState extends State<PaymentsPage> {
   CollectionReference? paymentStream;
+  CollectionReference? productStream;
+
   var dt, d12, ds, dss, d122;
   // late String paymentid;
 
@@ -26,6 +28,8 @@ class _PaymentsPageState extends State<PaymentsPage> {
   @override
   void initState() {
     paymentStream = FirebaseFirestore.instance.collection('payment');
+    productStream = FirebaseFirestore.instance.collection("product_details");
+
     super.initState();
   }
 
@@ -154,13 +158,16 @@ class _PaymentsPageState extends State<PaymentsPage> {
     dss = DateTime.fromMillisecondsSinceEpoch(timestamp.millisecondsSinceEpoch);
     d122 = DateFormat('dd/MM/yyyy, HH:mm').format(dss);
     String stamp = timestamp.toString();
+    String id = data['userid'];
     // var dtt = DateTime.fromMillisecondsSinceEpoch(stamp.millisecondsSinceEpoch);
     // var d122 = DateFormat('dd/MM/yyyy, HH:mm').format(dt);
     // String paymentID = data['payment_id'];
     // paymentid = paymentID;
 
     return DataRow(cells: [
-      DataCell(data != null ? Text(data['name'] ?? "") : Text("")),
+      DataCell(data != null
+          ? Text("${data['name']} | ${data['place'].toString().toUpperCase()}")
+          : Text("")),
       DataCell(data != null ? Text(data['amount'] ?? "") : Text("")),
       // DataCell(data != null ? Text(data['place'] ?? "") : Text("")),
       DataCell(data != null
@@ -187,7 +194,11 @@ class _PaymentsPageState extends State<PaymentsPage> {
         },
       ),
       DataCell(Icon(Icons.delete), onTap: () {
-        deleteMethod(stream: paymentStream, uniqueDocId: userid);
+// <<<<<<< HEAD
+        deleteMethod(stream: paymentStream, uniqueDocId: data['userid']);
+// =======
+//         deleteMethod(stream: paymentStream, uniqueDocId: id);
+// >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
       })
     ]);
   }
@@ -212,12 +223,16 @@ class PaymentScreen extends StatefulWidget {
 
 class _PaymentScreenState extends State<PaymentScreen> {
   CollectionReference? paymentStream;
+  CollectionReference? productStream;
+
   var dt, d12, ds;
 
   // late String paymentid;
   final userid = FirebaseFirestore.instance.collection('payment').doc().id;
   void initState() {
     paymentStream = FirebaseFirestore.instance.collection('payment');
+    productStream = FirebaseFirestore.instance.collection("product_details");
+
     super.initState();
     d12 = widget.d12;
   }
@@ -227,11 +242,14 @@ class _PaymentScreenState extends State<PaymentScreen> {
   DateTime? dateTime;
 
   final TextEditingController _addAmount = TextEditingController();
-  final TextEditingController _addPlace = TextEditingController();
-  final TextEditingController _addName = TextEditingController();
+  // final TextEditingController _addPlace = TextEditingController();
+  // final TextEditingController _addName = TextEditingController();
   // final TextEditingController _addTimestamp = TextEditingController();
   // late Timestamp dtime = Timestamp.now();
   var selectedValue = "ONLINE";
+  String namee = "Fitness Break";
+  String place = "";
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -252,10 +270,44 @@ class _PaymentScreenState extends State<PaymentScreen> {
                       fontWeight: FontWeight.w600,
                       fontSize: 14),
                 ),
-                customTextField(
-                    hinttext: "Vendor Name ", addcontroller: _addName),
+                Text("Choose Vendor"),
+                Container(
+                    height: 400,
+                    width: 400,
+                    child: StreamBuilder<QuerySnapshot>(
+                      stream: productStream!.snapshots(),
+                      builder: (context, AsyncSnapshot snapshot) {
+                        String check = "Jee";
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const CircularProgressIndicator();
+                        }
+                        if (snapshot.data == null) {
+                          return Container();
+                        }
+                        print("-----------------------------------");
+                        var doc = snapshot.data.docs;
+                        print(snapshot.data.docs);
+                        return ListView.builder(
+                          itemCount: doc.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return RadioListTile<String>(
+                                value: doc[index]['name'],
+                                title: Text(doc[index]['name'].toString()),
+                                groupValue: namee,
+                                onChanged: (String? valuee) {
+                                  setState(() {
+                                    namee = valuee!;
+                                    place = doc[index]['branch'];
+                                  });
+                                  print(namee);
+                                });
+                          },
+                        );
+                      },
+                    )),
                 customTextField(hinttext: "Amount", addcontroller: _addAmount),
-                customTextField(hinttext: "Place", addcontroller: _addPlace),
+                // customTextField(hinttext: "Place", addcontroller: _addPlace),
                 // customTextField(
                 //     hinttext: "TimeStamp",
                 //     addcontroller: _addTimestamp),
@@ -323,10 +375,10 @@ class _PaymentScreenState extends State<PaymentScreen> {
                             .set(
                           {
                             'amount': _addAmount.text,
-                            'gym_id': _addName.text,
-                            'place': _addPlace.text,
+                            'gym_id': namee,
+                            'place': place,
                             // 'payment_id': paymentid,
-                            'name': _addName.text,
+                            'name': namee,
                             'timestamp': dateTime,
                             'userid': userid,
                             'type': selectedValue,
@@ -452,6 +504,9 @@ class _ProductEditBoxState extends State<ProductEditBox> {
   late String userid;
   late String gym_id;
   var selectedValue = "ONLINE";
+  String namee = "Fitness Break";
+  late String place;
+  CollectionReference? productStream;
 
   @override
   void initState() {
@@ -463,6 +518,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
     // _paymentid = widget.paymentid;
     userid = widget.userid;
     gym_id = widget.gym_id;
+    productStream = FirebaseFirestore.instance.collection("product_details");
   }
 
   @override
@@ -491,7 +547,42 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                       fontWeight: FontWeight.w600,
                       fontSize: 14),
                 ),
-                customTextField(hinttext: "Name", addcontroller: _name),
+                Text("Choose Vendor"),
+                Container(
+                    height: 400,
+                    width: 400,
+                    child: StreamBuilder<QuerySnapshot>(
+                      stream: productStream!.snapshots(),
+                      builder: (context, AsyncSnapshot snapshot) {
+                        String check = "Jee";
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const CircularProgressIndicator();
+                        }
+                        if (snapshot.data == null) {
+                          return Container();
+                        }
+                        print("-----------------------------------");
+                        var doc = snapshot.data.docs;
+                        print(snapshot.data.docs);
+                        return ListView.builder(
+                          itemCount: doc.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return RadioListTile<String>(
+                                value: doc[index]['name'],
+                                title: Text(doc[index]['name'].toString()),
+                                groupValue: namee,
+                                onChanged: (String? valuee) {
+                                  setState(() {
+                                    namee = valuee!;
+                                    place = doc[index]['branch'];
+                                  });
+                                  print(namee);
+                                });
+                          },
+                        );
+                      },
+                    )),
                 customTextField(hinttext: "Amount", addcontroller: _amount),
                 //customTextField(hinttext: "Place", addcontroller: _place),
 
@@ -533,10 +624,10 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                               .doc(userid)
                               .update({
                             'amount': _amount.text,
-                            'gym_id': _name.text,
-                            'name': _name.text,
+                            'gym_id': namee,
+                            'name': namee,
                             // 'payment_id': _paymentid,
-                            'place': _place.text,
+                            'place': place,
                             'timestamp': r,
                             'userid': userid,
                             'type': selectedValue,

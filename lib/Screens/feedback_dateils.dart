@@ -38,34 +38,46 @@ class _FeedBackInfoState extends State<FeedBackInfo> {
               columns: const [
                 DataColumn(
                   label: Text(
-                    'user ID',
+                    'Name',
                     style: TextStyle(fontWeight: FontWeight.w600),
                   ),
                 ),
                 DataColumn(
                   label: Text(
-                    'GYM ID',
+                    'Phone Number',
+                    style: TextStyle(fontWeight: FontWeight.w600),
+                  ),
+                ),
+                // DataColumn(
+                //   label: Text(
+                //     'Images',
+                //     style: TextStyle(fontWeight: FontWeight.w600),
+                //   ),
+                // ),
+                DataColumn(
+                  label: Text(
+                    'GYMID',
                     style: TextStyle(fontWeight: FontWeight.w600),
                   ),
                 ),
                 DataColumn(
                   label: Text(
-                    'feedback_review title',
+                    'Feedback Review Title',
                     style: TextStyle(fontWeight: FontWeight.w600),
                   ),
                 ),
                 DataColumn(
                   label: Text(
-                    'feedback_suggestion',
+                    'Feedback Suggestion',
                     style: TextStyle(fontWeight: FontWeight.w600),
                   ),
                 ),
-                DataColumn(
-                  label: Text(
-                    'Edit',
-                    style: TextStyle(fontWeight: FontWeight.w600),
-                  ),
-                ),
+                // DataColumn(
+                //   label: Text(
+                //     'Edit',
+                //     style: TextStyle(fontWeight: FontWeight.w600),
+                //   ),
+                // ),
                 DataColumn(
                   label: Text(
                     'Delete',
@@ -91,18 +103,16 @@ class _FeedBackInfoState extends State<FeedBackInfo> {
     return DataRow(
       cells: [
         DataCell(
-          data['user_id'] != null
-              ? Text(data['user_id'] ?? "")
+          data['feedback_name'] != null
+              ? Text(data['feedback_name'] ?? "")
               : const Text(""),
         ),
-        // DataCell(
-        //   data['feedback_id'] != null
-        //       ? Text(data['feedback_id'] ?? "")
-        //       : const Text(""),
-        // ),
+        DataCell(data['user_id'] != null
+            ? Text(data['user_id'].toString().substring(3, 13))
+            : Text("")),
         DataCell(
           data['vendor_id'] != null
-              ? Text(data['vendor_id'].toString())
+              ? Text(data['vendor_id'] ?? "")
               : const Text(""),
         ),
         DataCell(
@@ -115,7 +125,6 @@ class _FeedBackInfoState extends State<FeedBackInfo> {
               ? Text(data['feedback_suggestion'] ?? "")
               : const Text(""),
         ),
-
         // DataCell(
         //   data['image'] != null
         //       ? Image.network(
@@ -131,13 +140,13 @@ class _FeedBackInfoState extends State<FeedBackInfo> {
         //       ? const Text("Enabled")
         //       : const Text("Disabled"),
         // ),
-        DataCell(
-          const Text(''),
-          showEditIcon: true,
-          onTap: () {
-            print("Open Edit Box");
-          },
-        ),
+        // DataCell(
+        //   const Text(''),
+        //   showEditIcon: true,
+        //   onTap: () {
+        //     print("Open Edit Box");
+        //   },
+        // ),
         DataCell(Icon(Icons.delete), onTap: () {
           deleteMethod(stream: categoryStream, uniqueDocId: categoryID);
         })

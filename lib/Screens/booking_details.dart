@@ -22,7 +22,7 @@ class _BookingDetailsState extends State<BookingDetails> {
   CollectionReference bookingStream =
       FirebaseFirestore.instance.collection('bookings');
   String searchVendorId = '';
-
+  var selectedValue = 'active';
   @override
   void initState() {
     super.initState();
@@ -97,8 +97,12 @@ class _BookingDetailsState extends State<BookingDetails> {
                   child: StreamBuilder<QuerySnapshot>(
                     stream: FirebaseFirestore.instance
                         .collection('bookings')
-                        .where('booking_status',
-                            whereIn: ['completed', 'active', 'upcoming'])
+                        .where('booking_status', whereIn: [
+                          'completed',
+                          'active',
+                          'upcoming',
+                          'cancelled'
+                        ])
                         .orderBy("order_date", descending: true)
                         .snapshots(),
                     builder: (context, AsyncSnapshot snapshot) {
@@ -120,10 +124,17 @@ class _BookingDetailsState extends State<BookingDetails> {
                       if (searchVendorId.length > 0) {
                         doc = doc.where((element) {
                           return element
+// <<<<<<< HEAD
+//                                   .get('user_name')
+//                                   .toString()
+//                                   .toLowerCase()
+//                                   .contains(searchVendorId.toString()) ||
+// =======
                                   .get('user_name')
                                   .toString()
                                   .toLowerCase()
                                   .contains(searchVendorId.toString()) ||
+// >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
                               element
                                   .get('userId')
                                   .toString()
@@ -139,14 +150,14 @@ class _BookingDetailsState extends State<BookingDetails> {
                             columns: const [
                               DataColumn(
                                   label: Text(
-                                'Vendor ID',
+                                'Booking ID',
                                 style: TextStyle(fontWeight: FontWeight.w600),
                               )),
-                              // DataColumn(
-                              //     label: Text(
-                              //   'Booking ID',
-                              //   style: TextStyle(fontWeight: FontWeight.w600),
-                              // )),
+                              DataColumn(
+                                  label: Text(
+                                'Vendor Name',
+                                style: TextStyle(fontWeight: FontWeight.w600),
+                              )),
                               DataColumn(
                                 label: Text(
                                   'User Name',
@@ -159,39 +170,27 @@ class _BookingDetailsState extends State<BookingDetails> {
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
-                              // DataColumn(
-                              //   label: Text(
-                              //     'Total Price',
-                              //     style: TextStyle(fontWeight: FontWeight.w600),
-                              //   ),
-                              // ),
+                              DataColumn(
+                                label: Text(
+                                  'Discount',
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
+                              ),
                               DataColumn(
                                 label: Text(
                                   'Total Days',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
-                              // DataColumn(
-                              //   label: Text(
-                              //     'Tax Pay',
-                              //     style: TextStyle(fontWeight: FontWeight.w600),
-                              //   ),
-                              // ),
                               DataColumn(
                                 label: Text(
-                                  'Plan End',
+                                  'Category',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
                               DataColumn(
                                 label: Text(
                                   'Payment done',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
-                              ),
-                              DataColumn(
-                                label: Text(
-                                  'Package Type',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
@@ -215,13 +214,13 @@ class _BookingDetailsState extends State<BookingDetails> {
                               // ),
                               DataColumn(
                                 label: Text(
-                                  'Grand Total',
+                                  'Booking Date',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
                               DataColumn(
                                 label: Text(
-                                  'Discount',
+                                  'Plan End',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
@@ -245,7 +244,7 @@ class _BookingDetailsState extends State<BookingDetails> {
                               // ),
                               DataColumn(
                                 label: Text(
-                                  'Booking Plan',
+                                  'Package Type',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
@@ -257,16 +256,16 @@ class _BookingDetailsState extends State<BookingDetails> {
                               // ),
                               DataColumn(
                                 label: Text(
-                                  'Booking Date',
+                                  'Grand Total',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
-                              DataColumn(
-                                label: Text(
-                                  'Booking Accepted',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
-                              ),
+                              // DataColumn(
+                              //   label: Text(
+                              //     'Booking Accepted',
+                              //     style: TextStyle(fontWeight: FontWeight.w600),
+                              //   ),
+                              // ),
                               DataColumn(
                                 label: Text(
                                   'Edit',
@@ -311,30 +310,39 @@ class _BookingDetailsState extends State<BookingDetails> {
     String bookingDate =
         DateFormat("MMM, dd, yyyy").format(data["booking_date"].toDate());
     // "${data['booking_date'].toDate().year}/${data['booking_date'].toDate().month}/${data['booking_date'].toDate().day}";
+    String x;
     return DataRow(cells: [
-      DataCell(data["vendorId"] != null
-          ? Text(data['vendorId'].toString())
+      DataCell(
+          data["id"] != null ? Text(data['id'].toString()) : const Text("")),
+      DataCell(data["gym_details"] != null
+          ? Text(
+              '${data['gym_details']['name'].toString().toUpperCase()}|${data['gym_details']['branch'].toString().toUpperCase()}')
           : const Text("")),
-      // DataCell(data["booking_id"] != null
-      //     ? Text(data['booking_id'].toString())
-      //     : const Text("")),
       DataCell(data['user_name'] != null
           ? Text(data['user_name'].toString())
           : const Text("")),
       DataCell(data['userId'] != null
-          ? Text(data['userId'].toString())
-          : const Text("")),
+
+          ? Text(data['userId'].toString().substring(3, 13))
+          : Text("")),
       // DataCell(data['total_price'] != null
       //     ? Text(data['total_price'].toString())
       //     : const Text("")),
+
+      DataCell(data['discount'] != null
+          ? Text(data['discount'].toString())
+          : const Text("")),
+
+
       DataCell(data['totalDays'] != null
           ? Text(data['totalDays'].toString())
           : const Text("")),
       // DataCell(data['tax_pay'] != null
       //     ? Text(data['tax_pay'].toString())
       //     : const Text("")),
-      DataCell(data['plan_end_duration'] != null
-          ? Text(durationEnd)
+
+      DataCell(data['package_type'] != null
+          ? Text(data['package_type'].toString().toUpperCase())
           : const Text("")),
       DataCell(Center(
         child: ElevatedButton(
@@ -349,15 +357,13 @@ class _BookingDetailsState extends State<BookingDetails> {
                 .whenComplete(() => print("Payment done updated"))
                 .catchError((e) => print(e));
           },
-          child: Text(paymentDoneBool.toString()),
+          child: Text(x = paymentDoneBool ? 'YES' : 'NO'),
           style: ElevatedButton.styleFrom(
               primary: paymentDoneBool ? Colors.green : Colors.red),
         ),
       )),
-      DataCell(data['package_type'] != null
-          ? Text(data['package_type'].toString())
-          : const Text("")),
       DataCell(data['order_date'] != null ? Text(orderDate) : const Text("")),
+
       // DataCell(data['gym_details']['name'] != null
       //     ? Text(data['gym_details']['name'].toString())
       //     : const Text("")),
@@ -365,53 +371,111 @@ class _BookingDetailsState extends State<BookingDetails> {
       //     ? Text(data['gym_address'].toString())
       //     : const Text("")),
       DataCell(data['grand_total'] != null
-          ? Text(data['grand_total'].toString())
+          ? Row(
+              children: [
+                Text('₹'),
+                Text(data['grand_total'].toString()),
+              ],
+            )
           : const Text("")),
       DataCell(data['discount'] != null
-          ? Text(data['discount'].toString())
+          ? Row(
+              children: [
+                Text('₹'),
+                Text(data['discount'].toString()),
+              ],
+            )
           : const Text("")),
       // DataCell(data['daysLeft'] != null
       //     ? Text(data['daysLeft'].toString())
       //     : const Text("")),
       DataCell(data['booking_status'] != null
           ? Text(data['booking_status'].toString())
+
+      DataCell(
+          data['booking_date'] != null ? Text(bookingDate) : const Text("")),
+      DataCell(data['plan_end_duration'] != null
+          ? Text(durationEnd)
+
           : const Text("")),
-      // DataCell(data['booking_price'] != null
-      //     ? Text(data['booking_price'].toString())
-      //     : const Text("")),
+
+      DataCell(
+        Center(
+          child: Container(
+            child: Row(
+              children: [
+                DropdownButton(
+                    hint: Text(data['booking_status'].toString()),
+                    value: data['booking_status'].toString(),
+                    items: [
+                      DropdownMenuItem(
+                        child: Text("Active"),
+                        value: "active",
+                      ),
+                      DropdownMenuItem(
+                        child: Text("Upcoming"),
+                        value: "upcoming",
+                      ),
+                      DropdownMenuItem(
+                          child: Text("Incomplete"), value: "incomplete"),
+                      DropdownMenuItem(
+                          child: Text("Cancelled"), value: "cancelled"),
+                    ],
+                    onChanged: (value) async {
+                      setState(() {
+                        selectedValue = value as String;
+                      });
+                      await FirebaseFirestore.instance
+                          .collection('bookings')
+                          .doc(bookingId)
+                          .update({'booking_status': value});
+                    }),
+              ],
+            ),
+          ),
+        ),
+      ),
+
       DataCell(data['booking_plan'] != null
           ? Text(data['booking_plan'].toString())
           : const Text("")),
       // DataCell(data['booking_id'] != null
       //     ? Text(data['booking_id'].toString())
       //     : const Text("")),
-      DataCell(
-          data['booking_date'] != null ? Text(bookingDate) : const Text("")),
-      DataCell(Center(
-        child: ElevatedButton(
-          onPressed: () async {
-            bool temp = bookingAccepted;
-            temp = !temp;
-            DocumentReference documentReference = FirebaseFirestore.instance
-                .collection('bookings')
-                .doc(bookingId);
-            await documentReference
-                .update({
-                  'booking_accepted': temp,
-                  "booking_status": temp ? "active" : "cancelled",
-                  "payment_done": temp
-                })
-                .whenComplete(() => print("booking accepted updated"))
-                .catchError((e) => print(e));
-          },
-          child: Text(bookingAccepted.toString()),
-          style: ElevatedButton.styleFrom(
-              primary: bookingAccepted ? Colors.green : Colors.red),
-        ),
-      )),
+      // DataCell(
+      //     data['booking_date'] != null ? Text(bookingDate) : const Text("")),
+      DataCell(data['grand_total'] != null
+          ? Text(data['grand_total'].toString())
+          : const Text("")),
+      // DataCell(Center(
+      //   child: ElevatedButton(
+      //     onPressed: () async {
+      //       bool temp = bookingAccepted;
+      //       temp = !temp;
+      //       DocumentReference documentReference = FirebaseFirestore.instance
+      //           .collection('bookings')
+      //           .doc(bookingId);
+      //       await documentReference
+      //           .update({
+      //         'booking_accepted': temp,
+      //         "booking_status": temp ? "active" : "cancelled",
+      //         "payment_done": temp
+      //       })
+      //           .whenComplete(() => print("booking accepted updated"))
+      //           .catchError((e) => print(e));
+      //     },
+      //     child: Text(bookingAccepted.toString()),
+      //     style: ElevatedButton.styleFrom(
+      //         primary: bookingAccepted ? Colors.green : Colors.red),
+      //   ),
+      // )),
       DataCell(const Text(""), showEditIcon: true, onTap: () {
         Get.to(
+// <<<<<<< HEAD
+//           () => ProductEditBox(
+// =======
           () => ProductEditBox(
+// >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
             vendorid: data['vendorId'],
             username: data['user_name'],
             userid: data['userId'],
@@ -485,115 +549,115 @@ class _BookingDetailsState extends State<BookingDetails> {
     ]);
   }
 
-  //
-  // showAddbox() => showDialog(
-  //     context: context,
-  //     builder: (context) => AlertDialog(
-  //           shape: const RoundedRectangleBorder(
-  //               borderRadius: BorderRadius.all(Radius.circular(30))),
-  //           content: SizedBox(
-  //             height: 480,
-  //             width: 800,
-  //             child: SingleChildScrollView(
-  //               child: Column(
-  //                 crossAxisAlignment: CrossAxisAlignment.start,
-  //                 children: [
-  //                   const Text(
-  //                     'Add Records',
-  //                     style: TextStyle(
-  //                         fontFamily: 'poppins',
-  //                         fontWeight: FontWeight.w600,
-  //                         fontSize: 14),
-  //                   ),
-  //                   CustomTextField(
-  //                       hinttext: "Vendor ID", addcontroller: _addvendorid),
-  //                   CustomTextField(
-  //                       hinttext: "User Name", addcontroller: _addusername),
-  //                   CustomTextField(
-  //                       hinttext: "User ID", addcontroller: _adduserid),
-  //                   CustomTextField(
-  //                       hinttext: "Total Price", addcontroller: _addtotalprice),
-  //                   CustomTextField(
-  //                       hinttext: "Total Days", addcontroller: _addtotaldays),
-  //                   CustomTextField(
-  //                       hinttext: "Tax Pay", addcontroller: _addtaxpay),
-  //                   CustomTextField(
-  //                       hinttext: "Plan End Y", addcontroller: _addplanendyear),
-  //                   CustomTextField(
-  //                       hinttext: "Plan End M",
-  //                       addcontroller: _addplanendmonth),
-  //                   CustomTextField(
-  //                       hinttext: "Name", addcontroller: _addplanendday),
-  //                   CustomTextField(
-  //                       hinttext: "Name", addcontroller: _addpaymentdone),
-  //                   CustomTextField(
-  //                       hinttext: "Name", addcontroller: _addpackagetype),
-  //                   CustomTextField(
-  //                       hinttext: "Name", addcontroller: _addorderyear),
-  //                   CustomTextField(
-  //                       hinttext: "Name", addcontroller: _addordermonth),
-  //                   CustomTextField(
-  //                       hinttext: "Name", addcontroller: _addorderday),
-  //                   CustomTextField(
-  //                       hinttext: "Name", addcontroller: _addgymname),
-  //                   CustomTextField(
-  //                       hinttext: "Name", addcontroller: _addgymaddress),
-  //                   CustomTextField(
-  //                       hinttext: "Name", addcontroller: _addgrandtotal),
-  //                   CustomTextField(
-  //                       hinttext: "Name", addcontroller: _adddiscount),
-  //                   CustomTextField(
-  //                       hinttext: "Name", addcontroller: _adddaysletf),
-  //                   CustomTextField(
-  //                       hinttext: "Name", addcontroller: _addbookingstatus),
-  //                   CustomTextField(
-  //                       hinttext: "Name", addcontroller: _addbookingprice),
-  //                   CustomTextField(
-  //                       hinttext: "Name", addcontroller: _addbookingplan),
-  //                   CustomTextField(
-  //                       hinttext: "Name", addcontroller: _addbookingid),
-  //                   CustomTextField(
-  //                       hinttext: "Name", addcontroller: _addbookingyear),
-  //                   CustomTextField(
-  //                       hinttext: "Name", addcontroller: _addbookingmonth),
-  //                   CustomTextField(
-  //                       hinttext: "Name", addcontroller: _addbookingday),
-  //                   CustomTextField(
-  //                       hinttext: "Name", addcontroller: _addbookingaccepted),
-  //                   Center(
-  //                     child: ElevatedButton(
-  //                       onPressed: () async {
-  //                         final querySnapshot = FirebaseFirestore.instance
-  //                             .collection('bookings')
-  //                             .doc("'data['userId']'")
-  //                             .collection('user_booking')
-  //                             .doc("data['booking_id']");
-  //                         querySnapshot.update({'booking_price': 20});
-  //                         // FirebaseFirestore.instance
-  //                         //     .collectionGroup('user_booking')
-  //                         //     .doc(_addgymId.text)
-  //                         //     .set(
-  //                         //   {
-  //                         //     // 'address': _addaddress.text,
-  //                         //     // 'gender': _addgender.text,
-  //                         //     // 'name': _addname.text,
-  //                         //     // 'pincode': _addpincode.text,
-  //                         //     // 'location': _addlocation.text,
-  //                         //     // 'gym_id': _addlandmark.text,
-  //                         //     // 'gym_owner': _addgymowner.text,
-  //                         //     // 'landmark': _addlandmark.text
-  //                         //   },
-  //                         // );
-  //                         Navigator.pop(context);
-  //                       },
-  //                       child: const Text('Done'),
-  //                     ),
-  //                   )
-  //                 ],
-  //               ),
-  //             ),
-  //           ),
-  //         ));
+//
+// showAddbox() => showDialog(
+//     context: context,
+//     builder: (context) => AlertDialog(
+//           shape: const RoundedRectangleBorder(
+//               borderRadius: BorderRadius.all(Radius.circular(30))),
+//           content: SizedBox(
+//             height: 480,
+//             width: 800,
+//             child: SingleChildScrollView(
+//               child: Column(
+//                 crossAxisAlignment: CrossAxisAlignment.start,
+//                 children: [
+//                   const Text(
+//                     'Add Records',
+//                     style: TextStyle(
+//                         fontFamily: 'poppins',
+//                         fontWeight: FontWeight.w600,
+//                         fontSize: 14),
+//                   ),
+//                   CustomTextField(
+//                       hinttext: "Vendor ID", addcontroller: _addvendorid),
+//                   CustomTextField(
+//                       hinttext: "User Name", addcontroller: _addusername),
+//                   CustomTextField(
+//                       hinttext: "User ID", addcontroller: _adduserid),
+//                   CustomTextField(
+//                       hinttext: "Total Price", addcontroller: _addtotalprice),
+//                   CustomTextField(
+//                       hinttext: "Total Days", addcontroller: _addtotaldays),
+//                   CustomTextField(
+//                       hinttext: "Tax Pay", addcontroller: _addtaxpay),
+//                   CustomTextField(
+//                       hinttext: "Plan End Y", addcontroller: _addplanendyear),
+//                   CustomTextField(
+//                       hinttext: "Plan End M",
+//                       addcontroller: _addplanendmonth),
+//                   CustomTextField(
+//                       hinttext: "Name", addcontroller: _addplanendday),
+//                   CustomTextField(
+//                       hinttext: "Name", addcontroller: _addpaymentdone),
+//                   CustomTextField(
+//                       hinttext: "Name", addcontroller: _addpackagetype),
+//                   CustomTextField(
+//                       hinttext: "Name", addcontroller: _addorderyear),
+//                   CustomTextField(
+//                       hinttext: "Name", addcontroller: _addordermonth),
+//                   CustomTextField(
+//                       hinttext: "Name", addcontroller: _addorderday),
+//                   CustomTextField(
+//                       hinttext: "Name", addcontroller: _addgymname),
+//                   CustomTextField(
+//                       hinttext: "Name", addcontroller: _addgymaddress),
+//                   CustomTextField(
+//                       hinttext: "Name", addcontroller: _addgrandtotal),
+//                   CustomTextField(
+//                       hinttext: "Name", addcontroller: _adddiscount),
+//                   CustomTextField(
+//                       hinttext: "Name", addcontroller: _adddaysletf),
+//                   CustomTextField(
+//                       hinttext: "Name", addcontroller: _addbookingstatus),
+//                   CustomTextField(
+//                       hinttext: "Name", addcontroller: _addbookingprice),
+//                   CustomTextField(
+//                       hinttext: "Name", addcontroller: _addbookingplan),
+//                   CustomTextField(
+//                       hinttext: "Name", addcontroller: _addbookingid),
+//                   CustomTextField(
+//                       hinttext: "Name", addcontroller: _addbookingyear),
+//                   CustomTextField(
+//                       hinttext: "Name", addcontroller: _addbookingmonth),
+//                   CustomTextField(
+//                       hinttext: "Name", addcontroller: _addbookingday),
+//                   CustomTextField(
+//                       hinttext: "Name", addcontroller: _addbookingaccepted),
+//                   Center(
+//                     child: ElevatedButton(
+//                       onPressed: () async {
+//                         final querySnapshot = FirebaseFirestore.instance
+//                             .collection('bookings')
+//                             .doc("'data['userId']'")
+//                             .collection('user_booking')
+//                             .doc("data['booking_id']");
+//                         querySnapshot.update({'booking_price': 20});
+//                         // FirebaseFirestore.instance
+//                         //     .collectionGroup('user_booking')
+//                         //     .doc(_addgymId.text)
+//                         //     .set(
+//                         //   {
+//                         //     // 'address': _addaddress.text,
+//                         //     // 'gender': _addgender.text,
+//                         //     // 'name': _addname.text,
+//                         //     // 'pincode': _addpincode.text,
+//                         //     // 'location': _addlocation.text,
+//                         //     // 'gym_id': _addlandmark.text,
+//                         //     // 'gym_owner': _addgymowner.text,
+//                         //     // 'landmark': _addlandmark.text
+//                         //   },
+//                         // );
+//                         Navigator.pop(context);
+//                       },
+//                       child: const Text('Done'),
+//                     ),
+//                   )
+//                 ],
+//               ),
+//             ),
+//           ),
+//         ));
 }
 
 class CustomTextField extends StatefulWidget {
@@ -617,8 +681,22 @@ class _CustomTextFieldState extends State<CustomTextField> {
       height: 50,
       child: Card(
           child: TextField(
+// <<<<<<< HEAD
+//         autofocus: true,
+//         style: const TextStyle(
+//           fontSize: 20,
+//           fontFamily: 'poppins',
+//           fontWeight: FontWeight.w400,
+//         ),
+//         controller: widget.addcontroller,
+//         maxLines: 3,
+//         decoration: InputDecoration(
+//             border: InputBorder.none,
+//             hintStyle: const TextStyle(
+// =======
         autofocus: true,
         style: const TextStyle(
+// >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
           fontSize: 20,
           fontFamily: 'poppins',
           fontWeight: FontWeight.w400,
@@ -833,6 +911,120 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                   ),
                   Container(
                       child: StreamBuilder<QuerySnapshot>(
+// // <<<<<<< HEAD
+//                     stream: vendorIdStream!.snapshots(),
+//                     builder: (context, AsyncSnapshot snapshot) {
+//                       if (snapshot.connectionState == ConnectionState.waiting) {
+//                         return const CircularProgressIndicator();
+//                       }
+//                       if (snapshot.data == null) {
+//                         return Container();
+//                       }
+//                       print("-----------------------------------");
+//                       var doc = snapshot.data.docs;
+//                       return Container(
+//                         width: 500,
+//                         height: 200,
+//                         child: ListView.builder(
+//                             itemCount: doc.length,
+//                             itemBuilder: (BuildContext context, int index) {
+//                               bool check = false;
+//                               return RadioListTile<String>(
+//                                 value: doc[index]["gym_id"],
+//                                 groupValue: abc3,
+//                                 onChanged: (val) => setState(
+//                                   () {
+//                                     abc3 = val!;
+//                                   },
+//                                 ),
+//                                 title: Text(doc[index]["gym_id"]),
+//                               );
+//                               // ListTile(
+//                               //   title: Text(doc[index]["name"]),
+//                               //   onTap: () {
+//                               //     _addgymname.text = doc[index]["name"];
+//                               //   },
+//                               // );
+//                             }),
+//                       );
+//                     },
+//                   )),
+//                   const SizedBox(height: 15),
+//                   // customTextField(
+//                   //     hinttext: "Vendor ID", addcontroller: _addvendorid),
+//                   customTextField(
+//                       hinttext: "User Name", addcontroller: _addusername),
+//                   customTextField(
+//                       hinttext: "User ID", addcontroller: _adduserid),
+//                   // CustomTextField(
+//                   //     hinttext: "Total Price", addcontroller: _addtotalprice),
+//                   customTextField(
+//                       hinttext: "Total Days", addcontroller: _addtotaldays),
+//                   // CustomTextField(
+//                   //     hinttext: "Tax Pay", addcontroller: _addtaxpay),
+//                   // Container(
+//                   //   child: Row(
+//                   //     children: [
+//                   //       ElevatedButton(
+//                   //         child: const Text('Select Date & Time for Plan'),
+//                   //         onPressed: () => pickDateTime(context, endtimedata),
+//                   //       ),
+//                   //       SizedBox(width: 15),
+//                   //     ],
+//                   //   ),
+//                   // ),
+//                   Container(
+//                     child: Row(
+//                       children: [
+//                         const Padding(
+//                           padding: EdgeInsets.all(8.0),
+//                           child: Text('Select Date & Time For Plan:',
+//                               style: TextStyle(
+//                                 fontSize: 20,
+//                                 fontWeight: FontWeight.bold,
+//                               )),
+//                         ),
+//                         ElevatedButton(
+//                           child: const Text('Select Date & Time For Plan'),
+//                           onPressed: () => pickplanDateTime(context),
+//                         ),
+//                         SizedBox(width: 15),
+//                       ],
+//                     ),
+//                   ),
+//                   // customTextField(
+//                   //     hinttext: "Plan End Y", addcontroller: _addplanendyear),
+//                   // customTextField(
+//                   //     hinttext: "Plan End M", addcontroller: _addplanendmonth),
+//                   // customTextField(
+//                   //     hinttext: "Plan End D", addcontroller: _addplanendday),
+//                   const SizedBox(height: 15),
+//                   const Padding(
+//                     padding: EdgeInsets.all(8.0),
+//                     child: Text('Payment Done:',
+//                         style: TextStyle(
+//                             fontWeight: FontWeight.bold, fontSize: 15)),
+//                   ),
+//                   DropdownButton<String>(
+//                     isExpanded: true,
+//                     hint: Text("Payment Done"),
+//                     items: _do.map<DropdownMenuItem<String>>((String value) {
+//                       return DropdownMenuItem<String>(
+//                         value: value,
+//                         child: Text(value),
+//                       );
+//                     }).toList(),
+//                     onChanged: (String? newValue) {
+//                       setState(() {
+//                         this._dropdownValue = newValue!;
+//                         _addpaymentdone.text = _dropdownValue;
+//                         print(_dropdownValue);
+//                       });
+//                     },
+//                     value: _dropdownValue,
+//                   ),
+//                   // customTextField(
+// =======
                     stream: vendorIdStream!.snapshots(),
                     builder: (context, AsyncSnapshot snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
@@ -945,6 +1137,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                     value: _dropdownValue,
                   ),
                   // customTextField(
+// >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
                   //     hinttext: "Payment Done", addcontroller: _addpaymentdone),
                   customTextField(
                       hinttext: "Package Type", addcontroller: _addpackagetype),
@@ -976,6 +1169,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                               itemBuilder: (BuildContext context, int index) {
                                 bool check = false;
                                 return
+// <<<<<<< HEAD
                                     // RadioBoxx(
                                     //   doc[index]["name"],
                                     //   doc[index]["category_id"],
@@ -991,6 +1185,23 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                                   ),
                                   title: Text(doc[index]["name"]),
                                 );
+// =======
+                                // RadioBoxx(
+                                //   doc[index]["name"],
+                                //   doc[index]["category_id"],
+                                //   _addpackagetype.text,
+                                // );
+                                RadioListTile<String>(
+                                  value: doc[index]["name"],
+                                  groupValue: abc,
+                                  onChanged: (val) => setState(
+                                    () {
+                                      abc = val!;
+                                    },
+                                  ),
+                                  title: Text(doc[index]["name"]),
+                                );
+// >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
                                 //     ListTile(
                                 //   tileColor: a,
                                 //   title: Text(doc[index]["name"]),
@@ -1053,6 +1264,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                   ),
                   Container(
                       child: StreamBuilder<QuerySnapshot>(
+//
                     stream: vendorIdStream!.snapshots(),
                     builder: (context, AsyncSnapshot snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
@@ -1090,14 +1302,16 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                       );
                     },
                   )),
+// >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
                   // customTextField(
                   //     hinttext: "Gym Name", addcontroller: _addgymname),
                   customTextField(
                       hinttext: "Gym Address", addcontroller: _addgymaddress),
                   customTextField(
-                      hinttext: "Grand Total", addcontroller: _addgrandtotal),
+                      hinttext: "Grand Total (₹)",
+                      addcontroller: _addgrandtotal),
                   customTextField(
-                      hinttext: "Discount", addcontroller: _adddiscount),
+                      hinttext: "Discount (₹)", addcontroller: _adddiscount),
                   customTextField(
                       hinttext: "Days Left", addcontroller: _adddaysletf),
                   const SizedBox(height: 15),
@@ -1127,7 +1341,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                   //     hinttext: "Booking Status",
                   //     addcontroller: _addbookingstatus),
                   customTextField(
-                      hinttext: "Booking Price",
+                      hinttext: "Booking Price (₹)",
                       addcontroller: _addbookingprice),
                   customTextField(
                       hinttext: "Booking Plan", addcontroller: _addbookingplan),
@@ -1199,9 +1413,15 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                           ElevatedButton(
                             onPressed: () async {
                               DocumentReference documentReference =
+// <<<<<<< HEAD
+//                                   FirebaseFirestore.instance
+//                                       .collection('bookings')
+//                                       .doc(_addbookingid.text);
+// =======
                                   FirebaseFirestore.instance
                                       .collection('bookings')
                                       .doc(_addbookingid.text);
+// >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
                               // DateTime endtimedata = DateTime.parse(
                               //     '${_addplanendyear.text}-${isLess(_addplanendmonth.text) ? '0' + _addplanendmonth.text : _addplanendday.text}-${isLess(_addplanendday.text) ? '0' + _addplanendday.text : _addplanendday.text} 00:00:04Z');
                               // DateTime ordertimedata = DateTime.parse(
@@ -1233,9 +1453,15 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                                 'booking_id': _addbookingid.text,
                                 'booking_date': bookingtimedata,
                                 'booking_accepted':
+// <<<<<<< HEAD
+//                                     _addbookingaccepted.text == 'true'
+//                                         ? true
+//                                         : false,
+// =======
                                     _addbookingaccepted.text == 'true'
                                         ? true
                                         : false,
+// >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
                               };
                               await documentReference
                                   .update(data)
@@ -1427,9 +1653,15 @@ class _ProductEditBoxState extends State<ProductEditBox> {
   }
 
   Future pickTime(BuildContext context) async {
-    final intialTime = TimeOfDay(hour: 9, minute: 0);
+// <<<<<<< HEAD
+//     final intialTime = TimeOfDay(hour: 9, minute: 0);
+//     final newTime =
+//         await showTimePicker(context: context, initialTime: time ?? intialTime);
+// =======
+    const intialTime = const TimeOfDay(hour: 9, minute: 0);
     final newTime =
         await showTimePicker(context: context, initialTime: time ?? intialTime);
+// >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
 
     if (newTime == null) return;
 
@@ -1478,9 +1710,15 @@ class _ProductEditBoxState extends State<ProductEditBox> {
   }
 
   Future pickplanTime(BuildContext context) async {
-    final intialTime = TimeOfDay(hour: 9, minute: 0);
+// <<<<<<< HEAD
+//     final intialTime = TimeOfDay(hour: 9, minute: 0);
+//     final newTime =
+//         await showTimePicker(context: context, initialTime: time ?? intialTime);
+// =======
+    const intialTime = const TimeOfDay(hour: 9, minute: 0);
     final newTime =
         await showTimePicker(context: context, initialTime: time ?? intialTime);
+// >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
 
     if (newTime == null) return;
 
@@ -1531,7 +1769,11 @@ class _ProductEditBoxState extends State<ProductEditBox> {
   Future pickorderTime(BuildContext context) async {
     final intialTime = TimeOfDay(hour: 9, minute: 0);
     final newTime =
+// <<<<<<< HEAD
+//         await showTimePicker(context: context, initialTime: time ?? intialTime);
+// =======
         await showTimePicker(context: context, initialTime: time ?? intialTime);
+// >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
 
     if (newTime == null) return;
 
@@ -1605,7 +1847,10 @@ class RadioBoxx extends StatefulWidget {
 
 class _RadioBoxxState extends State<RadioBoxx> {
   String check = "calisthenics";
+// <<<<<<< HEAD
+// =======
   String? value;
+// >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
 
   @override
   Widget build(BuildContext context) {
@@ -1614,8 +1859,13 @@ class _RadioBoxxState extends State<RadioBoxx> {
         children: [
           Container(
             child: RadioListTile<String>(
-              value: check,
-              groupValue: value,
+// <<<<<<< HEAD
+              value: widget.name,
+              groupValue: check,
+// =======
+//               value: check,
+//               groupValue: value,
+// >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
               onChanged: (String? abcd) {
                 widget.cat = abcd;
                 print(abcd);
