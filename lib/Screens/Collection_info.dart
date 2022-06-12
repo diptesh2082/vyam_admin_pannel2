@@ -179,7 +179,7 @@ class _UserInformationState extends State<UserInformation> {
                               ),
                               DataColumn(
                                 label: Text(
-                                  'Number',
+                                  'Phone Number',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
@@ -290,7 +290,9 @@ class _UserInformationState extends State<UserInformation> {
       DataCell(data != null ? Text(data['name'] ?? "") : Text("")),
       DataCell(data != null ? Text(data['email'] ?? "") : Text("")),
       DataCell(data != null ? Text(data['gender'] ?? "") : Text("")),
-      DataCell(data != null ? Text(data['number'] ?? "") : Text("")),
+      DataCell(data != null
+          ? Text((data['number']).toString().substring(3, 13))
+          : Text("")),
       DataCell(data != null ? Text(data['address'] ?? "") : Text("")),
       DataCell(data != null ? Text(data['locality'] ?? "") : Text("")),
       // DataCell(data != null ? Text(data['subLocality'] ?? "") : Text("")),

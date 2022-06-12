@@ -50,7 +50,7 @@ class _BookingDetailsState extends State<BookingDetails> {
                       onPressed: () {
                         Get.to(const addbookings()); //showAddbox,
                       },
-                      child: Text('Add Booking')),
+                      child: const Text('Add Booking')),
                 ),
                 Container(
                   width: 500,
@@ -200,17 +200,7 @@ class _BookingDetailsState extends State<BookingDetails> {
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
-                              // DataColumn(
-                              //   label: Text(
-                              //     'Gym Name',
-                              //     style: TextStyle(fontWeight: FontWeight.w600),
-                              //   ),
-                              // ),
-                              // DataColumn(
-                              //   label: Text(
-                              //     'Gym Address',
-                              //     style: TextStyle(fontWeight: FontWeight.w600),
-                              //   ),
+
                               // ),
                               DataColumn(
                                 label: Text(
@@ -322,11 +312,17 @@ class _BookingDetailsState extends State<BookingDetails> {
           ? Text(data['user_name'].toString())
           : const Text("")),
       DataCell(data['userId'] != null
-          ? Text(data['userId'].toString())
-          : const Text("")),
+
+          ? Text(data['userId'].toString().substring(3, 13))
+          : Text("")),
+      // DataCell(data['total_price'] != null
+      //     ? Text(data['total_price'].toString())
+      //     : const Text("")),
+
       DataCell(data['discount'] != null
           ? Text(data['discount'].toString())
           : const Text("")),
+
 
       DataCell(data['totalDays'] != null
           ? Text(data['totalDays'].toString())
@@ -357,10 +353,41 @@ class _BookingDetailsState extends State<BookingDetails> {
         ),
       )),
       DataCell(data['order_date'] != null ? Text(orderDate) : const Text("")),
-      DataCell(
-          data['booking_date'] != null ? Text(bookingDate) : const Text("")),
+
+      // DataCell(data['gym_details']['name'] != null
+      //     ? Text(data['gym_details']['name'].toString())
+      //     : const Text("")),
+      // DataCell(data['gym_address'] != null
+      //     ? Text(data['gym_address'].toString())
+      //     : const Text("")),
+      DataCell(data['grand_total'] != null
+          ? Row(
+              children: [
+                Text('₹'),
+                Text(data['grand_total'].toString()),
+              ],
+            )
+          : const Text("")),
+      DataCell(data['discount'] != null
+          ? Row(
+              children: [
+                Text('₹'),
+                Text(data['discount'].toString()),
+              ],
+            )
+          : const Text("")),
+      // DataCell(data['daysLeft'] != null
+      //     ? Text(data['daysLeft'].toString())
+      //     : const Text("")),
+      DataCell(data['booking_status'] != null
+          ? Text(data['booking_status'].toString())
+          : const Text("")),
+
+      DataCell(data['booking_date'] != null ? Text(bookingDate) : const Text("")),
+
       DataCell(data['plan_end_duration'] != null
           ? Text(durationEnd)
+
           : const Text("")),
 
       DataCell(
@@ -371,7 +398,7 @@ class _BookingDetailsState extends State<BookingDetails> {
                 DropdownButton(
                     hint: Text(data['booking_status'].toString()),
                     value: data['booking_status'].toString(),
-                    items: [
+                    items: const [
                       DropdownMenuItem(
                         child: Text("Active"),
                         value: "active",
@@ -784,8 +811,8 @@ class _ProductEditBoxState extends State<ProductEditBox> {
   DateTime? dateTime;
   DateTime? pdateTime;
   DateTime? orderdate;
-  List<String> _bookstatus = ['active', 'upcoming', 'completed'];
-  List<String> _do = ['true', 'false'];
+  final List<String> _bookstatus = ['active', 'upcoming', 'completed'];
+  final List<String> _do = ['true', 'false'];
   String _dropdownValue = 'true';
   String dropdownstatusvalue = 'active';
   CollectionReference? categoryStream;
@@ -875,120 +902,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                   ),
                   Container(
                       child: StreamBuilder<QuerySnapshot>(
-// // <<<<<<< HEAD
-//                     stream: vendorIdStream!.snapshots(),
-//                     builder: (context, AsyncSnapshot snapshot) {
-//                       if (snapshot.connectionState == ConnectionState.waiting) {
-//                         return const CircularProgressIndicator();
-//                       }
-//                       if (snapshot.data == null) {
-//                         return Container();
-//                       }
-//                       print("-----------------------------------");
-//                       var doc = snapshot.data.docs;
-//                       return Container(
-//                         width: 500,
-//                         height: 200,
-//                         child: ListView.builder(
-//                             itemCount: doc.length,
-//                             itemBuilder: (BuildContext context, int index) {
-//                               bool check = false;
-//                               return RadioListTile<String>(
-//                                 value: doc[index]["gym_id"],
-//                                 groupValue: abc3,
-//                                 onChanged: (val) => setState(
-//                                   () {
-//                                     abc3 = val!;
-//                                   },
-//                                 ),
-//                                 title: Text(doc[index]["gym_id"]),
-//                               );
-//                               // ListTile(
-//                               //   title: Text(doc[index]["name"]),
-//                               //   onTap: () {
-//                               //     _addgymname.text = doc[index]["name"];
-//                               //   },
-//                               // );
-//                             }),
-//                       );
-//                     },
-//                   )),
-//                   const SizedBox(height: 15),
-//                   // customTextField(
-//                   //     hinttext: "Vendor ID", addcontroller: _addvendorid),
-//                   customTextField(
-//                       hinttext: "User Name", addcontroller: _addusername),
-//                   customTextField(
-//                       hinttext: "User ID", addcontroller: _adduserid),
-//                   // CustomTextField(
-//                   //     hinttext: "Total Price", addcontroller: _addtotalprice),
-//                   customTextField(
-//                       hinttext: "Total Days", addcontroller: _addtotaldays),
-//                   // CustomTextField(
-//                   //     hinttext: "Tax Pay", addcontroller: _addtaxpay),
-//                   // Container(
-//                   //   child: Row(
-//                   //     children: [
-//                   //       ElevatedButton(
-//                   //         child: const Text('Select Date & Time for Plan'),
-//                   //         onPressed: () => pickDateTime(context, endtimedata),
-//                   //       ),
-//                   //       SizedBox(width: 15),
-//                   //     ],
-//                   //   ),
-//                   // ),
-//                   Container(
-//                     child: Row(
-//                       children: [
-//                         const Padding(
-//                           padding: EdgeInsets.all(8.0),
-//                           child: Text('Select Date & Time For Plan:',
-//                               style: TextStyle(
-//                                 fontSize: 20,
-//                                 fontWeight: FontWeight.bold,
-//                               )),
-//                         ),
-//                         ElevatedButton(
-//                           child: const Text('Select Date & Time For Plan'),
-//                           onPressed: () => pickplanDateTime(context),
-//                         ),
-//                         SizedBox(width: 15),
-//                       ],
-//                     ),
-//                   ),
-//                   // customTextField(
-//                   //     hinttext: "Plan End Y", addcontroller: _addplanendyear),
-//                   // customTextField(
-//                   //     hinttext: "Plan End M", addcontroller: _addplanendmonth),
-//                   // customTextField(
-//                   //     hinttext: "Plan End D", addcontroller: _addplanendday),
-//                   const SizedBox(height: 15),
-//                   const Padding(
-//                     padding: EdgeInsets.all(8.0),
-//                     child: Text('Payment Done:',
-//                         style: TextStyle(
-//                             fontWeight: FontWeight.bold, fontSize: 15)),
-//                   ),
-//                   DropdownButton<String>(
-//                     isExpanded: true,
-//                     hint: Text("Payment Done"),
-//                     items: _do.map<DropdownMenuItem<String>>((String value) {
-//                       return DropdownMenuItem<String>(
-//                         value: value,
-//                         child: Text(value),
-//                       );
-//                     }).toList(),
-//                     onChanged: (String? newValue) {
-//                       setState(() {
-//                         this._dropdownValue = newValue!;
-//                         _addpaymentdone.text = _dropdownValue;
-//                         print(_dropdownValue);
-//                       });
-//                     },
-//                     value: _dropdownValue,
-//                   ),
-//                   // customTextField(
-// =======
+
                     stream: vendorIdStream!.snapshots(),
                     builder: (context, AsyncSnapshot snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
@@ -1065,7 +979,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                           child: const Text('Select Date & Time For Plan'),
                           onPressed: () => pickplanDateTime(context),
                         ),
-                        SizedBox(width: 15),
+                        const SizedBox(width: 15),
                       ],
                     ),
                   ),
@@ -1084,7 +998,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                   ),
                   DropdownButton<String>(
                     isExpanded: true,
-                    hint: Text("Payment Done"),
+                    hint: const Text("Payment Done"),
                     items: _do.map<DropdownMenuItem<String>>((String value) {
                       return DropdownMenuItem<String>(
                         value: value,
@@ -1272,9 +1186,10 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                   customTextField(
                       hinttext: "Gym Address", addcontroller: _addgymaddress),
                   customTextField(
-                      hinttext: "Grand Total", addcontroller: _addgrandtotal),
+                      hinttext: "Grand Total (₹)",
+                      addcontroller: _addgrandtotal),
                   customTextField(
-                      hinttext: "Discount", addcontroller: _adddiscount),
+                      hinttext: "Discount (₹)", addcontroller: _adddiscount),
                   customTextField(
                       hinttext: "Days Left", addcontroller: _adddaysletf),
                   const SizedBox(height: 15),
@@ -1304,7 +1219,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                   //     hinttext: "Booking Status",
                   //     addcontroller: _addbookingstatus),
                   customTextField(
-                      hinttext: "Booking Price",
+                      hinttext: "Booking Price (₹)",
                       addcontroller: _addbookingprice),
                   customTextField(
                       hinttext: "Booking Plan", addcontroller: _addbookingplan),
@@ -1348,7 +1263,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                   ),
                   DropdownButton<String>(
                     isExpanded: true,
-                    hint: Text("Booking Accepted"),
+                    hint: const Text("Booking Accepted"),
                     items: _do.map<DropdownMenuItem<String>>((String value) {
                       return DropdownMenuItem<String>(
                         value: value,
