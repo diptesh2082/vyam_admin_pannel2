@@ -194,11 +194,7 @@ class _PaymentsPageState extends State<PaymentsPage> {
         },
       ),
       DataCell(Icon(Icons.delete), onTap: () {
-// <<<<<<< HEAD
         deleteMethod(stream: paymentStream, uniqueDocId: data['userid']);
-// =======
-//         deleteMethod(stream: paymentStream, uniqueDocId: id);
-// >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
       })
     ]);
   }

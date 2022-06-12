@@ -371,7 +371,7 @@ class _BookingDetailsState extends State<BookingDetails> {
                 DropdownButton(
                     hint: Text(data['booking_status'].toString()),
                     value: data['booking_status'].toString(),
-                    items: [
+                    items: const [
                       DropdownMenuItem(
                         child: Text("Active"),
                         value: "active",
@@ -439,7 +439,6 @@ class _BookingDetailsState extends State<BookingDetails> {
 //           () => ProductEditBox(
 // =======
           () => ProductEditBox(
-// >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
             vendorid: data['vendorId'],
             username: data['user_name'],
             userid: data['userId'],
@@ -988,7 +987,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
 //                     value: _dropdownValue,
 //                   ),
 //                   // customTextField(
-// =======
+
                     stream: vendorIdStream!.snapshots(),
                     builder: (context, AsyncSnapshot snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {

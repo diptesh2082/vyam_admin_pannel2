@@ -440,7 +440,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                     ),
                     DropdownButton(
                         value: selectedvaluee,
-                        items: [
+                        items: const [
                           DropdownMenuItem(
                             child: Text("pay per session"),
                             value: "pay per session",
@@ -480,11 +480,10 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                         "original_price": _originalprice.text,
                         'index': int.parse(_index.text),
                         'title': _title.text,
-// <<<<<<< HEAD
+
 //                         "type": _type.text
 // =======
                         "type": selectedvaluee,
-// >>>>>>> cf1997613ff877c63a56c61e3009bdfe3639ccfa
                       };
                       await documentReference
                           .update(data)
