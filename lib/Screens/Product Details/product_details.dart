@@ -1180,7 +1180,9 @@ class _ShowAddBoxState extends State<ShowAddBox> {
                           'legit': false,
                           "branch": _branchController.text,
                           "description": _descriptionCon.text,
-                          "display_picture": image,
+                          "display_picture": image != null
+                              ? image
+                              : "https://www.kindpng.com/picc/m/22-223941_transparent-avatar-png-male-avatar-icon-transparent-png.png",
                           "images": [],
                           "locality": "",
                           "number": _numberCon.text,
@@ -1726,6 +1728,37 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                       );
                     }),
               ),
+
+              Row(
+                children: [
+                  ElevatedButton(
+                    onPressed: () async {
+                      // dic = await chooseImage();
+                      image = uploadToStroagees();
+                    },
+                    child: Text(
+                      'Upload Gym Image',
+                      style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.w700),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 20,
+                  ),
+                  image != null
+                      ? Image(
+                          image: NetworkImage('$image'),
+                          height: 200,
+                          width: 200,
+                        )
+                      : Container(
+                          color: Colors.black,
+                          height: 200,
+                          width: 200,
+                        )
+                ],
+              ),
+
                Text("Services",
               style: GoogleFonts.poppins(
                 fontSize: 25,
@@ -1766,8 +1799,8 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                     }),
               ),
 
+
               // Text(image),
-              Image.network(image.toString()),
               Padding(
                 padding: const EdgeInsets.all(12.0),
                 child: Center(
@@ -1806,5 +1839,27 @@ class _ProductEditBoxState extends State<ProductEditBox> {
         ),
       ),
     );
+  }
+
+  uploadToStroagees() {
+    InputElement input = FileUploadInputElement() as InputElement
+      ..accept = 'image/*';
+    FirebaseStorage fs = FirebaseStorage.instance;
+
+    input.click();
+    input.onChange.listen((event) {
+      final file = input.files?.first;
+      final reader = FileReader();
+
+      reader.readAsDataUrl(file!);
+      reader.onLoadEnd.listen((event) async {
+        var snapshot =
+            await fs.ref().child('product_image/${widget.gymId}').putBlob(file);
+        String downloadUrl = await snapshot.ref.getDownloadURL();
+        setState(() {
+          image = downloadUrl;
+        });
+      });
+    });
   }
 }

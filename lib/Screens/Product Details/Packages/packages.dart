@@ -21,6 +21,8 @@ class PackagesPage extends StatefulWidget {
 
 class _PackagesPageState extends State<PackagesPage> {
   CollectionReference? packageStream;
+  CollectionReference? categoryStream;
+
   var catagory;
   var drop = [];
   var catagory_type;
@@ -59,6 +61,8 @@ class _PackagesPageState extends State<PackagesPage> {
         .collection('package')
         .doc("normal_package")
         .collection("gym");
+    categoryStream = FirebaseFirestore.instance.collection("category");
+
     globalGymId = widget.pGymId;
     name = widget.o;
     landmark = widget.land;
@@ -96,7 +100,13 @@ class _PackagesPageState extends State<PackagesPage> {
                 Padding(
                   padding: const EdgeInsets.only(top: 8.0, left: 8.0),
                   child: GestureDetector(
-                    onTap: showAddbox,
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  addbox(widget.pGymId, finalPackID)));
+                    },
                     child: Container(
                       width: 120,
                       decoration: BoxDecoration(
@@ -124,8 +134,6 @@ class _PackagesPageState extends State<PackagesPage> {
                         return Container();
                       }
                       print("-----------------------------------");
-
-                      print(snapshot.data.docs);
                       return SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
                         child: DataTable(
@@ -160,13 +168,23 @@ class _PackagesPageState extends State<PackagesPage> {
                                 'Discount',
                                 style: TextStyle(fontWeight: FontWeight.w600),
                               )),
+                              DataColumn(
+                                  label: Text(
+                                'Enable/Disable',
+                                style: TextStyle(fontWeight: FontWeight.w600),
+                              )),
 
                               DataColumn(
                                 label: Text(
-                                  'Type',
+                                  'Package Type',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
+                              DataColumn(
+                                  label: Text(
+                                'Type',
+                                style: TextStyle(fontWeight: FontWeight.w600),
+                              )),
                               DataColumn(
                                 label: Text(
                                   'Edit',
@@ -200,6 +218,8 @@ class _PackagesPageState extends State<PackagesPage> {
 
   DataRow _buildListItem(BuildContext context, DocumentSnapshot data) {
     String packId = data['id'];
+    bool legit = data['valid'];
+
     return DataRow(cells: [
       // DataCell(data != null ? Text(data['id'] ?? "") : Text("")),
       DataCell(data != null ? Text(data['index'].toString()) : Text("")),
@@ -209,9 +229,33 @@ class _PackagesPageState extends State<PackagesPage> {
           : Text("")),
       DataCell(data != null ? Text(data['original_price'] ?? "") : Text("")),
       DataCell(data != null ? Text(data['discount'] ?? "") : Text("")),
+      DataCell(
+        ElevatedButton(
+          onPressed: () async {
+            bool temp = legit;
+            temp = !temp;
+            DocumentReference documentReference = FirebaseFirestore.instance
+                .collection('product_details')
+                .doc(widget.pGymId)
+                .collection('package')
+                .doc("normal_package")
+                .collection("gym")
+                .doc(data['id']);
+            await documentReference
+                .update({'valid': temp})
+                .whenComplete(() => print("Legitimate toggled"))
+                .catchError((e) => print(e));
+          },
+          child: Text(legit ? "Enable" : "Disable"),
+          style: ElevatedButton.styleFrom(
+              primary: legit ? Colors.green : Colors.red),
+        ),
+      ),
+
       DataCell(data != null
           ? Text(data['type'].toString().toUpperCase())
           : Text("")),
+      DataCell(data != null ? Text(data['package_type'] ?? "") : Text("")),
       // DataCell(data != null ? Text(data['validity'] ?? "") : Text("")),
       DataCell(const Text(""), showEditIcon: true, onTap: () {
         showDialog(
@@ -238,6 +282,26 @@ class _PackagesPageState extends State<PackagesPage> {
       })
     ]);
   }
+}
+
+class addbox extends StatefulWidget {
+  const addbox(this.pGymId, this.finalPackID, {Key? key}) : super(key: key);
+  final String pGymId;
+  final String finalPackID;
+
+  @override
+  State<addbox> createState() => _addboxState();
+}
+
+class _addboxState extends State<addbox> {
+  CollectionReference? categoryStream;
+  @override
+  void initState() {
+    // TODO: implement initState
+    categoryStream = FirebaseFirestore.instance.collection("category");
+
+    super.initState();
+  }
 
   final TextEditingController _discount = TextEditingController();
   final TextEditingController _originalprice = TextEditingController();
@@ -246,120 +310,149 @@ class _PackagesPageState extends State<PackagesPage> {
   final TextEditingController _type = TextEditingController();
   final TextEditingController _validity = TextEditingController();
   final TextEditingController _price = TextEditingController();
-  var selectedvaluee = 'pay per session';
-
-  showAddbox() => showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-            shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(30))),
-            content: SizedBox(
-              height: 480,
-              width: 800,
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Add Records',
-                      style: TextStyle(
-                          fontFamily: 'poppins',
-                          fontWeight: FontWeight.w600,
-                          fontSize: 14),
-                    ),
-                    customTextField(
-                        hinttext: "discount", addcontroller: _discount),
-                    customTextField(
-                        hinttext: "original price",
-                        addcontroller: _originalprice),
-                    customTextField(hinttext: "index", addcontroller: _index),
-                    customTextField(hinttext: "title", addcontroller: _title),
-                    Container(
-                      child: Row(
-                        children: [
-                          Text('Type:',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w700, fontSize: 15)),
-                          SizedBox(
-                            width: 20,
-                          ),
-                          DropdownButton(
-                              value: selectedvaluee,
-                              items: [
-                                DropdownMenuItem(
-                                  child: Text("pay per session"),
-                                  value: "pay per session",
-                                ),
-                                DropdownMenuItem(
-                                  child: Text("package"),
-                                  value: "package",
-                                ),
-                              ],
-                              onChanged: (value) {
-                                print(selectedvaluee);
-                                setState(() {
-                                  selectedvaluee = value as String;
-                                });
-                              }),
-                        ],
-                      ),
-                    ),
-                    customTextField(
-                        hinttext: "validity", addcontroller: _validity),
-                    customTextField(hinttext: "price", addcontroller: _price),
-                    // Container(
-                    //   color: Colors.yellowAccent,
-                    //   width: 280,
-                    //   child: DropdownButton(
-                    //       hint: Text("bgg"),
-                    //       items: catagory.map<DropdownMenuItem<String>>((DocumentSnapshot value){
-                    //         return DropdownMenuItem(child: Text(value["name"]),value:value["name"],);
-                    //       }).toList(),
-                    //       // const [
-                    //       //   DropdownMenuItem(child: Text("pay per session"),value: "pay per session",),
-                    //       //   DropdownMenuItem(child: Text("package"),value: "package",),
-                    //       // ],
-                    //       onChanged:dropDownPackage ),
-                    // ),
-                    Center(
-                      child: ElevatedButton(
-                        onPressed: () async {
-                          await FirebaseFirestore.instance
-                              .collection('product_details')
-                              .doc(widget.pGymId)
-                              .collection('package')
-                              .doc("normal_package")
-                              .collection("gym")
-                              .doc(finalPackID)
-                              .set(
-                            {
-                              'discount': _discount.text,
-                              "original_price": _originalprice.text,
-                              'index': int.parse(_index.text),
-                              'title': _title.text,
+  String selectedvaluee = "pay per session";
+  String cat = "calisthenics";
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Add Package"),
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Add Records',
+              style: TextStyle(
+                  fontFamily: 'poppins',
+                  fontWeight: FontWeight.w600,
+                  fontSize: 14),
+            ),
+            customTextField(hinttext: "discount", addcontroller: _discount),
+            customTextField(
+                hinttext: "original price", addcontroller: _originalprice),
+            customTextField(hinttext: "index", addcontroller: _index),
+            customTextField(hinttext: "title", addcontroller: _title),
+            Container(
+                height: 300,
+                width: 400,
+                child: StreamBuilder<QuerySnapshot>(
+                  stream: categoryStream!.snapshots(),
+                  builder: (context, AsyncSnapshot snapshot) {
+                    String check = "Jee";
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const CircularProgressIndicator();
+                    }
+                    if (snapshot.data == null) {
+                      return Container();
+                    }
+                    print("-----------------------------------");
+                    var doc = snapshot.data.docs;
+                    print(snapshot.data.docs);
+                    return ListView.builder(
+                      itemCount: doc.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return RadioListTile<String>(
+                            value: doc[index]['name'],
+                            title: Text(doc[index]['name'].toString()),
+                            groupValue: cat,
+                            onChanged: (String? valuee) {
+                              setState(() {
+                                cat = valuee!;
+                              });
+                              print(cat);
+                            });
+                      },
+                    );
+                  },
+                )),
+            Container(
+              child: Row(
+                children: [
+                  Text('Type:',
+                      style:
+                          TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
+                  SizedBox(
+                    width: 20,
+                  ),
+                  DropdownButton(
+                      value: selectedvaluee,
+                      items: [
+                        DropdownMenuItem(
+                          child: Text("pay per session"),
+                          value: "pay per session",
+                        ),
+                        DropdownMenuItem(
+                          child: Text("package"),
+                          value: "package",
+                        ),
+                      ],
+                      onChanged: (String? x) {
+                        setState(() {
+                          selectedvaluee = x!;
+                        });
+                      }),
+                ],
+              ),
+            ),
+            customTextField(hinttext: "validity", addcontroller: _validity),
+            customTextField(hinttext: "price", addcontroller: _price),
+            // Container(
+            //   color: Colors.yellowAccent,
+            //   width: 280,
+            //   child: DropdownButton(
+            //       hint: Text("bgg"),
+            //       items: catagory.map<DropdownMenuItem<String>>((DocumentSnapshot value){
+            //         return DropdownMenuItem(child: Text(value["name"]),value:value["name"],);
+            //       }).toList(),
+            //       // const [
+            //       //   DropdownMenuItem(child: Text("pay per session"),value: "pay per session",),
+            //       //   DropdownMenuItem(child: Text("package"),value: "package",),
+            //       // ],
+            //       onChanged:dropDownPackage ),
+            // ),
+            Center(
+              child: ElevatedButton(
+                onPressed: () async {
+                  await FirebaseFirestore.instance
+                      .collection('product_details')
+                      .doc(widget.pGymId)
+                      .collection('package')
+                      .doc("normal_package")
+                      .collection("gym")
+                      .doc(widget.finalPackID)
+                      .set(
+                    {
+                      'discount': _discount.text,
+                      "original_price": _originalprice.text,
+                      'index': int.parse(_index.text),
+                      'title': _title.text,
+                      'valid': true,
 // <<<<<<< HEAD
 //                               "type": _type.text,
 //                               "id": finalPackID,
 //                               "validity": _validity.text,
 //                               "price": _price.text,
 // =======
-                              "type": selectedvaluee,
-                              "id": finalPackID,
-                              "validity": _validity.text,
-                              "price": _price.text,
+                      "package_type": selectedvaluee,
+                      "type": cat,
+                      "id": widget.finalPackID,
+                      "validity": _validity.text,
+                      "price": _price.text,
 // >>>>>>> cf1997613ff877c63a56c61e3009bdfe3639ccfa
-                            },
-                          );
-                          Navigator.pop(context);
-                        },
-                        child: const Text('Done'),
-                      ),
-                    )
-                  ],
-                ),
+                    },
+                  );
+                  Navigator.pop(context);
+                },
+                child: const Text('Done'),
               ),
-            ),
-          ));
+            )
+          ],
+        ),
+      ),
+    );
+  }
 }
 
 class ProductEditBox extends StatefulWidget {
@@ -392,7 +485,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
   final TextEditingController _index = TextEditingController();
   final TextEditingController _title = TextEditingController();
   // final TextEditingController _type = TextEditingController();
-  var selectedvaluee;
+  String selectedvalue = " ";
   @override
   void initState() {
     super.initState();
@@ -400,8 +493,8 @@ class _ProductEditBoxState extends State<ProductEditBox> {
     _originalprice.text = widget.originalprice;
     _index.text = widget.index.toString();
     _title.text = widget.title;
-    selectedvaluee = widget.type;
     // _type.text = widget.type;
+    selectedvalue = widget.type;
   }
 
   @override
@@ -439,8 +532,10 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                       width: 20,
                     ),
                     DropdownButton(
+
                         value: selectedvaluee,
                         items: const [
+
                           DropdownMenuItem(
                             child: Text("pay per session"),
                             value: "pay per session",
@@ -450,10 +545,9 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                             value: "package",
                           ),
                         ],
-                        onChanged: (value) {
-                          print(selectedvaluee);
+                        onChanged: (String? x) {
                           setState(() {
-                            selectedvaluee = value as String;
+                            selectedvalue = x!;
                           });
                         }),
                   ],
@@ -481,9 +575,11 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                         'index': int.parse(_index.text),
                         'title': _title.text,
 
+
 //                         "type": _type.text
 // =======
                         "type": selectedvaluee,
+
                       };
                       await documentReference
                           .update(data)
