@@ -212,7 +212,8 @@ class _BannerPageState extends State<BannerPage> {
                   .whenComplete(() => print("Legitimate toggled"))
                   .catchError((e) => print(e));
             },
-            child: Text(access ? 'Clickable' : 'Non-Clickable'),
+            child: Text(access ? "Clickable" : "Non-Clickable"),
+
             style: ElevatedButton.styleFrom(
                 primary: access ? Colors.green : Colors.red),
           ),

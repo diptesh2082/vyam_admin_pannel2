@@ -20,7 +20,7 @@ class BookingDetails extends StatefulWidget {
 
 class _BookingDetailsState extends State<BookingDetails> {
   CollectionReference bookingStream =
-      FirebaseFirestore.instance.collection('bookings');
+  FirebaseFirestore.instance.collection('bookings');
   String searchVendorId = '';
   var selectedValue = 'active';
   @override
@@ -52,6 +52,7 @@ class _BookingDetailsState extends State<BookingDetails> {
                       },
                       child: const Text('Add Booking')),
                 ),
+
                 Container(
                   width: 500,
                   height: 51,
@@ -93,16 +94,24 @@ class _BookingDetailsState extends State<BookingDetails> {
                     ),
                   ),
                 ),
+
+                Container(
+                  alignment:Alignment.topRight,
+                  child: Icon(
+                    Icons.date_range,
+                  ),
+                ),
+
                 Center(
                   child: StreamBuilder<QuerySnapshot>(
                     stream: FirebaseFirestore.instance
                         .collection('bookings')
                         .where('booking_status', whereIn: [
-                          'completed',
-                          'active',
-                          'upcoming',
-                          'cancelled'
-                        ])
+                      'completed',
+                      'active',
+                      'upcoming',
+                      'cancelled'
+                    ])
                         .orderBy("order_date", descending: true)
                         .snapshots(),
                     builder: (context, AsyncSnapshot snapshot) {
@@ -117,26 +126,22 @@ class _BookingDetailsState extends State<BookingDetails> {
                         print(snapshot.error);
                         return Container();
                       }
-                      // var document = snapshot.data!.docs;
-
                       var doc = snapshot.data.docs;
 
                       if (searchVendorId.length > 0) {
                         doc = doc.where((element) {
                           return element
-// <<<<<<< HEAD
-//                                   .get('user_name')
-//                                   .toString()
-//                                   .toLowerCase()
-//                                   .contains(searchVendorId.toString()) ||
-// =======
-                                  .get('user_name')
+                              .get('user_name')
+                              .toString()
+                              .toLowerCase()
+                              .contains(searchVendorId.toString()) ||
+                              element
+                                  .get('userId')
                                   .toString()
                                   .toLowerCase()
                                   .contains(searchVendorId.toString()) ||
-// >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
                               element
-                                  .get('userId')
+                                  .get('grand_total')
                                   .toString()
                                   .toLowerCase()
                                   .contains(searchVendorId.toString());
@@ -150,14 +155,14 @@ class _BookingDetailsState extends State<BookingDetails> {
                             columns: const [
                               DataColumn(
                                   label: Text(
-                                'Booking ID',
-                                style: TextStyle(fontWeight: FontWeight.w600),
-                              )),
+                                    'Booking ID',
+                                    style: TextStyle(fontWeight: FontWeight.w600),
+                                  )),
                               DataColumn(
                                   label: Text(
-                                'Vendor Name',
-                                style: TextStyle(fontWeight: FontWeight.w600),
-                              )),
+                                    'Vendor Name',
+                                    style: TextStyle(fontWeight: FontWeight.w600),
+                                  )),
                               DataColumn(
                                 label: Text(
                                   'User Name',
@@ -200,8 +205,6 @@ class _BookingDetailsState extends State<BookingDetails> {
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
-
-                              // ),
                               DataColumn(
                                 label: Text(
                                   'Booking Date',
@@ -214,48 +217,24 @@ class _BookingDetailsState extends State<BookingDetails> {
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
-                              // DataColumn(
-                              //   label: Text(
-                              //     'Days Left',
-                              //     style: TextStyle(fontWeight: FontWeight.w600),
-                              //   ),
-                              // ),
                               DataColumn(
                                 label: Text(
                                   'Booking Status',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
-                              // DataColumn(
-                              //   label: Text(
-                              //     'Booking Price',
-                              //     style: TextStyle(fontWeight: FontWeight.w600),
-                              //   ),
-                              // ),
                               DataColumn(
                                 label: Text(
                                   'Package Type',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
-                              // DataColumn(
-                              //   label: Text(
-                              //     'Booking ID',
-                              //     style: TextStyle(fontWeight: FontWeight.w600),
-                              //   ),
-                              // ),
                               DataColumn(
                                 label: Text(
                                   'Grand Total',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
-                              // DataColumn(
-                              //   label: Text(
-                              //     'Booking Accepted',
-                              //     style: TextStyle(fontWeight: FontWeight.w600),
-                              //   ),
-                              // ),
                               DataColumn(
                                 label: Text(
                                   'Edit',
@@ -292,13 +271,13 @@ class _BookingDetailsState extends State<BookingDetails> {
     bool paymentDoneBool = data['payment_done'];
     bool bookingAccepted = data['booking_accepted'];
     String durationEnd =
-        DateFormat("MMM, dd, yyyy").format(data["plan_end_duration"].toDate());
+    DateFormat("MMM, dd, yyyy").format(data["plan_end_duration"].toDate());
     // "${data['plan_end_duration'].toDate().year}/${data['plan_end_duration'].toDate().month}/${data['plan_end_duration'].toDate().day}";
     String orderDate =
-        DateFormat("MMM, dd, yyyy").format(data["order_date"].toDate());
+    DateFormat("MMM, dd, yyyy").format(data["order_date"].toDate());
     // "${data['order_date'].toDate().year}/${data['order_date'].toDate().month}/${data['order_date'].toDate().day}";
     String bookingDate =
-        DateFormat("MMM, dd, yyyy").format(data["booking_date"].toDate());
+    DateFormat("MMM, dd, yyyy").format(data["booking_date"].toDate());
     // "${data['booking_date'].toDate().year}/${data['booking_date'].toDate().month}/${data['booking_date'].toDate().day}";
     String x;
     return DataRow(cells: [
@@ -306,31 +285,20 @@ class _BookingDetailsState extends State<BookingDetails> {
           data["id"] != null ? Text(data['id'].toString()) : const Text("")),
       DataCell(data["gym_details"] != null
           ? Text(
-              '${data['gym_details']['name'].toString().toUpperCase()}|${data['gym_details']['branch'].toString().toUpperCase()}')
+          '${data['gym_details']['name'].toString().toUpperCase()}|${data['gym_details']['branch'].toString().toUpperCase()}')
           : const Text("")),
       DataCell(data['user_name'] != null
           ? Text(data['user_name'].toString())
           : const Text("")),
       DataCell(data['userId'] != null
-
           ? Text(data['userId'].toString().substring(3, 13))
           : Text("")),
-      // DataCell(data['total_price'] != null
-      //     ? Text(data['total_price'].toString())
-      //     : const Text("")),
-
       DataCell(data['discount'] != null
-          ? Text(data['discount'].toString())
+          ? Text('₹${data['discount'].toString()}')
           : const Text("")),
-
-
       DataCell(data['totalDays'] != null
           ? Text(data['totalDays'].toString())
           : const Text("")),
-      // DataCell(data['tax_pay'] != null
-      //     ? Text(data['tax_pay'].toString())
-      //     : const Text("")),
-
       DataCell(data['package_type'] != null
           ? Text(data['package_type'].toString().toUpperCase())
           : const Text("")),
@@ -354,40 +322,9 @@ class _BookingDetailsState extends State<BookingDetails> {
       )),
       DataCell(data['order_date'] != null ? Text(orderDate) : const Text("")),
 
-      // DataCell(data['gym_details']['name'] != null
-      //     ? Text(data['gym_details']['name'].toString())
-      //     : const Text("")),
-      // DataCell(data['gym_address'] != null
-      //     ? Text(data['gym_address'].toString())
-      //     : const Text("")),
-      DataCell(data['grand_total'] != null
-          ? Row(
-              children: [
-                const Text('₹'),
-                Text(data['grand_total'].toString()),
-              ],
-            )
-          : const Text("")),
-      DataCell(data['discount'] != null
-          ? Row(
-              children: [
-                const Text('₹'),
-                Text(data['discount'].toString()),
-              ],
-            )
-          : const Text("")),
-      // DataCell(data['daysLeft'] != null
-      //     ? Text(data['daysLeft'].toString())
-      //     : const Text("")),
-      DataCell(data['booking_status'] != null
-          ? Text(data['booking_status'].toString())
-          : const Text("")),
-
       DataCell(data['booking_date'] != null ? Text(bookingDate) : const Text("")),
-
       DataCell(data['plan_end_duration'] != null
           ? Text(durationEnd)
-
           : const Text("")),
 
       DataCell(
@@ -426,26 +363,16 @@ class _BookingDetailsState extends State<BookingDetails> {
           ),
         ),
       ),
-
       DataCell(data['booking_plan'] != null
           ? Text(data['booking_plan'].toString())
           : const Text("")),
-      // DataCell(data['booking_id'] != null
-      //     ? Text(data['booking_id'].toString())
-      //     : const Text("")),
-      // DataCell(
-      //     data['booking_date'] != null ? Text(bookingDate) : const Text("")),
       DataCell(data['grand_total'] != null
-          ? Text(data['grand_total'].toString())
+          ? Text('₹${data['grand_total'].toString()}')
           : const Text("")),
 
       DataCell(const Text(""), showEditIcon: true, onTap: () {
         Get.to(
-// <<<<<<< HEAD
-//           () => ProductEditBox(
-// =======
-          () => ProductEditBox(
-// >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
+              () => ProductEditBox(
             vendorid: data['vendorId'],
             username: data['user_name'],
             userid: data['userId'],
@@ -664,25 +591,25 @@ class _CustomTextFieldState extends State<CustomTextField> {
 //             border: InputBorder.none,
 //             hintStyle: const TextStyle(
 // =======
-        autofocus: true,
-        style: const TextStyle(
+            autofocus: true,
+            style: const TextStyle(
 // >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
-          fontSize: 20,
-          fontFamily: 'poppins',
-          fontWeight: FontWeight.w400,
-        ),
-        controller: widget.addcontroller,
-        maxLines: 3,
-        decoration: InputDecoration(
-            border: InputBorder.none,
-            hintStyle: const TextStyle(
               fontSize: 20,
               fontFamily: 'poppins',
               fontWeight: FontWeight.w400,
             ),
-            hintMaxLines: 2,
-            hintText: widget.hinttext),
-      )),
+            controller: widget.addcontroller,
+            maxLines: 3,
+            decoration: InputDecoration(
+                border: InputBorder.none,
+                hintStyle: const TextStyle(
+                  fontSize: 20,
+                  fontFamily: 'poppins',
+                  fontWeight: FontWeight.w400,
+                ),
+                hintMaxLines: 2,
+                hintText: widget.hinttext),
+          )),
     );
   }
 }
@@ -790,8 +717,8 @@ class _ProductEditBoxState extends State<ProductEditBox> {
   DateTime? dateTime;
   DateTime? pdateTime;
   DateTime? orderdate;
-  final List<String> _bookstatus = ['active', 'upcoming', 'completed'];
-  final List<String> _do = ['true', 'false'];
+  List<String> _bookstatus = ['active', 'upcoming', 'completed'];
+  List<String> _do = ['true', 'false'];
   String _dropdownValue = 'true';
   String dropdownstatusvalue = 'active';
   CollectionReference? categoryStream;
@@ -881,44 +808,157 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                   ),
                   Container(
                       child: StreamBuilder<QuerySnapshot>(
+// // <<<<<<< HEAD
+//                     stream: vendorIdStream!.snapshots(),
+//                     builder: (context, AsyncSnapshot snapshot) {
+//                       if (snapshot.connectionState == ConnectionState.waiting) {
+//                         return const CircularProgressIndicator();
+//                       }
+//                       if (snapshot.data == null) {
+//                         return Container();
+//                       }
+//                       print("-----------------------------------");
+//                       var doc = snapshot.data.docs;
+//                       return Container(
+//                         width: 500,
+//                         height: 200,
+//                         child: ListView.builder(
+//                             itemCount: doc.length,
+//                             itemBuilder: (BuildContext context, int index) {
+//                               bool check = false;
+//                               return RadioListTile<String>(
+//                                 value: doc[index]["gym_id"],
+//                                 groupValue: abc3,
+//                                 onChanged: (val) => setState(
+//                                   () {
+//                                     abc3 = val!;
+//                                   },
+//                                 ),
+//                                 title: Text(doc[index]["gym_id"]),
+//                               );
+//                               // ListTile(
+//                               //   title: Text(doc[index]["name"]),
+//                               //   onTap: () {
+//                               //     _addgymname.text = doc[index]["name"];
+//                               //   },
+//                               // );
+//                             }),
+//                       );
+//                     },
+//                   )),
+//                   const SizedBox(height: 15),
+//                   // customTextField(
+//                   //     hinttext: "Vendor ID", addcontroller: _addvendorid),
+//                   customTextField(
+//                       hinttext: "User Name", addcontroller: _addusername),
+//                   customTextField(
+//                       hinttext: "User ID", addcontroller: _adduserid),
+//                   // CustomTextField(
+//                   //     hinttext: "Total Price", addcontroller: _addtotalprice),
+//                   customTextField(
+//                       hinttext: "Total Days", addcontroller: _addtotaldays),
+//                   // CustomTextField(
+//                   //     hinttext: "Tax Pay", addcontroller: _addtaxpay),
+//                   // Container(
+//                   //   child: Row(
+//                   //     children: [
+//                   //       ElevatedButton(
+//                   //         child: const Text('Select Date & Time for Plan'),
+//                   //         onPressed: () => pickDateTime(context, endtimedata),
+//                   //       ),
+//                   //       SizedBox(width: 15),
+//                   //     ],
+//                   //   ),
+//                   // ),
+//                   Container(
+//                     child: Row(
+//                       children: [
+//                         const Padding(
+//                           padding: EdgeInsets.all(8.0),
+//                           child: Text('Select Date & Time For Plan:',
+//                               style: TextStyle(
+//                                 fontSize: 20,
+//                                 fontWeight: FontWeight.bold,
+//                               )),
+//                         ),
+//                         ElevatedButton(
+//                           child: const Text('Select Date & Time For Plan'),
+//                           onPressed: () => pickplanDateTime(context),
+//                         ),
+//                         SizedBox(width: 15),
+//                       ],
+//                     ),
+//                   ),
+//                   // customTextField(
+//                   //     hinttext: "Plan End Y", addcontroller: _addplanendyear),
+//                   // customTextField(
+//                   //     hinttext: "Plan End M", addcontroller: _addplanendmonth),
+//                   // customTextField(
+//                   //     hinttext: "Plan End D", addcontroller: _addplanendday),
+//                   const SizedBox(height: 15),
+//                   const Padding(
+//                     padding: EdgeInsets.all(8.0),
+//                     child: Text('Payment Done:',
+//                         style: TextStyle(
+//                             fontWeight: FontWeight.bold, fontSize: 15)),
+//                   ),
+//                   DropdownButton<String>(
+//                     isExpanded: true,
+//                     hint: Text("Payment Done"),
+//                     items: _do.map<DropdownMenuItem<String>>((String value) {
+//                       return DropdownMenuItem<String>(
+//                         value: value,
+//                         child: Text(value),
+//                       );
+//                     }).toList(),
+//                     onChanged: (String? newValue) {
+//                       setState(() {
+//                         this._dropdownValue = newValue!;
+//                         _addpaymentdone.text = _dropdownValue;
+//                         print(_dropdownValue);
+//                       });
+//                     },
+//                     value: _dropdownValue,
+//                   ),
+//                   // customTextField(
 
-                    stream: vendorIdStream!.snapshots(),
-                    builder: (context, AsyncSnapshot snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const CircularProgressIndicator();
-                      }
-                      if (snapshot.data == null) {
-                        return Container();
-                      }
-                      print("-----------------------------------");
-                      var doc = snapshot.data.docs;
-                      return Container(
-                        width: 500,
-                        height: 200,
-                        child: ListView.builder(
-                            itemCount: doc.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              bool check = false;
-                              return RadioListTile<String>(
-                                value: doc[index]["gym_id"],
-                                groupValue: abc3,
-                                onChanged: (val) => setState(
-                                  () {
-                                    abc3 = val!;
-                                  },
-                                ),
-                                title: Text(doc[index]["gym_id"]),
-                              );
-                              // ListTile(
-                              //   title: Text(doc[index]["name"]),
-                              //   onTap: () {
-                              //     _addgymname.text = doc[index]["name"];
-                              //   },
-                              // );
-                            }),
-                      );
-                    },
-                  )),
+                        stream: vendorIdStream!.snapshots(),
+                        builder: (context, AsyncSnapshot snapshot) {
+                          if (snapshot.connectionState == ConnectionState.waiting) {
+                            return const CircularProgressIndicator();
+                          }
+                          if (snapshot.data == null) {
+                            return Container();
+                          }
+                          print("-----------------------------------");
+                          var doc = snapshot.data.docs;
+                          return Container(
+                            width: 500,
+                            height: 200,
+                            child: ListView.builder(
+                                itemCount: doc.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  bool check = false;
+                                  return RadioListTile<String>(
+                                    value: doc[index]["gym_id"],
+                                    groupValue: abc3,
+                                    onChanged: (val) => setState(
+                                          () {
+                                        abc3 = val!;
+                                      },
+                                    ),
+                                    title: Text(doc[index]["gym_id"]),
+                                  );
+                                  // ListTile(
+                                  //   title: Text(doc[index]["name"]),
+                                  //   onTap: () {
+                                  //     _addgymname.text = doc[index]["name"];
+                                  //   },
+                                  // );
+                                }),
+                          );
+                        },
+                      )),
                   const SizedBox(height: 15),
                   // customTextField(
                   //     hinttext: "Vendor ID", addcontroller: _addvendorid),
@@ -958,7 +998,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                           child: const Text('Select Date & Time For Plan'),
                           onPressed: () => pickplanDateTime(context),
                         ),
-                        const SizedBox(width: 15),
+                        SizedBox(width: 15),
                       ],
                     ),
                   ),
@@ -977,7 +1017,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                   ),
                   DropdownButton<String>(
                     isExpanded: true,
-                    hint: const Text("Payment Done"),
+                    hint: Text("Payment Done"),
                     items: _do.map<DropdownMenuItem<String>>((String value) {
                       return DropdownMenuItem<String>(
                         value: value,
@@ -1026,22 +1066,21 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                               itemBuilder: (BuildContext context, int index) {
                                 bool check = false;
                                 return
-// <<<<<<< HEAD
-                                    // RadioBoxx(
-                                    //   doc[index]["name"],
-                                    //   doc[index]["category_id"],
-                                    //   _addpackagetype.text,
-                                    // );
-                                    RadioListTile<String>(
-                                  value: doc[index]["name"],
-                                  groupValue: abc,
-                                  onChanged: (val) => setState(
-                                    () {
-                                      abc = val!;
-                                    },
-                                  ),
-                                  title: Text(doc[index]["name"]),
-                                );
+                                  // RadioBoxx(
+                                  //   doc[index]["name"],
+                                  //   doc[index]["category_id"],
+                                  //   _addpackagetype.text,
+                                  // );
+                                  RadioListTile<String>(
+                                    value: doc[index]["name"],
+                                    groupValue: abc,
+                                    onChanged: (val) => setState(
+                                          () {
+                                        abc = val!;
+                                      },
+                                    ),
+                                    title: Text(doc[index]["name"]),
+                                  );
 // =======
                                 // RadioBoxx(
                                 //   doc[index]["name"],
@@ -1052,7 +1091,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                                   value: doc[index]["name"],
                                   groupValue: abc,
                                   onChanged: (val) => setState(
-                                    () {
+                                        () {
                                       abc = val!;
                                     },
                                   ),
@@ -1122,44 +1161,44 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                   Container(
                       child: StreamBuilder<QuerySnapshot>(
 //
-                    stream: vendorIdStream!.snapshots(),
-                    builder: (context, AsyncSnapshot snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const CircularProgressIndicator();
-                      }
-                      if (snapshot.data == null) {
-                        return Container();
-                      }
-                      print("-----------------------------------");
-                      var doc = snapshot.data.docs;
-                      return Container(
-                        width: 400,
-                        height: 300,
-                        child: ListView.builder(
-                            itemCount: doc.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              bool check = false;
-                              return RadioListTile<String>(
-                                value: doc[index]["name"],
-                                groupValue: abc2,
-                                onChanged: (val) => setState(
-                                  () {
-                                    abc2 = val!;
-                                  },
-                                ),
-                                title: Text(doc[index]["name"]),
-                              );
-                              // ListTile(
-                              //   title: Text(doc[index]["name"]),
-                              //   onTap: () {
-                              //     _addgymname.text = doc[index]["name"];
-                              //   },
-                              // );
-                            }),
-                      );
-                    },
-                  )),
-// >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
+                        stream: vendorIdStream!.snapshots(),
+                        builder: (context, AsyncSnapshot snapshot) {
+                          if (snapshot.connectionState == ConnectionState.waiting) {
+                            return const CircularProgressIndicator();
+                          }
+                          if (snapshot.data == null) {
+                            return Container();
+                          }
+                          print("-----------------------------------");
+                          var doc = snapshot.data.docs;
+                          return Container(
+                            width: 400,
+                            height: 300,
+                            child: ListView.builder(
+                                itemCount: doc.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  bool check = false;
+                                  return RadioListTile<String>(
+                                    value: doc[index]["name"],
+                                    groupValue: abc2,
+                                    onChanged: (val) => setState(
+                                          () {
+                                        abc2 = val!;
+                                      },
+                                    ),
+                                    title: Text(doc[index]["name"]),
+                                  );
+                                  // ListTile(
+                                  //   title: Text(doc[index]["name"]),
+                                  //   onTap: () {
+                                  //     _addgymname.text = doc[index]["name"];
+                                  //   },
+                                  // );
+                                }),
+                          );
+                        },
+                      )),
+
                   // customTextField(
                   //     hinttext: "Gym Name", addcontroller: _addgymname),
                   customTextField(
@@ -1242,7 +1281,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                   ),
                   DropdownButton<String>(
                     isExpanded: true,
-                    hint: const Text("Booking Accepted"),
+                    hint: Text("Booking Accepted"),
                     items: _do.map<DropdownMenuItem<String>>((String value) {
                       return DropdownMenuItem<String>(
                         value: value,
@@ -1275,9 +1314,9 @@ class _ProductEditBoxState extends State<ProductEditBox> {
 //                                       .collection('bookings')
 //                                       .doc(_addbookingid.text);
 // =======
-                                  FirebaseFirestore.instance
-                                      .collection('bookings')
-                                      .doc(_addbookingid.text);
+                              FirebaseFirestore.instance
+                                  .collection('bookings')
+                                  .doc(_addbookingid.text);
 // >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
                               // DateTime endtimedata = DateTime.parse(
                               //     '${_addplanendyear.text}-${isLess(_addplanendmonth.text) ? '0' + _addplanendmonth.text : _addplanendday.text}-${isLess(_addplanendday.text) ? '0' + _addplanendday.text : _addplanendday.text} 00:00:04Z');
@@ -1315,9 +1354,9 @@ class _ProductEditBoxState extends State<ProductEditBox> {
 //                                         ? true
 //                                         : false,
 // =======
-                                    _addbookingaccepted.text == 'true'
-                                        ? true
-                                        : false,
+                                _addbookingaccepted.text == 'true'
+                                    ? true
+                                    : false,
 // >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
                               };
                               await documentReference
@@ -1517,7 +1556,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
 // =======
     const intialTime = const TimeOfDay(hour: 9, minute: 0);
     final newTime =
-        await showTimePicker(context: context, initialTime: time ?? intialTime);
+    await showTimePicker(context: context, initialTime: time ?? intialTime);
 // >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
 
     if (newTime == null) return;
@@ -1574,7 +1613,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
 // =======
     const intialTime = const TimeOfDay(hour: 9, minute: 0);
     final newTime =
-        await showTimePicker(context: context, initialTime: time ?? intialTime);
+    await showTimePicker(context: context, initialTime: time ?? intialTime);
 // >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
 
     if (newTime == null) return;
@@ -1629,7 +1668,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
 // <<<<<<< HEAD
 //         await showTimePicker(context: context, initialTime: time ?? intialTime);
 // =======
-        await showTimePicker(context: context, initialTime: time ?? intialTime);
+    await showTimePicker(context: context, initialTime: time ?? intialTime);
 // >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
 
     if (newTime == null) return;
