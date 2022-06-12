@@ -36,7 +36,6 @@ class _TrackingScreenState extends State<TrackingScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-
                 Container(
                   width: 500,
                   height: 51,
@@ -66,13 +65,11 @@ class _TrackingScreenState extends State<TrackingScreen> {
                           });
                         }
                       },
-                      decoration:  InputDecoration(
+                      decoration: InputDecoration(
                         prefixIcon: const Icon(Icons.search),
                         hintText: 'Search',
                         hintStyle: GoogleFonts.poppins(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500
-                        ),
+                            fontSize: 16, fontWeight: FontWeight.w500),
                         border: InputBorder.none,
                         filled: true,
                         fillColor: Colors.white12,
@@ -80,12 +77,6 @@ class _TrackingScreenState extends State<TrackingScreen> {
                     ),
                   ),
                 ),
-
-
-
-
-
-
                 Center(
                   child: StreamBuilder<QuerySnapshot>(
                     stream: FirebaseFirestore.instance
@@ -112,28 +103,22 @@ class _TrackingScreenState extends State<TrackingScreen> {
                       if (searchByTracking.length > 0) {
                         doc = doc.where((element) {
                           return element
-                              .get('name')
-                              .toString()
-                              .toLowerCase()
-                              .contains(searchByTracking.toString())
-                              || element
+                                  .get('name')
+                                  .toString()
+                                  .toLowerCase()
+                                  .contains(searchByTracking.toString()) ||
+                              element
                                   .get('gym_id')
                                   .toString()
                                   .toLowerCase()
-                                  .contains(searchByTracking.toString())
-                              || element
+                                  .contains(searchByTracking.toString()) ||
+                              element
                                   .get('address')
                                   .toString()
                                   .toLowerCase()
                                   .contains(searchByTracking.toString());
                         }).toList();
                       }
-
-
-
-
-
-
 
                       return SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
@@ -314,8 +299,8 @@ class _TrackingScreenState extends State<TrackingScreen> {
           ? Text(data['user_name'].toString())
           : const Text("")),
       DataCell(data['userId'] != null
-          ? Text(data['userId'].toString())
-          : const Text("")),
+          ? Text(data['userId'].toString().substring(3, 13))
+          : Text("")),
       // DataCell(data['total_price'] != null
       //     ? Text(data['total_price'].toString())
       //     : const Text("")),

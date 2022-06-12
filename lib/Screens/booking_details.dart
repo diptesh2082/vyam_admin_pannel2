@@ -322,11 +322,17 @@ class _BookingDetailsState extends State<BookingDetails> {
           ? Text(data['user_name'].toString())
           : const Text("")),
       DataCell(data['userId'] != null
-          ? Text(data['userId'].toString())
-          : const Text("")),
+
+          ? Text(data['userId'].toString().substring(3, 13))
+          : Text("")),
+      // DataCell(data['total_price'] != null
+      //     ? Text(data['total_price'].toString())
+      //     : const Text("")),
+
       DataCell(data['discount'] != null
           ? Text(data['discount'].toString())
           : const Text("")),
+
 
       DataCell(data['totalDays'] != null
           ? Text(data['totalDays'].toString())
@@ -357,10 +363,41 @@ class _BookingDetailsState extends State<BookingDetails> {
         ),
       )),
       DataCell(data['order_date'] != null ? Text(orderDate) : const Text("")),
-      DataCell(
-          data['booking_date'] != null ? Text(bookingDate) : const Text("")),
+
+      // DataCell(data['gym_details']['name'] != null
+      //     ? Text(data['gym_details']['name'].toString())
+      //     : const Text("")),
+      // DataCell(data['gym_address'] != null
+      //     ? Text(data['gym_address'].toString())
+      //     : const Text("")),
+      DataCell(data['grand_total'] != null
+          ? Row(
+              children: [
+                Text('₹'),
+                Text(data['grand_total'].toString()),
+              ],
+            )
+          : const Text("")),
+      DataCell(data['discount'] != null
+          ? Row(
+              children: [
+                Text('₹'),
+                Text(data['discount'].toString()),
+              ],
+            )
+          : const Text("")),
+      // DataCell(data['daysLeft'] != null
+      //     ? Text(data['daysLeft'].toString())
+      //     : const Text("")),
+      DataCell(data['booking_status'] != null
+          ? Text(data['booking_status'].toString())
+          : const Text("")),
+
+      DataCell(data['booking_date'] != null ? Text(bookingDate) : const Text("")),
+
       DataCell(data['plan_end_duration'] != null
           ? Text(durationEnd)
+
           : const Text("")),
 
       DataCell(
@@ -1272,9 +1309,10 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                   customTextField(
                       hinttext: "Gym Address", addcontroller: _addgymaddress),
                   customTextField(
-                      hinttext: "Grand Total", addcontroller: _addgrandtotal),
+                      hinttext: "Grand Total (₹)",
+                      addcontroller: _addgrandtotal),
                   customTextField(
-                      hinttext: "Discount", addcontroller: _adddiscount),
+                      hinttext: "Discount (₹)", addcontroller: _adddiscount),
                   customTextField(
                       hinttext: "Days Left", addcontroller: _adddaysletf),
                   const SizedBox(height: 15),
@@ -1304,7 +1342,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                   //     hinttext: "Booking Status",
                   //     addcontroller: _addbookingstatus),
                   customTextField(
-                      hinttext: "Booking Price",
+                      hinttext: "Booking Price (₹)",
                       addcontroller: _addbookingprice),
                   customTextField(
                       hinttext: "Booking Plan", addcontroller: _addbookingplan),

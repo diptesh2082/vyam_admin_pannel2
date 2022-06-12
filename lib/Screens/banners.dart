@@ -136,6 +136,11 @@ class _BannerPageState extends State<BannerPage> {
                             columns: const [
                               DataColumn(
                                   label: Text(
+                                'Position',
+                                style: TextStyle(fontWeight: FontWeight.w600),
+                              )),
+                              DataColumn(
+                                  label: Text(
                                 'Name',
                                 style: TextStyle(fontWeight: FontWeight.w600),
                               )),
@@ -187,6 +192,9 @@ class _BannerPageState extends State<BannerPage> {
     String banner_id = data['id'];
 
     return DataRow(cells: [
+      DataCell(data['position_id'] != null
+          ? Text(data['position_id'] ?? "")
+          : const Text("")),
       DataCell(
           data['name'] != null ? Text(data['name'] ?? "") : const Text("")),
       DataCell(Image.network(data['image'])),
@@ -204,7 +212,11 @@ class _BannerPageState extends State<BannerPage> {
                   .whenComplete(() => print("Legitimate toggled"))
                   .catchError((e) => print(e));
             },
+// <<<<<<< HEAD
             child: Text(access ? "Clickable" : "Non-Clickable"),
+// =======
+//             child: Text(access ? 'Clickable' : 'Non-Clickable'),
+// >>>>>>> 1f09f104c279e9107f7b92c5d9c2cf410db6e92c
             style: ElevatedButton.styleFrom(
                 primary: access ? Colors.green : Colors.red),
           ),
@@ -212,6 +224,7 @@ class _BannerPageState extends State<BannerPage> {
       ),
       DataCell(const Text(""), showEditIcon: true, onTap: () {
         Get.to(() => EditBox(
+            position: data['position_id'],
             name: data['name'],
             image: data['image'],
             id: data['id'],
@@ -428,12 +441,13 @@ class CustomTextField extends StatelessWidget {
 class EditBox extends StatefulWidget {
   const EditBox({
     Key? key,
+    required this.position,
     required this.name,
     required this.image,
     required this.id,
     required this.access,
   }) : super(key: key);
-
+  final String position;
   final String name;
   final String image;
   final String id;
@@ -445,6 +459,7 @@ class EditBox extends StatefulWidget {
 
 class _EditBoxState extends State<EditBox> {
   final TextEditingController _name = TextEditingController();
+  final TextEditingController _position = TextEditingController();
   var id;
   var image;
   var imgUrl1;
@@ -455,7 +470,7 @@ class _EditBoxState extends State<EditBox> {
   @override
   void initState() {
     super.initState();
-
+    _position.text = widget.position;
     _name.text = widget.name;
     id = widget.id;
     image = widget.image;
@@ -485,6 +500,8 @@ class _EditBoxState extends State<EditBox> {
                           fontSize: 14),
                     ),
                   ),
+                  CustomTextField(
+                      hinttext: "Position", addcontroller: _position),
                   CustomTextField(hinttext: "Name", addcontroller: _name),
                   //CustomTextField(hinttext: "Image url", addcontroller: _image),
 
@@ -540,6 +557,7 @@ class _EditBoxState extends State<EditBox> {
                               .doc(id)
                               .update(
                             {
+                              'position_id': _position.text,
                               'name': _name.text,
                               'image': imgUrl1,
                               'id': id,
