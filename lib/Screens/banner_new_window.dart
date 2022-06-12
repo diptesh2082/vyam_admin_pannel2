@@ -149,11 +149,11 @@ class _bannerNewPageState extends State<bannerNewPage> {
                                 hint: Text('$print_type'),
                                 items: const [
                                   DropdownMenuItem(
-                                    child: Text("TRUE"),
+                                    child: Text("Clickable"),
                                     value: true,
                                   ),
                                   DropdownMenuItem(
-                                    child: Text("FALSE"),
+                                    child: Text("Non-Clickable"),
                                     value: false,
                                   ),
                                 ],

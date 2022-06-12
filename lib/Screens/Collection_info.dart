@@ -653,52 +653,52 @@ class _EditBoxState extends State<EditBox> {
                           hintText: 'Phone Number'),
                     )),
                   ),
-                  SizedBox(
-                    height: 50,
-                    child: Card(
-                        child: TextField(
-                      autofocus: true,
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w400,
-                      ),
-                      controller: _locality,
-                      maxLines: 3,
-                      decoration: const InputDecoration(
-                          border: InputBorder.none,
-                          hintStyle: TextStyle(
-                            fontSize: 14,
-                            fontFamily: 'Poppins',
-                            fontWeight: FontWeight.w400,
-                          ),
-                          hintMaxLines: 2,
-                          hintText: 'Locality'),
-                    )),
-                  ),
-                  SizedBox(
-                    height: 50,
-                    child: Card(
-                        child: TextField(
-                      autofocus: true,
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w400,
-                      ),
-                      controller: _sublocality,
-                      maxLines: 3,
-                      decoration: const InputDecoration(
-                          border: InputBorder.none,
-                          hintStyle: TextStyle(
-                            fontSize: 14,
-                            fontFamily: 'Poppins',
-                            fontWeight: FontWeight.w400,
-                          ),
-                          hintMaxLines: 2,
-                          hintText: 'Sub Locality'),
-                    )),
-                  ),
+                  // SizedBox(
+                  //   height: 50,
+                  //   child: Card(
+                  //       child: TextField(
+                  //     autofocus: true,
+                  //     style: const TextStyle(
+                  //       fontSize: 14,
+                  //       fontFamily: 'Poppins',
+                  //       fontWeight: FontWeight.w400,
+                  //     ),
+                  //     controller: _locality,
+                  //     maxLines: 3,
+                  //     decoration: const InputDecoration(
+                  //         border: InputBorder.none,
+                  //         hintStyle: TextStyle(
+                  //           fontSize: 14,
+                  //           fontFamily: 'Poppins',
+                  //           fontWeight: FontWeight.w400,
+                  //         ),
+                  //         hintMaxLines: 2,
+                  //         hintText: 'Locality'),
+                  //   )),
+                  // ),
+                  // SizedBox(
+                  //   height: 50,
+                  //   child: Card(
+                  //       child: TextField(
+                  //     autofocus: true,
+                  //     style: const TextStyle(
+                  //       fontSize: 14,
+                  //       fontFamily: 'Poppins',
+                  //       fontWeight: FontWeight.w400,
+                  //     ),
+                  //     controller: _sublocality,
+                  //     maxLines: 3,
+                  //     decoration: const InputDecoration(
+                  //         border: InputBorder.none,
+                  //         hintStyle: TextStyle(
+                  //           fontSize: 14,
+                  //           fontFamily: 'Poppins',
+                  //           fontWeight: FontWeight.w400,
+                  //         ),
+                  //         hintMaxLines: 2,
+                  //         hintText: 'Sub Locality'),
+                  //   )),
+                  // ),
                   SizedBox(
                     height: 50,
                     child: Card(
@@ -807,7 +807,7 @@ class _EditBoxState extends State<EditBox> {
                                     .doc("${x}");
 
                             Map<String, dynamic> data = <String, dynamic>{
-                              'address': _address.text,
+                              // 'address': _address.text,
                               'gender': _gender.text,
                               'image': imgUrl1,
                               // 'lat': _latitude.text,
@@ -815,8 +815,10 @@ class _EditBoxState extends State<EditBox> {
                               'name': _name.text,
                               'pincode': _pincode.text,
                               'userId': _userid.text,
+
                               'locality': "",
                               'subLocality': "",
+
                               'email': _email.text,
                               'number': _number.text,
                             };
@@ -977,6 +979,7 @@ class _detailsaddState extends State<detailsadd> {
               // customTextField(hinttext: "Gender", addcontroller: _addgender),
 
               customTextField(hinttext: "Address", addcontroller: _addaddress),
+
               // customTextField(
               //     hinttext: "Locality", addcontroller: _addlocality),
               // customTextField(
@@ -994,15 +997,17 @@ class _detailsaddState extends State<detailsadd> {
                           .doc("+91${_addnumber.text}")
                           .set(
                         {
-                          'address': _addaddress.text,
+                          'address': "",
                           'userId': "+91${_addnumber.text}",
                           'name': _addname.text,
                           'email': _addemail.text,
                           'gender': gender,
                           'image': imgUrl1,
                           'number': "+91${_addnumber.text}",
+
                           'locality': "",
                           'subLocality': "",
+
                           'pincode': _addpincode.text,
                           'long': " ",
                           'lat': " ",

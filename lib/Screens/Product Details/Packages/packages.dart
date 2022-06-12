@@ -71,126 +71,126 @@ class _PackagesPageState extends State<PackagesPage> {
   Widget build(BuildContext context) {
     print(finalPackID);
     return
-        // loadig?
-        //   const Center(child: CircularProgressIndicator())
-        //   :
-        Scaffold(
-      appBar: AppBar(
-        title: Center(
-          child: Text(
-            '${name.toUpperCase()}, ${landmark.toString().toUpperCase()}',
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
-        ),
-      ),
-      body: SafeArea(
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 5),
-          decoration: BoxDecoration(
-              color: Colors.grey.shade100,
-              borderRadius: BorderRadius.circular(20.0)),
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 8.0, left: 8.0),
-                  child: GestureDetector(
-                    onTap: showAddbox,
-                    child: Container(
-                      width: 120,
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(20.0)),
-                      child: Row(
-                        children: const [
-                          Icon(Icons.add),
-                          Text('Add Product',
-                              style: TextStyle(fontWeight: FontWeight.w400)),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                Center(
-                  child: StreamBuilder<QuerySnapshot>(
-                    stream: packageStream!.snapshots(),
-                    builder: (context, AsyncSnapshot snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const CircularProgressIndicator();
-                      }
-                      if (snapshot.data == null) {
-                        print('No output for package');
-                        return Container();
-                      }
-                      print("-----------------------------------");
-
-                      print(snapshot.data.docs);
-                      return SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: DataTable(
-                            dataRowHeight: 65,
-                            columns: const [
-                              // DataColumn(
-                              //     label: Text(
-                              //   'package id',
-                              //   style: TextStyle(fontWeight: FontWeight.w600),
-                              // )),
-                              DataColumn(
-                                label: Text(
-                                  'Index',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
-                              ),
-                              DataColumn(
-                                label: Text(
-                                  'Title',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
-                              ),
-
-                              DataColumn(
-                                label: Text(
-                                  'Original Price',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
-                              ),
-                              DataColumn(
-                                  label: Text(
-                                'Discount',
-                                style: TextStyle(fontWeight: FontWeight.w600),
-                              )),
-
-                              DataColumn(
-                                label: Text(
-                                  'Type',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
-                              ),
-                              DataColumn(
-                                label: Text(
-                                  'Edit',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
-                              ),
-                              DataColumn(
-                                label: Text(
-                                  'Delete',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
-                              ),
-                            ],
-                            rows: _buildlist(context, snapshot.data!.docs)),
-                      );
-                    },
-                  ),
-                ),
-              ],
+      // loadig?
+      //   const Center(child: CircularProgressIndicator())
+      //   :
+      Scaffold(
+        appBar: AppBar(
+          title: Center(
+            child: Text(
+              '${name.toUpperCase()}, ${landmark.toString().toUpperCase()}',
+              style: TextStyle(fontWeight: FontWeight.bold),
             ),
           ),
         ),
-      ),
-    );
+        body: SafeArea(
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 5),
+            decoration: BoxDecoration(
+                color: Colors.grey.shade100,
+                borderRadius: BorderRadius.circular(20.0)),
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8.0, left: 8.0),
+                    child: GestureDetector(
+                      onTap: showAddbox,
+                      child: Container(
+                        width: 120,
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(20.0)),
+                        child: Row(
+                          children: const [
+                            Icon(Icons.add),
+                            Text('Add Product',
+                                style: TextStyle(fontWeight: FontWeight.w400)),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  Center(
+                    child: StreamBuilder<QuerySnapshot>(
+                      stream: packageStream!.snapshots(),
+                      builder: (context, AsyncSnapshot snapshot) {
+                        if (snapshot.connectionState == ConnectionState.waiting) {
+                          return const CircularProgressIndicator();
+                        }
+                        if (snapshot.data == null) {
+                          print('No output for package');
+                          return Container();
+                        }
+                        print("-----------------------------------");
+
+                        print(snapshot.data.docs);
+                        return SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: DataTable(
+                              dataRowHeight: 65,
+                              columns: const [
+                                // DataColumn(
+                                //     label: Text(
+                                //   'package id',
+                                //   style: TextStyle(fontWeight: FontWeight.w600),
+                                // )),
+                                DataColumn(
+                                  label: Text(
+                                    'Index',
+                                    style: TextStyle(fontWeight: FontWeight.w600),
+                                  ),
+                                ),
+                                DataColumn(
+                                  label: Text(
+                                    'Title',
+                                    style: TextStyle(fontWeight: FontWeight.w600),
+                                  ),
+                                ),
+
+                                DataColumn(
+                                  label: Text(
+                                    'Original Price',
+                                    style: TextStyle(fontWeight: FontWeight.w600),
+                                  ),
+                                ),
+                                DataColumn(
+                                    label: Text(
+                                      'Discount',
+                                      style: TextStyle(fontWeight: FontWeight.w600),
+                                    )),
+
+                                DataColumn(
+                                  label: Text(
+                                    'Type',
+                                    style: TextStyle(fontWeight: FontWeight.w600),
+                                  ),
+                                ),
+                                DataColumn(
+                                  label: Text(
+                                    'Edit',
+                                    style: TextStyle(fontWeight: FontWeight.w600),
+                                  ),
+                                ),
+                                DataColumn(
+                                  label: Text(
+                                    'Delete',
+                                    style: TextStyle(fontWeight: FontWeight.w600),
+                                  ),
+                                ),
+                              ],
+                              rows: _buildlist(context, snapshot.data!.docs)),
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
   }
 
   List<DataRow> _buildlist(
@@ -251,115 +251,115 @@ class _PackagesPageState extends State<PackagesPage> {
   showAddbox() => showDialog(
       context: context,
       builder: (context) => AlertDialog(
-            shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(30))),
-            content: SizedBox(
-              height: 480,
-              width: 800,
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Add Records',
-                      style: TextStyle(
-                          fontFamily: 'poppins',
-                          fontWeight: FontWeight.w600,
-                          fontSize: 14),
-                    ),
-                    customTextField(
-                        hinttext: "discount", addcontroller: _discount),
-                    customTextField(
-                        hinttext: "original price",
-                        addcontroller: _originalprice),
-                    customTextField(hinttext: "index", addcontroller: _index),
-                    customTextField(hinttext: "title", addcontroller: _title),
-                    Container(
-                      child: Row(
-                        children: [
-                          Text('Type:',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w700, fontSize: 15)),
-                          SizedBox(
-                            width: 20,
-                          ),
-                          DropdownButton(
-                              value: selectedvaluee,
-                              items: [
-                                DropdownMenuItem(
-                                  child: Text("pay per session"),
-                                  value: "pay per session",
-                                ),
-                                DropdownMenuItem(
-                                  child: Text("package"),
-                                  value: "package",
-                                ),
-                              ],
-                              onChanged: (value) {
-                                print(selectedvaluee);
-                                setState(() {
-                                  selectedvaluee = value as String;
-                                });
-                              }),
-                        ],
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(30))),
+        content: SizedBox(
+          height: 480,
+          width: 800,
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Add Records',
+                  style: TextStyle(
+                      fontFamily: 'poppins',
+                      fontWeight: FontWeight.w600,
+                      fontSize: 14),
+                ),
+                customTextField(
+                    hinttext: "discount", addcontroller: _discount),
+                customTextField(
+                    hinttext: "original price",
+                    addcontroller: _originalprice),
+                customTextField(hinttext: "index", addcontroller: _index),
+                customTextField(hinttext: "title", addcontroller: _title),
+                Container(
+                  child: Row(
+                    children: [
+                      Text('Type:',
+                          style: TextStyle(
+                              fontWeight: FontWeight.w700, fontSize: 15)),
+                      SizedBox(
+                        width: 20,
                       ),
-                    ),
-                    customTextField(
-                        hinttext: "validity", addcontroller: _validity),
-                    customTextField(hinttext: "price", addcontroller: _price),
-                    // Container(
-                    //   color: Colors.yellowAccent,
-                    //   width: 280,
-                    //   child: DropdownButton(
-                    //       hint: Text("bgg"),
-                    //       items: catagory.map<DropdownMenuItem<String>>((DocumentSnapshot value){
-                    //         return DropdownMenuItem(child: Text(value["name"]),value:value["name"],);
-                    //       }).toList(),
-                    //       // const [
-                    //       //   DropdownMenuItem(child: Text("pay per session"),value: "pay per session",),
-                    //       //   DropdownMenuItem(child: Text("package"),value: "package",),
-                    //       // ],
-                    //       onChanged:dropDownPackage ),
-                    // ),
-                    Center(
-                      child: ElevatedButton(
-                        onPressed: () async {
-                          await FirebaseFirestore.instance
-                              .collection('product_details')
-                              .doc(widget.pGymId)
-                              .collection('package')
-                              .doc("normal_package")
-                              .collection("gym")
-                              .doc(finalPackID)
-                              .set(
-                            {
-                              'discount': _discount.text,
-                              "original_price": _originalprice.text,
-                              'index': int.parse(_index.text),
-                              'title': _title.text,
+                      DropdownButton(
+                          value: selectedvaluee,
+                          items: [
+                            DropdownMenuItem(
+                              child: Text("pay per session"),
+                              value: "pay per session",
+                            ),
+                            DropdownMenuItem(
+                              child: Text("package"),
+                              value: "package",
+                            ),
+                          ],
+                          onChanged: (value) {
+                            print(selectedvaluee);
+                            setState(() {
+                              selectedvaluee = value as String;
+                            });
+                          }),
+                    ],
+                  ),
+                ),
+                customTextField(
+                    hinttext: "validity", addcontroller: _validity),
+                customTextField(hinttext: "price", addcontroller: _price),
+                // Container(
+                //   color: Colors.yellowAccent,
+                //   width: 280,
+                //   child: DropdownButton(
+                //       hint: Text("bgg"),
+                //       items: catagory.map<DropdownMenuItem<String>>((DocumentSnapshot value){
+                //         return DropdownMenuItem(child: Text(value["name"]),value:value["name"],);
+                //       }).toList(),
+                //       // const [
+                //       //   DropdownMenuItem(child: Text("pay per session"),value: "pay per session",),
+                //       //   DropdownMenuItem(child: Text("package"),value: "package",),
+                //       // ],
+                //       onChanged:dropDownPackage ),
+                // ),
+                Center(
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      await FirebaseFirestore.instance
+                          .collection('product_details')
+                          .doc(widget.pGymId)
+                          .collection('package')
+                          .doc("normal_package")
+                          .collection("gym")
+                          .doc(finalPackID)
+                          .set(
+                        {
+                          'discount': _discount.text,
+                          "original_price": _originalprice.text,
+                          'index': int.parse(_index.text),
+                          'title': _title.text,
 // <<<<<<< HEAD
 //                               "type": _type.text,
 //                               "id": finalPackID,
 //                               "validity": _validity.text,
 //                               "price": _price.text,
 // =======
-                              "type": selectedvaluee,
-                              "id": finalPackID,
-                              "validity": _validity.text,
-                              "price": _price.text,
+                          "type": selectedvaluee,
+                          "id": finalPackID,
+                          "validity": _validity.text,
+                          "price": _price.text,
 // >>>>>>> cf1997613ff877c63a56c61e3009bdfe3639ccfa
-                            },
-                          );
-                          Navigator.pop(context);
                         },
-                        child: const Text('Done'),
-                      ),
-                    )
-                  ],
-                ),
-              ),
+                      );
+                      Navigator.pop(context);
+                    },
+                    child: const Text('Done'),
+                  ),
+                )
+              ],
             ),
-          ));
+          ),
+        ),
+      ));
 }
 
 class ProductEditBox extends StatefulWidget {
@@ -429,6 +429,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
               customTextField(hinttext: "index", addcontroller: _index),
               customTextField(hinttext: "title", addcontroller: _title),
               // customTextField(hinttext: "type", addcontroller: _type),
+
               Container(
                 child: Row(
                   children: [
@@ -459,6 +460,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                   ],
                 ),
               ),
+
               Padding(
                 padding: const EdgeInsets.all(12.0),
                 child: Center(
@@ -482,8 +484,9 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                         'title': _title.text,
 
 //                         "type": _type.text
-// =======
+
                         "type": selectedvaluee,
+
                       };
                       await documentReference
                           .update(data)

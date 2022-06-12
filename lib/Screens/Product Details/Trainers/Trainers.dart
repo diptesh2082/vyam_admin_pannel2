@@ -882,12 +882,13 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                 child: Center(
                   child: ElevatedButton(
                     onPressed: () async {
+                      print(globalGymId);
                       print("The Gym id is : ${widget.trainerId}");
                       DocumentReference documentReference = FirebaseFirestore
                           .instance
                           .collection('product_details')
                           .doc(globalGymId)
-                          .collection('trainers')
+                          .collection('trainer')
                           .doc(widget.trainerId);
                       Map<String, dynamic> data = <String, dynamic>{
                         'name': _name.text,
