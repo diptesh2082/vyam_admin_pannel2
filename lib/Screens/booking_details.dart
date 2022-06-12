@@ -20,7 +20,7 @@ class BookingDetails extends StatefulWidget {
 
 class _BookingDetailsState extends State<BookingDetails> {
   CollectionReference bookingStream =
-  FirebaseFirestore.instance.collection('bookings');
+      FirebaseFirestore.instance.collection('bookings');
   String searchVendorId = '';
   var selectedValue = 'active';
   @override
@@ -97,7 +97,12 @@ class _BookingDetailsState extends State<BookingDetails> {
                   child: StreamBuilder<QuerySnapshot>(
                     stream: FirebaseFirestore.instance
                         .collection('bookings')
-                        .where('booking_status',whereIn: ['completed', 'active', 'upcoming' , 'cancelled'])
+                        .where('booking_status', whereIn: [
+                          'completed',
+                          'active',
+                          'upcoming',
+                          'cancelled'
+                        ])
                         .orderBy("order_date", descending: true)
                         .snapshots(),
                     builder: (context, AsyncSnapshot snapshot) {
@@ -119,10 +124,17 @@ class _BookingDetailsState extends State<BookingDetails> {
                       if (searchVendorId.length > 0) {
                         doc = doc.where((element) {
                           return element
-                              .get('user_name')
-                              .toString()
-                              .toLowerCase()
-                              .contains(searchVendorId.toString()) ||
+// <<<<<<< HEAD
+//                                   .get('user_name')
+//                                   .toString()
+//                                   .toLowerCase()
+//                                   .contains(searchVendorId.toString()) ||
+// =======
+                                  .get('user_name')
+                                  .toString()
+                                  .toLowerCase()
+                                  .contains(searchVendorId.toString()) ||
+// >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
                               element
                                   .get('userId')
                                   .toString()
@@ -138,9 +150,9 @@ class _BookingDetailsState extends State<BookingDetails> {
                             columns: const [
                               DataColumn(
                                   label: Text(
-                                    'Booking ID',
-                                    style: TextStyle(fontWeight: FontWeight.w600),
-                                  )),
+                                'Booking ID',
+                                style: TextStyle(fontWeight: FontWeight.w600),
+                              )),
                               DataColumn(
                                   label: Text(
                                 'Vendor Name',
@@ -160,8 +172,7 @@ class _BookingDetailsState extends State<BookingDetails> {
                               ),
                               DataColumn(
                                 label: Text(
-                                  'Discount'
-                                  ,
+                                  'Discount',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
@@ -173,8 +184,7 @@ class _BookingDetailsState extends State<BookingDetails> {
                               ),
                               DataColumn(
                                 label: Text(
-                                  'Category'
-                                  ,
+                                  'Category',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
@@ -186,7 +196,7 @@ class _BookingDetailsState extends State<BookingDetails> {
                               ),
                               DataColumn(
                                 label: Text(
-                                  'Order Date' ,
+                                  'Order Date',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
@@ -292,21 +302,21 @@ class _BookingDetailsState extends State<BookingDetails> {
     bool paymentDoneBool = data['payment_done'];
     bool bookingAccepted = data['booking_accepted'];
     String durationEnd =
-    DateFormat("MMM, dd, yyyy").format(data["plan_end_duration"].toDate());
+        DateFormat("MMM, dd, yyyy").format(data["plan_end_duration"].toDate());
     // "${data['plan_end_duration'].toDate().year}/${data['plan_end_duration'].toDate().month}/${data['plan_end_duration'].toDate().day}";
     String orderDate =
-    DateFormat("MMM, dd, yyyy").format(data["order_date"].toDate());
+        DateFormat("MMM, dd, yyyy").format(data["order_date"].toDate());
     // "${data['order_date'].toDate().year}/${data['order_date'].toDate().month}/${data['order_date'].toDate().day}";
     String bookingDate =
-    DateFormat("MMM, dd, yyyy").format(data["booking_date"].toDate());
+        DateFormat("MMM, dd, yyyy").format(data["booking_date"].toDate());
     // "${data['booking_date'].toDate().year}/${data['booking_date'].toDate().month}/${data['booking_date'].toDate().day}";
     String x;
     return DataRow(cells: [
-      DataCell(data["id"] != null
-          ? Text(data['id'].toString())
-          : const Text("")),
+      DataCell(
+          data["id"] != null ? Text(data['id'].toString()) : const Text("")),
       DataCell(data["gym_details"] != null
-          ? Text('${data['gym_details']['name'].toString().toUpperCase()}|${data['gym_details']['branch'].toString().toUpperCase()}')
+          ? Text(
+              '${data['gym_details']['name'].toString().toUpperCase()}|${data['gym_details']['branch'].toString().toUpperCase()}')
           : const Text("")),
       DataCell(data['user_name'] != null
           ? Text(data['user_name'].toString())
@@ -317,7 +327,6 @@ class _BookingDetailsState extends State<BookingDetails> {
       DataCell(data['discount'] != null
           ? Text(data['discount'].toString())
           : const Text("")),
-
 
       DataCell(data['totalDays'] != null
           ? Text(data['totalDays'].toString())
@@ -342,7 +351,7 @@ class _BookingDetailsState extends State<BookingDetails> {
                 .whenComplete(() => print("Payment done updated"))
                 .catchError((e) => print(e));
           },
-          child: Text(x = paymentDoneBool ? 'YES':'NO'),
+          child: Text(x = paymentDoneBool ? 'YES' : 'NO'),
           style: ElevatedButton.styleFrom(
               primary: paymentDoneBool ? Colors.green : Colors.red),
         ),
@@ -356,7 +365,7 @@ class _BookingDetailsState extends State<BookingDetails> {
 
       DataCell(
         Center(
-          child:  Container(
+          child: Container(
             child: Row(
               children: [
                 DropdownButton(
@@ -372,17 +381,17 @@ class _BookingDetailsState extends State<BookingDetails> {
                         value: "upcoming",
                       ),
                       DropdownMenuItem(
-                          child: Text("Incomplete"),
-                          value: "incomplete"),
+                          child: Text("Incomplete"), value: "incomplete"),
                       DropdownMenuItem(
-                          child: Text("Cancelled"),
-                          value: "cancelled"),
+                          child: Text("Cancelled"), value: "cancelled"),
                     ],
                     onChanged: (value) async {
                       setState(() {
                         selectedValue = value as String;
                       });
-                      await FirebaseFirestore.instance.collection('bookings').doc(bookingId)
+                      await FirebaseFirestore.instance
+                          .collection('bookings')
+                          .doc(bookingId)
                           .update({'booking_status': value});
                     }),
               ],
@@ -426,7 +435,11 @@ class _BookingDetailsState extends State<BookingDetails> {
       // )),
       DataCell(const Text(""), showEditIcon: true, onTap: () {
         Get.to(
-              () => ProductEditBox(
+// <<<<<<< HEAD
+//           () => ProductEditBox(
+// =======
+          () => ProductEditBox(
+// >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
             vendorid: data['vendorId'],
             username: data['user_name'],
             userid: data['userId'],
@@ -632,24 +645,38 @@ class _CustomTextFieldState extends State<CustomTextField> {
       height: 50,
       child: Card(
           child: TextField(
-            autofocus: true,
-            style: const TextStyle(
+// <<<<<<< HEAD
+//         autofocus: true,
+//         style: const TextStyle(
+//           fontSize: 20,
+//           fontFamily: 'poppins',
+//           fontWeight: FontWeight.w400,
+//         ),
+//         controller: widget.addcontroller,
+//         maxLines: 3,
+//         decoration: InputDecoration(
+//             border: InputBorder.none,
+//             hintStyle: const TextStyle(
+// =======
+        autofocus: true,
+        style: const TextStyle(
+// >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
+          fontSize: 20,
+          fontFamily: 'poppins',
+          fontWeight: FontWeight.w400,
+        ),
+        controller: widget.addcontroller,
+        maxLines: 3,
+        decoration: InputDecoration(
+            border: InputBorder.none,
+            hintStyle: const TextStyle(
               fontSize: 20,
               fontFamily: 'poppins',
               fontWeight: FontWeight.w400,
             ),
-            controller: widget.addcontroller,
-            maxLines: 3,
-            decoration: InputDecoration(
-                border: InputBorder.none,
-                hintStyle: const TextStyle(
-                  fontSize: 20,
-                  fontFamily: 'poppins',
-                  fontWeight: FontWeight.w400,
-                ),
-                hintMaxLines: 2,
-                hintText: widget.hinttext),
-          )),
+            hintMaxLines: 2,
+            hintText: widget.hinttext),
+      )),
     );
   }
 }
@@ -848,43 +875,157 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                   ),
                   Container(
                       child: StreamBuilder<QuerySnapshot>(
-                        stream: vendorIdStream!.snapshots(),
-                        builder: (context, AsyncSnapshot snapshot) {
-                          if (snapshot.connectionState == ConnectionState.waiting) {
-                            return const CircularProgressIndicator();
-                          }
-                          if (snapshot.data == null) {
-                            return Container();
-                          }
-                          print("-----------------------------------");
-                          var doc = snapshot.data.docs;
-                          return Container(
-                            width: 500,
-                            height: 200,
-                            child: ListView.builder(
-                                itemCount: doc.length,
-                                itemBuilder: (BuildContext context, int index) {
-                                  bool check = false;
-                                  return RadioListTile<String>(
-                                    value: doc[index]["gym_id"],
-                                    groupValue: abc3,
-                                    onChanged: (val) => setState(
-                                          () {
-                                        abc3 = val!;
-                                      },
-                                    ),
-                                    title: Text(doc[index]["gym_id"]),
-                                  );
-                                  // ListTile(
-                                  //   title: Text(doc[index]["name"]),
-                                  //   onTap: () {
-                                  //     _addgymname.text = doc[index]["name"];
-                                  //   },
-                                  // );
-                                }),
-                          );
-                        },
-                      )),
+// // <<<<<<< HEAD
+//                     stream: vendorIdStream!.snapshots(),
+//                     builder: (context, AsyncSnapshot snapshot) {
+//                       if (snapshot.connectionState == ConnectionState.waiting) {
+//                         return const CircularProgressIndicator();
+//                       }
+//                       if (snapshot.data == null) {
+//                         return Container();
+//                       }
+//                       print("-----------------------------------");
+//                       var doc = snapshot.data.docs;
+//                       return Container(
+//                         width: 500,
+//                         height: 200,
+//                         child: ListView.builder(
+//                             itemCount: doc.length,
+//                             itemBuilder: (BuildContext context, int index) {
+//                               bool check = false;
+//                               return RadioListTile<String>(
+//                                 value: doc[index]["gym_id"],
+//                                 groupValue: abc3,
+//                                 onChanged: (val) => setState(
+//                                   () {
+//                                     abc3 = val!;
+//                                   },
+//                                 ),
+//                                 title: Text(doc[index]["gym_id"]),
+//                               );
+//                               // ListTile(
+//                               //   title: Text(doc[index]["name"]),
+//                               //   onTap: () {
+//                               //     _addgymname.text = doc[index]["name"];
+//                               //   },
+//                               // );
+//                             }),
+//                       );
+//                     },
+//                   )),
+//                   const SizedBox(height: 15),
+//                   // customTextField(
+//                   //     hinttext: "Vendor ID", addcontroller: _addvendorid),
+//                   customTextField(
+//                       hinttext: "User Name", addcontroller: _addusername),
+//                   customTextField(
+//                       hinttext: "User ID", addcontroller: _adduserid),
+//                   // CustomTextField(
+//                   //     hinttext: "Total Price", addcontroller: _addtotalprice),
+//                   customTextField(
+//                       hinttext: "Total Days", addcontroller: _addtotaldays),
+//                   // CustomTextField(
+//                   //     hinttext: "Tax Pay", addcontroller: _addtaxpay),
+//                   // Container(
+//                   //   child: Row(
+//                   //     children: [
+//                   //       ElevatedButton(
+//                   //         child: const Text('Select Date & Time for Plan'),
+//                   //         onPressed: () => pickDateTime(context, endtimedata),
+//                   //       ),
+//                   //       SizedBox(width: 15),
+//                   //     ],
+//                   //   ),
+//                   // ),
+//                   Container(
+//                     child: Row(
+//                       children: [
+//                         const Padding(
+//                           padding: EdgeInsets.all(8.0),
+//                           child: Text('Select Date & Time For Plan:',
+//                               style: TextStyle(
+//                                 fontSize: 20,
+//                                 fontWeight: FontWeight.bold,
+//                               )),
+//                         ),
+//                         ElevatedButton(
+//                           child: const Text('Select Date & Time For Plan'),
+//                           onPressed: () => pickplanDateTime(context),
+//                         ),
+//                         SizedBox(width: 15),
+//                       ],
+//                     ),
+//                   ),
+//                   // customTextField(
+//                   //     hinttext: "Plan End Y", addcontroller: _addplanendyear),
+//                   // customTextField(
+//                   //     hinttext: "Plan End M", addcontroller: _addplanendmonth),
+//                   // customTextField(
+//                   //     hinttext: "Plan End D", addcontroller: _addplanendday),
+//                   const SizedBox(height: 15),
+//                   const Padding(
+//                     padding: EdgeInsets.all(8.0),
+//                     child: Text('Payment Done:',
+//                         style: TextStyle(
+//                             fontWeight: FontWeight.bold, fontSize: 15)),
+//                   ),
+//                   DropdownButton<String>(
+//                     isExpanded: true,
+//                     hint: Text("Payment Done"),
+//                     items: _do.map<DropdownMenuItem<String>>((String value) {
+//                       return DropdownMenuItem<String>(
+//                         value: value,
+//                         child: Text(value),
+//                       );
+//                     }).toList(),
+//                     onChanged: (String? newValue) {
+//                       setState(() {
+//                         this._dropdownValue = newValue!;
+//                         _addpaymentdone.text = _dropdownValue;
+//                         print(_dropdownValue);
+//                       });
+//                     },
+//                     value: _dropdownValue,
+//                   ),
+//                   // customTextField(
+// =======
+                    stream: vendorIdStream!.snapshots(),
+                    builder: (context, AsyncSnapshot snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const CircularProgressIndicator();
+                      }
+                      if (snapshot.data == null) {
+                        return Container();
+                      }
+                      print("-----------------------------------");
+                      var doc = snapshot.data.docs;
+                      return Container(
+                        width: 500,
+                        height: 200,
+                        child: ListView.builder(
+                            itemCount: doc.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              bool check = false;
+                              return RadioListTile<String>(
+                                value: doc[index]["gym_id"],
+                                groupValue: abc3,
+                                onChanged: (val) => setState(
+                                  () {
+                                    abc3 = val!;
+                                  },
+                                ),
+                                title: Text(doc[index]["gym_id"]),
+                              );
+                              // ListTile(
+                              //   title: Text(doc[index]["name"]),
+                              //   onTap: () {
+                              //     _addgymname.text = doc[index]["name"];
+                              //   },
+                              // );
+                            }),
+                      );
+                    },
+                  )),
                   const SizedBox(height: 15),
                   // customTextField(
                   //     hinttext: "Vendor ID", addcontroller: _addvendorid),
@@ -960,6 +1101,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                     value: _dropdownValue,
                   ),
                   // customTextField(
+// >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
                   //     hinttext: "Payment Done", addcontroller: _addpaymentdone),
                   customTextField(
                       hinttext: "Package Type", addcontroller: _addpackagetype),
@@ -991,21 +1133,39 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                               itemBuilder: (BuildContext context, int index) {
                                 bool check = false;
                                 return
-                                  // RadioBoxx(
-                                  //   doc[index]["name"],
-                                  //   doc[index]["category_id"],
-                                  //   _addpackagetype.text,
-                                  // );
-                                  RadioListTile<String>(
-                                    value: doc[index]["name"],
-                                    groupValue: abc,
-                                    onChanged: (val) => setState(
-                                          () {
-                                        abc = val!;
-                                      },
-                                    ),
-                                    title: Text(doc[index]["name"]),
-                                  );
+// <<<<<<< HEAD
+                                    // RadioBoxx(
+                                    //   doc[index]["name"],
+                                    //   doc[index]["category_id"],
+                                    //   _addpackagetype.text,
+                                    // );
+                                    RadioListTile<String>(
+                                  value: doc[index]["name"],
+                                  groupValue: abc,
+                                  onChanged: (val) => setState(
+                                    () {
+                                      abc = val!;
+                                    },
+                                  ),
+                                  title: Text(doc[index]["name"]),
+                                );
+// =======
+                                // RadioBoxx(
+                                //   doc[index]["name"],
+                                //   doc[index]["category_id"],
+                                //   _addpackagetype.text,
+                                // );
+                                RadioListTile<String>(
+                                  value: doc[index]["name"],
+                                  groupValue: abc,
+                                  onChanged: (val) => setState(
+                                    () {
+                                      abc = val!;
+                                    },
+                                  ),
+                                  title: Text(doc[index]["name"]),
+                                );
+// >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
                                 //     ListTile(
                                 //   tileColor: a,
                                 //   title: Text(doc[index]["name"]),
@@ -1068,43 +1228,45 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                   ),
                   Container(
                       child: StreamBuilder<QuerySnapshot>(
-                        stream: vendorIdStream!.snapshots(),
-                        builder: (context, AsyncSnapshot snapshot) {
-                          if (snapshot.connectionState == ConnectionState.waiting) {
-                            return const CircularProgressIndicator();
-                          }
-                          if (snapshot.data == null) {
-                            return Container();
-                          }
-                          print("-----------------------------------");
-                          var doc = snapshot.data.docs;
-                          return Container(
-                            width: 400,
-                            height: 300,
-                            child: ListView.builder(
-                                itemCount: doc.length,
-                                itemBuilder: (BuildContext context, int index) {
-                                  bool check = false;
-                                  return RadioListTile<String>(
-                                    value: doc[index]["name"],
-                                    groupValue: abc2,
-                                    onChanged: (val) => setState(
-                                          () {
-                                        abc2 = val!;
-                                      },
-                                    ),
-                                    title: Text(doc[index]["name"]),
-                                  );
-                                  // ListTile(
-                                  //   title: Text(doc[index]["name"]),
-                                  //   onTap: () {
-                                  //     _addgymname.text = doc[index]["name"];
-                                  //   },
-                                  // );
-                                }),
-                          );
-                        },
-                      )),
+//
+                    stream: vendorIdStream!.snapshots(),
+                    builder: (context, AsyncSnapshot snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const CircularProgressIndicator();
+                      }
+                      if (snapshot.data == null) {
+                        return Container();
+                      }
+                      print("-----------------------------------");
+                      var doc = snapshot.data.docs;
+                      return Container(
+                        width: 400,
+                        height: 300,
+                        child: ListView.builder(
+                            itemCount: doc.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              bool check = false;
+                              return RadioListTile<String>(
+                                value: doc[index]["name"],
+                                groupValue: abc2,
+                                onChanged: (val) => setState(
+                                  () {
+                                    abc2 = val!;
+                                  },
+                                ),
+                                title: Text(doc[index]["name"]),
+                              );
+                              // ListTile(
+                              //   title: Text(doc[index]["name"]),
+                              //   onTap: () {
+                              //     _addgymname.text = doc[index]["name"];
+                              //   },
+                              // );
+                            }),
+                      );
+                    },
+                  )),
+// >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
                   // customTextField(
                   //     hinttext: "Gym Name", addcontroller: _addgymname),
                   customTextField(
@@ -1214,9 +1376,15 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                           ElevatedButton(
                             onPressed: () async {
                               DocumentReference documentReference =
-                              FirebaseFirestore.instance
-                                  .collection('bookings')
-                                  .doc(_addbookingid.text);
+// <<<<<<< HEAD
+//                                   FirebaseFirestore.instance
+//                                       .collection('bookings')
+//                                       .doc(_addbookingid.text);
+// =======
+                                  FirebaseFirestore.instance
+                                      .collection('bookings')
+                                      .doc(_addbookingid.text);
+// >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
                               // DateTime endtimedata = DateTime.parse(
                               //     '${_addplanendyear.text}-${isLess(_addplanendmonth.text) ? '0' + _addplanendmonth.text : _addplanendday.text}-${isLess(_addplanendday.text) ? '0' + _addplanendday.text : _addplanendday.text} 00:00:04Z');
                               // DateTime ordertimedata = DateTime.parse(
@@ -1248,9 +1416,15 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                                 'booking_id': _addbookingid.text,
                                 'booking_date': bookingtimedata,
                                 'booking_accepted':
-                                _addbookingaccepted.text == 'true'
-                                    ? true
-                                    : false,
+// <<<<<<< HEAD
+//                                     _addbookingaccepted.text == 'true'
+//                                         ? true
+//                                         : false,
+// =======
+                                    _addbookingaccepted.text == 'true'
+                                        ? true
+                                        : false,
+// >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
                               };
                               await documentReference
                                   .update(data)
@@ -1442,9 +1616,15 @@ class _ProductEditBoxState extends State<ProductEditBox> {
   }
 
   Future pickTime(BuildContext context) async {
+// <<<<<<< HEAD
+//     final intialTime = TimeOfDay(hour: 9, minute: 0);
+//     final newTime =
+//         await showTimePicker(context: context, initialTime: time ?? intialTime);
+// =======
     const intialTime = const TimeOfDay(hour: 9, minute: 0);
     final newTime =
-    await showTimePicker(context: context, initialTime: time ?? intialTime);
+        await showTimePicker(context: context, initialTime: time ?? intialTime);
+// >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
 
     if (newTime == null) return;
 
@@ -1493,9 +1673,15 @@ class _ProductEditBoxState extends State<ProductEditBox> {
   }
 
   Future pickplanTime(BuildContext context) async {
+// <<<<<<< HEAD
+//     final intialTime = TimeOfDay(hour: 9, minute: 0);
+//     final newTime =
+//         await showTimePicker(context: context, initialTime: time ?? intialTime);
+// =======
     const intialTime = const TimeOfDay(hour: 9, minute: 0);
     final newTime =
-    await showTimePicker(context: context, initialTime: time ?? intialTime);
+        await showTimePicker(context: context, initialTime: time ?? intialTime);
+// >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
 
     if (newTime == null) return;
 
@@ -1546,7 +1732,11 @@ class _ProductEditBoxState extends State<ProductEditBox> {
   Future pickorderTime(BuildContext context) async {
     final intialTime = TimeOfDay(hour: 9, minute: 0);
     final newTime =
-    await showTimePicker(context: context, initialTime: time ?? intialTime);
+// <<<<<<< HEAD
+//         await showTimePicker(context: context, initialTime: time ?? intialTime);
+// =======
+        await showTimePicker(context: context, initialTime: time ?? intialTime);
+// >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
 
     if (newTime == null) return;
 
@@ -1620,7 +1810,10 @@ class RadioBoxx extends StatefulWidget {
 
 class _RadioBoxxState extends State<RadioBoxx> {
   String check = "calisthenics";
+// <<<<<<< HEAD
+// =======
   String? value;
+// >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
 
   @override
   Widget build(BuildContext context) {
@@ -1629,8 +1822,13 @@ class _RadioBoxxState extends State<RadioBoxx> {
         children: [
           Container(
             child: RadioListTile<String>(
-              value: check,
-              groupValue: value,
+// <<<<<<< HEAD
+              value: widget.name,
+              groupValue: check,
+// =======
+//               value: check,
+//               groupValue: value,
+// >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
               onChanged: (String? abcd) {
                 widget.cat = abcd;
                 print(abcd);

@@ -1,6 +1,3 @@
-
-
-
 import 'dart:async';
 
 import 'package:admin_panel_vyam/Screens/map_view.dart';
@@ -18,8 +15,6 @@ import 'package:geocoding/geocoding.dart' as geocoding;
 import 'globalVar.dart';
 import 'map.dart';
 
-
-
 class citiesAdd extends StatefulWidget {
   const citiesAdd({Key? key}) : super(key: key);
   @override
@@ -27,27 +22,31 @@ class citiesAdd extends StatefulWidget {
 }
 
 class _citiesAddState extends State<citiesAdd> {
-
-final _formKey = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
   CollectionReference? cityStream;
   MapView mapView = MapView();
   String address1 = '';
-
-
-
 
   @override
   void initState() {
     cityStream = FirebaseFirestore.instance.collection('Cities');
     super.initState();
   }
-  var id =
-      FirebaseFirestore.instance.collection('Cities').doc().id;
+
+  var id = FirebaseFirestore.instance.collection('Cities').doc().id;
 
   final TextEditingController _addAddress = TextEditingController();
+// <<<<<<< HEAD
+  // final TextEditingController _addStatus = TextEditingController();
+  //final TextEditingController _addId = TextEditingController();
+  final TextEditingController _addIndex = TextEditingController();
 
-  static const cities_list =[
+  static const cities_list = [
+// =======
 
+    // static const cities_list =[
+//
+// >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
     "New Delhi",
     "Mumbai",
     "Delhi",
@@ -55,7 +54,6 @@ final _formKey = GlobalKey<FormState>();
     "Hyderbad",
     "Chennai",
     "Ahmedabad",
-
   ];
   // Completer<GoogleMapController> _controller = Completer();
   // geocoding.Location? _currentPosition;
@@ -77,18 +75,17 @@ final _formKey = GlobalKey<FormState>();
 //   zoom: 14.4746,
 // );
 
-@override
+  @override
   Widget build(BuildContext context) {
+    bool selectedValue = true;
     return Scaffold(
       backgroundColor: Colors.white10,
       appBar: AppBar(
         title: const Text('Add Cities'),
       ),
-      body:
-      Center(
-        child: SizedBox(
-          height: 480,
-          width: 800,
+      body: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Center(
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -100,74 +97,118 @@ final _formKey = GlobalKey<FormState>();
                       fontWeight: FontWeight.w600,
                       fontSize: 14),
                 ),
-              SizedBox(width: 15),
+                SizedBox(width: 15),
 
-              Text('Address'),
+                Text('Address'),
                 Stack(
                   children: [
                     Container(
                       height: MediaQuery.of(context).size.height * .75,
                       decoration: const BoxDecoration(
-                          border:
-                          const Border(bottom: BorderSide(color: Colors.grey))),
+                          border: const Border(
+                              bottom: BorderSide(color: Colors.grey))),
                       child: Stack(
                         children: [
-                          MapView(address_con: _addAddress,),
+                          MapView(
+                            address_con: _addAddress,
+                          ),
                           const Center(
                               child: Icon(
-                                Icons.location_on_rounded,
-                                size: 40,
-                                color: Colors.black,
-                              )),
+                            Icons.location_on_rounded,
+                            size: 40,
+                            color: Colors.black,
+                          )),
                         ],
                       ),
                     ),
                   ],
                 ),
-              const SizedBox(
-                height: 20,
-              ),
+                const SizedBox(
+                  height: 20,
+                ),
 
-              Form(
-                key: _formKey,
-                child: Container(
-                  height: 7,
-                  margin: const EdgeInsets.symmetric(vertical: 7),
-                  child: TypeAheadFormField(
-                    suggestionsCallback: ((pattern) => cities_list.where((item) => item.toLowerCase().contains(pattern.toLowerCase()))),
-                    itemBuilder: (_ , String item) => ListTile(title: Text(item)),
-                    onSuggestionSelected: (String val) {
-                     _addAddress.text = val ;
-                      print(val);
-                    },
-                    getImmediateSuggestions: true,
-                    hideSuggestionsOnKeyboardHide: false,
-                    hideOnEmpty: false,
-                    noItemsFoundBuilder: (context) => const Padding(padding: EdgeInsets.all(8.0),
-                    child: Text('No Item Found'),
-                    ),
-                    textFieldConfiguration: TextFieldConfiguration(
-                      scrollPadding: EdgeInsets.all(20),
-                      cursorWidth: 2.0,
-                      controller: _addAddress,
+                Form(
+                  key: _formKey,
+                  child: Container(
+                    height: 7,
+                    margin: const EdgeInsets.symmetric(vertical: 7),
+                    child: TypeAheadFormField(
+                      suggestionsCallback: ((pattern) => cities_list.where(
+                          (item) => item
+                              .toLowerCase()
+                              .contains(pattern.toLowerCase()))),
+                      itemBuilder: (_, String item) =>
+                          ListTile(title: Text(item)),
+                      onSuggestionSelected: (String val) {
+                        _addAddress.text = val;
+                        print(val);
+                      },
+                      getImmediateSuggestions: true,
+                      hideSuggestionsOnKeyboardHide: false,
+                      hideOnEmpty: false,
+                      noItemsFoundBuilder: (context) => const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text('No Item Found'),
+                      ),
+                      textFieldConfiguration: TextFieldConfiguration(
+                        scrollPadding: EdgeInsets.all(20),
+                        cursorWidth: 2.0,
+                        controller: _addAddress,
+                      ),
                     ),
                   ),
                 ),
-              ),
+// <<<<<<< HEAD
+                // customTextField(
+                //     hinttext: "Address", addcontroller: _addAddress),
+                Container(
+                  child: Row(
+                    children: [
+                      const Text('Status :',
+                          style: TextStyle(
+                              fontWeight: FontWeight.w700, fontSize: 15)),
+                      DropdownButton(
+                          value: selectedValue,
+                          items: const [
+                            DropdownMenuItem(
+                              child: Text("TRUE"),
+                              value: true,
+                            ),
+                            DropdownMenuItem(
+                              child: Text("FALSE"),
+                              value: false,
+                            ),
+                          ],
+                          onChanged: (bool? value) {
+                            setState(() {
+                              selectedValue = value!;
+                            });
+                          }),
+                    ],
+                  ),
+                ),
+                //customTextField(hinttext: "ID", addcontroller: _addId),
+                //customTextField(hinttext: "Index", addcontroller: _addIndex),
+// =======
+//               ),
+// >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
                 Center(
                   child: ElevatedButton(
                     onPressed: () async {
                       await matchID(
-                          newId: id,
-                          matchStream: cityStream,
-                          idField: 'id');
+                          newId: id, matchStream: cityStream, idField: 'id');
                       FirebaseFirestore.instance
                           .collection('Cities')
                           .doc(id)
                           .set(
                         {
-                          'Address': _addAddress.text,
-                          'Status': true,
+// <<<<<<< HEAD
+                          'Address': getAddress(),
+                          'Status': selectedValue,
+// =======
+//                           'Address': _addAddress.text,
+//                           'Status': true,
+// >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
                           'id': id,
                           //'index' : _addIndex,
                         },
@@ -185,11 +226,9 @@ final _formKey = GlobalKey<FormState>();
     );
   }
 
-String getAddress()
-{
-  address1 = address;
-  print(address1);
-  return address1;
-
-}
+  String getAddress() {
+    address1 = address;
+    print(address1);
+    return address1;
+  }
 }

@@ -437,7 +437,8 @@ class _ProductDetailsState extends State<ProductDetails> {
           style: ElevatedButton.styleFrom(primary: Colors.yellowAccent),
           onPressed: (() {
             Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => TrainerPage(tGymId: gymId),
+              builder: (context) =>
+                  TrainerPage(gymId, data['name'], data['branch']),
             ));
           }))),
 
@@ -514,14 +515,14 @@ class _ProductDetailsState extends State<ProductDetails> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       children: [
-                                        Container(
+                                        SizedBox(
                                           height: 500,
                                           width: 500,
                                           child: Image.network(
                                             data['images'][index].toString(),
                                           ),
                                         ),
-                                        SizedBox(width: 20),
+                                        const SizedBox(width: 20),
                                         IconButton(
                                           onPressed: () async {
                                             print(data['images'].length);
@@ -538,7 +539,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                                             });
                                             print("Delete!");
                                           },
-                                          icon: Icon(Icons.delete),
+                                          icon: const Icon(Icons.delete),
                                         )
                                       ],
                                     ),
@@ -546,7 +547,10 @@ class _ProductDetailsState extends State<ProductDetails> {
                                     // minLeadin≥gWidth: double.infinity,
                                   );
                                 });
-
+// <<<<<<< HEAD
+// =======
+//
+// >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
                           }),
                     ),
                   ),
@@ -617,7 +621,6 @@ class _ProductDetailsState extends State<ProductDetails> {
                   .catchError((e) => print(e));
             },
             child: Text(x = status ? 'YES' : 'NO'),
-
             style: ElevatedButton.styleFrom(
                 primary: status ? Colors.green : Colors.red),
           ),
@@ -772,7 +775,6 @@ class _ShowAddBoxState extends State<ShowAddBox> {
   CollectionReference? amenitiesStream;
   CollectionReference? workoutStream;
 
-
   var selectedValue = "MALE";
 
   @override
@@ -920,18 +922,22 @@ class _ShowAddBoxState extends State<ShowAddBox> {
                           fontWeight: FontWeight.bold,
                           fontStyle: FontStyle.italic),
                     ),
-                    SizedBox(height: 15,),
+                    SizedBox(
+                      height: 15,
+                    ),
                     Stack(
                       children: [
                         Container(
                           height: MediaQuery.of(context).size.height * .75,
-                          width: 900 ,
+                          width: 900,
                           decoration: const BoxDecoration(
                               border: Border(
                                   bottom: BorderSide(color: Colors.grey))),
                           child: Stack(
                             children: [
-                              MapView(address_con: _addaddress,),
+                              MapView(
+                                address_con: _addaddress,
+                              ),
                               const Center(
                                 child: Icon(
                                   Icons.location_on_rounded,
@@ -1008,6 +1014,14 @@ class _ShowAddBoxState extends State<ShowAddBox> {
                 child: Text('SELECT WORKOUTS:',
                     style:
                         TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
+// <<<<<<< HEAD
+              ),
+
+              const Text(
+                'SELECT WORKOUTS',
+                style: TextStyle(fontSize: 20),
+// =======
+// >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
               ),
               Container(
                 child: StreamBuilder<QuerySnapshot>(
@@ -1154,7 +1168,47 @@ class _ShowAddBoxState extends State<ShowAddBox> {
                       FirebaseFirestore.instance
                           .collection('product_details')
                           .doc(_addgymownerid.text)
-
+// <<<<<<< HEAD
+// <<<<<<< HEAD
+// <<<<<<< HEAD
+//                           .set({
+//                         'address': _addaddress.text,
+//                         'gender': selectedValue,
+//                         'name': _addname.text,
+//                         'pincode': _addpincode.text,
+//                         'location': dataForGeoPint,
+//                         'gym_id': _addgymownerid.text,
+//                         'gym_owner': _addgymownerid.text,
+//                         'landmark': _addlandmark.text,
+//                         'total_booking': "",
+//                         'total_sales': "",
+//                         'legit': false,
+//                         "branch": _branchController.text,
+//                         "description": _descriptionCon.text,
+//                         "display_picture": image,
+//                         "images": [],
+//                         "locality": "",
+//                         "number": _numberCon.text,
+//                         "online_pay": true,
+//                         "payment_due": "",
+//                         "rating": 0.0,
+//                         "service": cat,
+//                         "timings": [],
+//                         "token": [],
+//                         "view_count": 0.0,
+//                         "gym_status": false,
+//                         "amenities": arr
+//                       });
+//                       // }).then((snapshot) async {
+//                       //   await uploadImageToStorage(image, _addgymownerid.text);
+//                       // });
+// =======
+// =======
+//
+// >>>>>>> e2bea5635554890f907c9d88c8a5b0f830f5efe4
+// =======
+//
+// >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
                           .set(
                         {
                           'address': _addaddress.text,
@@ -1219,17 +1273,6 @@ class _ShowAddBoxState extends State<ShowAddBox> {
       ),
     );
   }
-
-  // String getAddress()
-  // {
-  //   addressVendor = address;
-  //  // _addaddress.text = address;
-  //   print('/////////////////////////////////===========++++++++');
-  //   print(addressVendor);
-  //   //print(_addaddress.text);
-  //   return addressVendor;
-  //
-  // }
 
   uploadToStroagees() {
     InputElement input = FileUploadInputElement() as InputElement
@@ -1526,7 +1569,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
   // final TextEditingController _location = TextEditingController();
   final TextEditingController _landmark = TextEditingController();
   final TextEditingController _pincode = TextEditingController();
-   final TextEditingController _description = TextEditingController();
+  final TextEditingController _description = TextEditingController();
   final TextEditingController _latitudeController = TextEditingController();
   final TextEditingController _longitudeController = TextEditingController();
   String image = '';
@@ -1577,7 +1620,8 @@ class _ProductEditBoxState extends State<ProductEditBox> {
               customTextField(hinttext: "Gym ID", addcontroller: _gymiid),
               customTextField(hinttext: "Gym Owner", addcontroller: _gymowner),
               customTextField(hinttext: "Gender", addcontroller: _gender),
-              customTextField(hinttext: "Description", addcontroller: _description),
+              customTextField(
+                  hinttext: "Description", addcontroller: _description),
               // customTextField(
               //     hinttext: 'Latitude', addcontroller: _latitudeController),
               // customTextField(
@@ -1660,7 +1704,10 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                           .collection('product_details')
                           .doc(_gymiid.text);
 
-
+// <<<<<<< HEAD
+// =======
+//
+// >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
                       Map<String, dynamic> data = <String, dynamic>{
                         'address': _address.text,
                         'gender': _gender.text,
@@ -1670,7 +1717,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                         'gym_id': _gymiid.text,
                         'gym_owner': _gymowner.text,
                         'landmark': _landmark.text,
-                        'description':_description.text,
+                        'description': _description.text,
                       };
                       await documentReference
                           .update(data)

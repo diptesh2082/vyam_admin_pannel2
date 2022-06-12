@@ -49,8 +49,7 @@ class _CouponState extends State<Coupon> {
                   padding: const EdgeInsets.only(top: 8.0, left: 8.0),
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      textStyle:
-                      const TextStyle(fontSize: 15 ),
+                      textStyle: const TextStyle(fontSize: 15),
                     ),
                     onPressed: () {
                       Navigator.push(
@@ -58,12 +57,9 @@ class _CouponState extends State<Coupon> {
                           MaterialPageRoute(
                               builder: (context) => CouponScreen()));
                     },
-                    child:
-                    Text('Add Coupon'),
-
+                    child: Text('Add Coupon'),
                   ),
                 ),
-
                 Container(
                   width: 500,
                   height: 51,
@@ -93,13 +89,11 @@ class _CouponState extends State<Coupon> {
                           });
                         }
                       },
-                      decoration:  InputDecoration(
+                      decoration: InputDecoration(
                         prefixIcon: const Icon(Icons.search),
                         hintText: 'Search',
                         hintStyle: GoogleFonts.poppins(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500
-                        ),
+                            fontSize: 16, fontWeight: FontWeight.w500),
                         border: InputBorder.none,
                         filled: true,
                         fillColor: Colors.white12,
@@ -107,12 +101,6 @@ class _CouponState extends State<Coupon> {
                     ),
                   ),
                 ),
-
-
-
-
-
-
                 Center(
                   child: StreamBuilder<QuerySnapshot>(
                     stream: couponStream!.snapshots(),
@@ -130,19 +118,17 @@ class _CouponState extends State<Coupon> {
                       if (searchCoupon.length > 0) {
                         doc = doc.where((element) {
                           return element
-                              .get('code')
-                              .toString()
-                              .toLowerCase()
-                              .contains(searchCoupon.toString())
-                              ||element
+                                  .get('code')
+                                  .toString()
+                                  .toLowerCase()
+                                  .contains(searchCoupon.toString()) ||
+                              element
                                   .get('tag')
                                   .toString()
                                   .toLowerCase()
                                   .contains(searchCoupon.toString());
                         }).toList();
                       }
-
-
 
                       print(snapshot.data.docs);
                       return SingleChildScrollView(
@@ -152,12 +138,35 @@ class _CouponState extends State<Coupon> {
                             columns: const [
                               DataColumn(
                                   label: Text(
-                                'Code',
+                                'Type',
+                                style: TextStyle(fontWeight: FontWeight.w600),
+                              )),
+                              DataColumn(
+                                label: Text(
+                                  'Title',
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
+                              ),
+                              DataColumn(
+                                  label: Text(
+                                'Promocode',
                                 style: TextStyle(fontWeight: FontWeight.w600),
                               )),
                               DataColumn(
                                 label: Text(
                                   'Details',
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
+                              ),
+                              DataColumn(
+                                label: Text(
+                                  'Start Date',
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
+                              ),
+                              DataColumn(
+                                label: Text(
+                                  'End Date',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
@@ -175,7 +184,7 @@ class _CouponState extends State<Coupon> {
                               ),
                               DataColumn(
                                 label: Text(
-                                  'Title',
+                                  'Enable/Disable',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
@@ -212,20 +221,47 @@ class _CouponState extends State<Coupon> {
 
   DataRow _buildListItem(BuildContext context, DocumentSnapshot data) {
     String couponIdData = data['coupon_id'];
+    bool validity = data['validity'];
+    String start =
+        DateFormat("MMM, dd, yyyy").format(data["start_date"].toDate());
+    String end = DateFormat("MMM, dd, yyyy").format(data["end_date"].toDate());
     return DataRow(cells: [
+      DataCell(data['package_type'] != null
+          ? Text(data['package_type'] ?? "")
+          : const Text("")),
+      DataCell(data['tag'] != null ? Text(data['tag'] ?? "") : const Text("")),
       DataCell(
           data['code'] != null ? Text(data['code'] ?? "") : const Text("")),
       DataCell(
           data['detail'] != null ? Text(data['detail'] ?? "") : const Text("")),
+      DataCell(start != null ? Text(start) : const Text("")),
+      DataCell(end != null ? Text(end) : const Text("")),
       DataCell(data['discount'] != null
           ? Text(data['discount'] ?? "")
           : const Text("")),
-
       DataCell(data['max_dis'] != null
           ? Text(data['max_dis'] ?? "")
           : const Text("")),
-
-      DataCell(data['tag'] != null ? Text(data['tag'] ?? "") : const Text("")),
+      DataCell(
+        Center(
+          child: ElevatedButton(
+            onPressed: () async {
+              bool temp = validity;
+              temp = !temp;
+              DocumentReference documentReference = FirebaseFirestore.instance
+                  .collection('coupon')
+                  .doc(couponIdData);
+              await documentReference
+                  .update({'validity': temp})
+                  .whenComplete(() => print("Legitimate toggled"))
+                  .catchError((e) => print(e));
+            },
+            child: Text(validity ? "Enable" : "Disable"),
+            style: ElevatedButton.styleFrom(
+                primary: validity ? Colors.green : Colors.red),
+          ),
+        ),
+      ),
       DataCell(const Text(""), showEditIcon: true, onTap: () {
         Navigator.push(
             context,
@@ -235,10 +271,8 @@ class _CouponState extends State<Coupon> {
                     discount: data['discount'],
                     title: data['tag'],
                     code: data['code'],
-
                     couponId: data['coupon_id'],
                     max_dis: data['max_dis'])));
-
       }),
       DataCell(Icon(Icons.delete), onTap: () {
         deleteMethod(stream: couponStream, uniqueDocId: couponIdData);
@@ -570,10 +604,13 @@ class _ProductEditBoxState extends State<ProductEditBox> {
             customTextField(hinttext: "Code", addcontroller: _code),
             customTextField(hinttext: "Detail", addcontroller: _detail),
             customTextField(hinttext: "Discount", addcontroller: _discount),
-            customTextField(hinttext: "Tag", addcontroller: _title),
-
+// <<<<<<< HEAD
+            customTextField(hinttext: "Title", addcontroller: _title),
+// =======
+//             customTextField(hinttext: "Tag", addcontroller: _title),
+//
+// >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
             customTextField(hinttext: "Max Discount", addcontroller: _max_dis),
-
             Padding(
               padding: const EdgeInsets.all(12.0),
               child: Row(
@@ -593,9 +630,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                           // 'title': _title.text,
                           'tag': _title.text,
                           'coupon_id': widget.couponId,
-
                           'max_dis': _max_dis.text,
-
                         };
                         await documentReference
                             .update(data)
