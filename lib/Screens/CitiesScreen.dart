@@ -48,7 +48,6 @@ class _CitiesScreenState extends State<CitiesScreen> {
                     },
                     child: Text('Add Cities'),
 
-// >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
                   ),
                 ),
                 Center(
@@ -125,11 +124,11 @@ class _CitiesScreenState extends State<CitiesScreen> {
         data['Address'] != null ? Text(data['Address'] ?? "") : const Text(""),
       ),
       DataCell(
-// <<<<<<< HEAD
-        status ? Text("True") : Text("False"),
-// =======
-//         data['Status'] != null ? Text(data['Status'].toString()) : const Text(""),
-// >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
+
+        data['Status'] != null
+            ? Text(data['Status'].toString())
+            : const Text(""),
+
       ),
       // DataCell(
       //   data['id'] != null ? Text(data['id']) : const Text(""),
@@ -138,19 +137,12 @@ class _CitiesScreenState extends State<CitiesScreen> {
         const Text(''),
         showEditIcon: true,
         onTap: () {
-// <<<<<<< HEAD
-//           Get.to(() => ProductEditBox(
-//               address: data['Address'],
-//               status: data['Status'],
-//               cityId: data['id']));
-// =======
 
           Get.to(() => ProductEditBox(
               address: data['Address'],
               status: data['Status'],
               cityId: data['id']));
 
-// >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
         },
       ),
       DataCell(const Icon(Icons.delete), onTap: () {

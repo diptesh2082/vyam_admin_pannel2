@@ -203,12 +203,14 @@ class _ReviewPage extends State<ReviewPage> {
                 )
               : const Text(""),
         ),
+        // .toString().substring(3, 13))
+        //   : Text("")),
         DataCell(
           data['user']['user_id'] != null
               ? SizedBox(
                   width: 200.0,
                   child: Text(
-                    data['user']['user_id'],
+                    data['user']['user_id'].toString().substring(3, 13),
                   ),
                 )
               : const Text(""),

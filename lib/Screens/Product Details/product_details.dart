@@ -360,6 +360,7 @@ class _ProductDetailsState extends State<ProductDetails> {
     String landmark = data['landmark'];
     List<dynamic> arr2 = data['amenities'];
     List<dynamic> WorkoutArray = data['workouts'];
+    List<dynamic> serviceArray = data['service'];
 
     String x, y;
 
@@ -504,10 +505,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                                     // minLeadin≥gWidth: double.infinity,
                                   );
                                 });
-// <<<<<<< HEAD
-// =======
-//
-// >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
+
                           }),
                     ),
                   ),
@@ -666,7 +664,11 @@ class _ProductDetailsState extends State<ProductDetails> {
                         imagee: data['display_picture'],
                         arr2: arr2,
                         WorkoutArray: WorkoutArray,
+
+                        serviceArray: serviceArray,
+
                         description: data['description'],
+
 
                         // location: data['location'],
                       )));
@@ -860,68 +862,106 @@ class _ShowAddBoxState extends State<ShowAddBox> {
                 ),
               ),
               const SizedBox(height: 15),
-              Container(
-                child: Row(
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Text('Longitude:',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w700, fontSize: 15)),
-                    ),
-                    SizedBox(
-                      width: 15,
-                    ),
-                    Text(
-                      'Not Required',
-                      style: TextStyle(
-                          color: Colors.red,
-                          fontWeight: FontWeight.bold,
-                          fontStyle: FontStyle.italic),
-                    ),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    Stack(
-                      children: [
-                        Container(
-                          height: MediaQuery.of(context).size.height * .75,
-                          width: 900,
-                          decoration: const BoxDecoration(
-                              border: Border(
-                                  bottom: BorderSide(color: Colors.grey))),
-                          child: Stack(
-                            children: [
-                              MapView(
-                                address_con: _addaddress,
+// <<<<<<< HEAD
+              Row(
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Text('Longitude:',
+                        style: TextStyle(
+                            fontWeight: FontWeight.w700, fontSize: 15)),
+                  ),
+                  const SizedBox(
+                    width: 15,
+                  ),
+                  const Text(
+                    'Not Required',
+                    style: TextStyle(
+                        color: Colors.red,
+                        fontWeight: FontWeight.bold,
+                        fontStyle: FontStyle.italic),
+                  ),
+                  const SizedBox(height: 15,),
+                  Stack(
+                    children: [
+                      Container(
+                        height: MediaQuery.of(context).size.height * .75,
+                        width: 900 ,
+                        decoration: const BoxDecoration(
+                            border: Border(
+                                bottom: BorderSide(color: Colors.grey))),
+                        child: Stack(
+                          children: [
+                            MapView(address_con: _addaddress,),
+                            const Center(
+                              child: Icon(
+                                Icons.location_on_rounded,
+                                size: 40,
+                                color: Colors.black,
+// =======
+//               Container(
+//                 child: Row(
+//                   children: [
+//                     Padding(
+//                       padding: EdgeInsets.all(8.0),
+//                       child: Text('Longitude:',
+//                           style: TextStyle(
+//                               fontWeight: FontWeight.w700, fontSize: 15)),
+//                     ),
+//                     SizedBox(
+//                       width: 15,
+//                     ),
+//                     Text(
+//                       'Not Required',
+//                       style: TextStyle(
+//                           color: Colors.red,
+//                           fontWeight: FontWeight.bold,
+//                           fontStyle: FontStyle.italic),
+//                     ),
+//                     SizedBox(
+//                       height: 15,
+//                     ),
+//                     Stack(
+//                       children: [
+//                         Container(
+//                           height: MediaQuery.of(context).size.height * .75,
+//                           width: 900,
+//                           decoration: const BoxDecoration(
+//                               border: Border(
+//                                   bottom: BorderSide(color: Colors.grey))),
+//                           child: Stack(
+//                             children: [
+//                               MapView(
+//                                 address_con: _addaddress,
+//                               ),
+//                               const Center(
+//                                 child: Icon(
+//                                   Icons.location_on_rounded,
+//                                   size: 40,
+//                                   color: Colors.black,
+//                                 ),
+// >>>>>>> 6c3fa0070166be553c60e87a940531de62732a35
                               ),
-                              const Center(
-                                child: Icon(
-                                  Icons.location_on_rounded,
-                                  size: 40,
-                                  color: Colors.black,
-                                ),
-                              ),
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
-                  ],
-                ),
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                ],
               ),
-              SizedBox(height: 15),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
+              const SizedBox(height: 15),
+              const Padding(
+                padding: EdgeInsets.all(8.0),
                 child: Text('Landmark:',
                     style:
                         TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
               ),
               customTextField(
                   hinttext: "Landmark", addcontroller: _addlandmark),
-              SizedBox(height: 15),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
+              const SizedBox(height: 15),
+              const Padding(
+                padding: EdgeInsets.all(8.0),
                 child: Text('Pincode:',
                     style:
                         TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
@@ -930,7 +970,7 @@ class _ShowAddBoxState extends State<ShowAddBox> {
                 addcontroller: _addpincode,
                 hinttext: "Pincode",
               ),
-              SizedBox(
+              const SizedBox(
                 height: 15,
               ),
               const Padding(
@@ -974,11 +1014,10 @@ class _ShowAddBoxState extends State<ShowAddBox> {
 // <<<<<<< HEAD
               ),
 
+
               const Text(
                 'SELECT WORKOUTS',
                 style: TextStyle(fontSize: 20),
-// =======
-// >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
               ),
               Container(
                 child: StreamBuilder<QuerySnapshot>(
@@ -1125,47 +1164,7 @@ class _ShowAddBoxState extends State<ShowAddBox> {
                       FirebaseFirestore.instance
                           .collection('product_details')
                           .doc(_addgymownerid.text)
-// <<<<<<< HEAD
-// <<<<<<< HEAD
-// <<<<<<< HEAD
-//                           .set({
-//                         'address': _addaddress.text,
-//                         'gender': selectedValue,
-//                         'name': _addname.text,
-//                         'pincode': _addpincode.text,
-//                         'location': dataForGeoPint,
-//                         'gym_id': _addgymownerid.text,
-//                         'gym_owner': _addgymownerid.text,
-//                         'landmark': _addlandmark.text,
-//                         'total_booking': "",
-//                         'total_sales': "",
-//                         'legit': false,
-//                         "branch": _branchController.text,
-//                         "description": _descriptionCon.text,
-//                         "display_picture": image,
-//                         "images": [],
-//                         "locality": "",
-//                         "number": _numberCon.text,
-//                         "online_pay": true,
-//                         "payment_due": "",
-//                         "rating": 0.0,
-//                         "service": cat,
-//                         "timings": [],
-//                         "token": [],
-//                         "view_count": 0.0,
-//                         "gym_status": false,
-//                         "amenities": arr
-//                       });
-//                       // }).then((snapshot) async {
-//                       //   await uploadImageToStorage(image, _addgymownerid.text);
-//                       // });
-// =======
-// =======
-//
-// >>>>>>> e2bea5635554890f907c9d88c8a5b0f830f5efe4
-// =======
-//
-// >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
+
                           .set(
                         {
                           'address': _addaddress.text,
@@ -1409,6 +1408,79 @@ class _CheckBoxxState1 extends State<CheckBoxx1> {
   }
 }
 
+class ECheckService extends StatefulWidget {
+  final String type;
+  final String id;
+  final serviceArray;
+  final String gymid;
+  const ECheckService({Key? key,required this.type, required this.id,required this.serviceArray,required this.gymid}) : super(key: key);
+
+  @override
+  State<ECheckService> createState() => _ECheckServiceState();
+}
+
+class _ECheckServiceState extends State<ECheckService> {
+  bool check = false;
+
+  checkBoxWorkout() async {
+    if (widget.serviceArray.contains(widget.id)) {
+      setState(() {
+        check = true;
+      });
+    } else {
+      setState(() {
+        check = false;
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    checkBoxWorkout();
+    print(widget.serviceArray);
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Column(
+        children: [
+          CheckboxListTile(
+            // bool selected=false;
+              value: check,
+              title: Text(widget.type),
+              onChanged: (bool? selected) async {
+                setState(() {
+                  check = selected!;
+                });
+                if (selected == true) {
+                  await FirebaseFirestore.instance
+                      .collection('product_details')
+                      .doc(widget.gymid)
+                      .update({
+                    'service': FieldValue.arrayUnion([widget.type])
+                  });
+                }
+                // print(widget.arr2);
+                if (selected == false) {
+                  await FirebaseFirestore.instance
+                      .collection('product_details')
+                      .doc(widget.gymid)
+                      .update({
+                    'service': FieldValue.arrayRemove([widget.type])
+                  });
+                }
+                // print(widget.arr2);
+              }),
+        ],
+      ),
+    );
+  }
+
+}
+
+
 class ECheckBoxWorkout extends StatefulWidget {
   final String type;
   final String id;
@@ -1496,8 +1568,12 @@ class ProductEditBox extends StatefulWidget {
     required this.pincode,
     required this.imagee,
     this.arr2,
-    this.WorkoutArray,
+
+    this.WorkoutArray, this.serviceArray,
+
+
     this.description,
+
   }) : super(key: key);
 
   final String name;
@@ -1511,6 +1587,9 @@ class ProductEditBox extends StatefulWidget {
   final imagee;
   final arr2;
   final WorkoutArray;
+
+  final serviceArray;
+
   final description;
 
   @override
@@ -1647,6 +1726,45 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                       );
                     }),
               ),
+               Text("Services",
+              style: GoogleFonts.poppins(
+                fontSize: 25,
+                fontWeight: FontWeight.w700
+              ),
+              ),
+              Container(
+                child: StreamBuilder<QuerySnapshot>(
+                    stream: FirebaseFirestore.instance.collection("category").snapshots(),
+                    builder: (context, AsyncSnapshot snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const CircularProgressIndicator();
+                      }
+                      if (snapshot.data == null) {
+                        return Container();
+                      }
+                      print("-----------------------------------");
+                      var doc = snapshot.data.docs;
+
+                      return Container(
+                        width: 400,
+                        height: 500,
+                        child: ListView.builder(
+                          itemCount: doc.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            bool check = false;
+                            return ECheckService(
+
+
+                                 type: doc[index]['name'],
+                              id: doc[index]['category_id'],
+                              gymid: _gymiid.text,
+                              serviceArray: widget.serviceArray,
+                            );
+                          },
+                        ),
+                      );
+                    }),
+              ),
 
               // Text(image),
               Image.network(image.toString()),
@@ -1661,10 +1779,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                           .collection('product_details')
                           .doc(_gymiid.text);
 
-// <<<<<<< HEAD
-// =======
-//
-// >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
+
                       Map<String, dynamic> data = <String, dynamic>{
                         'address': _address.text,
                         'gender': _gender.text,

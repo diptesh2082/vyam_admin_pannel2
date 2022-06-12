@@ -42,7 +42,6 @@ class _UserInformationState extends State<UserInformation> {
   var xs = "Yes";
   Widget build(BuildContext context) {
     return Scaffold(
-
       body: SafeArea(
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 5),
@@ -57,8 +56,7 @@ class _UserInformationState extends State<UserInformation> {
                   padding: const EdgeInsets.only(top: 8.0, left: 8.0),
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      textStyle:
-                      const TextStyle(fontSize: 15 ),
+                      textStyle: const TextStyle(fontSize: 15),
                     ),
                     onPressed: () {
                       Navigator.push(
@@ -66,10 +64,9 @@ class _UserInformationState extends State<UserInformation> {
                           MaterialPageRoute(
                               builder: (context) => detailsadd()));
                     },
-                     child: Text('Add User'),
+                    child: Text('Add User'),
                   ),
                 ),
-
                 Container(
                   width: 500,
                   height: 51,
@@ -99,13 +96,11 @@ class _UserInformationState extends State<UserInformation> {
                           });
                         }
                       },
-                      decoration:  InputDecoration(
+                      decoration: InputDecoration(
                         prefixIcon: const Icon(Icons.search),
                         hintText: 'Search',
                         hintStyle: GoogleFonts.poppins(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500
-                        ),
+                            fontSize: 16, fontWeight: FontWeight.w500),
                         border: InputBorder.none,
                         filled: true,
                         fillColor: Colors.white12,
@@ -113,8 +108,6 @@ class _UserInformationState extends State<UserInformation> {
                     ),
                   ),
                 ),
-
-
                 Center(
                   child: StreamBuilder<QuerySnapshot>(
                     stream: userDetailStream!.snapshots(),
@@ -132,16 +125,16 @@ class _UserInformationState extends State<UserInformation> {
                       if (searchUser.length > 0) {
                         doc = doc.where((element) {
                           return element
-                              .get('name')
-                              .toString()
-                              .toLowerCase()
-                              .contains(searchUser.toString())
-                              || element
+                                  .get('name')
+                                  .toString()
+                                  .toLowerCase()
+                                  .contains(searchUser.toString()) ||
+                              element
                                   .get('gender')
                                   .toString()
                                   .toLowerCase()
-                                  .contains(searchUser.toString())
-                              || element
+                                  .contains(searchUser.toString()) ||
+                              element
                                   .get('address')
                                   .toString()
                                   .toLowerCase()
@@ -186,7 +179,7 @@ class _UserInformationState extends State<UserInformation> {
                               ),
                               DataColumn(
                                 label: Text(
-                                  'Number',
+                                  'Phone Number',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
@@ -297,7 +290,9 @@ class _UserInformationState extends State<UserInformation> {
       DataCell(data != null ? Text(data['name'] ?? "") : Text("")),
       DataCell(data != null ? Text(data['email'] ?? "") : Text("")),
       DataCell(data != null ? Text(data['gender'] ?? "") : Text("")),
-      DataCell(data != null ? Text(data['number'] ?? "") : Text("")),
+      DataCell(data != null
+          ? Text((data['number']).toString().substring(3, 13))
+          : Text("")),
       DataCell(data != null ? Text(data['address'] ?? "") : Text("")),
       DataCell(data != null ? Text(data['locality'] ?? "") : Text("")),
       // DataCell(data != null ? Text(data['subLocality'] ?? "") : Text("")),
@@ -517,7 +512,6 @@ class _EditBoxState extends State<EditBox> {
     _userid.text = widget.userid;
     x = widget.number;
     img = widget.imageurl;
-
   }
 
   @override
@@ -791,9 +785,10 @@ class _EditBoxState extends State<EditBox> {
                     width: 300,
                     height: 200,
                     child: Container(
-                      child:
-                      Image.network((imgUrl1 == null) ? ' ' : imgUrl1,
-                        fit: BoxFit.contain,),
+                      child: Image.network(
+                        (imgUrl1 == null) ? ' ' : imgUrl1,
+                        fit: BoxFit.contain,
+                      ),
                     ),
                   ),
 
@@ -832,7 +827,6 @@ class _EditBoxState extends State<EditBox> {
                             Navigator.pop(context);
                           },
                           child: const Text('Done'),
-
                         ),
                         SizedBox(
                           width: 20,
@@ -854,13 +848,11 @@ class _EditBoxState extends State<EditBox> {
 
   getUrlImage(XFile? pickedFile) async {
     if (kIsWeb) {
-      final _firebaseStorage = FirebaseStorage.instance
-          .ref().child("category");
+      final _firebaseStorage = FirebaseStorage.instance.ref().child("category");
 
-      Reference _reference = _firebaseStorage
-          .child('category/${Path.basename(pickedFile!.path)}');
-      await _reference
-          .putData(
+      Reference _reference =
+          _firebaseStorage.child('category/${Path.basename(pickedFile!.path)}');
+      await _reference.putData(
         await pickedFile.readAsBytes(),
         SettableMetadata(contentType: 'image/jpeg'),
       );
@@ -870,12 +862,8 @@ class _EditBoxState extends State<EditBox> {
       setState(() {
         imgUrl1 = imageUrl;
       });
-
     }
   }
-
-
-
 }
 
 class detailsadd extends StatefulWidget {
@@ -935,16 +923,16 @@ class _detailsaddState extends State<detailsadd> {
                     onTap: () async {
                       profileImage = await chooseImage();
                       getUrlImage(profileImage);
-
                     },
                   ),
                   SizedBox(
                     width: 300,
                     height: 200,
                     child: Container(
-                      child:
-                      Image.network((imgUrl1 == null) ? ' ' : imgUrl1,
-                        fit: BoxFit.contain,),
+                      child: Image.network(
+                        (imgUrl1 == null) ? ' ' : imgUrl1,
+                        fit: BoxFit.contain,
+                      ),
                     ),
                   ),
                 ],
@@ -1049,13 +1037,11 @@ class _detailsaddState extends State<detailsadd> {
 
   getUrlImage(XFile? pickedFile) async {
     if (kIsWeb) {
-      final _firebaseStorage = FirebaseStorage.instance
-          .ref().child("banner");
+      final _firebaseStorage = FirebaseStorage.instance.ref().child("banner");
 
       Reference _reference = _firebaseStorage
           .child('banner_details/${Path.basename(pickedFile!.path)}');
-      await _reference
-          .putData(
+      await _reference.putData(
         await pickedFile.readAsBytes(),
         SettableMetadata(contentType: 'image/jpeg'),
       );
@@ -1065,7 +1051,6 @@ class _detailsaddState extends State<detailsadd> {
       setState(() {
         imgUrl1 = imageUrl;
       });
-
     }
   }
 }
