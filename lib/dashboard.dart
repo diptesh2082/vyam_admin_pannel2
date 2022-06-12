@@ -249,7 +249,10 @@ class _showLatestBookingState extends State<showLatestBooking> {
                   child: StreamBuilder<QuerySnapshot>(
                     stream: FirebaseFirestore.instance
                         .collection('bookings')
-                        .where('booking_status', whereIn: ['upcoming'])
+
+                        .where('booking_status',
+                            whereIn: ['upcoming' , 'active' , 'incomplete'])
+
                         .orderBy("id", descending: true)
                         .snapshots(),
                     builder: (context, AsyncSnapshot snapshot) {
@@ -316,12 +319,6 @@ class _showLatestBookingState extends State<showLatestBooking> {
                               ),
                               DataColumn(
                                 label: Text(
-                                  'Booking Accepted',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
-                              ),
-                              DataColumn(
-                                label: Text(
                                   'Booking Status',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
@@ -382,6 +379,7 @@ class _showLatestBookingState extends State<showLatestBooking> {
               .format(data['plan_end_duration'].toDate())
               .toString())
           : const Text("")),
+
       DataCell(
         Center(
           child: ElevatedButton(
@@ -403,6 +401,7 @@ class _showLatestBookingState extends State<showLatestBooking> {
           ),
         ),
       ),
+
       DataCell(
         Center(
           child: Container(
@@ -421,7 +420,13 @@ class _showLatestBookingState extends State<showLatestBooking> {
                         value: "upcoming",
                       ),
                       DropdownMenuItem(
-                          child: Text("Incomplete"), value: "incomplete"),
+
+                          child: Text("Incomplete"),
+                          value: "incomplete"),
+                      DropdownMenuItem(
+                          child: Text("Cancelled"),
+                          value: "cancelled"),
+
                     ],
                     onChanged: (value) async {
                       setState(() {

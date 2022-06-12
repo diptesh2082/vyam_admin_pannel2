@@ -98,10 +98,12 @@ class _bannerNewPageState extends State<bannerNewPage> {
                             ),
                             InkWell(
                               onTap: () async {
+
+
                                 image = await chooseImage();
                                 await getUrlImage(image);
                                 //uploadToStroage();
-                              },
+            },
                               child: const Icon(
                                 Icons.upload_file_outlined,
                               ),
@@ -113,6 +115,7 @@ class _bannerNewPageState extends State<bannerNewPage> {
                               width: 300,
                               height: 200,
                               child: Container(
+
                                   child: imgUrl1 != null
                                       ? Image.network(imgUrl1)
                                       : Container(
@@ -126,6 +129,7 @@ class _bannerNewPageState extends State<bannerNewPage> {
                                             ),
                                           ),
                                         )),
+
                             ),
                           ],
                         ),

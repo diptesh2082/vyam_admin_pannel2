@@ -437,7 +437,8 @@ class _ProductDetailsState extends State<ProductDetails> {
           style: ElevatedButton.styleFrom(primary: Colors.yellowAccent),
           onPressed: (() {
             Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => TrainerPage(tGymId: gymId),
+              builder: (context) =>
+                  TrainerPage(gymId, data['name'], data['branch']),
             ));
           }))),
 
@@ -514,14 +515,14 @@ class _ProductDetailsState extends State<ProductDetails> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       children: [
-                                        Container(
+                                        SizedBox(
                                           height: 500,
                                           width: 500,
                                           child: Image.network(
                                             data['images'][index].toString(),
                                           ),
                                         ),
-                                        SizedBox(width: 20),
+                                        const SizedBox(width: 20),
                                         IconButton(
                                           onPressed: () async {
                                             print(data['images'].length);
@@ -538,7 +539,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                                             });
                                             print("Delete!");
                                           },
-                                          icon: Icon(Icons.delete),
+                                          icon: const Icon(Icons.delete),
                                         )
                                       ],
                                     ),
@@ -546,6 +547,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                                     // minLeadin≥gWidth: double.infinity,
                                   );
                                 });
+
                           }),
                     ),
                   ),
@@ -615,11 +617,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                   .whenComplete(() => print("Legitimate toggled"))
                   .catchError((e) => print(e));
             },
-// <<<<<<< HEAD
-//             child: Text(x = status ? 'YES' : 'NO'),
-// =======
             child: Text(x = status ? 'YES' : 'NO'),
-// >>>>>>> cf1997613ff877c63a56c61e3009bdfe3639ccfa
             style: ElevatedButton.styleFrom(
                 primary: status ? Colors.green : Colors.red),
           ),
@@ -708,6 +706,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                         imagee: data['display_picture'],
                         arr2: arr2,
                         WorkoutArray: WorkoutArray,
+                        description: data['description'],
 
                         // location: data['location'],
                       )));
@@ -1012,7 +1011,14 @@ class _ShowAddBoxState extends State<ShowAddBox> {
                 child: Text('SELECT WORKOUTS:',
                     style:
                         TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
+// <<<<<<< HEAD
               ),
+
+
+              const Text(
+                'SELECT WORKOUTS',
+                style: TextStyle(fontSize: 20),
+
               Container(
                 child: StreamBuilder<QuerySnapshot>(
                   stream: FirebaseFirestore.instance
@@ -1158,6 +1164,7 @@ class _ShowAddBoxState extends State<ShowAddBox> {
                       FirebaseFirestore.instance
                           .collection('product_details')
                           .doc(_addgymownerid.text)
+
                           .set(
                         {
                           'address': _addaddress.text,
@@ -1222,17 +1229,6 @@ class _ShowAddBoxState extends State<ShowAddBox> {
       ),
     );
   }
-
-  // String getAddress()
-  // {
-  //   addressVendor = address;
-  //  // _addaddress.text = address;
-  //   print('/////////////////////////////////===========++++++++');
-  //   print(addressVendor);
-  //   //print(_addaddress.text);
-  //   return addressVendor;
-  //
-  // }
 
   uploadToStroagees() {
     InputElement input = FileUploadInputElement() as InputElement
@@ -1500,6 +1496,7 @@ class ProductEditBox extends StatefulWidget {
     required this.imagee,
     this.arr2,
     this.WorkoutArray,
+    this.description,
   }) : super(key: key);
 
   final String name;
@@ -1513,6 +1510,7 @@ class ProductEditBox extends StatefulWidget {
   final imagee;
   final arr2;
   final WorkoutArray;
+  final description;
 
   @override
   _ProductEditBoxState createState() => _ProductEditBoxState();
@@ -1527,6 +1525,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
   // final TextEditingController _location = TextEditingController();
   final TextEditingController _landmark = TextEditingController();
   final TextEditingController _pincode = TextEditingController();
+  final TextEditingController _description = TextEditingController();
   final TextEditingController _latitudeController = TextEditingController();
   final TextEditingController _longitudeController = TextEditingController();
   String image = '';
@@ -1544,6 +1543,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
     _gymowner.text = widget.gymOwner;
     _landmark.text = widget.landmark;
     image = widget.imagee;
+    _description.text = widget.description;
     amenitiesStream = FirebaseFirestore.instance.collection("amenities");
     workoutStream = FirebaseFirestore.instance.collection("workouts");
     // _location.text = "${widget.location.latitude}, ${widget.location.latitude}";
@@ -1576,6 +1576,8 @@ class _ProductEditBoxState extends State<ProductEditBox> {
               customTextField(hinttext: "Gym ID", addcontroller: _gymiid),
               customTextField(hinttext: "Gym Owner", addcontroller: _gymowner),
               customTextField(hinttext: "Gender", addcontroller: _gender),
+              customTextField(
+                  hinttext: "Description", addcontroller: _description),
               // customTextField(
               //     hinttext: 'Latitude', addcontroller: _latitudeController),
               // customTextField(
@@ -1658,6 +1660,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                           .collection('product_details')
                           .doc(_gymiid.text);
 
+
                       Map<String, dynamic> data = <String, dynamic>{
                         'address': _address.text,
                         'gender': _gender.text,
@@ -1666,7 +1669,8 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                         // 'location': dataForGeoPint,
                         'gym_id': _gymiid.text,
                         'gym_owner': _gymowner.text,
-                        'landmark': _landmark.text
+                        'landmark': _landmark.text,
+                        'description': _description.text,
                       };
                       await documentReference
                           .update(data)

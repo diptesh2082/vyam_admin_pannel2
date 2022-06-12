@@ -81,12 +81,12 @@ class _ReviewPage extends State<ReviewPage> {
                                 style: TextStyle(fontWeight: FontWeight.w600),
                               ),
                             ),
-                            DataColumn(
-                              label: Text(
-                                'Review',
-                                style: TextStyle(fontWeight: FontWeight.w600),
-                              ),
-                            ),
+                            // DataColumn(
+                            //   label: Text(
+                            //     'Review',
+                            //     style: TextStyle(fontWeight: FontWeight.w600),
+                            //   ),
+                            // ),
                             DataColumn(
                               label: Text(
                                 'Title',
@@ -183,16 +183,16 @@ class _ReviewPage extends State<ReviewPage> {
                 )
               : const Text(""),
         ),
-        DataCell(
-          data['review'] != null
-              ? SizedBox(
-                  width: 200.0,
-                  child: Text(
-                    data['review'],
-                  ),
-                )
-              : const Text(""),
-        ),
+        // DataCell(
+        //   data['review'] != null
+        //       ? SizedBox(
+        //           width: 200.0,
+        //           child: Text(
+        //             data['review'],
+        //           ),
+        //         )
+        //       : const Text(""),
+        // ),
         DataCell(
           data['title'] != null
               ? SizedBox(

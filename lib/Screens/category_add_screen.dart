@@ -109,14 +109,23 @@ class _categoryAddScreenState extends State<categoryAddScreen> {
                           ),
                         ),
                         SizedBox(
-                          width: 300,
-                          height: 200,
-                          child: Container(
-                            child:
-                            Image.network((imgUrl1 == null) ? ' ' : imgUrl1,
-                              fit: BoxFit.contain,),
-                          ),
-                        ),
+                            width: 300,
+                            height: 200,
+                            child: imgUrl1 != null
+                                ? Container(
+                              child: Image.network(imgUrl1),
+                            )
+                                : Container(
+                              color: Colors.white,
+                              child: Center(
+                                  child: Text(
+                                    'Please Upload Image',
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 24),
+                                  )),
+                            )),
                       ],
                     ),
                   ),
