@@ -547,10 +547,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                                     // minLeadin≥gWidth: double.infinity,
                                   );
                                 });
-// <<<<<<< HEAD
-// =======
-//
-// >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
+
                           }),
                     ),
                   ),
@@ -1017,12 +1014,11 @@ class _ShowAddBoxState extends State<ShowAddBox> {
 // <<<<<<< HEAD
               ),
 
+
               const Text(
                 'SELECT WORKOUTS',
                 style: TextStyle(fontSize: 20),
-// =======
-// >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
-              ),
+
               Container(
                 child: StreamBuilder<QuerySnapshot>(
                   stream: FirebaseFirestore.instance
@@ -1168,47 +1164,7 @@ class _ShowAddBoxState extends State<ShowAddBox> {
                       FirebaseFirestore.instance
                           .collection('product_details')
                           .doc(_addgymownerid.text)
-// <<<<<<< HEAD
-// <<<<<<< HEAD
-// <<<<<<< HEAD
-//                           .set({
-//                         'address': _addaddress.text,
-//                         'gender': selectedValue,
-//                         'name': _addname.text,
-//                         'pincode': _addpincode.text,
-//                         'location': dataForGeoPint,
-//                         'gym_id': _addgymownerid.text,
-//                         'gym_owner': _addgymownerid.text,
-//                         'landmark': _addlandmark.text,
-//                         'total_booking': "",
-//                         'total_sales': "",
-//                         'legit': false,
-//                         "branch": _branchController.text,
-//                         "description": _descriptionCon.text,
-//                         "display_picture": image,
-//                         "images": [],
-//                         "locality": "",
-//                         "number": _numberCon.text,
-//                         "online_pay": true,
-//                         "payment_due": "",
-//                         "rating": 0.0,
-//                         "service": cat,
-//                         "timings": [],
-//                         "token": [],
-//                         "view_count": 0.0,
-//                         "gym_status": false,
-//                         "amenities": arr
-//                       });
-//                       // }).then((snapshot) async {
-//                       //   await uploadImageToStorage(image, _addgymownerid.text);
-//                       // });
-// =======
-// =======
-//
-// >>>>>>> e2bea5635554890f907c9d88c8a5b0f830f5efe4
-// =======
-//
-// >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
+
                           .set(
                         {
                           'address': _addaddress.text,
@@ -1704,10 +1660,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                           .collection('product_details')
                           .doc(_gymiid.text);
 
-// <<<<<<< HEAD
-// =======
-//
-// >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
+
                       Map<String, dynamic> data = <String, dynamic>{
                         'address': _address.text,
                         'gender': _gender.text,
