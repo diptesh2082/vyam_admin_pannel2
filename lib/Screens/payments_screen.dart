@@ -60,7 +60,7 @@ class _PaymentsPageState extends State<PaymentsPage> {
                           MaterialPageRoute(
                               builder: (context) => PaymentScreen(d12)));
                     },
-                    child: Text('Add Payment'),
+                    child: const Text('Add Payment'),
                     // Container(
                     //   width: 120,
                     //   decoration: BoxDecoration(
