@@ -387,27 +387,7 @@ class _showLatestBookingState extends State<showLatestBooking> {
               .toString())
           : const Text("")),
 
-      DataCell(
-        Center(
-          child: ElevatedButton(
-            onPressed: () async {
-              bool temp = bookingAccepted;
-              temp = !temp;
 
-              DocumentReference documentReference = FirebaseFirestore.instance
-                  .collection('bookings')
-                  .doc(bookingId);
-              await documentReference
-                  .update({'booking_accepted': temp})
-                  .whenComplete(() => print("Legitimate toggled"))
-                  .catchError((e) => print(e));
-            },
-            child: Text(x = bookingAccepted ? 'YES' : 'NO'),
-            style: ElevatedButton.styleFrom(
-                primary: bookingAccepted ? Colors.green : Colors.red),
-          ),
-        ),
-      ),
 
       DataCell(
         Center(
