@@ -391,9 +391,10 @@ class _BookingDetailsState extends State<BookingDetails> {
       //     : const Text("")),
       DataCell(data['booking_status'] != null
           ? Text(data['booking_status'].toString())
+          : const Text("")),
 
-      DataCell(
-          data['booking_date'] != null ? Text(bookingDate) : const Text("")),
+      DataCell(data['booking_date'] != null ? Text(bookingDate) : const Text("")),
+
       DataCell(data['plan_end_duration'] != null
           ? Text(durationEnd)
 
