@@ -84,6 +84,8 @@ class _ProductDetailsState extends State<ProductDetails> {
                         child: const Text('Add Product'),
                       ),
                     ),
+
+
                     const Spacer(),
                     Container(
                       width: 500,
@@ -168,6 +170,11 @@ class _ProductDetailsState extends State<ProductDetails> {
                             // ? DATATABLE
                             dataRowHeight: 65,
                             columns: const [
+                              DataColumn(
+                                  label: Text(
+                                    'Index',
+                                    style: TextStyle(fontWeight: FontWeight.w600),
+                                  )),
                               DataColumn(
                                   label: Text(
                                 'Name',
@@ -339,11 +346,14 @@ class _ProductDetailsState extends State<ProductDetails> {
 
   List<DataRow> _buildlist(
       BuildContext context, List<DocumentSnapshot> snapshot) {
-    // var d=1;
-    return snapshot.map((data) => _buildListItem(context, data)).toList();
+
+    var d = 1;
+
+    return snapshot.map((data) => _buildListItem(context, data , d++)).toList();
+
   }
 
-  DataRow _buildListItem(BuildContext context, DocumentSnapshot data) {
+  DataRow _buildListItem(BuildContext context, DocumentSnapshot data , int index) {
     // morning.text=data['timings']["gym"]["Morning"];
     // evening.text=data['timings']["gym"]["Evening"];
     // closed.text=data['timings']["gym"]["Closed"];
@@ -364,6 +374,7 @@ class _ProductDetailsState extends State<ProductDetails> {
     String x, y;
 
     return DataRow(cells: [
+      DataCell(data != null ? Text(index.toString()) : const Text("")),
       DataCell(data != null ? Text(data['name'] ?? "") : const Text("")),
       DataCell(data != null ? Text(data['address'] ?? "") : const Text("")),
       DataCell(data != null ? Text(gymId) : const Text("")),
