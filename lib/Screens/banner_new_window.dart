@@ -24,30 +24,44 @@ class _bannerNewPageState extends State<bannerNewPage> {
   final id = FirebaseFirestore.instance.collection('banner_details').doc().id;
   final TextEditingController _addname = TextEditingController();
   final TextEditingController _addposition = TextEditingController();
+  final TextEditingController _addnavigation = TextEditingController();
+
   final bool _accesible = false;
   var image;
   var imgUrl1;
 
   final _formKey = GlobalKey<FormState>();
   String? selectedType;
-  String? print_type = 'accessible';
+  String? print_type = 'Clickable';
+  String namee = "";
+  String place = "";
 
   void dropDowntype(bool? selecetValue) {
     // if(selecetValue is String){
     setState(() {
       selectedType = selecetValue.toString();
       if (selecetValue == true) {
-        print_type = "TRUE";
+        print_type = "Clickable";
       }
       if (selecetValue == false) {
-        print_type = "FALSE";
+        print_type = "Non-Clickable";
       }
+      print(selectedType);
     });
+
     // }
   }
 
   late DropzoneViewController controller;
   bool _saving = false;
+  CollectionReference? productStream;
+  @override
+  void initState() {
+    // TODO: implement initState
+    productStream = FirebaseFirestore.instance.collection("product_details");
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -75,10 +89,50 @@ class _bannerNewPageState extends State<bannerNewPage> {
                             fontWeight: FontWeight.w600,
                             fontSize: 14),
                       ),
+                      SizedBox(height: 50),
+                      SizedBox(
+                          height: 400,
+                          width: 400,
+                          child: StreamBuilder<QuerySnapshot>(
+                            stream: productStream!.snapshots(),
+                            builder: (context, AsyncSnapshot snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return const CircularProgressIndicator();
+                              }
+                              if (snapshot.data == null) {
+                                return Container();
+                              }
+                              print("-----------------------------------");
+                              var doc = snapshot.data.docs;
+                              print(snapshot.data.docs);
+                              return ListView.builder(
+                                itemCount: doc.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  return RadioListTile<String>(
+                                      value: doc[index]['gym_id'],
+                                      title: Text(
+                                          "${doc[index]['name'].toString()} || ${doc[index]['branch']}"),
+                                      groupValue: namee,
+                                      onChanged: (String? valuee) {
+                                        setState(() {
+                                          namee = valuee!;
+                                          place = doc[index]['branch'];
+                                        });
+                                        print(namee);
+                                      });
+                                },
+                              );
+                            },
+                          )),
+                      CustomTextField(
+                          hinttext: "Name", addcontroller: _addname),
                       CustomTextField(
                           hinttext: "Position", addcontroller: _addposition),
                       CustomTextField(
-                          hinttext: "Name", addcontroller: _addname),
+                          hinttext: "Navigation",
+                          addcontroller: _addnavigation),
+
                       //CustomTextField(
                       //hinttext: "Image url", addcontroller: _addimage),
 
@@ -98,12 +152,10 @@ class _bannerNewPageState extends State<bannerNewPage> {
                             ),
                             InkWell(
                               onTap: () async {
-
-
                                 image = await chooseImage();
                                 await getUrlImage(image);
                                 //uploadToStroage();
-            },
+                              },
                               child: const Icon(
                                 Icons.upload_file_outlined,
                               ),
@@ -115,7 +167,6 @@ class _bannerNewPageState extends State<bannerNewPage> {
                               width: 300,
                               height: 200,
                               child: Container(
-
                                   child: imgUrl1 != null
                                       ? Image.network(imgUrl1)
                                       : Container(
@@ -129,22 +180,23 @@ class _bannerNewPageState extends State<bannerNewPage> {
                                             ),
                                           ),
                                         )),
-
                             ),
                           ],
                         ),
                       ),
 
-                      Column(
+                      Row(
                         children: [
                           const Text(
                             "Accessible",
                             style: TextStyle(
                                 fontSize: 20, fontWeight: FontWeight.w100),
                           ),
+                          SizedBox(
+                            width: 20,
+                          ),
                           Container(
                             color: Colors.white10,
-                            width: 120,
                             child: DropdownButton(
                                 hint: Text('$print_type'),
                                 items: const [
@@ -181,6 +233,8 @@ class _bannerNewPageState extends State<bannerNewPage> {
                                   'image': imgUrl1,
                                   'access': _accesible,
                                   'id': id,
+                                  'gym_id': namee != null ? namee : "",
+                                  'navigation': _addnavigation.text.toString()
                                 },
                               );
                               //     .then(

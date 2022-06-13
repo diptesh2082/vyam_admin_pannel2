@@ -254,7 +254,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                               ),
                               DataColumn(
                                 label: Text(
-                                  'Validity of User',
+                                  'User Block',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
@@ -618,7 +618,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                   .whenComplete(() => print("Legitimate toggled"))
                   .catchError((e) => print(e));
             },
-            child: Text(online_pay.toString()),
+            child: Text(online_pay ? "ON" : "OFF"),
             style: ElevatedButton.styleFrom(
                 primary: online_pay ? Colors.green : Colors.red),
           ),
@@ -627,18 +627,33 @@ class _ProductDetailsState extends State<ProductDetails> {
 
       DataCell(
         Center(
-          child: Column(
+          child: Row(
             children: [
-              IconButton(
-                  onPressed: () async {
-                    // print('OS: ${Platform.operatingSystem}');
-                    var dic = await chooseImage();
-                    await uploadImageToStorage(dic, gymId);
-                    // await pickImage();
-                    // await saveData(gymId);
-                  },
-                  icon: const Icon(Icons.camera_alt_outlined)),
-              const Text("Display Picture"),
+              Column(
+                children: [
+                  IconButton(
+                      onPressed: () async {
+                        // print('OS: ${Platform.operatingSystem}');
+                        var dic = await chooseImage();
+                        await uploadImageToStorage(dic, gymId);
+                        // await pickImage();
+                        // await saveData(gymId);
+                      },
+                      icon: const Icon(Icons.camera_alt_outlined)),
+                  const Text("Display Picture"),
+                ],
+              ),
+              data['display_picture'] != null
+                  ? Image(
+                      image: NetworkImage(data['display_picture']),
+                      height: 200,
+                      width: 200,
+                    )
+                  : Container(
+                      color: Colors.black,
+                      height: 200,
+                      width: 200,
+                    )
             ],
           ),
         ),

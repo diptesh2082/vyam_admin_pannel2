@@ -152,6 +152,12 @@ class _BannerPageState extends State<BannerPage> {
                               ),
                               DataColumn(
                                 label: Text(
+                                  'Navigation',
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
+                              ),
+                              DataColumn(
+                                label: Text(
                                   'Access',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
@@ -198,6 +204,9 @@ class _BannerPageState extends State<BannerPage> {
       DataCell(
           data['name'] != null ? Text(data['name'] ?? "") : const Text("")),
       DataCell(Image.network(data['image'])),
+      DataCell(data['navigation'] != null
+          ? Text(data['navigation'] ?? "")
+          : const Text("")),
       DataCell(
         Center(
           child: ElevatedButton(
@@ -228,12 +237,17 @@ class _BannerPageState extends State<BannerPage> {
         ),
       ),
       DataCell(const Text(""), showEditIcon: true, onTap: () {
-        Get.to(() => EditBox(
+        Get.to(
+          () => EditBox(
             position: data['position_id'],
             name: data['name'],
             image: data['image'],
             id: data['id'],
-            access: data['access']));
+            access: data['access'],
+            navigation: data['navigation'],
+            gym_id: data['gym_id'],
+          ),
+        );
         // showDialog(
         //     context: context,
         //     builder: (context) {
@@ -444,15 +458,19 @@ class CustomTextField extends StatelessWidget {
 }
 
 class EditBox extends StatefulWidget {
-  const EditBox({
-    Key? key,
-    required this.position,
-    required this.name,
-    required this.image,
-    required this.id,
-    required this.access,
-  }) : super(key: key);
+  const EditBox(
+      {Key? key,
+      required this.position,
+      required this.name,
+      required this.image,
+      required this.id,
+      required this.access,
+      required this.navigation,
+      required this.gym_id})
+      : super(key: key);
   final String position;
+  final String gym_id;
+  final String navigation;
   final String name;
   final String image;
   final String id;
@@ -465,20 +483,29 @@ class EditBox extends StatefulWidget {
 class _EditBoxState extends State<EditBox> {
   final TextEditingController _name = TextEditingController();
   final TextEditingController _position = TextEditingController();
+  final TextEditingController _navigation = TextEditingController();
+
   var id;
   var image;
   var imgUrl1;
   bool access = false;
+  var gym_id = '';
 
   // final TextEditingController _image = TextEditingController();
+  CollectionReference? productStream;
+  String namee = "edgefitness.kestopur@vyam.com";
 
   @override
   void initState() {
+    productStream = FirebaseFirestore.instance.collection("product_details");
+
     super.initState();
     _position.text = widget.position;
     _name.text = widget.name;
     id = widget.id;
     image = widget.image;
+    namee = widget.gym_id;
+    _navigation.text = widget.navigation;
   }
 
   @override
@@ -505,9 +532,47 @@ class _EditBoxState extends State<EditBox> {
                           fontSize: 14),
                     ),
                   ),
+                  CustomTextField(hinttext: "Name", addcontroller: _name),
                   CustomTextField(
                       hinttext: "Position", addcontroller: _position),
-                  CustomTextField(hinttext: "Name", addcontroller: _name),
+                  CustomTextField(
+                      hinttext: "Navigation", addcontroller: _navigation),
+
+                  SizedBox(
+                      height: 400,
+                      width: 400,
+                      child: StreamBuilder<QuerySnapshot>(
+                        stream: productStream!.snapshots(),
+                        builder: (context, AsyncSnapshot snapshot) {
+                          String check = "Jee";
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const CircularProgressIndicator();
+                          }
+                          if (snapshot.data == null) {
+                            return Container();
+                          }
+                          print("-----------------------------------");
+                          var doc = snapshot.data.docs;
+                          print(snapshot.data.docs);
+                          return ListView.builder(
+                            itemCount: doc.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return RadioListTile<String>(
+                                  value: doc[index]['gym_id'],
+                                  title: Text(
+                                      "${doc[index]['name'].toString()} || ${doc[index]['branch']}"),
+                                  groupValue: namee,
+                                  onChanged: (String? valuee) {
+                                    setState(() {
+                                      namee = valuee!;
+                                    });
+                                    print(namee);
+                                  });
+                            },
+                          );
+                        },
+                      )),
                   //CustomTextField(hinttext: "Image url", addcontroller: _image),
 
                   Center(
@@ -540,7 +605,7 @@ class _EditBoxState extends State<EditBox> {
                             height: 200,
                             child: Container(
                               child: Image.network(
-                                (imgUrl1 == null) ? ' ' : imgUrl1,
+                                (imgUrl1 == null) ? image : imgUrl1,
                                 fit: BoxFit.contain,
                               ),
                             ),
@@ -564,9 +629,11 @@ class _EditBoxState extends State<EditBox> {
                             {
                               'position_id': _position.text,
                               'name': _name.text,
-                              'image': imgUrl1,
+                              'image': imgUrl1 == null ? image : imgUrl1,
                               'id': id,
                               'access': access,
+                              'gym_id': namee,
+                              'navigation': _navigation.text,
                             },
                           );
                           Navigator.pop(context);
