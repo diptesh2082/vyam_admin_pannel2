@@ -107,8 +107,6 @@ class _ProductDetailsState extends State<ProductDetails> {
 
                           onChanged: (value) {
                             if (value.isEmpty) {
-                              // _node.canRequestFocus=false;
-                              // FocusScope.of(context).unfocus();
                             }
                             if (mounted) {
                               setState(() {

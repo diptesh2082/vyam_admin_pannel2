@@ -131,11 +131,11 @@ class _TrainerPageState extends State<TrainerPage> {
                                 'Image',
                                 style: TextStyle(fontWeight: FontWeight.w600),
                               )),
-                              DataColumn(
-                                  label: Text(
-                                'Trainer Id',
-                                style: TextStyle(fontWeight: FontWeight.w600),
-                              )),
+                              // DataColumn(
+                              //     label: Text(
+                              //   'Trainer Id',
+                              //   style: TextStyle(fontWeight: FontWeight.w600),
+                              // )),
                               DataColumn(
                                   label: Text(
                                 'Name',
@@ -221,7 +221,7 @@ class _TrainerPageState extends State<TrainerPage> {
       DataCell(data != null
           ? CircleAvatar(backgroundImage: NetworkImage(imageUrl))
           : Text("")),
-      DataCell(data != null ? Text(trainerId) : Text("")),
+      // DataCell(data != null ? Text(trainerId) : Text("")),
       DataCell(data != null ? Text(data['name'] ?? "") : Text("")),
       DataCell(data != null ? Text(data['branch'] ?? "") : Text("")),
       DataCell(data != null ? Text(data['place'] ?? "") : Text("")),
@@ -465,14 +465,20 @@ class _ShowAddboxState extends State<ShowAddbox> {
                     },
                     child: Text("Remove Specialization")),
               ]),
-              Text("$specialization"),
-              SizedBox(
+              Text(
+                "$specialization",
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                ),
+              ),
+              const SizedBox(
                 height: 40,
               ),
               customTextField(
                   hinttext: "Add Certification and Click Add",
                   addcontroller: _addcertifications),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               Row(children: [
@@ -484,8 +490,8 @@ class _ShowAddboxState extends State<ShowAddbox> {
                       });
                       print(certification);
                     },
-                    child: Text("Add Certification")),
-                SizedBox(
+                    child: const Text("Add Certification")),
+                const SizedBox(
                   height: 20,
                 ),
                 ElevatedButton(
@@ -498,7 +504,10 @@ class _ShowAddboxState extends State<ShowAddbox> {
                     },
                     child: Text("Remove Certification")),
               ]),
-              Text("$certification"),
+              Text(
+                "$certification",
+                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+              ),
               Row(
                 children: [
                   SizedBox(
@@ -841,15 +850,15 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                       });
                       print(spec);
                     },
-                    child: Text("Remove Specialization")),
+                    child: const Text("Remove Specialization")),
               ]),
-              Text("$spec"),
-              SizedBox(
+              Text("$spec", style: TextStyle(fontWeight: FontWeight.bold , fontSize: 20),),
+              const SizedBox(
                 height: 40,
               ),
               customTextField(
                   hinttext: "Certificaiton", addcontroller: _certification),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               Row(children: [
@@ -861,8 +870,8 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                       });
                       print(cert);
                     },
-                    child: Text("Add Certification")),
-                SizedBox(
+                    child: const Text("Add Certification")),
+                const SizedBox(
                   width: 20,
                 ),
                 ElevatedButton(
@@ -873,9 +882,9 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                       });
                       print(cert);
                     },
-                    child: Text("Remove Certification")),
+                    child: const Text("Remove Certification")),
               ]),
-              Text("$cert"),
+              Text("$cert" , style: TextStyle(fontWeight: FontWeight.bold , fontSize: 20),),
 
               Padding(
                 padding: const EdgeInsets.all(12.0),
