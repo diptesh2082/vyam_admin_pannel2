@@ -20,8 +20,8 @@ class _LoginPageState extends State<LoginPage> {
   void initState() {
     super.initState();
 
-    email.text = "mahakbansal017@gmail.com";
-    password.text = "maahaak259";
+    email.text = "vyamtesting@gmail.com";
+    password.text = "vyam123";
   }
 
   @override

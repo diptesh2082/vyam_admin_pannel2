@@ -201,12 +201,12 @@ class _BookingDetailsState extends State<BookingDetails> {
                                     'Booking ID',
                                     style: TextStyle(fontWeight: FontWeight.w600),
                                   )),
-                              DataColumn(
-
-                                  label: Text(
-                                    'Vendor Name',
-                                    style: TextStyle(fontWeight: FontWeight.w600),
-                                  )),
+                              // DataColumn(
+                              //
+                              //     label: Text(
+                              //       'Vendor Name',
+                              //       style: TextStyle(fontWeight: FontWeight.w600),
+                              //     )),
                               DataColumn(
 
                                 label: Text(
@@ -251,14 +251,7 @@ class _BookingDetailsState extends State<BookingDetails> {
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
-                              DataColumn(
-                                label: Text(
 
-                                  'Start Date',
-
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
-                              ),
                               DataColumn(
                                 label: Text(
 
@@ -269,17 +262,24 @@ class _BookingDetailsState extends State<BookingDetails> {
                               ),
                               DataColumn(
                                 label: Text(
+                                  'Booking Date',
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
+                              ),
+                              DataColumn(
+                                label: Text(
+                                  'Discount',
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
+                              ),
+                              DataColumn(
+                                label: Text(
                                   'Grand Total',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
 
-                              DataColumn(
-                                label: Text(
-                                  'Booking Date',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
-                              ),
+
                               DataColumn(
                                 label: Text(
                                   'Booking Status',
@@ -369,7 +369,7 @@ class _BookingDetailsState extends State<BookingDetails> {
 //       DataCell(data['totalDays'] != null
 //           ? Text(data['totalDays'].toString())
 
-          : const Text("")),
+          // : const Text("")),
       DataCell(data['package_type'] != null
           ? Text(data['package_type'].toString().toUpperCase())
           : const Text("")),
@@ -379,11 +379,12 @@ class _BookingDetailsState extends State<BookingDetails> {
       DataCell(data['totalDays'] != null
           ? Text(data['totalDays'].toString())
           : const Text("")),
-      DataCell(data['order_date'] != null ? Text(orderDate) : const Text("")),
+      DataCell(data['booking_date'] != null ? Text(orderDate) : const Text("")),
 
       DataCell(data['plan_end_duration'] != null
           ? Text(durationEnd)
           : const Text("")),
+      DataCell(data['order_date'] != null ? Text(orderDate) : const Text("")),
       DataCell(data['discount'] != null
           ? Text('₹${data['discount'].toString()}')
           : const Text("")),
@@ -408,8 +409,8 @@ class _BookingDetailsState extends State<BookingDetails> {
       //         primary: paymentDoneBool ? Colors.green : Colors.red),
       //   ),
       // )),
-      DataCell(
-          data['booking_date'] != null ? Text(bookingDate) : const Text("")),
+      // DataCell(
+      //     data['booking_date'] != null ? Text(bookingDate) : const Text("")),
 
       DataCell(
         Center(
