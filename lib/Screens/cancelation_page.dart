@@ -122,6 +122,11 @@ class _CancelationPageState extends State<CancelationPage> {
                           // dataRowHeight: 75.0,
                           columns: const [
                             DataColumn(
+                                label: Text(
+                              'Index',
+                              style: TextStyle(fontWeight: FontWeight.w600),
+                            )),
+                            DataColumn(
                               label: Text(
                                 'User Name',
                                 style: TextStyle(fontWeight: FontWeight.w600),
@@ -174,13 +179,16 @@ class _CancelationPageState extends State<CancelationPage> {
 
   List<DataRow> _buildlist(
       BuildContext context, List<DocumentSnapshot> snapshot) {
-    return snapshot.map((data) => _buildListItem(context, data)).toList();
+    var d = 1;
+    return snapshot.map((data) => _buildListItem(context, data, d++)).toList();
   }
 
-  DataRow _buildListItem(BuildContext context, DocumentSnapshot data) {
+  DataRow _buildListItem(
+      BuildContext context, DocumentSnapshot data, int index) {
     String Id = data['Id'];
     return DataRow(
       cells: [
+        DataCell(data != null ? Text(index.toString()) : const Text("")),
         DataCell(
           data['user_name'] != null
               ? SizedBox(

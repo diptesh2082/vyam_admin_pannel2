@@ -8,6 +8,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:get/get.dart';
 import '../services/deleteMethod.dart';
+import 'payments_screen.dart';
 
 class BookingDetails extends StatefulWidget {
   const BookingDetails({
@@ -23,6 +24,10 @@ class _BookingDetailsState extends State<BookingDetails> {
       FirebaseFirestore.instance.collection('bookings');
   String searchVendorId = '';
   var selectedValue = 'active';
+  DateTime? date;
+  DateTime startDate = DateTime(DateTime.now().year - 5);
+  DateTime endDate = DateTime(DateTime.now().year + 5);
+
   @override
   void initState() {
     super.initState();
@@ -63,7 +68,6 @@ class _BookingDetailsState extends State<BookingDetails> {
                     borderRadius: BorderRadius.circular(15),
                     child: TextField(
                       // focusNode: _node,
-
                       autofocus: false,
                       textAlignVertical: TextAlignVertical.bottom,
                       onSubmitted: (value) async {
@@ -133,7 +137,7 @@ class _BookingDetailsState extends State<BookingDetails> {
                                   .toLowerCase()
                                   .contains(searchVendorId.toString()) ||
                               element
-                                  .get('userId')
+                                  .get('grand_total')
                                   .toString()
                                   .toLowerCase()
                                   .contains(searchVendorId.toString()) ||
@@ -245,7 +249,7 @@ class _BookingDetailsState extends State<BookingDetails> {
                                 ),
                               ),
                             ],
-                            rows: _buildlist(context, doc)),
+                            rows: _buildlist(context, doc, startDate, endDate)),
                       );
                     },
                   ),
@@ -258,9 +262,24 @@ class _BookingDetailsState extends State<BookingDetails> {
     );
   }
 
-  List<DataRow> _buildlist(
-      BuildContext context, List<DocumentSnapshot> snapshot) {
-    return snapshot.map((data) => _buildListItem(context, data)).toList();
+  List<DataRow> _buildlist(BuildContext context,
+      List<DocumentSnapshot> snapshot, DateTime startDate, DateTime endDate) {
+    var d = [];
+
+    snapshot.forEach((element) {
+      var x = element['booking_date'].toDate();
+      // var y = endDate.difference(startDate).inDays;
+      print('XXXXXXXXXXXXXXXXXXX???????????????????////////////');
+      print(x);
+      if (x.isAfter(startDate) && x.isBefore(endDate) ||
+          x == startDate ||
+          x == endDate) {
+        d.add(element);
+      }
+      print('/////////////////DDDDDDDDDDDDDDDDDDDD???????????????');
+      print(d);
+    });
+    return d.map((data) => _buildListItem(context, data)).toList();
   }
 
   DataRow _buildListItem(BuildContext context, DocumentSnapshot data) {
@@ -556,6 +575,24 @@ class _BookingDetailsState extends State<BookingDetails> {
 //             ),
 //           ),
 //         ));
+
+  Future pickDate(BuildContext context) async {
+    final intialDate = DateTime.now();
+    final newDate = await showDatePicker(
+      context: context,
+      initialDate: intialDate,
+      firstDate: DateTime(DateTime.now().year - 5),
+      lastDate: DateTime(DateTime.now().year + 5),
+    );
+
+    if (newDate == null) DateTime.now();
+
+    setState(() {
+      date = newDate;
+    });
+
+    return newDate;
+  }
 }
 
 class CustomTextField extends StatefulWidget {

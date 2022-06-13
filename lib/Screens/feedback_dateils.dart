@@ -12,11 +12,13 @@ class FeedBackInfo extends StatefulWidget {
 
 class _FeedBackInfoState extends State<FeedBackInfo> {
   CollectionReference? categoryStream;
+  CollectionReference? vendorStream;
   String searchGymName = '';
 
   @override
   void initState() {
     categoryStream = FirebaseFirestore.instance.collection('Feedback');
+    vendorStream = FirebaseFirestore.instance.collection('product_details');
     super.initState();
   }
 
@@ -107,6 +109,11 @@ class _FeedBackInfoState extends State<FeedBackInfo> {
                     dataRowHeight: 65,
                     columns: const [
                       DataColumn(
+                          label: Text(
+                        'Index',
+                        style: TextStyle(fontWeight: FontWeight.w600),
+                      )),
+                      DataColumn(
                         label: Text(
                           'Name',
                           style: TextStyle(fontWeight: FontWeight.w600),
@@ -168,13 +175,17 @@ class _FeedBackInfoState extends State<FeedBackInfo> {
 
   List<DataRow> _buildlist(
       BuildContext context, List<DocumentSnapshot> snapshot) {
-    return snapshot.map((data) => _buildListItem(context, data)).toList();
+    var d = 1;
+
+    return snapshot.map((data) => _buildListItem(context, data, d++)).toList();
   }
 
-  DataRow _buildListItem(BuildContext context, DocumentSnapshot data) {
+  DataRow _buildListItem(
+      BuildContext context, DocumentSnapshot data, int index) {
     String categoryID = data['feedback_id'];
     return DataRow(
       cells: [
+        DataCell(data != null ? Text(index.toString()) : const Text("")),
         DataCell(
           data['feedback_name'] != null
               ? Text(data['feedback_name'] ?? "")

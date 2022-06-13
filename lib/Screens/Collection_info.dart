@@ -653,52 +653,52 @@ class _EditBoxState extends State<EditBox> {
                           hintText: 'Phone Number'),
                     )),
                   ),
-                  SizedBox(
-                    height: 50,
-                    child: Card(
-                        child: TextField(
-                      autofocus: true,
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w400,
-                      ),
-                      controller: _locality,
-                      maxLines: 3,
-                      decoration: const InputDecoration(
-                          border: InputBorder.none,
-                          hintStyle: TextStyle(
-                            fontSize: 14,
-                            fontFamily: 'Poppins',
-                            fontWeight: FontWeight.w400,
-                          ),
-                          hintMaxLines: 2,
-                          hintText: 'Locality'),
-                    )),
-                  ),
-                  SizedBox(
-                    height: 50,
-                    child: Card(
-                        child: TextField(
-                      autofocus: true,
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w400,
-                      ),
-                      controller: _sublocality,
-                      maxLines: 3,
-                      decoration: const InputDecoration(
-                          border: InputBorder.none,
-                          hintStyle: TextStyle(
-                            fontSize: 14,
-                            fontFamily: 'Poppins',
-                            fontWeight: FontWeight.w400,
-                          ),
-                          hintMaxLines: 2,
-                          hintText: 'Sub Locality'),
-                    )),
-                  ),
+                  // SizedBox(
+                  //   height: 50,
+                  //   child: Card(
+                  //       child: TextField(
+                  //     autofocus: true,
+                  //     style: const TextStyle(
+                  //       fontSize: 14,
+                  //       fontFamily: 'Poppins',
+                  //       fontWeight: FontWeight.w400,
+                  //     ),
+                  //     controller: _locality,
+                  //     maxLines: 3,
+                  //     decoration: const InputDecoration(
+                  //         border: InputBorder.none,
+                  //         hintStyle: TextStyle(
+                  //           fontSize: 14,
+                  //           fontFamily: 'Poppins',
+                  //           fontWeight: FontWeight.w400,
+                  //         ),
+                  //         hintMaxLines: 2,
+                  //         hintText: 'Locality'),
+                  //   )),
+                  // ),
+                  // SizedBox(
+                  //   height: 50,
+                  //   child: Card(
+                  //       child: TextField(
+                  //     autofocus: true,
+                  //     style: const TextStyle(
+                  //       fontSize: 14,
+                  //       fontFamily: 'Poppins',
+                  //       fontWeight: FontWeight.w400,
+                  //     ),
+                  //     controller: _sublocality,
+                  //     maxLines: 3,
+                  //     decoration: const InputDecoration(
+                  //         border: InputBorder.none,
+                  //         hintStyle: TextStyle(
+                  //           fontSize: 14,
+                  //           fontFamily: 'Poppins',
+                  //           fontWeight: FontWeight.w400,
+                  //         ),
+                  //         hintMaxLines: 2,
+                  //         hintText: 'Sub Locality'),
+                  //   )),
+                  // ),
                   SizedBox(
                     height: 50,
                     child: Card(
@@ -807,7 +807,7 @@ class _EditBoxState extends State<EditBox> {
                                     .doc("${x}");
 
                             Map<String, dynamic> data = <String, dynamic>{
-                              'address': _address.text,
+                              // 'address': _address.text,
                               'gender': _gender.text,
                               'image': imgUrl1,
                               // 'lat': _latitude.text,
@@ -815,8 +815,10 @@ class _EditBoxState extends State<EditBox> {
                               'name': _name.text,
                               'pincode': _pincode.text,
                               'userId': _userid.text,
-                              'locality': _locality.text,
-                              'subLocality': _sublocality.text,
+
+                              'locality': "",
+                              'subLocality': "",
+
                               'email': _email.text,
                               'number': _number.text,
                             };
@@ -955,7 +957,7 @@ class _detailsaddState extends State<detailsadd> {
                   ),
                   DropdownButton(
                       value: gender,
-                      items: [
+                      items: const [
                         DropdownMenuItem(
                           child: Text("Male"),
                           value: "Male",
@@ -994,15 +996,19 @@ class _detailsaddState extends State<detailsadd> {
                           .doc("+91${_addnumber.text}")
                           .set(
                         {
-                          'address': _addaddress.text,
+                          'address': "",
                           'userId': "+91${_addnumber.text}",
                           'name': _addname.text,
                           'email': _addemail.text,
                           'gender': gender,
-                          'image': imgUrl1,
+                          'image': imgUrl1 != null
+                              ? imgUrl1
+                              : "https://www.kindpng.com/picc/m/22-223941_transparent-avatar-png-male-avatar-icon-transparent-png.png",
                           'number': "+91${_addnumber.text}",
-                          'locality': _addlocality.text,
-                          'subLocality': _addsublocality.text,
+
+                          'locality': "",
+                          'subLocality': "",
+
                           'pincode': _addpincode.text,
                           'long': " ",
                           'lat': " ",
