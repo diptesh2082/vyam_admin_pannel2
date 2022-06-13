@@ -40,6 +40,9 @@ class _addbookingsState extends State<addbookings> {
   final TextEditingController _addbookingmonth = TextEditingController();
   final TextEditingController _addbookingday = TextEditingController();
   final TextEditingController _addbookingaccepted = TextEditingController();
+  DateTime bookingtimedata = DateTime.now();
+  DateTime? date;
+  TimeOfDay? time;
 
   final _formKey = GlobalKey<FormState>();
   @override
@@ -128,15 +131,35 @@ class _addbookingsState extends State<addbookings> {
                           addcontroller: _addbookingplan),
                       CustomTextField(
                           hinttext: "booking ID", addcontroller: _addbookingid),
-                      CustomTextField(
-                          hinttext: "Booking Date Y",
-                          addcontroller: _addbookingyear),
-                      CustomTextField(
-                          hinttext: "Booking Date M",
-                          addcontroller: _addbookingmonth),
-                      CustomTextField(
-                          hinttext: "Booking Date D",
-                          addcontroller: _addbookingday),
+                      Container(
+                        child: Row(
+                          children: [
+                            const Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Text('Select Date & Time For Bookings:',
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                  )),
+                            ),
+                            ElevatedButton(
+                              child:
+                                  const Text('Select Date & Time For Bookings'),
+                              onPressed: () => pickDateTime(context),
+                            ),
+                            SizedBox(width: 15),
+                          ],
+                        ),
+                      ),
+                      // CustomTextField(
+                      //     hinttext: "Booking Date Y",
+                      //     addcontroller: _addbookingyear),
+                      // CustomTextField(
+                      //     hinttext: "Booking Date M",
+                      //     addcontroller: _addbookingmonth),
+                      // CustomTextField(
+                      //     hinttext: "Booking Date D",
+                      //     addcontroller: _addbookingday),
                       CustomTextField(
                           hinttext: "Booking Accepted",
                           addcontroller: _addbookingaccepted),
@@ -230,5 +253,61 @@ class _addbookingsState extends State<addbookings> {
         ),
       ),
     );
+  }
+
+  Future pickDateTime(BuildContext context) async {
+    final date = await pickDate(context);
+    if (date == null) return;
+
+    final time = await pickTime(context);
+    if (time == null) return;
+
+    setState(() {
+      bookingtimedata = DateTime(
+        date.year,
+        date.month,
+        date.day,
+        time.hour,
+        time.minute,
+      );
+    });
+  }
+
+  Future pickDate(BuildContext context) async {
+    final intialDate = DateTime.now();
+    final newDate = await showDatePicker(
+      context: context,
+      initialDate: intialDate,
+      firstDate: DateTime(DateTime.now().year - 5),
+      lastDate: DateTime(DateTime.now().year + 5),
+    );
+
+    if (newDate == null) return;
+
+    setState(() {
+      date = newDate;
+    });
+
+    return newDate;
+  }
+
+  Future pickTime(BuildContext context) async {
+// <<<<<<< HEAD
+//     final intialTime = TimeOfDay(hour: 9, minute: 0);
+//     final newTime =
+//         await showTimePicker(context: context, initialTime: time ?? intialTime);
+// =======
+    const intialTime = const TimeOfDay(hour: 9, minute: 0);
+    final newTime =
+        await showTimePicker(context: context, initialTime: time ?? intialTime);
+// >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
+
+    if (newTime == null) return;
+
+    setState(() {
+      time = newTime;
+    });
+
+    return newTime;
   }
 }

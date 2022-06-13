@@ -256,7 +256,7 @@ class _TrainerPageState extends State<TrainerPage> {
                     experience: data['experience'],
                     clients: data['clients'],
                     certification: data['certification'],
-                    specialization: data['specialisation'],
+                    specialization: data['specialization'],
                     trainerId: data['trainer_id'],
                   ),
                 ),
@@ -399,6 +399,8 @@ class _ShowAddboxState extends State<ShowAddbox> {
   final TextEditingController _addclients = TextEditingController();
   final TextEditingController _addreview = TextEditingController();
   final TextEditingController _addspecialization = TextEditingController();
+  final TextEditingController social = TextEditingController();
+
   List<String> certification = [];
   List<String> specialization = [];
   // final TextEditingController _addCertification = TextEditingController();
@@ -438,6 +440,8 @@ class _ShowAddboxState extends State<ShowAddbox> {
               customTextField(
                   hinttext: "experience", addcontroller: _addexperience),
               customTextField(hinttext: "clients", addcontroller: _addclients),
+              customTextField(
+                  hinttext: "Social Media Link", addcontroller: social),
               customTextField(
                   hinttext: "Add Specialization",
                   addcontroller: _addspecialization),
@@ -703,7 +707,7 @@ class _ShowAddboxState extends State<ShowAddbox> {
                         'experience': _addexperience.text,
                         'about': _addabout.text,
                         'certification': certification,
-                        'specialisation': specialization,
+                        'specialization': specialization,
                         'clients': _addclients.text,
                       },
                     );

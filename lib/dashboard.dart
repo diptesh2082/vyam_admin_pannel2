@@ -245,7 +245,7 @@ class _showLatestBookingState extends State<showLatestBooking> {
               borderRadius: BorderRadius.circular(20.0)),
           child: SingleChildScrollView(
             child: Column(
-             // crossAxisAlignment: CrossAxisAlignment.start,
+              // crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Text(
                   'Latest Bookings',
@@ -255,15 +255,12 @@ class _showLatestBookingState extends State<showLatestBooking> {
                     fontSize: 32,
                   ),
                 ),
-
                 Center(
                   child: StreamBuilder<QuerySnapshot>(
                     stream: FirebaseFirestore.instance
                         .collection('bookings')
-
                         .where('booking_status',
-                            whereIn: ['upcoming' , 'active' , 'incomplete'])
-
+                            whereIn: ['upcoming', 'active', 'incomplete'])
                         .orderBy("id", descending: true)
                         .snapshots(),
                     builder: (context, AsyncSnapshot snapshot) {
@@ -396,9 +393,10 @@ class _showLatestBookingState extends State<showLatestBooking> {
               .format(data['plan_end_duration'].toDate())
               .toString())
           : const Text("")),
+// <<<<<<< HEAD
+// =======
 
-
-
+// >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
       DataCell(
         Center(
           child: Container(
@@ -417,13 +415,9 @@ class _showLatestBookingState extends State<showLatestBooking> {
                         value: "upcoming",
                       ),
                       DropdownMenuItem(
-
-                          child: Text("Incomplete"),
-                          value: "incomplete"),
+                          child: Text("Incomplete"), value: "incomplete"),
                       DropdownMenuItem(
-                          child: Text("Cancelled"),
-                          value: "cancelled"),
-
+                          child: Text("Cancelled"), value: "cancelled"),
                     ],
                     onChanged: (value) async {
                       setState(() {
@@ -439,11 +433,42 @@ class _showLatestBookingState extends State<showLatestBooking> {
           ),
         ),
       ),
+// <<<<<<< HEAD
+// =======
 
+// >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
       DataCell(
-          data["payment_method"] != null
-          ? Text(data['payment_method'].toString().toUpperCase())
-          : const Text("")),
+        Center(
+          child: Container(
+            child: Row(
+              children: [
+                DropdownButton(
+                    hint: Text(data['payment_method'].toString()),
+                    value: data['payment_method'].toString(),
+                    items: const [
+                      DropdownMenuItem(
+                        child: Text("Online"),
+                        value: "online",
+                      ),
+                      DropdownMenuItem(
+                        child: Text("Cash"),
+                        value: "offline",
+                      ),
+                    ],
+                    onChanged: (value) async {
+                      setState(() {
+                        selectedValue1 = value as String;
+                      });
+                      await FirebaseFirestore.instance
+                          .collection('bookings')
+                          .doc(bookingId)
+                          .update({'payment_method': value});
+                    }),
+              ],
+            ),
+          ),
+        ),
+      ),
     ]);
   }
 }

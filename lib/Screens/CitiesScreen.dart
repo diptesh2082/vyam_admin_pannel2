@@ -47,7 +47,6 @@ class _CitiesScreenState extends State<CitiesScreen> {
                       Get.to(() => const citiesAdd());
                     },
                     child: Text('Add Cities'),
-
                   ),
                 ),
                 Center(
@@ -66,6 +65,11 @@ class _CitiesScreenState extends State<CitiesScreen> {
                         child: DataTable(
                           dataRowHeight: 65,
                           columns: const [
+                            DataColumn(
+                                label: Text(
+                              'Index',
+                              style: TextStyle(fontWeight: FontWeight.w600),
+                            )),
                             DataColumn(
                               label: Text(
                                 'Name',
@@ -113,22 +117,23 @@ class _CitiesScreenState extends State<CitiesScreen> {
 
   List<DataRow> _buildlist(
       BuildContext context, List<DocumentSnapshot> snapshot) {
-    return snapshot.map((data) => _buildListItem(context, data)).toList();
+    var d = 1;
+    return snapshot.map((data) => _buildListItem(context, data, d++)).toList();
   }
 
-  DataRow _buildListItem(BuildContext context, DocumentSnapshot data) {
+  DataRow _buildListItem(
+      BuildContext context, DocumentSnapshot data, int index) {
     String cityId = data['id'];
     bool status = data['Status'];
     return DataRow(cells: [
+      DataCell(data != null ? Text(index.toString()) : const Text("")),
       DataCell(
         data['Address'] != null ? Text(data['Address'] ?? "") : const Text(""),
       ),
       DataCell(
-
         data['Status'] != null
             ? Text(data['Status'].toString())
             : const Text(""),
-
       ),
       // DataCell(
       //   data['id'] != null ? Text(data['id']) : const Text(""),
@@ -137,12 +142,10 @@ class _CitiesScreenState extends State<CitiesScreen> {
         const Text(''),
         showEditIcon: true,
         onTap: () {
-
           Get.to(() => ProductEditBox(
               address: data['Address'],
               status: data['Status'],
               cityId: data['id']));
-
         },
       ),
       DataCell(const Icon(Icons.delete), onTap: () {
