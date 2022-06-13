@@ -256,7 +256,6 @@ class _UserInformationState extends State<UserInformation> {
       BuildContext context, List<DocumentSnapshot> snapshot) {
     return snapshot.map((data) => _buildListItem(context, data)).toList();
   }
-
   DataRow _buildListItem(BuildContext context, DocumentSnapshot data) {
     String userIDData = data['userId'];
     String profileImage = data['image'];
@@ -291,7 +290,7 @@ class _UserInformationState extends State<UserInformation> {
       DataCell(data != null ? Text(data['email'] ?? "") : Text("")),
       DataCell(data != null ? Text(data['gender'] ?? "") : Text("")),
       DataCell(data != null
-          ? Text((data['number']).toString().substring(3, 13))
+          ? Text((data['number']).toString().substring(3, data['number'].toString().length))
           : Text("")),
       DataCell(data != null ? Text(data['address'] ?? "") : Text("")),
       DataCell(data != null ? Text(data['locality'] ?? "") : Text("")),
@@ -505,12 +504,12 @@ class _EditBoxState extends State<EditBox> {
     // _latitude.text = widget.latitude.toString();
     // _longitude.text = widget.longitude.toString();
     _locality.text = widget.locality;
-    _number.text = widget.number;
+    _number.text = widget.number.substring(3 , widget.number.length);
     _name.text = widget.name;
     _pincode.text = widget.pincode;
     _sublocality.text = widget.subLocality;
     _userid.text = widget.userid;
-    x = widget.number;
+    x = widget.userid;
     img = widget.imageurl;
   }
 
@@ -526,7 +525,7 @@ class _EditBoxState extends State<EditBox> {
           ),
           backgroundColor: Colors.white10,
           body: Container(
-            padding: EdgeInsets.all(20),
+            padding: const EdgeInsets.all(20),
             child: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -538,29 +537,29 @@ class _EditBoxState extends State<EditBox> {
                         fontWeight: FontWeight.w600,
                         fontSize: 14),
                   ),
-                  SizedBox(
-                    height: 50,
-                    child: Card(
-                        child: TextField(
-                      autofocus: true,
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w400,
-                      ),
-                      controller: _userid,
-                      maxLines: 3,
-                      decoration: const InputDecoration(
-                          border: InputBorder.none,
-                          hintStyle: TextStyle(
-                            fontSize: 14,
-                            fontFamily: 'Poppins',
-                            fontWeight: FontWeight.w400,
-                          ),
-                          hintMaxLines: 2,
-                          hintText: 'UserID'),
-                    )),
-                  ),
+                  // SizedBox(
+                  //   height: 50,
+                  //   child: Card(
+                  //       child: TextField(
+                  //     autofocus: true,
+                  //     style: const TextStyle(
+                  //       fontSize: 14,
+                  //       fontFamily: 'Poppins',
+                  //       fontWeight: FontWeight.w400,
+                  //     ),
+                  //     controller: _userid,
+                  //     maxLines: 3,
+                  //     decoration: const InputDecoration(
+                  //         border: InputBorder.none,
+                  //         hintStyle: TextStyle(
+                  //           fontSize: 14,
+                  //           fontFamily: 'Poppins',
+                  //           fontWeight: FontWeight.w400,
+                  //         ),
+                  //         hintMaxLines: 2,
+                  //         hintText: 'UserID'),
+                  //   )),
+                  // ),
                   SizedBox(
                     height: 50,
                     child: Card(
@@ -653,75 +652,75 @@ class _EditBoxState extends State<EditBox> {
                           hintText: 'Phone Number'),
                     )),
                   ),
-                  SizedBox(
-                    height: 50,
-                    child: Card(
-                        child: TextField(
-                      autofocus: true,
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w400,
-                      ),
-                      controller: _locality,
-                      maxLines: 3,
-                      decoration: const InputDecoration(
-                          border: InputBorder.none,
-                          hintStyle: TextStyle(
-                            fontSize: 14,
-                            fontFamily: 'Poppins',
-                            fontWeight: FontWeight.w400,
-                          ),
-                          hintMaxLines: 2,
-                          hintText: 'Locality'),
-                    )),
-                  ),
-                  SizedBox(
-                    height: 50,
-                    child: Card(
-                        child: TextField(
-                      autofocus: true,
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w400,
-                      ),
-                      controller: _sublocality,
-                      maxLines: 3,
-                      decoration: const InputDecoration(
-                          border: InputBorder.none,
-                          hintStyle: TextStyle(
-                            fontSize: 14,
-                            fontFamily: 'Poppins',
-                            fontWeight: FontWeight.w400,
-                          ),
-                          hintMaxLines: 2,
-                          hintText: 'Sub Locality'),
-                    )),
-                  ),
-                  SizedBox(
-                    height: 50,
-                    child: Card(
-                        child: TextField(
-                      autofocus: true,
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w400,
-                      ),
-                      controller: _pincode,
-                      maxLines: 3,
-                      decoration: const InputDecoration(
-                          border: InputBorder.none,
-                          hintStyle: TextStyle(
-                            fontSize: 14,
-                            fontFamily: 'Poppins',
-                            fontWeight: FontWeight.w400,
-                          ),
-                          hintMaxLines: 2,
-                          hintText: 'Pincode'),
-                    )),
-                  ),
+                  // SizedBox(
+                  //   height: 50,
+                  //   child: Card(
+                  //       child: TextField(
+                  //     autofocus: true,
+                  //     style: const TextStyle(
+                  //       fontSize: 14,
+                  //       fontFamily: 'Poppins',
+                  //       fontWeight: FontWeight.w400,
+                  //     ),
+                  //     controller: _locality,
+                  //     maxLines: 3,
+                  //     decoration: const InputDecoration(
+                  //         border: InputBorder.none,
+                  //         hintStyle: TextStyle(
+                  //           fontSize: 14,
+                  //           fontFamily: 'Poppins',
+                  //           fontWeight: FontWeight.w400,
+                  //         ),
+                  //         hintMaxLines: 2,
+                  //         hintText: 'Locality'),
+                  //   )),
+                  // ),
+                  // SizedBox(
+                  //   height: 50,
+                  //   child: Card(
+                  //       child: TextField(
+                  //     autofocus: true,
+                  //     style: const TextStyle(
+                  //       fontSize: 14,
+                  //       fontFamily: 'Poppins',
+                  //       fontWeight: FontWeight.w400,
+                  //     ),
+                  //     controller: _sublocality,
+                  //     maxLines: 3,
+                  //     decoration: const InputDecoration(
+                  //         border: InputBorder.none,
+                  //         hintStyle: TextStyle(
+                  //           fontSize: 14,
+                  //           fontFamily: 'Poppins',
+                  //           fontWeight: FontWeight.w400,
+                  //         ),
+                  //         hintMaxLines: 2,
+                  //         hintText: 'Sub Locality'),
+                  //   )),
+                  // ),
+                  // SizedBox(
+                  //   height: 50,
+                  //   child: Card(
+                  //       child: TextField(
+                  //     autofocus: true,
+                  //     style: const TextStyle(
+                  //       fontSize: 14,
+                  //       fontFamily: 'Poppins',
+                  //       fontWeight: FontWeight.w400,
+                  //     ),
+                  //     controller: _pincode,
+                  //     maxLines: 3,
+                  //     decoration: const InputDecoration(
+                  //         border: InputBorder.none,
+                  //         hintStyle: TextStyle(
+                  //           fontSize: 14,
+                  //           fontFamily: 'Poppins',
+                  //           fontWeight: FontWeight.w400,
+                  //         ),
+                  //         hintMaxLines: 2,
+                  //         hintText: 'Pincode'),
+                  //   )),
+                  // ),
                   // SizedBox(
                   //   height: 50,
                   //   child: Card(
@@ -805,20 +804,17 @@ class _EditBoxState extends State<EditBox> {
                                     .collection('user_details')
                                     //change _number to _userid
                                     .doc("${x}");
-
                             Map<String, dynamic> data = <String, dynamic>{
-                              'address': _address.text,
+                              // 'address':'',
                               'gender': _gender.text,
-                              'image': imgUrl1,
-                              // 'lat': _latitude.text,
-                              // 'long': _longitude.text,
+                              'image': imgUrl1 ?? "https://www.kindpng.com/picc/m/22-223941_transparent-avatar-png-male-avatar-icon-transparent-png.png",
                               'name': _name.text,
-                              'pincode': _pincode.text,
-                              'userId': _userid.text,
-                              'locality': _locality.text,
-                              'subLocality': _sublocality.text,
+                              // 'pincode': "",
+                              // 'userId': _userid.text,
+                              // 'locality': "",
+                              // 'subLocality': "",
                               'email': _email.text,
-                              'number': _number.text,
+                              'number': '+91${_number.text}',
                             };
                             await documentReference
                                 .update(data)
@@ -828,14 +824,14 @@ class _EditBoxState extends State<EditBox> {
                           },
                           child: const Text('Done'),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 20,
                         ),
                         ElevatedButton(
                             onPressed: () {
                               Navigator.pop(context);
                             },
-                            child: Text('Close'))
+                            child: const Text('Close'))
                       ],
                     ),
                   )
@@ -915,11 +911,11 @@ class _detailsaddState extends State<detailsadd> {
                     "User Image",
                     style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 20,
                   ),
                   InkWell(
-                    child: Icon(Icons.camera_alt),
+                    child: const Icon(Icons.camera_alt),
                     onTap: () async {
                       profileImage = await chooseImage();
                       getUrlImage(profileImage);
@@ -946,16 +942,16 @@ class _detailsaddState extends State<detailsadd> {
               customTextField(hinttext: "Email", addcontroller: _addemail),
               Row(
                 children: [
-                  Text(
+                  const Text(
                     "Gender: ",
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 20,
                   ),
                   DropdownButton(
                       value: gender,
-                      items: [
+                      items: const [
                         DropdownMenuItem(
                           child: Text("Male"),
                           value: "Male",
@@ -964,8 +960,6 @@ class _detailsaddState extends State<detailsadd> {
                           child: Text("Female"),
                           value: "Female",
                         ),
-                        DropdownMenuItem(
-                            child: Text("Unisex"), value: "Unisex"),
                       ],
                       onChanged: (value) {
                         setState(() {
@@ -977,6 +971,7 @@ class _detailsaddState extends State<detailsadd> {
               // customTextField(hinttext: "Gender", addcontroller: _addgender),
 
               // customTextField(hinttext: "Address", addcontroller: _addaddress),
+
               // customTextField(
               //     hinttext: "Locality", addcontroller: _addlocality),
               // customTextField(
@@ -994,38 +989,34 @@ class _detailsaddState extends State<detailsadd> {
                           .doc("+91${_addnumber.text}")
                           .set(
                         {
-                          'address': _addaddress.text,
+                          'address': "",
                           'userId': "+91${_addnumber.text}",
                           'name': _addname.text,
                           'email': _addemail.text,
                           'gender': gender,
-                          'image': imgUrl1,
+                          'image': imgUrl1 ?? "https://www.kindpng.com/picc/m/22-223941_transparent-avatar-png-male-avatar-icon-transparent-png.png",
                           'number': "+91${_addnumber.text}",
-                          'locality': _addlocality.text,
-                          'subLocality': _addsublocality.text,
-                          'pincode': _addpincode.text,
+                          'locality': "",
+                          'subLocality': "",
+                          'pincode': "",
                           'long': " ",
                           'lat': " ",
                           'legit': true
                           // 'image': ""
                         },
                       );
-                      //     .then((value) async {
-                      //   await uploadImageToUser(
-                      //       profileImage, "+91${_addnumber.text}");
-                      // });
                       Navigator.pop(context);
                     },
                     child: const Text('Done'),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 20,
                   ),
                   ElevatedButton(
                       onPressed: () {
                         Navigator.pop(context);
                       },
-                      child: Text('Close')),
+                      child: const Text('Close')),
                 ],
               ),
             ],

@@ -5,7 +5,6 @@ import 'dart:math';
 import 'package:admin_panel_vyam/Screens/banners.dart';
 import 'package:admin_panel_vyam/Screens/map_view.dart';
 import 'package:admin_panel_vyam/Screens/timings.dart';
-import 'package:flutter/widgets.dart';
 import 'package:random_password_generator/random_password_generator.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -23,6 +22,7 @@ import 'package:admin_panel_vyam/services/CustomTextFieldClass.dart';
 
 List<String> arr = [];
 List<String> workoutArray = [];
+List<String> d = [];
 
 class ProductDetails extends StatefulWidget {
   const ProductDetails({
@@ -78,12 +78,14 @@ class _ProductDetailsState extends State<ProductDetails> {
                         ),
                         onPressed: () {
                           Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => ShowAddBox(),
+                            builder: (context) => const ShowAddBox(),
                           ));
                         },
+
                         child: Text('Add Product'),
                       ),
                     ),
+
                     const Spacer(),
                     Container(
                       width: 500,
@@ -105,8 +107,7 @@ class _ProductDetailsState extends State<ProductDetails> {
 
                           onChanged: (value) {
                             if (value.isEmpty) {
-                              // _node.canRequestFocus=false;
-                              // FocusScope.of(context).unfocus();
+
                             }
                             if (mounted) {
                               setState(() {
@@ -168,6 +169,11 @@ class _ProductDetailsState extends State<ProductDetails> {
                             // ? DATATABLE
                             dataRowHeight: 65,
                             columns: const [
+                              DataColumn(
+                                  label: Text(
+                                    'Index',
+                                    style: TextStyle(fontWeight: FontWeight.w600),
+                                  )),
                               DataColumn(
                                   label: Text(
                                 'Name',
@@ -254,7 +260,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                               ),
                               DataColumn(
                                 label: Text(
-                                  'Validity of User',
+                                  'User Block',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
@@ -339,10 +345,14 @@ class _ProductDetailsState extends State<ProductDetails> {
 
   List<DataRow> _buildlist(
       BuildContext context, List<DocumentSnapshot> snapshot) {
-    return snapshot.map((data) => _buildListItem(context, data)).toList();
+
+    var d = 1;
+
+    return snapshot.map((data) => _buildListItem(context, data , d++)).toList();
+
   }
 
-  DataRow _buildListItem(BuildContext context, DocumentSnapshot data) {
+  DataRow _buildListItem(BuildContext context, DocumentSnapshot data , int index) {
     // morning.text=data['timings']["gym"]["Morning"];
     // evening.text=data['timings']["gym"]["Evening"];
     // closed.text=data['timings']["gym"]["Closed"];
@@ -363,6 +373,7 @@ class _ProductDetailsState extends State<ProductDetails> {
     String x, y;
 
     return DataRow(cells: [
+      DataCell(data != null ? Text(index.toString()) : const Text("")),
       DataCell(data != null ? Text(data['name'] ?? "") : const Text("")),
       DataCell(data != null ? Text(data['address'] ?? "") : const Text("")),
       DataCell(data != null ? Text(gymId) : const Text("")),
@@ -400,7 +411,7 @@ class _ProductDetailsState extends State<ProductDetails> {
           }))),
 
       DataCell(ElevatedButton(
-        child: Text('Packages'),
+        child: const Text('Packages'),
         onPressed: () {
           Navigator.of(context).push(MaterialPageRoute(
             builder: (context) =>
@@ -441,9 +452,9 @@ class _ProductDetailsState extends State<ProductDetails> {
                 ),
               ),
             ),
-            Spacer(),
+            const Spacer(),
             TextButton(
-              child: Text('View'),
+              child: const Text('View'),
               onPressed: () {
                 print(imgList);
                 showDialog(
@@ -617,7 +628,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                   .whenComplete(() => print("Legitimate toggled"))
                   .catchError((e) => print(e));
             },
-            child: Text(online_pay.toString()),
+            child: Text(online_pay ? "ON" : "OFF"),
             style: ElevatedButton.styleFrom(
                 primary: online_pay ? Colors.green : Colors.red),
           ),
@@ -626,18 +637,33 @@ class _ProductDetailsState extends State<ProductDetails> {
 
       DataCell(
         Center(
-          child: Column(
+          child: Row(
             children: [
-              IconButton(
-                  onPressed: () async {
-                    // print('OS: ${Platform.operatingSystem}');
-                    var dic = await chooseImage();
-                    await uploadImageToStorage(dic, gymId);
-                    // await pickImage();
-                    // await saveData(gymId);
-                  },
-                  icon: const Icon(Icons.camera_alt_outlined)),
-              const Text("Display Picture"),
+              Column(
+                children: [
+                  IconButton(
+                      onPressed: () async {
+                        // print('OS: ${Platform.operatingSystem}');
+                        var dic = await chooseImage();
+                        await uploadImageToStorage(dic, gymId);
+                        // await pickImage();
+                        // await saveData(gymId);
+                      },
+                      icon: const Icon(Icons.camera_alt_outlined)),
+                  const Text("Display Picture"),
+                ],
+              ),
+              data['display_picture'] != null
+                  ? Image(
+                      image: NetworkImage(data['display_picture']),
+                      height: 200,
+                      width: 200,
+                    )
+                  : Container(
+                      color: Colors.black,
+                      height: 200,
+                      width: 200,
+                    )
             ],
           ),
         ),
@@ -658,6 +684,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                         gymId: data['gym_id'],
                         gymOwner: data['gym_owner'],
                         landmark: data['landmark'],
+                        password: data['password'],
                         imagee: data['display_picture'],
                         arr2: arr2,
                         WorkoutArray: WorkoutArray,
@@ -678,12 +705,6 @@ class _ProductDetailsState extends State<ProductDetails> {
   }
 
 //Adding new data -----------------------------------------------------------------+++++++++++++++++++++++++++-------------------
-  final TextEditingController _addaddress = TextEditingController();
-  final TextEditingController _addgender = TextEditingController();
-  final TextEditingController _addname = TextEditingController();
-  final TextEditingController _addpincode = TextEditingController();
-  final TextEditingController _addlandmark = TextEditingController();
-  final TextEditingController _addgymownerid = TextEditingController();
   final TextEditingController _latitudeController = TextEditingController();
   final TextEditingController _longitudeController = TextEditingController();
   final TextEditingController _branchController = TextEditingController();
@@ -705,7 +726,6 @@ class ShowAddBox extends StatefulWidget {
 }
 
 class _ShowAddBoxState extends State<ShowAddBox> {
-  @override
   CollectionReference? productStream;
   final TextEditingController _addaddress = TextEditingController();
   final TextEditingController _addgender = TextEditingController();
@@ -742,6 +762,7 @@ class _ShowAddBoxState extends State<ShowAddBox> {
     super.initState();
   }
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white10,
@@ -749,7 +770,7 @@ class _ShowAddBoxState extends State<ShowAddBox> {
         title: const Text('Add Vendor Details'),
       ),
       body: Container(
-        padding: EdgeInsets.all(50),
+        padding: const EdgeInsets.all(50),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -771,9 +792,9 @@ class _ShowAddBoxState extends State<ShowAddBox> {
                         TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
               ),
               customTextField(hinttext: "Name", addcontroller: _addname),
-              SizedBox(height: 15),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
+              const SizedBox(height: 15),
+              const Padding(
+                padding: EdgeInsets.all(8.0),
                 child: Text('Address:',
                     style:
                         TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
@@ -781,7 +802,7 @@ class _ShowAddBoxState extends State<ShowAddBox> {
 
               customTextField(hinttext: "Address", addcontroller: _addaddress),
 
-              SizedBox(height: 15),
+              const SizedBox(height: 15),
               const Padding(
                 padding: EdgeInsets.all(8.0),
                 child: Text('Gym Owner Id:',
@@ -801,7 +822,7 @@ class _ShowAddBoxState extends State<ShowAddBox> {
                 addcontroller: _branchController,
                 hinttext: "branch",
               ),
-              SizedBox(height: 15),
+              const SizedBox(height: 15),
 
               //customTextField(hinttext: "Gender", addcontroller: _addgender),
 
@@ -835,27 +856,25 @@ class _ShowAddBoxState extends State<ShowAddBox> {
               ),
 
               const SizedBox(height: 15),
-              Container(
-                child: Row(
-                  children: const [
-                    Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Text('Latitude:',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w700, fontSize: 15)),
-                    ),
-                    SizedBox(
-                      width: 15,
-                    ),
-                    Text(
-                      'Not Required',
-                      style: TextStyle(
-                          color: Colors.red,
-                          fontWeight: FontWeight.bold,
-                          fontStyle: FontStyle.italic),
-                    ),
-                  ],
-                ),
+              Row(
+                children: const [
+                  Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Text('Latitude:',
+                        style: TextStyle(
+                            fontWeight: FontWeight.w700, fontSize: 15)),
+                  ),
+                  SizedBox(
+                    width: 15,
+                  ),
+                  Text(
+                    'Not Required',
+                    style: TextStyle(
+                        color: Colors.red,
+                        fontWeight: FontWeight.bold,
+                        fontStyle: FontStyle.italic),
+                  ),
+                ],
               ),
               const SizedBox(height: 15),
 // <<<<<<< HEAD
@@ -991,7 +1010,7 @@ class _ShowAddBoxState extends State<ShowAddBox> {
                   }
                   print("-----------------------------------");
                   var doc = snapshot.data.docs;
-                  return Container(
+                  return SizedBox(
                     width: 400,
                     height: 500,
                     child: ListView.builder(
@@ -1004,7 +1023,7 @@ class _ShowAddBoxState extends State<ShowAddBox> {
                   );
                 },
               )),
-              SizedBox(height: 15),
+              const SizedBox(height: 15),
 
               const Padding(
                 padding: EdgeInsets.all(8.0),
@@ -1034,7 +1053,7 @@ class _ShowAddBoxState extends State<ShowAddBox> {
                     var document = snapshot.data.docs;
                     print(document);
 
-                    return Container(
+                    return SizedBox(
                       width: 400,
                       height: 500,
                       child: ListView.builder(
@@ -1047,8 +1066,8 @@ class _ShowAddBoxState extends State<ShowAddBox> {
                   },
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
+              const Padding(
+                padding: EdgeInsets.all(8.0),
                 child: Text('Description:',
                     style:
                         TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
@@ -1057,10 +1076,10 @@ class _ShowAddBoxState extends State<ShowAddBox> {
                 addcontroller: _descriptionCon,
                 hinttext: "Description",
               ),
-              SizedBox(height: 15),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text('Number:',
+              const SizedBox(height: 15),
+              const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: const Text('Number:',
                     style:
                         TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
               ),
@@ -1068,15 +1087,15 @@ class _ShowAddBoxState extends State<ShowAddBox> {
                 addcontroller: _numberCon,
                 hinttext: "Number",
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
-              Text(
+              const Text(
                 'Upload Display Image',
-                style:
-                    TextStyle(color: Colors.black, fontWeight: FontWeight.w700),
+                style: const TextStyle(
+                    color: Colors.black, fontWeight: FontWeight.w700),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               Row(
@@ -1086,13 +1105,13 @@ class _ShowAddBoxState extends State<ShowAddBox> {
                       // dic = await chooseImage();
                       image = uploadToStroagees();
                     },
-                    child: Text(
+                    child: const Text(
                       'Upload Gym Image',
-                      style: TextStyle(
+                      style: const TextStyle(
                           color: Colors.white, fontWeight: FontWeight.w700),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 20,
                   ),
                   image != null
@@ -1109,7 +1128,7 @@ class _ShowAddBoxState extends State<ShowAddBox> {
                 ],
               ),
 
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               Text(xs.toString()),
               Text(
                 "Services",
@@ -1131,7 +1150,9 @@ class _ShowAddBoxState extends State<ShowAddBox> {
                       print("-----------------------------------");
                       var doc = snapshot.data.docs;
 
-                      return Container(
+
+                      return SizedBox(
+
                         width: 400,
                         height: 500,
                         child: ListView.builder(
@@ -1226,13 +1247,14 @@ class _ShowAddBoxState extends State<ShowAddBox> {
                           "online_pay": true,
                           "payment_due": "",
                           "rating": 0.0,
-                          "service": [],
+                          "service": d,
                           "timings": [],
                           "token": [],
                           "view_count": 0.0,
                           "gym_status": false,
                           "amenities": arr,
                           "workouts": workoutArray,
+                          "password": xs.toString(),
                         },
                         // ).then((snapshot) async {
                         //   await uploadImageToStorage(dic, _addgymownerid.text);
@@ -1254,7 +1276,7 @@ class _ShowAddBoxState extends State<ShowAddBox> {
                       onPressed: () {
                         Navigator.pop(context);
                       },
-                      child: Text('Close')),
+                      child: const Text('Close')),
                   // ElevatedButton(
                   //     onPressed: () {
                   //       print(impath);
@@ -1298,7 +1320,7 @@ class CheckBoxx extends StatefulWidget {
   final String doc;
   final String id;
 
-  CheckBoxx(this.doc, this.id, {Key? key}) : super(key: key);
+  const CheckBoxx(this.doc, this.id, {Key? key}) : super(key: key);
 
   @override
   State<CheckBoxx> createState() => _CheckBoxxState();
@@ -1312,21 +1334,19 @@ class _CheckBoxxState extends State<CheckBoxx> {
     return Container(
       child: Column(
         children: [
-          Container(
-            child: CheckboxListTile(
-                // bool selected=false;
-                value: check,
-                title: Text(widget.doc),
-                onChanged: (bool? selected) async {
-                  setState(() {
-                    check = selected!;
-                  });
-                  if (selected == true) arr.add(widget.id);
-                  print(arr);
-                  if (selected == false) arr.remove(widget.id);
-                  print(arr);
-                }),
-          ),
+          CheckboxListTile(
+              // bool selected=false;
+              value: check,
+              title: Text(widget.doc),
+              onChanged: (bool? selected) async {
+                setState(() {
+                  check = selected!;
+                });
+                if (selected == true) arr.add(widget.id);
+                print(arr);
+                if (selected == false) arr.remove(widget.id);
+                print(arr);
+              }),
         ],
       ),
     );
@@ -1339,7 +1359,7 @@ class ECheckBox extends StatefulWidget {
   final arr2;
   final String gym_id;
 
-  ECheckBox(this.doc, this.id, this.arr2, this.gym_id, {Key? key})
+  const ECheckBox(this.doc, this.id, this.arr2, this.gym_id, {Key? key})
       : super(key: key);
 
   @override
@@ -1412,7 +1432,7 @@ class CheckBoxx1 extends StatefulWidget {
   final String doc;
   final String id;
 
-  CheckBoxx1(this.doc, this.id, {Key? key}) : super(key: key);
+  const CheckBoxx1(this.doc, this.id, {Key? key}) : super(key: key);
 
   @override
   State<CheckBoxx1> createState() => _CheckBoxxState1();
@@ -1423,26 +1443,135 @@ class _CheckBoxxState1 extends State<CheckBoxx1> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        children: [
-          Container(
-            child: CheckboxListTile(
-                // bool selected=false;
-                value: check,
-                title: Text(widget.doc),
-                onChanged: (bool? selected) async {
-                  setState(() {
-                    check = selected!;
-                  });
-                  if (selected == true) workoutArray.add(widget.id);
-                  print(workoutArray);
-                  if (selected == false) workoutArray.remove(widget.id);
-                  print(workoutArray);
-                }),
-          ),
-        ],
-      ),
+    return Column(
+      children: [
+        CheckboxListTile(
+            // bool selected=false;
+            value: check,
+            title: Text(widget.doc),
+            onChanged: (bool? selected) async {
+              setState(() {
+                check = selected!;
+              });
+              if (selected == true) workoutArray.add(widget.id);
+              print(workoutArray);
+              if (selected == false) workoutArray.remove(widget.id);
+              print(workoutArray);
+            }),
+      ],
+    );
+  }
+}
+
+class Echecka extends StatefulWidget {
+  const Echecka(
+      {Key? key, required this.type, required this.id, required this.gymid})
+      : super(key: key);
+  final String type;
+  final String id;
+  final String gymid;
+  @override
+  State<Echecka> createState() => _EcheckaState();
+}
+
+class _EcheckaState extends State<Echecka> {
+  bool check = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        CheckboxListTile(
+            // bool selected=false;
+            value: check,
+            title: Text(widget.type),
+            onChanged: (bool? selected) async {
+              setState(() {
+                check = selected!;
+              });
+              if (selected == true) d.add(widget.id);
+              print(d);
+              if (selected == false) d.remove(widget.id);
+              print(d);
+            }
+            // print(widget.arr2);
+            ),
+      ],
+    );
+  }
+}
+
+class ECheckService extends StatefulWidget {
+  final String type;
+  final String id;
+  final serviceArray;
+  final String gymid;
+  const ECheckService(
+      {Key? key,
+      required this.type,
+      required this.id,
+      required this.serviceArray,
+      required this.gymid})
+      : super(key: key);
+
+  @override
+  State<ECheckService> createState() => _ECheckServiceState();
+}
+
+class _ECheckServiceState extends State<ECheckService> {
+  bool check = false;
+
+  checkBoxWorkout() async {
+    if (widget.serviceArray.contains(widget.id)) {
+      setState(() {
+        check = true;
+      });
+    } else {
+      setState(() {
+        check = false;
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    checkBoxWorkout();
+    print(widget.serviceArray);
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        CheckboxListTile(
+            // bool selected=false;
+            value: check,
+            title: Text(widget.type),
+            onChanged: (bool? selected) async {
+              setState(() {
+                check = selected!;
+              });
+              if (selected == true) {
+                await FirebaseFirestore.instance
+                    .collection('product_details')
+                    .doc(widget.gymid)
+                    .update({
+                  'service': FieldValue.arrayUnion([widget.type])
+                });
+              }
+              // print(widget.arr2);
+              if (selected == false) {
+                await FirebaseFirestore.instance
+                    .collection('product_details')
+                    .doc(widget.gymid)
+                    .update({
+                  'service': FieldValue.arrayRemove([widget.type])
+                });
+              }
+              // print(widget.arr2);
+            }),
+      ],
     );
   }
 }
@@ -1582,7 +1711,7 @@ class ECheckBoxWorkout extends StatefulWidget {
   final worKoutArray;
   final String gymid;
 
-  ECheckBoxWorkout(this.worKoutArray, this.type, this.id, this.gymid,
+  const ECheckBoxWorkout(this.worKoutArray, this.type, this.id, this.gymid,
       {Key? key})
       : super(key: key);
 
@@ -1614,38 +1743,36 @@ class _ECheckBoxWorkoutState extends State<ECheckBoxWorkout> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        children: [
-          CheckboxListTile(
-              // bool selected=false;
-              value: check,
-              title: Text(widget.type),
-              onChanged: (bool? selected) async {
-                setState(() {
-                  check = selected!;
+    return Column(
+      children: [
+        CheckboxListTile(
+            // bool selected=false;
+            value: check,
+            title: Text(widget.type),
+            onChanged: (bool? selected) async {
+              setState(() {
+                check = selected!;
+              });
+              if (selected == true) {
+                await FirebaseFirestore.instance
+                    .collection('product_details')
+                    .doc(widget.gymid)
+                    .update({
+                  'workouts': FieldValue.arrayUnion([widget.id])
                 });
-                if (selected == true) {
-                  await FirebaseFirestore.instance
-                      .collection('product_details')
-                      .doc(widget.gymid)
-                      .update({
-                    'workouts': FieldValue.arrayUnion([widget.id])
-                  });
-                }
-                // print(widget.arr2);
-                if (selected == false) {
-                  await FirebaseFirestore.instance
-                      .collection('product_details')
-                      .doc(widget.gymid)
-                      .update({
-                    'workouts': FieldValue.arrayRemove([widget.id])
-                  });
-                }
-                // print(widget.arr2);
-              }),
-        ],
-      ),
+              }
+              // print(widget.arr2);
+              if (selected == false) {
+                await FirebaseFirestore.instance
+                    .collection('product_details')
+                    .doc(widget.gymid)
+                    .update({
+                  'workouts': FieldValue.arrayRemove([widget.id])
+                });
+              }
+              // print(widget.arr2);
+            }),
+      ],
     );
   }
 }
@@ -1666,6 +1793,7 @@ class ProductEditBox extends StatefulWidget {
     this.WorkoutArray,
     this.serviceArray,
     this.description,
+    required this.password,
   }) : super(key: key);
 
   final String name;
@@ -1673,6 +1801,7 @@ class ProductEditBox extends StatefulWidget {
   final String gymId;
   final String gymOwner;
   final String gender;
+  final String password;
   // final GeoPoint location;
   final String landmark;
   final String pincode;
@@ -1694,7 +1823,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
   final TextEditingController _gymiid = TextEditingController();
   final TextEditingController _gymowner = TextEditingController();
   final TextEditingController _gender = TextEditingController();
-  // final TextEditingController _location = TextEditingController();
+  final TextEditingController _password = TextEditingController();
   final TextEditingController _landmark = TextEditingController();
   final TextEditingController _pincode = TextEditingController();
   final TextEditingController _description = TextEditingController();
@@ -1715,6 +1844,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
     _gymowner.text = widget.gymOwner;
     _landmark.text = widget.landmark;
     image = widget.imagee;
+    _password.text = widget.password;
     _description.text = widget.description;
     amenitiesStream = FirebaseFirestore.instance.collection("amenities");
     workoutStream = FirebaseFirestore.instance.collection("workouts");
@@ -1728,10 +1858,10 @@ class _ProductEditBoxState extends State<ProductEditBox> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Edit Box'),
+        title: const Text('Edit Box'),
       ),
       body: Container(
-        padding: EdgeInsets.all(20),
+        padding: const EdgeInsets.all(20),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -1750,8 +1880,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
               customTextField(hinttext: "Gender", addcontroller: _gender),
               customTextField(
                   hinttext: "Description", addcontroller: _description),
-              // customTextField(
-              //     hinttext: 'Latitude', addcontroller: _latitudeController),
+              customTextField(hinttext: 'Password', addcontroller: _password),
               // customTextField(
               //     hinttext: 'Longitude', addcontroller: _longitudeController),
               customTextField(hinttext: "Landmark", addcontroller: _landmark),
@@ -1768,7 +1897,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                   }
                   print("-----------------------------------");
                   var doc = snapshot.data.docs;
-                  return Container(
+                  return SizedBox(
                     width: 400,
                     height: 500,
                     child: ListView.builder(
@@ -1784,7 +1913,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                   );
                 },
               )),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
 
@@ -1801,7 +1930,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                       print("-----------------------------------");
                       var doc = snapshot.data.docs;
 
-                      return Container(
+                      return SizedBox(
                         width: 400,
                         height: 500,
                         child: ListView.builder(
@@ -1830,13 +1959,17 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                       // dic = await chooseImage();
                       image = uploadToStroagees();
                     },
-                    child: Text(
+
+                    child: const Text(
+
                       'Upload Gym Image',
                       style: TextStyle(
                           color: Colors.white, fontWeight: FontWeight.w700),
                     ),
                   ),
-                  SizedBox(
+
+                  const SizedBox(
+
                     width: 20,
                   ),
                   image != null
@@ -1882,7 +2015,8 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                       print("-----------------------------------");
                       var doc = snapshot.data.docs;
 
-                      return Container(
+                      return SizedBox(
+
                         width: 400,
                         height: 500,
                         child: ListView.builder(
@@ -1900,10 +2034,6 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                       );
                     }),
               ),
-
-// <<<<<<< HEAD
-// >>>>>>> 1f09f104c279e9107f7b92c5d9c2cf410db6e92c
-// =======
 
 // >>>>>>> db16c184745ea062b80bb6d62b73b5f64792dc9e
               // Text(image),
@@ -1924,6 +2054,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                         'name': _name.text,
                         'pincode': _pincode.text,
                         // 'location': dataForGeoPint,
+                        'password': _password.text,
                         'gym_id': _gymiid.text,
                         'gym_owner': _gymowner.text,
                         'landmark': _landmark.text,

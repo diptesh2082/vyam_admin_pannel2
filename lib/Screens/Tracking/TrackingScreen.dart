@@ -127,6 +127,11 @@ class _TrackingScreenState extends State<TrackingScreen> {
                             columns: const [
                               DataColumn(
                                   label: Text(
+                                    'Index',
+                                    style: TextStyle(fontWeight: FontWeight.w600),
+                                  )),
+                              DataColumn(
+                                  label: Text(
                                 'Vendor ID',
                                 style: TextStyle(fontWeight: FontWeight.w600),
                               )),
@@ -278,10 +283,11 @@ class _TrackingScreenState extends State<TrackingScreen> {
 
   List<DataRow> _buildlist(
       BuildContext context, List<DocumentSnapshot> snapshot) {
-    return snapshot.map((data) => _buildListItem(context, data)).toList();
+    var d = 1;
+    return snapshot.map((data) => _buildListItem(context, data , d++)).toList();
   }
 
-  DataRow _buildListItem(BuildContext context, DocumentSnapshot data) {
+  DataRow _buildListItem(BuildContext context, DocumentSnapshot data , index) {
     String bookingId = data['booking_id'];
     bool paymentDoneBool = data['payment_done'];
     bool bookingAccepted = data['booking_accepted'];
@@ -292,6 +298,9 @@ class _TrackingScreenState extends State<TrackingScreen> {
     String bookingDate =
         "${data['booking_date'].toDate().year}/${data['booking_date'].toDate().month}/${data['booking_date'].toDate().day}";
     return DataRow(cells: [
+      DataCell(index != null
+          ? Text(index.toString())
+          : const Text("")),
       DataCell(data["vendorId"] != null
           ? Text(data['vendorId'].toString())
           : const Text("")),
@@ -313,12 +322,7 @@ class _TrackingScreenState extends State<TrackingScreen> {
       DataCell(data['plan_end_duration'] != null
           ? Text(durationEnd)
           : const Text("")),
-// <<<<<<< HEAD
-// <<<<<<< HEAD
-// =======
-//
-// >>>>>>> cf1997613ff877c63a56c61e3009bdfe3639ccfa
-// <<<<<<< HEAD
+
 //       DataCell(Center(
 //         child: ElevatedButton(
 //           onPressed: () async {
@@ -343,58 +347,17 @@ class _TrackingScreenState extends State<TrackingScreen> {
             onPressed: () async {},
             child: data['package_type'] != null
                 ? Text(data['package_type'].toString().toUpperCase(),
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontWeight: FontWeight.bold, color: Colors.black))
                 : const Text(""),
             style: ElevatedButton.styleFrom(
-                primary: Color.fromRGBO(245, 190, 0, 1)),
+                primary: const Color.fromRGBO(245, 190, 0, 1)),
           ),
         ),
         // data['package_type'] != null
         // ? Text(data['package_type'].toString())
         // : const Text("")
       ),
-// =======
-// <<<<<<< HEAD
-// =======
-// >>>>>>> 419576ed132f1f7631adea2357dfe8fbddca83b9
-// =======
-
-// >>>>>>> cf1997613ff877c63a56c61e3009bdfe3639ccfa
-      // DataCell(Center(
-      //   child: ElevatedButton(
-      //     onPressed: () async {
-      //       bool temp = paymentDoneBool;
-      //       temp = !temp;
-      //       DocumentReference documentReference = FirebaseFirestore.instance
-      //           .collection('bookings')
-      //           .doc(bookingId);
-      //       await documentReference
-      //           .update({'payment_done': temp})
-      //           .whenComplete(() => print("Payment done updated"))
-      //           .catchError((e) => print(e));
-      //     },
-      //     child: Text(paymentDoneBool.toString()),
-      //     style: ElevatedButton.styleFrom(
-      //         primary: paymentDoneBool ? Colors.green : Colors.red),
-      //   ),
-      // ),
-// <<<<<<< HEAD
-//       // ),
-// <<<<<<< HEAD
-//       // DataCell(data['package_type'] != null
-//       //     ? Text(data['package_type'].toString())
-//       //     : const Text("")),
-// // >>>>>>> 419576ed132f1f7631adea2357dfe8fbddca83b9
-// =======
-//       DataCell(data['package_type'] != null
-//           ? Text(data['package_type'].toString())
-//           : const Text("")),
-// >>>>>>> 419576ed132f1f7631adea2357dfe8fbddca83b9
-// =======
-      // ),
-
-// >>>>>>> cf1997613ff877c63a56c61e3009bdfe3639ccfa
       DataCell(data['order_date'] != null ? Text(orderDate) : const Text("")),
       // DataCell(data['gym_details']['name'] != null
       //     ? Text(data['gym_details']['name'].toString())
