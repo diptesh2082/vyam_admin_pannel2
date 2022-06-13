@@ -55,9 +55,9 @@ class _CouponState extends State<Coupon> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => CouponScreen()));
+                              builder: (context) => const CouponScreen()));
                     },
-                    child: Text('Add Coupon'),
+                    child: const Text('Add Coupon'),
                   ),
                 ),
                 Container(
@@ -79,7 +79,7 @@ class _CouponState extends State<Coupon> {
                       },
                       // controller: searchController,
                       onChanged: (value) {
-                        if (value.length == 0) {
+                        if (value.isEmpty) {
                           // _node.canRequestFocus=false;
                           // FocusScope.of(context).unfocus();
                         }
@@ -115,7 +115,7 @@ class _CouponState extends State<Coupon> {
 
                       var doc = snapshot.data.docs;
 
-                      if (searchCoupon.length > 0) {
+                      if (searchCoupon.isNotEmpty) {
                         doc = doc.where((element) {
                           return element
                                   .get('code')
@@ -155,6 +155,12 @@ class _CouponState extends State<Coupon> {
                               DataColumn(
                                 label: Text(
                                   'Details',
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
+                              ),
+                              DataColumn(
+                                label: Text(
+                                  'Description',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
@@ -234,6 +240,8 @@ class _CouponState extends State<Coupon> {
           data['code'] != null ? Text(data['code'] ?? "") : const Text("")),
       DataCell(
           data['detail'] != null ? Text(data['detail'] ?? "") : const Text("")),
+      DataCell(
+          data['description'] != null ? Text(data['description'] ?? "") : const Text("")),
       DataCell(start != null ? Text(start) : const Text("")),
       DataCell(end != null ? Text(end) : const Text("")),
       DataCell(data['discount'] != null

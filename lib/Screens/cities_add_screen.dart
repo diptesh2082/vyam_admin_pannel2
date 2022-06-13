@@ -36,17 +36,11 @@ class _citiesAddState extends State<citiesAdd> {
   var id = FirebaseFirestore.instance.collection('Cities').doc().id;
 
   final TextEditingController _addAddress = TextEditingController();
-// <<<<<<< HEAD
   // final TextEditingController _addStatus = TextEditingController();
   //final TextEditingController _addId = TextEditingController();
   final TextEditingController _addIndex = TextEditingController();
 
   static const cities_list = [
-// =======
-
-    // static const cities_list =[
-//
-// >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
     "New Delhi",
     "Mumbai",
     "Delhi",
@@ -105,7 +99,7 @@ class _citiesAddState extends State<citiesAdd> {
                     Container(
                       height: MediaQuery.of(context).size.height * .75,
                       decoration: const BoxDecoration(
-                          border: const Border(
+                          border: Border(
                               bottom: BorderSide(color: Colors.grey))),
                       child: Stack(
                         children: [
@@ -158,35 +152,34 @@ class _citiesAddState extends State<citiesAdd> {
                     ),
                   ),
                 ),
-// <<<<<<< HEAD
                 // customTextField(
                 //     hinttext: "Address", addcontroller: _addAddress),
-                Container(
-                  child: Row(
-                    children: [
-                      const Text('Status :',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w700, fontSize: 15)),
-                      DropdownButton(
-                          value: selectedValue,
-                          items: const [
-                            DropdownMenuItem(
-                              child: Text("TRUE"),
-                              value: true,
-                            ),
-                            DropdownMenuItem(
-                              child: Text("FALSE"),
-                              value: false,
-                            ),
-                          ],
-                          onChanged: (bool? value) {
-                            setState(() {
-                              selectedValue = value!;
-                            });
-                          }),
-                    ],
-                  ),
-                ),
+                // Container(
+                //   child: Row(
+                //     children: [
+                //       const Text('Status :',
+                //           style: TextStyle(
+                //               fontWeight: FontWeight.w700, fontSize: 15)),
+                //       DropdownButton(
+                //           value: selectedValue,
+                //           items: const [
+                //             DropdownMenuItem(
+                //               child: Text("TRUE"),
+                //               value: true,
+                //             ),
+                //             DropdownMenuItem(
+                //               child: Text("FALSE"),
+                //               value: false,
+                //             ),
+                //           ],
+                //           onChanged: (bool? value) {
+                //             setState(() {
+                //               selectedValue = value!;
+                //             });
+                //           }),
+                //     ],
+                //   ),
+                // ),
                 //customTextField(hinttext: "ID", addcontroller: _addId),
                 //customTextField(hinttext: "Index", addcontroller: _addIndex),
 // =======
@@ -203,11 +196,10 @@ class _citiesAddState extends State<citiesAdd> {
                           .set(
                         {
 // <<<<<<< HEAD
-                          'Address': getAddress(),
-                          'Status': selectedValue,
-// =======
-//                           'Address': _addAddress.text,
+//                           'Address': getAddress(),
 //                           'Status': true,
+                          'Address': _addAddress.text,
+                          'Status': true,
 // >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
                           'id': id,
                           //'index' : _addIndex,

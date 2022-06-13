@@ -96,7 +96,7 @@ class _newAmenetiesState extends State<newAmeneties> {
                     ],
                   ),
                 ),
-                customTextField(hinttext: "ID", addcontroller: _addId),
+                // customTextField(hinttext: "ID", addcontroller: _addId),
                 Center(
                   child: ElevatedButton(
                     onPressed: () async {
@@ -107,7 +107,7 @@ class _newAmenetiesState extends State<newAmeneties> {
                         {
                           'name': _addName.text,
                           'image': imgUrl1,
-                          'id': _addId.text,
+                          'id': '',
                           'amenity_id': amenityId,
                           'gym_id': [],
                         },

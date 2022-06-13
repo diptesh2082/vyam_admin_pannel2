@@ -2,6 +2,7 @@ import 'package:admin_panel_vyam/Screens/Product%20Details/Trainers/Trainers.dar
 import 'package:admin_panel_vyam/Screens/category_screen.dart';
 import 'package:admin_panel_vyam/services/deleteMethod.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'Screens/Product Details/product_details.dart';
@@ -244,8 +245,17 @@ class _showLatestBookingState extends State<showLatestBooking> {
               borderRadius: BorderRadius.circular(20.0)),
           child: SingleChildScrollView(
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+             // crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                const Text(
+                  'Latest Bookings',
+                  textAlign: TextAlign.justify,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 32,
+                  ),
+                ),
+
                 Center(
                   child: StreamBuilder<QuerySnapshot>(
                     stream: FirebaseFirestore.instance
@@ -431,35 +441,9 @@ class _showLatestBookingState extends State<showLatestBooking> {
       ),
 
       DataCell(
-        Center(
-          child:  Container(
-            child: Row(
-              children: [
-                DropdownButton(
-                    hint: Text(data['payment_method'].toString()),
-                    value: data['payment_method'].toString(),
-                    items: const [
-                      DropdownMenuItem(
-                        child: Text("Online"),
-                        value: "online",
-                      ),
-                      DropdownMenuItem(
-                        child: Text("Cash"),
-                        value: "offline",
-                      ),
-                    ],
-                    onChanged: (value) async {
-                      setState(() {
-                        selectedValue1 = value as String;
-                      });
-                      await FirebaseFirestore.instance.collection('bookings').doc(bookingId)
-                          .update({'payment_method': value});
-                    }),
-              ],
-            ),
-          ),
-        ),
-      ),
+          data["payment_method"] != null
+          ? Text(data['payment_method'].toString().toUpperCase())
+          : const Text("")),
     ]);
   }
 }
