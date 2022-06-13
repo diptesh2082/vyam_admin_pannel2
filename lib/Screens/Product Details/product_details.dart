@@ -7,24 +7,16 @@ import 'package:admin_panel_vyam/Screens/map_view.dart';
 import 'package:admin_panel_vyam/Screens/timings.dart';
 import 'package:flutter/widgets.dart';
 import 'package:random_password_generator/random_password_generator.dart';
-import 'package:admin_panel_vyam/routing/showadd.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:path/path.dart' as Path;
-import 'package:admin_panel_vyam/services/maps_api.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-
-import 'package:flutter/services.dart';
-
-import 'package:image_picker/image_picker.dart';
 import '../../services/MatchIDMethod.dart';
 import '../../services/deleteMethod.dart';
 import '../../services/image_picker_api.dart';
 import '../globalVar.dart';
-import 'Packages/Extra_package.dart';
 import 'Packages/packages.dart';
 import 'Trainers/Trainers.dart';
 import 'package:admin_panel_vyam/services/CustomTextFieldClass.dart';
@@ -90,43 +82,8 @@ class _ProductDetailsState extends State<ProductDetails> {
                           ));
                         },
                         child: Text('Add Product'),
-                        // Container(
-                        //   width: 200,
-                        //   decoration: BoxDecoration(
-                        //       color: Colors.white,
-                        //       borderRadius: BorderRadius.circular(20.0)),
-                        //   child: Row(
-                        //     children: [
-                        //       const SizedBox(
-                        //         width: 20,
-                        //       ),
-                        //       Row(
-                        //         children: const [
-                        //           Icon(Icons.add),
-                        //           Text('Add Product',
-                        //               style:
-                        //                   TextStyle(fontWeight: FontWeight.w400)),
-                        //         ],
-                        //       ),
-                        //     ],
-                        //   ),
-                        // ),
-
-// =======
-//                     padding: const EdgeInsets.only(top: 8.0, left: 8.0),
-//                     child: ElevatedButton(
-//                       style: ElevatedButton.styleFrom(
-//                           //padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 20),
-//                           textStyle:
-//                           const TextStyle(fontSize: 15 ),
-// >>>>>>> cf1997613ff877c63a56c61e3009bdfe3639ccfa
                       ),
                     ),
-// <<<<<<< HEAD
-// =======
-//                   ),
-// >>>>>>> cf1997613ff877c63a56c61e3009bdfe3639ccfa
-
                     const Spacer(),
                     Container(
                       width: 500,
@@ -147,7 +104,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                           },
 
                           onChanged: (value) {
-                            if (value.length == 0) {
+                            if (value.isEmpty) {
                               // _node.canRequestFocus=false;
                               // FocusScope.of(context).unfocus();
                             }
@@ -162,7 +119,6 @@ class _ProductDetailsState extends State<ProductDetails> {
                             hintText: 'Search',
                             hintStyle: GoogleFonts.poppins(
                                 fontSize: 16, fontWeight: FontWeight.w500),
-// >>>>>>> cf1997613ff877c63a56c61e3009bdfe3639ccfa
                             border: InputBorder.none,
                             filled: true,
                             fillColor: Colors.white12,
@@ -185,7 +141,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                       print("-----------------------------------");
                       var doc = snapshot.data.docs;
 
-                      if (searchGymName.length > 0) {
+                      if (searchGymName.isNotEmpty) {
                         doc = doc.where((element) {
                           return element
                                   .get('name')
@@ -272,12 +228,12 @@ class _ProductDetailsState extends State<ProductDetails> {
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ), //!For Package
-                              DataColumn(
-                                label: Text(
-                                  'Extra Packages',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
-                              ),
+                              // DataColumn(
+                              //   label: Text(
+                              //     'Extra Packages',
+                              //     style: TextStyle(fontWeight: FontWeight.w600),
+                              //   ),
+                              // ),
                               DataColumn(
                                 label: Text(
                                   'Upload Image',
@@ -402,6 +358,7 @@ class _ProductDetailsState extends State<ProductDetails> {
     String landmark = data['landmark'];
     List<dynamic> arr2 = data['amenities'];
     List<dynamic> WorkoutArray = data['workouts'];
+    List<dynamic> serviceArray = data['service'];
 
     String x, y;
 
@@ -460,14 +417,13 @@ class _ProductDetailsState extends State<ProductDetails> {
 //           ),
 //         ));
 //       }),
-      DataCell(const Text('Extra Package '), onTap: () {
-        Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => ExtraPackagesPage(
-            pGymId: gymId,
-// >>>>>>> cf1997613ff877c63a56c61e3009bdfe3639ccfa
-          ),
-        ));
-      }),
+//       DataCell(const Text('Extra Package '), onTap: () {
+//         Navigator.of(context).push(MaterialPageRoute(
+//           builder: (context) => ExtraPackagesPage(
+//             pGymId: gymId,
+//           ),
+//         ));
+//       }),
       DataCell(
         Row(
           children: [
@@ -547,7 +503,6 @@ class _ProductDetailsState extends State<ProductDetails> {
                                     // minLeadin≥gWidth: double.infinity,
                                   );
                                 });
-
                           }),
                     ),
                   ),
@@ -706,6 +661,9 @@ class _ProductDetailsState extends State<ProductDetails> {
                         imagee: data['display_picture'],
                         arr2: arr2,
                         WorkoutArray: WorkoutArray,
+
+                        serviceArray: serviceArray,
+
                         description: data['description'],
 
                         // location: data['location'],
@@ -900,68 +858,110 @@ class _ShowAddBoxState extends State<ShowAddBox> {
                 ),
               ),
               const SizedBox(height: 15),
-              Container(
-                child: Row(
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Text('Longitude:',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w700, fontSize: 15)),
-                    ),
-                    SizedBox(
-                      width: 15,
-                    ),
-                    Text(
-                      'Not Required',
-                      style: TextStyle(
-                          color: Colors.red,
-                          fontWeight: FontWeight.bold,
-                          fontStyle: FontStyle.italic),
-                    ),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    Stack(
-                      children: [
-                        Container(
-                          height: MediaQuery.of(context).size.height * .75,
-                          width: 900,
-                          decoration: const BoxDecoration(
-                              border: Border(
-                                  bottom: BorderSide(color: Colors.grey))),
-                          child: Stack(
-                            children: [
-                              MapView(
-                                address_con: _addaddress,
+// <<<<<<< HEAD
+              Row(
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Text('Longitude:',
+                        style: TextStyle(
+                            fontWeight: FontWeight.w700, fontSize: 15)),
+                  ),
+                  const SizedBox(
+                    width: 15,
+                  ),
+                  const Text(
+                    'Not Required',
+                    style: TextStyle(
+                        color: Colors.red,
+                        fontWeight: FontWeight.bold,
+                        fontStyle: FontStyle.italic),
+                  ),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  Stack(
+                    children: [
+                      Container(
+                        height: MediaQuery.of(context).size.height * .75,
+                        width: 900,
+                        decoration: const BoxDecoration(
+                            border:
+                                Border(bottom: BorderSide(color: Colors.grey))),
+                        child: Stack(
+                          children: [
+                            MapView(
+                              address_con: _addaddress,
+                            ),
+                            const Center(
+                              child: Icon(
+                                Icons.location_on_rounded,
+                                size: 40,
+                                color: Colors.black,
+// =======
+//               Container(
+//                 child: Row(
+//                   children: [
+//                     Padding(
+//                       padding: EdgeInsets.all(8.0),
+//                       child: Text('Longitude:',
+//                           style: TextStyle(
+//                               fontWeight: FontWeight.w700, fontSize: 15)),
+//                     ),
+//                     SizedBox(
+//                       width: 15,
+//                     ),
+//                     Text(
+//                       'Not Required',
+//                       style: TextStyle(
+//                           color: Colors.red,
+//                           fontWeight: FontWeight.bold,
+//                           fontStyle: FontStyle.italic),
+//                     ),
+//                     SizedBox(
+//                       height: 15,
+//                     ),
+//                     Stack(
+//                       children: [
+//                         Container(
+//                           height: MediaQuery.of(context).size.height * .75,
+//                           width: 900,
+//                           decoration: const BoxDecoration(
+//                               border: Border(
+//                                   bottom: BorderSide(color: Colors.grey))),
+//                           child: Stack(
+//                             children: [
+//                               MapView(
+//                                 address_con: _addaddress,
+//                               ),
+//                               const Center(
+//                                 child: Icon(
+//                                   Icons.location_on_rounded,
+//                                   size: 40,
+//                                   color: Colors.black,
+//                                 ),
+// >>>>>>> 6c3fa0070166be553c60e87a940531de62732a35
                               ),
-                              const Center(
-                                child: Icon(
-                                  Icons.location_on_rounded,
-                                  size: 40,
-                                  color: Colors.black,
-                                ),
-                              ),
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
-                  ],
-                ),
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                ],
               ),
-              SizedBox(height: 15),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
+              const SizedBox(height: 15),
+              const Padding(
+                padding: EdgeInsets.all(8.0),
                 child: Text('Landmark:',
                     style:
                         TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
               ),
               customTextField(
                   hinttext: "Landmark", addcontroller: _addlandmark),
-              SizedBox(height: 15),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
+              const SizedBox(height: 15),
+              const Padding(
+                padding: EdgeInsets.all(8.0),
                 child: Text('Pincode:',
                     style:
                         TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
@@ -970,7 +970,7 @@ class _ShowAddBoxState extends State<ShowAddBox> {
                 addcontroller: _addpincode,
                 hinttext: "Pincode",
               ),
-              SizedBox(
+              const SizedBox(
                 height: 15,
               ),
               const Padding(
@@ -1014,11 +1014,10 @@ class _ShowAddBoxState extends State<ShowAddBox> {
 // <<<<<<< HEAD
               ),
 
-
               const Text(
                 'SELECT WORKOUTS',
                 style: TextStyle(fontSize: 20),
-
+              ),
               Container(
                 child: StreamBuilder<QuerySnapshot>(
                   stream: FirebaseFirestore.instance
@@ -1112,6 +1111,45 @@ class _ShowAddBoxState extends State<ShowAddBox> {
 
               SizedBox(height: 10),
               Text(xs.toString()),
+              Text(
+                "Services",
+                style: GoogleFonts.poppins(
+                    fontSize: 25, fontWeight: FontWeight.w700),
+              ),
+              Container(
+                child: StreamBuilder<QuerySnapshot>(
+                    stream: FirebaseFirestore.instance
+                        .collection("category")
+                        .snapshots(),
+                    builder: (context, AsyncSnapshot snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const CircularProgressIndicator();
+                      }
+                      if (snapshot.data == null) {
+                        return Container();
+                      }
+                      print("-----------------------------------");
+                      var doc = snapshot.data.docs;
+
+                      return Container(
+                        width: 400,
+                        height: 500,
+                        child: ListView.builder(
+                          itemCount: doc.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            bool check = false;
+                            return Echecka(
+                              type: doc[index]['name'],
+                              id: doc[index]['category_id'],
+                              gymid: _addgymownerid.text,
+                              // serviceArray: widget.serviceArray,
+                            );
+                          },
+                        ),
+                      );
+                    }),
+              ),
+
               // Text(
               //   'Upload Display Image',
               //   style:
@@ -1164,7 +1202,6 @@ class _ShowAddBoxState extends State<ShowAddBox> {
                       FirebaseFirestore.instance
                           .collection('product_details')
                           .doc(_addgymownerid.text)
-
                           .set(
                         {
                           'address': _addaddress.text,
@@ -1180,7 +1217,9 @@ class _ShowAddBoxState extends State<ShowAddBox> {
                           'legit': false,
                           "branch": _branchController.text,
                           "description": _descriptionCon.text,
-                          "display_picture": image,
+                          "display_picture": image != null
+                              ? image
+                              : "https://www.kindpng.com/picc/m/22-223941_transparent-avatar-png-male-avatar-icon-transparent-png.png",
                           "images": [],
                           "locality": "",
                           "number": _numberCon.text,
@@ -1408,6 +1447,135 @@ class _CheckBoxxState1 extends State<CheckBoxx1> {
   }
 }
 
+class Echecka extends StatefulWidget {
+  const Echecka(
+      {Key? key, required this.type, required this.id, required this.gymid})
+      : super(key: key);
+  final String type;
+  final String id;
+  final String gymid;
+  @override
+  State<Echecka> createState() => _EcheckaState();
+}
+
+class _EcheckaState extends State<Echecka> {
+  bool check = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Column(
+        children: [
+          CheckboxListTile(
+              // bool selected=false;
+              value: check,
+              title: Text(widget.type),
+              onChanged: (bool? selected) async {
+                setState(() {
+                  check = selected!;
+                });
+                if (selected == true) {
+                  await FirebaseFirestore.instance
+                      .collection('product_details')
+                      .doc(widget.gymid)
+                      .update({
+                    'service': FieldValue.arrayUnion([widget.type])
+                  });
+                }
+                // print(widget.arr2);
+                if (selected == false) {
+                  await FirebaseFirestore.instance
+                      .collection('product_details')
+                      .doc(widget.gymid)
+                      .update({
+                    'service': FieldValue.arrayRemove([widget.type])
+                  });
+                }
+                // print(widget.arr2);
+              }),
+        ],
+      ),
+    );
+  }
+}
+
+class ECheckService extends StatefulWidget {
+  final String type;
+  final String id;
+  final serviceArray;
+  final String gymid;
+  const ECheckService(
+      {Key? key,
+      required this.type,
+      required this.id,
+      required this.serviceArray,
+      required this.gymid})
+      : super(key: key);
+
+  @override
+  State<ECheckService> createState() => _ECheckServiceState();
+}
+
+class _ECheckServiceState extends State<ECheckService> {
+  bool check = false;
+
+  checkBoxWorkout() async {
+    if (widget.serviceArray.contains(widget.id)) {
+      setState(() {
+        check = true;
+      });
+    } else {
+      setState(() {
+        check = false;
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    checkBoxWorkout();
+    print(widget.serviceArray);
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Column(
+        children: [
+          CheckboxListTile(
+              // bool selected=false;
+              value: check,
+              title: Text(widget.type),
+              onChanged: (bool? selected) async {
+                setState(() {
+                  check = selected!;
+                });
+                if (selected == true) {
+                  await FirebaseFirestore.instance
+                      .collection('product_details')
+                      .doc(widget.gymid)
+                      .update({
+                    'service': FieldValue.arrayUnion([widget.type])
+                  });
+                }
+                // print(widget.arr2);
+                if (selected == false) {
+                  await FirebaseFirestore.instance
+                      .collection('product_details')
+                      .doc(widget.gymid)
+                      .update({
+                    'service': FieldValue.arrayRemove([widget.type])
+                  });
+                }
+                // print(widget.arr2);
+              }),
+        ],
+      ),
+    );
+  }
+}
+
 class ECheckBoxWorkout extends StatefulWidget {
   final String type;
   final String id;
@@ -1496,6 +1664,7 @@ class ProductEditBox extends StatefulWidget {
     required this.imagee,
     this.arr2,
     this.WorkoutArray,
+    this.serviceArray,
     this.description,
   }) : super(key: key);
 
@@ -1510,6 +1679,9 @@ class ProductEditBox extends StatefulWidget {
   final imagee;
   final arr2;
   final WorkoutArray;
+
+  final serviceArray;
+
   final description;
 
   @override
@@ -1646,9 +1818,95 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                       );
                     }),
               ),
+// <<<<<<< HEAD
+// <<<<<<< HEAD
+// =======
+//
+// >>>>>>> db16c184745ea062b80bb6d62b73b5f64792dc9e
+              Row(
+                children: [
+                  ElevatedButton(
+                    onPressed: () async {
+                      // dic = await chooseImage();
+                      image = uploadToStroagees();
+                    },
+                    child: Text(
+                      'Upload Gym Image',
+                      style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.w700),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 20,
+                  ),
+                  image != null
+                      ? Image(
+                          image: NetworkImage('$image'),
+                          height: 200,
+                          width: 200,
+                        )
+                      : Container(
+                          color: Colors.black,
+                          height: 200,
+                          width: 200,
+                        )
+                ],
+// <<<<<<< HEAD
+// =======
+              ),
+//
+//                Text("Services",
+//               style: GoogleFonts.poppins(
+//                 fontSize: 25,
+//                 fontWeight: FontWeight.w700
+// // >>>>>>> db16c184745ea062b80bb6d62b73b5f64792dc9e
+//               ),
+// =======
+              Text(
+                "Services",
+                style: GoogleFonts.poppins(
+                    fontSize: 25, fontWeight: FontWeight.w700),
+              ),
+              Container(
+                child: StreamBuilder<QuerySnapshot>(
+                    stream: FirebaseFirestore.instance
+                        .collection("category")
+                        .snapshots(),
+                    builder: (context, AsyncSnapshot snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const CircularProgressIndicator();
+                      }
+                      if (snapshot.data == null) {
+                        return Container();
+                      }
+                      print("-----------------------------------");
+                      var doc = snapshot.data.docs;
 
+                      return Container(
+                        width: 400,
+                        height: 500,
+                        child: ListView.builder(
+                          itemCount: doc.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            bool check = false;
+                            return ECheckService(
+                              type: doc[index]['name'],
+                              id: doc[index]['category_id'],
+                              gymid: _gymiid.text,
+                              serviceArray: widget.serviceArray,
+                            );
+                          },
+                        ),
+                      );
+                    }),
+              ),
+
+// <<<<<<< HEAD
+// >>>>>>> 1f09f104c279e9107f7b92c5d9c2cf410db6e92c
+// =======
+
+// >>>>>>> db16c184745ea062b80bb6d62b73b5f64792dc9e
               // Text(image),
-              Image.network(image.toString()),
               Padding(
                 padding: const EdgeInsets.all(12.0),
                 child: Center(
@@ -1659,7 +1917,6 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                           .instance
                           .collection('product_details')
                           .doc(_gymiid.text);
-
 
                       Map<String, dynamic> data = <String, dynamic>{
                         'address': _address.text,
@@ -1687,5 +1944,27 @@ class _ProductEditBoxState extends State<ProductEditBox> {
         ),
       ),
     );
+  }
+
+  uploadToStroagees() {
+    InputElement input = FileUploadInputElement() as InputElement
+      ..accept = 'image/*';
+    FirebaseStorage fs = FirebaseStorage.instance;
+
+    input.click();
+    input.onChange.listen((event) {
+      final file = input.files?.first;
+      final reader = FileReader();
+
+      reader.readAsDataUrl(file!);
+      reader.onLoadEnd.listen((event) async {
+        var snapshot =
+            await fs.ref().child('product_image/${widget.gymId}').putBlob(file);
+        String downloadUrl = await snapshot.ref.getDownloadURL();
+        setState(() {
+          image = downloadUrl;
+        });
+      });
+    });
   }
 }

@@ -219,6 +219,7 @@ class _showLatestBookingState extends State<showLatestBooking> {
   String x = '';
   bool y = false;
   var selectedValue = 'active';
+  var selectedValue1 = 'offline';
 
   @override
   void initState() {
@@ -249,10 +250,8 @@ class _showLatestBookingState extends State<showLatestBooking> {
                   child: StreamBuilder<QuerySnapshot>(
                     stream: FirebaseFirestore.instance
                         .collection('bookings')
-
                         .where('booking_status',
-                            whereIn: ['upcoming' , 'active' , 'incomplete'])
-
+                            whereIn: ['upcoming', 'active', 'incomplete'])
                         .orderBy("id", descending: true)
                         .snapshots(),
                     builder: (context, AsyncSnapshot snapshot) {
@@ -323,6 +322,12 @@ class _showLatestBookingState extends State<showLatestBooking> {
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
+                              DataColumn(
+                                label: Text(
+                                  'Booking Type',
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
+                              ),
                             ],
                             rows: _buildlist(context, doc)),
                       );
@@ -379,29 +384,6 @@ class _showLatestBookingState extends State<showLatestBooking> {
               .format(data['plan_end_duration'].toDate())
               .toString())
           : const Text("")),
-
-      DataCell(
-        Center(
-          child: ElevatedButton(
-            onPressed: () async {
-              bool temp = bookingAccepted;
-              temp = !temp;
-
-              DocumentReference documentReference = FirebaseFirestore.instance
-                  .collection('bookings')
-                  .doc(bookingId);
-              await documentReference
-                  .update({'booking_accepted': temp})
-                  .whenComplete(() => print("Legitimate toggled"))
-                  .catchError((e) => print(e));
-            },
-            child: Text(x = bookingAccepted ? 'YES' : 'NO'),
-            style: ElevatedButton.styleFrom(
-                primary: bookingAccepted ? Colors.green : Colors.red),
-          ),
-        ),
-      ),
-
       DataCell(
         Center(
           child: Container(
@@ -410,7 +392,7 @@ class _showLatestBookingState extends State<showLatestBooking> {
                 DropdownButton(
                     hint: Text(data['booking_status'].toString()),
                     value: data['booking_status'].toString(),
-                    items: [
+                    items: const [
                       DropdownMenuItem(
                         child: Text("Active"),
                         value: "active",
@@ -420,13 +402,9 @@ class _showLatestBookingState extends State<showLatestBooking> {
                         value: "upcoming",
                       ),
                       DropdownMenuItem(
-
-                          child: Text("Incomplete"),
-                          value: "incomplete"),
+                          child: Text("Incomplete"), value: "incomplete"),
                       DropdownMenuItem(
-                          child: Text("Cancelled"),
-                          value: "cancelled"),
-
+                          child: Text("Cancelled"), value: "cancelled"),
                     ],
                     onChanged: (value) async {
                       setState(() {
@@ -436,6 +414,38 @@ class _showLatestBookingState extends State<showLatestBooking> {
                           .collection('bookings')
                           .doc(bookingId)
                           .update({'booking_status': value});
+                    }),
+              ],
+            ),
+          ),
+        ),
+      ),
+      DataCell(
+        Center(
+          child: Container(
+            child: Row(
+              children: [
+                DropdownButton(
+                    hint: Text(data['payment_method'].toString()),
+                    value: data['payment_method'].toString(),
+                    items: const [
+                      DropdownMenuItem(
+                        child: Text("Online"),
+                        value: "online",
+                      ),
+                      DropdownMenuItem(
+                        child: Text("Cash"),
+                        value: "offline",
+                      ),
+                    ],
+                    onChanged: (value) async {
+                      setState(() {
+                        selectedValue1 = value as String;
+                      });
+                      await FirebaseFirestore.instance
+                          .collection('bookings')
+                          .doc(bookingId)
+                          .update({'payment_method': value});
                     }),
               ],
             ),

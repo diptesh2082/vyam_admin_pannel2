@@ -976,15 +976,15 @@ class _detailsaddState extends State<detailsadd> {
               ),
               // customTextField(hinttext: "Gender", addcontroller: _addgender),
 
-              customTextField(hinttext: "Address", addcontroller: _addaddress),
-              customTextField(
-                  hinttext: "Locality", addcontroller: _addlocality),
-              customTextField(
-                  hinttext: "Sub Locality", addcontroller: _addsublocality),
-              customTextField(
-                addcontroller: _addpincode,
-                hinttext: "Pincode",
-              ),
+              // customTextField(hinttext: "Address", addcontroller: _addaddress),
+              // customTextField(
+              //     hinttext: "Locality", addcontroller: _addlocality),
+              // customTextField(
+              //     hinttext: "Sub Locality", addcontroller: _addsublocality),
+              // customTextField(
+              //   addcontroller: _addpincode,
+              //   hinttext: "Pincode",
+              // ),
               Row(
                 children: [
                   ElevatedButton(

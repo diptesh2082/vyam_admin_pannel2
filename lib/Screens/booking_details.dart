@@ -50,7 +50,7 @@ class _BookingDetailsState extends State<BookingDetails> {
                       onPressed: () {
                         Get.to(const addbookings()); //showAddbox,
                       },
-                      child: Text('Add Booking')),
+                      child: const Text('Add Booking')),
                 ),
                 Container(
                   width: 500,
@@ -93,6 +93,12 @@ class _BookingDetailsState extends State<BookingDetails> {
                     ),
                   ),
                 ),
+                Container(
+                  alignment: Alignment.topRight,
+                  child: Icon(
+                    Icons.date_range,
+                  ),
+                ),
                 Center(
                   child: StreamBuilder<QuerySnapshot>(
                     stream: FirebaseFirestore.instance
@@ -117,26 +123,22 @@ class _BookingDetailsState extends State<BookingDetails> {
                         print(snapshot.error);
                         return Container();
                       }
-                      // var document = snapshot.data!.docs;
-
                       var doc = snapshot.data.docs;
 
                       if (searchVendorId.length > 0) {
                         doc = doc.where((element) {
                           return element
-// <<<<<<< HEAD
-//                                   .get('user_name')
-//                                   .toString()
-//                                   .toLowerCase()
-//                                   .contains(searchVendorId.toString()) ||
-// =======
                                   .get('user_name')
                                   .toString()
                                   .toLowerCase()
                                   .contains(searchVendorId.toString()) ||
-// >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
                               element
                                   .get('userId')
+                                  .toString()
+                                  .toLowerCase()
+                                  .contains(searchVendorId.toString()) ||
+                              element
+                                  .get('grand_total')
                                   .toString()
                                   .toLowerCase()
                                   .contains(searchVendorId.toString());
@@ -154,11 +156,6 @@ class _BookingDetailsState extends State<BookingDetails> {
                                 style: TextStyle(fontWeight: FontWeight.w600),
                               )),
                               DataColumn(
-                                  label: Text(
-                                'Vendor Name',
-                                style: TextStyle(fontWeight: FontWeight.w600),
-                              )),
-                              DataColumn(
                                 label: Text(
                                   'User Name',
                                   style: TextStyle(fontWeight: FontWeight.w600),
@@ -171,8 +168,19 @@ class _BookingDetailsState extends State<BookingDetails> {
                                 ),
                               ),
                               DataColumn(
+                                  label: Text(
+                                'Vendor Name',
+                                style: TextStyle(fontWeight: FontWeight.w600),
+                              )),
+                              DataColumn(
                                 label: Text(
-                                  'Discount',
+                                  'Category',
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
+                              ),
+                              DataColumn(
+                                label: Text(
+                                  'Package Type',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
@@ -184,31 +192,31 @@ class _BookingDetailsState extends State<BookingDetails> {
                               ),
                               DataColumn(
                                 label: Text(
-                                  'Category',
+                                  'Start Date',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
                               DataColumn(
                                 label: Text(
-                                  'Payment done',
+                                  'Plan End',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
                               DataColumn(
                                 label: Text(
-                                  'Order Date',
+                                  'Discount',
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
+                              ),
+                              DataColumn(
+                                label: Text(
+                                  'Grand Total',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
                               // DataColumn(
                               //   label: Text(
-                              //     'Gym Name',
-                              //     style: TextStyle(fontWeight: FontWeight.w600),
-                              //   ),
-                              // ),
-                              // DataColumn(
-                              //   label: Text(
-                              //     'Gym Address',
+                              //     'Payment done',
                               //     style: TextStyle(fontWeight: FontWeight.w600),
                               //   ),
                               // ),
@@ -220,52 +228,10 @@ class _BookingDetailsState extends State<BookingDetails> {
                               ),
                               DataColumn(
                                 label: Text(
-                                  'Plan End',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
-                              ),
-                              // DataColumn(
-                              //   label: Text(
-                              //     'Days Left',
-                              //     style: TextStyle(fontWeight: FontWeight.w600),
-                              //   ),
-                              // ),
-                              DataColumn(
-                                label: Text(
                                   'Booking Status',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
-                              // DataColumn(
-                              //   label: Text(
-                              //     'Booking Price',
-                              //     style: TextStyle(fontWeight: FontWeight.w600),
-                              //   ),
-                              // ),
-                              DataColumn(
-                                label: Text(
-                                  'Package Type',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
-                              ),
-                              // DataColumn(
-                              //   label: Text(
-                              //     'Booking ID',
-                              //     style: TextStyle(fontWeight: FontWeight.w600),
-                              //   ),
-                              // ),
-                              DataColumn(
-                                label: Text(
-                                  'Grand Total',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
-                              ),
-                              // DataColumn(
-                              //   label: Text(
-                              //     'Booking Accepted',
-                              //     style: TextStyle(fontWeight: FontWeight.w600),
-                              //   ),
-                              // ),
                               DataColumn(
                                 label: Text(
                                   'Edit',
@@ -314,91 +280,55 @@ class _BookingDetailsState extends State<BookingDetails> {
     return DataRow(cells: [
       DataCell(
           data["id"] != null ? Text(data['id'].toString()) : const Text("")),
-      DataCell(data["gym_details"] != null
-          ? Text(
-              '${data['gym_details']['name'].toString().toUpperCase()}|${data['gym_details']['branch'].toString().toUpperCase()}')
-          : const Text("")),
       DataCell(data['user_name'] != null
           ? Text(data['user_name'].toString())
           : const Text("")),
       DataCell(data['userId'] != null
-
           ? Text(data['userId'].toString().substring(3, 13))
           : Text("")),
-      // DataCell(data['total_price'] != null
-      //     ? Text(data['total_price'].toString())
-      //     : const Text("")),
-
-      DataCell(data['discount'] != null
-          ? Text(data['discount'].toString())
+      DataCell(data["gym_details"] != null
+          ? Text(
+              '${data['gym_details']['name'].toString().toUpperCase()}|${data['gym_details']['branch'].toString().toUpperCase()}')
           : const Text("")),
-
-
-      DataCell(data['totalDays'] != null
-          ? Text(data['totalDays'].toString())
-          : const Text("")),
-      // DataCell(data['tax_pay'] != null
-      //     ? Text(data['tax_pay'].toString())
-      //     : const Text("")),
-
       DataCell(data['package_type'] != null
           ? Text(data['package_type'].toString().toUpperCase())
           : const Text("")),
-      DataCell(Center(
-        child: ElevatedButton(
-          onPressed: () async {
-            bool temp = paymentDoneBool;
-            temp = !temp;
-            DocumentReference documentReference = FirebaseFirestore.instance
-                .collection('bookings')
-                .doc(bookingId);
-            await documentReference
-                .update({'payment_done': temp})
-                .whenComplete(() => print("Payment done updated"))
-                .catchError((e) => print(e));
-          },
-          child: Text(x = paymentDoneBool ? 'YES' : 'NO'),
-          style: ElevatedButton.styleFrom(
-              primary: paymentDoneBool ? Colors.green : Colors.red),
-        ),
-      )),
+      DataCell(data['booking_plan'] != null
+          ? Text(data['booking_plan'].toString())
+          : const Text("")),
+      DataCell(data['totalDays'] != null
+          ? Text(data['totalDays'].toString())
+          : const Text("")),
       DataCell(data['order_date'] != null ? Text(orderDate) : const Text("")),
-
-      // DataCell(data['gym_details']['name'] != null
-      //     ? Text(data['gym_details']['name'].toString())
-      //     : const Text("")),
-      // DataCell(data['gym_address'] != null
-      //     ? Text(data['gym_address'].toString())
-      //     : const Text("")),
-      DataCell(data['grand_total'] != null
-          ? Row(
-              children: [
-                Text('₹'),
-                Text(data['grand_total'].toString()),
-              ],
-            )
-          : const Text("")),
-      DataCell(data['discount'] != null
-          ? Row(
-              children: [
-                Text('₹'),
-                Text(data['discount'].toString()),
-              ],
-            )
-          : const Text("")),
-      // DataCell(data['daysLeft'] != null
-      //     ? Text(data['daysLeft'].toString())
-      //     : const Text("")),
-      DataCell(data['booking_status'] != null
-          ? Text(data['booking_status'].toString())
-
-      DataCell(
-          data['booking_date'] != null ? Text(bookingDate) : const Text("")),
       DataCell(data['plan_end_duration'] != null
           ? Text(durationEnd)
-
           : const Text("")),
-
+      DataCell(data['discount'] != null
+          ? Text('₹${data['discount'].toString()}')
+          : const Text("")),
+      DataCell(data['grand_total'] != null
+          ? Text('₹${data['grand_total'].toString()}')
+          : const Text("")),
+      // DataCell(Center(
+      //   child: ElevatedButton(
+      //     onPressed: () async {
+      //       bool temp = paymentDoneBool;
+      //       temp = !temp;
+      //       DocumentReference documentReference = FirebaseFirestore.instance
+      //           .collection('bookings')
+      //           .doc(bookingId);
+      //       await documentReference
+      //           .update({'payment_done': temp})
+      //           .whenComplete(() => print("Payment done updated"))
+      //           .catchError((e) => print(e));
+      //     },
+      //     child: Text(x = paymentDoneBool ? 'YES' : 'NO'),
+      //     style: ElevatedButton.styleFrom(
+      //         primary: paymentDoneBool ? Colors.green : Colors.red),
+      //   ),
+      // )),
+      DataCell(
+          data['booking_date'] != null ? Text(bookingDate) : const Text("")),
       DataCell(
         Center(
           child: Container(
@@ -407,7 +337,7 @@ class _BookingDetailsState extends State<BookingDetails> {
                 DropdownButton(
                     hint: Text(data['booking_status'].toString()),
                     value: data['booking_status'].toString(),
-                    items: [
+                    items: const [
                       DropdownMenuItem(
                         child: Text("Active"),
                         value: "active",
@@ -435,47 +365,15 @@ class _BookingDetailsState extends State<BookingDetails> {
           ),
         ),
       ),
-
-      DataCell(data['booking_plan'] != null
-          ? Text(data['booking_plan'].toString())
-          : const Text("")),
-      // DataCell(data['booking_id'] != null
-      //     ? Text(data['booking_id'].toString())
+      // DataCell(data['booking_plan'] != null
+      //     ? Text(data['booking_plan'].toString())
       //     : const Text("")),
-      // DataCell(
-      //     data['booking_date'] != null ? Text(bookingDate) : const Text("")),
-      DataCell(data['grand_total'] != null
-          ? Text(data['grand_total'].toString())
-          : const Text("")),
-      // DataCell(Center(
-      //   child: ElevatedButton(
-      //     onPressed: () async {
-      //       bool temp = bookingAccepted;
-      //       temp = !temp;
-      //       DocumentReference documentReference = FirebaseFirestore.instance
-      //           .collection('bookings')
-      //           .doc(bookingId);
-      //       await documentReference
-      //           .update({
-      //         'booking_accepted': temp,
-      //         "booking_status": temp ? "active" : "cancelled",
-      //         "payment_done": temp
-      //       })
-      //           .whenComplete(() => print("booking accepted updated"))
-      //           .catchError((e) => print(e));
-      //     },
-      //     child: Text(bookingAccepted.toString()),
-      //     style: ElevatedButton.styleFrom(
-      //         primary: bookingAccepted ? Colors.green : Colors.red),
-      //   ),
-      // )),
+      // DataCell(data['grand_total'] != null
+      //     ? Text('₹${data['grand_total'].toString()}')
+      //     : const Text("")),
       DataCell(const Text(""), showEditIcon: true, onTap: () {
         Get.to(
-// <<<<<<< HEAD
-//           () => ProductEditBox(
-// =======
           () => ProductEditBox(
-// >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
             vendorid: data['vendorId'],
             username: data['user_name'],
             userid: data['userId'],
@@ -1024,7 +922,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
 //                     value: _dropdownValue,
 //                   ),
 //                   // customTextField(
-// =======
+
                     stream: vendorIdStream!.snapshots(),
                     builder: (context, AsyncSnapshot snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
@@ -1169,7 +1067,6 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                               itemBuilder: (BuildContext context, int index) {
                                 bool check = false;
                                 return
-// <<<<<<< HEAD
                                     // RadioBoxx(
                                     //   doc[index]["name"],
                                     //   doc[index]["category_id"],
@@ -1302,7 +1199,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                       );
                     },
                   )),
-// >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
+
                   // customTextField(
                   //     hinttext: "Gym Name", addcontroller: _addgymname),
                   customTextField(

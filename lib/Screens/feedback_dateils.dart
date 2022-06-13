@@ -1,6 +1,7 @@
 import 'package:admin_panel_vyam/services/deleteMethod.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class FeedBackInfo extends StatefulWidget {
   const FeedBackInfo({Key? key}) : super(key: key);
@@ -11,6 +12,7 @@ class FeedBackInfo extends StatefulWidget {
 
 class _FeedBackInfoState extends State<FeedBackInfo> {
   CollectionReference? categoryStream;
+  String searchGymName = '';
 
   @override
   void initState() {
@@ -21,74 +23,145 @@ class _FeedBackInfoState extends State<FeedBackInfo> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: StreamBuilder<QuerySnapshot>(
-        stream: categoryStream!.snapshots(),
-        builder: (context, AsyncSnapshot snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const CircularProgressIndicator();
-          }
-          if (snapshot.data == null) {
-            return Container();
-          }
-
-          return SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: DataTable(
-              dataRowHeight: 65,
-              columns: const [
-                DataColumn(
-                  label: Text(
-                    'Name',
-                    style: TextStyle(fontWeight: FontWeight.w600),
-                  ),
-                ),
-                DataColumn(
-                  label: Text(
-                    'Phone Number',
-                    style: TextStyle(fontWeight: FontWeight.w600),
-                  ),
-                ),
-                // DataColumn(
-                //   label: Text(
-                //     'Images',
-                //     style: TextStyle(fontWeight: FontWeight.w600),
-                //   ),
-                // ),
-                DataColumn(
-                  label: Text(
-                    'GYMID',
-                    style: TextStyle(fontWeight: FontWeight.w600),
-                  ),
-                ),
-                DataColumn(
-                  label: Text(
-                    'Feedback Review Title',
-                    style: TextStyle(fontWeight: FontWeight.w600),
-                  ),
-                ),
-                DataColumn(
-                  label: Text(
-                    'Feedback Suggestion',
-                    style: TextStyle(fontWeight: FontWeight.w600),
-                  ),
-                ),
-                // DataColumn(
-                //   label: Text(
-                //     'Edit',
-                //     style: TextStyle(fontWeight: FontWeight.w600),
-                //   ),
-                // ),
-                DataColumn(
-                  label: Text(
-                    'Delete',
-                    style: TextStyle(fontWeight: FontWeight.w600),
-                  ),
-                ),
-              ],
-              rows: _buildlist(context, snapshot.data!.docs),
+      appBar: AppBar(
+        title: Text('Feedback'),
+      ),
+      body: Column(
+        children: [
+          Container(
+            width: 500,
+            height: 51,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(14),
+              color: Colors.white12,
             ),
-          );
-        },
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(15),
+              child: TextField(
+                // focusNode: _node,
+
+                autofocus: false,
+                textAlignVertical: TextAlignVertical.bottom,
+                onSubmitted: (value) async {
+                  FocusScope.of(context).unfocus();
+                },
+                // controller: searchController,
+                onChanged: (value) {
+                  if (value.length == 0) {
+                    // _node.canRequestFocus=false;
+                    // FocusScope.of(context).unfocus();
+                  }
+                  if (mounted) {
+                    setState(() {
+                      searchGymName = value.toString();
+                    });
+                  }
+                },
+                decoration: InputDecoration(
+                  prefixIcon: const Icon(Icons.search),
+                  hintText: 'Search',
+                  hintStyle: GoogleFonts.poppins(
+                      fontSize: 16, fontWeight: FontWeight.w500),
+                  border: InputBorder.none,
+                  filled: true,
+                  fillColor: Colors.white12,
+                ),
+              ),
+            ),
+          ),
+          Center(
+            child: StreamBuilder<QuerySnapshot>(
+              stream: categoryStream!.snapshots(),
+              builder: (context, AsyncSnapshot snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const CircularProgressIndicator();
+                }
+                if (snapshot.data == null) {
+                  return Container();
+                }
+                var doc = snapshot.data.docs;
+
+                if (searchGymName.length > 0) {
+                  doc = doc.where((element) {
+                    return element
+                            .get('feedback_review')
+                            .toString()
+                            .toLowerCase()
+                            .contains(searchGymName.toString()) ||
+                        element
+                            .get('vendor_id')
+                            .toString()
+                            .toLowerCase()
+                            .contains(searchGymName.toString()) ||
+                        element
+                            .get('feedback_suggestion')
+                            .toString()
+                            .toLowerCase()
+                            .contains(searchGymName.toString());
+                  }).toList();
+                }
+
+                return SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: DataTable(
+                    dataRowHeight: 65,
+                    columns: const [
+                      DataColumn(
+                        label: Text(
+                          'Name',
+                          style: TextStyle(fontWeight: FontWeight.w600),
+                        ),
+                      ),
+                      DataColumn(
+                        label: Text(
+                          'Phone Number',
+                          style: TextStyle(fontWeight: FontWeight.w600),
+                        ),
+                      ),
+                      // DataColumn(
+                      //   label: Text(
+                      //     'Images',
+                      //     style: TextStyle(fontWeight: FontWeight.w600),
+                      //   ),
+                      // ),
+                      DataColumn(
+                        label: Text(
+                          'GYMID',
+                          style: TextStyle(fontWeight: FontWeight.w600),
+                        ),
+                      ),
+                      DataColumn(
+                        label: Text(
+                          'Feedback Review Title',
+                          style: TextStyle(fontWeight: FontWeight.w600),
+                        ),
+                      ),
+                      DataColumn(
+                        label: Text(
+                          'Feedback Suggestion',
+                          style: TextStyle(fontWeight: FontWeight.w600),
+                        ),
+                      ),
+                      // DataColumn(
+                      //   label: Text(
+                      //     'Edit',
+                      //     style: TextStyle(fontWeight: FontWeight.w600),
+                      //   ),
+                      // ),
+                      DataColumn(
+                        label: Text(
+                          'Delete',
+                          style: TextStyle(fontWeight: FontWeight.w600),
+                        ),
+                      ),
+                    ],
+                    rows: _buildlist(context, doc),
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
