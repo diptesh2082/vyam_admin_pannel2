@@ -58,6 +58,7 @@ class _BookingDetailsState extends State<BookingDetails> {
                         Get.to(const addbookings()); //showAddbox,
                       },
                       child: const Text('Add Booking')),
+
                 ),
 
                 Column(
@@ -89,6 +90,7 @@ class _BookingDetailsState extends State<BookingDetails> {
                             label: const Text('End Date'))
                     ),
                   ],
+
                 ),
                 Container(
                   width: 500,
@@ -130,6 +132,12 @@ class _BookingDetailsState extends State<BookingDetails> {
                     ),
                   ),
                 ),
+                Container(
+                  alignment: Alignment.topRight,
+                  child: Icon(
+                    Icons.date_range,
+                  ),
+                ),
                 Center(
                   child: StreamBuilder<QuerySnapshot>(
                     stream: FirebaseFirestore.instance
@@ -159,12 +167,19 @@ class _BookingDetailsState extends State<BookingDetails> {
                       if (searchVendorId.isNotEmpty) {
                         doc = doc.where((element) {
                           return element
+
                               .get('user_name')
                               .toString()
                               .toLowerCase()
                               .contains(searchVendorId.toString()) ||
                               element
                                   .get('userId')
+
+                                  .toString()
+                                  .toLowerCase()
+                                  .contains(searchVendorId.toString()) ||
+                              element
+                                  .get('grand_total')
                                   .toString()
                                   .toLowerCase()
                                   .contains(searchVendorId.toString()) ||
@@ -187,11 +202,13 @@ class _BookingDetailsState extends State<BookingDetails> {
                                     style: TextStyle(fontWeight: FontWeight.w600),
                                   )),
                               DataColumn(
+
                                   label: Text(
                                     'Vendor Name',
                                     style: TextStyle(fontWeight: FontWeight.w600),
                                   )),
                               DataColumn(
+
                                 label: Text(
                                   'User Name',
                                   style: TextStyle(fontWeight: FontWeight.w600),
@@ -204,50 +221,13 @@ class _BookingDetailsState extends State<BookingDetails> {
                                 ),
                               ),
                               DataColumn(
-                                label: Text(
-                                  'Discount',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
-                              ),
-                              DataColumn(
-                                label: Text(
-                                  'Total Days',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
-                              ),
+                                  label: Text(
+                                'Vendor Name',
+                                style: TextStyle(fontWeight: FontWeight.w600),
+                              )),
                               DataColumn(
                                 label: Text(
                                   'Category',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
-                              ),
-                              DataColumn(
-                                label: Text(
-                                  'Payment done',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
-                              ),
-                              DataColumn(
-                                label: Text(
-                                  'Booking  Date',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
-                              ),
-                              DataColumn(
-                                label: Text(
-                                  'Start Date',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
-                              ),
-                              DataColumn(
-                                label: Text(
-                                  'End Date',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
-                              ),
-                              DataColumn(
-                                label: Text(
-                                  'Booking Status',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
@@ -259,7 +239,50 @@ class _BookingDetailsState extends State<BookingDetails> {
                               ),
                               DataColumn(
                                 label: Text(
+                                  'Total Days',
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
+                              ),
+                              DataColumn(
+                                label: Text(
+
+                                  'Start Date',
+
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
+                              ),
+                              DataColumn(
+                                label: Text(
+
+                                  'Start Date',
+
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
+                              ),
+                              DataColumn(
+                                label: Text(
+
+                                  'End Date',
+
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
+                              ),
+                              DataColumn(
+                                label: Text(
                                   'Grand Total',
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
+                              ),
+
+                              DataColumn(
+                                label: Text(
+                                  'Booking Date',
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
+                              ),
+                              DataColumn(
+                                label: Text(
+                                  'Booking Status',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
@@ -326,49 +349,67 @@ class _BookingDetailsState extends State<BookingDetails> {
     return DataRow(cells: [
       DataCell(
           data["id"] != null ? Text(data['id'].toString()) : const Text("")),
-      DataCell(data["gym_details"] != null
-          ? Text(
-          '${data['gym_details']['name'].toString().toUpperCase()} || ${data['gym_details']['branch'].toString().toUpperCase()}')
-          : const Text("")),
+
+  
       DataCell(data['user_name'] != null
           ? Text(data['user_name'].toString())
           : const Text("")),
       DataCell(data['userId'] != null
           ? Text(data['userId'].toString().substring(3, 13))
+
+          : Text("")),
+      DataCell(data["gym_details"] != null
+          ? Text(
+              '${data['gym_details']['name'].toString().toUpperCase()}|${data['gym_details']['branch'].toString().toUpperCase()}')
+
           : const Text("")),
-      DataCell(data['discount'] != null
-          ? Text('₹${data['discount'].toString()}')
-          : const Text("")),
-      DataCell(data['totalDays'] != null
-          ? Text(data['totalDays'].toString())
+//       DataCell(data['discount'] != null
+//           ? Text('₹${data['discount'].toString()}')
+//           : const Text("")),
+//       DataCell(data['totalDays'] != null
+//           ? Text(data['totalDays'].toString())
+
           : const Text("")),
       DataCell(data['package_type'] != null
           ? Text(data['package_type'].toString().toUpperCase())
           : const Text("")),
-      DataCell(Center(
-        child: ElevatedButton(
-          onPressed: () async {
-            bool temp = paymentDoneBool;
-            temp = !temp;
-            DocumentReference documentReference = FirebaseFirestore.instance
-                .collection('bookings')
-                .doc(bookingId);
-            await documentReference
-                .update({'payment_done': temp})
-                .whenComplete(() => print("Payment done updated"))
-                .catchError((e) => print(e));
-          },
-          child: Text(x = paymentDoneBool ? 'YES' : 'NO'),
-          style: ElevatedButton.styleFrom(
-              primary: paymentDoneBool ? Colors.green : Colors.red),
-        ),
-      )),
+      DataCell(data['booking_plan'] != null
+          ? Text(data['booking_plan'].toString())
+          : const Text("")),
+      DataCell(data['totalDays'] != null
+          ? Text(data['totalDays'].toString())
+          : const Text("")),
       DataCell(data['order_date'] != null ? Text(orderDate) : const Text("")),
 
-      DataCell(data['booking_date'] != null ? Text(bookingDate) : const Text("")),
       DataCell(data['plan_end_duration'] != null
           ? Text(durationEnd)
           : const Text("")),
+      DataCell(data['discount'] != null
+          ? Text('₹${data['discount'].toString()}')
+          : const Text("")),
+      DataCell(data['grand_total'] != null
+          ? Text('₹${data['grand_total'].toString()}')
+          : const Text("")),
+      // DataCell(Center(
+      //   child: ElevatedButton(
+      //     onPressed: () async {
+      //       bool temp = paymentDoneBool;
+      //       temp = !temp;
+      //       DocumentReference documentReference = FirebaseFirestore.instance
+      //           .collection('bookings')
+      //           .doc(bookingId);
+      //       await documentReference
+      //           .update({'payment_done': temp})
+      //           .whenComplete(() => print("Payment done updated"))
+      //           .catchError((e) => print(e));
+      //     },
+      //     child: Text(x = paymentDoneBool ? 'YES' : 'NO'),
+      //     style: ElevatedButton.styleFrom(
+      //         primary: paymentDoneBool ? Colors.green : Colors.red),
+      //   ),
+      // )),
+      DataCell(
+          data['booking_date'] != null ? Text(bookingDate) : const Text("")),
 
       DataCell(
         Center(
@@ -378,7 +419,9 @@ class _BookingDetailsState extends State<BookingDetails> {
                 DropdownButton(
                     hint: Text(data['booking_status'].toString()),
                     value: data['booking_status'].toString(),
+
                     items:  const [
+
                       DropdownMenuItem(
                         child: Text("Active"),
                         value: "active",
@@ -415,16 +458,28 @@ class _BookingDetailsState extends State<BookingDetails> {
           ),
         ),
       ),
-      DataCell(data['booking_plan'] != null
-          ? Text(data['booking_plan'].toString())
-          : const Text("")),
-      DataCell(data['grand_total'] != null
-          ? Text('₹${data['grand_total'].toString()}')
-          : const Text("")),
-
+// <<<<<<< nihal_new
+      // DataCell(data['booking_plan'] != null
+      //     ? Text(data['booking_plan'].toString())
+      //     : const Text("")),
+      // DataCell(data['grand_total'] != null
+      //     ? Text('₹${data['grand_total'].toString()}')
+      //     : const Text("")),
       DataCell(const Text(""), showEditIcon: true, onTap: () {
         Get.to(
-              () => ProductEditBox(
+          () => ProductEditBox(
+// =======
+//       DataCell(data['booking_plan'] != null
+//           ? Text(data['booking_plan'].toString())
+//           : const Text("")),
+//       DataCell(data['grand_total'] != null
+//           ? Text('₹${data['grand_total'].toString()}')
+//           : const Text("")),
+
+//       DataCell(const Text(""), showEditIcon: true, onTap: () {
+//         Get.to(
+//               () => ProductEditBox(
+// >>>>>>> Diptesh
             vendorid: data['vendorId'],
             username: data['user_name'],
             userid: data['userId'],
@@ -997,43 +1052,45 @@ class _ProductEditBoxState extends State<ProductEditBox> {
 //                   ),
 //                   // customTextField(
 
-                        stream: vendorIdStream!.snapshots(),
-                        builder: (context, AsyncSnapshot snapshot) {
-                          if (snapshot.connectionState == ConnectionState.waiting) {
-                            return const CircularProgressIndicator();
-                          }
-                          if (snapshot.data == null) {
-                            return Container();
-                          }
-                          print("-----------------------------------");
-                          var doc = snapshot.data.docs;
-                          return Container(
-                            width: 500,
-                            height: 200,
-                            child: ListView.builder(
-                                itemCount: doc.length,
-                                itemBuilder: (BuildContext context, int index) {
-                                  bool check = false;
-                                  return RadioListTile<String>(
-                                    value: doc[index]["gym_id"],
-                                    groupValue: abc3,
-                                    onChanged: (val) => setState(
-                                          () {
-                                        abc3 = val!;
-                                      },
-                                    ),
-                                    title: Text(doc[index]["gym_id"]),
-                                  );
-                                  // ListTile(
-                                  //   title: Text(doc[index]["name"]),
-                                  //   onTap: () {
-                                  //     _addgymname.text = doc[index]["name"];
-                                  //   },
-                                  // );
-                                }),
-                          );
-                        },
-                      )),
+
+                    stream: vendorIdStream!.snapshots(),
+                    builder: (context, AsyncSnapshot snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const CircularProgressIndicator();
+                      }
+                      if (snapshot.data == null) {
+                        return Container();
+                      }
+                      print("-----------------------------------");
+                      var doc = snapshot.data.docs;
+                      return Container(
+                        width: 500,
+                        height: 200,
+                        child: ListView.builder(
+                            itemCount: doc.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              bool check = false;
+                              return RadioListTile<String>(
+                                value: doc[index]["gym_id"],
+                                groupValue: abc3,
+                                onChanged: (val) => setState(
+                                  () {
+                                    abc3 = val!;
+                                  },
+                                ),
+                                title: Text(doc[index]["gym_id"]),
+                              );
+                              // ListTile(
+                              //   title: Text(doc[index]["name"]),
+                              //   onTap: () {
+                              //     _addgymname.text = doc[index]["name"];
+                              //   },
+                              // );
+                            }),
+                      );
+                    },
+                  )),
+
                   const SizedBox(height: 15),
                   // customTextField(
                   //     hinttext: "Vendor ID", addcontroller: _addvendorid),
@@ -1141,21 +1198,23 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                               itemBuilder: (BuildContext context, int index) {
                                 bool check = false;
                                 return
-                                  // RadioBoxx(
-                                  //   doc[index]["name"],
-                                  //   doc[index]["category_id"],
-                                  //   _addpackagetype.text,
-                                  // );
-                                  RadioListTile<String>(
-                                    value: doc[index]["name"],
-                                    groupValue: abc,
-                                    onChanged: (val) => setState(
-                                          () {
-                                        abc = val!;
-                                      },
-                                    ),
-                                    title: Text(doc[index]["name"]),
-                                  );
+
+                                    // RadioBoxx(
+                                    //   doc[index]["name"],
+                                    //   doc[index]["category_id"],
+                                    //   _addpackagetype.text,
+                                    // );
+                                    RadioListTile<String>(
+                                  value: doc[index]["name"],
+                                  groupValue: abc,
+                                  onChanged: (val) => setState(
+                                    () {
+                                      abc = val!;
+                                    },
+                                  ),
+                                  title: Text(doc[index]["name"]),
+                                );
+
 // =======
                                 // RadioBoxx(
                                 //   doc[index]["name"],
@@ -1236,43 +1295,45 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                   Container(
                       child: StreamBuilder<QuerySnapshot>(
 //
-                        stream: vendorIdStream!.snapshots(),
-                        builder: (context, AsyncSnapshot snapshot) {
-                          if (snapshot.connectionState == ConnectionState.waiting) {
-                            return const CircularProgressIndicator();
-                          }
-                          if (snapshot.data == null) {
-                            return Container();
-                          }
-                          print("-----------------------------------");
-                          var doc = snapshot.data.docs;
-                          return Container(
-                            width: 400,
-                            height: 300,
-                            child: ListView.builder(
-                                itemCount: doc.length,
-                                itemBuilder: (BuildContext context, int index) {
-                                  bool check = false;
-                                  return RadioListTile<String>(
-                                    value: doc[index]["name"],
-                                    groupValue: abc2,
-                                    onChanged: (val) => setState(
-                                          () {
-                                        abc2 = val!;
-                                      },
-                                    ),
-                                    title: Text(doc[index]["name"]),
-                                  );
-                                  // ListTile(
-                                  //   title: Text(doc[index]["name"]),
-                                  //   onTap: () {
-                                  //     _addgymname.text = doc[index]["name"];
-                                  //   },
-                                  // );
-                                }),
-                          );
-                        },
-                      )),
+
+                    stream: vendorIdStream!.snapshots(),
+                    builder: (context, AsyncSnapshot snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const CircularProgressIndicator();
+                      }
+                      if (snapshot.data == null) {
+                        return Container();
+                      }
+                      print("-----------------------------------");
+                      var doc = snapshot.data.docs;
+                      return Container(
+                        width: 400,
+                        height: 300,
+                        child: ListView.builder(
+                            itemCount: doc.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              bool check = false;
+                              return RadioListTile<String>(
+                                value: doc[index]["name"],
+                                groupValue: abc2,
+                                onChanged: (val) => setState(
+                                  () {
+                                    abc2 = val!;
+                                  },
+                                ),
+                                title: Text(doc[index]["name"]),
+                              );
+                              // ListTile(
+                              //   title: Text(doc[index]["name"]),
+                              //   onTap: () {
+                              //     _addgymname.text = doc[index]["name"];
+                              //   },
+                              // );
+                            }),
+                      );
+                    },
+                  )),
+
 
                   // customTextField(
                   //     hinttext: "Gym Name", addcontroller: _addgymname),
