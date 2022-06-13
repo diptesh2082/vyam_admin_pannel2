@@ -245,7 +245,7 @@ class _showLatestBookingState extends State<showLatestBooking> {
               borderRadius: BorderRadius.circular(20.0)),
           child: SingleChildScrollView(
             child: Column(
-             // crossAxisAlignment: CrossAxisAlignment.start,
+              // crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Text(
                   'Latest Bookings',
@@ -255,7 +255,6 @@ class _showLatestBookingState extends State<showLatestBooking> {
                     fontSize: 32,
                   ),
                 ),
-
                 Center(
                   child: StreamBuilder<QuerySnapshot>(
                     stream: FirebaseFirestore.instance
@@ -394,7 +393,10 @@ class _showLatestBookingState extends State<showLatestBooking> {
               .format(data['plan_end_duration'].toDate())
               .toString())
           : const Text("")),
+// <<<<<<< HEAD
+// =======
 
+// >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
       DataCell(
         Center(
           child: Container(
@@ -431,7 +433,10 @@ class _showLatestBookingState extends State<showLatestBooking> {
           ),
         ),
       ),
+// <<<<<<< HEAD
+// =======
 
+// >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
       DataCell(
         Center(
           child: Container(
@@ -464,7 +469,6 @@ class _showLatestBookingState extends State<showLatestBooking> {
           ),
         ),
       ),
-
     ]);
   }
 }

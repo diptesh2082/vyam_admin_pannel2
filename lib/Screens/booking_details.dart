@@ -22,12 +22,12 @@ class BookingDetails extends StatefulWidget {
 
 class _BookingDetailsState extends State<BookingDetails> {
   CollectionReference bookingStream =
-  FirebaseFirestore.instance.collection('bookings');
+      FirebaseFirestore.instance.collection('bookings');
   String searchVendorId = '';
   var selectedValue = 'active';
   DateTime? date;
-   DateTime startDate = DateTime(DateTime.now().year - 5);
-   DateTime endDate = DateTime(DateTime.now().year + 5);
+  DateTime startDate = DateTime(DateTime.now().year - 5);
+  DateTime endDate = DateTime(DateTime.now().year + 5);
 
 
   @override
@@ -58,6 +58,8 @@ class _BookingDetailsState extends State<BookingDetails> {
                         Get.to(const addbookings()); //showAddbox,
                       },
                       child: const Text('Add Booking')),
+<<<<<<< HEAD
+=======
 
                 ),
 
@@ -91,6 +93,7 @@ class _BookingDetailsState extends State<BookingDetails> {
                     ),
                   ],
 
+>>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
                 ),
                 Container(
                   width: 500,
@@ -143,11 +146,11 @@ class _BookingDetailsState extends State<BookingDetails> {
                     stream: FirebaseFirestore.instance
                         .collection('bookings')
                         .where('booking_status', whereIn: [
-                      'completed',
-                      'active',
-                      'upcoming',
-                      'cancelled'
-                    ])
+                          'completed',
+                          'active',
+                          'upcoming',
+                          'cancelled'
+                        ])
                         .orderBy("order_date", descending: true)
                         .snapshots(),
                     builder: (context, AsyncSnapshot snapshot) {
@@ -167,6 +170,9 @@ class _BookingDetailsState extends State<BookingDetails> {
                       if (searchVendorId.isNotEmpty) {
                         doc = doc.where((element) {
                           return element
+<<<<<<< HEAD
+                                  .get('user_name')
+=======
 
                               .get('user_name')
                               .toString()
@@ -175,6 +181,7 @@ class _BookingDetailsState extends State<BookingDetails> {
                               element
                                   .get('userId')
 
+>>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
                                   .toString()
                                   .toLowerCase()
                                   .contains(searchVendorId.toString()) ||
@@ -198,6 +205,12 @@ class _BookingDetailsState extends State<BookingDetails> {
                             columns: const [
                               DataColumn(
                                   label: Text(
+<<<<<<< HEAD
+                                'Booking ID',
+                                style: TextStyle(fontWeight: FontWeight.w600),
+                              )),
+                              DataColumn(
+=======
                                     'Booking ID',
                                     style: TextStyle(fontWeight: FontWeight.w600),
                                   )),
@@ -209,6 +222,7 @@ class _BookingDetailsState extends State<BookingDetails> {
                               //     )),
                               DataColumn(
 
+>>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
                                 label: Text(
                                   'User Name',
                                   style: TextStyle(fontWeight: FontWeight.w600),
@@ -278,10 +292,27 @@ class _BookingDetailsState extends State<BookingDetails> {
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
+<<<<<<< HEAD
+                              // DataColumn(
+                              //   label: Text(
+                              //     'Payment done',
+                              //     style: TextStyle(fontWeight: FontWeight.w600),
+                              //   ),
+                              // ),
+                              DataColumn(
+                                label: Text(
+                                  'Booking Date',
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
+                              ),
+                              DataColumn(
+                                label: Text(
+=======
 
 
                               DataColumn(
                                 label: Text(
+>>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
                                   'Booking Status',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
@@ -299,7 +330,7 @@ class _BookingDetailsState extends State<BookingDetails> {
                                 ),
                               ),
                             ],
-                            rows: _buildlist(context, doc , startDate , endDate)),
+                            rows: _buildlist(context, doc, startDate, endDate)),
                       );
                     },
                   ),
@@ -312,13 +343,24 @@ class _BookingDetailsState extends State<BookingDetails> {
     );
   }
 
-  List<DataRow> _buildlist(
-      BuildContext context, List<DocumentSnapshot> snapshot , DateTime startDate , DateTime endDate) {
-    var d  = [];
+  List<DataRow> _buildlist(BuildContext context,
+      List<DocumentSnapshot> snapshot, DateTime startDate, DateTime endDate) {
+    var d = [];
 
-    snapshot.forEach((element){
+    snapshot.forEach((element) {
       var x = element['booking_date'].toDate();
       // var y = endDate.difference(startDate).inDays;
+<<<<<<< HEAD
+      print('XXXXXXXXXXXXXXXXXXX???????????????????////////////');
+      print(x);
+      if (x.isAfter(startDate) && x.isBefore(endDate) ||
+          x == startDate ||
+          x == endDate) {
+        d.add(element);
+      }
+      print('/////////////////DDDDDDDDDDDDDDDDDDDD???????????????');
+      print(d);
+=======
       // print('XXXXXXXXXXXXXXXXXXX???????????????????////////////');
       // print(x);
       if( x.isAfter(startDate) && x.isBefore(endDate) || x==startDate || x==endDate)
@@ -328,6 +370,7 @@ class _BookingDetailsState extends State<BookingDetails> {
         }
       // print('/////////////////DDDDDDDDDDDDDDDDDDDD???????????????');
       // print(d);
+>>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
     });
     return d.map((data) => _buildListItem(context, data)).toList();
   }
@@ -337,20 +380,23 @@ class _BookingDetailsState extends State<BookingDetails> {
     bool paymentDoneBool = data['payment_done'];
     bool bookingAccepted = data['booking_accepted'];
     String durationEnd =
-    DateFormat("MMM, dd, yyyy").format(data["plan_end_duration"].toDate());
+        DateFormat("MMM, dd, yyyy").format(data["plan_end_duration"].toDate());
     // "${data['plan_end_duration'].toDate().year}/${data['plan_end_duration'].toDate().month}/${data['plan_end_duration'].toDate().day}";
     String orderDate =
-    DateFormat("MMM, dd, yyyy").format(data["order_date"].toDate());
+        DateFormat("MMM, dd, yyyy").format(data["order_date"].toDate());
     // "${data['order_date'].toDate().year}/${data['order_date'].toDate().month}/${data['order_date'].toDate().day}";
     String bookingDate =
-    DateFormat("MMM, dd, yyyy").format(data["booking_date"].toDate());
+        DateFormat("MMM, dd, yyyy").format(data["booking_date"].toDate());
     // "${data['booking_date'].toDate().year}/${data['booking_date'].toDate().month}/${data['booking_date'].toDate().day}";
     String x;
     return DataRow(cells: [
       DataCell(
           data["id"] != null ? Text(data['id'].toString()) : const Text("")),
+<<<<<<< HEAD
+=======
 
   
+>>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
       DataCell(data['user_name'] != null
           ? Text(data['user_name'].toString())
           : const Text("")),
@@ -363,6 +409,8 @@ class _BookingDetailsState extends State<BookingDetails> {
               '${data['gym_details']['name'].toString().toUpperCase()}|${data['gym_details']['branch'].toString().toUpperCase()}')
 
           : const Text("")),
+<<<<<<< HEAD
+=======
 //       DataCell(data['discount'] != null
 //           ? Text('₹${data['discount'].toString()}')
 //           : const Text("")),
@@ -370,6 +418,7 @@ class _BookingDetailsState extends State<BookingDetails> {
 //           ? Text(data['totalDays'].toString())
 
           // : const Text("")),
+>>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
       DataCell(data['package_type'] != null
           ? Text(data['package_type'].toString().toUpperCase())
           : const Text("")),
@@ -379,8 +428,12 @@ class _BookingDetailsState extends State<BookingDetails> {
       DataCell(data['totalDays'] != null
           ? Text(data['totalDays'].toString())
           : const Text("")),
+<<<<<<< HEAD
+      DataCell(data['order_date'] != null ? Text(orderDate) : const Text("")),
+=======
       DataCell(data['booking_date'] != null ? Text(orderDate) : const Text("")),
 
+>>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
       DataCell(data['plan_end_duration'] != null
           ? Text(durationEnd)
           : const Text("")),
@@ -459,7 +512,10 @@ class _BookingDetailsState extends State<BookingDetails> {
           ),
         ),
       ),
+<<<<<<< HEAD
+=======
 // <<<<<<< nihal_new
+>>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
       // DataCell(data['booking_plan'] != null
       //     ? Text(data['booking_plan'].toString())
       //     : const Text("")),
@@ -469,6 +525,8 @@ class _BookingDetailsState extends State<BookingDetails> {
       DataCell(const Text(""), showEditIcon: true, onTap: () {
         Get.to(
           () => ProductEditBox(
+<<<<<<< HEAD
+=======
 // =======
 //       DataCell(data['booking_plan'] != null
 //           ? Text(data['booking_plan'].toString())
@@ -481,6 +539,7 @@ class _BookingDetailsState extends State<BookingDetails> {
 //         Get.to(
 //               () => ProductEditBox(
 // >>>>>>> Diptesh
+>>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
             vendorid: data['vendorId'],
             username: data['user_name'],
             userid: data['userId'],
@@ -664,7 +723,6 @@ class _BookingDetailsState extends State<BookingDetails> {
 //           ),
 //         ));
 
-
   Future pickDate(BuildContext context) async {
     final intialDate = DateTime.now();
     final newDate = await showDatePicker(
@@ -682,7 +740,6 @@ class _BookingDetailsState extends State<BookingDetails> {
 
     return newDate;
   }
-
 }
 
 class CustomTextField extends StatefulWidget {
@@ -719,30 +776,27 @@ class _CustomTextFieldState extends State<CustomTextField> {
 //             border: InputBorder.none,
 //             hintStyle: const TextStyle(
 // =======
-            autofocus: true,
-            style: const TextStyle(
+        autofocus: true,
+        style: const TextStyle(
 // >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
+          fontSize: 20,
+          fontFamily: 'poppins',
+          fontWeight: FontWeight.w400,
+        ),
+        controller: widget.addcontroller,
+        maxLines: 3,
+        decoration: InputDecoration(
+            border: InputBorder.none,
+            hintStyle: const TextStyle(
               fontSize: 20,
               fontFamily: 'poppins',
               fontWeight: FontWeight.w400,
             ),
-            controller: widget.addcontroller,
-            maxLines: 3,
-            decoration: InputDecoration(
-                border: InputBorder.none,
-                hintStyle: const TextStyle(
-                  fontSize: 20,
-                  fontFamily: 'poppins',
-                  fontWeight: FontWeight.w400,
-                ),
-                hintMaxLines: 2,
-                hintText: widget.hinttext),
-          )),
+            hintMaxLines: 2,
+            hintText: widget.hinttext),
+      )),
     );
   }
-
-
-
 }
 
 class ProductEditBox extends StatefulWidget {
@@ -1053,7 +1107,10 @@ class _ProductEditBoxState extends State<ProductEditBox> {
 //                   ),
 //                   // customTextField(
 
+<<<<<<< HEAD
+=======
 
+>>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
                     stream: vendorIdStream!.snapshots(),
                     builder: (context, AsyncSnapshot snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
@@ -1091,7 +1148,10 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                       );
                     },
                   )),
+<<<<<<< HEAD
+=======
 
+>>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
                   const SizedBox(height: 15),
                   // customTextField(
                   //     hinttext: "Vendor ID", addcontroller: _addvendorid),
@@ -1199,7 +1259,10 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                               itemBuilder: (BuildContext context, int index) {
                                 bool check = false;
                                 return
+<<<<<<< HEAD
+=======
 
+>>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
                                     // RadioBoxx(
                                     //   doc[index]["name"],
                                     //   doc[index]["category_id"],
@@ -1215,7 +1278,10 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                                   ),
                                   title: Text(doc[index]["name"]),
                                 );
+<<<<<<< HEAD
+=======
 
+>>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
 // =======
                                 // RadioBoxx(
                                 //   doc[index]["name"],
@@ -1226,7 +1292,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                                   value: doc[index]["name"],
                                   groupValue: abc,
                                   onChanged: (val) => setState(
-                                        () {
+                                    () {
                                       abc = val!;
                                     },
                                   ),
@@ -1296,7 +1362,10 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                   Container(
                       child: StreamBuilder<QuerySnapshot>(
 //
+<<<<<<< HEAD
+=======
 
+>>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
                     stream: vendorIdStream!.snapshots(),
                     builder: (context, AsyncSnapshot snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
@@ -1334,7 +1403,10 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                       );
                     },
                   )),
+<<<<<<< HEAD
+=======
 
+>>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
 
                   // customTextField(
                   //     hinttext: "Gym Name", addcontroller: _addgymname),
@@ -1446,9 +1518,21 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                           ElevatedButton(
                             onPressed: () async {
                               DocumentReference documentReference =
+<<<<<<< HEAD
+// <<<<<<< HEAD
+//                                   FirebaseFirestore.instance
+//                                       .collection('bookings')
+//                                       .doc(_addbookingid.text);
+// =======
+                                  FirebaseFirestore.instance
+                                      .collection('bookings')
+                                      .doc(_addbookingid.text);
+// >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
+=======
                               FirebaseFirestore.instance
                                   .collection('bookings')
                                   .doc(_addbookingid.text);
+>>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
                               // DateTime endtimedata = DateTime.parse(
                               //     '${_addplanendyear.text}-${isLess(_addplanendmonth.text) ? '0' + _addplanendmonth.text : _addplanendday.text}-${isLess(_addplanendday.text) ? '0' + _addplanendday.text : _addplanendday.text} 00:00:04Z');
                               // DateTime ordertimedata = DateTime.parse(
@@ -1479,9 +1563,22 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                                 'booking_plan': _addbookingplan.text,
                                 'booking_id': _addbookingid.text,
                                 'booking_date': bookingtimedata,
+<<<<<<< HEAD
+                                'booking_accepted':
+// <<<<<<< HEAD
+//                                     _addbookingaccepted.text == 'true'
+//                                         ? true
+//                                         : false,
+// =======
+                                    _addbookingaccepted.text == 'true'
+                                        ? true
+                                        : false,
+// >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
+=======
                                 'booking_accepted': _addbookingaccepted.text == 'true'
                                     ? true
                                     : false,
+>>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
                               };
                               await documentReference
                                   .update(data)
@@ -1675,7 +1772,12 @@ class _ProductEditBoxState extends State<ProductEditBox> {
   Future pickTime(BuildContext context) async {
     const intialTime = const TimeOfDay(hour: 9, minute: 0);
     final newTime =
+<<<<<<< HEAD
+        await showTimePicker(context: context, initialTime: time ?? intialTime);
+// >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
+=======
     await showTimePicker(context: context, initialTime: time ?? intialTime);
+>>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
 
     if (newTime == null) return;
 
@@ -1726,7 +1828,12 @@ class _ProductEditBoxState extends State<ProductEditBox> {
   Future pickplanTime(BuildContext context) async {
     const intialTime = TimeOfDay(hour: 9, minute: 0);
     final newTime =
+<<<<<<< HEAD
+        await showTimePicker(context: context, initialTime: time ?? intialTime);
+// >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
+=======
     await showTimePicker(context: context, initialTime: time ?? intialTime);
+>>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
 
     if (newTime == null) return;
 
@@ -1777,7 +1884,15 @@ class _ProductEditBoxState extends State<ProductEditBox> {
   Future pickorderTime(BuildContext context) async {
     final intialTime = TimeOfDay(hour: 9, minute: 0);
     final newTime =
+<<<<<<< HEAD
+// <<<<<<< HEAD
+//         await showTimePicker(context: context, initialTime: time ?? intialTime);
+// =======
+        await showTimePicker(context: context, initialTime: time ?? intialTime);
+// >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
+=======
     await showTimePicker(context: context, initialTime: time ?? intialTime);
+>>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
 
     if (newTime == null) return;
 

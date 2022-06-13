@@ -81,11 +81,9 @@ class _ProductDetailsState extends State<ProductDetails> {
                             builder: (context) => const ShowAddBox(),
                           ));
                         },
-
                         child: Text('Add Product'),
                       ),
                     ),
-
                     const Spacer(),
                     Container(
                       width: 500,
@@ -106,9 +104,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                           },
 
                           onChanged: (value) {
-                            if (value.isEmpty) {
-
-                            }
+                            if (value.isEmpty) {}
                             if (mounted) {
                               setState(() {
                                 searchGymName = value.toString();
@@ -171,9 +167,9 @@ class _ProductDetailsState extends State<ProductDetails> {
                             columns: const [
                               DataColumn(
                                   label: Text(
-                                    'Index',
-                                    style: TextStyle(fontWeight: FontWeight.w600),
-                                  )),
+                                'Index',
+                                style: TextStyle(fontWeight: FontWeight.w600),
+                              )),
                               DataColumn(
                                   label: Text(
                                 'Name',
@@ -345,14 +341,13 @@ class _ProductDetailsState extends State<ProductDetails> {
 
   List<DataRow> _buildlist(
       BuildContext context, List<DocumentSnapshot> snapshot) {
-
     var d = 1;
 
-    return snapshot.map((data) => _buildListItem(context, data , d++)).toList();
-
+    return snapshot.map((data) => _buildListItem(context, data, d++)).toList();
   }
 
-  DataRow _buildListItem(BuildContext context, DocumentSnapshot data , int index) {
+  DataRow _buildListItem(
+      BuildContext context, DocumentSnapshot data, int index) {
     // morning.text=data['timings']["gym"]["Morning"];
     // evening.text=data['timings']["gym"]["Evening"];
     // closed.text=data['timings']["gym"]["Closed"];
@@ -1150,9 +1145,7 @@ class _ShowAddBoxState extends State<ShowAddBox> {
                       print("-----------------------------------");
                       var doc = snapshot.data.docs;
 
-
                       return SizedBox(
-
                         width: 400,
                         height: 500,
                         child: ListView.builder(
@@ -1959,17 +1952,13 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                       // dic = await chooseImage();
                       image = uploadToStroagees();
                     },
-
                     child: const Text(
-
                       'Upload Gym Image',
                       style: TextStyle(
                           color: Colors.white, fontWeight: FontWeight.w700),
                     ),
                   ),
-
                   const SizedBox(
-
                     width: 20,
                   ),
                   image != null
@@ -2016,7 +2005,6 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                       var doc = snapshot.data.docs;
 
                       return SizedBox(
-
                         width: 400,
                         height: 500,
                         child: ListView.builder(
