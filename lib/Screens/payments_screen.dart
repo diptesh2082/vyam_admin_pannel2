@@ -243,7 +243,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
   // final TextEditingController _addTimestamp = TextEditingController();
   // late Timestamp dtime = Timestamp.now();
   var selectedValue = "ONLINE";
-  String namee = "Fitness Break";
+  String namee = "edgefitness.kestopur@vyam.com";
   String place = "";
 
   @override
@@ -288,8 +288,9 @@ class _PaymentScreenState extends State<PaymentScreen> {
                           itemCount: doc.length,
                           itemBuilder: (BuildContext context, int index) {
                             return RadioListTile<String>(
-                                value: doc[index]['name'],
-                                title: Text(doc[index]['name'].toString()),
+                                value: doc[index]['gym_id'],
+                                title: Text(
+                                    "${doc[index]['name'].toString()} || ${doc[index]['branch']}"),
                                 groupValue: namee,
                                 onChanged: (String? valuee) {
                                   setState(() {

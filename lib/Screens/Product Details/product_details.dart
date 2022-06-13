@@ -81,7 +81,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                             builder: (context) => const ShowAddBox(),
                           ));
                         },
-                        child: const Text('Add Product'),
+                        child: Text('Add Product'),
                       ),
                     ),
                     const Spacer(),
@@ -104,10 +104,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                           },
 
                           onChanged: (value) {
-                            if (value.isEmpty) {
-                              // _node.canRequestFocus=false;
-                              // FocusScope.of(context).unfocus();
-                            }
+                            if (value.isEmpty) {}
                             if (mounted) {
                               setState(() {
                                 searchGymName = value.toString();
@@ -259,7 +256,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                               ),
                               DataColumn(
                                 label: Text(
-                                  'Validity of User',
+                                  'User Block',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
@@ -368,7 +365,7 @@ class _ProductDetailsState extends State<ProductDetails> {
     List<dynamic> WorkoutArray = data['workouts'];
     List<dynamic> serviceArray = data['service'];
 
-    String x, y, z;
+    String x, y;
 
     return DataRow(cells: [
       DataCell(data != null ? Text(index.toString()) : const Text("")),
@@ -626,7 +623,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                   .whenComplete(() => print("Legitimate toggled"))
                   .catchError((e) => print(e));
             },
-            child: Text(z = online_pay ? 'OFF' : 'ON'),
+            child: Text(online_pay ? "ON" : "OFF"),
             style: ElevatedButton.styleFrom(
                 primary: online_pay ? Colors.green : Colors.red),
           ),
@@ -635,18 +632,33 @@ class _ProductDetailsState extends State<ProductDetails> {
 
       DataCell(
         Center(
-          child: Column(
+          child: Row(
             children: [
-              IconButton(
-                  onPressed: () async {
-                    // print('OS: ${Platform.operatingSystem}');
-                    var dic = await chooseImage();
-                    await uploadImageToStorage(dic, gymId);
-                    // await pickImage();
-                    // await saveData(gymId);
-                  },
-                  icon: const Icon(Icons.camera_alt_outlined)),
-              const Text("Display Picture"),
+              Column(
+                children: [
+                  IconButton(
+                      onPressed: () async {
+                        // print('OS: ${Platform.operatingSystem}');
+                        var dic = await chooseImage();
+                        await uploadImageToStorage(dic, gymId);
+                        // await pickImage();
+                        // await saveData(gymId);
+                      },
+                      icon: const Icon(Icons.camera_alt_outlined)),
+                  const Text("Display Picture"),
+                ],
+              ),
+              data['display_picture'] != null
+                  ? Image(
+                      image: NetworkImage(data['display_picture']),
+                      height: 200,
+                      width: 200,
+                    )
+                  : Container(
+                      color: Colors.black,
+                      height: 200,
+                      width: 200,
+                    )
             ],
           ),
         ),
@@ -1557,6 +1569,135 @@ class _ECheckServiceState extends State<ECheckService> {
   }
 }
 
+// class Echecka extends StatefulWidget {
+//   const Echecka(
+//       {Key? key, required this.type, required this.id, required this.gymid})
+//       : super(key: key);
+//   final String type;
+//   final String id;
+//   final String gymid;
+//   @override
+//   State<Echecka> createState() => _EcheckaState();
+// }
+//
+// class _EcheckaState extends State<Echecka> {
+//   bool check = false;
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container(
+//       child: Column(
+//         children: [
+//           CheckboxListTile(
+//               // bool selected=false;
+//               value: check,
+//               title: Text(widget.type),
+//               onChanged: (bool? selected) async {
+//                 setState(() {
+//                   check = selected!;
+//                 });
+//                 if (selected == true) {
+//                   await FirebaseFirestore.instance
+//                       .collection('product_details')
+//                       .doc(widget.gymid)
+//                       .update({
+//                     'service': FieldValue.arrayUnion([widget.type])
+//                   });
+//                 }
+//                 // print(widget.arr2);
+//                 if (selected == false) {
+//                   await FirebaseFirestore.instance
+//                       .collection('product_details')
+//                       .doc(widget.gymid)
+//                       .update({
+//                     'service': FieldValue.arrayRemove([widget.type])
+//                   });
+//                 }
+//                 // print(widget.arr2);
+//               }),
+//         ],
+//       ),
+//     );
+//   }
+// }
+
+// class ECheckService extends StatefulWidget {
+//   final String type;
+//   final String id;
+//   final serviceArray;
+//   final String gymid;
+//   const ECheckService(
+//       {Key? key,
+//       required this.type,
+//       required this.id,
+//       required this.serviceArray,
+//       required this.gymid})
+//       : super(key: key);
+//
+//   @override
+//   State<ECheckService> createState() => _ECheckServiceState();
+// }
+
+// class _ECheckServiceState extends State<ECheckService> {
+//   bool check = false;
+//
+//   checkBoxWorkout() async {
+//     if (widget.serviceArray.contains(widget.id)) {
+//       setState(() {
+//         check = true;
+//       });
+//     } else {
+//       setState(() {
+//         check = false;
+//       });
+//     }
+//   }
+//
+//   @override
+//   void initState() {
+//     checkBoxWorkout();
+//     print(widget.serviceArray);
+//     super.initState();
+//   }
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container(
+//       child: Column(
+//         children: [
+//           CheckboxListTile(
+//               // bool selected=false;
+//               value: check,
+//               title: Text(widget.type),
+//               onChanged: (bool? selected) async {
+//                 setState(() {
+//                   check = selected!;
+//                 });
+//                 if (selected == true) {
+//                   await FirebaseFirestore.instance
+//                       .collection('product_details')
+//                       .doc(widget.gymid)
+//                       .update({
+//                     'service': FieldValue.arrayUnion([widget.type])
+//                   });
+//                 }
+//                 // print(widget.arr2);
+//                 if (selected == false) {
+//                   await FirebaseFirestore.instance
+//                       .collection('product_details')
+//                       .doc(widget.gymid)
+//                       .update({
+//                     'service': FieldValue.arrayRemove([widget.type])
+//                   });
+//                 }
+//                 // print(widget.arr2);
+//               }),
+//         ],
+//       ),
+//     );
+//   }
+// }
+
 class ECheckBoxWorkout extends StatefulWidget {
   final String type;
   final String id;
@@ -1881,10 +2022,6 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                       );
                     }),
               ),
-
-// <<<<<<< HEAD
-// >>>>>>> 1f09f104c279e9107f7b92c5d9c2cf410db6e92c
-// =======
 
 // >>>>>>> db16c184745ea062b80bb6d62b73b5f64792dc9e
               // Text(image),

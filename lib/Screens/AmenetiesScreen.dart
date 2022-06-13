@@ -195,15 +195,17 @@ class _AmenetiesScreenState extends State<AmenetiesScreen> {
 
   List<DataRow> _buildlist(
       BuildContext context, List<DocumentSnapshot> snapshot) {
-    return snapshot.map((data) => _buildListItem(context, data)).toList();
+    var d = 1;
+    return snapshot.map((data) => _buildListItem(context, data , d++)).toList();
   }
 
-  DataRow _buildListItem(BuildContext context, DocumentSnapshot data) {
+  DataRow _buildListItem(BuildContext context, DocumentSnapshot data , index) {
     String amenitiesId = data['amenity_id'];
     return DataRow(cells: [
-      DataCell(
-        data['id'] != null ? Text(data['id'] ?? "") : const Text(""),
-      ),
+      DataCell(data != null ? Text(index.toString()) : const Text("")),
+      // DataCell(
+      //   data['id'] != null ? Text(data['id'] ?? "") : const Text(""),
+      // ),
       DataCell(
         data['image'] != null
             ? Image.network(
