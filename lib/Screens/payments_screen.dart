@@ -167,13 +167,13 @@ class _PaymentsPageState extends State<PaymentsPage> {
     return DataRow(cells: [
       DataCell(data != null
           ? Text("${data['name']} | ${data['place'].toString().toUpperCase()}")
-          : Text("")),
-      DataCell(data != null ? Text(data['amount'] ?? "") : Text("")),
+          : const Text("")),
+      DataCell(data != null ? Text(data['amount'] ?? "") : const Text("")),
       // DataCell(data != null ? Text(data['place'] ?? "") : Text("")),
       DataCell(data != null
           ? Text(data['type'].toString().toUpperCase())
-          : Text("")),
-      DataCell(data != null ? Text(d122) : Text("")),
+          : const Text("")),
+      DataCell(data != null ? Text(d122) : const Text("")),
       DataCell(
         const Text(""),
         showEditIcon: true,
@@ -193,7 +193,7 @@ class _PaymentsPageState extends State<PaymentsPage> {
           );
         },
       ),
-      DataCell(Icon(Icons.delete), onTap: () {
+      DataCell(const Icon(Icons.delete), onTap: () {
         deleteMethod(stream: paymentStream, uniqueDocId: data['userid']);
       })
     ]);
@@ -211,7 +211,7 @@ class _PaymentsPageState extends State<PaymentsPage> {
 class PaymentScreen extends StatefulWidget {
   final String d12;
 
-  const PaymentScreen(@required this.d12, {Key? key}) : super(key: key);
+  const PaymentScreen(this.d12, {Key? key}) : super(key: key);
 
   @override
   State<PaymentScreen> createState() => _PaymentScreenState();
@@ -250,10 +250,10 @@ class _PaymentScreenState extends State<PaymentScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add Payment'),
+        title: const Text('Add Payment'),
       ),
       body: Container(
-        padding: EdgeInsets.all(20),
+        padding: const EdgeInsets.all(20),
         child: Center(
           child: SingleChildScrollView(
             child: Column(
@@ -266,8 +266,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
                       fontWeight: FontWeight.w600,
                       fontSize: 14),
                 ),
-                Text("Choose Vendor"),
-                Container(
+                const Text("Choose Vendor"),
+                SizedBox(
                     height: 400,
                     width: 400,
                     child: StreamBuilder<QuerySnapshot>(
@@ -307,7 +307,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                 // customTextField(
                 //     hinttext: "TimeStamp",
                 //     addcontroller: _addTimestamp),
-                SizedBox(width: 15),
+                const SizedBox(width: 15),
 
                 Container(
                   child: Row(
@@ -316,35 +316,33 @@ class _PaymentScreenState extends State<PaymentScreen> {
                         child: const Text('Select Date & Time '),
                         onPressed: () => pickDateTime(context),
                       ),
-                      SizedBox(width: 15),
+                      const SizedBox(width: 15),
                     ],
                   ),
                 ),
 
-                Container(
-                  child: Row(
-                    children: [
-                      const Text('Payment Type'),
-                      const SizedBox(width: 15),
-                      DropdownButton(
-                          value: selectedValue,
-                          items: const [
-                            DropdownMenuItem(
-                              child: Text("Online"),
-                              value: "ONLINE",
-                            ),
-                            DropdownMenuItem(
-                              child: Text("Cash"),
-                              value: "Cash",
-                            ),
-                          ],
-                          onChanged: (value) {
-                            setState(() {
-                              selectedValue = value as String;
-                            });
-                          }),
-                    ],
-                  ),
+                Row(
+                  children: [
+                    const Text('Payment Type'),
+                    const SizedBox(width: 15),
+                    DropdownButton(
+                        value: selectedValue,
+                        items: const [
+                          DropdownMenuItem(
+                            child: Text("Online"),
+                            value: "ONLINE",
+                          ),
+                          DropdownMenuItem(
+                            child: Text("Cash"),
+                            value: "Cash",
+                          ),
+                        ],
+                        onChanged: (value) {
+                          setState(() {
+                            selectedValue = value as String;
+                          });
+                        }),
+                  ],
                 ),
 
                 // Container(
@@ -398,7 +396,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                         onPressed: () {
                           Navigator.pop(context);
                         },
-                        child: Text('Close'))
+                        child: const Text('Close'))
                   ],
                 )
               ],
@@ -446,7 +444,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
   }
 
   Future pickTime(BuildContext context) async {
-    final intialTime = TimeOfDay(hour: 9, minute: 0);
+    const intialTime = TimeOfDay(hour: 9, minute: 0);
     final newTime =
         await showTimePicker(context: context, initialTime: time ?? intialTime);
 
@@ -530,7 +528,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
         title: const Text('Edit Payment'),
       ),
       body: Container(
-        padding: EdgeInsets.all(20),
+        padding: const EdgeInsets.all(20),
         child: Center(
           child: SingleChildScrollView(
             child: Column(
@@ -543,8 +541,8 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                       fontWeight: FontWeight.w600,
                       fontSize: 14),
                 ),
-                Text("Choose Vendor"),
-                Container(
+                const Text("Choose Vendor"),
+                SizedBox(
                     height: 400,
                     width: 400,
                     child: StreamBuilder<QuerySnapshot>(
@@ -585,7 +583,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                 Container(
                   child: Row(
                     children: [
-                      Text('Payment Type : '),
+                      const Text('Payment Type : '),
                       DropdownButton(
                           value: selectedValue,
                           items: const [
@@ -633,11 +631,11 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                         },
                         child: const Text('Done'),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 20,
                       ),
                       ElevatedButton(
-                        child: Text('Close'),
+                        child: const Text('Close'),
                         onPressed: () {
                           Navigator.pop(context);
                         },
