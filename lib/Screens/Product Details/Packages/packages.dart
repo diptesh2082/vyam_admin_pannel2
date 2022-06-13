@@ -225,25 +225,19 @@ class _PackagesPageState extends State<PackagesPage> {
           : const Text("")),
       // DataCell(data != null ? Text(data['validity'] ?? "") : Text("")),
       DataCell(const Text(""), showEditIcon: true, onTap: () {
-        showDialog(
-            context: context,
-            builder: (context) {
-              return GestureDetector(
-                onTap: () => Navigator.pop(context),
-                child: SingleChildScrollView(
-                  child: ProductEditBox(
-                    gym_id: widget.pGymId,
-                    type: data['type'],
-                    package_type: data['package_type'],
-                    index: data['index'],
-                    discount: data['discount'],
-                    title: data['title'],
-                    originalprice: data['original_price'],
-                    id: packId,
-                  ),
-                ),
-              );
-            });
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => ProductEditBox(
+                      gym_id: widget.pGymId,
+                      type: data['type'],
+                      package_type: data['package_type'],
+                      index: data['index'],
+                      discount: data['discount'],
+                      title: data['title'],
+                      originalprice: data['original_price'],
+                      id: packId,
+                    )));
       }),
       DataCell(const Icon(Icons.delete), onTap: () {
         deleteMethod(stream: packageStream, uniqueDocId: packId);
@@ -284,6 +278,9 @@ class _addboxxState extends State<addboxx> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text("Add Packages"),
+      ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -295,11 +292,13 @@ class _addboxxState extends State<addboxx> {
                   fontWeight: FontWeight.w600,
                   fontSize: 14),
             ),
-            customTextField(hinttext: "discount", addcontroller: _discount),
+            customTextField(hinttext: "Title", addcontroller: _title),
+
+            customTextField(
+                hinttext: "Discount Percentage", addcontroller: _discount),
             customTextField(
                 hinttext: "original price", addcontroller: _originalprice),
             customTextField(hinttext: "index", addcontroller: _index),
-            customTextField(hinttext: "title", addcontroller: _title),
             Row(
               children: [
                 const Text('Type:',
@@ -461,121 +460,119 @@ class _ProductEditBoxState extends State<ProductEditBox> {
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(30))),
-      content: SizedBox(
-        height: 580,
-        width: 800,
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'Update Records for this doc',
-                style: TextStyle(
-                    fontFamily: 'poppins',
-                    fontWeight: FontWeight.w600,
-                    fontSize: 14),
-              ),
-              customTextField(hinttext: "discount", addcontroller: _discount),
-              customTextField(
-                  hinttext: "original price", addcontroller: _originalprice),
-              customTextField(hinttext: "index", addcontroller: _index),
-              customTextField(hinttext: "title", addcontroller: _title),
-              // customTextField(hinttext: "type", addcontroller: _type),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Edit Box"),
+      ),
+      body: Container(
+        padding: EdgeInsets.all(20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Update Records for this doc',
+              style: TextStyle(
+                  fontFamily: 'poppins',
+                  fontWeight: FontWeight.w600,
+                  fontSize: 14),
+            ),
+            customTextField(hinttext: "discount", addcontroller: _discount),
+            customTextField(
+                hinttext: "original price", addcontroller: _originalprice),
+            customTextField(hinttext: "index", addcontroller: _index),
+            customTextField(hinttext: "title", addcontroller: _title),
+            // customTextField(hinttext: "type", addcontroller: _type),
 
-              Row(
-                children: [
-                  const Text('Type:',
-                      style: const TextStyle(
-                          fontWeight: FontWeight.w700, fontSize: 15)),
-                  const SizedBox(
-                    width: 20,
-                  ),
-                  DropdownButton(
-                      value: selectedvaluee,
-                      items: const [
-                        DropdownMenuItem(
-                          child: Text("pay per session"),
-                          value: "pay per session",
-                        ),
-                        DropdownMenuItem(
-                          child: Text("package"),
-                          value: "package",
-                        ),
-                      ],
-                      onChanged: (value) {
-                        print(selectedvaluee);
-                        setState(() {
-                          selectedvaluee = value as String;
-                        });
-                      }),
-                ],
-              ),
-              StreamBuilder(
-                  stream: categoryStream!.snapshots(),
-                  builder: (context, AsyncSnapshot snapshot) {
-                    var doc = snapshot.data.docs;
-                    return SizedBox(
-                      width: 400,
-                      height: 400,
-                      child: ListView.builder(
-                          itemCount: doc.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            return RadioListTile<String>(
-                                value: doc[index]['name'],
-                                title: Text(doc[index]['name'].toString()),
-                                groupValue: widget.type,
-                                onChanged: (String? v) {
-                                  setState(() {
-                                    sele = v!;
-                                  });
-                                  print(sele);
+            Row(
+              children: [
+                const Text('Type:',
+                    style: const TextStyle(
+                        fontWeight: FontWeight.w700, fontSize: 15)),
+                const SizedBox(
+                  width: 20,
+                ),
+                DropdownButton(
+                    value: selectedvaluee,
+                    items: const [
+                      DropdownMenuItem(
+                        child: Text("pay per session"),
+                        value: "pay per session",
+                      ),
+                      DropdownMenuItem(
+                        child: Text("package"),
+                        value: "package",
+                      ),
+                    ],
+                    onChanged: (value) {
+                      print(selectedvaluee);
+                      setState(() {
+                        selectedvaluee = value as String;
+                      });
+                    }),
+              ],
+            ),
+            StreamBuilder(
+                stream: categoryStream!.snapshots(),
+                builder: (context, AsyncSnapshot snapshot) {
+                  var doc = snapshot.data.docs;
+                  return SizedBox(
+                    width: 400,
+                    height: 400,
+                    child: ListView.builder(
+                        itemCount: doc.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return RadioListTile<String>(
+                              value: doc[index]['name'],
+                              title: Text(doc[index]['name'].toString()),
+                              groupValue: widget.type,
+                              onChanged: (String? v) {
+                                setState(() {
+                                  sele = v!;
                                 });
-                          }),
-                    );
-                  }),
+                                print(sele);
+                              });
+                        }),
+                  );
+                }),
 
-              Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: Center(
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      print(widget.id);
-                      print(widget.gym_id);
-                      // print("The Gym id is : ${widget.}");
-                      DocumentReference documentReference = FirebaseFirestore
-                          .instance
-                          .collection('product_details')
-                          .doc(widget.gym_id)
-                          .collection('package')
-                          .doc("normal_package")
-                          .collection("gym")
-                          .doc(widget.id);
-                      Map<String, dynamic> data = <String, dynamic>{
-                        'discount': _discount.text,
-                        "original_price": _originalprice.text,
-                        'index': int.parse(_index.text),
-                        'title': _title.text,
+            Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Center(
+                child: ElevatedButton(
+                  onPressed: () async {
+                    print(widget.id);
+                    print(widget.gym_id);
+                    // print("The Gym id is : ${widget.}");
+                    DocumentReference documentReference = FirebaseFirestore
+                        .instance
+                        .collection('product_details')
+                        .doc(widget.gym_id)
+                        .collection('package')
+                        .doc("normal_package")
+                        .collection("gym")
+                        .doc(widget.id);
+                    Map<String, dynamic> data = <String, dynamic>{
+                      'discount': _discount.text,
+                      "original_price": _originalprice.text,
+                      'index': int.parse(_index.text),
+                      'title': _title.text,
 
 //                         "type": _type.text
-                        "package_type": selectedvaluee,
+                      "package_type": selectedvaluee,
 
-                        "type": sele,
-                      };
-                      await documentReference
-                          .update(data)
-                          .whenComplete(() => print("Item Updated"))
-                          .catchError((e) => print(e));
-                      Navigator.pop(context);
-                    },
-                    child: const Text('Done'),
-                  ),
+                      "type": sele,
+                    };
+                    await documentReference
+                        .update(data)
+                        .whenComplete(() => print("Item Updated"))
+                        .catchError((e) => print(e));
+                    Navigator.pop(context);
+                  },
+                  child: const Text('Done'),
                 ),
-              )
-            ],
-          ),
+              ),
+            )
+          ],
         ),
       ),
     );
