@@ -13,11 +13,17 @@ class filters extends StatefulWidget {
 
 class _filtersState extends State<filters> {
   CollectionReference? bookingStream;
+  CollectionReference? productStream;
   String searchVendor = '';
+  String namee = "edgefitness.kestopur@vyam.com";
+  String place = "";
+  String search = '';
+
 
   @override
   void initState() {
     bookingStream = FirebaseFirestore.instance.collection('bookings');
+    productStream = FirebaseFirestore.instance.collection('product_details');
     super.initState();
   }
   DateTime? date;
@@ -33,6 +39,46 @@ class _filtersState extends State<filters> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+
+            const Text("Select Vendor" , style: TextStyle(fontWeight: FontWeight.bold),),
+            SizedBox(
+                height: 400,
+                width: 400,
+                child: StreamBuilder<QuerySnapshot>(
+                  stream: productStream!.snapshots(),
+                  builder: (context, AsyncSnapshot snapshot) {
+                    String check = "Jee";
+                    if (snapshot.connectionState ==
+                        ConnectionState.waiting) {
+                      return const CircularProgressIndicator();
+                    }
+                    if (snapshot.data == null) {
+                      return Container();
+                    }
+                    print("-----------------------------------");
+                    var doc = snapshot.data.docs;
+                    print(snapshot.data.docs);
+                    return ListView.builder(
+                      itemCount: doc.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return RadioListTile<String>(
+                            value: doc[index]['gym_id'],
+                            title: Text(
+                                "${doc[index]['name'].toString()} || ${doc[index]['branch'].toString().toUpperCase()}."),
+                            groupValue: namee,
+                            onChanged: (String? valuee) {
+                              setState(() {
+                                namee = valuee!;
+                                search = namee;
+                                place = doc[index]['branch'];
+                              });
+                              print(namee);
+                            });
+                      },
+                    );
+                  },
+                )),
+
             Container(
               width: 500,
               height: 51,
@@ -58,13 +104,13 @@ class _filtersState extends State<filters> {
                     }
                     if (mounted) {
                       setState(() {
-                        searchVendor = value.toString();
+                        search = value.toString();
                       });
                     }
                   },
                   decoration: InputDecoration(
                     prefixIcon: const Icon(Icons.search),
-                    hintText: 'Search',
+                    hintText: 'Search Vendor',
                     hintStyle: GoogleFonts.poppins(
                         fontSize: 16, fontWeight: FontWeight.w500),
                     border: InputBorder.none,
@@ -96,6 +142,47 @@ class _filtersState extends State<filters> {
                   icon: const Icon(Icons.date_range),
                   label: const Text('End Date'),
                 ),
+                Container(
+                  width: 500,
+                  height: 51,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(14),
+                    color: Colors.white12,
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(15),
+                    child: TextField(
+                      // focusNode: _node,
+
+                      autofocus: false,
+                      textAlignVertical: TextAlignVertical.bottom,
+                      onSubmitted: (value) async {
+                        FocusScope.of(context).unfocus();
+                      },
+                      // controller: searchController,
+                      onChanged: (value) {
+                        if (value.isEmpty) {
+                          // _node.canRequestFocus=false;
+                          // FocusScope.of(context).unfocus();
+                        }
+                        if (mounted) {
+                          setState(() {
+                            searchVendor = value.toString();
+                          });
+                        }
+                      },
+                      decoration: InputDecoration(
+                        prefixIcon: const Icon(Icons.search),
+                        hintText: 'Search',
+                        hintStyle: GoogleFonts.poppins(
+                            fontSize: 16, fontWeight: FontWeight.w500),
+                        border: InputBorder.none,
+                        filled: true,
+                        fillColor: Colors.white12,
+                      ),
+                    ),
+                  ),
+                ),
               ],
             ),
             Center(
@@ -124,35 +211,47 @@ class _filtersState extends State<filters> {
                   }
                   var doc = snapshot.data.docs;
 
+                  if (search.isNotEmpty) {
+                    doc = doc.where((element) {
+                      return element
+                          .get('vendorId')
+                          .toString()
+                          .toLowerCase()
+                          .contains(search.toString())
+                          ;
+                    }).toList();
+                  }
+
                   if (searchVendor.isNotEmpty) {
                     doc = doc.where((element) {
                       return element
-                          .get('user_name')
+                          .get('vendorId')
+                          .toString()
+                          .toLowerCase()
+                          .contains(searchVendor.toString())
+                      ||
+                      element
+                          .get('userId')
+                          .toString()
+                          .toLowerCase()
+                          .contains(searchVendor.toString())  ||
+                      element
+                          .get('grand_total')
                           .toString()
                           .toLowerCase()
                           .contains(searchVendor.toString()) ||
+                      element
+                          .get('id')
+                          .toString()
+                          .contains(searchVendor.toString()) ||
+                      element
+                          .get('gym_details')['name']
+                          .toString()
+                          .contains(searchVendor.toString()) ||
                           element
-                              .get('userId')
+                              .get('user_name')
                               .toString()
                               .toLowerCase()
-                              .contains(searchVendor.toString()) ||
-                          element
-                              .get('grand_total')
-                              .toString()
-                              .toLowerCase()
-                              .contains(searchVendor.toString()) ||
-                          element
-                              .get('grand_total')
-                              .toString()
-                              .toLowerCase()
-                              .contains(searchVendor.toString()) ||
-                          element
-                              .get('id')
-                              .toString()
-                              .contains(searchVendor.toString()) ||
-                          element
-                              .get('gym_details')['name']
-                              .toString()
                               .contains(searchVendor.toString());
                     }).toList();
                   }
