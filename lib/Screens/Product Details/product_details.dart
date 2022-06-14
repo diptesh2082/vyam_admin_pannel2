@@ -458,8 +458,6 @@ class _ProductDetailsState extends State<ProductDetails> {
                     shape: const RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(Radius.circular(30))),
                     content: SizedBox(
-                      // =======
-                      // >>>>>>> 39301b603a430fc9803df29ba70b59135c783388
                       height: MediaQuery.of(context).size.height * .90,
                       width: MediaQuery.of(context).size.width * .92,
 
@@ -1074,7 +1072,7 @@ class _ShowAddBoxState extends State<ShowAddBox> {
               const SizedBox(height: 15),
               const Padding(
                 padding: EdgeInsets.all(8.0),
-                child: const Text('Number:',
+                child: Text('Number:',
                     style:
                         TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
               ),
@@ -1087,7 +1085,7 @@ class _ShowAddBoxState extends State<ShowAddBox> {
               ),
               const Text(
                 'Upload Display Image',
-                style: const TextStyle(
+                style: TextStyle(
                     color: Colors.black, fontWeight: FontWeight.w700),
               ),
               const SizedBox(
@@ -1102,7 +1100,7 @@ class _ShowAddBoxState extends State<ShowAddBox> {
                     },
                     child: const Text(
                       'Upload Gym Image',
-                      style: const TextStyle(
+                      style:  TextStyle(
                           color: Colors.white, fontWeight: FontWeight.w700),
                     ),
                   ),
