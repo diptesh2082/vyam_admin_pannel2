@@ -256,6 +256,7 @@ class _UserInformationState extends State<UserInformation> {
       BuildContext context, List<DocumentSnapshot> snapshot) {
     return snapshot.map((data) => _buildListItem(context, data)).toList();
   }
+
   DataRow _buildListItem(BuildContext context, DocumentSnapshot data) {
     String userIDData = data['userId'];
     String profileImage = data['image'];
@@ -290,7 +291,9 @@ class _UserInformationState extends State<UserInformation> {
       DataCell(data != null ? Text(data['email'] ?? "") : Text("")),
       DataCell(data != null ? Text(data['gender'] ?? "") : Text("")),
       DataCell(data != null
-          ? Text((data['number']).toString().substring(3, data['number'].toString().length))
+          ? Text((data['number'])
+              .toString()
+              .substring(3, data['number'].toString().length))
           : Text("")),
       DataCell(data != null ? Text(data['address'] ?? "") : Text("")),
       DataCell(data != null ? Text(data['locality'] ?? "") : Text("")),
@@ -504,7 +507,7 @@ class _EditBoxState extends State<EditBox> {
     // _latitude.text = widget.latitude.toString();
     // _longitude.text = widget.longitude.toString();
     _locality.text = widget.locality;
-    _number.text = widget.number.substring(3 , widget.number.length);
+    _number.text = widget.number.substring(3, widget.number.length);
     _name.text = widget.name;
     _pincode.text = widget.pincode;
     _sublocality.text = widget.subLocality;
@@ -807,7 +810,8 @@ class _EditBoxState extends State<EditBox> {
                             Map<String, dynamic> data = <String, dynamic>{
                               // 'address':'',
                               'gender': _gender.text,
-                              'image': imgUrl1 ?? "https://www.kindpng.com/picc/m/22-223941_transparent-avatar-png-male-avatar-icon-transparent-png.png",
+                              'image': imgUrl1 ??
+                                  "https://www.kindpng.com/picc/m/22-223941_transparent-avatar-png-male-avatar-icon-transparent-png.png",
                               'name': _name.text,
                               // 'pincode': "",
                               // 'userId': _userid.text,
@@ -971,10 +975,10 @@ class _detailsaddState extends State<detailsadd> {
               // customTextField(hinttext: "Gender", addcontroller: _addgender),
 
               // customTextField(hinttext: "Address", addcontroller: _addaddress),
-<<<<<<< HEAD
-=======
-
->>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
+// <<<<<<< HEAD
+// =======
+//
+// >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
               // customTextField(
               //     hinttext: "Locality", addcontroller: _addlocality),
               // customTextField(
@@ -997,7 +1001,8 @@ class _detailsaddState extends State<detailsadd> {
                           'name': _addname.text,
                           'email': _addemail.text,
                           'gender': gender,
-                          'image': imgUrl1 ?? "https://www.kindpng.com/picc/m/22-223941_transparent-avatar-png-male-avatar-icon-transparent-png.png",
+                          'image': imgUrl1 ??
+                              "https://www.kindpng.com/picc/m/22-223941_transparent-avatar-png-male-avatar-icon-transparent-png.png",
                           'number': "+91${_addnumber.text}",
                           'locality': "",
                           'subLocality': "",

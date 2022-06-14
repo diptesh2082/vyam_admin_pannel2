@@ -3,8 +3,10 @@ import 'dart:io';
 import 'package:admin_panel_vyam/Screens/CitiesScreen.dart';
 import 'package:admin_panel_vyam/Screens/Review.dart';
 import 'package:admin_panel_vyam/Screens/Tracking/TrackingScreen.dart';
+import 'package:admin_panel_vyam/Screens/app_details.dart';
 import 'package:admin_panel_vyam/Screens/booking_details.dart';
 import 'package:admin_panel_vyam/Screens/cancelation_page.dart';
+import 'package:admin_panel_vyam/Screens/cancelation_questions.dart';
 import 'package:admin_panel_vyam/Screens/category_screen.dart';
 import 'package:admin_panel_vyam/Screens/AmenetiesScreen.dart';
 import 'package:admin_panel_vyam/Screens/coupon.dart';
@@ -262,7 +264,6 @@ class _SideNavBar1State extends State<SideNavBar1> {
                 setState(() {});
               },
             ),
-
             ListTile(
               title: Text(
                 'Workouts',
@@ -273,11 +274,26 @@ class _SideNavBar1State extends State<SideNavBar1> {
                 setState(() {});
               },
             ),
-
-
-
-
-
+            ListTile(
+              title: Text(
+                'Cancelation Questions',
+                style: kTextStyle,
+              ),
+              onTap: () {
+                index = 18;
+                setState(() {});
+              },
+            ),
+            ListTile(
+              title: Text(
+                'App Details',
+                style: kTextStyle,
+              ),
+              onTap: () {
+                index = 19;
+                setState(() {});
+              },
+            ),
             ListTile(
               title: Text(
                 'Logout',
@@ -295,7 +311,6 @@ class _SideNavBar1State extends State<SideNavBar1> {
       ),
       body: Stack(
         children: [
-
           index == 1 ? const showLatestBooking() : Container(),
           index == 2 ? const ProductDetails() : Container(),
           index == 3 ? const UserInformation() : Container(),
@@ -313,7 +328,8 @@ class _SideNavBar1State extends State<SideNavBar1> {
           index == 16 ? const Push() : Container(),
           index == 15 ? const BannerPage() : Container(),
           index == 17 ? const workoutsGym() : Container(),
-
+          index == 18 ? const CancelationQuestion() : Container(),
+          index == 19 ? const appDetails() : Container(),
         ],
       ),
     );
