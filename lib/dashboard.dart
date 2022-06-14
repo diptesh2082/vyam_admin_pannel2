@@ -252,7 +252,7 @@ class _showLatestBookingState extends State<showLatestBooking> {
                   textAlign: TextAlign.justify,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    fontSize: 32,
+                    fontSize: 25,
                   ),
                 ),
                 Center(
@@ -260,8 +260,8 @@ class _showLatestBookingState extends State<showLatestBooking> {
                     stream: FirebaseFirestore.instance
                         .collection('bookings')
                         .where('booking_status',
-                            whereIn: ['upcoming', 'active', 'completed'])
-                        .orderBy("id", descending: true)
+                            whereIn: ['upcoming', 'active', 'completed' , 'cancelled'])
+                        .orderBy("order_date", descending: true)
                         .snapshots(),
                     builder: (context, AsyncSnapshot snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
@@ -381,7 +381,7 @@ class _showLatestBookingState extends State<showLatestBooking> {
           ? Text(data['booking_plan'].toString())
           : const Text("")),
       DataCell(data['gym_details']['name'] != null
-          ? Text(data['gym_details']['name'].toString())
+          ? Text('${data['gym_details']['name']}|| ${data['gym_details']['branch']}'.toString())
           : const Text("")),
       DataCell(data['booking_date'] != null
           ? Text(DateFormat('dd MMM , yyyy')
@@ -393,10 +393,6 @@ class _showLatestBookingState extends State<showLatestBooking> {
               .format(data['plan_end_duration'].toDate())
               .toString())
           : const Text("")),
-// <<<<<<< HEAD
-// =======
-
-// >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
       DataCell(
         Center(
           child: Container(
@@ -433,42 +429,11 @@ class _showLatestBookingState extends State<showLatestBooking> {
           ),
         ),
       ),
-// <<<<<<< HEAD
-// =======
 
-// >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
-      DataCell(
-        Center(
-          child: Container(
-            child: Row(
-              children: [
-                DropdownButton(
-                    hint: Text(data['payment_method'].toString()),
-                    value: data['payment_method'].toString(),
-                    items: const [
-                      DropdownMenuItem(
-                        child: Text("Online"),
-                        value: "online",
-                      ),
-                      DropdownMenuItem(
-                        child: Text("Cash"),
-                        value: "offline",
-                      ),
-                    ],
-                    onChanged: (value) async {
-                      setState(() {
-                        selectedValue1 = value as String;
-                      });
-                      await FirebaseFirestore.instance
-                          .collection('bookings')
-                          .doc(bookingId)
-                          .update({'payment_method': value});
-                    }),
-              ],
-            ),
-          ),
-        ),
-      ),
+      DataCell(data["payment_method"] != null
+          ? Text(data['payment_method'].toString().toUpperCase())
+          : const Text("")),
+
     ]);
   }
 }

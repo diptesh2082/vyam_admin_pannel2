@@ -138,7 +138,6 @@ class _CategoryInfoScreenState extends State<CategoryInfoScreen> {
                               .toString()
                               .toLowerCase()
                               .contains(searchCateogryName.toString());
-
                         }).toList();
                       }
 
@@ -149,6 +148,12 @@ class _CategoryInfoScreenState extends State<CategoryInfoScreen> {
                         child: DataTable(
                           dataRowHeight: 65,
                           columns: const [
+                            DataColumn(
+                              label: Text(
+                                'Index',
+                                style: TextStyle(fontWeight: FontWeight.w600),
+                              ),
+                            ),
                             DataColumn(
                               label: Text(
                                 'Name',
@@ -202,14 +207,16 @@ class _CategoryInfoScreenState extends State<CategoryInfoScreen> {
 
   List<DataRow> _buildlist(
       BuildContext context, List<DocumentSnapshot> snapshot) {
-    return snapshot.map((data) => _buildListItem(context, data)).toList();
+    var d = 1;
+    return snapshot.map((data) => _buildListItem(context, data , d++)).toList();
   }
 
-  DataRow _buildListItem(BuildContext context, DocumentSnapshot data) {
+  DataRow _buildListItem(BuildContext context, DocumentSnapshot data , index) {
     String categoryID = data['category_id'];
     String x;
     bool status = data['status'];
     return DataRow(cells: [
+      DataCell(data != null ? Text(index.toString()) : const Text("")),
       DataCell(
         data['name'] != null ? Text(data['name'] ?? "") : const Text(""),
       ),

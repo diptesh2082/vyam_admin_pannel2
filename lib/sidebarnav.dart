@@ -12,6 +12,7 @@ import 'package:admin_panel_vyam/Screens/banners.dart';
 
 import 'package:admin_panel_vyam/Screens/faq_details.dart';
 import 'package:admin_panel_vyam/Screens/feedback_dateils.dart';
+import 'package:admin_panel_vyam/Screens/filters.dart';
 import 'package:admin_panel_vyam/Screens/payments_screen.dart';
 import 'package:admin_panel_vyam/Screens/push_n.dart';
 
@@ -274,6 +275,17 @@ class _SideNavBar1State extends State<SideNavBar1> {
               },
             ),
 
+            ListTile(
+              title: Text(
+                'Filters',
+                style: kTextStyle,
+              ),
+              onTap: () {
+                index = 18;
+                setState(() {});
+              },
+            ),
+
 
 
 
@@ -313,6 +325,7 @@ class _SideNavBar1State extends State<SideNavBar1> {
           index == 16 ? const Push() : Container(),
           index == 15 ? const BannerPage() : Container(),
           index == 17 ? const workoutsGym() : Container(),
+          index == 18 ? const filters() : Container(),
 
         ],
       ),

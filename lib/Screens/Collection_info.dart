@@ -150,6 +150,12 @@ class _UserInformationState extends State<UserInformation> {
                             columns: const [
                               DataColumn(
                                 label: Text(
+                                  'Index',
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
+                              ),
+                              DataColumn(
+                                label: Text(
                                   'Profile Image',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
@@ -254,14 +260,18 @@ class _UserInformationState extends State<UserInformation> {
 
   List<DataRow> _buildlist(
       BuildContext context, List<DocumentSnapshot> snapshot) {
-    return snapshot.map((data) => _buildListItem(context, data)).toList();
+    var d =1;
+    return snapshot.map((data) => _buildListItem(context, data , d++)).toList();
   }
-  DataRow _buildListItem(BuildContext context, DocumentSnapshot data) {
+  DataRow _buildListItem(BuildContext context, DocumentSnapshot data , index) {
     String userIDData = data['userId'];
     String profileImage = data['image'];
     bool legit = data['legit'];
 
     return DataRow(cells: [
+
+      DataCell(data != null ? Text(index.toString()) : const Text("")),
+
       DataCell(
         profileImage != "null" || profileImage != null
             ? CircleAvatar(
