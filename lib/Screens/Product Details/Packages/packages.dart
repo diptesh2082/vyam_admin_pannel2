@@ -332,6 +332,15 @@ class _addboxxState extends State<addboxx> {
             StreamBuilder(
                 stream: categoryStream!.snapshots(),
                 builder: (context, AsyncSnapshot snapshot) {
+
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const CircularProgressIndicator();
+                  }
+                  if (snapshot.data == null) {
+                    return Container();
+                  }
+                  print("-----------------------------------");
+
                   var doc = snapshot.data.docs;
                   return SizedBox(
                     width: 400,
@@ -382,7 +391,7 @@ class _addboxxState extends State<addboxx> {
                       "original_price": _originalprice.text,
                       'index': int.parse(_index.text),
                       'title': _title.text,
-// <<<<<<< HEAD
+
 //                               "type": _type.text,
 //                               "id": finalPackID,
 //                               "validity": _validity.text,
@@ -394,7 +403,6 @@ class _addboxxState extends State<addboxx> {
                       "price": _price.text,
                       "package_type": selectedvaluee,
 
-// >>>>>>> cf1997613ff877c63a56c61e3009bdfe3639ccfa
                     },
                   );
                   Navigator.pop(context);
@@ -462,117 +470,128 @@ class _ProductEditBoxState extends State<ProductEditBox> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Edit Box"),
+        title: const Text("Edit Box"),
       ),
       body: Container(
-        padding: EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Update Records for this doc',
-              style: TextStyle(
-                  fontFamily: 'poppins',
-                  fontWeight: FontWeight.w600,
-                  fontSize: 14),
-            ),
-            customTextField(hinttext: "discount", addcontroller: _discount),
-            customTextField(
-                hinttext: "original price", addcontroller: _originalprice),
-            customTextField(hinttext: "index", addcontroller: _index),
-            customTextField(hinttext: "title", addcontroller: _title),
-            // customTextField(hinttext: "type", addcontroller: _type),
+        padding: const EdgeInsets.all(20),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Update Records for this doc',
+                style: TextStyle(
+                    fontFamily: 'poppins',
+                    fontWeight: FontWeight.w600,
+                    fontSize: 14),
+              ),
+              customTextField(hinttext: "discount", addcontroller: _discount),
+              customTextField(
+                  hinttext: "original price", addcontroller: _originalprice),
+              customTextField(hinttext: "index", addcontroller: _index),
+              customTextField(hinttext: "title", addcontroller: _title),
+              // customTextField(hinttext: "type", addcontroller: _type),
 
-            Row(
-              children: [
-                const Text('Type:',
-                    style: const TextStyle(
-                        fontWeight: FontWeight.w700, fontSize: 15)),
-                const SizedBox(
-                  width: 20,
-                ),
-                DropdownButton(
-                    value: selectedvaluee,
-                    items: const [
-                      DropdownMenuItem(
-                        child: Text("pay per session"),
-                        value: "pay per session",
-                      ),
-                      DropdownMenuItem(
-                        child: Text("package"),
-                        value: "package",
-                      ),
-                    ],
-                    onChanged: (value) {
-                      print(selectedvaluee);
-                      setState(() {
-                        selectedvaluee = value as String;
-                      });
-                    }),
-              ],
-            ),
-            StreamBuilder(
-                stream: categoryStream!.snapshots(),
-                builder: (context, AsyncSnapshot snapshot) {
-                  var doc = snapshot.data.docs;
-                  return SizedBox(
-                    width: 400,
-                    height: 400,
-                    child: ListView.builder(
-                        itemCount: doc.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return RadioListTile<String>(
-                              value: doc[index]['name'],
-                              title: Text(doc[index]['name'].toString()),
-                              groupValue: widget.type,
-                              onChanged: (String? v) {
-                                setState(() {
-                                  sele = v!;
+              Row(
+                children: [
+                  const Text('Type:',
+                      style: const TextStyle(
+                          fontWeight: FontWeight.w700, fontSize: 15)),
+                  const SizedBox(
+                    width: 20,
+                  ),
+                  DropdownButton(
+                      value: selectedvaluee,
+                      items: const [
+                        DropdownMenuItem(
+                          child: Text("pay per session"),
+                          value: "pay per session",
+                        ),
+                        DropdownMenuItem(
+                          child: Text("package"),
+                          value: "package",
+                        ),
+                      ],
+                      onChanged: (value) {
+                        print(selectedvaluee);
+                        setState(() {
+                          selectedvaluee = value as String;
+                        });
+                      }),
+                ],
+              ),
+              StreamBuilder(
+                  stream: categoryStream!.snapshots(),
+                  builder: (context, AsyncSnapshot snapshot) {
+
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const CircularProgressIndicator();
+                    }
+                    if (snapshot.data == null) {
+                      return Container();
+                    }
+                    print("-----------------------------------");
+                    
+                    var doc = snapshot.data.docs;
+                    return SizedBox(
+                      width: 400,
+                      height: 400,
+                      child: ListView.builder(
+                          itemCount: doc.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return RadioListTile<String>(
+                                value: doc[index]['name'],
+                                title: Text(doc[index]['name'].toString()),
+                                groupValue: widget.type,
+                                onChanged: (String? v) {
+                                  setState(() {
+                                    sele = v!;
+                                  });
+                                  print(sele);
                                 });
-                                print(sele);
-                              });
-                        }),
-                  );
-                }),
+                          }),
+                    );
+                  }),
 
-            Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Center(
-                child: ElevatedButton(
-                  onPressed: () async {
-                    print(widget.id);
-                    print(widget.gym_id);
-                    // print("The Gym id is : ${widget.}");
-                    DocumentReference documentReference = FirebaseFirestore
-                        .instance
-                        .collection('product_details')
-                        .doc(widget.gym_id)
-                        .collection('package')
-                        .doc("normal_package")
-                        .collection("gym")
-                        .doc(widget.id);
-                    Map<String, dynamic> data = <String, dynamic>{
-                      'discount': _discount.text,
-                      "original_price": _originalprice.text,
-                      'index': int.parse(_index.text),
-                      'title': _title.text,
+              Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Center(
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      print(widget.id);
+                      print(widget.gym_id);
+                      // print("The Gym id is : ${widget.}");
+                      DocumentReference documentReference = FirebaseFirestore
+                          .instance
+                          .collection('product_details')
+                          .doc(widget.gym_id)
+                          .collection('package')
+                          .doc("normal_package")
+                          .collection("gym")
+                          .doc(widget.id);
+                      Map<String, dynamic> data = <String, dynamic>{
+                        'discount': _discount.text,
+                        "original_price": _originalprice.text,
+                        'index': int.parse(_index.text),
+                        'title': _title.text,
 
 //                         "type": _type.text
-                      "package_type": selectedvaluee,
+                        "package_type": selectedvaluee,
 
-                      "type": sele,
-                    };
-                    await documentReference
-                        .update(data)
-                        .whenComplete(() => print("Item Updated"))
-                        .catchError((e) => print(e));
-                    Navigator.pop(context);
-                  },
-                  child: const Text('Done'),
+                        "type": sele,
+                      };
+                      await documentReference
+                          .update(data)
+                          .whenComplete(() => print("Item Updated"))
+                          .catchError((e) => print(e));
+                      Navigator.pop(context);
+                    },
+                    child: const Text('Done'),
+                  ),
                 ),
-              ),
-            )
-          ],
+              )
+            ],
+          ),
         ),
       ),
     );

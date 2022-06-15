@@ -96,14 +96,14 @@ class _PaymentsPageState extends State<PaymentsPage> {
                       return SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
                         child: DataTable(
-                            // ? DATATABLE
+                          // ? DATATABLE
                             dataRowHeight: 65,
                             columns: const [
                               DataColumn(
                                   label: Text(
-                                'Vendor Name',
-                                style: TextStyle(fontWeight: FontWeight.w600),
-                              )),
+                                    'Vendor Name',
+                                    style: TextStyle(fontWeight: FontWeight.w600),
+                                  )),
                               DataColumn(
                                 label: Text(
                                   'Amount',
@@ -228,7 +228,7 @@ class _PaymentsPageState extends State<PaymentsPage> {
         onTap: () {
           // ? Added Gesture Detecter for popping off update record Card
           Get.to(
-            () => ProductEditBox(
+                () => ProductEditBox(
               amount: data['amount'],
               gym_id: data['gym_id'],
               name: data['name'],
@@ -495,7 +495,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
   Future pickTime(BuildContext context) async {
     const intialTime = TimeOfDay(hour: 9, minute: 0);
     final newTime =
-        await showTimePicker(context: context, initialTime: time ?? intialTime);
+    await showTimePicker(context: context, initialTime: time ?? intialTime);
 
     if (newTime == null) return;
 

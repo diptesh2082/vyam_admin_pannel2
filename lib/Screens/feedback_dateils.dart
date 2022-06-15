@@ -86,10 +86,10 @@ class _FeedBackInfoState extends State<FeedBackInfo> {
                 if (searchGymName.length > 0) {
                   doc = doc.where((element) {
                     return element
-                            .get('feedback_review')
-                            .toString()
-                            .toLowerCase()
-                            .contains(searchGymName.toString()) ||
+                        .get('feedback_review')
+                        .toString()
+                        .toLowerCase()
+                        .contains(searchGymName.toString()) ||
                         element
                             .get('vendor_id')
                             .toString()
@@ -110,9 +110,9 @@ class _FeedBackInfoState extends State<FeedBackInfo> {
                     columns: const [
                       DataColumn(
                           label: Text(
-                        'Index',
-                        style: TextStyle(fontWeight: FontWeight.w600),
-                      )),
+                            'Index',
+                            style: TextStyle(fontWeight: FontWeight.w600),
+                          )),
                       DataColumn(
                         label: Text(
                           'Name',

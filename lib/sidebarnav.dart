@@ -14,6 +14,7 @@ import 'package:admin_panel_vyam/Screens/banners.dart';
 
 import 'package:admin_panel_vyam/Screens/faq_details.dart';
 import 'package:admin_panel_vyam/Screens/feedback_dateils.dart';
+import 'package:admin_panel_vyam/Screens/filters.dart';
 import 'package:admin_panel_vyam/Screens/payments_screen.dart';
 import 'package:admin_panel_vyam/Screens/push_n.dart';
 
@@ -22,7 +23,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 //import 'package:flutter/painting.dart';
 import 'package:image_picker/image_picker.dart';
-import 'Screens/filter.dart';
+import 'Screens/filters.dart';
 import 'Screens/workouts.dart';
 import 'dashboard.dart';
 
@@ -275,9 +276,10 @@ class _SideNavBar1State extends State<SideNavBar1> {
                 setState(() {});
               },
             ),
+
             ListTile(
               title: Text(
-                'Cancelation Questions',
+                'Filters',
                 style: kTextStyle,
               ),
               onTap: () {
@@ -285,6 +287,7 @@ class _SideNavBar1State extends State<SideNavBar1> {
                 setState(() {});
               },
             ),
+
             ListTile(
               title: Text(
                 'App Details',
@@ -295,6 +298,18 @@ class _SideNavBar1State extends State<SideNavBar1> {
                 setState(() {});
               },
             ),
+            ListTile(
+              title: Text(
+                'Cancellation Questions',
+                style: kTextStyle,
+              ),
+              onTap: () {
+                index = 20;
+                setState(() {});
+              },
+            ),
+
+
             ListTile(
               title: Text(
                 'Logout',
@@ -329,11 +344,10 @@ class _SideNavBar1State extends State<SideNavBar1> {
           index == 16 ? const Push() : Container(),
           index == 15 ? const BannerPage() : Container(),
           index == 17 ? const workoutsGym() : Container(),
+          index == 18 ? const filters() : Container(),
+          index == 19 ? const CancelationQuestion() : Container(),
+          index == 20 ? const appDetails() : Container(),
 
-          index == 18 ? const CancelationQuestion() : Container(),
-          index == 19 ? const appDetails() : Container(),
-
-          index == 10 ? const filters() : Container(),
 
         ],
       ),

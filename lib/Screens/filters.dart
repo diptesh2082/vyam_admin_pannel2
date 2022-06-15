@@ -218,7 +218,7 @@ class _filtersState extends State<filters> {
                           .toString()
                           .toLowerCase()
                           .contains(search.toString())
-                      ;
+                          ;
                     }).toList();
                   }
 
@@ -229,25 +229,25 @@ class _filtersState extends State<filters> {
                           .toString()
                           .toLowerCase()
                           .contains(searchVendor.toString())
-                          ||
-                          element
-                              .get('userId')
-                              .toString()
-                              .toLowerCase()
-                              .contains(searchVendor.toString())  ||
-                          element
-                              .get('grand_total')
-                              .toString()
-                              .toLowerCase()
-                              .contains(searchVendor.toString()) ||
-                          element
-                              .get('id')
-                              .toString()
-                              .contains(searchVendor.toString()) ||
-                          element
-                              .get('gym_details')['name']
-                              .toString()
-                              .contains(searchVendor.toString()) ||
+                      ||
+                      element
+                          .get('userId')
+                          .toString()
+                          .toLowerCase()
+                          .contains(searchVendor.toString())  ||
+                      element
+                          .get('grand_total')
+                          .toString()
+                          .toLowerCase()
+                          .contains(searchVendor.toString()) ||
+                      element
+                          .get('id')
+                          .toString()
+                          .contains(searchVendor.toString()) ||
+                      element
+                          .get('gym_details')['name']
+                          .toString()
+                          .contains(searchVendor.toString()) ||
                           element
                               .get('user_name')
                               .toString()
@@ -393,7 +393,7 @@ class _filtersState extends State<filters> {
           ? Text('₹${data['grand_total'].toString()}')
           : const Text("")),
 
-    ]);
+     ]);
   }
   Future pickDate(BuildContext context) async {
     final intialDate = DateTime.now();
@@ -410,4 +410,12 @@ class _filtersState extends State<filters> {
     return newDate;
   }
 
-}
+  }
+
+
+
+
+
+
+
+

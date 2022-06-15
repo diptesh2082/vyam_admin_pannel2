@@ -257,11 +257,11 @@ class _CategoryInfoScreenState extends State<CategoryInfoScreen> {
       DataCell(
         data['image'] != null
             ? Image.network(
-                data['image'] ?? "",
-                scale: 0.5,
-                height: 150,
-                width: 150,
-              )
+          data['image'] ?? "",
+          scale: 0.5,
+          height: 150,
+          width: 150,
+        )
             : const Text(""),
       ),
       DataCell(
@@ -272,7 +272,7 @@ class _CategoryInfoScreenState extends State<CategoryInfoScreen> {
               temp = !temp;
 
               DocumentReference documentReference =
-                  FirebaseFirestore.instance.collection('category').doc(catId);
+              FirebaseFirestore.instance.collection('category').doc(catId);
               await documentReference
                   .update({'status': temp})
                   .whenComplete(() => print("Legitimate toggled"))
@@ -467,7 +467,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
       final _firebaseStorage = FirebaseStorage.instance.ref().child("category");
 
       Reference _reference =
-          _firebaseStorage.child('category/${Path.basename(pickedFile!.path)}');
+      _firebaseStorage.child('category/${Path.basename(pickedFile!.path)}');
       await _reference.putData(
         await pickedFile.readAsBytes(),
         SettableMetadata(contentType: 'image/jpeg'),

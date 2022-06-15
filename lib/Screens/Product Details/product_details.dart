@@ -1097,7 +1097,6 @@ class _ShowAddBoxState extends State<ShowAddBox> {
                 child: Text('SELECT WORKOUTS:',
                     style:
                         TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
-// <<<<<<< HEAD
               ),
 
               const Text(
