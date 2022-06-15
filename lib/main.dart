@@ -38,7 +38,7 @@ class HomePage extends StatelessWidget {
       title: 'Vyam Admin Panel',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.purple,
         fontFamily: 'Poppins',
       ),
       home: const MainPage(),

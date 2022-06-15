@@ -70,7 +70,7 @@ class _SideNavBar1State extends State<SideNavBar1> {
         title: const Text('VYAM'),
       ),
       drawer: Drawer(
-        backgroundColor: Colors.blue,
+        backgroundColor: Colors.teal,
         shape: const RoundedRectangleBorder(),
         child: ListView(
           children: [

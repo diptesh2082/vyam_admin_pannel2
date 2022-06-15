@@ -272,7 +272,7 @@ class _CategoryInfoScreenState extends State<CategoryInfoScreen> {
               temp = !temp;
 
               DocumentReference documentReference =
-              FirebaseFirestore.instance.collection('category').doc(catId);
+              FirebaseFirestore.instance.collection('category').doc(data.id);
               await documentReference
                   .update({'status': temp})
                   .whenComplete(() => print("Legitimate toggled"))
