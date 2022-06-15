@@ -199,6 +199,13 @@ class _ProductDetailsState extends State<ProductDetails> {
                                 ),
                                 DataColumn(
                                   label: Text(
+                                    'Password',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.w600),
+                                  ),
+                                ),
+                                DataColumn(
+                                  label: Text(
                                     'Gym Owner',
                                     style:
                                         TextStyle(fontWeight: FontWeight.w600),
@@ -437,6 +444,9 @@ class _ProductDetailsState extends State<ProductDetails> {
       DataCell(data != null ? Text(data['name'] ?? "") : const Text("")),
       DataCell(data != null ? Text(data['address'] ?? "") : const Text("")),
       DataCell(data != null ? Text(gymId) : const Text("")),
+      DataCell(
+          data != null ? Text(data['password'].toString()) : const Text("")),
+
       DataCell(data != null ? Text(data['gym_owner'] ?? "") : const Text("")),
 // <<<<<<< HEAD
 //       DataCell(data != null
@@ -800,6 +810,8 @@ class _ShowAddBoxState extends State<ShowAddBox> {
   final TextEditingController _addpincode = TextEditingController();
   final TextEditingController _addlandmark = TextEditingController();
   final TextEditingController _addgymownerid = TextEditingController();
+  final TextEditingController _addpassword = TextEditingController();
+
   final _latitudeController = 0;
   final _longitudeController = 0;
   String addressVendor = '';
@@ -812,7 +824,7 @@ class _ShowAddBoxState extends State<ShowAddBox> {
   var impath;
   var image;
 
-  var xs;
+  // var xs;
   bool selected = false;
   CollectionReference? amenitiesStream;
   CollectionReference? workoutStream;
@@ -824,8 +836,8 @@ class _ShowAddBoxState extends State<ShowAddBox> {
     productStream = FirebaseFirestore.instance.collection("product_details");
     amenitiesStream = FirebaseFirestore.instance.collection("amenities");
     workoutStream = FirebaseFirestore.instance.collection("workouts");
-    RandomPasswordGenerator pswd = RandomPasswordGenerator();
-    xs = pswd.randomPassword(letters: true, uppercase: true, numbers: true);
+    // RandomPasswordGenerator pswd = RandomPasswordGenerator();
+    // xs = pswd.randomPassword(letters: true, uppercase: true, numbers: true);
     super.initState();
   }
 
@@ -878,6 +890,15 @@ class _ShowAddBoxState extends State<ShowAddBox> {
               ),
               customTextField(
                   hinttext: "Gym Owner Id", addcontroller: _addgymownerid),
+              const SizedBox(height: 15),
+              const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Text('Add Password:',
+                    style:
+                        TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
+              ),
+              customTextField(
+                  hinttext: "Password", addcontroller: _addpassword),
               const SizedBox(height: 15),
               const Padding(
                 padding: EdgeInsets.all(8.0),
@@ -1195,7 +1216,6 @@ class _ShowAddBoxState extends State<ShowAddBox> {
               ),
 
               const SizedBox(height: 10),
-              Text(xs.toString()),
               Text(
                 "Services",
                 style: GoogleFonts.poppins(
@@ -1293,7 +1313,7 @@ class _ShowAddBoxState extends State<ShowAddBox> {
                           'gender': selectedValue,
                           'name': _addname.text,
                           'pincode': _addpincode.text,
-                          'location': dataForGeoPint,
+                          // 'location': dataForGeoPint,
                           'gym_id': _addgymownerid.text,
                           'gym_owner': _addgymownerid.text,
                           'landmark': _addlandmark.text,
@@ -1318,7 +1338,7 @@ class _ShowAddBoxState extends State<ShowAddBox> {
                           "gym_status": false,
                           "amenities": arr,
                           "workouts": workoutArray,
-                          "password": xs.toString(),
+                          "password": _addpassword.text,
                         },
                         // ).then((snapshot) async {
                         //   await uploadImageToStorage(dic, _addgymownerid.text);

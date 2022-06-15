@@ -1054,8 +1054,7 @@ class _detailsaddState extends State<detailsadd> {
                           'name': _addname.text,
                           'email': _addemail.text,
                           'gender': gender,
-                          'image': imgUrl1 ??
-                              "https://www.kindpng.com/picc/m/22-223941_transparent-avatar-png-male-avatar-icon-transparent-png.png",
+                          'image': imgUrl1 ?? " ",
                           'number': "+91${_addnumber.text}",
                           'locality': "",
                           'subLocality': "",
