@@ -134,6 +134,14 @@ class _FeedBackInfoState extends State<FeedBackInfo> {
 //                   }).toList();
 //                 }
 
+// <<<<<<< someshwar
+//                 return SingleChildScrollView(
+//                   scrollDirection: Axis.vertical,
+//                   child: DataTable(
+//                     dataRowHeight: 65,
+//                     columns: const [
+//                       DataColumn(
+// =======
 //                 return SingleChildScrollView(
 //                   scrollDirection: Axis.horizontal,
 //                   child: DataTable(
@@ -151,6 +159,7 @@ class _FeedBackInfoState extends State<FeedBackInfo> {
                           style: TextStyle(fontWeight: FontWeight.w600),
                         )),
                         DataColumn(
+// >>>>>>> Diptesh
                           label: Text(
                             'Name',
                             style: TextStyle(fontWeight: FontWeight.w600),
@@ -198,10 +207,12 @@ class _FeedBackInfoState extends State<FeedBackInfo> {
                             style: TextStyle(fontWeight: FontWeight.w600),
                           ),
                         ),
+
                       ],
                       rows: _buildlist(context, doc),
                     ),
                   );
+
                 },
               ),
             ),
