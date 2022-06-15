@@ -41,6 +41,7 @@ class _BookingDetailsState extends State<BookingDetails> {
         title: Text("Bookings"),
       ),
       body: SafeArea(
+
 // <<<<<<< HEAD
         child: Material(
           elevation: 8,
@@ -147,6 +148,7 @@ class _BookingDetailsState extends State<BookingDetails> {
                     //           ],
 
                     // >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
+// >>>>>>> Diptesh
                   ),
 //                 Container(
 //                   width: 500,
@@ -229,7 +231,66 @@ class _BookingDetailsState extends State<BookingDetails> {
                         }
                         var doc = snapshot.data.docs;
 
-// <<<<<<< HEAD
+// <<<<<<< nihal_new
+//                       if (searchVendorId.isNotEmpty) {
+//                         doc = doc.where((element) {
+//                           return element
+//                                   // <<<<<<< HEAD
+//                                   //     .get('user_name')
+//                                   // =======
+
+//                                   .get('user_name')
+//                                   .toString()
+//                                   .toLowerCase()
+//                                   .contains(searchVendorId.toString()) ||
+//                               element
+//                                   .get('userId')
+
+//                                   // >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
+//                                   .toString()
+//                                   .toLowerCase()
+//                                   .contains(searchVendorId.toString()) ||
+//                               element
+//                                   .get('grand_total')
+//                                   .toString()
+//                                   .toLowerCase()
+//                                   .contains(searchVendorId.toString()) ||
+//                               element
+//                                   .get('grand_total')
+//                                   .toString()
+//                                   .toLowerCase()
+//                                   .contains(searchVendorId.toString());
+//                         }).toList();
+//                       }
+
+//                       return SingleChildScrollView(
+//                         scrollDirection: Axis.horizontal,
+//                         child: DataTable(
+//                             dataRowHeight: 65,
+//                             columns: const [
+//                               DataColumn(
+//                                   label: Text(
+//                                 'Booking ID',
+//                                 style: TextStyle(fontWeight: FontWeight.w600),
+//                               )),
+//                               // DataColumn(
+//                               //
+//                               //     label: Text(
+//                               //       'Vendor Name',
+//                               //       style: TextStyle(fontWeight: FontWeight.w600),
+//                               //     )),
+//                               DataColumn(
+//                                 // >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
+//                                 label: Text(
+//                                   'User Name',
+//                                   style: TextStyle(fontWeight: FontWeight.w600),
+//                                 ),
+//                               ),
+//                               DataColumn(
+//                                 label: Text(
+//                                   'User ID',
+// =======
+// // <<<<<<< HEAD
                         if (searchVendorId.isNotEmpty) {
                           doc = doc.where((element) {
                             return element
@@ -269,6 +330,7 @@ class _BookingDetailsState extends State<BookingDetails> {
                                 DataColumn(
                                     label: Text(
                                   'Booking ID',
+// >>>>>>> Diptesh
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 )),
                                 // DataColumn(
@@ -311,6 +373,7 @@ class _BookingDetailsState extends State<BookingDetails> {
                                         TextStyle(fontWeight: FontWeight.w600),
                                   ),
                                 ),
+
                                 DataColumn(
                                   label: Text(
                                     'Total Days',
@@ -324,6 +387,7 @@ class _BookingDetailsState extends State<BookingDetails> {
                                     style:
                                         TextStyle(fontWeight: FontWeight.w600),
                                   ),
+// >>>>>>> Diptesh
                                 ),
 
                                 DataColumn(
@@ -347,6 +411,31 @@ class _BookingDetailsState extends State<BookingDetails> {
                                         TextStyle(fontWeight: FontWeight.w600),
                                   ),
                                 ),
+// <<<<<<< nihal_new
+//                               ),
+//                               // <<<<<<< HEAD
+//                               // // DataColumn(
+//                               // //   label: Text(
+//                               // //     'Payment done',
+//                               // //     style: TextStyle(fontWeight: FontWeight.w600),
+//                               // //   ),
+//                               // // ),
+//                               // DataColumn(
+//                               // label: Text(
+//                               // 'Booking Date',
+//                               // style: TextStyle(fontWeight: FontWeight.w600),
+//                               // ),
+//                               // ),
+//                               // DataColumn(
+//                               // label: Text(
+//                               // =======
+
+//                               DataColumn(
+//                                 label: Text(
+//                                   // >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
+//                                   'Booking Status',
+//                                   style: TextStyle(fontWeight: FontWeight.w600),
+// =======
                                 DataColumn(
                                   label: Text(
                                     'Grand Total',
@@ -378,6 +467,7 @@ class _BookingDetailsState extends State<BookingDetails> {
                                     style:
                                         TextStyle(fontWeight: FontWeight.w600),
                                   ),
+// >>>>>>> Diptesh
                                 ),
                                 DataColumn(
                                   label: Text(
@@ -455,6 +545,26 @@ class _BookingDetailsState extends State<BookingDetails> {
 
     snapshot.forEach((element) {
       var x = element['booking_date'].toDate();
+// <<<<<<< nihal_new
+//       // var y = endDate.difference(startDate).inDays;
+//       // <<<<<<< HEAD
+//       // print('XXXXXXXXXXXXXXXXXXX???????????????????////////////');
+//       // print(x);
+//       // if (x.isAfter(startDate) && x.isBefore(endDate) ||
+//       // x == startDate ||
+//       // x == endDate) {
+//       // d.add(element);
+//       // }
+//       // print('/////////////////DDDDDDDDDDDDDDDDDDDD???????????????');
+//       // print(d);
+//       // =======
+//       // print('XXXXXXXXXXXXXXXXXXX???????????????????////////////');
+//       // print(x);
+//       if (x.isAfter(startDate) && x.isBefore(endDate) ||
+//           x == startDate ||
+//           x == endDate) {
+//         d.add(element);
+// =======
 // <<<<<<< HEAD
       if (x.isAfter(startDate) && x.isBefore(endDate) ||
           x == startDate ||
@@ -482,6 +592,7 @@ class _BookingDetailsState extends State<BookingDetails> {
 //           x == endDate) {
 //         d.add(element);
 // >>>>>>> ae7259e7ba6e19ed4976a35667cb3a762fe66e2c
+// >>>>>>> Diptesh
       }
       // print('/////////////////DDDDDDDDDDDDDDDDDDDD???????????????');
       // print(d);
@@ -511,13 +622,19 @@ class _BookingDetailsState extends State<BookingDetails> {
     return DataRow(cells: [
       DataCell(
           data["id"] != null ? Text(data['id'].toString()) : const Text("")),
+// <<<<<<< nihal_new
+// =======
 
+// >>>>>>> Diptesh
       // <<<<<<< HEAD
       // =======
       //
       //
-      // >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
-// >>>>>>> ae7259e7ba6e19ed4976a35667cb3a762fe66e2c
+//       // >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
+// <<<<<<< nihal_new
+// =======
+// // >>>>>>> ae7259e7ba6e19ed4976a35667cb3a762fe66e2c
+// >>>>>>> Diptesh
       DataCell(data['user_name'] != null
           ? Text(data['user_name'].toString())
           : const Text("")),
@@ -528,6 +645,7 @@ class _BookingDetailsState extends State<BookingDetails> {
           ? Text(
               '${data['gym_details']['name'].toString().toUpperCase()}|${data['gym_details']['branch'].toString().toUpperCase()}')
           : const Text("")),
+
 
       DataCell(data['package_type'] != null
           ? Text(data['package_type'].toString().toUpperCase())
@@ -543,8 +661,7 @@ class _BookingDetailsState extends State<BookingDetails> {
       // =======
       DataCell(data['booking_date'] != null ? Text(orderDate) : const Text("")),
 
-      // >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
-// >>>>>>> ae7259e7ba6e19ed4976a35667cb3a762fe66e2c
+
       DataCell(data['plan_end_duration'] != null
           ? Text(durationEnd)
           : const Text("")),
@@ -619,17 +736,23 @@ class _BookingDetailsState extends State<BookingDetails> {
           ),
         ),
       ),
-// <<<<<<< HEAD
-// <<<<<<< HEAD
-// =======
 // <<<<<<< nihal_new
-// >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
 // =======
+// // <<<<<<< HEAD
+// // <<<<<<< HEAD
+// // =======
+// // <<<<<<< nihal_new
+// // >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
+// // =======
+// >>>>>>> Diptesh
 //     <<<<<<< HEAD
 //     =======
 // // <<<<<<< nihal_new
-//     >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
-// >>>>>>> ae7259e7ba6e19ed4976a35667cb3a762fe66e2c
+// //     >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
+// <<<<<<< nihal_new
+// =======
+// // >>>>>>> ae7259e7ba6e19ed4976a35667cb3a762fe66e2c
+// >>>>>>> Diptesh
       // DataCell(data['booking_plan'] != null
       //     ? Text(data['booking_plan'].toString())
       //     : const Text("")),
@@ -639,6 +762,7 @@ class _BookingDetailsState extends State<BookingDetails> {
       DataCell(const Text(""), showEditIcon: true, onTap: () {
         Get.to(
           () => ProductEditBox(
+
 // <<<<<<< HEAD
 // <<<<<<< HEAD
 // =======
@@ -655,7 +779,7 @@ class _BookingDetailsState extends State<BookingDetails> {
 //               () => ProductEditBox(
 // >>>>>>> Diptesh
 // >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
-// =======
+
 //     <<<<<<< HEAD
 //     =======
 // // =======
@@ -671,7 +795,10 @@ class _BookingDetailsState extends State<BookingDetails> {
 // //               () => ProductEditBox(
 // // >>>>>>> Diptesh
 //     >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
-// >>>>>>> ae7259e7ba6e19ed4976a35667cb3a762fe66e2c
+// <<<<<<< nihal_new
+// =======
+// // >>>>>>> ae7259e7ba6e19ed4976a35667cb3a762fe66e2c
+// >>>>>>> Diptesh
             vendorid: data['vendorId'],
             username: data['user_name'],
             userid: data['userId'],
@@ -1239,17 +1366,23 @@ class _ProductEditBoxState extends State<ProductEditBox> {
 //                   ),
 //                   // customTextField(
 
-// <<<<<<< HEAD
-// <<<<<<< HEAD
+// <<<<<<< nihal_new
 // =======
-//
-// >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
+// // <<<<<<< HEAD
+// // <<<<<<< HEAD
+// // =======
+// //
+// // >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
+// // =======
+// >>>>>>> Diptesh
+//                     // <<<<<<< HEAD
+//                     // =======
+//                     //
+//                     // >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
+// <<<<<<< nihal_new
 // =======
-                    // <<<<<<< HEAD
-                    // =======
-                    //
-                    // >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
-// >>>>>>> ae7259e7ba6e19ed4976a35667cb3a762fe66e2c
+// // >>>>>>> ae7259e7ba6e19ed4976a35667cb3a762fe66e2c
+// >>>>>>> Diptesh
                     stream: vendorIdStream!.snapshots(),
                     builder: (context, AsyncSnapshot snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
@@ -1287,17 +1420,23 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                       );
                     },
                   )),
-// <<<<<<< HEAD
-// <<<<<<< HEAD
+// <<<<<<< nihal_new
 // =======
-//
-// >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
+// // <<<<<<< HEAD
+// // <<<<<<< HEAD
+// // =======
+// //
+// // >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
+// // =======
+// >>>>>>> Diptesh
+//                   //     <<<<<<< HEAD
+//                   // =======
+//                   //
+//                   // >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
+// <<<<<<< nihal_new
 // =======
-                  //     <<<<<<< HEAD
-                  // =======
-                  //
-                  // >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
-// >>>>>>> ae7259e7ba6e19ed4976a35667cb3a762fe66e2c
+// // >>>>>>> ae7259e7ba6e19ed4976a35667cb3a762fe66e2c
+// >>>>>>> Diptesh
                   const SizedBox(height: 15),
                   // customTextField(
                   //     hinttext: "Vendor ID", addcontroller: _addvendorid),
@@ -1405,17 +1544,23 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                               itemBuilder: (BuildContext context, int index) {
                                 bool check = false;
                                 return
-// <<<<<<< HEAD
-// <<<<<<< HEAD
+// <<<<<<< nihal_new
 // =======
-//
-// >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
-// =======
+// // <<<<<<< HEAD
+// // <<<<<<< HEAD
+// // =======
+// //
+// // >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
+// // =======
+// >>>>>>> Diptesh
                                     // <<<<<<< HEAD
                                     // =======
                                     //
-                                    // >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
-// >>>>>>> ae7259e7ba6e19ed4976a35667cb3a762fe66e2c
+//                                     // >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
+// <<<<<<< nihal_new
+// =======
+// // >>>>>>> ae7259e7ba6e19ed4976a35667cb3a762fe66e2c
+// >>>>>>> Diptesh
                                     // RadioBoxx(
                                     //   doc[index]["name"],
                                     //   doc[index]["category_id"],
@@ -1431,34 +1576,40 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                                   ),
                                   title: Text(doc[index]["name"]),
                                 );
-// <<<<<<< HEAD
-// <<<<<<< HEAD
+// <<<<<<< nihal_new
 // =======
+// // <<<<<<< HEAD
+// // <<<<<<< HEAD
+// // =======
 
-// >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
-// =======
-                                // <<<<<<< HEAD
+// // >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
+// // =======
+// >>>>>>> Diptesh
+//                                 // <<<<<<< HEAD
                                 // =======
 
                                 // >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
-// >>>>>>> ae7259e7ba6e19ed4976a35667cb3a762fe66e2c
+// <<<<<<< nihal_new
+// =======
+// // >>>>>>> ae7259e7ba6e19ed4976a35667cb3a762fe66e2c
+// >>>>>>> Diptesh
 // =======
                                 // RadioBoxx(
                                 //   doc[index]["name"],
                                 //   doc[index]["category_id"],
                                 //   _addpackagetype.text,
                                 // );
-                                RadioListTile<String>(
-                                  value: doc[index]["name"],
-                                  groupValue: abc,
-                                  onChanged: (val) => setState(
-                                    () {
-                                      abc = val!;
-                                    },
-                                  ),
-                                  title: Text(doc[index]["name"]),
-                                );
-// >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
+                                // RadioListTile<String>(
+//                                   value: doc[index]["name"],
+//                                   groupValue: abc,
+//                                   onChanged: (val) => setState(
+//                                     () {
+//                                       abc = val!;
+//                                     },
+//                                   ),
+//                                   title: Text(doc[index]["name"]),
+//                                 );
+// // >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
                                 //     ListTile(
                                 //   tileColor: a,
                                 //   title: Text(doc[index]["name"]),
@@ -1522,17 +1673,23 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                   Container(
                       child: StreamBuilder<QuerySnapshot>(
 //
-// <<<<<<< HEAD
-// <<<<<<< HEAD
+// <<<<<<< nihal_new
 // =======
-//
-// >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
-// =======
+// // <<<<<<< HEAD
+// // <<<<<<< HEAD
+// // =======
+// //
+// // >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
+// // =======
+// >>>>>>> Diptesh
 //               <<<<<<< HEAD
 //               =======
 //
 //               >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
-// >>>>>>> ae7259e7ba6e19ed4976a35667cb3a762fe66e2c
+// <<<<<<< nihal_new
+// =======
+// // >>>>>>> ae7259e7ba6e19ed4976a35667cb3a762fe66e2c
+// >>>>>>> Diptesh
                     stream: vendorIdStream!.snapshots(),
                     builder: (context, AsyncSnapshot snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
@@ -1570,17 +1727,23 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                       );
                     },
                   )),
-// <<<<<<< HEAD
-// <<<<<<< HEAD
+// <<<<<<< nihal_new
 // =======
-//
-// >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
-// =======
+// // <<<<<<< HEAD
+// // <<<<<<< HEAD
+// // =======
+// //
+// // >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
+// // =======
+// >>>>>>> Diptesh
                   //     <<<<<<< HEAD
                   // =======
                   //
                   // >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
-// >>>>>>> ae7259e7ba6e19ed4976a35667cb3a762fe66e2c
+// <<<<<<< nihal_new
+// =======
+// // >>>>>>> ae7259e7ba6e19ed4976a35667cb3a762fe66e2c
+// >>>>>>> Diptesh
 
                   // customTextField(
                   //     hinttext: "Gym Name", addcontroller: _addgymname),
@@ -1692,29 +1855,12 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                           ElevatedButton(
                             onPressed: () async {
                               DocumentReference documentReference =
-// <<<<<<< HEAD
-// <<<<<<< HEAD
-// <<<<<<< HEAD
-//                                   FirebaseFirestore.instance
-//                                       .collection('bookings')
-//                                       .doc(_addbookingid.text);
-// =======
-                                  // FirebaseFirestore.instance
-                                  //     .collection('bookings')
-                                  //     .doc(_addbookingid.text);
-// >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
+
 // =======
                                   FirebaseFirestore.instance
                                       .collection('bookings')
                                       .doc(_addbookingid.text);
-// >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
-                              // DateTime endtimedata = DateTime.parse(
-                              //     '${_addplanendyear.text}-${isLess(_addplanendmonth.text) ? '0' + _addplanendmonth.text : _addplanendday.text}-${isLess(_addplanendday.text) ? '0' + _addplanendday.text : _addplanendday.text} 00:00:04Z');
-                              // DateTime ordertimedata = DateTime.parse(
-                              //     '${_addorderyear.text}-${isLess(_addordermonth.text) ? '0' + _addordermonth.text : _addordermonth.text}-${isLess(_addorderday.text) ? '0' + _addorderday.text : _addorderday.text} 00:00:04Z');
-                              // DateTime bookingtimedata = DateTime.parse(
-                              //     '${_addbookingyear.text}-${isLess(_addbookingmonth.text) ? '0' + _addbookingmonth.text : _addbookingmonth.text}-${isLess(_addbookingday.text) ? '0' + _addbookingday.text : _addbookingday.text} 00:00:04Z');
-// =======
+
                               FirebaseFirestore.instance
                                   .collection('bookings')
                                   .doc(_addbookingid.text);
@@ -1744,29 +1890,12 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                                 'booking_plan': _addbookingplan.text,
                                 'booking_id': _addbookingid.text,
                                 'booking_date': bookingtimedata,
-// <<<<<<< HEAD
-// <<<<<<< HEAD///
-//                                 'booking_accepted':
-// <<<<<<< HEAD
-//                                     _addbookingaccepted.text == 'true'
-//                                         ? true
-//                                         : false,
-// =======
-//                                     _addbookingaccepted.text == 'true'
-                                //     ? true
-                                //     : false,
-// >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
-// =======
+
                                 'booking_accepted':
                                     _addbookingaccepted.text == 'true'
                                         ? true
                                         : false,
-// >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
-// =======
 
-                                // 'booking_accepted': true ? true : false,
-                                // >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
-// >>>>>>> ae7259e7ba6e19ed4976a35667cb3a762fe66e2c
                               };
                               await documentReference
                                   .update(data)
@@ -1960,21 +2089,12 @@ class _ProductEditBoxState extends State<ProductEditBox> {
   Future pickTime(BuildContext context) async {
     const intialTime = const TimeOfDay(hour: 9, minute: 0);
     final newTime =
-// <<<<<<< HEAD
-// <<<<<<< HEAD
-//         await showTimePicker(context: context, initialTime: time ?? intialTime);
-// >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
-// =======
-//         await showTimePicker(context: context, initialTime: time ?? intialTime);
-// >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
-// =======
-//         / <<<<<<< HEAD
+
         await showTimePicker(context: context, initialTime: time ?? intialTime);
 // >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
 //     =======
 //     await showTimePicker(context: context, initialTime: time ?? intialTime);
 //     >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
-// >>>>>>> ae7259e7ba6e19ed4976a35667cb3a762fe66e2c
 
     if (newTime == null) return;
 
@@ -2025,21 +2145,14 @@ class _ProductEditBoxState extends State<ProductEditBox> {
   Future pickplanTime(BuildContext context) async {
     const intialTime = TimeOfDay(hour: 9, minute: 0);
     final newTime =
-// <<<<<<< HEAD
-// <<<<<<< HEAD
-//         await showTimePicker(context: context, initialTime: time ?? intialTime);
-// >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
-// =======
-//         await showTimePicker(context: context, initialTime: time ?? intialTime);
-// >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
-// =======
+
         // <<<<<<< HEAD
         await showTimePicker(context: context, initialTime: time ?? intialTime);
 // >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
 //     =======
 //     await showTimePicker(context: context, initialTime: time ?? intialTime);
 //     >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
-// >>>>>>> ae7259e7ba6e19ed4976a35667cb3a762fe66e2c
+
 
     if (newTime == null) return;
 
@@ -2090,25 +2203,17 @@ class _ProductEditBoxState extends State<ProductEditBox> {
   Future pickorderTime(BuildContext context) async {
     final intialTime = TimeOfDay(hour: 9, minute: 0);
     final newTime =
-// <<<<<<< HEAD
-// <<<<<<< HEAD
-// =======
-        // <<<<<<< HEAD
-// >>>>>>> ae7259e7ba6e19ed4976a35667cb3a762fe66e2c
+
 // <<<<<<< HEAD
 //         await showTimePicker(context: context, initialTime: time ?? intialTime);
 // =======
 //         await showTimePicker(context: context, initialTime: time ?? intialTime);
 // >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
-// <<<<<<< HEAD
-// =======
+
         await showTimePicker(context: context, initialTime: time ?? intialTime);
 // >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
 // =======
-//     =======
-//     await showTimePicker(context: context, initialTime: time ?? intialTime);
-//     >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
-// >>>>>>> ae/7259e7ba6e19ed4976a35667cb3a762fe66e2c
+
 
     if (newTime == null) return;
 

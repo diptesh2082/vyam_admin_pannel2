@@ -303,8 +303,10 @@ class _UserInformationState extends State<UserInformation> {
         .toList();
   }
 
+
   DataRow _buildListItem(BuildContext context, DocumentSnapshot data, int index,
       int start, int end) {
+
     String userIDData = data['userId'];
     String profileImage = data['image'];
     bool legit = data['legit'];
@@ -1030,7 +1032,14 @@ class _detailsaddState extends State<detailsadd> {
 // =======
               // customTextField(hinttext: "Gender", addcontroller: _addgender),
               // customTextField(hinttext: "Address", addcontroller: _addaddress),
+// <<<<<<< nihal_new
+// // <<<<<<< HEAD
+// // =======
+// //
+// // >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
+// =======
 
+// >>>>>>> Diptesh
               // customTextField(
               //     hinttext: "Locality", addcontroller: _addlocality),
               // customTextField(
