@@ -15,11 +15,38 @@ chooseImage() async {
   return pickedFile;
 }
 
+final ImagePicker _picker = ImagePicker();
+
+send(String id) async {
+  var ds = await choosemulti();
+  print("Elements: $ds");
+  ds.forEach((element) async {
+    print("ELements: $element");
+
+    await uploadImageToStorage(element, id);
+    // print(element.toString());
+  });
+}
+
+choosemulti() async {
+  List<XFile>? _imageFileList = [];
+
+  final List<XFile>? selectedImages = await _picker.pickMultiImage();
+  if (selectedImages!.isNotEmpty) {
+    _imageFileList.addAll(selectedImages);
+  }
+  print(_imageFileList.toString());
+
+  print(_imageFileList.length.toString());
+  print(selectedImages.toString());
+  return selectedImages;
+}
+
 final _firebaseStorage = FirebaseStorage.instance.ref().child("product_image");
 uploadImageToStorage(XFile? pickedFile, String? id) async {
   if (kIsWeb) {
     Reference _reference = _firebaseStorage
-        .child('product_images/${Path.basename(pickedFile!.path)}');
+        .child('product_images/${Path.basename(pickedFile!.path)}*/');
     await _reference
         .putData(
       await pickedFile.readAsBytes(),
@@ -32,9 +59,9 @@ uploadImageToStorage(XFile? pickedFile, String? id) async {
         await FirebaseFirestore.instance
             .collection("product_details")
             .doc(id)
-            .set({
+            .update({
           "images": FieldValue.arrayUnion([value]),
-        });
+        }).whenComplete(() => print("Completed"));
       });
     });
   } else {
