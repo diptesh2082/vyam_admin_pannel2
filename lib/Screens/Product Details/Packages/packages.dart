@@ -99,27 +99,29 @@ class _PackagesPageState extends State<PackagesPage> {
               children: [
                 Padding(
                   padding: const EdgeInsets.only(top: 8.0, left: 8.0),
-                  child: GestureDetector(
-                    onTap: () {
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(onPrimary: Colors.purple),
+                    onPressed: () {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) =>
                                   addboxx(widget.pGymId, finalPackID)));
                     },
-                    child: Container(
-                      width: 120,
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(20.0)),
-                      child: Row(
-                        children: const [
-                          Icon(Icons.add),
-                          Text('Add Product',
-                              style: TextStyle(fontWeight: FontWeight.w400)),
-                        ],
-                      ),
-                    ),
+                    child: const Text('Add Packages'),
+                    // Container(
+                    //   width: 120,
+                    //   decoration: BoxDecoration(
+                    //       color: Colors.white,
+                    //       borderRadius: BorderRadius.circular(20.0)),
+                    //   child: Row(
+                    //     children: const [
+                    //       Icon(Icons.add),
+                    //       Text('Add Product',
+                    //           style: TextStyle(fontWeight: FontWeight.w400)),
+                    //     ],
+                    //   ),
+                    // ),
                   ),
                 ),
                 Center(
@@ -279,9 +281,10 @@ class _addboxxState extends State<addboxx> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Add Packages"),
+        title: const Text("Add Packages"),
       ),
       body: SingleChildScrollView(
+        padding:const EdgeInsets.all(20) ,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -329,6 +332,7 @@ class _addboxxState extends State<addboxx> {
             ),
             customTextField(hinttext: "validity", addcontroller: _validity),
             customTextField(hinttext: "price", addcontroller: _price),
+            const Text('Category' , style: TextStyle(fontWeight: FontWeight.bold),),
             StreamBuilder(
                 stream: categoryStream!.snapshots(),
                 builder: (context, AsyncSnapshot snapshot) {

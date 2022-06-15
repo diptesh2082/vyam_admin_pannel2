@@ -41,7 +41,6 @@ class _BookingDetailsState extends State<BookingDetails> {
         title: Text("Bookings"),
       ),
       body: SafeArea(
-// <<<<<<< HEAD
         child: Material(
           elevation: 8,
           child: Container(
@@ -62,10 +61,7 @@ class _BookingDetailsState extends State<BookingDetails> {
                         onPressed: () {
                           Get.to(const addbookings()); //showAddbox,
                         },
-                        child: const Text('Add Booking')),
-// <<<<<<< HEAD
-// =======
-                  ),
+                        child: const Text('Add Booking')),),
                   Column(
                     children: [
                       Padding(
@@ -196,12 +192,6 @@ class _BookingDetailsState extends State<BookingDetails> {
                       ),
                     ),
                   ),
-                  Container(
-                    alignment: Alignment.topRight,
-                    child: Icon(
-                      Icons.date_range,
-                    ),
-                  ),
                   Center(
                     child: StreamBuilder<QuerySnapshot>(
                       stream: FirebaseFirestore.instance
@@ -233,8 +223,7 @@ class _BookingDetailsState extends State<BookingDetails> {
                         if (searchVendorId.isNotEmpty) {
                           doc = doc.where((element) {
                             return element
-// <<<<<<< HEAD
-//                                   .get('user_name')
+// <<<<<<< HEA
 // =======
 
                                 .get('user_name')
@@ -243,8 +232,6 @@ class _BookingDetailsState extends State<BookingDetails> {
                                 .contains(searchVendorId.toString()) ||
                                 element
                                     .get('userId')
-
-// >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
                                     .toString()
                                     .toLowerCase()
                                     .contains(searchVendorId.toString()) ||

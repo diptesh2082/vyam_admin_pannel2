@@ -385,7 +385,7 @@ class _showLatestBookingState extends State<showLatestBooking> {
                               ),
                               DataColumn(
                                 label: Text(
-                                  'Booking Type',
+                                  'Payment Type',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),

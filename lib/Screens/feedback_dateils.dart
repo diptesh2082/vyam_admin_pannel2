@@ -104,7 +104,7 @@ class _FeedBackInfoState extends State<FeedBackInfo> {
                 }
 
                 return SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
+                  scrollDirection: Axis.vertical,
                   child: DataTable(
                     dataRowHeight: 65,
                     columns: const [
@@ -168,12 +168,12 @@ class _FeedBackInfoState extends State<FeedBackInfo> {
               },
             ),
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               ElevatedButton(
-                child: Text("Previous Page"),
+                child: const Text("Previous Page"),
                 onPressed: () {
                   setState(() {
                     if (start > 0 && end > 0) {

@@ -24,7 +24,7 @@ class UserInformation extends StatefulWidget {
 
 class _UserInformationState extends State<UserInformation> {
   CollectionReference? userDetailStream;
-  String searchUser = ' ';
+  String searchUser = '';
   @override
   void initState() {
     userDetailStream = FirebaseFirestore.instance.collection("user_details");
@@ -60,7 +60,7 @@ class _UserInformationState extends State<UserInformation> {
                         Navigator.push(context,
                             MaterialPageRoute(builder: (context) => detailsadd()));
                       },
-                      child: Text('Add User'),
+                      child: const Text('Add User'),
                     ),
                   ),
                   Container(
@@ -82,7 +82,7 @@ class _UserInformationState extends State<UserInformation> {
                         },
                         // controller: searchController,
                         onChanged: (value) {
-                          if (value.length == 0) {
+                          if (value.isEmpty) {
                             // _node.canRequestFocus=false;
                             // FocusScope.of(context).unfocus();
                           }
