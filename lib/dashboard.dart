@@ -260,7 +260,7 @@ class _showLatestBookingState extends State<showLatestBooking> {
                     stream: FirebaseFirestore.instance
                         .collection('bookings')
                         .where('booking_status',
-                            whereIn: ['upcoming', 'active', 'incomplete'])
+                            whereIn: ['upcoming', 'active', 'completed'])
                         .orderBy("id", descending: true)
                         .snapshots(),
                     builder: (context, AsyncSnapshot snapshot) {
@@ -285,7 +285,7 @@ class _showLatestBookingState extends State<showLatestBooking> {
                             columns: const [
                               DataColumn(
                                 label: Text(
-                                  'Order ID',
+                                  'Booking ID',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
@@ -415,7 +415,7 @@ class _showLatestBookingState extends State<showLatestBooking> {
                         value: "upcoming",
                       ),
                       DropdownMenuItem(
-                          child: Text("Incomplete"), value: "incomplete"),
+                          child: Text("Completed"), value: "completed"),
                       DropdownMenuItem(
                           child: Text("Cancelled"), value: "cancelled"),
                     ],

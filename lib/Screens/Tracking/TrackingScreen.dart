@@ -1,6 +1,8 @@
 import 'package:admin_panel_vyam/services/deleteMethod.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class TrackingScreen extends StatefulWidget {
@@ -127,15 +129,17 @@ class _TrackingScreenState extends State<TrackingScreen> {
                             columns: const [
                               DataColumn(
                                   label: Text(
-                                'Index',
+                                'Booking ID',
                                 style: TextStyle(fontWeight: FontWeight.w600),
                               )),
+                              // DataColumn(
+                              //
+                              //     label: Text(
+                              //       'Vendor Name',
+                              //       style: TextStyle(fontWeight: FontWeight.w600),
+                              //     )),
                               DataColumn(
-                                  label: Text(
-                                'Vendor ID',
-                                style: TextStyle(fontWeight: FontWeight.w600),
-                              )),
-                              DataColumn(
+                                // >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
                                 label: Text(
                                   'User Name',
                                   style: TextStyle(fontWeight: FontWeight.w600),
@@ -147,36 +151,17 @@ class _TrackingScreenState extends State<TrackingScreen> {
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
-                              // DataColumn(
-                              //   label: Text(
-                              //     'Total Price',
-                              //     style: TextStyle(fontWeight: FontWeight.w600),
-                              //   ),
-                              // ),
-                              // DataColumn(
-                              //   label: Text(
-                              //     'Total Days',
-                              //     style: TextStyle(fontWeight: FontWeight.w600),
-                              //   ),
-                              // ),
-                              // DataColumn(
-                              //   label: Text(
-                              //     'Tax Pay',
-                              //     style: TextStyle(fontWeight: FontWeight.w600),
-                              //   ),
-                              // ),
+                              DataColumn(
+                                  label: Text(
+                                'Vendor Name',
+                                style: TextStyle(fontWeight: FontWeight.w600),
+                              )),
                               DataColumn(
                                 label: Text(
-                                  'Plan End',
+                                  'Category',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
-                              // DataColumn(
-                              //   label: Text(
-                              //     'Payment done',
-                              //     style: TextStyle(fontWeight: FontWeight.w600),
-                              //   ),
-                              // ),
                               DataColumn(
                                 label: Text(
                                   'Package Type',
@@ -185,76 +170,65 @@ class _TrackingScreenState extends State<TrackingScreen> {
                               ),
                               DataColumn(
                                 label: Text(
-                                  'Order Date',
+                                  'Total Days',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
-                              // DataColumn(
-                              //   label: Text(
-                              //     'Gym Name',
-                              //     style: TextStyle(fontWeight: FontWeight.w600),
-                              //   ),
-                              // ),
-                              // DataColumn(
-                              //   label: Text(
-                              //     'Gym Address',
-                              //     style: TextStyle(fontWeight: FontWeight.w600),
-                              //   ),
-                              // ),
                               DataColumn(
                                 label: Text(
-                                  'Grand Total',
+                                  'Start Date',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
-                              // DataColumn(
-                              //   label: Text(
-                              //     'Discount',
-                              //     style: TextStyle(fontWeight: FontWeight.w600),
-                              //   ),
-                              // ),
-                              // DataColumn(
-                              //   label: Text(
-                              //     'Days Left',
-                              //     style: TextStyle(fontWeight: FontWeight.w600),
-                              //   ),
-                              // ),
+
                               DataColumn(
                                 label: Text(
-                                  'Booking Status',
+                                  'End Date',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
-                              // DataColumn(
-                              //   label: Text(
-                              //     'Booking Price',
-                              //     style: TextStyle(fontWeight: FontWeight.w600),
-                              //   ),
-                              // ),
-                              DataColumn(
-                                label: Text(
-                                  'Booking Plan',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
-                              ),
-                              // DataColumn(
-                              //   label: Text(
-                              //     'Booking ID',
-                              //     style: TextStyle(fontWeight: FontWeight.w600),
-                              //   ),
-                              // ),
                               DataColumn(
                                 label: Text(
                                   'Booking Date',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
+                              DataColumn(
+                                label: Text(
+                                  'Discount',
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
+                              ),
+                              DataColumn(
+                                label: Text(
+                                  'Grand Total',
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
+                              ),
+                              // <<<<<<< HEAD
+                              // // DataColumn(
+                              // //   label: Text(
+                              // //     'Payment done',
+                              // //     style: TextStyle(fontWeight: FontWeight.w600),
+                              // //   ),
+                              // // ),
                               // DataColumn(
-                              //   label: Text(
-                              //     'Booking Accepted',
-                              //     style: TextStyle(fontWeight: FontWeight.w600),
-                              //   ),
+                              // label: Text(
+                              // 'Booking Date',
+                              // style: TextStyle(fontWeight: FontWeight.w600),
                               // ),
+                              // ),
+                              // DataColumn(
+                              // label: Text(
+                              // =======
+
+                              DataColumn(
+                                label: Text(
+                                  // >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
+                                  'Booking Status',
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
+                              ),
                               DataColumn(
                                 label: Text(
                                   'Edit',
@@ -345,152 +319,197 @@ class _TrackingScreenState extends State<TrackingScreen> {
     String bookingDate =
         "${data['booking_date'].toDate().year}/${data['booking_date'].toDate().month}/${data['booking_date'].toDate().day}";
     return DataRow(cells: [
-      DataCell(index != null ? Text(index.toString()) : const Text("")),
-      DataCell(data["vendorId"] != null
-          ? Text(data['vendorId'].toString())
-          : const Text("")),
+      DataCell(
+          data["id"] != null ? Text(data['id'].toString()) : const Text("")),
+
+      // <<<<<<< HEAD
+      // =======
+      //
+      //
+      // >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
+// >>>>>>> ae7259e7ba6e19ed4976a35667cb3a762fe66e2c
       DataCell(data['user_name'] != null
           ? Text(data['user_name'].toString())
           : const Text("")),
       DataCell(data['userId'] != null
           ? Text(data['userId'].toString().substring(3, 13))
           : Text("")),
-      // DataCell(data['total_price'] != null
-      //     ? Text(data['total_price'].toString())
-      //     : const Text("")),
-      // DataCell(data['totalDays'] != null
-      //     ? Text(data['totalDays'].toString())
-      //     : const Text("")),
-      // DataCell(data['tax_pay'] != null
-      //     ? Text(data['tax_pay'].toString())
-      //     : const Text("")),
-      DataCell(data['plan_end_duration'] != null
-          ? Text(durationEnd)
+      DataCell(data["gym_details"] != null
+          ? Text(
+              '${data['gym_details']['name'].toString().toUpperCase()}|${data['gym_details']['branch'].toString().toUpperCase()}')
           : const Text("")),
 
-//       DataCell(Center(
-//         child: ElevatedButton(
-//           onPressed: () async {
-//             bool temp = paymentDoneBool;
-//             temp = !temp;
-//             DocumentReference documentReference = FirebaseFirestore.instance
-//                 .collection('bookings')
-//                 .doc(bookingId);
-//             await documentReference
-//                 .update({'payment_done': temp})
-//                 .whenComplete(() => print("Payment done updated"))
-//                 .catchError((e) => print(e));
-//           },
-//           child: Text(paymentDoneBool.toString()),
-//           style: ElevatedButton.styleFrom(
-//               primary: paymentDoneBool ? Colors.green : Colors.red),
-//         ),
-//       )),
-      DataCell(
-        Center(
-          child: ElevatedButton(
-            onPressed: () async {},
-            child: data['package_type'] != null
-                ? Text(data['package_type'].toString().toUpperCase(),
-                    style: const TextStyle(
-                        fontWeight: FontWeight.bold, color: Colors.black))
-                : const Text(""),
-            style: ElevatedButton.styleFrom(
-                primary: const Color.fromRGBO(245, 190, 0, 1)),
-          ),
-        ),
-        // data['package_type'] != null
-        // ? Text(data['package_type'].toString())
-        // : const Text("")
-      ),
-      DataCell(data['order_date'] != null ? Text(orderDate) : const Text("")),
-      // DataCell(data['gym_details']['name'] != null
-      //     ? Text(data['gym_details']['name'].toString())
-      //     : const Text("")),
-      // DataCell(data['gym_address'] != null
-      //     ? Text(data['gym_address'].toString())
-      //     : const Text("")),
-      DataCell(data['grand_total'] != null
-          ? Text(data['grand_total'].toString())
+      DataCell(data['package_type'] != null
+          ? Text(data['package_type'].toString().toUpperCase())
           : const Text("")),
-      // DataCell(data['discount'] != null
-      //     ? Text(data['discount'].toString())
-      //     : const Text("")),
-      // DataCell(data['daysLeft'] != null
-      //     ? Text(data['daysLeft'].toString())
-      //     : const Text("")),
-      DataCell(data['booking_status'] != null
-          ? Text(data['booking_status'].toString())
-          : const Text("")),
-      // DataCell(data['booking_price'] != null
-      //     ? Text(data['booking_price'].toString())
-      //     : const Text("")),
       DataCell(data['booking_plan'] != null
           ? Text(data['booking_plan'].toString())
           : const Text("")),
-      // DataCell(data['booking_id'] != null
-      //     ? Text(data['booking_id'].toString())
-      //     : const Text("")),
-      DataCell(
-          data['booking_date'] != null ? Text(bookingDate) : const Text("")),
+      DataCell(data['totalDays'] != null
+          ? Text(data['totalDays'].toString())
+          : const Text("")),
+
+      // DataCell(data['order_date'] != null ? Text(orderDate) : const Text("")),
+      // =======
+      DataCell(data['booking_date'] != null ? Text(orderDate) : const Text("")),
+
+      // >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
+// >>>>>>> ae7259e7ba6e19ed4976a35667cb3a762fe66e2c
+      DataCell(data['plan_end_duration'] != null
+          ? Text(durationEnd)
+          : const Text("")),
+      DataCell(data['order_date'] != null ? Text(orderDate) : const Text("")),
+      DataCell(data['discount'] != null
+          ? Text('₹${data['discount'].toString()}')
+          : const Text("")),
+      DataCell(data['grand_total'] != null
+          ? Text('₹${data['grand_total'].toString()}')
+          : const Text("")),
       // DataCell(Center(
       //   child: ElevatedButton(
       //     onPressed: () async {
-      //       bool temp = bookingAccepted;
+      //       bool temp = paymentDoneBool;
       //       temp = !temp;
       //       DocumentReference documentReference = FirebaseFirestore.instance
       //           .collection('bookings')
       //           .doc(bookingId);
       //       await documentReference
-      //           .update({'booking_accepted': temp})
-      //           .whenComplete(() => print("booking accepted updated"))
+      //           .update({'payment_done': temp})
+      //           .whenComplete(() => print("Payment done updated"))
       //           .catchError((e) => print(e));
       //     },
-      //     child: Text(bookingAccepted.toString()),
+      //     child: Text(x = paymentDoneBool ? 'YES' : 'NO'),
       //     style: ElevatedButton.styleFrom(
-      //         primary: bookingAccepted ? Colors.green : Colors.red),
+      //         primary: paymentDoneBool ? Colors.green : Colors.red),
       //   ),
       // )),
+      // DataCell(
+      //     data['booking_date'] != null ? Text(bookingDate) : const Text("")),
+
+      DataCell(data['booking_status'] != null
+          ? Text(data['booking_status'].toString())
+          : const Text("")),
+// <<<<<<< HEAD
+// <<<<<<< HEAD
+// =======
+// <<<<<<< nihal_new
+// >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
+// =======
+//     <<<<<<< HEAD
+//     =======
+// // <<<<<<< nihal_new
+//     >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
+// >>>>>>> ae7259e7ba6e19ed4976a35667cb3a762fe66e2c
+      // DataCell(data['booking_plan'] != null
+      //     ? Text(data['booking_plan'].toString())
+      //     : const Text("")),
+      // DataCell(data['grand_total'] != null
+      //     ? Text('₹${data['grand_total'].toString()}')
+      //     : const Text("")),
       DataCell(const Text(""), showEditIcon: true, onTap: () {
-        showDialog(
-            context: context,
-            builder: (context) {
-              return SingleChildScrollView(
-                child: ProductEditBox(
-                  vendorid: data['vendorId'],
-                  username: data['user_name'],
-                  userid: data['userId'],
-                  totalprice: data['total_price'].toString(),
-                  totaldays: data['totalDays'].toString(),
-                  taxpay: data['tax_pay'].toString(),
-                  planendyear:
-                      data['plan_end_duration'].toDate().year.toString(),
-                  planendmonth:
-                      data['plan_end_duration'].toDate().month.toString(),
-                  planendday: data['plan_end_duration'].toDate().day.toString(),
-                  paymentdone: data['payment_done'].toString(),
-                  packagetype: data['package_type'],
-                  orderyear: data['order_date'].toDate().year.toString(),
-                  ordermonth: data['order_date'].toDate().month.toString(),
-                  orderday: data['order_date'].toDate().day.toString(),
-                  gymname: data['gym_name'],
-                  gymaddress: data['gym_address'].toString(),
-                  grandtotal: data['grand_total'].toString(),
-                  discount: data['discount'].toString(),
-                  daysleft: data['daysLeft'],
-                  bookingstatus: data['booking_status'],
-                  bookingprice: data['booking_price'].toString(),
-                  bookingplan: data['booking_plan'],
-                  bookingid: data['booking_id'],
-                  bookingyear: data['booking_date'].toDate().year.toString(),
-                  bookingmonth: data['booking_date'].toDate().month.toString(),
-                  bookingday: data['booking_date'].toDate().day.toString(),
-                  bookingaccepted: data['booking_accepted'].toString(),
-                ),
-              );
-            });
+        Get.to(
+          () => ProductEditBox(
+// <<<<<<< HEAD
+// <<<<<<< HEAD
+// =======
+// =======
+//       DataCell(data['booking_plan'] != null
+//           ? Text(data['booking_plan'].toString())
+//           : const Text("")),
+//       DataCell(data['grand_total'] != null
+//           ? Text('₹${data['grand_total'].toString()}')
+//           : const Text("")),
+
+//       DataCell(const Text(""), showEditIcon: true, onTap: () {
+//         Get.to(
+//               () => ProductEditBox(
+// >>>>>>> Diptesh
+// >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
+// =======
+//     <<<<<<< HEAD
+//     =======
+// // =======
+// //       DataCell(data['booking_plan'] != null
+// //           ? Text(data['booking_plan'].toString())
+// //           : const Text("")),
+// //       DataCell(data['grand_total'] != null
+// //           ? Text('₹${data['grand_total'].toString()}')
+// //           : const Text("")),
+//
+// //       DataCell(const Text(""), showEditIcon: true, onTap: () {
+// //         Get.to(
+// //               () => ProductEditBox(
+// // >>>>>>> Diptesh
+//     >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
+// >>>>>>> ae7259e7ba6e19ed4976a35667cb3a762fe66e2c
+            vendorid: data['vendorId'],
+            username: data['user_name'],
+            userid: data['userId'],
+            totalprice: data['total_price'].toString(),
+            totaldays: data['totalDays'].toString(),
+            taxpay: data['tax_pay'].toString(),
+            planendyear: data['plan_end_duration'].toDate().year.toString(),
+            planendmonth: data['plan_end_duration'].toDate().month.toString(),
+            planendday: data['plan_end_duration'].toDate().day.toString(),
+            paymentdone: data['payment_done'].toString(),
+            packagetype: data['package_type'],
+            orderyear: data['order_date'].toDate().year.toString(),
+            ordermonth: data['order_date'].toDate().month.toString(),
+            orderday: data['order_date'].toDate().day.toString(),
+            gymname: data["gym_details"]['name'],
+            gymaddress: data['gym_address'].toString(),
+            grandtotal: data['grand_total'].toString(),
+            discount: data['discount'].toString(),
+            daysleft: data['daysLeft'],
+            bookingstatus: data['booking_status'],
+            bookingprice: data['booking_price'].toString(),
+            bookingplan: data['booking_plan'],
+            bookingid: data['booking_id'],
+            bookingyear: data['booking_date'].toDate().year.toString(),
+            bookingmonth: data['booking_date'].toDate().month.toString(),
+            bookingday: data['booking_date'].toDate().day.toString(),
+            bookingaccepted: data['booking_accepted'].toString(),
+          ),
+        );
+        // showDialog(
+        //     context: context,
+        //     builder: (context) {
+        //       return SingleChildScrollView(
+        //         child: ProductEditBox(
+        //           vendorid: data['vendorId'],
+        //           username: data['user_name'],
+        //           userid: data['userId'],
+        //           totalprice: data['total_price'].toString(),
+        //           totaldays: data['totalDays'].toString(),
+        //           taxpay: data['tax_pay'].toString(),
+        //           planendyear:
+        //               data['plan_end_duration'].toDate().year.toString(),
+        //           planendmonth:
+        //               data['plan_end_duration'].toDate().month.toString(),
+        //           planendday: data['plan_end_duration'].toDate().day.toString(),
+        //           paymentdone: data['payment_done'].toString(),
+        //           packagetype: data['package_type'],
+        //           orderyear: data['order_date'].toDate().year.toString(),
+        //           ordermonth: data['order_date'].toDate().month.toString(),
+        //           orderday: data['order_date'].toDate().day.toString(),
+        //           gymname: data["gym_details"]['name'],
+        //           gymaddress: data['gym_address'].toString(),
+        //           grandtotal: data['grand_total'].toString(),
+        //           discount: data['discount'].toString(),
+        //           daysleft: data['daysLeft'],
+        //           bookingstatus: data['booking_status'],
+        //           bookingprice: data['booking_price'].toString(),
+        //           bookingplan: data['booking_plan'],
+        //           bookingid: data['booking_id'],
+        //           bookingyear: data['booking_date'].toDate().year.toString(),
+        //           bookingmonth: data['booking_date'].toDate().month.toString(),
+        //           bookingday: data['booking_date'].toDate().day.toString(),
+        //           bookingaccepted: data['booking_accepted'].toString(),
+        //         ),
+        //       );
+        // }
       }),
-      DataCell(Icon(Icons.delete), onTap: () {
+      DataCell(const Icon(Icons.delete), onTap: () {
         deleteMethod(stream: bookingStream, uniqueDocId: bookingId);
       })
     ]);
