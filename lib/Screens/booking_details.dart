@@ -38,6 +38,7 @@ class _BookingDetailsState extends State<BookingDetails> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
+// <<<<<<< HEAD
         child: Material(
           elevation: 8,
           child: Container(
@@ -91,7 +92,67 @@ class _BookingDetailsState extends State<BookingDetails> {
                     ],
 
 // >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
+// =======
+                    // child: Container(
+                    //   padding: const EdgeInsets.symmetric(horizontal: 5),
+                    //   decoration: BoxDecoration(
+                    //       color: Colors.grey.shade100,
+                    //       borderRadius: BorderRadius.circular(20.0)),
+                    //   child: SingleChildScrollView(
+                    //     child: Column(
+                    //       crossAxisAlignment: CrossAxisAlignment.start,
+                    //       children: [
+                    //         Padding(
+                    //           padding: const EdgeInsets.only(top: 8.0, left: 8.0),
+                    //           child: ElevatedButton(
+                    //               style: ElevatedButton.styleFrom(
+                    //                 textStyle: const TextStyle(fontSize: 15),
+                    //               ),
+                    //               onPressed: () {
+                    //                 Get.to(const addbookings()); //showAddbox,
+                    //               },
+                    //               child: const Text('Add Booking')),
+                    //           // <<<<<<< HEAD
+                    //           // =======
+                    //         ),
+                    //         Column(
+                    //           children: [
+                    //             Padding(
+                    //                 padding: const EdgeInsets.only(left: 900),
+                    //                 child: ElevatedButton.icon(
+                    //                     onPressed: () async {
+                    //                       setState(() async {
+                    //                         startDate = await pickDate(context);
+                    //                       });
+                    //
+                    //                       print(startDate.toString());
+                    //                     },
+                    //                     icon: const Icon(Icons.date_range),
+                    //                     label: const Text('Start Date'))),
+                    //             Padding(
+                    //                 padding: const EdgeInsets.only(left: 900),
+                    //                 child: ElevatedButton.icon(
+                    //                     onPressed: () async {
+                    //                       setState(() async {
+                    //                         endDate = await pickDate(context);
+                    //                       });
+                    //
+                    //                       print(endDate.toString());
+                    //                     },
+                    //                     icon: const Icon(Icons.date_range),
+                    //                     label: const Text('End Date'))),
+                    //           ],
+
+                    // >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
                   ),
+//                 Container(
+//                   width: 500,
+//                   height: 51,
+//                   decoration: BoxDecoration(
+//                     borderRadius: BorderRadius.circular(14),
+//                     color: Colors.white12,
+// // >>>>>>> ae7259e7ba6e19ed4976a35667cb3a762fe66e2c
+//                   ),
                   Container(
                     width: 500,
                     height: 51,
@@ -165,6 +226,7 @@ class _BookingDetailsState extends State<BookingDetails> {
                         }
                         var doc = snapshot.data.docs;
 
+// <<<<<<< HEAD
                         if (searchVendorId.isNotEmpty) {
                           doc = doc.where((element) {
                             return element
@@ -203,12 +265,6 @@ class _BookingDetailsState extends State<BookingDetails> {
                               columns: const [
                                 DataColumn(
                                     label: Text(
-// <<<<<<< HEAD
-//                                 'Booking ID',
-//                                 style: TextStyle(fontWeight: FontWeight.w600),
-//                               )),
-//                               DataColumn(
-// =======
                                   'Booking ID',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 )),
@@ -219,7 +275,7 @@ class _BookingDetailsState extends State<BookingDetails> {
                                 //       style: TextStyle(fontWeight: FontWeight.w600),
                                 //     )),
                                 DataColumn(
-// >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
+                                  // >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
                                   label: Text(
                                     'User Name',
                                     style:
@@ -295,26 +351,26 @@ class _BookingDetailsState extends State<BookingDetails> {
                                         TextStyle(fontWeight: FontWeight.w600),
                                   ),
                                 ),
-// <<<<<<< HEAD
-//                               // DataColumn(
-//                               //   label: Text(
-//                               //     'Payment done',
-//                               //     style: TextStyle(fontWeight: FontWeight.w600),
-//                               //   ),
-//                               // ),
-//                               DataColumn(
-//                                 label: Text(
-//                                   'Booking Date',
-//                                   style: TextStyle(fontWeight: FontWeight.w600),
-//                                 ),
-//                               ),
-//                               DataColumn(
-//                                 label: Text(
-// =======
+                                // <<<<<<< HEAD
+                                // // DataColumn(
+                                // //   label: Text(
+                                // //     'Payment done',
+                                // //     style: TextStyle(fontWeight: FontWeight.w600),
+                                // //   ),
+                                // // ),
+                                // DataColumn(
+                                // label: Text(
+                                // 'Booking Date',
+                                // style: TextStyle(fontWeight: FontWeight.w600),
+                                // ),
+                                // ),
+                                // DataColumn(
+                                // label: Text(
+                                // =======
 
                                 DataColumn(
                                   label: Text(
-// >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
+                                    // >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
                                     'Booking Status',
                                     style:
                                         TextStyle(fontWeight: FontWeight.w600),
@@ -396,12 +452,33 @@ class _BookingDetailsState extends State<BookingDetails> {
 
     snapshot.forEach((element) {
       var x = element['booking_date'].toDate();
+// <<<<<<< HEAD
       if (x.isAfter(startDate) && x.isBefore(endDate) ||
           x == startDate ||
           x == endDate) {
         if (end >= ds++ && start <= ds) {
           d.add(element);
         }
+// =======
+        // var y = endDate.difference(startDate).inDays;
+        // <<<<<<< HEAD
+        // print('XXXXXXXXXXXXXXXXXXX???????????????????////////////');
+        // print(x);
+        // if (x.isAfter(startDate) && x.isBefore(endDate) ||
+        // x == startDate ||
+        // x == endDate) {
+        // d.add(element);
+        // }
+        // print('/////////////////DDDDDDDDDDDDDDDDDDDD???????????????');
+        // print(d);
+        // =======
+        // print('XXXXXXXXXXXXXXXXXXX???????????????????////////////');
+        // print(x);
+//       if (x.isAfter(startDate) && x.isBefore(endDate) ||
+//           x == startDate ||
+//           x == endDate) {
+//         d.add(element);
+// >>>>>>> ae7259e7ba6e19ed4976a35667cb3a762fe66e2c
       }
       // print('/////////////////DDDDDDDDDDDDDDDDDDDD???????????????');
       // print(d);
@@ -431,11 +508,13 @@ class _BookingDetailsState extends State<BookingDetails> {
     return DataRow(cells: [
       DataCell(
           data["id"] != null ? Text(data['id'].toString()) : const Text("")),
-// <<<<<<< HEAD
-// =======
-//
-//
-// >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
+
+      // <<<<<<< HEAD
+      // =======
+      //
+      //
+      // >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
+// >>>>>>> ae7259e7ba6e19ed4976a35667cb3a762fe66e2c
       DataCell(data['user_name'] != null
           ? Text(data['user_name'].toString())
           : const Text("")),
@@ -446,16 +525,7 @@ class _BookingDetailsState extends State<BookingDetails> {
           ? Text(
               '${data['gym_details']['name'].toString().toUpperCase()}|${data['gym_details']['branch'].toString().toUpperCase()}')
           : const Text("")),
-// <<<<<<< HEAD
-// =======
-//       DataCell(data['discount'] != null
-//           ? Text('₹${data['discount'].toString()}')
-//           : const Text("")),
-//       DataCell(data['totalDays'] != null
-//           ? Text(data['totalDays'].toString())
 
-      // : const Text("")),
-// >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
       DataCell(data['package_type'] != null
           ? Text(data['package_type'].toString().toUpperCase())
           : const Text("")),
@@ -465,12 +535,13 @@ class _BookingDetailsState extends State<BookingDetails> {
       DataCell(data['totalDays'] != null
           ? Text(data['totalDays'].toString())
           : const Text("")),
-// <<<<<<< HEAD
-//       DataCell(data['order_date'] != null ? Text(orderDate) : const Text("")),
-// =======
+
+      // DataCell(data['order_date'] != null ? Text(orderDate) : const Text("")),
+      // =======
       DataCell(data['booking_date'] != null ? Text(orderDate) : const Text("")),
 
-// >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
+      // >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
+// >>>>>>> ae7259e7ba6e19ed4976a35667cb3a762fe66e2c
       DataCell(data['plan_end_duration'] != null
           ? Text(durationEnd)
           : const Text("")),
@@ -546,9 +617,16 @@ class _BookingDetailsState extends State<BookingDetails> {
         ),
       ),
 // <<<<<<< HEAD
+// <<<<<<< HEAD
 // =======
 // <<<<<<< nihal_new
 // >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
+// =======
+//     <<<<<<< HEAD
+//     =======
+// // <<<<<<< nihal_new
+//     >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
+// >>>>>>> ae7259e7ba6e19ed4976a35667cb3a762fe66e2c
       // DataCell(data['booking_plan'] != null
       //     ? Text(data['booking_plan'].toString())
       //     : const Text("")),
@@ -558,6 +636,7 @@ class _BookingDetailsState extends State<BookingDetails> {
       DataCell(const Text(""), showEditIcon: true, onTap: () {
         Get.to(
           () => ProductEditBox(
+// <<<<<<< HEAD
 // <<<<<<< HEAD
 // =======
 // =======
@@ -573,6 +652,23 @@ class _BookingDetailsState extends State<BookingDetails> {
 //               () => ProductEditBox(
 // >>>>>>> Diptesh
 // >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
+// =======
+//     <<<<<<< HEAD
+//     =======
+// // =======
+// //       DataCell(data['booking_plan'] != null
+// //           ? Text(data['booking_plan'].toString())
+// //           : const Text("")),
+// //       DataCell(data['grand_total'] != null
+// //           ? Text('₹${data['grand_total'].toString()}')
+// //           : const Text("")),
+//
+// //       DataCell(const Text(""), showEditIcon: true, onTap: () {
+// //         Get.to(
+// //               () => ProductEditBox(
+// // >>>>>>> Diptesh
+//     >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
+// >>>>>>> ae7259e7ba6e19ed4976a35667cb3a762fe66e2c
             vendorid: data['vendorId'],
             username: data['user_name'],
             userid: data['userId'],
@@ -1141,9 +1237,16 @@ class _ProductEditBoxState extends State<ProductEditBox> {
 //                   // customTextField(
 
 // <<<<<<< HEAD
+// <<<<<<< HEAD
 // =======
 //
 // >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
+// =======
+                    // <<<<<<< HEAD
+                    // =======
+                    //
+                    // >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
+// >>>>>>> ae7259e7ba6e19ed4976a35667cb3a762fe66e2c
                     stream: vendorIdStream!.snapshots(),
                     builder: (context, AsyncSnapshot snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
@@ -1182,9 +1285,16 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                     },
                   )),
 // <<<<<<< HEAD
+// <<<<<<< HEAD
 // =======
 //
 // >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
+// =======
+                  //     <<<<<<< HEAD
+                  // =======
+                  //
+                  // >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
+// >>>>>>> ae7259e7ba6e19ed4976a35667cb3a762fe66e2c
                   const SizedBox(height: 15),
                   // customTextField(
                   //     hinttext: "Vendor ID", addcontroller: _addvendorid),
@@ -1293,9 +1403,16 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                                 bool check = false;
                                 return
 // <<<<<<< HEAD
+// <<<<<<< HEAD
 // =======
 //
 // >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
+// =======
+                                    // <<<<<<< HEAD
+                                    // =======
+                                    //
+                                    // >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
+// >>>>>>> ae7259e7ba6e19ed4976a35667cb3a762fe66e2c
                                     // RadioBoxx(
                                     //   doc[index]["name"],
                                     //   doc[index]["category_id"],
@@ -1312,9 +1429,16 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                                   title: Text(doc[index]["name"]),
                                 );
 // <<<<<<< HEAD
+// <<<<<<< HEAD
 // =======
 
 // >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
+// =======
+                                // <<<<<<< HEAD
+                                // =======
+
+                                // >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
+// >>>>>>> ae7259e7ba6e19ed4976a35667cb3a762fe66e2c
 // =======
                                 // RadioBoxx(
                                 //   doc[index]["name"],
@@ -1396,9 +1520,16 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                       child: StreamBuilder<QuerySnapshot>(
 //
 // <<<<<<< HEAD
+// <<<<<<< HEAD
 // =======
 //
 // >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
+// =======
+//               <<<<<<< HEAD
+//               =======
+//
+//               >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
+// >>>>>>> ae7259e7ba6e19ed4976a35667cb3a762fe66e2c
                     stream: vendorIdStream!.snapshots(),
                     builder: (context, AsyncSnapshot snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
@@ -1437,9 +1568,16 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                     },
                   )),
 // <<<<<<< HEAD
+// <<<<<<< HEAD
 // =======
 //
 // >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
+// =======
+                  //     <<<<<<< HEAD
+                  // =======
+                  //
+                  // >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
+// >>>>>>> ae7259e7ba6e19ed4976a35667cb3a762fe66e2c
 
                   // customTextField(
                   //     hinttext: "Gym Name", addcontroller: _addgymname),
@@ -1553,6 +1691,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                               DocumentReference documentReference =
 // <<<<<<< HEAD
 // <<<<<<< HEAD
+// <<<<<<< HEAD
 //                                   FirebaseFirestore.instance
 //                                       .collection('bookings')
 //                                       .doc(_addbookingid.text);
@@ -1572,6 +1711,12 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                               //     '${_addorderyear.text}-${isLess(_addordermonth.text) ? '0' + _addordermonth.text : _addordermonth.text}-${isLess(_addorderday.text) ? '0' + _addorderday.text : _addorderday.text} 00:00:04Z');
                               // DateTime bookingtimedata = DateTime.parse(
                               //     '${_addbookingyear.text}-${isLess(_addbookingmonth.text) ? '0' + _addbookingmonth.text : _addbookingmonth.text}-${isLess(_addbookingday.text) ? '0' + _addbookingday.text : _addbookingday.text} 00:00:04Z');
+// =======
+                              FirebaseFirestore.instance
+                                  .collection('bookings')
+                                  .doc(_addbookingid.text);
+                              //\ '0' + _addbookingmonth.text : _addbookingmonth.text}-${isLess(_addbookingday.text) ? '0' + _addbookingday.text : _addbookingday.text} 00:00:04Z');
+// >>>>>>> ae7259e7ba6e19ed4976a35667cb3a762fe66e2c
 
                               Map<String, dynamic> data = <String, dynamic>{
                                 'vandorId': abc3,
@@ -1596,6 +1741,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                                 'booking_plan': _addbookingplan.text,
                                 'booking_id': _addbookingid.text,
                                 'booking_date': bookingtimedata,
+// <<<<<<< HEAD
 // <<<<<<< HEAD///
 //                                 'booking_accepted':
 // <<<<<<< HEAD
@@ -1613,6 +1759,11 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                                         ? true
                                         : false,
 // >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
+// =======
+
+                                // 'booking_accepted': true ? true : false,
+                                // >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
+// >>>>>>> ae7259e7ba6e19ed4976a35667cb3a762fe66e2c
                               };
                               await documentReference
                                   .update(data)
@@ -1807,11 +1958,20 @@ class _ProductEditBoxState extends State<ProductEditBox> {
     const intialTime = const TimeOfDay(hour: 9, minute: 0);
     final newTime =
 // <<<<<<< HEAD
+// <<<<<<< HEAD
 //         await showTimePicker(context: context, initialTime: time ?? intialTime);
 // >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
 // =======
-        await showTimePicker(context: context, initialTime: time ?? intialTime);
+//         await showTimePicker(context: context, initialTime: time ?? intialTime);
 // >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
+// =======
+//         / <<<<<<< HEAD
+        await showTimePicker(context: context, initialTime: time ?? intialTime);
+// >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
+//     =======
+//     await showTimePicker(context: context, initialTime: time ?? intialTime);
+//     >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
+// >>>>>>> ae7259e7ba6e19ed4976a35667cb3a762fe66e2c
 
     if (newTime == null) return;
 
@@ -1863,11 +2023,20 @@ class _ProductEditBoxState extends State<ProductEditBox> {
     const intialTime = TimeOfDay(hour: 9, minute: 0);
     final newTime =
 // <<<<<<< HEAD
+// <<<<<<< HEAD
 //         await showTimePicker(context: context, initialTime: time ?? intialTime);
 // >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
 // =======
-        await showTimePicker(context: context, initialTime: time ?? intialTime);
+//         await showTimePicker(context: context, initialTime: time ?? intialTime);
 // >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
+// =======
+        // <<<<<<< HEAD
+        await showTimePicker(context: context, initialTime: time ?? intialTime);
+// >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
+//     =======
+//     await showTimePicker(context: context, initialTime: time ?? intialTime);
+//     >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
+// >>>>>>> ae7259e7ba6e19ed4976a35667cb3a762fe66e2c
 
     if (newTime == null) return;
 
@@ -1920,13 +2089,23 @@ class _ProductEditBoxState extends State<ProductEditBox> {
     final newTime =
 // <<<<<<< HEAD
 // <<<<<<< HEAD
+// =======
+        // <<<<<<< HEAD
+// >>>>>>> ae7259e7ba6e19ed4976a35667cb3a762fe66e2c
+// <<<<<<< HEAD
 //         await showTimePicker(context: context, initialTime: time ?? intialTime);
 // =======
 //         await showTimePicker(context: context, initialTime: time ?? intialTime);
 // >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
+// <<<<<<< HEAD
 // =======
         await showTimePicker(context: context, initialTime: time ?? intialTime);
 // >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
+// =======
+//     =======
+//     await showTimePicker(context: context, initialTime: time ?? intialTime);
+//     >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
+// >>>>>>> ae/7259e7ba6e19ed4976a35667cb3a762fe66e2c
 
     if (newTime == null) return;
 

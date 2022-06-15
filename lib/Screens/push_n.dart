@@ -2,6 +2,7 @@ import 'package:admin_panel_vyam/Screens/push_new_screen.dart';
 import 'package:admin_panel_vyam/services/deleteMethod.dart';
 import 'package:admin_panel_vyam/services/image_picker_api.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -62,7 +63,8 @@ class _PushState extends State<Push> {
                     style: ElevatedButton.styleFrom(
                       textStyle: const TextStyle(fontSize: 15),
                     ),
-                    onPressed: () {
+                    onPressed: () async {
+                    // await  FirebaseMessaging.instance.subscribeToTopic("push_notifications");
                       Get.to(() => const pushNew());
                     },
                     child: Text('Add Push Notification'),

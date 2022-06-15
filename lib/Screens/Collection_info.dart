@@ -573,7 +573,7 @@ class _EditBoxState extends State<EditBox> {
         },
         child: Scaffold(
           appBar: AppBar(
-            title: Text('Edit User Details'),
+            title: const Text('Edit User Details'),
           ),
           backgroundColor: Colors.white10,
           body: Container(
@@ -935,7 +935,7 @@ class _detailsaddState extends State<detailsadd> {
   final TextEditingController _addsublocality = TextEditingController();
   final TextEditingController _adduserid = TextEditingController();
   var profileImage;
-  String gender = "Male";
+  String gender = "Not Specified";
   var imgUrl1;
 
   @override
@@ -1006,13 +1006,18 @@ class _detailsaddState extends State<detailsadd> {
                       value: gender,
                       items: const [
                         DropdownMenuItem(
+                          child: Text("Not Specified"),
+                          value: "Not Specified",
+                        ),
+                        DropdownMenuItem(
                           child: Text("Male"),
-                          value: "Male",
+                          value: "male",
                         ),
                         DropdownMenuItem(
                           child: Text("Female"),
-                          value: "Female",
+                          value: "female",
                         ),
+
                       ],
                       onChanged: (value) {
                         setState(() {
@@ -1022,12 +1027,8 @@ class _detailsaddState extends State<detailsadd> {
                 ],
               ),
               // customTextField(hinttext: "Gender", addcontroller: _addgender),
-
               // customTextField(hinttext: "Address", addcontroller: _addaddress),
-// <<<<<<< HEAD
-// =======
-//
-// >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
+
               // customTextField(
               //     hinttext: "Locality", addcontroller: _addlocality),
               // customTextField(
