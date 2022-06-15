@@ -210,7 +210,6 @@ class _BookingDetailsState extends State<BookingDetails> {
                             'completed',
                             'active',
                             'upcoming',
-                            'cancelled'
                           ])
                           .orderBy("order_date", descending: true)
                           .snapshots(),
