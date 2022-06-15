@@ -20,6 +20,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 //import 'package:flutter/painting.dart';
 import 'package:image_picker/image_picker.dart';
+import 'Screens/filter.dart';
 import 'Screens/workouts.dart';
 import 'dashboard.dart';
 
@@ -313,7 +314,7 @@ class _SideNavBar1State extends State<SideNavBar1> {
           index == 16 ? const Push() : Container(),
           index == 15 ? const BannerPage() : Container(),
           index == 17 ? const workoutsGym() : Container(),
-
+          index == 18 ? const filters() : Container(),
         ],
       ),
     );
