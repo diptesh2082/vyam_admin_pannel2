@@ -38,8 +38,8 @@ class _workoutsGymState extends State<workoutsGym> {
       body: Container(
         padding: const EdgeInsets.symmetric(horizontal: 5),
         decoration: BoxDecoration(
-            color: Colors.grey.shade100,
-            borderRadius: BorderRadius.circular(20.0),
+          color: Colors.grey.shade100,
+          borderRadius: BorderRadius.circular(20.0),
         ),
         child: SingleChildScrollView(
           child: Column(
@@ -47,24 +47,21 @@ class _workoutsGymState extends State<workoutsGym> {
             children: [
               Row(
                 children: [
-              Padding(
-              padding: const EdgeInsets.only(top: 8.0, left: 8.0),
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  textStyle:
-                  const TextStyle(fontSize: 15 ),
-                ),
-                onPressed: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                     builder: (context) => const addWorkouts(),
-                   ));
-                },
-                child: Text('Add Workout'),
-              ),
-              ),
-
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8.0, left: 8.0),
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        textStyle: const TextStyle(fontSize: 15),
+                      ),
+                      onPressed: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => const addWorkouts(),
+                        ));
+                      },
+                      child: Text('Add Workout'),
+                    ),
+                  ),
                   const Spacer(),
-
                   Container(
                     width: 500,
                     height: 51,
@@ -94,13 +91,11 @@ class _workoutsGymState extends State<workoutsGym> {
                             });
                           }
                         },
-                        decoration:  InputDecoration(
+                        decoration: InputDecoration(
                           prefixIcon: const Icon(Icons.search),
                           hintText: 'Search',
                           hintStyle: GoogleFonts.poppins(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500
-                          ),
+                              fontSize: 16, fontWeight: FontWeight.w500),
                           border: InputBorder.none,
                           filled: true,
                           fillColor: Colors.white12,
@@ -110,49 +105,46 @@ class _workoutsGymState extends State<workoutsGym> {
                   ),
                 ],
               ),
-
               Center(
-                child: StreamBuilder<QuerySnapshot>(
-                  stream: couponStream!.snapshots(),
-                  builder: (context, AsyncSnapshot snapshot)
-                  {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const CircularProgressIndicator();
-                    }
-                    if (snapshot.data == null) {
-                      return Container();
-                    }
-                    print("-----------------------------------");
+                  child: StreamBuilder<QuerySnapshot>(
+                stream: couponStream!.snapshots(),
+                builder: (context, AsyncSnapshot snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const CircularProgressIndicator();
+                  }
+                  if (snapshot.data == null) {
+                    return Container();
+                  }
+                  print("-----------------------------------");
 
-                    var doc = snapshot.data.docs;
+                  var doc = snapshot.data.docs;
 
-                    if (searchWorkout.length > 0) {
-                      doc = doc.where((element) {
-                        return element
-                            .get('type')
-                            .toString()
-                            .toLowerCase()
-                            .contains(searchWorkout.toString())
-                            || element
-                                .get('gym_id')
-                                .toString()
-                                .toLowerCase()
-                                .contains(searchWorkout.toString());
-                      }).toList();
-                    }
-                    print(snapshot.data.docs);
+                  if (searchWorkout.length > 0) {
+                    doc = doc.where((element) {
+                      return element
+                              .get('type')
+                              .toString()
+                              .toLowerCase()
+                              .contains(searchWorkout.toString()) ||
+                          element
+                              .get('gym_id')
+                              .toString()
+                              .toLowerCase()
+                              .contains(searchWorkout.toString());
+                    }).toList();
+                  }
+                  print(snapshot.data.docs);
 
-                    return SingleChildScrollView(
-                      child: DataTable(
+                  return SingleChildScrollView(
+                    child: DataTable(
                         dataRowHeight: 65,
                         columns: const [
                           DataColumn(
-                              label: Text(
-                                'ID',
-                                style: TextStyle(fontWeight: FontWeight.w600),
-                              ),
+                            label: Text(
+                              'ID',
+                              style: TextStyle(fontWeight: FontWeight.w600),
+                            ),
                           ),
-
                           DataColumn(
                             label: Text(
                               'Name',
@@ -171,52 +163,90 @@ class _workoutsGymState extends State<workoutsGym> {
                               style: TextStyle(fontWeight: FontWeight.w600),
                             ),
                           ),
-
                         ],
                         rows: _buildlist(context, doc)),
-                      );
-                  },
-                )
+                  );
+                },
+              )),
+              SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    child: Text("Previous Page"),
+                    onPressed: () {
+                      setState(() {
+                        if (start > 0 && end > 0) {
+                          start = start - 10;
+                          end = end - 10;
+                        }
+                      });
+                      print("Previous Page");
+                    },
+                  ),
+                  SizedBox(width: 20),
+                  ElevatedButton(
+                    child: Text("Next Page"),
+                    onPressed: () {
+                      setState(() {
+                        if (end < length) {
+                          start = start + 10;
+                          end = end + 10;
+                        }
+                      });
+                      print("Next Page");
+                    },
+                  ),
+                ],
               ),
-
             ],
           ),
         ),
-
       ),
     );
   }
 
+  var start = 0;
+
+  var end = 10;
+  var length;
+
   List<DataRow> _buildlist(
       BuildContext context, List<DocumentSnapshot> snapshot) {
-    return snapshot.map((data) => _buildListItem(context, data)).toList();
+    var d = 1;
+    var s = start + 1;
+    var snap = [];
+    length = snapshot.length;
+    snapshot.forEach((element) {
+      if (end >= d++ && start <= d) {
+        snap.add(element);
+      }
+    });
+    return snap
+        .map((data) => _buildListItem(context, data, s++, start, end))
+        .toList();
   }
 
-  DataRow _buildListItem(BuildContext context, DocumentSnapshot data)
-  {
+  DataRow _buildListItem(BuildContext context, DocumentSnapshot data, int index,
+      int start, int end) {
     String name = data['type'];
     String id = data['gym_id'];
     String id1 = data['id'];
 
-
     return DataRow(cells: [
       DataCell(data != null ? Text(data['gym_id'] ?? "") : const Text("")),
       DataCell(data != null ? Text(data['type'] ?? "") : const Text("")),
-
       DataCell(const Text(""), showEditIcon: true, onTap: () {
         //TODO: Create Edit PAge
-        Get.to(()=>EditBox(gymId: data['gym_id'], type: data['type'], id: data['id']));
+        Get.to(() =>
+            EditBox(gymId: data['gym_id'], type: data['type'], id: data['id']));
       }),
-
       DataCell(const Icon(Icons.delete), onTap: () {
         deleteMethod(stream: couponStream, uniqueDocId: id1);
       })
-
     ]);
   }
-
 }
-
 
 class EditBox extends StatefulWidget {
   const EditBox({
@@ -224,7 +254,6 @@ class EditBox extends StatefulWidget {
     required this.gymId,
     required this.type,
     required this.id,
-
   }) : super(key: key);
 
   final String type;
@@ -255,7 +284,6 @@ class _EditBoxState extends State<EditBox> {
       appBar: AppBar(
         title: Text('Edit Workouts'),
       ),
-
       body: Center(
         child: SizedBox(
           height: 600,
@@ -263,19 +291,18 @@ class _EditBoxState extends State<EditBox> {
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children:   [
+              children: [
                 Center(
-                  child: Text('Update Records for this doc',
-                  style:
-                  TextStyle(
-                      fontFamily: 'poppins',
-                      fontWeight: FontWeight.w600,
-                      fontSize: 14),
+                  child: Text(
+                    'Update Records for this doc',
+                    style: TextStyle(
+                        fontFamily: 'poppins',
+                        fontWeight: FontWeight.w600,
+                        fontSize: 14),
                   ),
                 ),
                 CustomTextField(hinttext: "Name", addcontroller: _type),
                 CustomTextField(hinttext: "Gym_Id", addcontroller: _gymId),
-
                 Padding(
                   padding: EdgeInsets.all(50),
                   child: Center(
@@ -299,18 +326,11 @@ class _EditBoxState extends State<EditBox> {
                     ),
                   ),
                 ),
-
               ],
             ),
           ),
         ),
       ),
-
-
-
-
     );
   }
 }
-
-

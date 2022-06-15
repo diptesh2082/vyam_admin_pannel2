@@ -57,243 +57,296 @@ class _ProductDetailsState extends State<ProductDetails> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 5),
-          decoration: BoxDecoration(
-              color: Colors.grey.shade100,
-              borderRadius: BorderRadius.circular(20.0)),
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 8.0, left: 8.0),
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          //padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 20),
+        child: Material(
+          elevation: 8,
+          child: Container(
+            height: 800,
+            width: 1450,
+            padding: const EdgeInsets.symmetric(horizontal: 5),
+            decoration: BoxDecoration(
+                color: Colors.grey.shade100,
+                borderRadius: BorderRadius.circular(20.0)),
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(top: 8.0, left: 8.0),
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            //padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 20),
 
-                          textStyle: const TextStyle(fontSize: 15),
+                            textStyle: const TextStyle(fontSize: 15),
+                          ),
+                          onPressed: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => const ShowAddBox(),
+                            ));
+                          },
+                          child: Text('Add Product'),
                         ),
-                        onPressed: () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => const ShowAddBox(),
-                          ));
-                        },
-                        child: Text('Add Product'),
                       ),
-                    ),
-                    const Spacer(),
-                    Container(
-                      width: 500,
-                      height: 51,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(14),
-                        color: Colors.white12,
-                      ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(15),
-                        child: TextField(
-                          // focusNode: _node,
+                      const Spacer(),
+                      Container(
+                        width: 500,
+                        height: 51,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(14),
+                          color: Colors.white12,
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(15),
+                          child: TextField(
+                            // focusNode: _node,
 
-                          autofocus: false,
-                          textAlignVertical: TextAlignVertical.bottom,
-                          onSubmitted: (value) async {
-                            FocusScope.of(context).unfocus(); // <<<<<<< HEAD
-                          },
+                            autofocus: false,
+                            textAlignVertical: TextAlignVertical.bottom,
+                            onSubmitted: (value) async {
+                              FocusScope.of(context).unfocus(); // <<<<<<< HEAD
+                            },
 
-                          onChanged: (value) {
-                            if (value.isEmpty) {}
-                            if (mounted) {
-                              setState(() {
-                                searchGymName = value.toString();
-                              });
-                            }
-                          },
-                          decoration: InputDecoration(
-                            prefixIcon: const Icon(Icons.search),
-                            hintText: 'Search',
-                            hintStyle: GoogleFonts.poppins(
-                                fontSize: 16, fontWeight: FontWeight.w500),
-                            border: InputBorder.none,
-                            filled: true,
-                            fillColor: Colors.white12,
+                            onChanged: (value) {
+                              if (value.isEmpty) {}
+                              if (mounted) {
+                                setState(() {
+                                  searchGymName = value.toString();
+                                });
+                              }
+                            },
+                            decoration: InputDecoration(
+                              prefixIcon: const Icon(Icons.search),
+                              hintText: 'Search',
+                              hintStyle: GoogleFonts.poppins(
+                                  fontSize: 16, fontWeight: FontWeight.w500),
+                              border: InputBorder.none,
+                              filled: true,
+                              fillColor: Colors.white12,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-                Center(
-                  child: StreamBuilder<QuerySnapshot>(
-                    stream: productStream!.snapshots(),
-                    builder: (context, AsyncSnapshot snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const CircularProgressIndicator();
-                      }
-                      if (snapshot.data == null) {
-                        return Container();
-                      }
-                      print("-----------------------------------");
-                      var doc = snapshot.data.docs;
-
-                      if (searchGymName.isNotEmpty) {
-                        doc = doc.where((element) {
-                          return element
-                                  .get('name')
-                                  .toString()
-                                  .toLowerCase()
-                                  .contains(searchGymName.toString()) ||
-                              element
-                                  .get('gym_id')
-                                  .toString()
-                                  .toLowerCase()
-                                  .contains(searchGymName.toString()) ||
-                              element
-                                  .get('address')
-                                  .toString()
-                                  .toLowerCase()
-                                  .contains(searchGymName.toString());
-                        }).toList();
-                      }
-
-                      print(snapshot.data.docs);
-                      return SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: DataTable(
-                            // ? DATATABLE
-                            dataRowHeight: 65,
-                            columns: const [
-                              DataColumn(
-                                  label: Text(
-                                'Index',
-                                style: TextStyle(fontWeight: FontWeight.w600),
-                              )),
-                              DataColumn(
-                                  label: Text(
-                                'Name',
-                                style: TextStyle(fontWeight: FontWeight.w600),
-                              )),
-                              DataColumn(
-                                label: Text(
-                                  'Address',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
-                              ),
-                              DataColumn(
-                                label: Text(
-                                  'GYM Owner ID',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
-                              ),
-                              DataColumn(
-                                label: Text(
-                                  'Gym Owner',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
-                              ),
-                              DataColumn(
-                                label: Text(
-                                  'Gender',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
-                              ),
-                              // DataColumn(
-                              //   label: Text(
-                              //     'Location',
-                              //     style: TextStyle(fontWeight: FontWeight.w600),
-                              //   ),
-                              // ),
-                              DataColumn(
-                                label: Text(
-                                  'Landmark',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
-                              ),
-                              DataColumn(
-                                label: Text(
-                                  'Pincode',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
-                              ),
-
-                              DataColumn(
-                                label: Text(
-                                  'Trainers',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
-                              ), //! For trainer
-                              DataColumn(
-                                label: Text(
-                                  'Packages',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
-                              ), //!For Package
-                              // DataColumn(
-                              //   label: Text(
-                              //     'Extra Packages',
-                              //     style: TextStyle(fontWeight: FontWeight.w600),
-                              //   ),
-                              // ),
-                              DataColumn(
-                                label: Text(
-                                  'Upload Image',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
-                              ),
-                              DataColumn(
-                                label: Text(
-                                  'Timings',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
-                              ),
-                              DataColumn(
-                                label: Text(
-                                  'Gym_status',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
-                              ),
-                              DataColumn(
-                                label: Text(
-                                  'User Block',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
-                              ),
-                              DataColumn(
-                                label: Text(
-                                  'Online Pay Status',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
-                              ),
-                              DataColumn(
-                                label: Text(
-                                  'Upload Display Image',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
-                              ),
-                              DataColumn(
-                                label: Text(
-                                  'Edit',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
-                              ),
-                              DataColumn(
-                                label: Text(
-                                  'Delete',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
-                              ),
-
-                              // DataColumn(label: Text('')), //! For edit pencil
-                              // DataColumn(label: Text('')),
-                            ],
-                            rows: _buildlist(context, doc)),
-                      );
-                    },
+                    ],
                   ),
-                ),
-              ],
+                  Center(
+                    child: StreamBuilder<QuerySnapshot>(
+                      stream: productStream!.snapshots(),
+                      builder: (context, AsyncSnapshot snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const CircularProgressIndicator();
+                        }
+                        if (snapshot.data == null) {
+                          return Container();
+                        }
+                        print("-----------------------------------");
+                        var doc = snapshot.data.docs;
+
+                        if (searchGymName.isNotEmpty) {
+                          doc = doc.where((element) {
+                            return element
+                                    .get('name')
+                                    .toString()
+                                    .toLowerCase()
+                                    .contains(searchGymName.toString()) ||
+                                element
+                                    .get('gym_id')
+                                    .toString()
+                                    .toLowerCase()
+                                    .contains(searchGymName.toString()) ||
+                                element
+                                    .get('address')
+                                    .toString()
+                                    .toLowerCase()
+                                    .contains(searchGymName.toString());
+                          }).toList();
+                        }
+
+                        print(snapshot.data.docs);
+                        return SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: DataTable(
+                              // ? DATATABLE
+                              dataRowHeight: 65,
+                              columns: const [
+                                DataColumn(
+                                    label: Text(
+                                  'Index',
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                )),
+                                DataColumn(
+                                    label: Text(
+                                  'Name',
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                )),
+                                DataColumn(
+                                  label: Text(
+                                    'Address',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.w600),
+                                  ),
+                                ),
+                                DataColumn(
+                                  label: Text(
+                                    'GYM Owner ID',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.w600),
+                                  ),
+                                ),
+                                DataColumn(
+                                  label: Text(
+                                    'Gym Owner',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.w600),
+                                  ),
+                                ),
+                                DataColumn(
+                                  label: Text(
+                                    'Gender',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.w600),
+                                  ),
+                                ),
+                                // DataColumn(
+                                //   label: Text(
+                                //     'Location',
+                                //     style: TextStyle(fontWeight: FontWeight.w600),
+                                //   ),
+                                // ),
+                                DataColumn(
+                                  label: Text(
+                                    'Landmark',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.w600),
+                                  ),
+                                ),
+                                DataColumn(
+                                  label: Text(
+                                    'Pincode',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.w600),
+                                  ),
+                                ),
+
+                                DataColumn(
+                                  label: Text(
+                                    'Trainers',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.w600),
+                                  ),
+                                ), //! For trainer
+                                DataColumn(
+                                  label: Text(
+                                    'Packages',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.w600),
+                                  ),
+                                ), //!For Package
+                                // DataColumn(
+                                //   label: Text(
+                                //     'Extra Packages',
+                                //     style: TextStyle(fontWeight: FontWeight.w600),
+                                //   ),
+                                // ),
+                                DataColumn(
+                                  label: Text(
+                                    'Upload Image',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.w600),
+                                  ),
+                                ),
+                                DataColumn(
+                                  label: Text(
+                                    'Timings',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.w600),
+                                  ),
+                                ),
+                                DataColumn(
+                                  label: Text(
+                                    'Gym_status',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.w600),
+                                  ),
+                                ),
+                                DataColumn(
+                                  label: Text(
+                                    'User Block',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.w600),
+                                  ),
+                                ),
+                                DataColumn(
+                                  label: Text(
+                                    'Online Pay Status',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.w600),
+                                  ),
+                                ),
+                                DataColumn(
+                                  label: Text(
+                                    'Upload Display Image',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.w600),
+                                  ),
+                                ),
+                                DataColumn(
+                                  label: Text(
+                                    'Edit',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.w600),
+                                  ),
+                                ),
+                                DataColumn(
+                                  label: Text(
+                                    'Delete',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.w600),
+                                  ),
+                                ),
+
+                                // DataColumn(label: Text('')), //! For edit pencil
+                                // DataColumn(label: Text('')),
+                              ],
+                              rows: _buildlist(context, doc)),
+                        );
+                      },
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ElevatedButton(
+                        child: Text("Previous Page"),
+                        onPressed: () {
+                          setState(() {
+                            if (start > 0 && end > 0) {
+                              start = start - 10;
+                              end = end - 10;
+                            }
+                          });
+                          print("Previous Page");
+                        },
+                      ),
+                      SizedBox(width: 20),
+                      ElevatedButton(
+                        child: Text("Next Page"),
+                        onPressed: () {
+                          setState(() {
+                            if (end < length) {
+                              start = start + 10;
+                              end = end + 10;
+                            }
+                          });
+                          print("Next Page");
+                        },
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -339,20 +392,29 @@ class _ProductDetailsState extends State<ProductDetails> {
   // final TextEditingController morning_days = TextEditingController();
   // final TextEditingController evening_days = TextEditingController();
 
+  var start = 0;
+
+  var end = 10;
+  var length;
   List<DataRow> _buildlist(
       BuildContext context, List<DocumentSnapshot> snapshot) {
     var d = 1;
+    var s = start + 1;
+    var snap = [];
+    length = snapshot.length;
+    snapshot.forEach((element) {
+      if (end >= d++ && start <= d) {
+        snap.add(element);
+      }
+    });
 
-    return snapshot.map((data) => _buildListItem(context, data, d++)).toList();
+    return snap
+        .map((data) => _buildListItem(context, data, s++, start, end))
+        .toList();
   }
 
-  DataRow _buildListItem(
-      BuildContext context, DocumentSnapshot data, int index) {
-    // morning.text=data['timings']["gym"]["Morning"];
-    // evening.text=data['timings']["gym"]["Evening"];
-    // closed.text=data['timings']["gym"]["Closed"];
-    // morning_days.text=data['timings']["gym"]["morning_days"];
-    // evening_days.text=data['timings']["gym"]["evening_days"];
+  DataRow _buildListItem(BuildContext context, DocumentSnapshot data, int index,
+      int start, int end) {
     String gymId = data['gym_id'];
     GeoPoint loc = data['location'];
     String name = data['name'];
@@ -361,10 +423,10 @@ class _ProductDetailsState extends State<ProductDetails> {
     bool online_pay = data["online_pay"];
     List imgList = data['images'];
     String landmark = data['landmark'];
+    String imagess = data['display_picture'];
     List<dynamic> arr2 = data['amenities'];
     List<dynamic> WorkoutArray = data['workouts'];
     List<dynamic> serviceArray = data['service'];
-
     String x, y;
 
     return DataRow(cells: [
@@ -386,7 +448,6 @@ class _ProductDetailsState extends State<ProductDetails> {
       //           await MapsLaucherApi().launchMaps(loc.latitude, loc.longitude);
       //         },
       //         child: Text(loctext))
-
       //: const Text("")),
       DataCell(data != null ? Text(data['landmark'] ?? "") : const Text("")),
 // >>>>>>> cf1997613ff877c63a56c61e3009bdfe3639ccfa
@@ -464,8 +525,11 @@ class _ProductDetailsState extends State<ProductDetails> {
                       child: StreamBuilder<Object>(
                           stream: productStream!.snapshots(),
                           builder: (context, AsyncSnapshot snapshot) {
-                            return ListView.builder(
-                                scrollDirection: Axis.vertical,
+                            return GridView.builder(
+                                padding: const EdgeInsets.all(20.0),
+                                gridDelegate:
+                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 2),
                                 itemCount: data['images'].length,
                                 itemBuilder: (BuildContext context, int index) {
                                   return SizedBox(
@@ -478,8 +542,11 @@ class _ProductDetailsState extends State<ProductDetails> {
                                         SizedBox(
                                           height: 500,
                                           width: 500,
-                                          child: Image.network(
-                                            data['images'][index].toString(),
+                                          child: FittedBox(
+                                            child: Image.network(
+                                              data['images'][index].toString(),
+                                              fit: BoxFit.fill,
+                                            ),
                                           ),
                                         ),
                                         const SizedBox(width: 20),
@@ -637,8 +704,9 @@ class _ProductDetailsState extends State<ProductDetails> {
                   IconButton(
                       onPressed: () async {
                         // print('OS: ${Platform.operatingSystem}');
-                        var dic = await chooseImage();
-                        await uploadImageToStorage(dic, gymId);
+                        // var dic = await chooseImage();
+                        // await uploadImageToStorage(dic, gymId);
+                        send(gymId);
                         // await pickImage();
                         // await saveData(gymId);
                       },
@@ -692,7 +760,11 @@ class _ProductDetailsState extends State<ProductDetails> {
       ),
 
       DataCell(const Icon(Icons.delete), onTap: () {
-        deleteMethod(stream: productStream, uniqueDocId: gymId);
+        deleteMethodVendor(
+            stream: productStream,
+            uniqueDocId: gymId,
+            imagess: imagess,
+            imlist: imgList);
       })
     ]);
   }

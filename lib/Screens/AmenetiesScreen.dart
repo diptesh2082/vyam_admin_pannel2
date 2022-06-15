@@ -70,7 +70,6 @@ class _AmenetiesScreenState extends State<AmenetiesScreen> {
                     // ),
                   ),
                 ),
-
                 Container(
                   width: 500,
                   height: 51,
@@ -100,13 +99,11 @@ class _AmenetiesScreenState extends State<AmenetiesScreen> {
                           });
                         }
                       },
-                      decoration:  InputDecoration(
+                      decoration: InputDecoration(
                         prefixIcon: const Icon(Icons.search),
                         hintText: 'Search',
                         hintStyle: GoogleFonts.poppins(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500
-                        ),
+                            fontSize: 16, fontWeight: FontWeight.w500),
                         border: InputBorder.none,
                         filled: true,
                         fillColor: Colors.white12,
@@ -114,13 +111,11 @@ class _AmenetiesScreenState extends State<AmenetiesScreen> {
                     ),
                   ),
                 ),
-
                 Center(
                   child: StreamBuilder<QuerySnapshot>(
                     stream: amenityStream!
                         .orderBy('id', descending: false)
                         .snapshots(),
-
                     builder: (context, AsyncSnapshot snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return const CircularProgressIndicator();
@@ -140,8 +135,6 @@ class _AmenetiesScreenState extends State<AmenetiesScreen> {
                               .contains(searchAmeneties.toString());
                         }).toList();
                       }
-
-
 
                       return SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
@@ -185,6 +178,37 @@ class _AmenetiesScreenState extends State<AmenetiesScreen> {
                     },
                   ),
                 ),
+                SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                      child: Text("Previous Page"),
+                      onPressed: () {
+                        setState(() {
+                          if (start > 0 && end > 0) {
+                            start = start - 10;
+                            end = end - 10;
+                          }
+                        });
+                        print("Previous Page");
+                      },
+                    ),
+                    SizedBox(width: 20),
+                    ElevatedButton(
+                      child: Text("Next Page"),
+                      onPressed: () {
+                        setState(() {
+                          if (end < length) {
+                            start = start + 10;
+                            end = end + 10;
+                          }
+                        });
+                        print("Next Page");
+                      },
+                    ),
+                  ],
+                ),
               ],
             ),
           ),
@@ -193,13 +217,29 @@ class _AmenetiesScreenState extends State<AmenetiesScreen> {
     );
   }
 
+  var start = 0;
+
+  var end = 10;
+  var length;
+
   List<DataRow> _buildlist(
       BuildContext context, List<DocumentSnapshot> snapshot) {
     var d = 1;
-    return snapshot.map((data) => _buildListItem(context, data , d++)).toList();
+    var s = start + 1;
+    var snap = [];
+    length = snapshot.length;
+    snapshot.forEach((element) {
+      if (end >= d++ && start <= d) {
+        snap.add(element);
+      }
+    });
+    return snap
+        .map((data) => _buildListItem(context, data, s++, start, end))
+        .toList();
   }
 
-  DataRow _buildListItem(BuildContext context, DocumentSnapshot data , index) {
+  DataRow _buildListItem(BuildContext context, DocumentSnapshot data, int index,
+      int start, int end) {
     String amenitiesId = data['amenity_id'];
     return DataRow(cells: [
       DataCell(data != null ? Text(index.toString()) : const Text("")),
@@ -246,9 +286,10 @@ class _AmenetiesScreenState extends State<AmenetiesScreen> {
         },
       ),
       DataCell(Icon(Icons.delete), onTap: () {
-        deleteMethod(
+        deleteMethodI(
             stream: FirebaseFirestore.instance.collection('amenities'),
-            uniqueDocId: amenitiesId);
+            uniqueDocId: amenitiesId,
+            imagess: data['image']);
       })
     ]);
   }
@@ -419,20 +460,20 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                             checker = (checker == false) ? true : false;
                           });
                           imagee = await chooseImage();
-                         await getUrlImage(imagee);
+                          await getUrlImage(imagee);
                         },
                         child: const Icon(
                           Icons.upload_file_outlined,
                         ),
                       ),
-
                       SizedBox(
                         width: 300,
                         height: 200,
                         child: Container(
-                          child:
-                          Image.network((imgUrl1 == null) ? ' ' : imgUrl1,
-                            fit: BoxFit.contain,),
+                          child: Image.network(
+                            (imgUrl1 == null) ? ' ' : imgUrl1,
+                            fit: BoxFit.contain,
+                          ),
                         ),
                       ),
                     ],
@@ -494,13 +535,11 @@ class _ProductEditBoxState extends State<ProductEditBox> {
 
   getUrlImage(XFile? pickedFile) async {
     if (kIsWeb) {
-      final _firebaseStorage = FirebaseStorage.instance
-          .ref().child("banner");
+      final _firebaseStorage = FirebaseStorage.instance.ref().child("banner");
 
       Reference _reference = _firebaseStorage
           .child('banner_details/${Path.basename(pickedFile!.path)}');
-      await _reference
-          .putData(
+      await _reference.putData(
         await pickedFile.readAsBytes(),
         SettableMetadata(contentType: 'image/jpeg'),
       );
@@ -510,11 +549,6 @@ class _ProductEditBoxState extends State<ProductEditBox> {
       setState(() {
         imgUrl1 = imageUrl;
       });
-
     }
   }
-
-
-
-
 }
