@@ -9,18 +9,19 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:get/get.dart';
 import '../services/deleteMethod.dart';
-import 'payments_screen.dart';
 
-class BookingDetails extends StatefulWidget {
-  const BookingDetails({
+class BookingDetails1 extends StatefulWidget {
+  const BookingDetails1({
     Key? key,
+    required this.st,
   }) : super(key: key);
+  final String st;
 
   @override
-  State<BookingDetails> createState() => _BookingDetailsState();
+  State<BookingDetails1> createState() => _BookingDetails1State();
 }
 
-class _BookingDetailsState extends State<BookingDetails> {
+class _BookingDetails1State extends State<BookingDetails1> {
   CollectionReference bookingStream =
       FirebaseFirestore.instance.collection('bookings');
   String searchVendorId = '';
@@ -38,7 +39,7 @@ class _BookingDetailsState extends State<BookingDetails> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Bookings"),
+        title: Text('Bookings'),
       ),
       body: SafeArea(
 // <<<<<<< HEAD
@@ -206,12 +207,7 @@ class _BookingDetailsState extends State<BookingDetails> {
                     child: StreamBuilder<QuerySnapshot>(
                       stream: FirebaseFirestore.instance
                           .collection('bookings')
-                          .where('booking_status', whereIn: [
-                            'completed',
-                            'active',
-                            'upcoming',
-                            'cancelled'
-                          ])
+                          .where('booking_status', isEqualTo: widget.st)
                           .orderBy("order_date", descending: true)
                           .snapshots(),
                       builder: (context, AsyncSnapshot snapshot) {
