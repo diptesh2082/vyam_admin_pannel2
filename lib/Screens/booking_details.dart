@@ -29,7 +29,6 @@ class _BookingDetailsState extends State<BookingDetails> {
   DateTime startDate = DateTime(DateTime.now().year - 5);
   DateTime endDate = DateTime(DateTime.now().year + 5);
 
-
   @override
   void initState() {
     super.initState();
@@ -39,303 +38,342 @@ class _BookingDetailsState extends State<BookingDetails> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 5),
-          decoration: BoxDecoration(
-              color: Colors.grey.shade100,
-              borderRadius: BorderRadius.circular(20.0)),
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 8.0, left: 8.0),
-                  child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        textStyle: const TextStyle(fontSize: 15),
-                      ),
-                      onPressed: () {
-                        Get.to(const addbookings()); //showAddbox,
-                      },
-                      child: const Text('Add Booking')),
-<<<<<<< HEAD
-=======
-
-                ),
-
-                Column(
-                  children: [
-                    Padding(
-                        padding: const EdgeInsets.only(left: 900),
-                        child:
-                        ElevatedButton.icon(onPressed: ()async {
-                          setState(() async {
-                           startDate = await pickDate(context);
-                          });
-
-                          print(startDate.toString());
+        child: Material(
+          elevation: 8,
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 5),
+            decoration: BoxDecoration(
+                color: Colors.grey.shade100,
+                borderRadius: BorderRadius.circular(20.0)),
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8.0, left: 8.0),
+                    child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          textStyle: const TextStyle(fontSize: 15),
+                        ),
+                        onPressed: () {
+                          Get.to(const addbookings()); //showAddbox,
                         },
-                            icon: const Icon(Icons.date_range),
-                            label: const Text('Start Date'))
-                    ),
-                    Padding(
-                        padding: const EdgeInsets.only(left: 900),
-                        child:
-                        ElevatedButton.icon(onPressed: ()async {
-                          setState(() async {
-                            endDate = await pickDate(context);
-                          });
-
-                          print(endDate.toString());
-                        },
-                            icon: const Icon(Icons.date_range),
-                            label: const Text('End Date'))
-                    ),
-                  ],
-
->>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
-                ),
-                Container(
-                  width: 500,
-                  height: 51,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(14),
-                    color: Colors.white12,
+                        child: const Text('Add Booking')),
+// <<<<<<< HEAD
+// =======
                   ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(15),
-                    child: TextField(
-                      // focusNode: _node,
-                      autofocus: false,
-                      textAlignVertical: TextAlignVertical.bottom,
-                      onSubmitted: (value) async {
-                        FocusScope.of(context).unfocus();
-                      },
-                      // controller: searchController,
-                      onChanged: (value) {
-                        if (value.isEmpty) {
-                          // _node.canRequestFocus=false;
-                          // FocusScope.of(context).unfocus();
+                  Column(
+                    children: [
+                      Padding(
+                          padding: const EdgeInsets.only(left: 900),
+                          child: ElevatedButton.icon(
+                              onPressed: () async {
+                                setState(() async {
+                                  startDate = await pickDate(context);
+                                });
+
+                                print(startDate.toString());
+                              },
+                              icon: const Icon(Icons.date_range),
+                              label: const Text('Start Date'))),
+                      Padding(
+                          padding: const EdgeInsets.only(left: 900),
+                          child: ElevatedButton.icon(
+                              onPressed: () async {
+                                setState(() async {
+                                  endDate = await pickDate(context);
+                                });
+
+                                print(endDate.toString());
+                              },
+                              icon: const Icon(Icons.date_range),
+                              label: const Text('End Date'))),
+                    ],
+
+// >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
+                  ),
+                  Container(
+                    width: 500,
+                    height: 51,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(14),
+                      color: Colors.white12,
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(15),
+                      child: TextField(
+                        // focusNode: _node,
+                        autofocus: false,
+                        textAlignVertical: TextAlignVertical.bottom,
+                        onSubmitted: (value) async {
+                          FocusScope.of(context).unfocus();
+                        },
+                        // controller: searchController,
+                        onChanged: (value) {
+                          if (value.isEmpty) {
+                            // _node.canRequestFocus=false;
+                            // FocusScope.of(context).unfocus();
+                          }
+                          if (mounted) {
+                            setState(() {
+                              searchVendorId = value.toString();
+                            });
+                          }
+                        },
+                        decoration: InputDecoration(
+                          prefixIcon: const Icon(Icons.search),
+                          hintText: 'Search',
+                          hintStyle: GoogleFonts.poppins(
+                              fontSize: 16, fontWeight: FontWeight.w500),
+                          border: InputBorder.none,
+                          filled: true,
+                          fillColor: Colors.white12,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    alignment: Alignment.topRight,
+                    child: Icon(
+                      Icons.date_range,
+                    ),
+                  ),
+                  Center(
+                    child: StreamBuilder<QuerySnapshot>(
+                      stream: FirebaseFirestore.instance
+                          .collection('bookings')
+                          .where('booking_status', whereIn: [
+                            'completed',
+                            'active',
+                            'upcoming',
+                            'cancelled'
+                          ])
+                          .orderBy("order_date", descending: true)
+                          .snapshots(),
+                      builder: (context, AsyncSnapshot snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const CircularProgressIndicator();
                         }
-                        if (mounted) {
+                        if (snapshot.data == null) {
+                          print(snapshot.error);
+                          return Container();
+                        }
+                        if (snapshot.hasError) {
+                          print(snapshot.error);
+                          return Container();
+                        }
+                        var doc = snapshot.data.docs;
+
+                        if (searchVendorId.isNotEmpty) {
+                          doc = doc.where((element) {
+                            return element
+// <<<<<<< HEAD
+//                                   .get('user_name')
+// =======
+
+                                    .get('user_name')
+                                    .toString()
+                                    .toLowerCase()
+                                    .contains(searchVendorId.toString()) ||
+                                element
+                                    .get('userId')
+
+// >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
+                                    .toString()
+                                    .toLowerCase()
+                                    .contains(searchVendorId.toString()) ||
+                                element
+                                    .get('grand_total')
+                                    .toString()
+                                    .toLowerCase()
+                                    .contains(searchVendorId.toString()) ||
+                                element
+                                    .get('grand_total')
+                                    .toString()
+                                    .toLowerCase()
+                                    .contains(searchVendorId.toString());
+                          }).toList();
+                        }
+
+                        return SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: DataTable(
+                              dataRowHeight: 65,
+                              columns: const [
+                                DataColumn(
+                                    label: Text(
+// <<<<<<< HEAD
+//                                 'Booking ID',
+//                                 style: TextStyle(fontWeight: FontWeight.w600),
+//                               )),
+//                               DataColumn(
+// =======
+                                  'Booking ID',
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                )),
+                                // DataColumn(
+                                //
+                                //     label: Text(
+                                //       'Vendor Name',
+                                //       style: TextStyle(fontWeight: FontWeight.w600),
+                                //     )),
+                                DataColumn(
+// >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
+                                  label: Text(
+                                    'User Name',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.w600),
+                                  ),
+                                ),
+                                DataColumn(
+                                  label: Text(
+                                    'User ID',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.w600),
+                                  ),
+                                ),
+                                DataColumn(
+                                    label: Text(
+                                  'Vendor Name',
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                )),
+                                DataColumn(
+                                  label: Text(
+                                    'Category',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.w600),
+                                  ),
+                                ),
+                                DataColumn(
+                                  label: Text(
+                                    'Package Type',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.w600),
+                                  ),
+                                ),
+                                DataColumn(
+                                  label: Text(
+                                    'Total Days',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.w600),
+                                  ),
+                                ),
+                                DataColumn(
+                                  label: Text(
+                                    'Start Date',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.w600),
+                                  ),
+                                ),
+
+                                DataColumn(
+                                  label: Text(
+                                    'End Date',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.w600),
+                                  ),
+                                ),
+                                DataColumn(
+                                  label: Text(
+                                    'Booking Date',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.w600),
+                                  ),
+                                ),
+                                DataColumn(
+                                  label: Text(
+                                    'Discount',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.w600),
+                                  ),
+                                ),
+                                DataColumn(
+                                  label: Text(
+                                    'Grand Total',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.w600),
+                                  ),
+                                ),
+// <<<<<<< HEAD
+//                               // DataColumn(
+//                               //   label: Text(
+//                               //     'Payment done',
+//                               //     style: TextStyle(fontWeight: FontWeight.w600),
+//                               //   ),
+//                               // ),
+//                               DataColumn(
+//                                 label: Text(
+//                                   'Booking Date',
+//                                   style: TextStyle(fontWeight: FontWeight.w600),
+//                                 ),
+//                               ),
+//                               DataColumn(
+//                                 label: Text(
+// =======
+
+                                DataColumn(
+                                  label: Text(
+// >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
+                                    'Booking Status',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.w600),
+                                  ),
+                                ),
+                                DataColumn(
+                                  label: Text(
+                                    'Edit',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.w600),
+                                  ),
+                                ),
+                                DataColumn(
+                                  label: Text(
+                                    'Delete',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.w600),
+                                  ),
+                                ),
+                              ],
+                              rows:
+                                  _buildlist(context, doc, startDate, endDate)),
+                        );
+                      },
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ElevatedButton(
+                        child: Text("Previous Page"),
+                        onPressed: () {
                           setState(() {
-                            searchVendorId = value.toString();
+                            if (start > 0 && end > 0) {
+                              start = start - 10;
+                              end = end - 10;
+                            }
                           });
-                        }
-                      },
-                      decoration: InputDecoration(
-                        prefixIcon: const Icon(Icons.search),
-                        hintText: 'Search',
-                        hintStyle: GoogleFonts.poppins(
-                            fontSize: 16, fontWeight: FontWeight.w500),
-                        border: InputBorder.none,
-                        filled: true,
-                        fillColor: Colors.white12,
+                          print("Previous Page");
+                        },
                       ),
-                    ),
+                      SizedBox(width: 20),
+                      ElevatedButton(
+                        child: Text("Next Page"),
+                        onPressed: () {
+                          setState(() {
+                            if (end < length) {
+                              start = start + 10;
+                              end = end + 10;
+                            }
+                          });
+                          print("Next Page");
+                        },
+                      ),
+                    ],
                   ),
-                ),
-                Container(
-                  alignment: Alignment.topRight,
-                  child: Icon(
-                    Icons.date_range,
-                  ),
-                ),
-                Center(
-                  child: StreamBuilder<QuerySnapshot>(
-                    stream: FirebaseFirestore.instance
-                        .collection('bookings')
-                        .where('booking_status', whereIn: [
-                          'completed',
-                          'active',
-                          'upcoming',
-                          'cancelled'
-                        ])
-                        .orderBy("order_date", descending: true)
-                        .snapshots(),
-                    builder: (context, AsyncSnapshot snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const CircularProgressIndicator();
-                      }
-                      if (snapshot.data == null) {
-                        print(snapshot.error);
-                        return Container();
-                      }
-                      if (snapshot.hasError) {
-                        print(snapshot.error);
-                        return Container();
-                      }
-                      var doc = snapshot.data.docs;
-
-                      if (searchVendorId.isNotEmpty) {
-                        doc = doc.where((element) {
-                          return element
-<<<<<<< HEAD
-                                  .get('user_name')
-=======
-
-                              .get('user_name')
-                              .toString()
-                              .toLowerCase()
-                              .contains(searchVendorId.toString()) ||
-                              element
-                                  .get('userId')
-
->>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
-                                  .toString()
-                                  .toLowerCase()
-                                  .contains(searchVendorId.toString()) ||
-                              element
-                                  .get('grand_total')
-                                  .toString()
-                                  .toLowerCase()
-                                  .contains(searchVendorId.toString()) ||
-                              element
-                                  .get('grand_total')
-                                  .toString()
-                                  .toLowerCase()
-                                  .contains(searchVendorId.toString());
-                        }).toList();
-                      }
-
-                      return SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: DataTable(
-                            dataRowHeight: 65,
-                            columns: const [
-                              DataColumn(
-                                  label: Text(
-<<<<<<< HEAD
-                                'Booking ID',
-                                style: TextStyle(fontWeight: FontWeight.w600),
-                              )),
-                              DataColumn(
-=======
-                                    'Booking ID',
-                                    style: TextStyle(fontWeight: FontWeight.w600),
-                                  )),
-                              // DataColumn(
-                              //
-                              //     label: Text(
-                              //       'Vendor Name',
-                              //       style: TextStyle(fontWeight: FontWeight.w600),
-                              //     )),
-                              DataColumn(
-
->>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
-                                label: Text(
-                                  'User Name',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
-                              ),
-                              DataColumn(
-                                label: Text(
-                                  'User ID',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
-                              ),
-                              DataColumn(
-                                  label: Text(
-                                'Vendor Name',
-                                style: TextStyle(fontWeight: FontWeight.w600),
-                              )),
-                              DataColumn(
-                                label: Text(
-                                  'Category',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
-                              ),
-                              DataColumn(
-                                label: Text(
-                                  'Package Type',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
-                              ),
-                              DataColumn(
-                                label: Text(
-                                  'Total Days',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
-                              ),
-                              DataColumn(
-                                label: Text(
-
-                                  'Start Date',
-
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
-                              ),
-
-                              DataColumn(
-                                label: Text(
-
-                                  'End Date',
-
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
-                              ),
-                              DataColumn(
-                                label: Text(
-                                  'Booking Date',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
-                              ),
-                              DataColumn(
-                                label: Text(
-                                  'Discount',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
-                              ),
-                              DataColumn(
-                                label: Text(
-                                  'Grand Total',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
-                              ),
-<<<<<<< HEAD
-                              // DataColumn(
-                              //   label: Text(
-                              //     'Payment done',
-                              //     style: TextStyle(fontWeight: FontWeight.w600),
-                              //   ),
-                              // ),
-                              DataColumn(
-                                label: Text(
-                                  'Booking Date',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
-                              ),
-                              DataColumn(
-                                label: Text(
-=======
-
-
-                              DataColumn(
-                                label: Text(
->>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
-                                  'Booking Status',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
-                              ),
-                              DataColumn(
-                                label: Text(
-                                  'Edit',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
-                              ),
-                              DataColumn(
-                                label: Text(
-                                  'Delete',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
-                              ),
-                            ],
-                            rows: _buildlist(context, doc, startDate, endDate)),
-                      );
-                    },
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
@@ -343,42 +381,43 @@ class _BookingDetailsState extends State<BookingDetails> {
     );
   }
 
+  var start = 0;
+
+  var end = 10;
+  var length;
   List<DataRow> _buildlist(BuildContext context,
       List<DocumentSnapshot> snapshot, DateTime startDate, DateTime endDate) {
     var d = [];
+    var ds = 1;
+    var s = start + 1;
+    var snap = [];
+    length = snapshot.length;
+    snapshot.forEach((element) {});
 
     snapshot.forEach((element) {
       var x = element['booking_date'].toDate();
-      // var y = endDate.difference(startDate).inDays;
-<<<<<<< HEAD
-      print('XXXXXXXXXXXXXXXXXXX???????????????????////////////');
-      print(x);
       if (x.isAfter(startDate) && x.isBefore(endDate) ||
           x == startDate ||
           x == endDate) {
-        d.add(element);
-      }
-      print('/////////////////DDDDDDDDDDDDDDDDDDDD???????????????');
-      print(d);
-=======
-      // print('XXXXXXXXXXXXXXXXXXX???????????????????////////////');
-      // print(x);
-      if( x.isAfter(startDate) && x.isBefore(endDate) || x==startDate || x==endDate)
-        {
+        if (end >= ds++ && start <= ds) {
           d.add(element);
-
         }
+      }
       // print('/////////////////DDDDDDDDDDDDDDDDDDDD???????????????');
       // print(d);
->>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
+      // >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
     });
-    return d.map((data) => _buildListItem(context, data)).toList();
+    return d
+        .map((data) => _buildListItem(context, data, s, start, end))
+        .toList();
   }
 
-  DataRow _buildListItem(BuildContext context, DocumentSnapshot data) {
+  DataRow _buildListItem(
+      BuildContext context, DocumentSnapshot data, int s, int start, int end) {
     String bookingId = data['booking_id'];
     bool paymentDoneBool = data['payment_done'];
     bool bookingAccepted = data['booking_accepted'];
+
     String durationEnd =
         DateFormat("MMM, dd, yyyy").format(data["plan_end_duration"].toDate());
     // "${data['plan_end_duration'].toDate().year}/${data['plan_end_duration'].toDate().month}/${data['plan_end_duration'].toDate().day}";
@@ -392,33 +431,31 @@ class _BookingDetailsState extends State<BookingDetails> {
     return DataRow(cells: [
       DataCell(
           data["id"] != null ? Text(data['id'].toString()) : const Text("")),
-<<<<<<< HEAD
-=======
-
-  
->>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
+// <<<<<<< HEAD
+// =======
+//
+//
+// >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
       DataCell(data['user_name'] != null
           ? Text(data['user_name'].toString())
           : const Text("")),
       DataCell(data['userId'] != null
           ? Text(data['userId'].toString().substring(3, 13))
-
           : Text("")),
       DataCell(data["gym_details"] != null
           ? Text(
               '${data['gym_details']['name'].toString().toUpperCase()}|${data['gym_details']['branch'].toString().toUpperCase()}')
-
           : const Text("")),
-<<<<<<< HEAD
-=======
+// <<<<<<< HEAD
+// =======
 //       DataCell(data['discount'] != null
 //           ? Text('₹${data['discount'].toString()}')
 //           : const Text("")),
 //       DataCell(data['totalDays'] != null
 //           ? Text(data['totalDays'].toString())
 
-          // : const Text("")),
->>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
+      // : const Text("")),
+// >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
       DataCell(data['package_type'] != null
           ? Text(data['package_type'].toString().toUpperCase())
           : const Text("")),
@@ -428,12 +465,12 @@ class _BookingDetailsState extends State<BookingDetails> {
       DataCell(data['totalDays'] != null
           ? Text(data['totalDays'].toString())
           : const Text("")),
-<<<<<<< HEAD
-      DataCell(data['order_date'] != null ? Text(orderDate) : const Text("")),
-=======
+// <<<<<<< HEAD
+//       DataCell(data['order_date'] != null ? Text(orderDate) : const Text("")),
+// =======
       DataCell(data['booking_date'] != null ? Text(orderDate) : const Text("")),
 
->>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
+// >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
       DataCell(data['plan_end_duration'] != null
           ? Text(durationEnd)
           : const Text("")),
@@ -473,9 +510,7 @@ class _BookingDetailsState extends State<BookingDetails> {
                 DropdownButton(
                     hint: Text(data['booking_status'].toString()),
                     value: data['booking_status'].toString(),
-
-                    items:  const [
-
+                    items: const [
                       DropdownMenuItem(
                         child: Text("Active"),
                         value: "active",
@@ -485,7 +520,7 @@ class _BookingDetailsState extends State<BookingDetails> {
                         value: "upcoming",
                       ),
                       DropdownMenuItem(
-                          child: Text("Incomplete"), value: "incomplete"),
+                          child: Text("Completed"), value: "completed"),
                       DropdownMenuItem(
                           child: Text("Cancelled"), value: "cancelled"),
                     ],
@@ -498,24 +533,22 @@ class _BookingDetailsState extends State<BookingDetails> {
                           .doc(bookingId)
                           .update({'booking_status': value});
 
-                      if(value == "active")
-                      {
+                      if (value == "active") {
                         await FirebaseFirestore.instance
                             .collection('bookings')
                             .doc(bookingId)
                             .update({'payment_done': true});
                       }
                     }),
-
               ],
             ),
           ),
         ),
       ),
-<<<<<<< HEAD
-=======
+// <<<<<<< HEAD
+// =======
 // <<<<<<< nihal_new
->>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
+// >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
       // DataCell(data['booking_plan'] != null
       //     ? Text(data['booking_plan'].toString())
       //     : const Text("")),
@@ -525,8 +558,8 @@ class _BookingDetailsState extends State<BookingDetails> {
       DataCell(const Text(""), showEditIcon: true, onTap: () {
         Get.to(
           () => ProductEditBox(
-<<<<<<< HEAD
-=======
+// <<<<<<< HEAD
+// =======
 // =======
 //       DataCell(data['booking_plan'] != null
 //           ? Text(data['booking_plan'].toString())
@@ -539,7 +572,7 @@ class _BookingDetailsState extends State<BookingDetails> {
 //         Get.to(
 //               () => ProductEditBox(
 // >>>>>>> Diptesh
->>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
+// >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
             vendorid: data['vendorId'],
             username: data['user_name'],
             userid: data['userId'],
@@ -1107,10 +1140,10 @@ class _ProductEditBoxState extends State<ProductEditBox> {
 //                   ),
 //                   // customTextField(
 
-<<<<<<< HEAD
-=======
-
->>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
+// <<<<<<< HEAD
+// =======
+//
+// >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
                     stream: vendorIdStream!.snapshots(),
                     builder: (context, AsyncSnapshot snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
@@ -1148,10 +1181,10 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                       );
                     },
                   )),
-<<<<<<< HEAD
-=======
-
->>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
+// <<<<<<< HEAD
+// =======
+//
+// >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
                   const SizedBox(height: 15),
                   // customTextField(
                   //     hinttext: "Vendor ID", addcontroller: _addvendorid),
@@ -1259,10 +1292,10 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                               itemBuilder: (BuildContext context, int index) {
                                 bool check = false;
                                 return
-<<<<<<< HEAD
-=======
-
->>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
+// <<<<<<< HEAD
+// =======
+//
+// >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
                                     // RadioBoxx(
                                     //   doc[index]["name"],
                                     //   doc[index]["category_id"],
@@ -1278,10 +1311,10 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                                   ),
                                   title: Text(doc[index]["name"]),
                                 );
-<<<<<<< HEAD
-=======
+// <<<<<<< HEAD
+// =======
 
->>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
+// >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
 // =======
                                 // RadioBoxx(
                                 //   doc[index]["name"],
@@ -1362,10 +1395,10 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                   Container(
                       child: StreamBuilder<QuerySnapshot>(
 //
-<<<<<<< HEAD
-=======
-
->>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
+// <<<<<<< HEAD
+// =======
+//
+// >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
                     stream: vendorIdStream!.snapshots(),
                     builder: (context, AsyncSnapshot snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
@@ -1403,10 +1436,10 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                       );
                     },
                   )),
-<<<<<<< HEAD
-=======
-
->>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
+// <<<<<<< HEAD
+// =======
+//
+// >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
 
                   // customTextField(
                   //     hinttext: "Gym Name", addcontroller: _addgymname),
@@ -1518,21 +1551,21 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                           ElevatedButton(
                             onPressed: () async {
                               DocumentReference documentReference =
-<<<<<<< HEAD
+// <<<<<<< HEAD
 // <<<<<<< HEAD
 //                                   FirebaseFirestore.instance
 //                                       .collection('bookings')
 //                                       .doc(_addbookingid.text);
 // =======
+                                  // FirebaseFirestore.instance
+                                  //     .collection('bookings')
+                                  //     .doc(_addbookingid.text);
+// >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
+// =======
                                   FirebaseFirestore.instance
                                       .collection('bookings')
                                       .doc(_addbookingid.text);
-// >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
-=======
-                              FirebaseFirestore.instance
-                                  .collection('bookings')
-                                  .doc(_addbookingid.text);
->>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
+// >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
                               // DateTime endtimedata = DateTime.parse(
                               //     '${_addplanendyear.text}-${isLess(_addplanendmonth.text) ? '0' + _addplanendmonth.text : _addplanendday.text}-${isLess(_addplanendday.text) ? '0' + _addplanendday.text : _addplanendday.text} 00:00:04Z');
                               // DateTime ordertimedata = DateTime.parse(
@@ -1563,22 +1596,23 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                                 'booking_plan': _addbookingplan.text,
                                 'booking_id': _addbookingid.text,
                                 'booking_date': bookingtimedata,
-<<<<<<< HEAD
-                                'booking_accepted':
+// <<<<<<< HEAD///
+//                                 'booking_accepted':
 // <<<<<<< HEAD
 //                                     _addbookingaccepted.text == 'true'
 //                                         ? true
 //                                         : false,
 // =======
+//                                     _addbookingaccepted.text == 'true'
+                                //     ? true
+                                //     : false,
+// >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
+// =======
+                                'booking_accepted':
                                     _addbookingaccepted.text == 'true'
                                         ? true
                                         : false,
-// >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
-=======
-                                'booking_accepted': _addbookingaccepted.text == 'true'
-                                    ? true
-                                    : false,
->>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
+// >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
                               };
                               await documentReference
                                   .update(data)
@@ -1772,12 +1806,12 @@ class _ProductEditBoxState extends State<ProductEditBox> {
   Future pickTime(BuildContext context) async {
     const intialTime = const TimeOfDay(hour: 9, minute: 0);
     final newTime =
-<<<<<<< HEAD
-        await showTimePicker(context: context, initialTime: time ?? intialTime);
+// <<<<<<< HEAD
+//         await showTimePicker(context: context, initialTime: time ?? intialTime);
 // >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
-=======
-    await showTimePicker(context: context, initialTime: time ?? intialTime);
->>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
+// =======
+        await showTimePicker(context: context, initialTime: time ?? intialTime);
+// >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
 
     if (newTime == null) return;
 
@@ -1828,12 +1862,12 @@ class _ProductEditBoxState extends State<ProductEditBox> {
   Future pickplanTime(BuildContext context) async {
     const intialTime = TimeOfDay(hour: 9, minute: 0);
     final newTime =
-<<<<<<< HEAD
-        await showTimePicker(context: context, initialTime: time ?? intialTime);
+// <<<<<<< HEAD
+//         await showTimePicker(context: context, initialTime: time ?? intialTime);
 // >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
-=======
-    await showTimePicker(context: context, initialTime: time ?? intialTime);
->>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
+// =======
+        await showTimePicker(context: context, initialTime: time ?? intialTime);
+// >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
 
     if (newTime == null) return;
 
@@ -1884,15 +1918,15 @@ class _ProductEditBoxState extends State<ProductEditBox> {
   Future pickorderTime(BuildContext context) async {
     final intialTime = TimeOfDay(hour: 9, minute: 0);
     final newTime =
-<<<<<<< HEAD
+// <<<<<<< HEAD
 // <<<<<<< HEAD
 //         await showTimePicker(context: context, initialTime: time ?? intialTime);
 // =======
-        await showTimePicker(context: context, initialTime: time ?? intialTime);
+//         await showTimePicker(context: context, initialTime: time ?? intialTime);
 // >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
-=======
-    await showTimePicker(context: context, initialTime: time ?? intialTime);
->>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
+// =======
+        await showTimePicker(context: context, initialTime: time ?? intialTime);
+// >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
 
     if (newTime == null) return;
 
@@ -1968,7 +2002,6 @@ class _RadioBoxxState extends State<RadioBoxx> {
   String check = "calisthenics";
   String? value;
 
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -1976,7 +2009,6 @@ class _RadioBoxxState extends State<RadioBoxx> {
         children: [
           Container(
             child: RadioListTile<String>(
-
               value: widget.name,
               groupValue: check,
               onChanged: (String? abcd) {

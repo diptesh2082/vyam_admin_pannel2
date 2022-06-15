@@ -127,9 +127,9 @@ class _TrackingScreenState extends State<TrackingScreen> {
                             columns: const [
                               DataColumn(
                                   label: Text(
-                                    'Index',
-                                    style: TextStyle(fontWeight: FontWeight.w600),
-                                  )),
+                                'Index',
+                                style: TextStyle(fontWeight: FontWeight.w600),
+                              )),
                               DataColumn(
                                   label: Text(
                                 'Vendor ID',
@@ -273,6 +273,37 @@ class _TrackingScreenState extends State<TrackingScreen> {
                     },
                   ),
                 ),
+                SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                      child: Text("Previous Page"),
+                      onPressed: () {
+                        setState(() {
+                          if (start > 0 && end > 0) {
+                            start = start - 10;
+                            end = end - 10;
+                          }
+                        });
+                        print("Previous Page");
+                      },
+                    ),
+                    SizedBox(width: 20),
+                    ElevatedButton(
+                      child: Text("Next Page"),
+                      onPressed: () {
+                        setState(() {
+                          if (end < length) {
+                            start = start + 10;
+                            end = end + 10;
+                          }
+                        });
+                        print("Next Page");
+                      },
+                    ),
+                  ],
+                ),
               ],
             ),
           ),
@@ -281,13 +312,29 @@ class _TrackingScreenState extends State<TrackingScreen> {
     );
   }
 
+  var start = 0;
+
+  var end = 10;
+  var length;
+
   List<DataRow> _buildlist(
       BuildContext context, List<DocumentSnapshot> snapshot) {
     var d = 1;
-    return snapshot.map((data) => _buildListItem(context, data , d++)).toList();
+    var s = start + 1;
+    var snap = [];
+    length = snapshot.length;
+    snapshot.forEach((element) {
+      if (end >= d++ && start <= d) {
+        snap.add(element);
+      }
+    });
+    return snap
+        .map((data) => _buildListItem(context, data, s++, start, end))
+        .toList();
   }
 
-  DataRow _buildListItem(BuildContext context, DocumentSnapshot data , index) {
+  DataRow _buildListItem(BuildContext context, DocumentSnapshot data, int index,
+      int start, int end) {
     String bookingId = data['booking_id'];
     bool paymentDoneBool = data['payment_done'];
     bool bookingAccepted = data['booking_accepted'];
@@ -298,9 +345,7 @@ class _TrackingScreenState extends State<TrackingScreen> {
     String bookingDate =
         "${data['booking_date'].toDate().year}/${data['booking_date'].toDate().month}/${data['booking_date'].toDate().day}";
     return DataRow(cells: [
-      DataCell(index != null
-          ? Text(index.toString())
-          : const Text("")),
+      DataCell(index != null ? Text(index.toString()) : const Text("")),
       DataCell(data["vendorId"] != null
           ? Text(data['vendorId'].toString())
           : const Text("")),

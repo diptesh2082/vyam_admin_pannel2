@@ -1,6 +1,7 @@
 import 'package:admin_panel_vyam/services/deleteMethod.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
+import 'package:markdown_editable_textinput/format_markdown.dart';
+import 'package:markdown_editable_textinput/markdown_text_input.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -212,6 +213,37 @@ class _CouponState extends State<Coupon> {
                     },
                   ),
                 ),
+                SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                      child: Text("Previous Page"),
+                      onPressed: () {
+                        setState(() {
+                          if (start > 0 && end > 0) {
+                            start = start - 10;
+                            end = end - 10;
+                          }
+                        });
+                        print("Previous Page");
+                      },
+                    ),
+                    SizedBox(width: 20),
+                    ElevatedButton(
+                      child: Text("Next Page"),
+                      onPressed: () {
+                        setState(() {
+                          if (end < length) {
+                            start = start + 10;
+                            end = end + 10;
+                          }
+                        });
+                        print("Next Page");
+                      },
+                    ),
+                  ],
+                ),
               ],
             ),
           ),
@@ -220,12 +252,29 @@ class _CouponState extends State<Coupon> {
     );
   }
 
+  var start = 0;
+
+  var end = 10;
+  var length;
+
   List<DataRow> _buildlist(
       BuildContext context, List<DocumentSnapshot> snapshot) {
-    return snapshot.map((data) => _buildListItem(context, data)).toList();
+    var d = 1;
+    var s = start + 1;
+    var snap = [];
+    length = snapshot.length;
+    snapshot.forEach((element) {
+      if (end >= d++ && start <= d) {
+        snap.add(element);
+      }
+    });
+    return snap
+        .map((data) => _buildListItem(context, data, s++, start, end))
+        .toList();
   }
 
-  DataRow _buildListItem(BuildContext context, DocumentSnapshot data) {
+  DataRow _buildListItem(BuildContext context, DocumentSnapshot data, int index,
+      int start, int end) {
     String couponIdData = data['coupon_id'];
     bool validity = data['validity'];
     String start =
@@ -240,8 +289,9 @@ class _CouponState extends State<Coupon> {
           data['code'] != null ? Text(data['code'] ?? "") : const Text("")),
       DataCell(
           data['detail'] != null ? Text(data['detail'] ?? "") : const Text("")),
-      DataCell(
-          data['description'] != null ? Text(data['description'] ?? "") : const Text("")),
+      DataCell(data['description'] != null
+          ? Text(data['description'] ?? "")
+          : const Text("")),
       DataCell(start != null ? Text(start) : const Text("")),
       DataCell(end != null ? Text(end) : const Text("")),
       DataCell(data['discount'] != null

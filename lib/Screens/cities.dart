@@ -19,7 +19,6 @@ class _AmenetiesScreenState extends State<AmenetiesScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance.collection('amenities').snapshots(),
         builder: (context, AsyncSnapshot snapshot) {
@@ -69,12 +68,29 @@ class _AmenetiesScreenState extends State<AmenetiesScreen> {
     );
   }
 
+  var start = 0;
+
+  var end = 10;
+  var length;
+
   List<DataRow> _buildlist(
       BuildContext context, List<DocumentSnapshot> snapshot) {
-    return snapshot.map((data) => _buildListItem(context, data)).toList();
+    var d = 1;
+    var s = start + 1;
+    var snap = [];
+    length = snapshot.length;
+    snapshot.forEach((element) {
+      if (end >= d++ && start <= d) {
+        snap.add(element);
+      }
+    });
+    return snap
+        .map((data) => _buildListItem(context, data, s++, start, end))
+        .toList();
   }
 
-  DataRow _buildListItem(BuildContext context, DocumentSnapshot data) {
+  DataRow _buildListItem(BuildContext context, DocumentSnapshot data, int index,
+      int start, int end) {
     return DataRow(
       cells: [
         DataCell(
