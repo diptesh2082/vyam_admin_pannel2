@@ -126,12 +126,6 @@ class _BookingDetailsState extends State<BookingDetails> {
                     ),
                   ),
                 ),
-                Container(
-                  alignment: Alignment.topRight,
-                  child: const Icon(
-                    Icons.date_range,
-                  ),
-                ),
                 Center(
                   child: StreamBuilder<QuerySnapshot>(
                     stream: FirebaseFirestore.instance
@@ -351,7 +345,7 @@ class _BookingDetailsState extends State<BookingDetails> {
           : const Text("")),
       DataCell(data['userId'] != null
           ? Text(data['userId'].toString().substring(3, 13))
-          : Text("")),
+          : const Text("")),
       DataCell(data["gym_details"] != null
           ? Text(
               '${data['gym_details']['name'].toString().toUpperCase()}|${data['gym_details']['branch'].toString().toUpperCase()}')
@@ -433,21 +427,6 @@ class _BookingDetailsState extends State<BookingDetails> {
       DataCell(const Text(""), showEditIcon: true, onTap: () {
         Get.to(
           () => ProductEditBox(
-//     <<<<<<< HEAD
-//     =======
-// // =======
-// //       DataCell(data['booking_plan'] != null
-// //           ? Text(data['booking_plan'].toString())
-// //           : const Text("")),
-// //       DataCell(data['grand_total'] != null
-// //           ? Text('₹${data['grand_total'].toString()}')
-// //           : const Text("")),
-//
-// //       DataCell(const Text(""), showEditIcon: true, onTap: () {
-// //         Get.to(
-// //               () => ProductEditBox(
-// // >>>>>>> Diptesh
-//     >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
             vendorid: data['vendorId'],
             username: data['user_name'],
             userid: data['userId'],
@@ -686,7 +665,6 @@ class _CustomTextFieldState extends State<CustomTextField> {
 // =======
         autofocus: true,
         style: const TextStyle(
-// >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
           fontSize: 20,
           fontFamily: 'poppins',
           fontWeight: FontWeight.w400,
@@ -874,10 +852,10 @@ class _ProductEditBoxState extends State<ProductEditBox> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text('Edit Booking'),
+        title: const Text('Edit Booking'),
       ),
       body: Container(
-        margin: EdgeInsets.all(15.0),
+        margin: const EdgeInsets.all(15.0),
         child: Center(
           child: SizedBox(
             child: SingleChildScrollView(
@@ -1056,8 +1034,6 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                       );
                     },
                   )),
-                  //     <<<<<<< HEAD
-                  // =======
                   //
                   // >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
                   const SizedBox(height: 15),
@@ -1099,7 +1075,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                           child: const Text('Select Date & Time For Plan'),
                           onPressed: () => pickplanDateTime(context),
                         ),
-                        SizedBox(width: 15),
+                        const SizedBox(width: 15),
                       ],
                     ),
                   ),
@@ -1118,7 +1094,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                   ),
                   DropdownButton<String>(
                     isExpanded: true,
-                    hint: Text("Payment Done"),
+                    hint: const Text("Payment Done"),
                     items: _do.map<DropdownMenuItem<String>>((String value) {
                       return DropdownMenuItem<String>(
                         value: value,
