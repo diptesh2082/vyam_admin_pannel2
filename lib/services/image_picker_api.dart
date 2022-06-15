@@ -143,9 +143,7 @@ addImageToStorage(XFile? pickedFile, String? id) async {
         await FirebaseFirestore.instance
             .collection("product_details")
             .doc(id)
-            .update({
-          "images": FieldValue.arrayUnion([value])
-        });
+            .update({"display_picture": value});
       });
     });
   } else {

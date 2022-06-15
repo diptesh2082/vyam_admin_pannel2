@@ -22,7 +22,7 @@ class BookingDetails extends StatefulWidget {
 
 class _BookingDetailsState extends State<BookingDetails> {
   CollectionReference bookingStream =
-  FirebaseFirestore.instance.collection('bookings');
+      FirebaseFirestore.instance.collection('bookings');
   String searchVendorId = '';
   var selectedValue = 'active';
   DateTime? date;
@@ -207,11 +207,18 @@ class _BookingDetailsState extends State<BookingDetails> {
                       stream: FirebaseFirestore.instance
                           .collection('bookings')
                           .where('booking_status', whereIn: [
-                        'completed',
-                        'active',
-                        'upcoming',
-                        'cancelled'
-                      ])
+// <<<<<<< HEAD
+                            'completed',
+                            'active',
+                            'upcoming',
+                          ])
+// =======
+//                         'completed',
+//                         'active',
+//                         'upcoming',
+//                         'cancelled'
+//                       ])
+// >>>>>>> 05d90541ad53debf68ad8405091343fc5d3a8558
                           .orderBy("order_date", descending: true)
                           .snapshots(),
                       builder: (context, AsyncSnapshot snapshot) {
@@ -237,10 +244,10 @@ class _BookingDetailsState extends State<BookingDetails> {
 //                                   .get('user_name')
 // =======
 
-                                .get('user_name')
-                                .toString()
-                                .toLowerCase()
-                                .contains(searchVendorId.toString()) ||
+                                    .get('user_name')
+                                    .toString()
+                                    .toLowerCase()
+                                    .contains(searchVendorId.toString()) ||
                                 element
                                     .get('userId')
 
@@ -268,9 +275,9 @@ class _BookingDetailsState extends State<BookingDetails> {
                               columns: const [
                                 DataColumn(
                                     label: Text(
-                                      'Booking ID',
-                                      style: TextStyle(fontWeight: FontWeight.w600),
-                                    )),
+                                  'Booking ID',
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                )),
                                 // DataColumn(
                                 //
                                 //     label: Text(
@@ -282,47 +289,47 @@ class _BookingDetailsState extends State<BookingDetails> {
                                   label: Text(
                                     'User Name',
                                     style:
-                                    TextStyle(fontWeight: FontWeight.w600),
+                                        TextStyle(fontWeight: FontWeight.w600),
                                   ),
                                 ),
                                 DataColumn(
                                   label: Text(
                                     'User ID',
                                     style:
-                                    TextStyle(fontWeight: FontWeight.w600),
+                                        TextStyle(fontWeight: FontWeight.w600),
                                   ),
                                 ),
                                 DataColumn(
                                     label: Text(
-                                      'Vendor Name',
-                                      style: TextStyle(fontWeight: FontWeight.w600),
-                                    )),
+                                  'Vendor Name',
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                )),
                                 DataColumn(
                                   label: Text(
                                     'Category',
                                     style:
-                                    TextStyle(fontWeight: FontWeight.w600),
+                                        TextStyle(fontWeight: FontWeight.w600),
                                   ),
                                 ),
                                 DataColumn(
                                   label: Text(
                                     'Package Type',
                                     style:
-                                    TextStyle(fontWeight: FontWeight.w600),
+                                        TextStyle(fontWeight: FontWeight.w600),
                                   ),
                                 ),
                                 DataColumn(
                                   label: Text(
                                     'Total Days',
                                     style:
-                                    TextStyle(fontWeight: FontWeight.w600),
+                                        TextStyle(fontWeight: FontWeight.w600),
                                   ),
                                 ),
                                 DataColumn(
                                   label: Text(
                                     'Start Date',
                                     style:
-                                    TextStyle(fontWeight: FontWeight.w600),
+                                        TextStyle(fontWeight: FontWeight.w600),
                                   ),
                                 ),
 
@@ -330,28 +337,28 @@ class _BookingDetailsState extends State<BookingDetails> {
                                   label: Text(
                                     'End Date',
                                     style:
-                                    TextStyle(fontWeight: FontWeight.w600),
+                                        TextStyle(fontWeight: FontWeight.w600),
                                   ),
                                 ),
                                 DataColumn(
                                   label: Text(
                                     'Booking Date',
                                     style:
-                                    TextStyle(fontWeight: FontWeight.w600),
+                                        TextStyle(fontWeight: FontWeight.w600),
                                   ),
                                 ),
                                 DataColumn(
                                   label: Text(
                                     'Discount',
                                     style:
-                                    TextStyle(fontWeight: FontWeight.w600),
+                                        TextStyle(fontWeight: FontWeight.w600),
                                   ),
                                 ),
                                 DataColumn(
                                   label: Text(
                                     'Grand Total',
                                     style:
-                                    TextStyle(fontWeight: FontWeight.w600),
+                                        TextStyle(fontWeight: FontWeight.w600),
                                   ),
                                 ),
                                 // <<<<<<< HEAD
@@ -376,26 +383,26 @@ class _BookingDetailsState extends State<BookingDetails> {
                                     // >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
                                     'Booking Status',
                                     style:
-                                    TextStyle(fontWeight: FontWeight.w600),
+                                        TextStyle(fontWeight: FontWeight.w600),
                                   ),
                                 ),
                                 DataColumn(
                                   label: Text(
                                     'Edit',
                                     style:
-                                    TextStyle(fontWeight: FontWeight.w600),
+                                        TextStyle(fontWeight: FontWeight.w600),
                                   ),
                                 ),
                                 DataColumn(
                                   label: Text(
                                     'Delete',
                                     style:
-                                    TextStyle(fontWeight: FontWeight.w600),
+                                        TextStyle(fontWeight: FontWeight.w600),
                                   ),
                                 ),
                               ],
                               rows:
-                              _buildlist(context, doc, startDate, endDate)),
+                                  _buildlist(context, doc, startDate, endDate)),
                         );
                       },
                     ),
@@ -499,13 +506,13 @@ class _BookingDetailsState extends State<BookingDetails> {
     bool bookingAccepted = data['booking_accepted'];
 
     String durationEnd =
-    DateFormat("MMM, dd, yyyy").format(data["plan_end_duration"].toDate());
+        DateFormat("MMM, dd, yyyy").format(data["plan_end_duration"].toDate());
     // "${data['plan_end_duration'].toDate().year}/${data['plan_end_duration'].toDate().month}/${data['plan_end_duration'].toDate().day}";
     String orderDate =
-    DateFormat("MMM, dd, yyyy").format(data["order_date"].toDate());
+        DateFormat("MMM, dd, yyyy").format(data["order_date"].toDate());
     // "${data['order_date'].toDate().year}/${data['order_date'].toDate().month}/${data['order_date'].toDate().day}";
     String bookingDate =
-    DateFormat("MMM, dd, yyyy").format(data["booking_date"].toDate());
+        DateFormat("MMM, dd, yyyy").format(data["booking_date"].toDate());
     // "${data['booking_date'].toDate().year}/${data['booking_date'].toDate().month}/${data['booking_date'].toDate().day}";
     String x;
     return DataRow(cells: [
@@ -526,7 +533,7 @@ class _BookingDetailsState extends State<BookingDetails> {
           : Text("")),
       DataCell(data["gym_details"] != null
           ? Text(
-          '${data['gym_details']['name'].toString().toUpperCase()}|${data['gym_details']['branch'].toString().toUpperCase()}')
+              '${data['gym_details']['name'].toString().toUpperCase()}|${data['gym_details']['branch'].toString().toUpperCase()}')
           : const Text("")),
 
       DataCell(data['package_type'] != null
@@ -638,7 +645,7 @@ class _BookingDetailsState extends State<BookingDetails> {
       //     : const Text("")),
       DataCell(const Text(""), showEditIcon: true, onTap: () {
         Get.to(
-              () => ProductEditBox(
+          () => ProductEditBox(
 // <<<<<<< HEAD
 // <<<<<<< HEAD
 // =======
@@ -908,25 +915,25 @@ class _CustomTextFieldState extends State<CustomTextField> {
 //             border: InputBorder.none,
 //             hintStyle: const TextStyle(
 // =======
-            autofocus: true,
-            style: const TextStyle(
+        autofocus: true,
+        style: const TextStyle(
 // >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
+          fontSize: 20,
+          fontFamily: 'poppins',
+          fontWeight: FontWeight.w400,
+        ),
+        controller: widget.addcontroller,
+        maxLines: 3,
+        decoration: InputDecoration(
+            border: InputBorder.none,
+            hintStyle: const TextStyle(
               fontSize: 20,
               fontFamily: 'poppins',
               fontWeight: FontWeight.w400,
             ),
-            controller: widget.addcontroller,
-            maxLines: 3,
-            decoration: InputDecoration(
-                border: InputBorder.none,
-                hintStyle: const TextStyle(
-                  fontSize: 20,
-                  fontFamily: 'poppins',
-                  fontWeight: FontWeight.w400,
-                ),
-                hintMaxLines: 2,
-                hintText: widget.hinttext),
-          )),
+            hintMaxLines: 2,
+            hintText: widget.hinttext),
+      )),
     );
   }
 }
@@ -1245,48 +1252,48 @@ class _ProductEditBoxState extends State<ProductEditBox> {
 //
 // >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
 // =======
-                        // <<<<<<< HEAD
-                        // =======
-                        //
-                        // >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
+                    // <<<<<<< HEAD
+                    // =======
+                    //
+                    // >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
 // >>>>>>> ae7259e7ba6e19ed4976a35667cb3a762fe66e2c
-                        stream: vendorIdStream!.snapshots(),
-                        builder: (context, AsyncSnapshot snapshot) {
-                          if (snapshot.connectionState == ConnectionState.waiting) {
-                            return const CircularProgressIndicator();
-                          }
-                          if (snapshot.data == null) {
-                            return Container();
-                          }
-                          print("-----------------------------------");
-                          var doc = snapshot.data.docs;
-                          return Container(
-                            width: 500,
-                            height: 200,
-                            child: ListView.builder(
-                                itemCount: doc.length,
-                                itemBuilder: (BuildContext context, int index) {
-                                  bool check = false;
-                                  return RadioListTile<String>(
-                                    value: doc[index]["gym_id"],
-                                    groupValue: abc3,
-                                    onChanged: (val) => setState(
-                                          () {
-                                        abc3 = val!;
-                                      },
-                                    ),
-                                    title: Text(doc[index]["gym_id"]),
-                                  );
-                                  // ListTile(
-                                  //   title: Text(doc[index]["name"]),
-                                  //   onTap: () {
-                                  //     _addgymname.text = doc[index]["name"];
-                                  //   },
-                                  // );
-                                }),
-                          );
-                        },
-                      )),
+                    stream: vendorIdStream!.snapshots(),
+                    builder: (context, AsyncSnapshot snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const CircularProgressIndicator();
+                      }
+                      if (snapshot.data == null) {
+                        return Container();
+                      }
+                      print("-----------------------------------");
+                      var doc = snapshot.data.docs;
+                      return Container(
+                        width: 500,
+                        height: 200,
+                        child: ListView.builder(
+                            itemCount: doc.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              bool check = false;
+                              return RadioListTile<String>(
+                                value: doc[index]["gym_id"],
+                                groupValue: abc3,
+                                onChanged: (val) => setState(
+                                  () {
+                                    abc3 = val!;
+                                  },
+                                ),
+                                title: Text(doc[index]["gym_id"]),
+                              );
+                              // ListTile(
+                              //   title: Text(doc[index]["name"]),
+                              //   onTap: () {
+                              //     _addgymname.text = doc[index]["name"];
+                              //   },
+                              // );
+                            }),
+                      );
+                    },
+                  )),
 // <<<<<<< HEAD
 // <<<<<<< HEAD
 // =======
@@ -1411,26 +1418,26 @@ class _ProductEditBoxState extends State<ProductEditBox> {
 //
 // >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
 // =======
-                                  // <<<<<<< HEAD
-                                  // =======
-                                  //
-                                  // >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
+                                    // <<<<<<< HEAD
+                                    // =======
+                                    //
+                                    // >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
 // >>>>>>> ae7259e7ba6e19ed4976a35667cb3a762fe66e2c
-                                  // RadioBoxx(
-                                  //   doc[index]["name"],
-                                  //   doc[index]["category_id"],
-                                  //   _addpackagetype.text,
-                                  // );
-                                  RadioListTile<String>(
-                                    value: doc[index]["name"],
-                                    groupValue: abc,
-                                    onChanged: (val) => setState(
-                                          () {
-                                        abc = val!;
-                                      },
-                                    ),
-                                    title: Text(doc[index]["name"]),
-                                  );
+                                    // RadioBoxx(
+                                    //   doc[index]["name"],
+                                    //   doc[index]["category_id"],
+                                    //   _addpackagetype.text,
+                                    // );
+                                    RadioListTile<String>(
+                                  value: doc[index]["name"],
+                                  groupValue: abc,
+                                  onChanged: (val) => setState(
+                                    () {
+                                      abc = val!;
+                                    },
+                                  ),
+                                  title: Text(doc[index]["name"]),
+                                );
 // <<<<<<< HEAD
 // <<<<<<< HEAD
 // =======
@@ -1452,7 +1459,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                                   value: doc[index]["name"],
                                   groupValue: abc,
                                   onChanged: (val) => setState(
-                                        () {
+                                    () {
                                       abc = val!;
                                     },
                                   ),
@@ -1533,43 +1540,43 @@ class _ProductEditBoxState extends State<ProductEditBox> {
 //
 //               >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
 // >>>>>>> ae7259e7ba6e19ed4976a35667cb3a762fe66e2c
-                        stream: vendorIdStream!.snapshots(),
-                        builder: (context, AsyncSnapshot snapshot) {
-                          if (snapshot.connectionState == ConnectionState.waiting) {
-                            return const CircularProgressIndicator();
-                          }
-                          if (snapshot.data == null) {
-                            return Container();
-                          }
-                          print("-----------------------------------");
-                          var doc = snapshot.data.docs;
-                          return Container(
-                            width: 400,
-                            height: 300,
-                            child: ListView.builder(
-                                itemCount: doc.length,
-                                itemBuilder: (BuildContext context, int index) {
-                                  bool check = false;
-                                  return RadioListTile<String>(
-                                    value: doc[index]["name"],
-                                    groupValue: abc2,
-                                    onChanged: (val) => setState(
-                                          () {
-                                        abc2 = val!;
-                                      },
-                                    ),
-                                    title: Text(doc[index]["name"]),
-                                  );
-                                  // ListTile(
-                                  //   title: Text(doc[index]["name"]),
-                                  //   onTap: () {
-                                  //     _addgymname.text = doc[index]["name"];
-                                  //   },
-                                  // );
-                                }),
-                          );
-                        },
-                      )),
+                    stream: vendorIdStream!.snapshots(),
+                    builder: (context, AsyncSnapshot snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const CircularProgressIndicator();
+                      }
+                      if (snapshot.data == null) {
+                        return Container();
+                      }
+                      print("-----------------------------------");
+                      var doc = snapshot.data.docs;
+                      return Container(
+                        width: 400,
+                        height: 300,
+                        child: ListView.builder(
+                            itemCount: doc.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              bool check = false;
+                              return RadioListTile<String>(
+                                value: doc[index]["name"],
+                                groupValue: abc2,
+                                onChanged: (val) => setState(
+                                  () {
+                                    abc2 = val!;
+                                  },
+                                ),
+                                title: Text(doc[index]["name"]),
+                              );
+                              // ListTile(
+                              //   title: Text(doc[index]["name"]),
+                              //   onTap: () {
+                              //     _addgymname.text = doc[index]["name"];
+                              //   },
+                              // );
+                            }),
+                      );
+                    },
+                  )),
 // <<<<<<< HEAD
 // <<<<<<< HEAD
 // =======
@@ -1699,14 +1706,14 @@ class _ProductEditBoxState extends State<ProductEditBox> {
 //                                       .collection('bookings')
 //                                       .doc(_addbookingid.text);
 // =======
-                              // FirebaseFirestore.instance
-                              //     .collection('bookings')
-                              //     .doc(_addbookingid.text);
+                                  // FirebaseFirestore.instance
+                                  //     .collection('bookings')
+                                  //     .doc(_addbookingid.text);
 // >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
 // =======
-                              FirebaseFirestore.instance
-                                  .collection('bookings')
-                                  .doc(_addbookingid.text);
+                                  FirebaseFirestore.instance
+                                      .collection('bookings')
+                                      .doc(_addbookingid.text);
 // >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
                               // DateTime endtimedata = DateTime.parse(
                               //     '${_addplanendyear.text}-${isLess(_addplanendmonth.text) ? '0' + _addplanendmonth.text : _addplanendday.text}-${isLess(_addplanendday.text) ? '0' + _addplanendday.text : _addplanendday.text} 00:00:04Z');
@@ -1758,9 +1765,9 @@ class _ProductEditBoxState extends State<ProductEditBox> {
 // >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
 // =======
                                 'booking_accepted':
-                                _addbookingaccepted.text == 'true'
-                                    ? true
-                                    : false,
+                                    _addbookingaccepted.text == 'true'
+                                        ? true
+                                        : false,
 // >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
 // =======
 
@@ -1969,7 +1976,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
 // >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
 // =======
 //         / <<<<<<< HEAD
-    await showTimePicker(context: context, initialTime: time ?? intialTime);
+        await showTimePicker(context: context, initialTime: time ?? intialTime);
 // >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
 //     =======
 //     await showTimePicker(context: context, initialTime: time ?? intialTime);
@@ -2033,8 +2040,8 @@ class _ProductEditBoxState extends State<ProductEditBox> {
 //         await showTimePicker(context: context, initialTime: time ?? intialTime);
 // >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
 // =======
-    // <<<<<<< HEAD
-    await showTimePicker(context: context, initialTime: time ?? intialTime);
+        // <<<<<<< HEAD
+        await showTimePicker(context: context, initialTime: time ?? intialTime);
 // >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
 //     =======
 //     await showTimePicker(context: context, initialTime: time ?? intialTime);
@@ -2093,7 +2100,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
 // <<<<<<< HEAD
 // <<<<<<< HEAD
 // =======
-    // <<<<<<< HEAD
+        // <<<<<<< HEAD
 // >>>>>>> ae7259e7ba6e19ed4976a35667cb3a762fe66e2c
 // <<<<<<< HEAD
 //         await showTimePicker(context: context, initialTime: time ?? intialTime);
@@ -2102,7 +2109,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
 // >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
 // <<<<<<< HEAD
 // =======
-    await showTimePicker(context: context, initialTime: time ?? intialTime);
+        await showTimePicker(context: context, initialTime: time ?? intialTime);
 // >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
 // =======
 //     =======
