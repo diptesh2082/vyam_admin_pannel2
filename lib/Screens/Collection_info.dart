@@ -42,265 +42,307 @@ class _UserInformationState extends State<UserInformation> {
   var xs = "Yes";
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 5),
-          decoration: BoxDecoration(
-              color: Colors.grey.shade100,
-              borderRadius: BorderRadius.circular(20.0)),
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 8.0, left: 8.0),
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      textStyle: const TextStyle(fontSize: 15),
+        body: SafeArea(
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 5),
+              decoration: BoxDecoration(
+                  color: Colors.grey.shade100,
+                  borderRadius: BorderRadius.circular(20.0)),
+              child: SingleChildScrollView(
+                child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8.0, left: 8.0),
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        textStyle: const TextStyle(fontSize: 15),
+                      ),
+                      onPressed: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => detailsadd()));
+                      },
+                      child: Text('Add User'),
                     ),
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => detailsadd()));
-                    },
-                    child: Text('Add User'),
                   ),
-                ),
-                Container(
-                  width: 500,
-                  height: 51,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(14),
-                    color: Colors.white12,
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(15),
-                    child: TextField(
-                      // focusNode: _node,
+                  Container(
+                    width: 500,
+                    height: 51,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(14),
+                      color: Colors.white12,
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(15),
+                      child: TextField(
+                        // focusNode: _node,
 
-                      autofocus: false,
-                      textAlignVertical: TextAlignVertical.bottom,
-                      onSubmitted: (value) async {
-                        FocusScope.of(context).unfocus();
-                      },
-                      // controller: searchController,
-                      onChanged: (value) {
-                        if (value.length == 0) {
-                          // _node.canRequestFocus=false;
-                          // FocusScope.of(context).unfocus();
-                        }
-                        if (mounted) {
-                          setState(() {
-                            searchUser = value.toString();
-                          });
-                        }
-                      },
-                      decoration: InputDecoration(
-                        prefixIcon: const Icon(Icons.search),
-                        hintText: 'Search',
-                        hintStyle: GoogleFonts.poppins(
-                            fontSize: 16, fontWeight: FontWeight.w500),
-                        border: InputBorder.none,
-                        filled: true,
-                        fillColor: Colors.white12,
+                        autofocus: false,
+                        textAlignVertical: TextAlignVertical.bottom,
+                        onSubmitted: (value) async {
+                          FocusScope.of(context).unfocus();
+                        },
+                        // controller: searchController,
+                        onChanged: (value) {
+                          if (value.length == 0) {
+                            // _node.canRequestFocus=false;
+                            // FocusScope.of(context).unfocus();
+                          }
+                          if (mounted) {
+                            setState(() {
+                              searchUser = value.toString();
+                            });
+                          }
+                        },
+                        decoration: InputDecoration(
+                          prefixIcon: const Icon(Icons.search),
+                          hintText: 'Search',
+                          hintStyle: GoogleFonts.poppins(
+                              fontSize: 16, fontWeight: FontWeight.w500),
+                          border: InputBorder.none,
+                          filled: true,
+                          fillColor: Colors.white12,
+                        ),
                       ),
                     ),
                   ),
-                ),
-                Center(
-                  child: StreamBuilder<QuerySnapshot>(
-                    stream: userDetailStream!.snapshots(),
-                    builder: (context, AsyncSnapshot snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const CircularProgressIndicator();
-                      }
-                      if (snapshot.data == null) {
-                        return Container();
-                      }
-                      print("-----------------------------------");
+                  Center(
+                    child: StreamBuilder<QuerySnapshot>(
+                      stream: userDetailStream!.snapshots(),
+                      builder: (context, AsyncSnapshot snapshot) {
+                        if (snapshot.connectionState == ConnectionState.waiting) {
+                          return const CircularProgressIndicator();
+                        }
+                        if (snapshot.data == null) {
+                          return Container();
+                        }
+                        print("-----------------------------------");
 
-                      var doc = snapshot.data.docs;
+                        var doc = snapshot.data.docs;
 
-                      if (searchUser.length > 0) {
-                        doc = doc.where((element) {
-                          return element
-                                  .get('name')
-                                  .toString()
-                                  .toLowerCase()
-                                  .contains(searchUser.toString()) ||
-                              element
-                                  .get('gender')
-                                  .toString()
-                                  .toLowerCase()
-                                  .contains(searchUser.toString()) ||
-                              element
-                                  .get('address')
-                                  .toString()
-                                  .toLowerCase()
-                                  .contains(searchUser.toString());
-                        }).toList();
-                      }
+                        if (searchUser.length > 0) {
+                          doc = doc.where((element) {
+                            return element
+                                .get('name')
+                                .toString()
+                                .toLowerCase()
+                                .contains(searchUser.toString()) ||
+                                element
+                                    .get('gender')
+                                    .toString()
+                                    .toLowerCase()
+                                    .contains(searchUser.toString()) ||
+                                element
+                                    .get('address')
+                                    .toString()
+                                    .toLowerCase()
+                                    .contains(searchUser.toString());
+                          }).toList();
+                        }
 
-                      print(snapshot.data.docs);
-                      return SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: DataTable(
-                            dataRowHeight: 65,
-                            columns: const [
-                              DataColumn(
-                                label: Text(
-                                  'Index',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
+                        print(snapshot.data.docs);
+                        return SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: DataTable(
+                              dataRowHeight: 65,
+                              columns: const [
+                                DataColumn(
+                                  label: Text(
+                                    'S.No',
+                                    style: TextStyle(fontWeight: FontWeight.w600),
+                                  ),
                                 ),
-                              ),
-                              DataColumn(
-                                label: Text(
-                                  'Profile Image',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                DataColumn(
+                                  label: Text(
+                                    'Profile Image',
+                                    style: TextStyle(fontWeight: FontWeight.w600),
+                                  ),
                                 ),
-                              ),
-                              // DataColumn(
-                              //     label: Text(
-                              //   'UserId',
-                              //   style: TextStyle(fontWeight: FontWeight.w600),
-                              // )),
-                              DataColumn(
-                                label: Text(
-                                  'Name',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                // DataColumn(
+                                //     label: Text(
+                                //   'UserId',
+                                //   style: TextStyle(fontWeight: FontWeight.w600),
+                                // )),
+                                DataColumn(
+                                  label: Text(
+                                    'Name',
+                                    style: TextStyle(fontWeight: FontWeight.w600),
+                                  ),
                                 ),
-                              ),
-                              DataColumn(
-                                label: Text(
-                                  'Email',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                DataColumn(
+                                  label: Text(
+                                    'Email',
+                                    style: TextStyle(fontWeight: FontWeight.w600),
+                                  ),
                                 ),
-                              ),
-                              DataColumn(
-                                label: Text(
-                                  'Gender',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                DataColumn(
+                                  label: Text(
+                                    'Gender',
+                                    style: TextStyle(fontWeight: FontWeight.w600),
+                                  ),
                                 ),
-                              ),
-                              DataColumn(
-                                label: Text(
-                                  'Phone Number',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                DataColumn(
+                                  label: Text(
+                                    'Phone Number',
+                                    style: TextStyle(fontWeight: FontWeight.w600),
+                                  ),
                                 ),
-                              ),
-                              DataColumn(
-                                label: Text(
-                                  'Address',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                DataColumn(
+                                  label: Text(
+                                    'Address',
+                                    style: TextStyle(fontWeight: FontWeight.w600),
+                                  ),
                                 ),
-                              ),
-                              DataColumn(
-                                label: Text(
-                                  'Locality',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                DataColumn(
+                                  label: Text(
+                                    'Locality',
+                                    style: TextStyle(fontWeight: FontWeight.w600),
+                                  ),
                                 ),
-                              ),
-                              // DataColumn(
-                              //   label: Text(
-                              //     'Sub Locality',
-                              //     style: TextStyle(fontWeight: FontWeight.w600),
-                              //   ),
-                              // ),
-                              DataColumn(
-                                label: Text(
-                                  'Pincode',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                // DataColumn(
+                                //   label: Text(
+                                //     'Sub Locality',
+                                //     style: TextStyle(fontWeight: FontWeight.w600),
+                                //   ),
+                                // ),
+                                DataColumn(
+                                  label: Text(
+                                    'Pincode',
+                                    style: TextStyle(fontWeight: FontWeight.w600),
+                                  ),
                                 ),
-                              ),
-                              DataColumn(
-                                label: Text(
-                                  'Validity of User',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                DataColumn(
+                                  label: Text(
+                                    'Validity of User',
+                                    style: TextStyle(fontWeight: FontWeight.w600),
+                                  ),
                                 ),
-                              ),
 
-                              // DataColumn(
-                              //   label: Text(
-                              //     'Latitude',
-                              //     style: TextStyle(fontWeight: FontWeight.w600),
-                              //   ),
-                              // ),
-                              // DataColumn(
-                              //   label: Text(
-                              //     'Longitude',
-                              //     style: TextStyle(fontWeight: FontWeight.w600),
-                              //   ),
-                              // ),
-                              DataColumn(
-                                label: Text(
-                                  'Edit',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                // DataColumn(
+                                //   label: Text(
+                                //     'Latitude',
+                                //     style: TextStyle(fontWeight: FontWeight.w600),
+                                //   ),
+                                // ),
+                                // DataColumn(
+                                //   label: Text(
+                                //     'Longitude',
+                                //     style: TextStyle(fontWeight: FontWeight.w600),
+                                //   ),
+                                // ),
+                                DataColumn(
+                                  label: Text(
+                                    'Edit',
+                                    style: TextStyle(fontWeight: FontWeight.w600),
+                                  ),
                                 ),
-                              ),
-                              DataColumn(
-                                label: Text(
-                                  'Delete',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
-                              )
-                            ],
-                            rows: _buildlist(context, doc)),
-                      );
-                    },
+                                DataColumn(
+                                  label: Text(
+                                    'Delete',
+                                    style: TextStyle(fontWeight: FontWeight.w600),
+                                  ),
+                                )
+                              ],
+                              rows: _buildlist(context, doc)),
+                        );
+                      },
+                    ),
                   ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
+                  SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ElevatedButton(
+                        child: Text("Previous Page"),
+                        onPressed: () {
+                          setState(() {
+                            if (start > 0 && end > 0) {
+                              start = start - 10;
+                              end = end - 10;
+                            }
+                          });
+                          print("Previous Page");
+                        },
+                      ),
+                      SizedBox(width: 20),
+                      ElevatedButton(
+                        child: Text("Next Page"),
+                        onPressed: () {
+                          setState(() {
+                            if (end < length) {
+                              start = start + 10;
+                              end = end + 10;
+                            }
+                          });
+                          print("Next Page");
+                        },
+                      ),
+                    ],
+                  ),
+                ]),
+              ),
+            )));
   }
+
+  var start = 0;
+
+  var end = 10;
+  var length;
 
   List<DataRow> _buildlist(
       BuildContext context, List<DocumentSnapshot> snapshot) {
-    var d =1;
-    return snapshot.map((data) => _buildListItem(context, data , d++)).toList();
+    var d = 1;
+    var s = start + 1;
+    var snap = [];
+    length = snapshot.length;
+    snapshot.forEach((element) {
+      if (end >= d++ && start <= d) {
+        snap.add(element);
+      }
+    });
+    return snap
+        .map((data) => _buildListItem(context, data, s++, start, end))
+        .toList();
   }
-  DataRow _buildListItem(BuildContext context, DocumentSnapshot data , index) {
+
+  DataRow _buildListItem(BuildContext context, DocumentSnapshot data, int index,
+      int start, int end) {
     String userIDData = data['userId'];
     String profileImage = data['image'];
     bool legit = data['legit'];
 
     return DataRow(cells: [
-
-      DataCell(data != null ? Text(index.toString()) : const Text("")),
+      DataCell(data != null ? Text(index.toString()) : Text("")),
 
       DataCell(
         profileImage != "null" || profileImage != null
             ? CircleAvatar(
-                child: CachedNetworkImage(
-                  imageUrl: profileImage,
-                  imageBuilder: (context, imageProvider) => Container(
-                    width: 100.0,
-                    height: 100.0,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      image: DecorationImage(
-                        image: imageProvider,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
+          child: CachedNetworkImage(
+            imageUrl: profileImage,
+            imageBuilder: (context, imageProvider) => Container(
+              width: 100.0,
+              height: 100.0,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                image: DecorationImage(
+                  image: imageProvider,
+                  fit: BoxFit.cover,
                 ),
-              )
-            : const CircleAvatar(
-                backgroundColor: Colors.black,
-                child: Text('Null'),
               ),
+            ),
+          ),
+        )
+            : const CircleAvatar(
+          backgroundColor: Colors.black,
+          child: Text('Null'),
+        ),
       ),
       // DataCell(data != null ? Text(userIDData) : Text("")),
       DataCell(data != null ? Text(data['name'] ?? "") : Text("")),
       DataCell(data != null ? Text(data['email'] ?? "") : Text("")),
       DataCell(data != null ? Text(data['gender'] ?? "") : Text("")),
       DataCell(data != null
-          ? Text((data['number']).toString().substring(3, data['number'].toString().length))
+          ? Text((data['number'])
+          .toString()
+          .substring(3, data['number'].toString().length))
           : Text("")),
       DataCell(data != null ? Text(data['address'] ?? "") : Text("")),
       DataCell(data != null ? Text(data['locality'] ?? "") : Text("")),
@@ -364,95 +406,95 @@ class _UserInformationState extends State<UserInformation> {
   final TextEditingController _addsublocality = TextEditingController();
   final TextEditingController _adduserid = TextEditingController();
   var profileImage;
-  // showAddbox() => showDialog(
-  //     context: context,
-  //     builder: (context) => AlertDialog(
-  //           shape: const RoundedRectangleBorder(
-  //               borderRadius: BorderRadius.all(Radius.circular(30))),
-  //           content: SizedBox(
-  //             height: 480,
-  //             width: 800,
-  //             child: SingleChildScrollView(
-  //               child: Column(
-  //                 crossAxisAlignment: CrossAxisAlignment.start,
-  //                 children: [
-  //                   const Text(
-  //                     'Add Records',
-  //                     style: TextStyle(
-  //                         fontFamily: 'poppins',
-  //                         fontWeight: FontWeight.w600,
-  //                         fontSize: 14),
-  //                   ),
-  //                   Row(
-  //                     children: [
-  //                       const Text("User Image"),
-  //
-  //                       IconButton(
-  //                           onPressed: () async {
-  //                             profileImage = await chooseImage();
-  //                           },
-  //                           icon: const Icon(Icons.camera_alt)),
-  //                       // if(profileImage != null)
-  //                       // Image.file();
-  //                     ],
-  //                   ),
-  //                   customTextField(
-  //                       hinttext: "phone number", addcontroller: _addnumber),
-  //                   // customTextField(
-  //                   //
-  //                   //     hinttext: "UserID", addcontroller: _adduserid),
-  //                   customTextField(hinttext: "Name", addcontroller: _addname),
-  //                   customTextField(
-  //                       hinttext: "Email", addcontroller: _addemail),
-  //                   customTextField(
-  //                       hinttext: "Gender", addcontroller: _addgender),
-  //
-  //                   customTextField(
-  //                       hinttext: "Address", addcontroller: _addaddress),
-  //                   customTextField(
-  //                       hinttext: "Locality", addcontroller: _addlocality),
-  //                   customTextField(
-  //                       hinttext: "Sub Locality",
-  //                       addcontroller: _addsublocality),
-  //                   customTextField(
-  //                     addcontroller: _addpincode,
-  //                     hinttext: "Pincode",
-  //                   ),
-  //                   Center(
-  //                     child: ElevatedButton(
-  //                       onPressed: () async {
-  //                         FirebaseFirestore.instance
-  //                             .collection('user_details')
-  //                             .doc("+91${_addnumber.text}")
-  //                             .set(
-  //                           {
-  //                             'address': _addaddress.text,
-  //                             'userId': "+91${_addnumber.text}",
-  //                             'name': _addname.text,
-  //                             'email': _addemail.text,
-  //                             'gender': _addgender.text,
-  //                             'number': "+91${_addnumber.text}",
-  //                             'locality': _addlocality.text,
-  //                             'subLocality': _addsublocality.text,
-  //                             'pincode': _addpincode.text,
-  //                             'long': " ",
-  //                             'lat': " ",
-  //                             'image': ""
-  //                           },
-  //                         ).then((value) async {
-  //                           await uploadImageToUser(
-  //                               profileImage, "+91${_addnumber.text}");
-  //                         });
-  //                         Navigator.pop(context);
-  //                       },
-  //                       child: const Text('Done'),
-  //                     ),
-  //                   )
-  //                 ],
-  //               ),
-  //             ),
-  //           ),
-  //         ));
+// showAddbox() => showDialog(
+//     context: context,
+//     builder: (context) => AlertDialog(
+//           shape: const RoundedRectangleBorder(
+//               borderRadius: BorderRadius.all(Radius.circular(30))),
+//           content: SizedBox(
+//             height: 480,
+//             width: 800,
+//             child: SingleChildScrollView(
+//               child: Column(
+//                 crossAxisAlignment: CrossAxisAlignment.start,
+//                 children: [
+//                   const Text(
+//                     'Add Records',
+//                     style: TextStyle(
+//                         fontFamily: 'poppins',
+//                         fontWeight: FontWeight.w600,
+//                         fontSize: 14),
+//                   ),
+//                   Row(
+//                     children: [
+//                       const Text("User Image"),
+//
+//                       IconButton(
+//                           onPressed: () async {
+//                             profileImage = await chooseImage();
+//                           },
+//                           icon: const Icon(Icons.camera_alt)),
+//                       // if(profileImage != null)
+//                       // Image.file();
+//                     ],
+//                   ),
+//                   customTextField(
+//                       hinttext: "phone number", addcontroller: _addnumber),
+//                   // customTextField(
+//                   //
+//                   //     hinttext: "UserID", addcontroller: _adduserid),
+//                   customTextField(hinttext: "Name", addcontroller: _addname),
+//                   customTextField(
+//                       hinttext: "Email", addcontroller: _addemail),
+//                   customTextField(
+//                       hinttext: "Gender", addcontroller: _addgender),
+//
+//                   customTextField(
+//                       hinttext: "Address", addcontroller: _addaddress),
+//                   customTextField(
+//                       hinttext: "Locality", addcontroller: _addlocality),
+//                   customTextField(
+//                       hinttext: "Sub Locality",
+//                       addcontroller: _addsublocality),
+//                   customTextField(
+//                     addcontroller: _addpincode,
+//                     hinttext: "Pincode",
+//                   ),
+//                   Center(
+//                     child: ElevatedButton(
+//                       onPressed: () async {
+//                         FirebaseFirestore.instance
+//                             .collection('user_details')
+//                             .doc("+91${_addnumber.text}")
+//                             .set(
+//                           {
+//                             'address': _addaddress.text,
+//                             'userId': "+91${_addnumber.text}",
+//                             'name': _addname.text,
+//                             'email': _addemail.text,
+//                             'gender': _addgender.text,
+//                             'number': "+91${_addnumber.text}",
+//                             'locality': _addlocality.text,
+//                             'subLocality': _addsublocality.text,
+//                             'pincode': _addpincode.text,
+//                             'long': " ",
+//                             'lat': " ",
+//                             'image': ""
+//                           },
+//                         ).then((value) async {
+//                           await uploadImageToUser(
+//                               profileImage, "+91${_addnumber.text}");
+//                         });
+//                         Navigator.pop(context);
+//                       },
+//                       child: const Text('Done'),
+//                     ),
+//                   )
+//                 ],
+//               ),
+//             ),
+//           ),
+//         ));
 }
 
 class EditBox extends StatefulWidget {
@@ -514,7 +556,7 @@ class _EditBoxState extends State<EditBox> {
     // _latitude.text = widget.latitude.toString();
     // _longitude.text = widget.longitude.toString();
     _locality.text = widget.locality;
-    _number.text = widget.number.substring(3 , widget.number.length);
+    _number.text = widget.number.substring(3, widget.number.length);
     _name.text = widget.name;
     _pincode.text = widget.pincode;
     _sublocality.text = widget.subLocality;
@@ -574,93 +616,93 @@ class _EditBoxState extends State<EditBox> {
                     height: 50,
                     child: Card(
                         child: TextField(
-                      autofocus: true,
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w400,
-                      ),
-                      controller: _name,
-                      maxLines: 3,
-                      decoration: const InputDecoration(
-                          border: InputBorder.none,
-                          hintStyle: TextStyle(
+                          autofocus: true,
+                          style: const TextStyle(
                             fontSize: 14,
                             fontFamily: 'Poppins',
                             fontWeight: FontWeight.w400,
                           ),
-                          hintMaxLines: 2,
-                          hintText: 'Name'),
-                    )),
+                          controller: _name,
+                          maxLines: 3,
+                          decoration: const InputDecoration(
+                              border: InputBorder.none,
+                              hintStyle: TextStyle(
+                                fontSize: 14,
+                                fontFamily: 'Poppins',
+                                fontWeight: FontWeight.w400,
+                              ),
+                              hintMaxLines: 2,
+                              hintText: 'Name'),
+                        )),
                   ),
                   SizedBox(
                     height: 50,
                     child: Card(
                         child: TextField(
-                      autofocus: true,
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w400,
-                      ),
-                      controller: _email,
-                      maxLines: 3,
-                      decoration: const InputDecoration(
-                          border: InputBorder.none,
-                          hintStyle: TextStyle(
+                          autofocus: true,
+                          style: const TextStyle(
                             fontSize: 14,
                             fontFamily: 'Poppins',
                             fontWeight: FontWeight.w400,
                           ),
-                          hintMaxLines: 2,
-                          hintText: 'email'),
-                    )),
+                          controller: _email,
+                          maxLines: 3,
+                          decoration: const InputDecoration(
+                              border: InputBorder.none,
+                              hintStyle: TextStyle(
+                                fontSize: 14,
+                                fontFamily: 'Poppins',
+                                fontWeight: FontWeight.w400,
+                              ),
+                              hintMaxLines: 2,
+                              hintText: 'email'),
+                        )),
                   ),
                   SizedBox(
                     height: 50,
                     child: Card(
                         child: TextField(
-                      autofocus: true,
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w400,
-                      ),
-                      controller: _gender,
-                      maxLines: 3,
-                      decoration: const InputDecoration(
-                          border: InputBorder.none,
-                          hintStyle: TextStyle(
+                          autofocus: true,
+                          style: const TextStyle(
                             fontSize: 14,
                             fontFamily: 'Poppins',
                             fontWeight: FontWeight.w400,
                           ),
-                          hintMaxLines: 2,
-                          hintText: 'Gender'),
-                    )),
+                          controller: _gender,
+                          maxLines: 3,
+                          decoration: const InputDecoration(
+                              border: InputBorder.none,
+                              hintStyle: TextStyle(
+                                fontSize: 14,
+                                fontFamily: 'Poppins',
+                                fontWeight: FontWeight.w400,
+                              ),
+                              hintMaxLines: 2,
+                              hintText: 'Gender'),
+                        )),
                   ),
                   SizedBox(
                     height: 50,
                     child: Card(
                         child: TextField(
-                      autofocus: true,
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w400,
-                      ),
-                      controller: _number,
-                      maxLines: 3,
-                      decoration: const InputDecoration(
-                          border: InputBorder.none,
-                          hintStyle: TextStyle(
+                          autofocus: true,
+                          style: const TextStyle(
                             fontSize: 14,
                             fontFamily: 'Poppins',
                             fontWeight: FontWeight.w400,
                           ),
-                          hintMaxLines: 2,
-                          hintText: 'Phone Number'),
-                    )),
+                          controller: _number,
+                          maxLines: 3,
+                          decoration: const InputDecoration(
+                              border: InputBorder.none,
+                              hintStyle: TextStyle(
+                                fontSize: 14,
+                                fontFamily: 'Poppins',
+                                fontWeight: FontWeight.w400,
+                              ),
+                              hintMaxLines: 2,
+                              hintText: 'Phone Number'),
+                        )),
                   ),
                   // SizedBox(
                   //   height: 50,
@@ -810,14 +852,15 @@ class _EditBoxState extends State<EditBox> {
                             print("/////");
 
                             DocumentReference documentReference =
-                                FirebaseFirestore.instance
-                                    .collection('user_details')
-                                    //change _number to _userid
-                                    .doc("${x}");
+                            FirebaseFirestore.instance
+                                .collection('user_details')
+                            //change _number to _userid
+                                .doc("${x}");
                             Map<String, dynamic> data = <String, dynamic>{
                               // 'address':'',
                               'gender': _gender.text,
-                              'image': imgUrl1 ?? "https://www.kindpng.com/picc/m/22-223941_transparent-avatar-png-male-avatar-icon-transparent-png.png",
+                              'image': imgUrl1 ??
+                                  "https://www.kindpng.com/picc/m/22-223941_transparent-avatar-png-male-avatar-icon-transparent-png.png",
                               'name': _name.text,
                               // 'pincode': "",
                               // 'userId': _userid.text,
@@ -857,7 +900,7 @@ class _EditBoxState extends State<EditBox> {
       final _firebaseStorage = FirebaseStorage.instance.ref().child("category");
 
       Reference _reference =
-          _firebaseStorage.child('category/${Path.basename(pickedFile!.path)}');
+      _firebaseStorage.child('category/${Path.basename(pickedFile!.path)}');
       await _reference.putData(
         await pickedFile.readAsBytes(),
         SettableMetadata(contentType: 'image/jpeg'),
@@ -974,7 +1017,6 @@ class _detailsaddState extends State<detailsadd> {
                           child: Text("Female"),
                           value: "female",
                         ),
-
                       ],
                       onChanged: (value) {
                         setState(() {
@@ -983,8 +1025,12 @@ class _detailsaddState extends State<detailsadd> {
                       }),
                 ],
               ),
+// <<<<<<< HEAD
+//
+// =======
               // customTextField(hinttext: "Gender", addcontroller: _addgender),
               // customTextField(hinttext: "Address", addcontroller: _addaddress),
+
               // customTextField(
               //     hinttext: "Locality", addcontroller: _addlocality),
               // customTextField(
@@ -993,6 +1039,7 @@ class _detailsaddState extends State<detailsadd> {
               //   addcontroller: _addpincode,
               //   hinttext: "Pincode",
               // ),
+// >>>>>>> 49b8466335e6ab5faa01c342e68556f18142e421
               Row(
                 children: [
                   ElevatedButton(
@@ -1007,7 +1054,8 @@ class _detailsaddState extends State<detailsadd> {
                           'name': _addname.text,
                           'email': _addemail.text,
                           'gender': gender,
-                          'image': imgUrl1 ?? "https://www.kindpng.com/picc/m/22-223941_transparent-avatar-png-male-avatar-icon-transparent-png.png",
+                          'image': imgUrl1 ??
+                              "https://www.kindpng.com/picc/m/22-223941_transparent-avatar-png-male-avatar-icon-transparent-png.png",
                           'number': "+91${_addnumber.text}",
                           'locality': "",
                           'subLocality': "",

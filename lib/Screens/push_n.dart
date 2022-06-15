@@ -2,6 +2,7 @@ import 'package:admin_panel_vyam/Screens/push_new_screen.dart';
 import 'package:admin_panel_vyam/services/deleteMethod.dart';
 import 'package:admin_panel_vyam/services/image_picker_api.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -28,11 +29,11 @@ class _PushState extends State<Push> {
     super.initState();
   }
 
-  var id = FirebaseFirestore.instance
-      .collection('push_notifications')
-      .doc()
-      .id
-      .toString();
+  // var id = FirebaseFirestore.instance
+  //     .collection('push_notifications')
+  //     .doc()
+  //     .id
+  //     .toString();
 
   var millis, dt, d12, image;
 
@@ -62,7 +63,8 @@ class _PushState extends State<Push> {
                     style: ElevatedButton.styleFrom(
                       textStyle: const TextStyle(fontSize: 15),
                     ),
-                    onPressed: () {
+                    onPressed: () async {
+                    // await  FirebaseMessaging.instance.subscribeToTopic("push_notifications");
                       Get.to(() => const pushNew());
                     },
                     child: Text('Add Push Notification'),
@@ -97,12 +99,12 @@ class _PushState extends State<Push> {
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
-                              DataColumn(
-                                label: Text(
-                                  'ID',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
-                              ),
+                              // DataColumn(
+                              //   label: Text(
+                              //     'ID',
+                              //     style: TextStyle(fontWeight: FontWeight.w600),
+                              //   ),
+                              // ),
                               DataColumn(
                                 label: Text(
                                   'Timestamp',
@@ -127,6 +129,37 @@ class _PushState extends State<Push> {
                     },
                   ),
                 ),
+                const SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                      child: Text("Previous Page"),
+                      onPressed: () {
+                        setState(() {
+                          if (start > 0 && end > 0) {
+                            start = start - 10;
+                            end = end - 10;
+                          }
+                        });
+                        print("Previous Page");
+                      },
+                    ),
+                    const SizedBox(width: 20),
+                    ElevatedButton(
+                      child: Text("Next Page"),
+                      onPressed: () {
+                        setState(() {
+                          if (end < length) {
+                            start = start + 10;
+                            end = end + 10;
+                          }
+                        });
+                        print("Next Page");
+                      },
+                    ),
+                  ],
+                ),
               ],
             ),
           ),
@@ -135,20 +168,37 @@ class _PushState extends State<Push> {
     );
   }
 
+  var start = 0;
+
+  var end = 10;
+  var length;
+
   List<DataRow> _buildlist(
       BuildContext context, List<DocumentSnapshot> snapshot) {
-    return snapshot.map((data) => _buildListItem(context, data)).toList();
+    var d = 1;
+    var s = start + 1;
+    var snap = [];
+    length = snapshot.length;
+    snapshot.forEach((element) {
+      if (end >= d++ && start <= d) {
+        snap.add(element);
+      }
+    });
+    return snap
+        .map((data) => _buildListItem(context, data, s++, start, end))
+        .toList();
   }
 
-  DataRow _buildListItem(BuildContext context, DocumentSnapshot data) {
-    String pushIdData = data['id'];
+  DataRow _buildListItem(BuildContext context, DocumentSnapshot data, int index,
+      int start, int end) {
+    String pushIdData = data.id;
     return DataRow(cells: [
       DataCell(
           data['title'] != null ? Text(data['title'] ?? "") : const Text("")),
       DataCell(data['definition'] != null
           ? Text(data['definition'] ?? "")
           : const Text("")),
-      DataCell(data['id'] != null ? Text(data['id'] ?? "") : const Text("")),
+      // DataCell(data['id'] != null ? Text(data['id'] ?? "") : const Text("")),
       DataCell(data['timestamp'] != null
           ? Text(data['timestamp'] ?? "")
           : const Text("")),
@@ -156,9 +206,9 @@ class _PushState extends State<Push> {
         Get.to(() => ProductEditBox(
             title: data['title'],
             definition: data['definition'],
-            id: data['id'],
+            id: data.id,
             timestamp: data['timestamp'],
-            image: data['image']));
+            image: data['image'].toString()));
       }),
       DataCell(Icon(Icons.delete), onTap: () {
         deleteMethod(stream: pushStream, uniqueDocId: pushIdData);
@@ -304,7 +354,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
     _title.text = widget.title;
     _definition.text = widget.definition;
     image = widget.image;
-    id = widget.id;
+    // id = widget.id;
     timestamp = widget.timestamp;
   }
 
@@ -346,7 +396,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                       'definition': _definition.text,
                       'image': image,
                       'timestamp': d12,
-                      'id': id,
+                      // 'id': id,
                     };
                     await documentReference
                         .update(data)

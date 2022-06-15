@@ -1,4 +1,5 @@
 import 'package:admin_panel_vyam/Screens/Product%20Details/Trainers/Trainers.dart';
+import 'package:admin_panel_vyam/Screens/banners.dart';
 import 'package:admin_panel_vyam/Screens/category_screen.dart';
 import 'package:admin_panel_vyam/services/deleteMethod.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -7,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'Screens/Product Details/product_details.dart';
 import 'Screens/booking_details.dart';
+import 'bookfilter.dart';
 
 class DashBoardScreen extends StatefulWidget {
   const DashBoardScreen({Key? key}) : super(key: key);
@@ -16,6 +18,22 @@ class DashBoardScreen extends StatefulWidget {
 
 class _DashBoardScreenState extends State<DashBoardScreen> {
   bool isHovering = false;
+  CollectionReference? categoryStream;
+  CollectionReference? productStream;
+  CollectionReference? bannerStream;
+  CollectionReference? bookingStream;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    categoryStream = FirebaseFirestore.instance.collection("category");
+    productStream = FirebaseFirestore.instance.collection("product_details");
+    bannerStream = FirebaseFirestore.instance.collection("banner_details");
+    bookingStream = FirebaseFirestore.instance.collection("bookings");
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return GridView.builder(
@@ -35,7 +53,6 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
             },
             child: buildDashBoardCard(
               title: 'Categories',
-              count: 4,
               collectionID: 'category',
             ),
           );
@@ -43,7 +60,7 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
         if (i == 1) {
           return GestureDetector(
             child: buildDashBoardCard(
-                title: 'Vendor', count: 17, collectionID: 'product_details'),
+                title: 'Vendor', collectionID: 'product_details'),
             onTap: () {
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) => ProductDetails()));
@@ -62,64 +79,92 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
         if (i == 3) {
           return GestureDetector(
             child: buildDashBoardCard(
-                title: 'Banner', count: 3, collectionID: 'banner_details'),
+                title: 'Banner', collectionID: 'banner_details'),
             onTap: () {
-              // Navigator.push(context,
-              //   MaterialPageRoute(builder: (context) => ProductDetails()));
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => BannerPage()));
             },
           );
         }
         if (i == 4) {
           return GestureDetector(
-            child: buildDashBoardCard(title: 'Total Bookings', count: 129),
+            child: buildDashBoardCard(
+                title: 'Total Bookings', collectionID: 'bookings'),
             onTap: () {
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) => BookingDetails()));
             },
           );
         }
+
         if (i == 5) {
           return GestureDetector(
-            child: buildDashBoardCard(title: 'Total Confirm', count: 1),
+            child: buildDashBoardCard(
+                title: 'Total Confirm',
+                collectionID: 'bookings',
+                iss: true,
+                state: 'completed'),
             onTap: () {
-              // Navigator.push(context,
-              //   MaterialPageRoute(builder: (context) => ProductDetails()));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => BookingDetails1(st: 'completed')));
             },
           );
         }
         if (i == 6) {
           return GestureDetector(
-            child: buildDashBoardCard(title: 'Total Active', count: 7),
+            child: buildDashBoardCard(
+                title: 'Total Active',
+                collectionID: 'bookings',
+                state: 'active',
+                iss: true),
             onTap: () {
-              // Navigator.push(context,
-              //   MaterialPageRoute(builder: (context) => ProductDetails()));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => BookingDetails1(st: 'active')));
             },
           );
         }
         if (i == 7) {
           return GestureDetector(
-            child: buildDashBoardCard(title: 'Total Complete', count: 116),
+            child: buildDashBoardCard(
+                title: 'Total Complete',
+                iss: true,
+                state: 'completed',
+                collectionID: 'bookings'),
             onTap: () {
-              // Navigator.push(context,
-              //   MaterialPageRoute(builder: (context) => ProductDetails()));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => BookingDetails1(st: 'completed')));
             },
           );
         }
         if (i == 8) {
           return GestureDetector(
-            child: buildDashBoardCard(title: 'Total Cancel', count: 4),
+            child: buildDashBoardCard(
+                title: 'Total Cancel',
+                count: 4,
+                collectionID: 'bookings',
+                state: 'cancelled',
+                iss: true),
             onTap: () {
-              //Navigator.push(context,
-              //  MaterialPageRoute(builder: (context) => ProductDetails()));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => BookingDetails1(st: 'cancelled')));
             },
           );
         }
         if (i == 9) {
           return GestureDetector(
-            child: buildDashBoardCard(title: 'Total Bookings', count: 1),
+            child: buildDashBoardCard(
+                title: 'Total Bookings', collectionID: 'bookings'),
             onTap: () {
-              // Navigator.push(context,
-              //   MaterialPageRoute(builder: (context) => ProductDetails()));
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => BookingDetails()));
             },
           );
         }
@@ -140,9 +185,16 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
     String? collectionID = "category",
     int? count = 0,
     Color? colour,
+    bool? iss = false,
+    String? state,
   }) {
     return FutureBuilder(
-        future: FirebaseFirestore.instance.collection(collectionID!).get(),
+        future: iss != false
+            ? FirebaseFirestore.instance
+                .collection(collectionID!)
+                .where('booking_status', isEqualTo: state)
+                .get()
+            : FirebaseFirestore.instance.collection(collectionID!).get(),
         builder: (context, AsyncSnapshot snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(

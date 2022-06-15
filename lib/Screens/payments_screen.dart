@@ -3,7 +3,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
 import '../services/CustomTextFieldClass.dart';
@@ -25,7 +24,6 @@ class _PaymentsPageState extends State<PaymentsPage> {
   // late String paymentid;
 
   final userid = FirebaseFirestore.instance.collection('payment').doc().id;
-  String searchPayment = '';
 
   @override
   void initState() {
@@ -67,51 +65,21 @@ class _PaymentsPageState extends State<PaymentsPage> {
                               builder: (context) => PaymentScreen(d12)));
                     },
                     child: const Text('Add Payment'),
+                    // Container(
+                    //   width: 120,
+                    //   decoration: BoxDecoration(
+                    //       color: Colors.white,
+                    //       borderRadius: BorderRadius.circular(20.0)),
+                    //   child: Row(
+                    //     children: const [
+                    //       Icon(Icons.add),
+                    //       Text('Add Product',
+                    //           style: TextStyle(fontWeight: FontWeight.w400)),
+                    //     ],
+                    //   ),
+                    // ),
                   ),
                 ),
-                Container(
-                  width: 500,
-                  height: 51,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(14),
-                    color: Colors.white12,
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(15),
-                    child: TextField(
-                      // focusNode: _node,
-
-                      autofocus: false,
-                      textAlignVertical: TextAlignVertical.bottom,
-                      onSubmitted: (value) async {
-                        FocusScope.of(context).unfocus();
-                      },
-                      // controller: searchController,
-                      onChanged: (value) {
-                        if (value.length == 0) {
-                          // _node.canRequestFocus=false;
-                          // FocusScope.of(context).unfocus();
-                        }
-                        if (mounted) {
-                          setState(() {
-                            searchPayment = value.toString();
-                          });
-                        }
-                      },
-                      decoration: InputDecoration(
-                        prefixIcon: const Icon(Icons.search),
-                        hintText: 'Search',
-                        hintStyle: GoogleFonts.poppins(
-                            fontSize: 16, fontWeight: FontWeight.w500),
-                        border: InputBorder.none,
-                        filled: true,
-                        fillColor: Colors.white12,
-                      ),
-                    ),
-                  ),
-                ),
-
-
                 Center(
                   child: StreamBuilder<QuerySnapshot>(
                     stream: paymentStream!.snapshots(),
@@ -124,50 +92,18 @@ class _PaymentsPageState extends State<PaymentsPage> {
                       }
                       print("-----------------------------------");
 
-                      var doc = snapshot.data.docs;
-
-                      if (searchPayment.isNotEmpty) {
-                        doc = doc.where((element) {
-                          return element
-                              .get('name')
-                              .toString()
-                              .toLowerCase()
-                              .contains(searchPayment.toString()) ||
-                              element
-                                  .get('type')
-                                  .toString()
-                                  .toLowerCase()
-                                  .contains(searchPayment.toString()) ||
-                              element
-                                  .get('amount')
-                                  .toString()
-                                  .toLowerCase()
-                                  .contains(searchPayment.toString()) ||
-                              element
-                                  .get('place')
-                                  .toString()
-                                  .toLowerCase()
-                                  .contains(searchPayment.toString());
-                        }).toList();
-                      }
-
                       print(snapshot.data.docs);
                       return SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
                         child: DataTable(
-                            // ? DATATABLE
+                          // ? DATATABLE
                             dataRowHeight: 65,
                             columns: const [
                               DataColumn(
                                   label: Text(
-                                    'Index',
+                                    'Vendor Name',
                                     style: TextStyle(fontWeight: FontWeight.w600),
                                   )),
-                              DataColumn(
-                                  label: Text(
-                                'Vendor Name',
-                                style: TextStyle(fontWeight: FontWeight.w600),
-                              )),
                               DataColumn(
                                 label: Text(
                                   'Amount',
@@ -199,10 +135,41 @@ class _PaymentsPageState extends State<PaymentsPage> {
                                 ),
                               ),
                             ],
-                            rows: _buildlist(context, doc)),
+                            rows: _buildlist(context, snapshot.data!.docs)),
                       );
                     },
                   ),
+                ),
+                SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                      child: Text("Previous Page"),
+                      onPressed: () {
+                        setState(() {
+                          if (start > 0 && end > 0) {
+                            start = start - 10;
+                            end = end - 10;
+                          }
+                        });
+                        print("Previous Page");
+                      },
+                    ),
+                    SizedBox(width: 20),
+                    ElevatedButton(
+                      child: Text("Next Page"),
+                      onPressed: () {
+                        setState(() {
+                          if (end < length) {
+                            start = start + 10;
+                            end = end + 10;
+                          }
+                        });
+                        print("Next Page");
+                      },
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -212,13 +179,29 @@ class _PaymentsPageState extends State<PaymentsPage> {
     );
   }
 
+  var start = 0;
+
+  var end = 10;
+  var length;
+
   List<DataRow> _buildlist(
       BuildContext context, List<DocumentSnapshot> snapshot) {
-    var d =1;
-    return snapshot.map((data) => _buildListItem(context, data , d++)).toList();
+    var d = 1;
+    var s = start + 1;
+    var snap = [];
+    length = snapshot.length;
+    snapshot.forEach((element) {
+      if (end >= d++ && start <= d) {
+        snap.add(element);
+      }
+    });
+    return snap
+        .map((data) => _buildListItem(context, data, s++, start, end))
+        .toList();
   }
 
-  DataRow _buildListItem(BuildContext context, DocumentSnapshot data , index) {
+  DataRow _buildListItem(BuildContext context, DocumentSnapshot data, int index,
+      int start, int end) {
     Timestamp timestamp = data['timestamp'];
     dss = DateTime.fromMillisecondsSinceEpoch(timestamp.millisecondsSinceEpoch);
     d122 = DateFormat('dd/MM/yyyy, HH:mm').format(dss);
@@ -230,7 +213,6 @@ class _PaymentsPageState extends State<PaymentsPage> {
     // paymentid = paymentID;
 
     return DataRow(cells: [
-      DataCell(data != null ? Text(index.toString()) : const Text("")),
       DataCell(data != null
           ? Text("${data['name']} | ${data['place'].toString().toUpperCase()}")
           : const Text("")),
@@ -246,7 +228,7 @@ class _PaymentsPageState extends State<PaymentsPage> {
         onTap: () {
           // ? Added Gesture Detecter for popping off update record Card
           Get.to(
-            () => ProductEditBox(
+                () => ProductEditBox(
               amount: data['amount'],
               gym_id: data['gym_id'],
               name: data['name'],
@@ -270,12 +252,15 @@ class _PaymentsPageState extends State<PaymentsPage> {
   final TextEditingController _addName = TextEditingController();
   // final TextEditingController _addTimestamp = TextEditingController();
   late Timestamp dtime = Timestamp.now();
+
+//---> MOVED TO PAYMENTSCREEN///---------------------
 }
 
 class PaymentScreen extends StatefulWidget {
   final String d12;
 
   const PaymentScreen(this.d12, {Key? key}) : super(key: key);
+
   @override
   State<PaymentScreen> createState() => _PaymentScreenState();
 }
@@ -499,6 +484,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
     );
 
     if (newDate == null) return;
+
     setState(() {
       date = newDate;
     });
@@ -509,7 +495,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
   Future pickTime(BuildContext context) async {
     const intialTime = TimeOfDay(hour: 9, minute: 0);
     final newTime =
-        await showTimePicker(context: context, initialTime: time ?? intialTime);
+    await showTimePicker(context: context, initialTime: time ?? intialTime);
 
     if (newTime == null) return;
 

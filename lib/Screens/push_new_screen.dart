@@ -26,11 +26,11 @@ class _pushNewState extends State<pushNew> {
     super.initState();
   }
 
-  var id = FirebaseFirestore.instance
-      .collection('push_notifications')
-      .doc()
-      .id
-      .toString();
+  // var id = FirebaseFirestore.instance
+  //     .collection('push_notifications')
+  //     .doc()
+  //     .id
+  //     .toString();
 
   final TextEditingController _addtitle = TextEditingController();
   final TextEditingController _adddefiniton = TextEditingController();
@@ -128,17 +128,17 @@ class _pushNewState extends State<pushNew> {
                   child: ElevatedButton(
                     onPressed: () async {
                       date();
-                      await matchID(
-                          newId: id, matchStream: pushStream, idField: 'id');
+                      // await matchID(
+                      //     newId: id, matchStream: pushStream, idField: 'id');
                       await FirebaseFirestore.instance
                           .collection('push_notifications')
-                          .doc(id)
+                          .doc()
                           .set(
                         {
                           'title': _addtitle.text,
                           'definition': _adddefiniton.text,
                           'image': image ,
-                          'id': id,
+                          // 'id': "id",
                           'timestamp': d12,
                         },
                       );

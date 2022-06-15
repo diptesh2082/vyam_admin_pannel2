@@ -23,8 +23,7 @@ class CategoryInfoScreen extends StatefulWidget {
 
 class _CategoryInfoScreenState extends State<CategoryInfoScreen> {
   CollectionReference? categoryStream;
-  var catId =
-      FirebaseFirestore.instance.collection('category').doc().id;
+  var catId = FirebaseFirestore.instance.collection('category').doc().id;
   String searchCateogryName = '';
 
   @override
@@ -33,10 +32,12 @@ class _CategoryInfoScreenState extends State<CategoryInfoScreen> {
     super.initState();
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text("Category"),
+      ),
       body: SafeArea(
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 5),
@@ -51,13 +52,12 @@ class _CategoryInfoScreenState extends State<CategoryInfoScreen> {
                   padding: const EdgeInsets.only(top: 8.0, left: 8.0),
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      textStyle:
-                      const TextStyle(fontSize: 15 ),
+                      textStyle: const TextStyle(fontSize: 15),
                     ),
-                    onPressed: (){
-                      Get.to(()=>const categoryAddScreen());
+                    onPressed: () {
+                      Get.to(() => const categoryAddScreen());
                     },
-                    child:const Text('Add Product'),
+                    child: const Text('Add Product'),
                     // Container(
                     //   width: 120,
                     //   decoration: BoxDecoration(
@@ -73,7 +73,6 @@ class _CategoryInfoScreenState extends State<CategoryInfoScreen> {
                     // ),
                   ),
                 ),
-
                 Container(
                   width: 500,
                   height: 51,
@@ -102,13 +101,11 @@ class _CategoryInfoScreenState extends State<CategoryInfoScreen> {
                           });
                         }
                       },
-                      decoration:  InputDecoration(
+                      decoration: InputDecoration(
                         prefixIcon: const Icon(Icons.search),
                         hintText: 'Search',
                         hintStyle: GoogleFonts.poppins(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500
-                        ),
+                            fontSize: 16, fontWeight: FontWeight.w500),
                         border: InputBorder.none,
                         filled: true,
                         fillColor: Colors.white12,
@@ -116,7 +113,6 @@ class _CategoryInfoScreenState extends State<CategoryInfoScreen> {
                     ),
                   ),
                 ),
-
                 Center(
                   child: StreamBuilder<QuerySnapshot>(
                     stream: categoryStream!.snapshots(),
@@ -127,7 +123,6 @@ class _CategoryInfoScreenState extends State<CategoryInfoScreen> {
                       if (snapshot.data == null) {
                         return Container();
                       }
-
 
                       var doc = snapshot.data.docs;
 
@@ -141,19 +136,11 @@ class _CategoryInfoScreenState extends State<CategoryInfoScreen> {
                         }).toList();
                       }
 
-
-
                       return SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
                         child: DataTable(
                           dataRowHeight: 65,
                           columns: const [
-                            DataColumn(
-                              label: Text(
-                                'Index',
-                                style: TextStyle(fontWeight: FontWeight.w600),
-                              ),
-                            ),
                             DataColumn(
                               label: Text(
                                 'Name',
@@ -197,6 +184,37 @@ class _CategoryInfoScreenState extends State<CategoryInfoScreen> {
                     },
                   ),
                 ),
+                SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                      child: Text("Previous Page"),
+                      onPressed: () {
+                        setState(() {
+                          if (start > 0 && end > 0) {
+                            start = start - 10;
+                            end = end - 10;
+                          }
+                        });
+                        print("Previous Page");
+                      },
+                    ),
+                    SizedBox(width: 20),
+                    ElevatedButton(
+                      child: Text("Next Page"),
+                      onPressed: () {
+                        setState(() {
+                          if (end < length) {
+                            start = start + 10;
+                            end = end + 10;
+                          }
+                        });
+                        print("Next Page");
+                      },
+                    ),
+                  ],
+                ),
               ],
             ),
           ),
@@ -205,29 +223,45 @@ class _CategoryInfoScreenState extends State<CategoryInfoScreen> {
     );
   }
 
+  var start = 0;
+
+  var end = 10;
+  var length;
+
   List<DataRow> _buildlist(
       BuildContext context, List<DocumentSnapshot> snapshot) {
     var d = 1;
-    return snapshot.map((data) => _buildListItem(context, data , d++)).toList();
+    var s = start + 1;
+    var snap = [];
+    length = snapshot.length;
+    snapshot.forEach((element) {
+      if (end >= d++ && start <= d) {
+        snap.add(element);
+      }
+    });
+    return snap
+        .map((data) => _buildListItem(context, data, s++, start, end))
+        .toList();
   }
 
-  DataRow _buildListItem(BuildContext context, DocumentSnapshot data , index) {
+  DataRow _buildListItem(BuildContext context, DocumentSnapshot data, int index,
+      int start, int end) {
     String categoryID = data['category_id'];
     String x;
     bool status = data['status'];
+    String img = data['image'];
     return DataRow(cells: [
-      DataCell(data != null ? Text(index.toString()) : const Text("")),
       DataCell(
         data['name'] != null ? Text(data['name'] ?? "") : const Text(""),
       ),
       DataCell(
         data['image'] != null
             ? Image.network(
-                data['image'] ?? "",
-                scale: 0.5,
-                height: 150,
-                width: 150,
-              )
+          data['image'] ?? "",
+          scale: 0.5,
+          height: 150,
+          width: 150,
+        )
             : const Text(""),
       ),
       DataCell(
@@ -237,15 +271,14 @@ class _CategoryInfoScreenState extends State<CategoryInfoScreen> {
               bool temp = status;
               temp = !temp;
 
-              DocumentReference documentReference = FirebaseFirestore.instance
-                  .collection('category')
-                  .doc(catId);
+              DocumentReference documentReference =
+              FirebaseFirestore.instance.collection('category').doc(catId);
               await documentReference
                   .update({'status': temp})
                   .whenComplete(() => print("Legitimate toggled"))
                   .catchError((e) => print(e));
             },
-            child: Text( x = status ? 'ENABLED':'DISABLED'),
+            child: Text(x = status ? 'ENABLED' : 'DISABLED'),
             style: ElevatedButton.styleFrom(
                 primary: status ? Colors.green : Colors.red),
           ),
@@ -260,7 +293,12 @@ class _CategoryInfoScreenState extends State<CategoryInfoScreen> {
         const Text(''),
         showEditIcon: true,
         onTap: () {
-          Get.to(()=>ProductEditBox(name: data['name'], status:data['status'], image: data['image'], categoryId: data['category_id'] , position: data['position']));
+          Get.to(() => ProductEditBox(
+              name: data['name'],
+              status: data['status'],
+              image: data['image'],
+              categoryId: data['category_id'],
+              position: data['position']));
           // showDialog(
           //     context: context,
           //     builder: (context) {
@@ -280,7 +318,8 @@ class _CategoryInfoScreenState extends State<CategoryInfoScreen> {
         },
       ),
       DataCell(const Icon(Icons.delete), onTap: () {
-        deleteMethod(stream: categoryStream, uniqueDocId: categoryID);
+        deleteMethodI(
+            stream: categoryStream, uniqueDocId: categoryID, imagess: img);
       })
     ]);
   }
@@ -313,11 +352,10 @@ class ProductEditBox extends StatefulWidget {
 class _ProductEditBoxState extends State<ProductEditBox> {
   final TextEditingController _name = TextEditingController();
   final TextEditingController _position = TextEditingController();
- // final TextEditingController _image = TextEditingController();
+  // final TextEditingController _image = TextEditingController();
   var categoryId;
   var image;
   var imgUrl1;
-
 
   @override
   void initState() {
@@ -335,8 +373,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
       appBar: AppBar(
         title: const Text('Edit Category'),
       ),
-      body:
-      Center(
+      body: Center(
         child: SizedBox(
           height: 580,
           width: 800,
@@ -352,7 +389,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                       fontSize: 14),
                 ),
                 customTextField(hinttext: "Name", addcontroller: _name),
-               customTextField(hinttext: "Position", addcontroller: _position),
+                customTextField(hinttext: "Position", addcontroller: _position),
                 //customTextField(hinttext: "Image", addcontroller: _image),
 
                 Container(
@@ -364,8 +401,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                         style: TextStyle(
                             color: Colors.grey,
                             fontWeight: FontWeight.bold,
-                            fontSize: 15
-                        ),
+                            fontSize: 15),
                       ),
                       const SizedBox(
                         width: 20,
@@ -379,22 +415,19 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                           Icons.upload_file_outlined,
                         ),
                       ),
-
                       SizedBox(
                         width: 300,
                         height: 200,
                         child: Container(
-                          child:
-                          Image.network((imgUrl1 == null) ? ' ' : imgUrl1,
-                            fit: BoxFit.contain,),
+                          child: Image.network(
+                            (imgUrl1 == null) ? ' ' : imgUrl1,
+                            fit: BoxFit.contain,
+                          ),
                         ),
                       ),
                     ],
                   ),
                 ),
-
-
-
 
                 Padding(
                   padding: const EdgeInsets.all(12.0),
@@ -412,7 +445,6 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                             'name': _name.text,
                             'category_id': categoryId,
                             'position': _position.text,
-
                           },
                         );
 
@@ -432,13 +464,11 @@ class _ProductEditBoxState extends State<ProductEditBox> {
 
   getUrlImage(XFile? pickedFile) async {
     if (kIsWeb) {
-      final _firebaseStorage = FirebaseStorage.instance
-          .ref().child("category");
+      final _firebaseStorage = FirebaseStorage.instance.ref().child("category");
 
-      Reference _reference = _firebaseStorage
-          .child('category/${Path.basename(pickedFile!.path)}');
-      await _reference
-          .putData(
+      Reference _reference =
+      _firebaseStorage.child('category/${Path.basename(pickedFile!.path)}');
+      await _reference.putData(
         await pickedFile.readAsBytes(),
         SettableMetadata(contentType: 'image/jpeg'),
       );
@@ -448,8 +478,6 @@ class _ProductEditBoxState extends State<ProductEditBox> {
       setState(() {
         imgUrl1 = imageUrl;
       });
-
     }
   }
-
 }
