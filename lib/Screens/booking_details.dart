@@ -207,10 +207,18 @@ class _BookingDetailsState extends State<BookingDetails> {
                       stream: FirebaseFirestore.instance
                           .collection('bookings')
                           .where('booking_status', whereIn: [
+// <<<<<<< HEAD
                             'completed',
                             'active',
                             'upcoming',
                           ])
+// =======
+//                         'completed',
+//                         'active',
+//                         'upcoming',
+//                         'cancelled'
+//                       ])
+// >>>>>>> 05d90541ad53debf68ad8405091343fc5d3a8558
                           .orderBy("order_date", descending: true)
                           .snapshots(),
                       builder: (context, AsyncSnapshot snapshot) {

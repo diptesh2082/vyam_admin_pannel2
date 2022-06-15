@@ -29,11 +29,11 @@ class _PushState extends State<Push> {
     super.initState();
   }
 
-  var id = FirebaseFirestore.instance
-      .collection('push_notifications')
-      .doc()
-      .id
-      .toString();
+  // var id = FirebaseFirestore.instance
+  //     .collection('push_notifications')
+  //     .doc()
+  //     .id
+  //     .toString();
 
   var millis, dt, d12, image;
 
@@ -99,12 +99,12 @@ class _PushState extends State<Push> {
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
-                              DataColumn(
-                                label: Text(
-                                  'ID',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
-                              ),
+                              // DataColumn(
+                              //   label: Text(
+                              //     'ID',
+                              //     style: TextStyle(fontWeight: FontWeight.w600),
+                              //   ),
+                              // ),
                               DataColumn(
                                 label: Text(
                                   'Timestamp',
@@ -129,7 +129,7 @@ class _PushState extends State<Push> {
                     },
                   ),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -145,7 +145,7 @@ class _PushState extends State<Push> {
                         print("Previous Page");
                       },
                     ),
-                    SizedBox(width: 20),
+                    const SizedBox(width: 20),
                     ElevatedButton(
                       child: Text("Next Page"),
                       onPressed: () {
@@ -191,14 +191,14 @@ class _PushState extends State<Push> {
 
   DataRow _buildListItem(BuildContext context, DocumentSnapshot data, int index,
       int start, int end) {
-    String pushIdData = data['id'];
+    String pushIdData = data.id;
     return DataRow(cells: [
       DataCell(
           data['title'] != null ? Text(data['title'] ?? "") : const Text("")),
       DataCell(data['definition'] != null
           ? Text(data['definition'] ?? "")
           : const Text("")),
-      DataCell(data['id'] != null ? Text(data['id'] ?? "") : const Text("")),
+      // DataCell(data['id'] != null ? Text(data['id'] ?? "") : const Text("")),
       DataCell(data['timestamp'] != null
           ? Text(data['timestamp'] ?? "")
           : const Text("")),
@@ -206,9 +206,9 @@ class _PushState extends State<Push> {
         Get.to(() => ProductEditBox(
             title: data['title'],
             definition: data['definition'],
-            id: data['id'],
+            id: data.id,
             timestamp: data['timestamp'],
-            image: data['image']));
+            image: data['image'].toString()));
       }),
       DataCell(Icon(Icons.delete), onTap: () {
         deleteMethod(stream: pushStream, uniqueDocId: pushIdData);
@@ -354,7 +354,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
     _title.text = widget.title;
     _definition.text = widget.definition;
     image = widget.image;
-    id = widget.id;
+    // id = widget.id;
     timestamp = widget.timestamp;
   }
 
@@ -396,7 +396,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                       'definition': _definition.text,
                       'image': image,
                       'timestamp': d12,
-                      'id': id,
+                      // 'id': id,
                     };
                     await documentReference
                         .update(data)

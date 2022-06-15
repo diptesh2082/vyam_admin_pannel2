@@ -84,6 +84,7 @@ class _FeedBackInfoState extends State<FeedBackInfo> {
                   }
                   var doc = snapshot.data.docs;
 
+// <<<<<<< HEAD
                   if (searchGymName.length > 0) {
                     doc = doc.where((element) {
                       return element
@@ -112,6 +113,41 @@ class _FeedBackInfoState extends State<FeedBackInfo> {
                         DataColumn(
                             label: Text(
                           'Index',
+// =======
+//                 if (searchGymName.length > 0) {
+//                   doc = doc.where((element) {
+//                     return element
+//                         .get('feedback_review')
+//                         .toString()
+//                         .toLowerCase()
+//                         .contains(searchGymName.toString()) ||
+//                         element
+//                             .get('vendor_id')
+//                             .toString()
+//                             .toLowerCase()
+//                             .contains(searchGymName.toString()) ||
+//                         element
+//                             .get('feedback_suggestion')
+//                             .toString()
+//                             .toLowerCase()
+//                             .contains(searchGymName.toString());
+//                   }).toList();
+//                 }
+
+//                 return SingleChildScrollView(
+//                   scrollDirection: Axis.horizontal,
+//                   child: DataTable(
+//                     dataRowHeight: 65,
+//                     columns: const [
+//                       DataColumn(
+//                           label: Text(
+//                             'Index',
+//                             style: TextStyle(fontWeight: FontWeight.w600),
+//                           )),
+//                       DataColumn(
+//                         label: Text(
+//                           'Name',
+// >>>>>>> 05d90541ad53debf68ad8405091343fc5d3a8558
                           style: TextStyle(fontWeight: FontWeight.w600),
                         )),
                         DataColumn(
