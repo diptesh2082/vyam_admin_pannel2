@@ -56,6 +56,9 @@ class _ProductDetailsState extends State<ProductDetails> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text("Product Details"),
+      ),
       body: SafeArea(
         child: Material(
           elevation: 8,
@@ -521,7 +524,6 @@ class _ProductDetailsState extends State<ProductDetails> {
                     content: SizedBox(
                       height: MediaQuery.of(context).size.height * .90,
                       width: MediaQuery.of(context).size.width * .92,
-
                       child: StreamBuilder<Object>(
                           stream: productStream!.snapshots(),
                           builder: (context, AsyncSnapshot snapshot) {
@@ -1157,8 +1159,8 @@ class _ShowAddBoxState extends State<ShowAddBox> {
               ),
               const Text(
                 'Upload Display Image',
-                style: TextStyle(
-                    color: Colors.black, fontWeight: FontWeight.w700),
+                style:
+                    TextStyle(color: Colors.black, fontWeight: FontWeight.w700),
               ),
               const SizedBox(
                 height: 20,
@@ -1172,7 +1174,7 @@ class _ShowAddBoxState extends State<ShowAddBox> {
                     },
                     child: const Text(
                       'Upload Gym Image',
-                      style:  TextStyle(
+                      style: TextStyle(
                           color: Colors.white, fontWeight: FontWeight.w700),
                     ),
                   ),
