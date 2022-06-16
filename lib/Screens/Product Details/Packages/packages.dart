@@ -36,22 +36,6 @@ class _PackagesPageState extends State<PackagesPage> {
     // }
   }
 
-  // bool loadig=true;
-  // catagoryStream()async{
-  //   await FirebaseFirestore.instance.collection("category").snapshots()
-  //       .listen((event) {
-  //         if(event.docs.isNotEmpty){
-  //           catagory=event.docs;
-  //           catagory.forEach((event){
-  //             drop.add( event["name"].toString().toLowerCase());
-  //             setState(() {
-  //               loadig=false;
-  //             });
-  //             // DropdownMenuItem(child: Text(event["name"].toString()),value: event["name"].toString().toLowerCase(),),
-  //           });
-  //         }
-  //   });
-  // }
   var landmark;
   @override
   void initState() {
@@ -70,12 +54,8 @@ class _PackagesPageState extends State<PackagesPage> {
     landmark = widget.land;
   }
 
-  final finalPackID =
-      FirebaseFirestore.instance.collection('product_details').doc().id;
-
   @override
   Widget build(BuildContext context) {
-    print(finalPackID);
     return
         // loadig?
         //   const Center(child: CircularProgressIndicator())
@@ -101,27 +81,28 @@ class _PackagesPageState extends State<PackagesPage> {
               children: [
                 Padding(
                   padding: const EdgeInsets.only(top: 8.0, left: 8.0),
-                  child: GestureDetector(
-                    onTap: () {
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(onPrimary: Colors.purple),
+                    onPressed: () {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) =>
-                                  addboxx(widget.pGymId, finalPackID)));
+                              builder: (context) => addboxx(widget.pGymId)));
                     },
-                    child: Container(
-                      width: 120,
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(20.0)),
-                      child: Row(
-                        children: const [
-                          Icon(Icons.add),
-                          Text('Add Product',
-                              style: TextStyle(fontWeight: FontWeight.w400)),
-                        ],
-                      ),
-                    ),
+                    child: const Text('Add Packages'),
+                    // Container(
+                    //   width: 120,
+                    //   decoration: BoxDecoration(
+                    //       color: Colors.white,
+                    //       borderRadius: BorderRadius.circular(20.0)),
+                    //   child: Row(
+                    //     children: const [
+                    //       Icon(Icons.add),
+                    //       Text('Add Product',
+                    //           style: TextStyle(fontWeight: FontWeight.w400)),
+                    //     ],
+                    //   ),
+                    // ),
                   ),
                 ),
                 Center(
@@ -178,6 +159,11 @@ class _PackagesPageState extends State<PackagesPage> {
                                 style: TextStyle(fontWeight: FontWeight.w600),
                               )),
                               DataColumn(
+                                  label: Text(
+                                'Trending Validity',
+                                style: TextStyle(fontWeight: FontWeight.w600),
+                              )),
+                              DataColumn(
                                 label: Text(
                                   'Type',
                                   style: TextStyle(fontWeight: FontWeight.w600),
@@ -217,6 +203,7 @@ class _PackagesPageState extends State<PackagesPage> {
   DataRow _buildListItem(BuildContext context, DocumentSnapshot data) {
     String packId = data['id'];
     bool legit = data['valid'];
+    bool legit2 = data['trending'];
     return DataRow(cells: [
       // DataCell(data != null ? Text(data['id'] ?? "") : Text("")),
       DataCell(data != null ? Text(data['index'].toString()) : const Text("")),
@@ -254,6 +241,33 @@ class _PackagesPageState extends State<PackagesPage> {
           ),
         ),
       ),
+      DataCell(
+        Center(
+          child: ElevatedButton(
+            onPressed: () async {
+              print(packId);
+              print(legit2);
+              bool temp = legit2;
+              temp = !temp;
+              print(temp);
+
+              await FirebaseFirestore.instance
+                  .collection('product_details')
+                  .doc(widget.pGymId)
+                  .collection('package')
+                  .doc("normal_package")
+                  .collection("gym")
+                  .doc(packId)
+                  .update({'trending': temp})
+                  .whenComplete(() => print("Legitimate toggled"))
+                  .catchError((e) => print(e));
+            },
+            child: Text(legit2 ? "Enable" : "Disable"),
+            style: ElevatedButton.styleFrom(
+                primary: legit2 ? Colors.green : Colors.red),
+          ),
+        ),
+      ),
       DataCell(data != null
           ? Text(data['type'].toString().toUpperCase())
           : const Text("")),
@@ -283,9 +297,8 @@ class _PackagesPageState extends State<PackagesPage> {
 
 class addboxx extends StatefulWidget {
   final String pGymID;
-  final String finalPackID;
 
-  const addboxx(this.pGymID, this.finalPackID, {Key? key}) : super(key: key);
+  const addboxx(this.pGymID, {Key? key}) : super(key: key);
 
   @override
   State<addboxx> createState() => _addboxxState();
@@ -311,11 +324,21 @@ class _addboxxState extends State<addboxx> {
     MarkdownType.list
   ];
   String descriptionn = 'Description';
+  var finalPackID;
 
   @override
   void initState() {
     // TODO: implement initState
     categoryStream = FirebaseFirestore.instance.collection("category");
+    finalPackID = FirebaseFirestore.instance
+        .collection('product_details')
+        .doc(widget.pGymID)
+        .collection('package')
+        .doc("normal_package")
+        .collection("gym")
+        .doc()
+        .id
+        .toString();
 
     super.initState();
   }
@@ -324,9 +347,10 @@ class _addboxxState extends State<addboxx> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Add Packages"),
+        title: const Text("Add Packages"),
       ),
       body: SingleChildScrollView(
+        padding: const EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -390,7 +414,14 @@ class _addboxxState extends State<addboxx> {
             ),
             customTextField(hinttext: "validity", addcontroller: _validity),
             customTextField(hinttext: "price", addcontroller: _price),
+// <<<<<<< HEAD
 
+// =======
+            const Text(
+              'Category',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+// >>>>>>> 020d3fb78ac8558cc588ec004fcb0f0492d313ff
             StreamBuilder(
                 stream: categoryStream!.snapshots(),
                 builder: (context, AsyncSnapshot snapshot) {
@@ -445,7 +476,7 @@ class _addboxxState extends State<addboxx> {
                       .collection('package')
                       .doc("normal_package")
                       .collection("gym")
-                      .doc(widget.finalPackID)
+                      .doc(finalPackID)
                       .set(
                     {
                       'discount': _discount.text,
@@ -461,11 +492,12 @@ class _addboxxState extends State<addboxx> {
 
 // =======
                       "type": selectedd,
-                      "id": widget.finalPackID,
+                      "id": finalPackID,
                       "validity": _validity.text,
                       "price": _price.text,
                       "package_type": selectedvaluee,
                       'description': descriptionn,
+                      'trending': true,
                     },
                   );
                   Navigator.pop(context);

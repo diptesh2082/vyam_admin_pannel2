@@ -41,7 +41,6 @@ class _BookingDetailsState extends State<BookingDetails> {
         title: Text("Bookings"),
       ),
       body: SafeArea(
-// <<<<<<< HEAD
         child: Material(
           elevation: 8,
           child: Container(
@@ -63,8 +62,6 @@ class _BookingDetailsState extends State<BookingDetails> {
                           Get.to(const addbookings()); //showAddbox,
                         },
                         child: const Text('Add Booking')),
-// <<<<<<< HEAD
-// =======
                   ),
                   Column(
                     children: [
@@ -196,12 +193,6 @@ class _BookingDetailsState extends State<BookingDetails> {
                       ),
                     ),
                   ),
-                  Container(
-                    alignment: Alignment.topRight,
-                    child: Icon(
-                      Icons.date_range,
-                    ),
-                  ),
                   Center(
                     child: StreamBuilder<QuerySnapshot>(
                       stream: FirebaseFirestore.instance
@@ -240,8 +231,7 @@ class _BookingDetailsState extends State<BookingDetails> {
                         if (searchVendorId.isNotEmpty) {
                           doc = doc.where((element) {
                             return element
-// <<<<<<< HEAD
-//                                   .get('user_name')
+// <<<<<<< HEA
 // =======
 
                                     .get('user_name')
@@ -250,8 +240,6 @@ class _BookingDetailsState extends State<BookingDetails> {
                                     .contains(searchVendorId.toString()) ||
                                 element
                                     .get('userId')
-
-// >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
                                     .toString()
                                     .toLowerCase()
                                     .contains(searchVendorId.toString()) ||
@@ -415,6 +403,7 @@ class _BookingDetailsState extends State<BookingDetails> {
                         child: Text("Previous Page"),
                         onPressed: () {
                           setState(() {
+                            if (start >= 1) page--;
                             if (start > 0 && end > 0) {
                               start = start - 10;
                               end = end - 10;
@@ -423,11 +412,21 @@ class _BookingDetailsState extends State<BookingDetails> {
                           print("Previous Page");
                         },
                       ),
-                      SizedBox(width: 20),
+                      Container(
+                        margin: EdgeInsets.symmetric(horizontal: 20),
+                        child: Text(
+                          page.toString(),
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15,
+                              color: Colors.teal),
+                        ),
+                      ),
                       ElevatedButton(
                         child: Text("Next Page"),
                         onPressed: () {
                           setState(() {
+                            if (end <= length) page++;
                             if (end < length) {
                               start = start + 10;
                               end = end + 10;
@@ -448,7 +447,7 @@ class _BookingDetailsState extends State<BookingDetails> {
   }
 
   var start = 0;
-
+  var page = 1;
   var end = 10;
   var length;
   List<DataRow> _buildlist(BuildContext context,

@@ -134,6 +134,14 @@ class _FeedBackInfoState extends State<FeedBackInfo> {
 //                   }).toList();
 //                 }
 
+// <<<<<<< someshwar
+//                 return SingleChildScrollView(
+//                   scrollDirection: Axis.vertical,
+//                   child: DataTable(
+//                     dataRowHeight: 65,
+//                     columns: const [
+//                       DataColumn(
+// =======
 //                 return SingleChildScrollView(
 //                   scrollDirection: Axis.horizontal,
 //                   child: DataTable(
@@ -151,6 +159,7 @@ class _FeedBackInfoState extends State<FeedBackInfo> {
                           style: TextStyle(fontWeight: FontWeight.w600),
                         )),
                         DataColumn(
+// >>>>>>> Diptesh
                           label: Text(
                             'Name',
                             style: TextStyle(fontWeight: FontWeight.w600),
@@ -221,7 +230,16 @@ class _FeedBackInfoState extends State<FeedBackInfo> {
                     print("Previous Page");
                   },
                 ),
-                SizedBox(width: 20),
+                Container(
+                  margin: EdgeInsets.symmetric(horizontal: 20),
+                  child: Text(
+                    page.toString(),
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 15,
+                        color: Colors.teal),
+                  ),
+                ),
                 ElevatedButton(
                   child: Text("Next Page"),
                   onPressed: () {
@@ -243,7 +261,7 @@ class _FeedBackInfoState extends State<FeedBackInfo> {
   }
 
   var start = 0;
-
+  var page = 1;
   var end = 10;
   var length;
 

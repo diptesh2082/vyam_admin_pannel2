@@ -18,12 +18,13 @@ class newAmeneties extends StatefulWidget {
   State<newAmeneties> createState() => _newAmenetiesState();
 }
 
+var image;
+var imgUrl1;
+
 class _newAmenetiesState extends State<newAmeneties> {
   final amenityId = FirebaseFirestore.instance.collection('amenities').doc().id;
   final TextEditingController _addName = TextEditingController();
   final TextEditingController _addId = TextEditingController();
-  var image;
-  var imgUrl1;
 
   // customTextField3(hinttext: "Name", addcontroller: _addName),
 
@@ -52,50 +53,7 @@ class _newAmenetiesState extends State<newAmeneties> {
                 customTextField(hinttext: "Name", addcontroller: _addName),
                 // customTextField(
                 //     hinttext: "Image", addcontroller: _addImage),
-                Container(
-                  padding: EdgeInsets.all(20),
-                  child: Row(
-                    children: [
-                      const Text(
-                        'Upload Image: ',
-                        style: TextStyle(
-                            color: Colors.grey,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15),
-                      ),
-                      const SizedBox(
-                        width: 20,
-                      ),
-                      InkWell(
-                        onTap: () async {
-                          image = await chooseImage();
-                          await getUrlImage(image);
-                        },
-                        child: const Icon(
-                          Icons.upload_file_outlined,
-                        ),
-                      ),
-                      SizedBox(
-                          width: 300,
-                          height: 200,
-                          child: imgUrl1 != null
-                              ? Container(
-                                  child: Image.network(imgUrl1),
-                                )
-                              : Container(
-                                  color: Colors.white,
-                                  child: Center(
-                                      child: Text(
-                                    'Please Upload Image',
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 24),
-                                  )),
-                                )),
-                    ],
-                  ),
-                ),
+                loadimage(),
                 // customTextField(hinttext: "ID", addcontroller: _addId),
                 Center(
                   child: ElevatedButton(
@@ -125,6 +83,68 @@ class _newAmenetiesState extends State<newAmeneties> {
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class loadimage extends StatefulWidget {
+  const loadimage({Key? key}) : super(key: key);
+
+  @override
+  State<loadimage> createState() => _loadimageState();
+}
+
+class _loadimageState extends State<loadimage> {
+  @override
+  bool isloading = false;
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(20),
+      child: Row(
+        children: [
+          const Text(
+            'Upload Image: ',
+            style: TextStyle(
+                color: Colors.grey, fontWeight: FontWeight.bold, fontSize: 15),
+          ),
+          const SizedBox(
+            width: 20,
+          ),
+          InkWell(
+            onTap: () async {
+              setState(() {
+                isloading = true;
+              });
+              image = await chooseImage();
+              await getUrlImage(image);
+            },
+            child: const Icon(
+              Icons.upload_file_outlined,
+            ),
+          ),
+          SizedBox(
+              width: 300,
+              height: 200,
+              child: isloading
+                  ? imgUrl1 != null
+                      ? Container(
+                          child: Image.network(imgUrl1),
+                        )
+                      : Container(
+                          child: Center(child: CircularProgressIndicator()))
+                  : Container(
+                      color: Colors.white,
+                      child: Center(
+                          child: Text(
+                        'Please Upload Image',
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 24),
+                      )),
+                    ))
+        ],
       ),
     );
   }

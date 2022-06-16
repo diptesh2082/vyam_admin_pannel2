@@ -229,7 +229,16 @@ class _CouponState extends State<Coupon> {
                         print("Previous Page");
                       },
                     ),
-                    SizedBox(width: 20),
+                    Container(
+                      margin: EdgeInsets.symmetric(horizontal: 20),
+                      child: Text(
+                        page.toString(),
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15,
+                            color: Colors.teal),
+                      ),
+                    ),
                     ElevatedButton(
                       child: Text("Next Page"),
                       onPressed: () {
@@ -253,7 +262,7 @@ class _CouponState extends State<Coupon> {
   }
 
   var start = 0;
-
+  var page = 1;
   var end = 10;
   var length;
 
