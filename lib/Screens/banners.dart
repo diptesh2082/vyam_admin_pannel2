@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:admin_panel_vyam/Screens/banner_edit.dart';
 import 'package:admin_panel_vyam/Screens/banner_new_window.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -22,6 +24,9 @@ class BannerPage extends StatefulWidget {
   State<BannerPage> createState() => _BannerPageState();
 }
 
+var image;
+var imgUrl1;
+
 class _BannerPageState extends State<BannerPage> {
   final id = FirebaseFirestore.instance.collection('banner_details').doc().id;
   CollectionReference? bannerStream;
@@ -32,6 +37,7 @@ class _BannerPageState extends State<BannerPage> {
   }
 
   String searchBannerName = '';
+
   @override
   void initState() {
     bannerStream = FirebaseFirestore.instance.collection('banner_details');
@@ -42,7 +48,7 @@ class _BannerPageState extends State<BannerPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Category"),
+        title: Text("Banners"),
       ),
       body: SafeArea(
         child: Container(
@@ -191,6 +197,8 @@ class _BannerPageState extends State<BannerPage> {
                       child: Text("Previous Page"),
                       onPressed: () {
                         setState(() {
+                          if (start >= 1) page--;
+
                           if (start > 0 && end > 0) {
                             start = start - 10;
                             end = end - 10;
@@ -199,11 +207,21 @@ class _BannerPageState extends State<BannerPage> {
                         print("Previous Page");
                       },
                     ),
-                    SizedBox(width: 20),
+                    Container(
+                      margin: EdgeInsets.symmetric(horizontal: 20),
+                      child: Text(
+                        page.toString(),
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15,
+                            color: Colors.teal),
+                      ),
+                    ),
                     ElevatedButton(
                       child: Text("Next Page"),
                       onPressed: () {
                         setState(() {
+                          if (end <= length) page++;
                           if (end < length) {
                             start = start + 10;
                             end = end + 10;
@@ -223,7 +241,7 @@ class _BannerPageState extends State<BannerPage> {
   }
 
   var start = 0;
-
+  var page = 1;
   var end = 10;
   var length;
 
@@ -299,18 +317,6 @@ class _BannerPageState extends State<BannerPage> {
             gym_id: data['gym_id'],
           ),
         );
-        // showDialog(
-        //     context: context,
-        //     builder: (context) {
-        //       return SingleChildScrollView(
-        //         child: EditBox(
-        //           image: data['image'],
-        //           id: data['id'],
-        //           name: data['name'],
-        //           access: data['access'],
-        //         ),
-        //       );
-        //     });
       }),
       DataCell(const Icon(Icons.delete), onTap: () {
         deleteMethodI(
@@ -321,150 +327,9 @@ class _BannerPageState extends State<BannerPage> {
     ]);
   }
 
-  // final TextEditingController _addname = TextEditingController();
-  // bool _accesible = false;
-  var image;
-
   final _formKey = GlobalKey<FormState>();
   String? selectedType;
   String? print_type = 'accessible';
-
-  // showAddbox() => showDialog(
-  //   context: context,
-  //   builder: (context) => StatefulBuilder(builder: (context, setState) {
-  //     void dropDowntype(bool? selecetValue) {
-  //       // if(selecetValue is String){
-  //       setState(() {
-  //         selectedType = selecetValue.toString();
-  //         if (selecetValue == true) {
-  //           print_type = "TRUE";
-  //         }
-  //         if (selecetValue == false) {
-  //           print_type = "FALSE";
-  //         }
-  //       });
-  //       // }
-  //     }
-  //
-  //
-  //
-  //
-  //     return AlertDialog(
-  //       shape: const RoundedRectangleBorder(
-  //           borderRadius: BorderRadius.all(Radius.circular(30))),
-  //       content: Form(
-  //         key: _formKey,
-  //         child: SizedBox(
-  //           height: 200,
-  //           width: 800,
-  //           child: SingleChildScrollView(
-  //             child: Column(
-  //               crossAxisAlignment: CrossAxisAlignment.start,
-  //               children: [
-  //                 const Text(
-  //                   'Add Records',
-  //                   style: TextStyle(
-  //                       fontFamily: 'poppins',
-  //                       fontWeight: FontWeight.w600,
-  //                       fontSize: 14),
-  //                 ),
-  //                 CustomTextField(
-  //                     hinttext: "Name", addcontroller: _addname),
-  //                 // CustomTextField(
-  //                 //     hinttext: "Image url", addcontroller: _addimage),
-  //
-  //                 Container(
-  //                   padding: const EdgeInsets.all(20),
-  //                   child: Row(
-  //                     children: [
-  //                       const Text(
-  //                         'Upload Image: ',
-  //                         style: TextStyle(
-  //                             color: Colors.grey,
-  //                             fontWeight: FontWeight.bold,
-  //                             fontSize: 15),
-  //                       ),
-  //                       const SizedBox(
-  //                         width: 20,
-  //                       ),
-  //                       InkWell(
-  //                         onTap: () async {
-  //                           image = await chooseImage();
-  //                         },
-  //                         child: const Icon(
-  //                           Icons.upload_file_outlined,
-  //                         ),
-  //                       )
-  //                     ],
-  //                   ),
-  //                 ),
-  //
-  //                 const SizedBox(
-  //                   height: 8,
-  //                 ),
-  //
-  //                 Column(
-  //                   children: [
-  //                     const Text(
-  //                       "Accessible",
-  //                       style: TextStyle(
-  //                           fontSize: 20, fontWeight: FontWeight.w100),
-  //                     ),
-  //                     Container(
-  //                       color: Colors.white10,
-  //                       width: 120,
-  //                       child: DropdownButton(
-  //                           hint: Text('$print_type'),
-  //                           items: const [
-  //                             DropdownMenuItem(
-  //                               child: Text("TRUE"),
-  //                               value: true,
-  //                             ),
-  //                             DropdownMenuItem(
-  //                               child: Text("FALSE"),
-  //                               value: false,
-  //                             ),
-  //                           ],
-  //                           onChanged: dropDowntype),
-  //                     ),
-  //                   ],
-  //                 ),
-
-  //                 Center(
-  //                   child: ElevatedButton(
-  //                     onPressed: () async {
-  //                       if (_formKey.currentState!.validate()) {
-  //                        // await createReview(id);
-  //                         await FirebaseFirestore.instance
-  //                             .collection('banner_details')
-  //                             .doc(id)
-  //                             .set(
-  //                           {
-  //                             'name': _addname.text,
-  //                             // 'image': _addimage.text,
-  //                             'access': _accesible,
-  //                             'id': id,
-  //                           },
-  //                         ).then(
-  //                               (snapshot) async {
-  //                             await uploadImageToBanner(image, id);
-  //                           },
-  //                         );
-  //
-  //                         Navigator.pop(context);
-  //                       }
-  //                     },
-  //                     child: const Text('Done'),
-  //                   ),
-  //                 )
-  //               ],
-  //             ),
-  //           ),
-  //         ),
-  //       ),
-  //     );
-  //   }),
-  // );
 }
 
 class CustomTextField extends StatelessWidget {
@@ -629,45 +494,7 @@ class _EditBoxState extends State<EditBox> {
                       )),
                   //CustomTextField(hinttext: "Image url", addcontroller: _image),
 
-                  Center(
-                    child: Container(
-                      padding: EdgeInsets.all(
-                          20), //EdgeInsets.only(top: 8.0, left: 8.0)
-                      child: Row(
-                        children: [
-                          const Text(
-                            'Upload Image: ',
-                            style: TextStyle(
-                                color: Colors.grey,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 15),
-                          ),
-                          const SizedBox(
-                            width: 20,
-                          ),
-                          InkWell(
-                            onTap: () async {
-                              image = await chooseImage();
-                              getUrlImage(image);
-                            },
-                            child: const Icon(
-                              Icons.upload_file_outlined,
-                            ),
-                          ),
-                          SizedBox(
-                            width: 300,
-                            height: 200,
-                            child: Container(
-                              child: Image.network(
-                                (imgUrl1 == null) ? image : imgUrl1,
-                                fit: BoxFit.contain,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
+                  loadimage(),
 
                   Padding(
                     padding: EdgeInsets.all(50),
@@ -708,6 +535,87 @@ class _EditBoxState extends State<EditBox> {
             ),
           ),
         ));
+  }
+
+  getUrlImage(XFile? pickedFile) async {
+    if (kIsWeb) {
+      final _firebaseStorage = FirebaseStorage.instance.ref().child("banner");
+
+      Reference _reference = _firebaseStorage
+          .child('banner_details/${Path.basename(pickedFile!.path)}');
+      await _reference.putData(
+        await pickedFile.readAsBytes(),
+        SettableMetadata(contentType: 'image/jpeg'),
+      );
+
+      String imageUrl = await _reference.getDownloadURL();
+
+      setState(() {
+        imgUrl1 = imageUrl;
+      });
+    }
+  }
+}
+
+class loadimage extends StatefulWidget {
+  const loadimage({Key? key}) : super(key: key);
+
+  @override
+  State<loadimage> createState() => _loadimageState();
+}
+
+class _loadimageState extends State<loadimage> {
+  @override
+  bool isloading = false;
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(20),
+      child: Row(
+        children: [
+          const Text(
+            'Upload Image: ',
+            style: TextStyle(
+                color: Colors.grey, fontWeight: FontWeight.bold, fontSize: 15),
+          ),
+          const SizedBox(
+            width: 20,
+          ),
+          InkWell(
+            onTap: () async {
+              setState(() {
+                isloading = true;
+              });
+              image = await chooseImage();
+              await getUrlImage(image);
+            },
+            child: const Icon(
+              Icons.upload_file_outlined,
+            ),
+          ),
+          SizedBox(
+              width: 300,
+              height: 200,
+              child: isloading
+                  ? imgUrl1 != null
+                      ? Container(
+                          child: Image.network(imgUrl1),
+                        )
+                      : Container(
+                          child: Center(child: CircularProgressIndicator()))
+                  : Container(
+                      color: Colors.white,
+                      child: Center(
+                          child: Text(
+                        'Please Upload Image',
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 24),
+                      )),
+                    ))
+        ],
+      ),
+    );
   }
 
   getUrlImage(XFile? pickedFile) async {
