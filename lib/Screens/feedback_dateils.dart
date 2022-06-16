@@ -207,10 +207,12 @@ class _FeedBackInfoState extends State<FeedBackInfo> {
                             style: TextStyle(fontWeight: FontWeight.w600),
                           ),
                         ),
+
                       ],
                       rows: _buildlist(context, doc),
                     ),
                   );
+
                 },
               ),
             ),

@@ -61,8 +61,12 @@ class _BookingDetailsState extends State<BookingDetails> {
                         onPressed: () {
                           Get.to(const addbookings()); //showAddbox,
                         },
-                        child: const Text('Add Booking')),
-                  ),
+// <<<<<<< dewansh_new
+//                         child: const Text('Add Booking')),
+//                   ),
+// =======
+                        child: const Text('Add Booking')),),
+// >>>>>>> Diptesh
                   Column(
                     children: [
                       Padding(

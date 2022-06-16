@@ -351,6 +351,7 @@ class _addboxxState extends State<addboxx> {
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
+
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -414,14 +415,13 @@ class _addboxxState extends State<addboxx> {
             ),
             customTextField(hinttext: "validity", addcontroller: _validity),
             customTextField(hinttext: "price", addcontroller: _price),
-// <<<<<<< HEAD
 
-// =======
             const Text(
               'Category',
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
 // >>>>>>> 020d3fb78ac8558cc588ec004fcb0f0492d313ff
+
             StreamBuilder(
                 stream: categoryStream!.snapshots(),
                 builder: (context, AsyncSnapshot snapshot) {

@@ -280,9 +280,14 @@ class _CategoryInfoScreenState extends State<CategoryInfoScreen> {
               bool temp = status;
               temp = !temp;
 
+// <<<<<<< dewansh_new
               DocumentReference documentReference = FirebaseFirestore.instance
                   .collection('category')
                   .doc(data.id);
+// =======
+//               DocumentReference documentReference =
+//               FirebaseFirestore.instance.collection('category').doc(data.id);
+// >>>>>>> Diptesh
               await documentReference
                   .update({'status': temp})
                   .whenComplete(() => print("Legitimate toggled"))
