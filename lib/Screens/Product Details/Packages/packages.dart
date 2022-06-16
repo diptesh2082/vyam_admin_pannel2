@@ -1,6 +1,8 @@
 import 'package:admin_panel_vyam/services/deleteMethod.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:markdown_editable_textinput/format_markdown.dart';
+import 'package:markdown_editable_textinput/markdown_text_input.dart';
 import '../../../services/CustomTextFieldClass.dart';
 import '../../../services/MatchIDMethod.dart';
 
@@ -170,7 +172,11 @@ class _PackagesPageState extends State<PackagesPage> {
                                 'Discount',
                                 style: TextStyle(fontWeight: FontWeight.w600),
                               )),
-
+                              DataColumn(
+                                  label: Text(
+                                'Enable/Disable',
+                                style: TextStyle(fontWeight: FontWeight.w600),
+                              )),
                               DataColumn(
                                 label: Text(
                                   'Type',
@@ -210,6 +216,7 @@ class _PackagesPageState extends State<PackagesPage> {
 
   DataRow _buildListItem(BuildContext context, DocumentSnapshot data) {
     String packId = data['id'];
+    bool legit = data['valid'];
     return DataRow(cells: [
       // DataCell(data != null ? Text(data['id'] ?? "") : Text("")),
       DataCell(data != null ? Text(data['index'].toString()) : const Text("")),
@@ -220,6 +227,33 @@ class _PackagesPageState extends State<PackagesPage> {
       DataCell(
           data != null ? Text(data['original_price'] ?? "") : const Text("")),
       DataCell(data != null ? Text(data['discount'] ?? "") : const Text("")),
+      DataCell(
+        Center(
+          child: ElevatedButton(
+            onPressed: () async {
+              print(packId);
+              print(legit);
+              bool temp = legit;
+              temp = !temp;
+              print(temp);
+
+              await FirebaseFirestore.instance
+                  .collection('product_details')
+                  .doc(widget.pGymId)
+                  .collection('package')
+                  .doc("normal_package")
+                  .collection("gym")
+                  .doc(packId)
+                  .update({'valid': temp})
+                  .whenComplete(() => print("Legitimate toggled"))
+                  .catchError((e) => print(e));
+            },
+            child: Text(legit ? "Enable" : "Disable"),
+            style: ElevatedButton.styleFrom(
+                primary: legit ? Colors.green : Colors.red),
+          ),
+        ),
+      ),
       DataCell(data != null
           ? Text(data['type'].toString().toUpperCase())
           : const Text("")),
@@ -237,6 +271,7 @@ class _PackagesPageState extends State<PackagesPage> {
                       title: data['title'],
                       originalprice: data['original_price'],
                       id: packId,
+                      description: data['description'],
                     )));
       }),
       DataCell(const Icon(Icons.delete), onTap: () {
@@ -267,6 +302,16 @@ class _addboxxState extends State<addboxx> {
   var selectedvaluee = 'pay per session';
   var selectedd = 'gym';
   CollectionReference? categoryStream;
+  TextEditingController controller = TextEditingController();
+  List<MarkdownType> actions = const [
+    MarkdownType.bold,
+    MarkdownType.italic,
+    MarkdownType.title,
+    MarkdownType.link,
+    MarkdownType.list
+  ];
+  String descriptionn = 'Description';
+
   @override
   void initState() {
     // TODO: implement initState
@@ -299,6 +344,22 @@ class _addboxxState extends State<addboxx> {
             customTextField(
                 hinttext: "original price", addcontroller: _originalprice),
             customTextField(hinttext: "index", addcontroller: _index),
+            const SizedBox(
+              height: 8,
+            ),
+            Text("Description"),
+            MarkdownTextInput(
+              (String value) => setState(() => descriptionn = value),
+              descriptionn,
+              label: 'Description',
+              maxLines: 10,
+              actions: actions,
+              controller: controller,
+            ),
+            const SizedBox(
+              height: 8,
+            ),
+
             Row(
               children: [
                 const Text('Type:',
@@ -329,10 +390,10 @@ class _addboxxState extends State<addboxx> {
             ),
             customTextField(hinttext: "validity", addcontroller: _validity),
             customTextField(hinttext: "price", addcontroller: _price),
+
             StreamBuilder(
                 stream: categoryStream!.snapshots(),
                 builder: (context, AsyncSnapshot snapshot) {
-
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const CircularProgressIndicator();
                   }
@@ -391,18 +452,20 @@ class _addboxxState extends State<addboxx> {
                       "original_price": _originalprice.text,
                       'index': int.parse(_index.text),
                       'title': _title.text,
+                      'valid': true,
 
 //                               "type": _type.text,
 //                               "id": finalPackID,
 //                               "validity": _validity.text,
 //                               "price": _price.text,
+
 // =======
                       "type": selectedd,
                       "id": widget.finalPackID,
                       "validity": _validity.text,
                       "price": _price.text,
                       "package_type": selectedvaluee,
-
+                      'description': descriptionn,
                     },
                   );
                   Navigator.pop(context);
@@ -428,6 +491,7 @@ class ProductEditBox extends StatefulWidget {
     required this.originalprice,
     required this.id,
     required this.package_type,
+    required this.description,
   }) : super(key: key);
 
   final String discount;
@@ -438,6 +502,7 @@ class ProductEditBox extends StatefulWidget {
   final String id;
   final gym_id;
   final String package_type;
+  final String description;
 
   @override
   _ProductEditBoxState createState() => _ProductEditBoxState();
@@ -451,8 +516,17 @@ class _ProductEditBoxState extends State<ProductEditBox> {
   // final TextEditingController _type = TextEditingController();
   var selectedvaluee;
   var sele;
+  String description = '';
   @override
   CollectionReference? categoryStream;
+  TextEditingController controller = TextEditingController();
+  List<MarkdownType> actions = const [
+    MarkdownType.bold,
+    MarkdownType.italic,
+    MarkdownType.title,
+    MarkdownType.link,
+    MarkdownType.list
+  ];
   void initState() {
     super.initState();
     categoryStream = FirebaseFirestore.instance.collection("category");
@@ -463,6 +537,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
     _title.text = widget.title;
     sele = widget.type;
     selectedvaluee = widget.package_type;
+    description = widget.description;
     // _type.text = widget.type;
   }
 
@@ -489,6 +564,21 @@ class _ProductEditBoxState extends State<ProductEditBox> {
               customTextField(
                   hinttext: "original price", addcontroller: _originalprice),
               customTextField(hinttext: "index", addcontroller: _index),
+              const SizedBox(
+                height: 8,
+              ),
+              Text("Description"),
+              MarkdownTextInput(
+                (String value) => setState(() => description = value),
+                description,
+                label: 'Description',
+                maxLines: 10,
+                actions: actions,
+                controller: controller,
+              ),
+              const SizedBox(
+                height: 8,
+              ),
               customTextField(hinttext: "title", addcontroller: _title),
               // customTextField(hinttext: "type", addcontroller: _type),
 
@@ -523,7 +613,6 @@ class _ProductEditBoxState extends State<ProductEditBox> {
               StreamBuilder(
                   stream: categoryStream!.snapshots(),
                   builder: (context, AsyncSnapshot snapshot) {
-
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return const CircularProgressIndicator();
                     }
@@ -531,7 +620,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                       return Container();
                     }
                     print("-----------------------------------");
-                    
+
                     var doc = snapshot.data.docs;
                     return SizedBox(
                       width: 400,
@@ -542,7 +631,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                             return RadioListTile<String>(
                                 value: doc[index]['name'],
                                 title: Text(doc[index]['name'].toString()),
-                                groupValue: widget.type,
+                                groupValue: sele,
                                 onChanged: (String? v) {
                                   setState(() {
                                     sele = v!;
@@ -574,7 +663,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                         "original_price": _originalprice.text,
                         'index': int.parse(_index.text),
                         'title': _title.text,
-
+                        'description': description,
 //                         "type": _type.text
                         "package_type": selectedvaluee,
 

@@ -51,16 +51,20 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                   MaterialPageRoute(
                       builder: (context) => CategoryInfoScreen()));
             },
-            child: buildDashBoardCard(
-              title: 'Categories',
-              collectionID: 'category',
+            child: Cardd(
+              title: "Categories",
+              collectionId: "category",
+              color: Colors.teal,
             ),
           );
         }
         if (i == 1) {
           return GestureDetector(
-            child: buildDashBoardCard(
-                title: 'Vendor', collectionID: 'product_details'),
+            child: Cardd(
+              title: 'Vendor',
+              collectionId: 'product_details',
+              color: Colors.red,
+            ),
             onTap: () {
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) => ProductDetails()));
@@ -100,15 +104,15 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
         if (i == 5) {
           return GestureDetector(
             child: buildDashBoardCard(
-                title: 'Total Confirm',
+                title: 'Upcoming Bookings',
                 collectionID: 'bookings',
                 iss: true,
-                state: 'completed'),
+                state: 'upcoming'),
             onTap: () {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => BookingDetails1(st: 'completed')));
+                      builder: (context) => BookingDetails1(st: 'upcoming')));
             },
           );
         }
@@ -161,7 +165,9 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
         if (i == 9) {
           return GestureDetector(
             child: buildDashBoardCard(
-                title: 'Total Bookings', collectionID: 'bookings'),
+              title: 'Total Bookings',
+              collectionID: 'bookings',
+            ),
             onTap: () {
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) => BookingDetails()));
@@ -179,22 +185,27 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
     );
   }
 
-  buildDashBoardCard({
-    String? title = "Categories",
-    IconData? iconData = Icons.abc_outlined,
-    String? collectionID = "category",
-    int? count = 0,
+  card({
+    String? title,
+    IconData? iconData,
+    String? collectionID,
+    int? count,
     Color? colour,
-    bool? iss = false,
-    String? state,
-  }) {
-    return FutureBuilder(
-        future: iss != false
+    List? s,
+  }
+      // bool? iss = false,
+      // String? state,
+      ) {
+    return StreamBuilder(
+        stream: collectionID == "bookings"
             ? FirebaseFirestore.instance
                 .collection(collectionID!)
-                .where('booking_status', isEqualTo: state)
-                .get()
-            : FirebaseFirestore.instance.collection(collectionID!).get(),
+                .where('booking_status', whereIn: s)
+                .snapshots()
+            : FirebaseFirestore.instance
+                .collection(collectionID!)
+                // .where('booking_status', whereIn: s)
+                .snapshots(),
         builder: (context, AsyncSnapshot snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(
@@ -222,28 +233,118 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                       color: Colors.blue,
                     ),
                   ),
-                  FittedBox(
-                    child: Column(
-                      // mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Text(
-                          title!,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 14,
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: FittedBox(
+                      child: Column(
+                        // mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Text(
+                            title!,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 14,
+                            ),
                           ),
-                        ),
-                        const SizedBox(
-                          height: 8,
-                        ),
-                        Text(
-                          snapshot.data.docs.length.toString(),
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 25,
+                          const SizedBox(
+                            height: 8,
                           ),
-                        ),
-                      ],
+                          Text(
+                            snapshot.data.docs.length.toString(),
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 25,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
+  }
+
+  buildDashBoardCard({
+    String? title = "Categories",
+    IconData? iconData = Icons.abc_outlined,
+    String? collectionID = "category",
+    int? count = 0,
+    Color? colour,
+    bool? iss = false,
+    String? state,
+  }) {
+    var check = [];
+    return FutureBuilder(
+        future: iss != false
+            ? FirebaseFirestore.instance
+                .collection(collectionID!)
+                .where('booking_status', isEqualTo: state)
+                .get()
+            : FirebaseFirestore.instance
+                .collection(collectionID!)
+                .where('booking_status', whereIn: [
+                'active',
+                'upcoming',
+                'completed',
+                'cancelled'
+              ]).get(),
+        builder: (context, AsyncSnapshot snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+
+          return InkWell(
+            hoverColor: isHovering == true ? Colors.green : Colors.amber,
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+              width: 300,
+              height: 100,
+              decoration: BoxDecoration(
+                color: count!.isEven ? Colors.red : Colors.lightBlueAccent,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  CircleAvatar(
+                    backgroundColor: Colors.white,
+                    radius: 30,
+                    child: Icon(
+                      iconData!,
+                      color: Colors.blue,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: FittedBox(
+                      child: Column(
+                        // mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Text(
+                            title!,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 14,
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 8,
+                          ),
+                          Text(
+                            snapshot.data.docs.length.toString(),
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 25,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ],
@@ -311,8 +412,12 @@ class _showLatestBookingState extends State<showLatestBooking> {
                   child: StreamBuilder<QuerySnapshot>(
                     stream: FirebaseFirestore.instance
                         .collection('bookings')
-                        .where('booking_status',
-                            whereIn: ['upcoming', 'active', 'completed' , 'cancelled'])
+                        .where('booking_status', whereIn: [
+                          'upcoming',
+                          'active',
+                          'completed',
+                          'cancelled'
+                        ])
                         .orderBy("order_date", descending: true)
                         .snapshots(),
                     builder: (context, AsyncSnapshot snapshot) {
@@ -433,7 +538,9 @@ class _showLatestBookingState extends State<showLatestBooking> {
           ? Text(data['booking_plan'].toString())
           : const Text("")),
       DataCell(data['gym_details']['name'] != null
-          ? Text('${data['gym_details']['name']}|| ${data['gym_details']['branch']}'.toString())
+          ? Text(
+              '${data['gym_details']['name']}|| ${data['gym_details']['branch']}'
+                  .toString())
           : const Text("")),
       DataCell(data['booking_date'] != null
           ? Text(DateFormat('dd MMM , yyyy')
@@ -481,11 +588,108 @@ class _showLatestBookingState extends State<showLatestBooking> {
           ),
         ),
       ),
-
       DataCell(data["payment_method"] != null
           ? Text(data['payment_method'].toString().toUpperCase())
           : const Text("")),
-
     ]);
+  }
+}
+
+class Cardd extends StatelessWidget {
+  Cardd(
+      {Key? key,
+      required this.title,
+      required this.collectionId,
+      this.color,
+      this.s})
+      : super(key: key);
+  final title;
+  final collectionId;
+  final color;
+  final s;
+  bool isHovering = false;
+  CollectionReference? categoryStream;
+  CollectionReference? productStream;
+  CollectionReference? bannerStream;
+  CollectionReference? bookingStream;
+
+  // @override
+  // void initState() {
+  //   // TODO: implement initState
+  //   categoryStream = FirebaseFirestore.instance.collection("category");
+  //   productStream = FirebaseFirestore.instance.collection("product_details");
+  //   bannerStream = FirebaseFirestore.instance.collection("banner_details");
+  //   bookingStream = FirebaseFirestore.instance.collection("bookings");
+  //
+  //   super.initState();
+  // }
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder(
+        stream: FirebaseFirestore.instance
+            .collection(collectionId)
+            .where('booking_status', whereIn: s)
+            .snapshots(),
+        builder: (context, AsyncSnapshot snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+
+          return InkWell(
+            hoverColor: isHovering == true ? Colors.green : Colors.amber,
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+              width: 300,
+              height: 100,
+              decoration: BoxDecoration(
+                color: color,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  CircleAvatar(
+                    backgroundColor: Colors.white,
+                    radius: 30,
+                    child: Icon(
+                      Icons.add,
+                      color: Colors.blue,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: FittedBox(
+                      child: Column(
+                        // mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Text(
+                            title!,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 14,
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 8,
+                          ),
+                          Text(
+                            snapshot.data.docs.length.toString(),
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 25,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
   }
 }

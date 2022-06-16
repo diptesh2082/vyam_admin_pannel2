@@ -325,12 +325,19 @@ class _CouponState extends State<Coupon> {
             context,
             MaterialPageRoute(
                 builder: (context) => ProductEditBox(
-                    details: data['detail'],
-                    discount: data['discount'],
-                    title: data['tag'],
-                    code: data['code'],
-                    couponId: data['coupon_id'],
-                    max_dis: data['max_dis'])));
+                      details: data['detail'],
+                      discount: data['discount'],
+                      title: data['tag'],
+                      code: data['code'],
+                      couponId: data['coupon_id'],
+                      max_dis: data['max_dis'],
+                      price: data['price'],
+                      tag: data['tag'],
+                      minimum_cart_value: data['minimum_cart_value'],
+                      start_date: data['start_date'].toDate(),
+                      end_date: data['end_date'].toDate(),
+                      selectedPackagetype: data['package_type'],
+                    )));
       }),
       DataCell(Icon(Icons.delete), onTap: () {
         deleteMethod(stream: couponStream, uniqueDocId: couponIdData);
@@ -348,270 +355,31 @@ class _CouponState extends State<Coupon> {
   final TextEditingController max_dis = TextEditingController();
   final TextEditingController munimum_cart_value = TextEditingController();
   final TextEditingController offer_type = TextEditingController();
-  // final TextEditingController package_type = TextEditingController();
-  // DateTime date=DateTime.now();
+
   DateTime start_date = DateTime.now();
   DateTime end_date = DateTime.now();
   String? packageType;
   String? Select_Package_type = "Select Package type";
   bool? coupontype = false;
   String? print_type = "Select Coupon type";
-
-//   showAddbox() => showDialog(
-//         context: context,
-//         builder: (context) => StatefulBuilder(builder: (context, setState) {
-//           void dropDownPackage(String? selecetValue) {
-//             // if(selecetValue is String){
-//             setState(() {
-//               packageType = selecetValue;
-//               Select_Package_type = selecetValue;
-//             });
-//             // }
-//           }
-//
-//           void dropDowntype(bool? selecetValue) {
-//             // if(selecetValue is String){
-//             setState(() {
-//               coupontype = selecetValue;
-//               if (selecetValue == true) {
-//                 print_type = "Percentage";
-//               }
-//               if (selecetValue == false) {
-//                 print_type = "Flat";
-//               }
-//             });
-//             // }
-//           }
-//
-//           return AlertDialog(
-//             shape: const RoundedRectangleBorder(
-//                 borderRadius: BorderRadius.all(Radius.circular(30))),
-//             content: SizedBox(
-//               // height: 480,
-//               width: MediaQuery.of(context).size.width * .92,
-//               child: SingleChildScrollView(
-//                 child: Column(
-//                   crossAxisAlignment: CrossAxisAlignment.start,
-//                   children: [
-//                     const Text(
-//                       'Add Records',
-//                       style: TextStyle(
-//                           fontFamily: 'poppins',
-//                           fontWeight: FontWeight.w600,
-//                           fontSize: 20),
-//                     ),
-//                     customTextField(hinttext: "Code", addcontroller: _addCode),
-//                     const SizedBox(
-//                       height: 8,
-//                     ),
-//                     customTextField(
-//                         hinttext: "Details", addcontroller: _adddetails),
-//                     const SizedBox(
-//                       height: 8,
-//                     ),
-//                     customTextField(
-//                         hinttext: "Discount", addcontroller: _adddiscount),
-//                     const SizedBox(
-//                       height: 8,
-//                     ),
-//
-//                     customTextField(hinttext: "brief", addcontroller: brief),
-//                     const SizedBox(
-//                       height: 8,
-//                     ),
-//                     customTextField(hinttext: "price", addcontroller: price),
-//                     const SizedBox(
-//                       height: 8,
-//                     ),
-//                     customTextField(hinttext: "tag", addcontroller: tag),
-//                     // const SizedBox(
-//                     //   height: 8,
-//                     // ),
-//                     // customTextField(
-//                     //     hinttext: "package_type", addcontroller: package_type),
-//                     const SizedBox(
-//                       height: 8,
-//                     ),
-//                     customTextField(
-//                         hinttext: "munimum_cart_value",
-//                         addcontroller: munimum_cart_value),
-//                     const SizedBox(
-//                       height: 8,
-//                     ),
-//                     customTextField(
-//                         hinttext: "max_dis", addcontroller: max_dis),
-//                     const SizedBox(
-//                       height: 8,
-//                     ),
-//                     Column(
-//                       children: [
-//                         const Text(
-//                           "Select Start Date",
-//                           style: TextStyle(
-//                               fontSize: 36, fontWeight: FontWeight.w500),
-//                         ),
-//                         CalendarDatePicker(
-//                           initialDate: DateTime.now(),
-//                           firstDate: DateTime.utc(2022, 5, 18),
-//                           lastDate: DateTime.utc(DateTime.now().year + 1),
-//                           onDateChanged: (DateTime value) {
-//                             setState(() {
-//                               start_date = value;
-//                             });
-//                           },
-//                         ),
-//                         Text(
-//                           DateFormat("dd,MMM, yyyy").format(start_date),
-//                           style: const TextStyle(
-//                               fontSize: 36, fontWeight: FontWeight.w500),
-//                         ),
-//                       ],
-//                     ),
-//                     const SizedBox(
-//                       height: 8,
-//                     ),
-//                     Column(
-//                       children: [
-//                         const Text(
-//                           "Select End Date",
-//                           style: TextStyle(
-//                               fontSize: 36, fontWeight: FontWeight.w500),
-//                         ),
-//                         CalendarDatePicker(
-//                           initialDate: DateTime.now(),
-//                           firstDate: DateTime.utc(2022, 5, 18),
-//                           lastDate: DateTime.utc(DateTime.now().year + 1),
-//                           onDateChanged: (DateTime value) {
-//                             setState(() {
-//                               end_date = value;
-//                             });
-//                           },
-//                         ),
-//                         Text(
-//                           DateFormat("dd,MMM, yyyy").format(end_date),
-//                           style: const TextStyle(
-//                               fontSize: 36, fontWeight: FontWeight.w500),
-//                         ),
-//                       ],
-//                     ),
-//
-//                     const SizedBox(
-//                       height: 8,
-//                     ),
-//                     Column(
-//                       children: [
-//                         InkWell(
-//                           onTap: () {
-//                             print(start_date);
-//                           },
-//                           child: const Text(
-//                             "Select Package type",
-//                             style: TextStyle(
-//                                 fontSize: 30, fontWeight: FontWeight.w500),
-//                           ),
-//                         ),
-//                         Container(
-//                           color: Colors.yellowAccent,
-//                           width: 280,
-//                           child: DropdownButton(
-//                               hint: Text("${Select_Package_type}"),
-//                               items: const [
-//                                 DropdownMenuItem(
-//                                   child: Text("pay per session"),
-//                                   value: "pay per session",
-//                                 ),
-//                                 DropdownMenuItem(
-//                                   child: Text("package"),
-//                                   value: "package",
-//                                 ),
-//                               ],
-//                               onChanged: dropDownPackage),
-//                         ),
-//                       ],
-//                     ),
-//                     const SizedBox(
-//                       height: 8,
-//                     ),
-//                     Column(
-//                       children: [
-//                         const Text(
-//                           "Select Coupon type",
-//                           style: TextStyle(
-//                               fontSize: 30, fontWeight: FontWeight.w500),
-//                         ),
-//                         Container(
-//                           color: Colors.yellowAccent,
-//                           width: 280,
-//                           child: DropdownButton(
-//                               hint: Text("${print_type}"),
-//                               items: const [
-//                                 DropdownMenuItem(
-//                                   child: Text("Percentage"),
-//                                   value: true,
-//                                 ),
-//                                 DropdownMenuItem(
-//                                   child: Text("Flat"),
-//                                   value: false,
-//                                 ),
-//                               ],
-//                               onChanged: dropDowntype),
-//                         ),
-//                       ],
-//                     ),
-//
-//                     Center(
-//                       child: ElevatedButton(
-//                         onPressed: () async {
-//                           await matchID(
-//                               newId: id,
-//                               matchStream: couponStream,
-//                               idField: 'coupon_id');
-//                           await FirebaseFirestore.instance
-//                               .collection('coupon')
-//                               .doc(id)
-//                               .set(
-//                             {
-//                               "coupon_id": id,
-//                               'code': _addCode.text.toUpperCase(),
-//                               'detail': _adddetails.text,
-//                               'discount': _adddiscount.text,
-//                               'coupon_id': id,
-//                               "brief": brief.text,
-//                               "end_date": end_date,
-//                               "start_date": start_date,
-//                               "max_dis": max_dis.text,
-//                               "minimum_cart_value": munimum_cart_value.text,
-//                               "offer_type": coupontype,
-//                               "package_type": packageType!.trim(),
-//                               "price": price.text,
-//                               "tag": tag.text,
-//                               "user_id": [],
-//                             },
-//                           );
-//                           Navigator.pop(context);
-//                         },
-//                         child: const Text('Done'),
-//                       ),
-//                     )
-//                   ],
-//                 ),
-//               ),
-//             ),
-//           );
-//         }),
-//       );
 }
 
 class ProductEditBox extends StatefulWidget {
-  const ProductEditBox(
-      {Key? key,
-      required this.details,
-      required this.discount,
-      required this.title,
-      required this.code,
-      required this.couponId,
-      required this.max_dis})
-      : super(key: key);
+  const ProductEditBox({
+    Key? key,
+    required this.details,
+    required this.discount,
+    required this.title,
+    required this.code,
+    required this.couponId,
+    required this.max_dis,
+    required this.price,
+    required this.tag,
+    required this.minimum_cart_value,
+    required this.end_date,
+    required this.start_date,
+    required this.selectedPackagetype,
+  }) : super(key: key);
 
   final String details;
   final String discount;
@@ -619,6 +387,12 @@ class ProductEditBox extends StatefulWidget {
   final String code;
   final String couponId;
   final String max_dis;
+  final String price;
+  final String tag;
+  final DateTime end_date;
+  final DateTime start_date;
+  final String minimum_cart_value;
+  final String selectedPackagetype;
 
   @override
   _ProductEditBoxState createState() => _ProductEditBoxState();
@@ -629,7 +403,26 @@ class _ProductEditBoxState extends State<ProductEditBox> {
   final TextEditingController _detail = TextEditingController();
   final TextEditingController _discount = TextEditingController();
   final TextEditingController _title = TextEditingController();
+  final TextEditingController _price = TextEditingController();
+  final TextEditingController _tag = TextEditingController();
+  final TextEditingController _minimum_cart_value = TextEditingController();
+
   final TextEditingController _max_dis = TextEditingController();
+  TextEditingController controller = TextEditingController();
+  List<MarkdownType> actions = const [
+    MarkdownType.bold,
+    MarkdownType.italic,
+    MarkdownType.title,
+    MarkdownType.link,
+    MarkdownType.list
+  ];
+  DateTime start_date = DateTime.now();
+  DateTime end_date = DateTime.now();
+  DateTime? date;
+  String? packageType;
+  String? Select_Package_type = "Select Package type";
+  bool? coupontype = false;
+  String? print_type = "Select Coupon type";
 
   @override
   void initState() {
@@ -639,7 +432,39 @@ class _ProductEditBoxState extends State<ProductEditBox> {
     _discount.text = widget.discount;
     _title.text = widget.title;
     _max_dis.text = widget.max_dis;
+    _price.text = widget.price;
+    _tag.text = widget.tag;
+    _minimum_cart_value.text = widget.minimum_cart_value;
+    start_date = widget.start_date;
+    end_date = widget.end_date;
+    Select_Package_type = widget.selectedPackagetype;
   }
+
+  void dropDownPackage(String? selecetValue) {
+    // if(selecetValue is String){
+    setState(() {
+      packageType = selecetValue;
+      Select_Package_type = selecetValue;
+    });
+    // }
+  }
+
+  void dropDowntype(bool? selecetValue) {
+    // if(selecetValue is String){
+    setState(() {
+      coupontype = selecetValue;
+      if (selecetValue == true) {
+        print_type = "Percentage";
+      }
+      if (selecetValue == false) {
+        print_type = "Flat";
+      }
+    });
+    // }
+  }
+
+  CollectionReference? couponStream;
+  String descriptionn = 'My great package';
 
   @override
   Widget build(BuildContext context) {
@@ -659,60 +484,244 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                   fontWeight: FontWeight.w600,
                   fontSize: 14),
             ),
+            Image.asset(
+              'Assets/images/coupon.png',
+              height: 400,
+              width: 400,
+              alignment: Alignment.topRight,
+            ),
+
             customTextField(hinttext: "Code", addcontroller: _code),
-            customTextField(hinttext: "Detail", addcontroller: _detail),
+            const SizedBox(
+              height: 8,
+            ),
+            customTextField(hinttext: "Details", addcontroller: _detail),
+            const SizedBox(
+              height: 8,
+            ),
             customTextField(hinttext: "Discount", addcontroller: _discount),
-// <<<<<<< HEAD
-            customTextField(hinttext: "Title", addcontroller: _title),
-// =======
-//             customTextField(hinttext: "Tag", addcontroller: _title),
-//
-// >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
-            customTextField(hinttext: "Max Discount", addcontroller: _max_dis),
-            Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Row(
-                children: [
-                  Center(
-                    child: ElevatedButton(
-                      onPressed: () async {
-                        print("/////");
-                        DocumentReference documentReference = FirebaseFirestore
-                            .instance
-                            .collection('coupon')
-                            .doc(widget.couponId);
-                        Map<String, dynamic> data = <String, dynamic>{
-                          'code': _code.text,
-                          'detail': _detail.text,
-                          'discount': _discount.text,
-                          // 'title': _title.text,
-                          'tag': _title.text,
-                          'coupon_id': widget.couponId,
-                          'max_dis': _max_dis.text,
-                        };
-                        await documentReference
-                            .update(data)
-                            .whenComplete(() => print("Item Updated"))
-                            .catchError((e) => print(e));
-                        Navigator.pop(context);
-                      },
-                      child: const Text('Done'),
+            const SizedBox(
+              height: 8,
+            ),
+            // customTextField(
+            //     hinttext: "Description", addcontroller: description),
+            const SizedBox(
+              height: 8,
+            ),
+            MarkdownTextInput(
+              (String value) => setState(() => descriptionn = value),
+              descriptionn,
+              label: 'Description',
+              maxLines: 10,
+              actions: actions,
+              controller: controller,
+            ),
+            const SizedBox(
+              height: 8,
+            ),
+
+            customTextField(hinttext: "price", addcontroller: _price),
+            const SizedBox(
+              height: 8,
+            ),
+            customTextField(hinttext: "tag", addcontroller: _tag),
+            // const SizedBox(
+            //   height: 8,
+            // ),
+            // customTextField(
+            //     hinttext: "package_type", addcontroller: package_type),
+            const SizedBox(
+              height: 8,
+            ),
+            customTextField(
+                hinttext: "minimum_cart_value",
+                addcontroller: _minimum_cart_value),
+            const SizedBox(
+              height: 8,
+            ),
+            customTextField(hinttext: "max_dis", addcontroller: _max_dis),
+            const SizedBox(
+              height: 8,
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(
+                  height: 8,
+                ),
+                Row(
+                  children: [
+                    Container(
+                      child: Row(
+                        children: [
+                          ElevatedButton(
+                            child: const Text('Select Start Date '),
+                            onPressed: () async {
+                              start_date = await pickDate(context);
+                            },
+                          ),
+                          const SizedBox(width: 15),
+                        ],
+                      ),
                     ),
-                  ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  ElevatedButton(
-                      onPressed: () {
-                        Navigator.pop(context);
+                    Container(
+                      child: Row(
+                        children: [
+                          ElevatedButton(
+                            child: const Text('Select End Date '),
+                            onPressed: () async {
+                              end_date = await pickDate(context);
+                            },
+                          ),
+                          const SizedBox(width: 15),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 8,
+                ),
+                Column(
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        print(start_date);
                       },
-                      child: Text('Close'))
-                ],
-              ),
-            )
+                      child: const Text(
+                        "Select Package type",
+                        style: TextStyle(
+                            fontSize: 30, fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                    Container(
+                      color: Colors.yellowAccent,
+                      width: 280,
+                      child: DropdownButton(
+                          hint: Text("${Select_Package_type}"),
+                          items: const [
+                            DropdownMenuItem(
+                              child: Text("pay per session"),
+                              value: "pay per session",
+                            ),
+                            DropdownMenuItem(
+                              child: Text("package"),
+                              value: "package",
+                            ),
+                          ],
+                          onChanged: dropDownPackage),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 8,
+                ),
+                Column(
+                  children: [
+                    const Text(
+                      "Select Coupon type",
+                      style:
+                          TextStyle(fontSize: 30, fontWeight: FontWeight.w500),
+                    ),
+                    Container(
+                      color: Colors.yellowAccent,
+                      width: 280,
+                      child: DropdownButton(
+                          hint: Text("${print_type}"),
+                          items: const [
+                            DropdownMenuItem(
+                              child: Text("Percentage"),
+                              value: true,
+                            ),
+                            DropdownMenuItem(
+                              child: Text("Flat"),
+                              value: false,
+                            ),
+                          ],
+                          onChanged: dropDowntype),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 30,
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Row(
+                    children: [
+                      Center(
+                        child: ElevatedButton(
+                          onPressed: () async {
+                            print("/////");
+                            print(start_date);
+                            print(end_date);
+                            DocumentReference documentReference =
+                                FirebaseFirestore.instance
+                                    .collection('coupon')
+                                    .doc(widget.couponId);
+                            Map<String, dynamic> data = <String, dynamic>{
+                              // 'code': _code.text,
+                              // 'detail': _detail.text,
+                              // 'discount': _discount.text,
+                              // // 'title': _title.text,
+                              // 'tag': _title.text,
+                              // 'coupon_id': widget.couponId,
+                              // 'max_dis': _max_dis.text,
+                              'code': _code.text.toUpperCase(),
+                              'detail': _detail.text,
+                              'discount': _discount.text,
+                              "end_date": end_date,
+                              "start_date": start_date,
+                              "max_dis": _max_dis.text,
+                              "minimum_cart_value": _minimum_cart_value.text,
+                              "offer_type": coupontype,
+                              "package_type": Select_Package_type!.trim(),
+                              "price": _price.text,
+                              "tag": _tag.text,
+                              'description': descriptionn,
+                            };
+                            await documentReference
+                                .update(data)
+                                .whenComplete(() => print("Item Updated"))
+                                .catchError((e) => print(e));
+                            Navigator.pop(context);
+                          },
+                          child: const Text('Done'),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      ElevatedButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: Text('Close'))
+                    ],
+                  ),
+                )
+              ],
+            ),
           ],
         ),
       ),
     );
+  }
+
+  Future pickDate(BuildContext context) async {
+    final intialDate = DateTime.now();
+    final newDate = await showDatePicker(
+      context: context,
+      initialDate: intialDate,
+      firstDate: DateTime(DateTime.now().year - 5),
+      lastDate: DateTime(DateTime.now().year + 5),
+    );
+
+    if (newDate == null) return;
+
+    setState(() {
+      date = newDate;
+    });
+    return newDate;
   }
 }

@@ -51,20 +51,20 @@ class _SideNavBar1State extends State<SideNavBar1> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          String res = await ImagePickerAPI().pickImage(ImageSource.gallery);
-          File file = File.fromUri(Uri.file(res));
-          print(file.path);
-        },
-        child: FittedBox(
-            fit: BoxFit.fill,
-            child: const Text(
-              'Pick\nImage',
-              style: TextStyle(fontSize: 12),
-              textAlign: TextAlign.center,
-            )),
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () async {
+      //     String res = await ImagePickerAPI().pickImage(ImageSource.gallery);
+      //     File file = File.fromUri(Uri.file(res));
+      //     print(file.path);
+      //   },
+      //   child: FittedBox(
+      //       fit: BoxFit.fill,
+      //       child: const Text(
+      //         'Pick\nImage',
+      //         style: TextStyle(fontSize: 12),
+      //         textAlign: TextAlign.center,
+      //       )),
+      // ),
       appBar: AppBar(
         elevation: 0,
         title: const Text('VYAM'),
@@ -276,7 +276,6 @@ class _SideNavBar1State extends State<SideNavBar1> {
                 setState(() {});
               },
             ),
-
             ListTile(
               title: Text(
                 'Filters',
@@ -287,7 +286,6 @@ class _SideNavBar1State extends State<SideNavBar1> {
                 setState(() {});
               },
             ),
-
             ListTile(
               title: Text(
                 'App Details',
@@ -308,8 +306,6 @@ class _SideNavBar1State extends State<SideNavBar1> {
                 setState(() {});
               },
             ),
-
-
             ListTile(
               title: Text(
                 'Logout',
@@ -347,8 +343,6 @@ class _SideNavBar1State extends State<SideNavBar1> {
           index == 18 ? const filters() : Container(),
           index == 19 ? const CancelationQuestion() : Container(),
           index == 20 ? const appDetails() : Container(),
-
-
         ],
       ),
     );

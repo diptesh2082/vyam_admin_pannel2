@@ -207,10 +207,10 @@ class _BookingDetailsState extends State<BookingDetails> {
                       stream: FirebaseFirestore.instance
                           .collection('bookings')
                           .where('booking_status', whereIn: [
-// <<<<<<< HEAD
-                            'completed',
                             'active',
                             'upcoming',
+                            'cancelled'
+                                'completed',
                           ])
 // =======
 //                         'completed',
