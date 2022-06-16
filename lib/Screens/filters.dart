@@ -124,12 +124,12 @@ class _filtersState extends State<filters> {
                           );
                         },
                       )),
-                  SizedBox(
+                  const SizedBox(
                     width: 20,
                   ),
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 30,
               ),
               Row(
@@ -144,7 +144,7 @@ class _filtersState extends State<filters> {
                     icon: const Icon(Icons.date_range),
                     label: const Text('Start Date'),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 20,
                   ),
                   ElevatedButton.icon(
@@ -157,7 +157,7 @@ class _filtersState extends State<filters> {
                     icon: const Icon(Icons.date_range),
                     label: const Text('End Date'),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 20,
                   ),
                   ElevatedButton.icon(
@@ -177,6 +177,11 @@ class _filtersState extends State<filters> {
                   ),
                 ],
               ),
+              Row(children:[
+                Text(DateFormat("MMM, dd, yyyy").format(startDate) , style: const TextStyle(fontWeight: FontWeight.bold),),
+                const SizedBox(width: 25,),
+                Text(DateFormat("MMM, dd, yyyy").format(endDate) , style: const TextStyle(fontWeight: FontWeight.bold),)
+              ]),
               Container(
                 width: 500,
                 height: 51,
@@ -340,12 +345,12 @@ class _filtersState extends State<filters> {
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
-                              DataColumn(
-                                label: Text(
-                                  'Total Days',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
-                              ),
+                              // DataColumn(
+                              //   label: Text(
+                              //     'Total Days',
+                              //     style: TextStyle(fontWeight: FontWeight.w600),
+                              //   ),
+                              // ),
                               DataColumn(
                                 label: Text(
                                   'Amount',
@@ -359,12 +364,12 @@ class _filtersState extends State<filters> {
                   ),
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   ElevatedButton(
-                    child: Text("Previous Page"),
+                    child: const Text("Previous Page"),
                     onPressed: () {
                       setState(() {
                         if (start > 0 && end > 0) {
@@ -375,9 +380,9 @@ class _filtersState extends State<filters> {
                       print("Previous Page");
                     },
                   ),
-                  SizedBox(width: 20),
+                  const SizedBox(width: 20),
                   ElevatedButton(
-                    child: Text("Next Page"),
+                    child: const Text("Next Page"),
                     onPressed: () {
                       setState(() {
                         if (end < length) {
@@ -464,9 +469,9 @@ class _filtersState extends State<filters> {
       DataCell(data['plan_end_duration'] != null
           ? Text(durationEnd)
           : const Text("")),
-      DataCell(data['totalDays'] != null
-          ? Text(data['totalDays'].toString())
-          : const Text("")),
+      // DataCell(data['totalDays'] != null
+      //     ? Text(data['totalDays'].toString())
+      //     : const Text("")),
       DataCell(data['grand_total'] != null
           ? Text('₹${data['grand_total'].toString()}')
           : const Text("")),

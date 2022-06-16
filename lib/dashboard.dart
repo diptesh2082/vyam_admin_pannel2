@@ -209,7 +209,7 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
               width: 300,
               height: 100,
               decoration: BoxDecoration(
-                color: count!.isEven ? Colors.red : Colors.lightBlueAccent,
+                color: count!.isEven ? Colors.red : Colors.lightBlueAccent, //TODO
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -289,7 +289,7 @@ class _showLatestBookingState extends State<showLatestBooking> {
           width: MediaQuery.of(context).size.width,
           child: DashBoardScreen(),
         ),
-        SizedBox(height: 100),
+        const SizedBox(height: 100),
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 5),
           decoration: BoxDecoration(
@@ -355,37 +355,43 @@ class _showLatestBookingState extends State<showLatestBooking> {
                               ),
                               DataColumn(
                                 label: Text(
-                                  'Booking Plan',
+                                  'Booking \nPlan',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
                               DataColumn(
                                 label: Text(
-                                  'Vendor Name',
+                                  'Vendor \n Name',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
                               DataColumn(
                                 label: Text(
-                                  'Start Date',
+                                  'Start \n Date',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
                               DataColumn(
                                 label: Text(
-                                  'End Date',
+                                  'End \n Date',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
                               DataColumn(
                                 label: Text(
-                                  'Booking Status',
+                                  'Booking \n Status',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
                               DataColumn(
                                 label: Text(
-                                  'Payment Type',
+                                  'Payment \n Type',
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
+                              ),
+                              DataColumn(
+                                label: Text(
+                                  'Grand \n Total',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
@@ -433,7 +439,7 @@ class _showLatestBookingState extends State<showLatestBooking> {
           ? Text(data['booking_plan'].toString())
           : const Text("")),
       DataCell(data['gym_details']['name'] != null
-          ? Text('${data['gym_details']['name']}|| ${data['gym_details']['branch']}'.toString())
+          ? Text('${data['gym_details']['name']}\n ${data['gym_details']['branch']}'.toString())
           : const Text("")),
       DataCell(data['booking_date'] != null
           ? Text(DateFormat('dd MMM , yyyy')
@@ -484,6 +490,9 @@ class _showLatestBookingState extends State<showLatestBooking> {
 
       DataCell(data["payment_method"] != null
           ? Text(data['payment_method'].toString().toUpperCase())
+          : const Text("")),
+      DataCell(data["grand_total"] != null
+          ? Text(data['grand_total'].toString().toUpperCase())
           : const Text("")),
 
     ]);

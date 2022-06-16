@@ -62,88 +62,56 @@ class _BookingDetailsState extends State<BookingDetails> {
                           Get.to(const addbookings()); //showAddbox,
                         },
                         child: const Text('Add Booking')),),
-                  Column(
+                 const SizedBox(height: 15,),
+                 Row(
                     children: [
-                      Padding(
-                          padding: const EdgeInsets.only(left: 900),
-                          child: ElevatedButton.icon(
-                              onPressed: () async {
-                                setState(() async {
-                                  startDate = await pickDate(context);
-                                });
+                      ElevatedButton.icon(
+                          onPressed: () async {
+                            setState(() async {
+                              startDate = await pickDate(context);
+                            });
 
-                                print(startDate.toString());
-                              },
-                              icon: const Icon(Icons.date_range),
-                              label: const Text('Start Date'))),
-                      Padding(
-                          padding: const EdgeInsets.only(left: 900),
-                          child: ElevatedButton.icon(
-                              onPressed: () async {
-                                setState(() async {
-                                  endDate = await pickDate(context);
-                                });
+                            print(startDate.toString());
+                          },
+                          icon: const Icon(Icons.date_range),
+                          label: const Text('Start Date')),
 
-                                print(endDate.toString());
-                              },
-                              icon: const Icon(Icons.date_range),
-                              label: const Text('End Date'))),
+                      const SizedBox(width: 20,),
+                      ElevatedButton.icon(
+                          onPressed: () async {
+                            setState(() async {
+                              endDate = await pickDate(context);
+                            });
+
+                            print(endDate.toString());
+                          },
+                          icon: const Icon(Icons.date_range),
+                          label: const Text('End Date')),
+                      const SizedBox(
+                        width: 20,
+                      ),
+                      ElevatedButton.icon(
+                        onPressed: () async {
+                          setState(() {
+                            startDate = DateTime(DateTime.now().year - 5);
+                            endDate = DateTime(DateTime.now().year + 5);
+                            searchVendorId = "";
+                            print(startDate);
+                            print(endDate);
+                          });
+                        },
+                        icon: const Icon(Icons.clear),
+                        label: const Text('Clear'),
+                      ),
                     ],
-
-// >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
-// =======
-                    // child: Container(
-                    //   padding: const EdgeInsets.symmetric(horizontal: 5),
-                    //   decoration: BoxDecoration(
-                    //       color: Colors.grey.shade100,
-                    //       borderRadius: BorderRadius.circular(20.0)),
-                    //   child: SingleChildScrollView(
-                    //     child: Column(
-                    //       crossAxisAlignment: CrossAxisAlignment.start,
-                    //       children: [
-                    //         Padding(
-                    //           padding: const EdgeInsets.only(top: 8.0, left: 8.0),
-                    //           child: ElevatedButton(
-                    //               style: ElevatedButton.styleFrom(
-                    //                 textStyle: const TextStyle(fontSize: 15),
-                    //               ),
-                    //               onPressed: () {
-                    //                 Get.to(const addbookings()); //showAddbox,
-                    //               },
-                    //               child: const Text('Add Booking')),
-                    //           // <<<<<<< HEAD
-                    //           // =======
-                    //         ),
-                    //         Column(
-                    //           children: [
-                    //             Padding(
-                    //                 padding: const EdgeInsets.only(left: 900),
-                    //                 child: ElevatedButton.icon(
-                    //                     onPressed: () async {
-                    //                       setState(() async {
-                    //                         startDate = await pickDate(context);
-                    //                       });
-                    //
-                    //                       print(startDate.toString());
-                    //                     },
-                    //                     icon: const Icon(Icons.date_range),
-                    //                     label: const Text('Start Date'))),
-                    //             Padding(
-                    //                 padding: const EdgeInsets.only(left: 900),
-                    //                 child: ElevatedButton.icon(
-                    //                     onPressed: () async {
-                    //                       setState(() async {
-                    //                         endDate = await pickDate(context);
-                    //                       });
-                    //
-                    //                       print(endDate.toString());
-                    //                     },
-                    //                     icon: const Icon(Icons.date_range),
-                    //                     label: const Text('End Date'))),
-                    //           ],
-
-                    // >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
                   ),
+                  Row(children:[
+                    Text(DateFormat("MMM, dd, yyyy").format(startDate) , style: const TextStyle(fontWeight: FontWeight.bold),),
+                    const SizedBox(width: 25,),
+                    Text(DateFormat("MMM, dd, yyyy").format(endDate) , style: const TextStyle(fontWeight: FontWeight.bold),)
+
+        ]),
+
 //                 Container(
 //                   width: 500,
 //                   height: 51,
@@ -197,18 +165,10 @@ class _BookingDetailsState extends State<BookingDetails> {
                       stream: FirebaseFirestore.instance
                           .collection('bookings')
                           .where('booking_status', whereIn: [
-// <<<<<<< HEAD
                             'completed',
                             'active',
                             'upcoming',
                           ])
-// =======
-//                         'completed',
-//                         'active',
-//                         'upcoming',
-//                         'cancelled'
-//                       ])
-// >>>>>>> 05d90541ad53debf68ad8405091343fc5d3a8558
                           .orderBy("order_date", descending: true)
                           .snapshots(),
                       builder: (context, AsyncSnapshot snapshot) {
@@ -300,21 +260,21 @@ class _BookingDetailsState extends State<BookingDetails> {
                                 ),
                                 DataColumn(
                                   label: Text(
-                                    'Package Type',
+                                    'Package \n Type',
                                     style:
                                         TextStyle(fontWeight: FontWeight.w600),
                                   ),
                                 ),
+                                // DataColumn(
+                                //   label: Text(
+                                //     'Total Days',
+                                //     style:
+                                //         TextStyle(fontWeight: FontWeight.w600),
+                                //   ),
+                                // ),
                                 DataColumn(
                                   label: Text(
-                                    'Total Days',
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.w600),
-                                  ),
-                                ),
-                                DataColumn(
-                                  label: Text(
-                                    'Start Date',
+                                    'Start \n Date',
                                     style:
                                         TextStyle(fontWeight: FontWeight.w600),
                                   ),
@@ -322,16 +282,23 @@ class _BookingDetailsState extends State<BookingDetails> {
 
                                 DataColumn(
                                   label: Text(
-                                    'End Date',
+                                    'End \n Date',
                                     style:
                                         TextStyle(fontWeight: FontWeight.w600),
                                   ),
                                 ),
                                 DataColumn(
                                   label: Text(
-                                    'Booking Date',
+                                    'Booking \n Date',
                                     style:
                                         TextStyle(fontWeight: FontWeight.w600),
+                                  ),
+                                ),
+                                DataColumn(
+                                  label: Text(
+                                    'Total \n Price',
+                                    style:
+                                    TextStyle(fontWeight: FontWeight.w600),
                                   ),
                                 ),
                                 DataColumn(
@@ -343,7 +310,7 @@ class _BookingDetailsState extends State<BookingDetails> {
                                 ),
                                 DataColumn(
                                   label: Text(
-                                    'Grand Total',
+                                    'Grand \n Total',
                                     style:
                                         TextStyle(fontWeight: FontWeight.w600),
                                   ),
@@ -368,7 +335,7 @@ class _BookingDetailsState extends State<BookingDetails> {
                                 DataColumn(
                                   label: Text(
                                     // >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
-                                    'Booking Status',
+                                    'Booking \n Status',
                                     style:
                                         TextStyle(fontWeight: FontWeight.w600),
                                   ),
@@ -394,12 +361,12 @@ class _BookingDetailsState extends State<BookingDetails> {
                       },
                     ),
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       ElevatedButton(
-                        child: Text("Previous Page"),
+                        child: const Text("Previous Page"),
                         onPressed: () {
                           setState(() {
                             if (start > 0 && end > 0) {
@@ -410,9 +377,9 @@ class _BookingDetailsState extends State<BookingDetails> {
                           print("Previous Page");
                         },
                       ),
-                      SizedBox(width: 20),
+                      const SizedBox(width: 20),
                       ElevatedButton(
-                        child: Text("Next Page"),
+                        child: const Text("Next Page"),
                         onPressed: () {
                           setState(() {
                             if (end < length) {
@@ -517,10 +484,10 @@ class _BookingDetailsState extends State<BookingDetails> {
           : const Text("")),
       DataCell(data['userId'] != null
           ? Text(data['userId'].toString().substring(3, 13))
-          : Text("")),
+          : const Text("")),
       DataCell(data["gym_details"] != null
           ? Text(
-              '${data['gym_details']['name'].toString().toUpperCase()}|${data['gym_details']['branch'].toString().toUpperCase()}')
+              '${data['gym_details']['name'].toString().toUpperCase()}\n${data['gym_details']['branch'].toString().toUpperCase()}')
           : const Text("")),
 
       DataCell(data['package_type'] != null
@@ -529,20 +496,16 @@ class _BookingDetailsState extends State<BookingDetails> {
       DataCell(data['booking_plan'] != null
           ? Text(data['booking_plan'].toString())
           : const Text("")),
-      DataCell(data['totalDays'] != null
-          ? Text(data['totalDays'].toString())
-          : const Text("")),
 
-      // DataCell(data['order_date'] != null ? Text(orderDate) : const Text("")),
-      // =======
       DataCell(data['booking_date'] != null ? Text(orderDate) : const Text("")),
 
-      // >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
-// >>>>>>> ae7259e7ba6e19ed4976a35667cb3a762fe66e2c
       DataCell(data['plan_end_duration'] != null
           ? Text(durationEnd)
           : const Text("")),
       DataCell(data['order_date'] != null ? Text(orderDate) : const Text("")),
+      DataCell(data['total_price'] != null
+          ? Text('₹${data['total_price']}'.toString())
+          : const Text("")),
       DataCell(data['discount'] != null
           ? Text('₹${data['discount'].toString()}')
           : const Text("")),

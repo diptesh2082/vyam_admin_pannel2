@@ -299,27 +299,11 @@ class _CategoryInfoScreenState extends State<CategoryInfoScreen> {
               image: data['image'],
               categoryId: data['category_id'],
               position: data['position']));
-          // showDialog(
-          //     context: context,
-          //     builder: (context) {
-          //       return GestureDetector(
-          //         onTap: () => ,
-          //         child: SingleChildScrollView(
-          //           child: ProductEditBox(
-          //             name: data['name'],
-          //             status: data['status'],
-          //             image: data['image'],
-          //             categoryId: data['category_id'],
-          //           ),
-          //         ),
-          //       );
-          //     }
-          //     );
         },
       ),
       DataCell(const Icon(Icons.delete), onTap: () {
         deleteMethodI(
-            stream: categoryStream, uniqueDocId: categoryID, imagess: img);
+            stream: categoryStream, uniqueDocId: data['category_id'], imagess: img);
       })
     ]);
   }
@@ -418,11 +402,12 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                       SizedBox(
                         width: 300,
                         height: 200,
-                        child: Container(
-                          child: Image.network(
-                            (imgUrl1 == null) ? ' ' : imgUrl1,
+                        child: imgUrl1!=null?Container(
+                          child: Image.network(imgUrl1,
                             fit: BoxFit.contain,
                           ),
+                        ):Image.network(image,
+                          fit: BoxFit.contain,
                         ),
                       ),
                     ],
@@ -441,7 +426,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                             .doc(categoryId)
                             .update(
                           {
-                            'image': imgUrl1,
+                            'image': imgUrl1!=null?imgUrl1:image,
                             'name': _name.text,
                             'category_id': categoryId,
                             'position': _position.text,

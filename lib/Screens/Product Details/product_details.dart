@@ -324,12 +324,12 @@ class _ProductDetailsState extends State<ProductDetails> {
                       },
                     ),
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       ElevatedButton(
-                        child: Text("Previous Page"),
+                        child: const Text("Previous Page"),
                         onPressed: () {
                           setState(() {
                             if (start > 0 && end > 0) {
@@ -340,9 +340,9 @@ class _ProductDetailsState extends State<ProductDetails> {
                           print("Previous Page");
                         },
                       ),
-                      SizedBox(width: 20),
+                      const SizedBox(width: 20),
                       ElevatedButton(
-                        child: Text("Next Page"),
+                        child: const Text("Next Page"),
                         onPressed: () {
                           setState(() {
                             if (end < length) {
@@ -540,7 +540,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                             return GridView.builder(
                                 padding: const EdgeInsets.all(20.0),
                                 gridDelegate:
-                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                    const SliverGridDelegateWithFixedCrossAxisCount(
                                         crossAxisCount: 2),
                                 itemCount: data['images'].length,
                                 itemBuilder: (BuildContext context, int index) {
@@ -2064,8 +2064,6 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                           width: 200,
                         )
                 ],
-// <<<<<<< HEAD
-// =======
               ),
 //
 //                Text("Services",

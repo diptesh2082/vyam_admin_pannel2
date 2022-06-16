@@ -117,7 +117,7 @@ class _categoryAddScreenState extends State<categoryAddScreen> {
                             )
                                 : Container(
                               color: Colors.white,
-                              child: Center(
+                              child: const Center(
                                   child: Text(
                                     'Please Upload Image',
                                     style: TextStyle(
@@ -129,33 +129,33 @@ class _categoryAddScreenState extends State<categoryAddScreen> {
                       ],
                     ),
                   ),
-
-                  Column(
-                    children: [
-                      const Text(
-                        "Status",
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.w100),
-                      ),
-                      Container(
-                        color: Colors.white10,
-                        width: 120,
-                        child: DropdownButton(
-                            hint: Text('$print_type'),
-                            items: const [
-                              DropdownMenuItem(
-                                child: Text("TRUE"),
-                                value: true,
-                              ),
-                              DropdownMenuItem(
-                                child: Text("FALSE"),
-                                value: false,
-                              ),
-                            ],
-                            onChanged: dropDowntype),
-                      ),
-                    ],
-                  ),
+                  //
+                  // Column(
+                  //   children: [
+                  //     // const Text(
+                  //     //   "Status",
+                  //     //   style: TextStyle(
+                  //     //       fontSize: 20, fontWeight: FontWeight.w100),
+                  //     // ),
+                  //     // Container(
+                  //     //   color: Colors.white10,
+                  //     //   width: 120,
+                  //     //   child: DropdownButton(
+                  //     //       hint: Text('$print_type'),
+                  //     //       items: const [
+                  //     //         DropdownMenuItem(
+                  //     //           child: Text("TRUE"),
+                  //     //           value: true,
+                  //     //         ),
+                  //     //         DropdownMenuItem(
+                  //     //           child: Text("FALSE"),
+                  //     //           value: false,
+                  //     //         ),
+                  //     //       ],
+                  //     //       onChanged: dropDowntype),
+                  //     // ),
+                  //   ],
+                  // ),
 
 
 
@@ -172,7 +172,7 @@ class _categoryAddScreenState extends State<categoryAddScreen> {
                               .doc(catId)
                               .set(
                             {
-                              'status': _addStatus,
+                              'status': true,
                               'image': imgUrl1,
                               'name': _addName.text,
                               'category_id': catId,

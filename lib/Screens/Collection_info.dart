@@ -251,7 +251,7 @@ class _UserInformationState extends State<UserInformation> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       ElevatedButton(
-                        child: Text("Previous Page"),
+                        child: const Text("Previous Page"),
                         onPressed: () {
                           setState(() {
                             if (start > 0 && end > 0) {
@@ -262,7 +262,7 @@ class _UserInformationState extends State<UserInformation> {
                           print("Previous Page");
                         },
                       ),
-                      SizedBox(width: 20),
+                      const SizedBox(width: 20),
                       ElevatedButton(
                         child: Text("Next Page"),
                         onPressed: () {
