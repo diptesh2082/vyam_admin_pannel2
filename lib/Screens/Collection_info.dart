@@ -250,49 +250,70 @@ class _UserInformationState extends State<UserInformation> {
                   },
                 ),
               ),
-              SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ElevatedButton(
-                    child: Text("Previous Page"),
-                    onPressed: () {
-                      setState(() {
-                        if (start > 0 && end > 0) {
-                          start = start - 10;
-                          end = end - 10;
-                        }
-                      });
-                      print("Previous Page");
-                    },
-                  ),
+              // SizedBox(height: 20),
+              // Row(
+              //   mainAxisAlignment: MainAxisAlignment.center,
+              //   children: [
+              //     ElevatedButton(
+              //       child: Text("Previous Page"),
+              //       onPressed: () {
+              //         setState(() {
+              //           if (start > 0 && end > 0) {
+              //             start = start - 10;
+              //             end = end - 10;
+              //           }
+              //         });
+              //         print("Previous Page");
+              //       },
+              //     ),
                   Container(
-                    margin: EdgeInsets.symmetric(horizontal: 20),
+                    margin: const EdgeInsets.symmetric(horizontal: 20),
                     child: Text(
                       page.toString(),
-                      style: TextStyle(
+                      style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 15,
                           color: Colors.teal),
                     ),
                   ),
-                  ElevatedButton(
-                    child: Text("Next Page"),
-                    onPressed: () {
-                      setState(() {
-                        if (end < length) {
-                          start = start + 10;
-                          end = end + 10;
-                        }
-                      });
-                      print("Next Page");
-                    },
-                  ),
+
+                  const SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ElevatedButton(
+                        child: const Text("Previous Page"),
+                        onPressed: () {
+                          setState(() {
+                            if (start > 0 && end > 0) {
+                              start = start - 10;
+                              end = end - 10;
+                            }
+                          });
+                          print("Previous Page");
+                        },
+                      ),
+                      const SizedBox(width: 20),
+                      ElevatedButton(
+                        child: const Text("Next Page"),
+                        onPressed: () {
+                          setState(() {
+                            if (end < length) {
+                              start = start + 10;
+                              end = end + 10;
+                            }
+                          });
+                          print("Next Page");
+                        },
+                      ),
+                    ],
+                  )
                 ],
+
               ),
-            ]),
+            ),
           ),
-        )));
+        ),);
   }
 
   var start = 0;

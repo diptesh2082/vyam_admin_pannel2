@@ -184,6 +184,80 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
       ),
     );
   }
+
+  buildDashBoardCard({
+    String? title = "Categories",
+    IconData? iconData = Icons.abc_outlined,
+    String? collectionID = "category",
+    int? count = 0,
+    Color? colour,
+    bool? iss = false,
+    String? state,
+  }) {
+    return FutureBuilder(
+        future: iss != false
+            ? FirebaseFirestore.instance
+                .collection(collectionID!)
+                .where('booking_status', isEqualTo: state)
+                .get()
+            : FirebaseFirestore.instance.collection(collectionID!).get(),
+        builder: (context, AsyncSnapshot snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+
+          return InkWell(
+            hoverColor: isHovering == true ? Colors.green : Colors.amber,
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+              width: 300,
+              height: 100,
+              decoration: BoxDecoration(
+                color: count!.isEven ? Colors.red : Colors.lightBlueAccent, //TODO
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  CircleAvatar(
+                    backgroundColor: Colors.white,
+                    radius: 30,
+                    child: Icon(
+                      iconData!,
+                      color: Colors.blue,
+                    ),
+                  ),
+                  FittedBox(
+                    child: Column(
+                      // mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Text(
+                          title!,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 8,
+                        ),
+                        Text(
+                          snapshot.data.docs.length.toString(),
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 25,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
+  }
 }
 
 class showLatestBooking extends StatefulWidget {
@@ -221,7 +295,7 @@ class _showLatestBookingState extends State<showLatestBooking> {
           width: MediaQuery.of(context).size.width,
           child: DashBoardScreen(),
         ),
-        SizedBox(height: 100),
+        const SizedBox(height: 100),
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 5),
           decoration: BoxDecoration(
@@ -291,37 +365,43 @@ class _showLatestBookingState extends State<showLatestBooking> {
                               ),
                               DataColumn(
                                 label: Text(
-                                  'Booking Plan',
+                                  'Booking \nPlan',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
                               DataColumn(
                                 label: Text(
-                                  'Vendor Name',
+                                  'Vendor \n Name',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
                               DataColumn(
                                 label: Text(
-                                  'Start Date',
+                                  'Start \n Date',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
                               DataColumn(
                                 label: Text(
-                                  'End Date',
+                                  'End \n Date',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
                               DataColumn(
                                 label: Text(
-                                  'Booking Status',
+                                  'Booking \n Status',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
                               DataColumn(
                                 label: Text(
-                                  'Payment Type',
+                                  'Payment \n Type',
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
+                              ),
+                              DataColumn(
+                                label: Text(
+                                  'Grand \n Total',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
@@ -369,10 +449,9 @@ class _showLatestBookingState extends State<showLatestBooking> {
           ? Text(data['booking_plan'].toString())
           : const Text("")),
       DataCell(data['gym_details']['name'] != null
-          ? Text(
-              '${data['gym_details']['name']}|| ${data['gym_details']['branch']}'
-                  .toString())
-          : const Text("")),
+          ? Text('${data['gym_details']['name']}\n ${data['gym_details']['branch']}'.toString()):const Text('')),
+
+
       DataCell(data['booking_date'] != null
           ? Text(DateFormat('dd MMM , yyyy')
               .format(data['booking_date'].toDate())
@@ -421,6 +500,9 @@ class _showLatestBookingState extends State<showLatestBooking> {
       ),
       DataCell(data["payment_method"] != null
           ? Text(data['payment_method'].toString().toUpperCase())
+          : const Text("")),
+      DataCell(data["grand_total"] != null
+          ? Text(data['grand_total'].toString().toUpperCase())
           : const Text("")),
     ]);
   }

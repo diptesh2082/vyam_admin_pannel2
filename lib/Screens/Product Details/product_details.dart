@@ -174,7 +174,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                           child: DataTable(
                               // ? DATATABLE
                               dataRowHeight: 65,
-                              columns: const [
+                              columns:  const [
                                 DataColumn(
                                     label: Text(
                                   'Index',
@@ -326,6 +326,38 @@ class _ProductDetailsState extends State<ProductDetails> {
                       },
                     ),
                   ),
+// <<<<<<< HEAD
+                  const SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ElevatedButton(
+                        child: const Text("Previous Page"),
+                        onPressed: () {
+                          setState(() {
+                            if (start > 0 && end > 0) {
+                              start = start - 10;
+                              end = end - 10;
+                            }
+                          });
+                          print("Previous Page");
+                        },
+                      ),
+                      const SizedBox(width: 20),
+                      ElevatedButton(
+                        child: const Text("Next Page"),
+                        onPressed: () {
+                          setState(() {
+                            if (end < length) {
+                              start = start + 10;
+                              end = end + 10;
+                            }
+                          });
+                          print("Next Page");
+                        },
+                      ),
+
+
                   SizedBox(height: 20),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -371,7 +403,9 @@ class _ProductDetailsState extends State<ProductDetails> {
                       ],
                     ),
                   ),
-                ],
+                 ]
+                  )
+                    ],
               ),
             ),
           ),
@@ -526,7 +560,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                             return GridView.builder(
                                 padding: const EdgeInsets.all(20.0),
                                 gridDelegate:
-                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                    const SliverGridDelegateWithFixedCrossAxisCount(
                                         crossAxisCount: 2),
                                 itemCount: data['images'].length,
                                 itemBuilder: (BuildContext context, int index) {
@@ -2109,8 +2143,6 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                           width: 200,
                         )
                 ],
-// <<<<<<< HEAD
-// =======
               ),
 //
 //                Text("Services",
