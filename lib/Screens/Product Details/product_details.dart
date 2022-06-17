@@ -5,6 +5,7 @@ import 'dart:math';
 import 'package:admin_panel_vyam/Screens/banners.dart';
 import 'package:admin_panel_vyam/Screens/map_view.dart';
 import 'package:admin_panel_vyam/Screens/timings.dart';
+import 'package:flutter/foundation.dart';
 import 'package:random_password_generator/random_password_generator.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -23,7 +24,6 @@ import 'package:admin_panel_vyam/services/CustomTextFieldClass.dart';
 List<String> arr = [];
 List<String> workoutArray = [];
 List<String> d = [];
-var image;
 
 class ProductDetails extends StatefulWidget {
   const ProductDetails({
@@ -413,7 +413,7 @@ class _ProductDetailsState extends State<ProductDetails> {
   DataRow _buildListItem(BuildContext context, DocumentSnapshot data, int index,
       int start, int end) {
     String gymId = data['gym_id'];
-    GeoPoint loc = data['location'];
+    // GeoPoint loc = data['location'];
     String name = data['name'];
     bool legit = data['legit'];
     bool status = data["gym_status"];
@@ -939,49 +939,6 @@ class _ShowAddBoxState extends State<ShowAddBox> {
                                 Icons.location_on_rounded,
                                 size: 40,
                                 color: Colors.black,
-// =======
-//               Container(
-//                 child: Row(
-//                   children: [
-//                     Padding(
-//                       padding: EdgeInsets.all(8.0),
-//                       child: Text('Longitude:',
-//                           style: TextStyle(
-//                               fontWeight: FontWeight.w700, fontSize: 15)),
-//                     ),
-//                     SizedBox(
-//                       width: 15,
-//                     ),
-//                     Text(
-//                       'Not Required',
-//                       style: TextStyle(
-//                           color: Colors.red,
-//                           fontWeight: FontWeight.bold,
-//                           fontStyle: FontStyle.italic),
-//                     ),
-//                     SizedBox(
-//                       height: 15,
-//                     ),
-//                     Stack(
-//                       children: [
-//                         Container(
-//                           height: MediaQuery.of(context).size.height * .75,
-//                           width: 900,
-//                           decoration: const BoxDecoration(
-//                               border: Border(
-//                                   bottom: BorderSide(color: Colors.grey))),
-//                           child: Stack(
-//                             children: [
-//                               MapView(
-//                                 address_con: _addaddress,
-//                               ),
-//                               const Center(
-//                                 child: Icon(
-//                                   Icons.location_on_rounded,
-//                                   size: 40,
-//                                   color: Colors.black,
-//                                 ),
-// >>>>>>> 6c3fa0070166be553c60e87a940531de62732a35
                               ),
                             ),
                           ],
@@ -1208,7 +1165,7 @@ class _ShowAddBoxState extends State<ShowAddBox> {
                           'gender': selectedValue,
                           'name': _addname.text,
                           'pincode': _addpincode.text,
-                          // 'location': dataForGeoPint,
+                          'location': dataForGeoPint,
                           'gym_id': _addgymownerid.text,
                           'gym_owner': _addgymownerid.text,
                           'landmark': _addlandmark.text,
@@ -1709,7 +1666,7 @@ class ProductEditBox extends StatefulWidget {
   // final GeoPoint location;
   final String landmark;
   final String pincode;
-  final imagee;
+  final String imagee;
   final arr2;
   final WorkoutArray;
 
@@ -1733,7 +1690,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
   final TextEditingController _description = TextEditingController();
   final TextEditingController _latitudeController = TextEditingController();
   final TextEditingController _longitudeController = TextEditingController();
-  String image = '';
+  String imagess = '';
   CollectionReference? amenitiesStream;
   CollectionReference? workoutStream;
   @override
@@ -1747,7 +1704,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
     _gymiid.text = widget.gymId;
     _gymowner.text = widget.gymOwner;
     _landmark.text = widget.landmark;
-    image = widget.imagee;
+    imagess = widget.imagee;
     _password.text = widget.password;
     _description.text = widget.description;
     amenitiesStream = FirebaseFirestore.instance.collection("amenities");
@@ -1758,6 +1715,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
     // print(widget.location.latitude);
   }
 
+  bool isloading = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -1789,6 +1747,8 @@ class _ProductEditBoxState extends State<ProductEditBox> {
               //     hinttext: 'Longitude', addcontroller: _longitudeController),
               customTextField(hinttext: "Landmark", addcontroller: _landmark),
               customTextField(hinttext: "Pincode", addcontroller: _pincode),
+              editim(imagea: imagess.toString(), gymid: _gymiid.text),
+
               Container(
                   child: StreamBuilder<QuerySnapshot>(
                 stream: amenitiesStream!.snapshots(),
@@ -1851,51 +1811,6 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                       );
                     }),
               ),
-
-// <<<<<<< HEAD
-// <<<<<<< HEAD
-// =======
-//
-// >>>>>>> db16c184745ea062b80bb6d62b73b5f64792dc9e
-              Row(
-                children: [
-                  ElevatedButton(
-                    onPressed: () async {
-                      // dic = await chooseImage();
-                      image = uploadToStroagees();
-                    },
-                    child: const Text(
-                      'Upload Gym Image',
-                      style: TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.w700),
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 20,
-                  ),
-                  image != null
-                      ? Image(
-                          image: NetworkImage('$image'),
-                          height: 200,
-                          width: 200,
-                        )
-                      : Container(
-                          color: Colors.black,
-                          height: 200,
-                          width: 200,
-                        )
-                ],
-              ),
-//
-//                Text("Services",
-//               style: GoogleFonts.poppins(
-//                 fontSize: 25,
-//                 fontWeight: FontWeight.w700
-// // >>>>>>> db16c184745ea062b80bb6d62b73b5f64792dc9e
-//               ),
-// =======
-// <<<<<<< HEAD
-// >>>>>>> b18127da40fb75acdf06f2a0b795ed8654c2b9b0
 
               Text(
                 "Services",
@@ -1960,12 +1875,14 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                         'gym_owner': _gymowner.text,
                         'landmark': _landmark.text,
                         'description': _description.text,
-                        'display_picture': image2,
+                        'display_picture': image2 != null ? image2 : imagess,
                       };
-                      await documentReference
-                          .update(data)
-                          .whenComplete(() => print("Item Updated"))
-                          .catchError((e) => print(e));
+                      await documentReference.update(data).whenComplete(() {
+                        print("Item Updated");
+                        setState(() {
+                          image2 = "";
+                        });
+                      }).catchError((e) => print(e));
                       Navigator.pop(context);
                     },
                     child: const Text('Done'),
@@ -1978,30 +1895,125 @@ class _ProductEditBoxState extends State<ProductEditBox> {
       ),
     );
   }
+}
 
-  uploadToStroagees() {
-    InputElement input = FileUploadInputElement() as InputElement
-      ..accept = 'image/*';
-    FirebaseStorage fs = FirebaseStorage.instance;
+///////////Edit Change
+class editim extends StatefulWidget {
+  const editim({Key? key, required this.imagea, required this.gymid})
+      : super(key: key);
+  final String imagea;
+  final String gymid;
+  @override
+  State<editim> createState() => _editimState();
+}
 
-    input.click();
-    input.onChange.listen((event) {
-      final file = input.files?.first;
-      final reader = FileReader();
+class _editimState extends State<editim> {
+  @override
+  String i2 = '';
+  void initState() {
+    // TODO: implement initState
+    i2 = widget.imagea;
+    super.initState();
+  }
 
-      reader.readAsDataUrl(file!);
-      reader.onLoadEnd.listen((event) async {
-        var snapshot =
-            await fs.ref().child('product_image/${widget.gymId}').putBlob(file);
-        String downloadUrl = await snapshot.ref.getDownloadURL();
-        setState(() {
-          image = downloadUrl;
-          image2 = downloadUrl;
+  @override
+  bool isloading = false;
+  var imagee;
+  Widget build(BuildContext context) {
+    return Container(
+      child: Row(
+        children: [
+          ElevatedButton(
+            onPressed: () async {
+              setState(() {
+                isloading = true;
+              });
+              var dic = await chooseImage();
+              await addImageToStorage(dic, widget.gymid);
+              setState(() {
+                isloading = false;
+              });
+            },
+            child: const Text(
+              'Upload Gym Image',
+              style:
+                  TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
+            ),
+          ),
+          const SizedBox(
+            width: 20,
+          ),
+          isloading
+              ? Container(
+                  height: 200, width: 200, child: CircularProgressIndicator())
+              : image2 != null
+                  ? Image(
+                      image: NetworkImage(image2.toString()),
+                      height: 200,
+                      width: 200,
+                    )
+                  : Image(
+                      image: NetworkImage(i2),
+                      height: 200,
+                      width: 200,
+                    )
+        ],
+      ),
+    );
+  }
+
+  addImageToStorage(XFile? pickedFile, String? id) async {
+    if (kIsWeb) {
+      Reference _reference = FirebaseStorage.instance
+          .ref()
+          .child("product_image")
+          .child('images/$id');
+      await _reference
+          .putData(
+        await pickedFile!.readAsBytes(),
+        SettableMetadata(contentType: 'image/jpeg'),
+      )
+          .whenComplete(() async {
+        await _reference.getDownloadURL().then((value) async {
+          var uploadedPhotoUrl = value;
+          setState(() {
+            image2 = value;
+          });
+          print(value);
+          await FirebaseFirestore.instance
+              .collection("product_details")
+              .doc(id)
+              .update({"display_picture": value});
         });
       });
-    });
+    } else {
+//write a code for android or ios
+    }
   }
+  // uploadToStroagees() {
+  //   InputElement input = FileUploadInputElement() as InputElement
+  //     ..accept = 'image/*';
+  //   FirebaseStorage fs = FirebaseStorage.instance;
+  //
+  //   input.click();
+  //   input.onChange.listen((event) {
+  //     final file = input.files?.first;
+  //     final reader = FileReader();
+  //
+  //     reader.readAsDataUrl(file!);
+  //     reader.onLoadEnd.listen((event) async {
+  //       var snapshot =
+  //           await fs.ref().child('product_image/${widget.gymid}').putBlob(file);
+  //       String downloadUrl = await snapshot.ref.getDownloadURL();
+  //       setState(() {
+  //         image2 = downloadUrl;
+  //       });
+  //     });
+  //   });
+  // }
 }
+
+///////Edit Change
 
 class datacelldisplay extends StatefulWidget {
   const datacelldisplay({Key? key, required this.disimg, required this.idd})

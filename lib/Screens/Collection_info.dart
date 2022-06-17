@@ -491,8 +491,8 @@ class _EditBoxState extends State<EditBox> {
   TextEditingController _pincode = TextEditingController();
   TextEditingController _sublocality = TextEditingController();
   TextEditingController _userid = TextEditingController();
-  var imgUrl1;
   var img;
+  var imgUrl1;
   @override
   var x;
   void initState() {
@@ -632,25 +632,7 @@ class _EditBoxState extends State<EditBox> {
                   const SizedBox(
                     width: 20,
                   ),
-                  InkWell(
-                    onTap: () async {
-                      img = await chooseImage();
-                      await uploadImageToUser(img, _userid.text);
-                    },
-                    child: const Icon(
-                      Icons.upload_file_outlined,
-                    ),
-                  ),
-                  SizedBox(
-                    width: 300,
-                    height: 200,
-                    child: Container(
-                      child: Image.network(
-                        (imgUrl1 == null) ? ' ' : imgUrl1,
-                        fit: BoxFit.contain,
-                      ),
-                    ),
-                  ),
+                  loadimage(id: x, img: img),
                   Padding(
                     padding: const EdgeInsets.all(12.0),
                     child: Row(
@@ -667,8 +649,7 @@ class _EditBoxState extends State<EditBox> {
                             Map<String, dynamic> data = <String, dynamic>{
                               // 'address':'',
                               'gender': _gender.text,
-                              'image': imgUrl1 ??
-                                  "https://www.kindpng.com/picc/m/22-223941_transparent-avatar-png-male-avatar-icon-transparent-png.png",
+                              'image': ds,
                               'name': _name.text,
                               // 'pincode': "",
                               // 'userId': _userid.text,
@@ -679,8 +660,14 @@ class _EditBoxState extends State<EditBox> {
                             };
                             await documentReference
                                 .update(data)
-                                .whenComplete(() => print("Item Updated"))
-                                .catchError((e) => print(e));
+                                .whenComplete(() {
+                              print("Item Updated");
+                              print(ds);
+                              setState(() {
+                                ds = "";
+                              });
+                              print("value:$ds");
+                            }).catchError((e) => print(e));
                             Navigator.pop(context);
                           },
                           child: const Text('Done'),
@@ -717,6 +704,7 @@ class _EditBoxState extends State<EditBox> {
 
       setState(() {
         imgUrl1 = imageUrl;
+        ds = imgUrl1;
       });
     }
   }
@@ -731,7 +719,7 @@ class detailsadd extends StatefulWidget {
 
 var profileImage;
 String gender = "Not Specified";
-var imgUrl1;
+var ds;
 
 class _detailsaddState extends State<detailsadd> {
   final TextEditingController _addaddress = TextEditingController();
@@ -806,7 +794,7 @@ class _detailsaddState extends State<detailsadd> {
                       }),
                 ],
               ),
-              loadimage(),
+              loadimage(id: "+91${_addnumber.text}", img: ""),
               Row(
                 children: [
                   ElevatedButton(
@@ -821,7 +809,7 @@ class _detailsaddState extends State<detailsadd> {
                           'name': _addname.text,
                           'email': _addemail.text,
                           'gender': gender,
-                          'image': imgUrl1 ?? " ",
+                          'image': ds,
                           'number': "+91${_addnumber.text}",
                           'locality': "",
                           'subLocality': "",
@@ -831,7 +819,15 @@ class _detailsaddState extends State<detailsadd> {
                           'legit': true
                           // 'image': ""
                         },
-                      );
+                      ).whenComplete(() {
+                        print("Item Updated");
+                        print(ds);
+                        setState(() {
+                          ds = "";
+                        });
+                        print("value:$ds");
+                      }).catchError((e) => print(e));
+                      ;
                       Navigator.pop(context);
                     },
                     child: const Text('Done'),
@@ -855,14 +851,16 @@ class _detailsaddState extends State<detailsadd> {
 }
 
 class loadimage extends StatefulWidget {
-  const loadimage({Key? key}) : super(key: key);
-
+  loadimage({Key? key, required this.id, required this.img}) : super(key: key);
+  final String id;
+  final String img;
   @override
   State<loadimage> createState() => _loadimageState();
 }
 
 class _loadimageState extends State<loadimage> {
   bool isloading = false;
+  var imgUrl1;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -882,42 +880,46 @@ class _loadimageState extends State<loadimage> {
               isloading = true;
             });
             profileImage = await chooseImage();
-            getUrlImage(profileImage);
+            await getUrlImage(profileImage);
+            setState(() {
+              isloading = false;
+            });
           },
         ),
         SizedBox(
-            width: 200,
-            height: 100,
-            child: isloading
-                ? Container(
-                    child: imgUrl1 != null
-                        ? Image.network(
-                            imgUrl1,
-                            fit: BoxFit.contain,
-                          )
-                        : Container(
-                            child: Center(
-                              child: CircularProgressIndicator(),
-                            ),
-                          ))
-                : Container(
-                    child: Text(
-                      "Please Upload Image",
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                      textAlign: TextAlign.center,
+          width: 200,
+          height: 100,
+          child: isloading
+              ? Container(
+                  height: 100,
+                  width: 200,
+                  child: Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                )
+              : ds != null
+                  ? Container(
+                      height: 100,
+                      width: 200,
+                      child: Image.network(ds),
+                    )
+                  : Container(
+                      height: 100,
+                      width: 200,
+                      child: Image.network(widget.img.toString()),
                     ),
-                  )),
+        ),
       ],
     ));
   }
 
   getUrlImage(XFile? pickedFile) async {
     if (kIsWeb) {
-      final _firebaseStorage = FirebaseStorage.instance.ref().child("banner");
+      final _firebaseStorage =
+          FirebaseStorage.instance.ref().child("user_details");
 
       Reference _reference = _firebaseStorage
-          .child('banner_details/${Path.basename(pickedFile!.path)}');
+          .child('user_details/${Path.basename(pickedFile!.path)}');
       await _reference.putData(
         await pickedFile.readAsBytes(),
         SettableMetadata(contentType: 'image/jpeg'),
@@ -927,6 +929,7 @@ class _loadimageState extends State<loadimage> {
 
       setState(() {
         imgUrl1 = imageUrl;
+        ds = imgUrl1;
       });
     }
   }
