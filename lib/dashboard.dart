@@ -451,7 +451,6 @@ class _showLatestBookingState extends State<showLatestBooking> {
       DataCell(data['gym_details']['name'] != null
           ? Text('${data['gym_details']['name']}\n ${data['gym_details']['branch']}'.toString()):const Text('')),
 
-
       DataCell(data['booking_date'] != null
           ? Text(DateFormat('dd MMM , yyyy')
               .format(data['booking_date'].toDate())
@@ -502,7 +501,7 @@ class _showLatestBookingState extends State<showLatestBooking> {
           ? Text(data['payment_method'].toString().toUpperCase())
           : const Text("")),
       DataCell(data["grand_total"] != null
-          ? Text(data['grand_total'].toString().toUpperCase())
+          ? Text('₹${data['grand_total']}'.toString().toUpperCase())
           : const Text("")),
     ]);
   }

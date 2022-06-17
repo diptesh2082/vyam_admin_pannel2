@@ -11,6 +11,7 @@ import 'package:get/get_core/src/get_main.dart';
 import '../services/CustomTextFieldClass.dart';
 import '../services/MatchIDMethod.dart';
 import 'package:geocoding/geocoding.dart' as geocoding;
+import 'request_helper.dart';
 
 import 'globalVar.dart';
 import 'map.dart';
@@ -35,9 +36,11 @@ class _citiesAddState extends State<citiesAdd> {
 
   var id = FirebaseFirestore.instance.collection('Cities').doc().id;
 
+  late List<PlacesApiHelperModel>? _list = [];
+  FocusNode myFocousNode = FocusNode();
+
+
   final TextEditingController _addAddress = TextEditingController();
-  // final TextEditingController _addStatus = TextEditingController();
-  //final TextEditingController _addId = TextEditingController();
   final TextEditingController _addIndex = TextEditingController();
 
   static const cities_list = [
@@ -49,25 +52,10 @@ class _citiesAddState extends State<citiesAdd> {
     "Chennai",
     "Ahmedabad",
   ];
-  // Completer<GoogleMapController> _controller = Completer();
-  // geocoding.Location? _currentPosition;
-  // LatLng? _latLong;
-  // bool? _locating = false;
-  // geocoding.Placemark? _placeMark;
 
-// getUserAddress() async {
-//   List<geocoding.Placemark> placemarks = await geocoding
-//       .placemarkFromCoordinates(_latLong!.latitude, _latLong!.longitude);
-//   setState(() {
-//     _placeMark = placemarks.first;
-//   });
-// }
-//
-//
-// static const CameraPosition _kGooglePlex = CameraPosition(
-//   target: LatLng(37.42796133580664, -122.085749655962),
-//   zoom: 14.4746,
-// );
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -91,9 +79,9 @@ class _citiesAddState extends State<citiesAdd> {
                       fontWeight: FontWeight.w600,
                       fontSize: 14),
                 ),
-                SizedBox(width: 15),
+                const SizedBox(width: 15),
 
-                Text('Address'),
+                const Text('Address'),
                 Stack(
                   children: [
                     Container(
@@ -115,6 +103,51 @@ class _citiesAddState extends State<citiesAdd> {
                         ],
                       ),
                     ),
+
+          // SizedBox(
+          //   width: MediaQuery.of(context).size.width,
+          //   child: TextFormField(
+          //     controller: _addAddress,
+          //     autofocus: false,
+          //     focusNode: myFocousNode,
+          //     onChanged: (value) async {
+          //       _list =
+          //       await RequestHelper().getPlaces(query: value);
+          //       setState(() {});
+          //       if (value.isEmpty) {
+          //         _list!.clear();
+          //         setState(() {
+          //           _addAddress.text = value;
+          //           print('PRINTING LIST /////////////');
+          //           print(_list);
+          //         });
+          //       }
+          //     },
+          //     style: const TextStyle(
+          //       fontSize: 12,
+          //       fontFamily: 'Poppins',
+          //       fontWeight: FontWeight.w500,
+          //     ),
+          //     decoration: InputDecoration(
+          //         prefixIcon: const Icon(Icons.abc),
+          //         suffixIcon: IconButton(
+          //           onPressed: () {
+          //             _addAddress.clear();
+          //             FocusScope.of(context)
+          //                 .requestFocus(myFocousNode);
+          //           },
+          //           icon: const Icon(Icons.edit_outlined),
+          //         ),
+          //         // border: InputBorde,
+          //         hintStyle: const TextStyle(
+          //             fontSize: 12,
+          //             fontFamily: 'Poppins',
+          //             fontWeight: FontWeight.w500,
+          //             color: Colors.green),
+          //         hintMaxLines: 2,
+          //         hintText: 'Search your location here'),
+          //   ),
+          // ),
                   ],
                 ),
                 const SizedBox(

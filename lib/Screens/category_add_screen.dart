@@ -19,6 +19,10 @@ class categoryAddScreen extends StatefulWidget {
 }
 
 var ds;
+// <<<<<<< HEAD
+// =======
+//
+// >>>>>>> 21d9c030cebb9d9fd030fc57983203910f0655fa
 
 class _categoryAddScreenState extends State<categoryAddScreen> {
   @override
@@ -27,6 +31,8 @@ class _categoryAddScreenState extends State<categoryAddScreen> {
     super.initState();
   }
 
+  var image;
+  var imgUrl1;
   var catId = FirebaseFirestore.instance.collection('category').doc().id;
   CollectionReference? categoryStream;
 
@@ -225,7 +231,11 @@ class _categoryAddScreenState extends State<categoryAddScreen> {
                             },
                           ).whenComplete(() {
                             setState(() {
+// <<<<<<< HE/AD
                               ds = "";
+// =======
+//                               ds = null;
+// >>>>>>> 21d9c030cebb9d9fd030fc57983203910f0655fa
                             });
                           });
 
@@ -258,6 +268,7 @@ class _loadimageState extends State<loadimage> {
   @override
   Widget build(BuildContext context) {
     return Container(
+// <<<<<<< HEAD
         child: Row(
       children: [
         const Text(
@@ -289,6 +300,55 @@ class _loadimageState extends State<loadimage> {
                   width: 200,
                   child: Center(
                     child: CircularProgressIndicator(),
+// =======
+//       padding: const EdgeInsets.all(20),
+//       child: Row(
+//         children: [
+//           const Text(
+//             'Upload Image: ',
+//             style: TextStyle(
+//                 color: Colors.grey, fontWeight: FontWeight.bold, fontSize: 15),
+//           ),
+//           const SizedBox(
+//             width: 20,
+//           ),
+//           InkWell(
+//             onTap: () async {
+//               setState(() {
+//                 isloading = true;
+//               });
+//                var image = await chooseImage();
+//
+//               await getUrlImage(image);
+//             },
+//             child: const Icon(
+//               Icons.upload_file_outlined,
+//             ),
+//           ),
+//           SizedBox(
+//             width: 300,
+//             height: 200,
+//             child: isloading
+//                 ? ds != null
+//                     ? Container(
+//                         child: Image.network(ds),
+//                       )
+//                     : Container(
+//                         child: const Center(
+//                           child: CircularProgressIndicator(),
+//                         ),
+//                       )
+//                 : Container(
+//                     color: Colors.white,
+//                     child: const Center(
+//                         child: Text(
+//                       'Please Upload Image',
+//                       style: TextStyle(
+//                           color: Colors.black,
+//                           fontWeight: FontWeight.bold,
+//                           fontSize: 24),
+//                     )),
+// >>>>>>> 21d9c030cebb9d9fd030fc57983203910f0655fa
                   ),
                 )
               : ds != null
@@ -321,8 +381,13 @@ class _loadimageState extends State<loadimage> {
       String imageUrl = await _reference.getDownloadURL();
 
       setState(() {
+// <<<<<<< HEAD
         imgUrl1 = imageUrl;
         ds = imgUrl1;
+// =======
+//             var imgUrl1 = imageUrl;
+//             ds = imgUrl1;
+// >>>>>>> 21d9c030cebb9d9fd030fc57983203910f0655fa
       });
     }
   }
