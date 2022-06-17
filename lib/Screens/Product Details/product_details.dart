@@ -1851,9 +1851,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                       );
                     }),
               ),
-// <<<<<<< HEAD
-//
-// =======
+
 // <<<<<<< HEAD
 // <<<<<<< HEAD
 // =======
@@ -1896,7 +1894,9 @@ class _ProductEditBoxState extends State<ProductEditBox> {
 // // >>>>>>> db16c184745ea062b80bb6d62b73b5f64792dc9e
 //               ),
 // =======
+// <<<<<<< HEAD
 // >>>>>>> b18127da40fb75acdf06f2a0b795ed8654c2b9b0
+
               Text(
                 "Services",
                 style: GoogleFonts.poppins(
