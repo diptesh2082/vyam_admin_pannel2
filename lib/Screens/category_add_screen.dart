@@ -19,7 +19,10 @@ class categoryAddScreen extends StatefulWidget {
 }
 
 var ds;
-
+// <<<<<<< HEAD
+// =======
+//
+// >>>>>>> 21d9c030cebb9d9fd030fc57983203910f0655fa
 
 class _categoryAddScreenState extends State<categoryAddScreen> {
   @override
@@ -27,6 +30,7 @@ class _categoryAddScreenState extends State<categoryAddScreen> {
     categoryStream = FirebaseFirestore.instance.collection('category');
     super.initState();
   }
+
   var image;
   var imgUrl1;
   var catId = FirebaseFirestore.instance.collection('category').doc().id;
@@ -106,7 +110,7 @@ class _categoryAddScreenState extends State<categoryAddScreen> {
 
                   customTextField3(
                       hinttext: "Position", addcontroller: _addPosition),
-                  const loadimage(),
+                  loadimage(),
 
                   // Container(
                   //   padding: const EdgeInsets.all(20),
@@ -227,7 +231,11 @@ class _categoryAddScreenState extends State<categoryAddScreen> {
                             },
                           ).whenComplete(() {
                             setState(() {
-                              ds = null;
+// <<<<<<< HE/AD
+                              ds = "";
+// =======
+//                               ds = null;
+// >>>>>>> 21d9c030cebb9d9fd030fc57983203910f0655fa
                             });
                           });
 
@@ -248,69 +256,115 @@ class _categoryAddScreenState extends State<categoryAddScreen> {
 }
 
 class loadimage extends StatefulWidget {
-  const loadimage({Key? key}) : super(key: key);
+  loadimage({Key? key}) : super(key: key);
 
   @override
   State<loadimage> createState() => _loadimageState();
 }
 
 class _loadimageState extends State<loadimage> {
-  @override
   bool isloading = false;
+  var imgUrl1;
+  @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(20),
-      child: Row(
-        children: [
-          const Text(
-            'Upload Image: ',
-            style: TextStyle(
-                color: Colors.grey, fontWeight: FontWeight.bold, fontSize: 15),
-          ),
-          const SizedBox(
-            width: 20,
-          ),
-          InkWell(
-            onTap: () async {
-              setState(() {
-                isloading = true;
-              });
-               var image = await chooseImage();
-
-              await getUrlImage(image);
-            },
-            child: const Icon(
-              Icons.upload_file_outlined,
-            ),
-          ),
-          SizedBox(
-            width: 300,
-            height: 200,
-            child: isloading
-                ? ds != null
-                    ? Container(
-                        child: Image.network(ds),
-                      )
-                    : Container(
-                        child: const Center(
-                          child: CircularProgressIndicator(),
-                        ),
-                      )
-                : Container(
-                    color: Colors.white,
-                    child: const Center(
-                        child: Text(
-                      'Please Upload Image',
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 24),
-                    )),
+// <<<<<<< HEAD
+        child: Row(
+      children: [
+        const Text(
+          "User Image",
+          style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
+        ),
+        const SizedBox(
+          width: 20,
+        ),
+        InkWell(
+          child: const Icon(Icons.camera_alt),
+          onTap: () async {
+            setState(() {
+              isloading = true;
+            });
+            var profileImage = await chooseImage();
+            await getUrlImage(profileImage);
+            setState(() {
+              isloading = false;
+            });
+          },
+        ),
+        SizedBox(
+          width: 200,
+          height: 100,
+          child: isloading
+              ? Container(
+                  height: 100,
+                  width: 200,
+                  child: Center(
+                    child: CircularProgressIndicator(),
+// =======
+//       padding: const EdgeInsets.all(20),
+//       child: Row(
+//         children: [
+//           const Text(
+//             'Upload Image: ',
+//             style: TextStyle(
+//                 color: Colors.grey, fontWeight: FontWeight.bold, fontSize: 15),
+//           ),
+//           const SizedBox(
+//             width: 20,
+//           ),
+//           InkWell(
+//             onTap: () async {
+//               setState(() {
+//                 isloading = true;
+//               });
+//                var image = await chooseImage();
+//
+//               await getUrlImage(image);
+//             },
+//             child: const Icon(
+//               Icons.upload_file_outlined,
+//             ),
+//           ),
+//           SizedBox(
+//             width: 300,
+//             height: 200,
+//             child: isloading
+//                 ? ds != null
+//                     ? Container(
+//                         child: Image.network(ds),
+//                       )
+//                     : Container(
+//                         child: const Center(
+//                           child: CircularProgressIndicator(),
+//                         ),
+//                       )
+//                 : Container(
+//                     color: Colors.white,
+//                     child: const Center(
+//                         child: Text(
+//                       'Please Upload Image',
+//                       style: TextStyle(
+//                           color: Colors.black,
+//                           fontWeight: FontWeight.bold,
+//                           fontSize: 24),
+//                     )),
+// >>>>>>> 21d9c030cebb9d9fd030fc57983203910f0655fa
                   ),
-          )
-        ],
-      ),
-    );
+                )
+              : ds != null
+                  ? Container(
+                      height: 100,
+                      width: 200,
+                      child: Image.network(ds),
+                    )
+                  : Container(
+                      height: 100,
+                      width: 200,
+                      child: Text("Please Upload Image"),
+                    ),
+        ),
+      ],
+    ));
   }
 
   getUrlImage(XFile? pickedFile) async {
@@ -327,8 +381,13 @@ class _loadimageState extends State<loadimage> {
       String imageUrl = await _reference.getDownloadURL();
 
       setState(() {
-            var imgUrl1 = imageUrl;
-            ds = imgUrl1;
+// <<<<<<< HEAD
+        imgUrl1 = imageUrl;
+        ds = imgUrl1;
+// =======
+//             var imgUrl1 = imageUrl;
+//             ds = imgUrl1;
+// >>>>>>> 21d9c030cebb9d9fd030fc57983203910f0655fa
       });
     }
   }
