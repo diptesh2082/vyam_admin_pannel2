@@ -194,7 +194,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                                 ),
                                 DataColumn(
                                   label: Text(
-                                    'GYM Owner ID',
+                                    'GYM \n Owner ID',
                                     style:
                                         TextStyle(fontWeight: FontWeight.w600),
                                   ),
@@ -326,46 +326,46 @@ class _ProductDetailsState extends State<ProductDetails> {
                       },
                     ),
                   ),
-// <<<<<<< HEAD
+
                   const SizedBox(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      ElevatedButton(
-                        child: const Text("Previous Page"),
-                        onPressed: () {
-                          setState(() {
-                            if (start > 0 && end > 0) {
-                              start = start - 10;
-                              end = end - 10;
-                            }
-                          });
-                          print("Previous Page");
-                        },
-                      ),
-                      const SizedBox(width: 20),
-                      ElevatedButton(
-                        child: const Text("Next Page"),
-                        onPressed: () {
-                          setState(() {
-                            if (end < length) {
-                              start = start + 10;
-                              end = end + 10;
-                            }
-                          });
-                          print("Next Page");
-                        },
-                      ),
+                      // ElevatedButton(
+                      //   child: const Text("Previous Page"),
+                      //   onPressed: () {
+                      //     setState(() {
+                      //       if (start > 0 && end > 0) {
+                      //         start = start - 10;
+                      //         end = end - 10;
+                      //       }
+                      //     });
+                      //     print("Previous Page");
+                      //   },
+                      // ),
+                      // const SizedBox(width: 20),
+                      // ElevatedButton(
+                      //   child: const Text("Next Page"),
+                      //   onPressed: () {
+                      //     setState(() {
+                      //       if (end < length) {
+                      //         start = start + 10;
+                      //         end = end + 10;
+                      //       }
+                      //     });
+                      //     print("Next Page");
+                      //   },
+                      // ),
 
 
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         ElevatedButton(
-                          child: Text("Previous Page"),
+                          child: const Text("Previous Page"),
                           onPressed: () {
                             setState(() {
                               if (start >= 1) page--;
@@ -378,10 +378,10 @@ class _ProductDetailsState extends State<ProductDetails> {
                           },
                         ),
                         Container(
-                          margin: EdgeInsets.symmetric(horizontal: 20),
+                          margin: const EdgeInsets.symmetric(horizontal: 20),
                           child: Text(
                             page.toString(),
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 15,
                                 color: Colors.teal),
@@ -791,13 +791,59 @@ class _ProductDetailsState extends State<ProductDetails> {
         },
       ),
 
-      DataCell(const Icon(Icons.delete), onTap: () {
-        deleteMethodVendor(
-            stream: productStream,
-            uniqueDocId: gymId,
-            imagess: imagess,
-            imlist: imgList);
-      })
+      // DataCell(const Icon(Icons.delete), onTap: () {
+        // deleteMethodVendor(
+        //     stream: productStream,
+        //     uniqueDocId: gymId,
+        //     imagess: imagess,
+        //     imlist: imgList);
+        DataCell(const Icon(Icons.delete), onTap: () {
+
+          showDialog(context: context, builder: (context)=>  AlertDialog(
+            shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(16))),
+            content: SizedBox(
+              height: 170,
+              width: 280,
+              child: Stack(
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children:  [
+                      const Text('Do you want to delete?' , style: TextStyle(fontWeight: FontWeight.bold),),
+                      const SizedBox(height: 15,),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const SizedBox(height: 15),
+                          ElevatedButton.icon(
+                            onPressed: (){
+                              deleteMethodVendor(
+                                      stream: productStream,
+                                      uniqueDocId: gymId,
+                                      imagess: imagess,
+                                      imlist: imgList);
+                              Navigator.pop(context);
+                            } ,
+                            icon: const Icon(Icons.check),
+                            label: const Text('Yes'),
+                          ),
+                          const SizedBox(width: 20,),
+                          ElevatedButton.icon(onPressed: (){
+                            Navigator.pop(context);
+                          } ,
+                            icon: const Icon(Icons.clear),
+                            label: const Text('No'),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),);
+        })
+      // })
     ]);
   }
 

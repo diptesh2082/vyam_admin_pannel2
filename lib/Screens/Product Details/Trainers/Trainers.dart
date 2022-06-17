@@ -267,7 +267,47 @@ class _TrainerPageState extends State<TrainerPage> {
             });
       }),
       DataCell(Icon(Icons.delete), onTap: () {
-        deleteMethod(stream: trainerStream, uniqueDocId: trainerId);
+        // deleteMethod(stream: trainerStream, uniqueDocId: trainerId);
+
+        showDialog(context: context, builder: (context)=>  AlertDialog(
+          shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(16))),
+          content: SizedBox(
+            height: 170,
+            width: 280,
+            child: Stack(
+              children: [
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children:  [
+                    const Text('Do you want to delete?' , style: TextStyle(fontWeight: FontWeight.bold),),
+                    const SizedBox(height: 15,),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const SizedBox(height: 15),
+                        ElevatedButton.icon(
+                          onPressed: (){
+                            deleteMethod(stream: trainerStream, uniqueDocId: trainerId);
+                            Navigator.pop(context);
+                          } ,
+                          icon: const Icon(Icons.check),
+                          label: const Text('Yes'),
+                        ),
+                        const SizedBox(width: 20,),
+                        ElevatedButton.icon(onPressed: (){
+                          Navigator.pop(context);
+                        } ,
+                          icon: const Icon(Icons.clear),
+                          label: const Text('No'),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),);
       }),
     ]);
   }

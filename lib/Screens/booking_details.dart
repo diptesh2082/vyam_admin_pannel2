@@ -29,6 +29,9 @@ class _BookingDetailsState extends State<BookingDetails> {
   DateTime startDate = DateTime(DateTime.now().year - 5);
   DateTime endDate = DateTime(DateTime.now().year + 5);
 
+  bool showStartDate = false;
+  bool showEndDate = false;
+
   @override
   void initState() {
     super.initState();
@@ -38,7 +41,7 @@ class _BookingDetailsState extends State<BookingDetails> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Bookings"),
+        title: const Text("Bookings"),
       ),
       body: SafeArea(
         child: Material(
@@ -70,28 +73,39 @@ class _BookingDetailsState extends State<BookingDetails> {
                       Row(
                         children: [
 
-                          ElevatedButton.icon(
-                              onPressed: () async {
-                                setState(() async {
-                                  startDate = await pickDate(context);
-                                });
+                          Column(
+                            children:[ ElevatedButton.icon(
+                                onPressed: () async {
+                                  setState(() async {
+                                    showStartDate = true;
+                                    startDate = await pickDate(context);
+                                  });
 
-                                print(startDate.toString());
-                              },
-                              icon: const Icon(Icons.date_range),
-                              label: const Text('Start Date')),
+                                  print(startDate.toString());
+                                },
+                                icon: const Icon(Icons.date_range),
+                                label: const Text('Start Date')),
+                              showStartDate !=false ? Text(DateFormat("MMM, dd, yyyy").format(startDate),style: const TextStyle(fontWeight: FontWeight.bold)):const SizedBox(),
+                         ],
+                          ),
+                          const SizedBox(
+                            width: 20,
+                          ),
+                          Column(
+                            children:[ ElevatedButton.icon(
+                                onPressed: () async {
+                                  setState(() async {
+                                    showEndDate = true;
+                                    endDate = await pickDate(context);
+                                  });
 
-                          const SizedBox(width: 20,),
-                          ElevatedButton.icon(
-                              onPressed: () async {
-                                setState(() async {
-                                  endDate = await pickDate(context);
-                                });
-
-                                print(endDate.toString());
-                              },
-                              icon: const Icon(Icons.date_range),
-                              label: const Text('End Date')),
+                                  print(endDate.toString());
+                                },
+                                icon: const Icon(Icons.date_range),
+                                label: const Text('End Date')),
+                              showEndDate !=false ? Text(DateFormat("MMM ,dd , yyyy").format(endDate), style: const TextStyle(fontWeight: FontWeight.bold),):const SizedBox(),
+                            ],
+                          ),
                           const SizedBox(
                             width: 20,
                           ),
@@ -100,6 +114,8 @@ class _BookingDetailsState extends State<BookingDetails> {
                               setState(() {
                                 startDate = DateTime(DateTime.now().year - 5);
                                 endDate = DateTime(DateTime.now().year + 5);
+                                showEndDate = false;
+                                showStartDate = false;
                                 searchVendorId = "";
                                 print(startDate);
                                 print(endDate);
@@ -112,12 +128,12 @@ class _BookingDetailsState extends State<BookingDetails> {
                       ),
                     ],
                   ),
-                  Row(children:[
-                    Text(DateFormat("MMM, dd, yyyy").format(startDate) , style: const TextStyle(fontWeight: FontWeight.bold),),
-                    const SizedBox(width: 25,),
-                    Text(DateFormat("MMM, dd, yyyy").format(endDate) , style: const TextStyle(fontWeight: FontWeight.bold),)
-
-        ]),
+        //           Row(children:[
+        //             Text(DateFormat("MMM, dd, yyyy").format(startDate) , style: const TextStyle(fontWeight: FontWeight.bold),),
+        //             const SizedBox(width: 25,),
+        //             Text(DateFormat("MMM, dd, yyyy").format(endDate) , style: const TextStyle(fontWeight: FontWeight.bold),)
+        //
+        // ]),
 
                   Container(
                     width: 500,
@@ -190,7 +206,6 @@ class _BookingDetailsState extends State<BookingDetails> {
                         if (searchVendorId.isNotEmpty) {
                           doc = doc.where((element) {
                             return element
-
                                     .get('user_name')
                                     .toString()
                                     .toLowerCase()
@@ -206,9 +221,8 @@ class _BookingDetailsState extends State<BookingDetails> {
                                     .toLowerCase()
                                     .contains(searchVendorId.toString()) ||
                                 element
-                                    .get('grand_total')
+                                    .get('id')
                                     .toString()
-                                    .toLowerCase()
                                     .contains(searchVendorId.toString());
                           }).toList();
                         }
@@ -378,7 +392,7 @@ class _BookingDetailsState extends State<BookingDetails> {
                       ),
                       const SizedBox(width: 20),
                       Container(
-                        margin: EdgeInsets.symmetric(horizontal: 20),
+                        margin: const EdgeInsets.symmetric(horizontal: 20),
                         child: Text(
                           page.toString(),
                           style: const TextStyle(
@@ -674,7 +688,47 @@ class _BookingDetailsState extends State<BookingDetails> {
         // }
       }),
       DataCell(const Icon(Icons.delete), onTap: () {
-        deleteMethod(stream: bookingStream, uniqueDocId: bookingId);
+        // deleteMethod(stream: bookingStream, uniqueDocId: bookingId);
+
+        showDialog(context: context, builder: (context)=>  AlertDialog(
+          shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(16))),
+          content: SizedBox(
+            height: 170,
+            width: 280,
+            child: Stack(
+              children: [
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children:  [
+                    const Text('Do you want to delete?' , style: TextStyle(fontWeight: FontWeight.bold),),
+                    const SizedBox(height: 15,),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const SizedBox(height: 15),
+                        ElevatedButton.icon(
+                          onPressed: (){
+                            deleteMethod(stream: bookingStream, uniqueDocId: bookingId);
+                            Navigator.pop(context);
+                          } ,
+                          icon: const Icon(Icons.check),
+                          label: const Text('Yes'),
+                        ),
+                        const SizedBox(width: 20,),
+                        ElevatedButton.icon(onPressed: (){
+                          Navigator.pop(context);
+                        } ,
+                          icon: const Icon(Icons.clear),
+                          label: const Text('No'),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),);
       })
     ]);
   }

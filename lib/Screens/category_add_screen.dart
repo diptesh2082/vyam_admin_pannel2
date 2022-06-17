@@ -18,8 +18,8 @@ class categoryAddScreen extends StatefulWidget {
   State<categoryAddScreen> createState() => _categoryAddScreenState();
 }
 
-var image;
-var imgUrl1;
+var ds;
+
 
 class _categoryAddScreenState extends State<categoryAddScreen> {
   @override
@@ -27,7 +27,8 @@ class _categoryAddScreenState extends State<categoryAddScreen> {
     categoryStream = FirebaseFirestore.instance.collection('category');
     super.initState();
   }
-
+  var image;
+  var imgUrl1;
   var catId = FirebaseFirestore.instance.collection('category').doc().id;
   CollectionReference? categoryStream;
 
@@ -219,12 +220,16 @@ class _categoryAddScreenState extends State<categoryAddScreen> {
                               .set(
                             {
                               'status': true,
-                              'image': imgUrl1,
+                              'image': ds,
                               'name': _addName.text,
                               'category_id': catId,
                               'position': _addPosition.text,
                             },
-                          );
+                          ).whenComplete(() {
+                            setState(() {
+                              ds = null;
+                            });
+                          });
 
                           Navigator.pop(context);
                         }
@@ -270,7 +275,7 @@ class _loadimageState extends State<loadimage> {
               setState(() {
                 isloading = true;
               });
-              image = await chooseImage();
+               var image = await chooseImage();
 
               await getUrlImage(image);
             },
@@ -282,18 +287,18 @@ class _loadimageState extends State<loadimage> {
             width: 300,
             height: 200,
             child: isloading
-                ? imgUrl1 != null
+                ? ds != null
                     ? Container(
-                        child: Image.network(imgUrl1),
+                        child: Image.network(ds),
                       )
                     : Container(
-                        child: Center(
+                        child: const Center(
                           child: CircularProgressIndicator(),
                         ),
                       )
                 : Container(
                     color: Colors.white,
-                    child: Center(
+                    child: const Center(
                         child: Text(
                       'Please Upload Image',
                       style: TextStyle(
@@ -322,7 +327,8 @@ class _loadimageState extends State<loadimage> {
       String imageUrl = await _reference.getDownloadURL();
 
       setState(() {
-        imgUrl1 = imageUrl;
+            var imgUrl1 = imageUrl;
+            ds = imgUrl1;
       });
     }
   }

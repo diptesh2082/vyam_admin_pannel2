@@ -233,17 +233,17 @@ class _FeedBackInfoState extends State<FeedBackInfo> {
                   },
                 ),
                 Container(
-                  margin: EdgeInsets.symmetric(horizontal: 20),
+                  margin: const EdgeInsets.symmetric(horizontal: 20),
                   child: Text(
                     page.toString(),
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 15,
                         color: Colors.teal),
                   ),
                 ),
                 ElevatedButton(
-                  child: Text("Next Page"),
+                  child: const Text("Next Page"),
                   onPressed: () {
                     setState(() {
                       if (end < length) {
@@ -335,7 +335,47 @@ class _FeedBackInfoState extends State<FeedBackInfo> {
         //   },
         // ),
         DataCell(Icon(Icons.delete), onTap: () {
-          deleteMethod(stream: categoryStream, uniqueDocId: categoryID);
+          // deleteMethod(stream: categoryStream, uniqueDocId: categoryID);
+
+          showDialog(context: context, builder: (context)=>  AlertDialog(
+            shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(16))),
+            content: SizedBox(
+              height: 170,
+              width: 280,
+              child: Stack(
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children:  [
+                      const Text('Do you want to delete?' , style: TextStyle(fontWeight: FontWeight.bold),),
+                      const SizedBox(height: 15,),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const SizedBox(height: 15),
+                          ElevatedButton.icon(
+                            onPressed: (){
+                              deleteMethod(stream: categoryStream, uniqueDocId: categoryID);
+                              Navigator.pop(context);
+                            } ,
+                            icon: const Icon(Icons.check),
+                            label: const Text('Yes'),
+                          ),
+                          const SizedBox(width: 20,),
+                          ElevatedButton.icon(onPressed: (){
+                            Navigator.pop(context);
+                          } ,
+                            icon: const Icon(Icons.clear),
+                            label: const Text('No'),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),);
         })
       ],
     );

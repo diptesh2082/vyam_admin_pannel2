@@ -22,6 +22,14 @@ Future<void> deleteMethodVendor(
     String? uniqueDocId,
     String? imagess,
     List? imlist}) async {
+  if(imagess == null || imagess == "")
+    {
+      return stream!
+          .doc(uniqueDocId)
+          .delete()
+          .then((value) => print("User Deleted"))
+          .catchError((error) => print("Failed to delete user: $error"));
+    }
   // await deletee(
   // '12.jpeg',
   // imlist[0].toString();
@@ -44,8 +52,17 @@ Future<void> deleteMethodI({
   String? uniqueDocId,
   String? imagess,
 }) async {
-  await deletee(imagess.toString());
+  if(imagess ==null || imagess == "")
+    {
 
+      return stream!
+          .doc(uniqueDocId)
+          .delete()
+          .then((value) => print("User Deleted"))
+          .catchError((error) => print("Failed to delete user: $error"));
+    }
+
+  await deletee(imagess.toString());
   return stream!
       .doc(uniqueDocId)
       .delete()
