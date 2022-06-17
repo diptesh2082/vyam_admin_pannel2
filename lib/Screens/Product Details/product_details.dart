@@ -423,6 +423,7 @@ class _ProductDetailsState extends State<ProductDetails> {
     List<dynamic> arr2 = data['amenities'];
     List<dynamic> WorkoutArray = data['workouts'];
     List<dynamic> serviceArray = data['service'];
+    bool isloadingg = false;
     String x, y;
 
     return DataRow(cells: [
@@ -496,8 +497,7 @@ class _ProductDetailsState extends State<ProductDetails> {
             Container(
               child: GestureDetector(
                 onTap: () async {
-                  var image = await chooseImage();
-                  await addImageToStorage(image, gymId);
+                  send(gymId);
                 },
                 child: const Center(
                   child: Icon(
@@ -605,27 +605,6 @@ class _ProductDetailsState extends State<ProductDetails> {
           ),
         ),
       ),
-      // DataCell(
-      //   Center(
-      //     child: ElevatedButton(
-      //       onPressed: () async {
-      //         bool temp = legit;
-      //         temp = !temp;
-      //         DocumentReference documentReference = FirebaseFirestore.instance
-      //             .collection('product_details')
-      //             .doc(gymId);
-      //         await documentReference
-      //             .update({'gym_status': temp})
-      //             .whenComplete(() => print("Legitimate toggled"))
-      //             .catchError((e) => print(e));
-      //       },
-      //       child: Text(legit.toString()),
-      //       style: ElevatedButton.styleFrom(
-      //           primary: legit ? Colors.green : Colors.red),
-      //     ),
-      //   ),
-      // ),
-
       DataCell(
         Center(
           child: ElevatedButton(
@@ -694,38 +673,7 @@ class _ProductDetailsState extends State<ProductDetails> {
       ),
 
       DataCell(
-        Center(
-          child: Row(
-            children: [
-              Column(
-                children: [
-                  IconButton(
-                      onPressed: () async {
-                        // print('OS: ${Platform.operatingSystem}');
-                        // var dic = await chooseImage();
-                        // await uploadImageToStorage(dic, gymId);
-                        send(gymId);
-                        // await pickImage();
-                        // await saveData(gymId);
-                      },
-                      icon: const Icon(Icons.camera_alt_outlined)),
-                  const Text("Display Picture"),
-                ],
-              ),
-              data['display_picture'] != null
-                  ? Image(
-                      image: NetworkImage(data['display_picture']),
-                      height: 200,
-                      width: 200,
-                    )
-                  : Container(
-                      color: Colors.black,
-                      height: 200,
-                      width: 200,
-                    )
-            ],
-          ),
-        ),
+        datacelldisplay(disimg: data['display_picture'], idd: data['gym_id']),
       ),
 
       DataCell(
@@ -822,8 +770,7 @@ class _ShowAddBoxState extends State<ShowAddBox> {
     productStream = FirebaseFirestore.instance.collection("product_details");
     amenitiesStream = FirebaseFirestore.instance.collection("amenities");
     workoutStream = FirebaseFirestore.instance.collection("workouts");
-    // RandomPasswordGenerator pswd = RandomPasswordGenerator();
-    // xs = pswd.randomPassword(letters: true, uppercase: true, numbers: true);
+
     super.initState();
   }
 
@@ -1172,41 +1119,6 @@ class _ShowAddBoxState extends State<ShowAddBox> {
                 height: 20,
               ),
               loadimage(id: _addgymownerid.text),
-              // Row(
-              //   children: [
-              //     ElevatedButton(
-              //       onPressed: () async {
-              //         // dic = await chooseImage();
-              //         setState(() {
-              //           isloading = true;
-              //         });
-              //         image = await uploadToStroagees();
-              //         setState(() {
-              //           isloading = false;
-              //         });
-              //       },
-              //       child: const Text(
-              //         'Upload Gym Image',
-              //         style: TextStyle(
-              //             color: Colors.white, fontWeight: FontWeight.w700),
-              //       ),
-              //     ),
-              //     const SizedBox(
-              //       width: 20,
-              //     ),
-              //     isloading
-              //         ? Container(
-              //             child: CircularProgressIndicator(),
-              //             height: 200,
-              //             width: 200,
-              //           )
-              //         : Image(
-              //             image: NetworkImage('$image'),
-              //             height: 200,
-              //             width: 200,
-              //           )
-              //   ],
-              // ),
 
               const SizedBox(height: 10),
               Text(
@@ -1275,17 +1187,6 @@ class _ShowAddBoxState extends State<ShowAddBox> {
 
               Row(
                 children: [
-                  // ElevatedButton(onPressed: (){
-                  //     if(addressVendor!='')
-                  //     {
-                  //       setState(() {
-                  //         _addaddress.text = getAddress();
-                  //       });
-                  //
-                  //     }
-                  //     print(_addaddress.text);
-                  //
-                  // }, child: Text('HELLO')),
                   ElevatedButton(
                     onPressed: () async {
                       print(dic);
@@ -1705,135 +1606,6 @@ class _ECheckServiceState extends State<ECheckService> {
   }
 }
 
-// class Echecka extends StatefulWidget {
-//   const Echecka(
-//       {Key? key, required this.type, required this.id, required this.gymid})
-//       : super(key: key);
-//   final String type;
-//   final String id;
-//   final String gymid;
-//   @override
-//   State<Echecka> createState() => _EcheckaState();
-// }
-//
-// class _EcheckaState extends State<Echecka> {
-//   bool check = false;
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//       child: Column(
-//         children: [
-//           CheckboxListTile(
-//               // bool selected=false;
-//               value: check,
-//               title: Text(widget.type),
-//               onChanged: (bool? selected) async {
-//                 setState(() {
-//                   check = selected!;
-//                 });
-//                 if (selected == true) {
-//                   await FirebaseFirestore.instance
-//                       .collection('product_details')
-//                       .doc(widget.gymid)
-//                       .update({
-//                     'service': FieldValue.arrayUnion([widget.type])
-//                   });
-//                 }
-//                 // print(widget.arr2);
-//                 if (selected == false) {
-//                   await FirebaseFirestore.instance
-//                       .collection('product_details')
-//                       .doc(widget.gymid)
-//                       .update({
-//                     'service': FieldValue.arrayRemove([widget.type])
-//                   });
-//                 }
-//                 // print(widget.arr2);
-//               }),
-//         ],
-//       ),
-//     );
-//   }
-// }
-
-// class ECheckService extends StatefulWidget {
-//   final String type;
-//   final String id;
-//   final serviceArray;
-//   final String gymid;
-//   const ECheckService(
-//       {Key? key,
-//       required this.type,
-//       required this.id,
-//       required this.serviceArray,
-//       required this.gymid})
-//       : super(key: key);
-//
-//   @override
-//   State<ECheckService> createState() => _ECheckServiceState();
-// }
-
-// class _ECheckServiceState extends State<ECheckService> {
-//   bool check = false;
-//
-//   checkBoxWorkout() async {
-//     if (widget.serviceArray.contains(widget.id)) {
-//       setState(() {
-//         check = true;
-//       });
-//     } else {
-//       setState(() {
-//         check = false;
-//       });
-//     }
-//   }
-//
-//   @override
-//   void initState() {
-//     checkBoxWorkout();
-//     print(widget.serviceArray);
-//     super.initState();
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//       child: Column(
-//         children: [
-//           CheckboxListTile(
-//               // bool selected=false;
-//               value: check,
-//               title: Text(widget.type),
-//               onChanged: (bool? selected) async {
-//                 setState(() {
-//                   check = selected!;
-//                 });
-//                 if (selected == true) {
-//                   await FirebaseFirestore.instance
-//                       .collection('product_details')
-//                       .doc(widget.gymid)
-//                       .update({
-//                     'service': FieldValue.arrayUnion([widget.type])
-//                   });
-//                 }
-//                 // print(widget.arr2);
-//                 if (selected == false) {
-//                   await FirebaseFirestore.instance
-//                       .collection('product_details')
-//                       .doc(widget.gymid)
-//                       .update({
-//                     'service': FieldValue.arrayRemove([widget.type])
-//                   });
-//                 }
-//                 // print(widget.arr2);
-//               }),
-//         ],
-//       ),
-//     );
-//   }
-// }
-
 class ECheckBoxWorkout extends StatefulWidget {
   final String type;
   final String id;
@@ -1905,6 +1677,8 @@ class _ECheckBoxWorkoutState extends State<ECheckBoxWorkout> {
     );
   }
 }
+
+var image2 = "";
 
 class ProductEditBox extends StatefulWidget {
   const ProductEditBox({
@@ -2076,50 +1850,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                       );
                     }),
               ),
-// <<<<<<< HEAD
-// <<<<<<< HEAD
-// =======
-//
-// >>>>>>> db16c184745ea062b80bb6d62b73b5f64792dc9e
-              Row(
-                children: [
-                  ElevatedButton(
-                    onPressed: () async {
-                      // dic = await chooseImage();
-                      image = uploadToStroagees();
-                    },
-                    child: const Text(
-                      'Upload Gym Image',
-                      style: TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.w700),
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 20,
-                  ),
-                  image != null
-                      ? Image(
-                          image: NetworkImage('$image'),
-                          height: 200,
-                          width: 200,
-                        )
-                      : Container(
-                          color: Colors.black,
-                          height: 200,
-                          width: 200,
-                        )
-                ],
-// <<<<<<< HEAD
-// =======
-              ),
-//
-//                Text("Services",
-//               style: GoogleFonts.poppins(
-//                 fontSize: 25,
-//                 fontWeight: FontWeight.w700
-// // >>>>>>> db16c184745ea062b80bb6d62b73b5f64792dc9e
-//               ),
-// =======
+
               Text(
                 "Services",
                 style: GoogleFonts.poppins(
@@ -2183,6 +1914,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                         'gym_owner': _gymowner.text,
                         'landmark': _landmark.text,
                         'description': _description.text,
+                        'display_picture': image2,
                       };
                       await documentReference
                           .update(data)
@@ -2218,8 +1950,62 @@ class _ProductEditBoxState extends State<ProductEditBox> {
         String downloadUrl = await snapshot.ref.getDownloadURL();
         setState(() {
           image = downloadUrl;
+          image2 = downloadUrl;
         });
       });
     });
+  }
+}
+
+class datacelldisplay extends StatefulWidget {
+  const datacelldisplay({Key? key, required this.disimg, required this.idd})
+      : super(key: key);
+  final String disimg;
+  final String idd;
+  @override
+  State<datacelldisplay> createState() => _datacelldisplayState();
+}
+
+class _datacelldisplayState extends State<datacelldisplay> {
+  @override
+  bool isloadingg = false;
+  Widget build(BuildContext context) {
+    return Center(
+      child: Row(children: [
+        Column(
+          children: [
+            IconButton(
+                onPressed: () async {
+                  setState(() {
+                    isloadingg = true;
+                  });
+                  var image2 = await chooseImage();
+                  await addImageToStorage(image2, widget.idd);
+                },
+                icon: const Icon(Icons.camera_alt_outlined)),
+            const Text("Display Picture"),
+          ],
+        ),
+        isloadingg
+            ? widget.disimg != null
+                ? Container(
+                    height: 100,
+                    width: 200,
+                    child: Image.network(widget.disimg),
+                  )
+                : Container(
+                    height: 100,
+                    width: 200,
+                    child: Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  )
+            : Container(
+                height: 100,
+                width: 200,
+                child: Image.network(widget.disimg),
+              ),
+      ]),
+    );
   }
 }
