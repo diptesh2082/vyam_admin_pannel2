@@ -140,6 +140,12 @@ class _CancelationPageState extends State<CancelationPage> {
                             ),
                             DataColumn(
                               label: Text(
+                                'Vendor ID',
+                                style: TextStyle(fontWeight: FontWeight.w600),
+                              ),
+                            ),
+                            DataColumn(
+                              label: Text(
                                 'Vendor Name',
                                 style: TextStyle(fontWeight: FontWeight.w600),
                               ),
@@ -255,7 +261,7 @@ class _CancelationPageState extends State<CancelationPage> {
 
   DataRow _buildListItem(BuildContext context, DocumentSnapshot data, int index,
       int start, int end) {
-    String Id = data['Id'];
+    String Id = data.id;
     return DataRow(
       cells: [
         DataCell(data != null ? Text(index.toString()) : const Text("")),
@@ -272,6 +278,16 @@ class _CancelationPageState extends State<CancelationPage> {
               ? SizedBox(
                   width: 100.0,
                   child: Text(data['user_name'] ?? ""),
+                )
+              : const Text(""),
+        ),
+        DataCell(
+          data['vendor_id'] != null
+              ? SizedBox(
+                  width: 200.0,
+                  child: Text(
+                    data['cancel_remark'],
+                  ),
                 )
               : const Text(""),
         ),
