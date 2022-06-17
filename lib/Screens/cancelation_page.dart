@@ -128,7 +128,19 @@ class _CancelationPageState extends State<CancelationPage> {
                             )),
                             DataColumn(
                               label: Text(
+                                'Booking ID',
+                                style: TextStyle(fontWeight: FontWeight.w600),
+                              ),
+                            ),
+                            DataColumn(
+                              label: Text(
                                 'User Name',
+                                style: TextStyle(fontWeight: FontWeight.w600),
+                              ),
+                            ),
+                            DataColumn(
+                              label: Text(
+                                'Vendor Name',
                                 style: TextStyle(fontWeight: FontWeight.w600),
                               ),
                             ),
@@ -248,10 +260,26 @@ class _CancelationPageState extends State<CancelationPage> {
       cells: [
         DataCell(data != null ? Text(index.toString()) : const Text("")),
         DataCell(
+          data['booking_id'] != null
+              ? SizedBox(
+                  width: 100.0,
+                  child: Text(data['booking_id'] ?? ""),
+                )
+              : const Text(""),
+        ),
+        DataCell(
           data['user_name'] != null
               ? SizedBox(
                   width: 100.0,
                   child: Text(data['user_name'] ?? ""),
+                )
+              : const Text(""),
+        ),
+        DataCell(
+          data['vendor_name'] != null
+              ? SizedBox(
+                  width: 100.0,
+                  child: Text(data['vendor_name'] ?? ""),
                 )
               : const Text(""),
         ),
