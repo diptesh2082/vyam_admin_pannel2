@@ -84,6 +84,7 @@ class _TrackingScreenState extends State<TrackingScreen> {
                     stream: FirebaseFirestore.instance
                         .collection('bookings')
                         .where('booking_status', isEqualTo: 'incomplete')
+                        .orderBy('order_date' , descending: true)
                         .snapshots(),
                     builder: (context, AsyncSnapshot snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
@@ -129,7 +130,7 @@ class _TrackingScreenState extends State<TrackingScreen> {
                             columns: const [
                               DataColumn(
                                   label: Text(
-                                'Booking ID',
+                                'Index',
                                 style: TextStyle(fontWeight: FontWeight.w600),
                               )),
                               // DataColumn(
@@ -139,7 +140,6 @@ class _TrackingScreenState extends State<TrackingScreen> {
                               //       style: TextStyle(fontWeight: FontWeight.w600),
                               //     )),
                               DataColumn(
-                                // >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
                                 label: Text(
                                   'User Name',
                                   style: TextStyle(fontWeight: FontWeight.w600),
@@ -164,32 +164,32 @@ class _TrackingScreenState extends State<TrackingScreen> {
                               ),
                               DataColumn(
                                 label: Text(
-                                  'Package Type',
+                                  'Package \n Type',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
                               DataColumn(
                                 label: Text(
-                                  'Total Days',
+                                  'Total \n Days',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
                               DataColumn(
                                 label: Text(
-                                  'Start Date',
+                                  'Start \n Date',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
 
                               DataColumn(
                                 label: Text(
-                                  'End Date',
+                                  'End \n Date',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
                               DataColumn(
                                 label: Text(
-                                  'Booking Date',
+                                  'Booking \n Date',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
@@ -201,7 +201,7 @@ class _TrackingScreenState extends State<TrackingScreen> {
                               ),
                               DataColumn(
                                 label: Text(
-                                  'Grand Total',
+                                  'Grand \n Total',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
@@ -225,16 +225,16 @@ class _TrackingScreenState extends State<TrackingScreen> {
                               DataColumn(
                                 label: Text(
                                   // >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
-                                  'Booking Status',
+                                  'Booking \n Status',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
-                              DataColumn(
-                                label: Text(
-                                  'Edit',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
-                              ),
+                              // DataColumn(
+                              //   label: Text(
+                              //     'Edit',
+                              //     style: TextStyle(fontWeight: FontWeight.w600),
+                              //   ),
+                              // ),
                               DataColumn(
                                 label: Text(
                                   'Delete',
@@ -247,12 +247,12 @@ class _TrackingScreenState extends State<TrackingScreen> {
                     },
                   ),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     ElevatedButton(
-                      child: Text("Previous Page"),
+                      child: const Text("Previous Page"),
                       onPressed: () {
                         setState(() {
                           if (start >= 1) page--;
@@ -264,6 +264,7 @@ class _TrackingScreenState extends State<TrackingScreen> {
                         print("Previous Page");
                       },
                     ),
+                    const SizedBox(width: 20),
                     Container(
                       margin: EdgeInsets.symmetric(horizontal: 20),
                       child: Text(
@@ -275,7 +276,7 @@ class _TrackingScreenState extends State<TrackingScreen> {
                       ),
                     ),
                     ElevatedButton(
-                      child: Text("Next Page"),
+                      child: const Text("Next Page"),
                       onPressed: () {
                         if (end <= length) page++;
                         setState(() {
@@ -305,6 +306,7 @@ class _TrackingScreenState extends State<TrackingScreen> {
   List<DataRow> _buildlist(
       BuildContext context, List<DocumentSnapshot> snapshot) {
     var d = 1;
+    var w = 1;
     var s = start + 1;
     var snap = [];
     length = snapshot.length;
@@ -314,7 +316,7 @@ class _TrackingScreenState extends State<TrackingScreen> {
       }
     });
     return snap
-        .map((data) => _buildListItem(context, data, s++, start, end))
+        .map((data) => _buildListItem(context, data, s++, start, end ))
         .toList();
   }
 
@@ -330,24 +332,18 @@ class _TrackingScreenState extends State<TrackingScreen> {
     String bookingDate =
         "${data['booking_date'].toDate().year}/${data['booking_date'].toDate().month}/${data['booking_date'].toDate().day}";
     return DataRow(cells: [
-      DataCell(
-          data["id"] != null ? Text(data['id'].toString()) : const Text("")),
-
-      // <<<<<<< HEAD
-      // =======
-      //
-      //
-      // >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
-// >>>>>>> ae7259e7ba6e19ed4976a35667cb3a762fe66e2c
+      DataCell(index != null
+          ? Text(index.toString())
+          : const Text("")),
       DataCell(data['user_name'] != null
           ? Text(data['user_name'].toString())
           : const Text("")),
       DataCell(data['userId'] != null
           ? Text(data['userId'].toString().substring(3, 13))
-          : Text("")),
+          : const Text("")),
       DataCell(data["gym_details"] != null
           ? Text(
-              '${data['gym_details']['name'].toString().toUpperCase()}|${data['gym_details']['branch'].toString().toUpperCase()}')
+              '${data['gym_details']['name'].toString().toUpperCase()}\n ${data['gym_details']['branch'].toString().toUpperCase()}')
           : const Text("")),
 
       DataCell(data['package_type'] != null
@@ -360,16 +356,12 @@ class _TrackingScreenState extends State<TrackingScreen> {
           ? Text(data['totalDays'].toString())
           : const Text("")),
 
-      // DataCell(data['order_date'] != null ? Text(orderDate) : const Text("")),
-      // =======
       DataCell(data['booking_date'] != null ? Text(orderDate) : const Text("")),
-
-      // >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
-// >>>>>>> ae7259e7ba6e19ed4976a35667cb3a762fe66e2c
       DataCell(data['plan_end_duration'] != null
           ? Text(durationEnd)
           : const Text("")),
       DataCell(data['order_date'] != null ? Text(orderDate) : const Text("")),
+
       DataCell(data['discount'] != null
           ? Text('₹${data['discount'].toString()}')
           : const Text("")),
@@ -417,109 +409,39 @@ class _TrackingScreenState extends State<TrackingScreen> {
       // DataCell(data['grand_total'] != null
       //     ? Text('₹${data['grand_total'].toString()}')
       //     : const Text("")),
-      DataCell(const Text(""), showEditIcon: true, onTap: () {
-        Get.to(
-          () => ProductEditBox(
-// <<<<<<< HEAD
-// <<<<<<< HEAD
-// =======
-// =======
-//       DataCell(data['booking_plan'] != null
-//           ? Text(data['booking_plan'].toString())
-//           : const Text("")),
-//       DataCell(data['grand_total'] != null
-//           ? Text('₹${data['grand_total'].toString()}')
-//           : const Text("")),
-
-//       DataCell(const Text(""), showEditIcon: true, onTap: () {
-//         Get.to(
-//               () => ProductEditBox(
-// >>>>>>> Diptesh
-// >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
-// =======
-//     <<<<<<< HEAD
-//     =======
-// // =======
-// //       DataCell(data['booking_plan'] != null
-// //           ? Text(data['booking_plan'].toString())
-// //           : const Text("")),
-// //       DataCell(data['grand_total'] != null
-// //           ? Text('₹${data['grand_total'].toString()}')
-// //           : const Text("")),
-//
-// //       DataCell(const Text(""), showEditIcon: true, onTap: () {
-// //         Get.to(
-// //               () => ProductEditBox(
-// // >>>>>>> Diptesh
-//     >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
-// >>>>>>> ae7259e7ba6e19ed4976a35667cb3a762fe66e2c
-            vendorid: data['vendorId'],
-            username: data['user_name'],
-            userid: data['userId'],
-            totalprice: data['total_price'].toString(),
-            totaldays: data['totalDays'].toString(),
-            taxpay: data['tax_pay'].toString(),
-            planendyear: data['plan_end_duration'].toDate().year.toString(),
-            planendmonth: data['plan_end_duration'].toDate().month.toString(),
-            planendday: data['plan_end_duration'].toDate().day.toString(),
-            paymentdone: data['payment_done'].toString(),
-            packagetype: data['package_type'],
-            orderyear: data['order_date'].toDate().year.toString(),
-            ordermonth: data['order_date'].toDate().month.toString(),
-            orderday: data['order_date'].toDate().day.toString(),
-            gymname: data["gym_details"]['name'],
-            gymaddress: data['gym_address'].toString(),
-            grandtotal: data['grand_total'].toString(),
-            discount: data['discount'].toString(),
-            daysleft: data['daysLeft'],
-            bookingstatus: data['booking_status'],
-            bookingprice: data['booking_price'].toString(),
-            bookingplan: data['booking_plan'],
-            bookingid: data['booking_id'],
-            bookingyear: data['booking_date'].toDate().year.toString(),
-            bookingmonth: data['booking_date'].toDate().month.toString(),
-            bookingday: data['booking_date'].toDate().day.toString(),
-            bookingaccepted: data['booking_accepted'].toString(),
-          ),
-        );
-        // showDialog(
-        //     context: context,
-        //     builder: (context) {
-        //       return SingleChildScrollView(
-        //         child: ProductEditBox(
-        //           vendorid: data['vendorId'],
-        //           username: data['user_name'],
-        //           userid: data['userId'],
-        //           totalprice: data['total_price'].toString(),
-        //           totaldays: data['totalDays'].toString(),
-        //           taxpay: data['tax_pay'].toString(),
-        //           planendyear:
-        //               data['plan_end_duration'].toDate().year.toString(),
-        //           planendmonth:
-        //               data['plan_end_duration'].toDate().month.toString(),
-        //           planendday: data['plan_end_duration'].toDate().day.toString(),
-        //           paymentdone: data['payment_done'].toString(),
-        //           packagetype: data['package_type'],
-        //           orderyear: data['order_date'].toDate().year.toString(),
-        //           ordermonth: data['order_date'].toDate().month.toString(),
-        //           orderday: data['order_date'].toDate().day.toString(),
-        //           gymname: data["gym_details"]['name'],
-        //           gymaddress: data['gym_address'].toString(),
-        //           grandtotal: data['grand_total'].toString(),
-        //           discount: data['discount'].toString(),
-        //           daysleft: data['daysLeft'],
-        //           bookingstatus: data['booking_status'],
-        //           bookingprice: data['booking_price'].toString(),
-        //           bookingplan: data['booking_plan'],
-        //           bookingid: data['booking_id'],
-        //           bookingyear: data['booking_date'].toDate().year.toString(),
-        //           bookingmonth: data['booking_date'].toDate().month.toString(),
-        //           bookingday: data['booking_date'].toDate().day.toString(),
-        //           bookingaccepted: data['booking_accepted'].toString(),
-        //         ),
-        //       );
-        // }
-      }),
+      // DataCell(const Text(""), showEditIcon: true, onTap: () {
+      //   Get.to(
+      //     () => ProductEditBox(
+      //       vendorid: data['vendorId'],
+      //       username: data['user_name'],
+      //       userid: data['userId'],
+      //       totalprice: data['total_price'].toString(),
+      //       totaldays: data['totalDays'].toString(),
+      //       taxpay: data['tax_pay'].toString(),
+      //       planendyear: data['plan_end_duration'].toDate().year.toString(),
+      //       planendmonth: data['plan_end_duration'].toDate().month.toString(),
+      //       planendday: data['plan_end_duration'].toDate().day.toString(),
+      //       paymentdone: data['payment_done'].toString(),
+      //       packagetype: data['package_type'],
+      //       orderyear: data['order_date'].toDate().year.toString(),
+      //       ordermonth: data['order_date'].toDate().month.toString(),
+      //       orderday: data['order_date'].toDate().day.toString(),
+      //       gymname: data["gym_details"]['name'],
+      //       gymaddress: data['gym_address'].toString(),
+      //       grandtotal: data['grand_total'].toString(),
+      //       discount: data['discount'].toString(),
+      //       daysleft: data['daysLeft'],
+      //       bookingstatus: data['booking_status'],
+      //       bookingprice: data['booking_price'].toString(),
+      //       bookingplan: data['booking_plan'],
+      //       bookingid: data['booking_id'],
+      //       bookingyear: data['booking_date'].toDate().year.toString(),
+      //       bookingmonth: data['booking_date'].toDate().month.toString(),
+      //       bookingday: data['booking_date'].toDate().day.toString(),
+      //       bookingaccepted: data['booking_accepted'].toString(),
+      //     ),
+      //   );
+      // }),
       DataCell(const Icon(Icons.delete), onTap: () {
         deleteMethod(stream: bookingStream, uniqueDocId: bookingId);
       })

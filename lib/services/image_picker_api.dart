@@ -101,7 +101,6 @@ uploadImageToUser(XFile? pickedFile, String? id) async {
   if (kIsWeb) {
     Reference _reference = FirebaseStorage.instance
         .ref()
-        .child("user_image")
         .child('Users/${Path.basename(pickedFile!.path)}');
     await _reference
         .putData(
@@ -131,6 +130,30 @@ addImageToStorage(XFile? pickedFile, String? id) async {
         .ref()
         .child("product_image")
         .child('images/${Path.basename(pickedFile!.path)}');
+    await _reference
+        .putData(
+      await pickedFile.readAsBytes(),
+      SettableMetadata(contentType: 'image/jpeg'),
+    )
+        .whenComplete(() async {
+      await _reference.getDownloadURL().then((value) async {
+        var uploadedPhotoUrl = value;
+        print(value);
+        await FirebaseFirestore.instance
+            .collection("product_details")
+            .doc(id)
+            .update({"display_picture": value});
+      });
+    });
+  } else {
+//write a code for android or ios
+  }
+}
+
+addImageToCategory(XFile? pickedFile, String? id) async {
+  if (kIsWeb) {
+    Reference _reference =
+        _firebaseStorage.child('category/${Path.basename(pickedFile!.path)}');
     await _reference
         .putData(
       await pickedFile.readAsBytes(),

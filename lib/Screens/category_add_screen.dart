@@ -81,7 +81,7 @@ class _categoryAddScreenState extends State<categoryAddScreen> {
                   customTextField3(hinttext: "Name", addcontroller: _addName),
                   // customTextField3(
                   //     hinttext: "Status", addcontroller: _addStatus),
-                  Text("Choose Position Except These"),
+                  const Text("Choose Position Except These"),
                   Container(
                     height: 100,
                     width: 700,
@@ -95,7 +95,7 @@ class _categoryAddScreenState extends State<categoryAddScreen> {
                               itemBuilder: (BuildContext context, int index) {
                                 return Text(
                                   "${doc[index]['position'].toString()}, ",
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontSize: 24,
                                       fontWeight: FontWeight.bold),
                                 );
@@ -105,7 +105,79 @@ class _categoryAddScreenState extends State<categoryAddScreen> {
 
                   customTextField3(
                       hinttext: "Position", addcontroller: _addPosition),
-                  loadimage(),
+                  const loadimage(),
+
+                  // Container(
+                  //   padding: const EdgeInsets.all(20),
+                  //   child: Row(
+                  //     children: [
+                  //       const Text(
+                  //         'Upload Image: ',
+                  //         style: TextStyle(
+                  //             color: Colors.grey,
+                  //             fontWeight: FontWeight.bold,
+                  //             fontSize: 15),
+                  //       ),
+                  //       const SizedBox(
+                  //         width: 20,
+                  //       ),
+                  //       InkWell(
+                  //         onTap: () async {
+                  //           image = await chooseImage();
+                  //           await getUrlImage(image);
+                  //         },
+                  //         child: const Icon(
+                  //           Icons.upload_file_outlined,
+                  //         ),
+                  //       ),
+                  //       SizedBox(
+                  //           width: 300,
+                  //           height: 200,
+                  //           child: imgUrl1 != null
+                  //               ? Container(
+                  //             child: Image.network(imgUrl1),
+                  //           )
+                  //               : Container(
+                  //             color: Colors.white,
+                  //             child: const Center(
+                  //                 child: Text(
+                  //                   'Please Upload Image',
+                  //                   style: TextStyle(
+                  //                       color: Colors.black,
+                  //                       fontWeight: FontWeight.bold,
+                  //                       fontSize: 24),
+                  //                 )),
+                  //           )),
+                  //     ],
+                  //   ),
+                  // ),
+                  //
+                  // Column(
+                  //   children: [
+                  //     // const Text(
+                  //     //   "Status",
+                  //     //   style: TextStyle(
+                  //     //       fontSize: 20, fontWeight: FontWeight.w100),
+                  //     // ),
+                  //     // Container(
+                  //     //   color: Colors.white10,
+                  //     //   width: 120,
+                  //     //   child: DropdownButton(
+                  //     //       hint: Text('$print_type'),
+                  //     //       items: const [
+                  //     //         DropdownMenuItem(
+                  //     //           child: Text("TRUE"),
+                  //     //           value: true,
+                  //     //         ),
+                  //     //         DropdownMenuItem(
+                  //     //           child: Text("FALSE"),
+                  //     //           value: false,
+                  //     //         ),
+                  //     //       ],
+                  //     //       onChanged: dropDowntype),
+                  //     // ),
+                  //   ],
+                  // ),
 
                   // Column(
                   //   children: [
