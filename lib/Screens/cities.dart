@@ -69,7 +69,7 @@ class _AmenetiesScreenState extends State<AmenetiesScreen> {
   }
 
   var start = 0;
-
+  var page = 1;
   var end = 10;
   var length;
 

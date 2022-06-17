@@ -126,6 +126,8 @@ class _ReviewPage extends State<ReviewPage> {
                       child: Text("Previous Page"),
                       onPressed: () {
                         setState(() {
+                          if (start >= 1) page--;
+
                           if (start > 0 && end > 0) {
                             start = start - 10;
                             end = end - 10;
@@ -134,11 +136,21 @@ class _ReviewPage extends State<ReviewPage> {
                         print("Previous Page");
                       },
                     ),
-                    SizedBox(width: 20),
+                    Container(
+                      margin: EdgeInsets.symmetric(horizontal: 20),
+                      child: Text(
+                        page.toString(),
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15,
+                            color: Colors.teal),
+                      ),
+                    ),
                     ElevatedButton(
                       child: Text("Next Page"),
                       onPressed: () {
                         setState(() {
+                          if (end <= length) page++;
                           if (end < length) {
                             start = start + 10;
                             end = end + 10;
@@ -158,7 +170,7 @@ class _ReviewPage extends State<ReviewPage> {
   }
 
   var start = 0;
-
+  var page = 1;
   var end = 10;
   var length;
 

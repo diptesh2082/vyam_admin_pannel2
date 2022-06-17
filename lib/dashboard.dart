@@ -1,3 +1,4 @@
+import 'package:admin_panel_vyam/Screens/Collection_info.dart';
 import 'package:admin_panel_vyam/Screens/Product%20Details/Trainers/Trainers.dart';
 import 'package:admin_panel_vyam/Screens/banners.dart';
 import 'package:admin_panel_vyam/Screens/category_screen.dart';
@@ -51,16 +52,20 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                   MaterialPageRoute(
                       builder: (context) => CategoryInfoScreen()));
             },
-            child: buildDashBoardCard(
-              title: 'Categories',
-              collectionID: 'category',
+            child: Cardd(
+              title: "Categories",
+              collectionId: "category",
+              color: Colors.teal,
             ),
           );
         }
         if (i == 1) {
           return GestureDetector(
-            child: buildDashBoardCard(
-                title: 'Vendor', collectionID: 'product_details'),
+            child: Cardd(
+              title: 'Vendor',
+              collectionId: 'product_details',
+              color: Colors.red,
+            ),
             onTap: () {
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) => ProductDetails()));
@@ -69,7 +74,7 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
         }
         if (i == 2) {
           return GestureDetector(
-            child: buildDashBoardCard(title: 'Per Day', count: 16),
+            child: Cardd(title: 'Per Day', collectionId: 'product_details'),
             onTap: () {
               // Navigator.push(context,
               //   MaterialPageRoute(builder: (context) => ProductDetails()));
@@ -78,8 +83,7 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
         }
         if (i == 3) {
           return GestureDetector(
-            child: buildDashBoardCard(
-                title: 'Banner', collectionID: 'banner_details'),
+            child: Cardd(title: 'Banner', collectionId: 'banner_details'),
             onTap: () {
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) => BannerPage()));
@@ -88,8 +92,11 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
         }
         if (i == 4) {
           return GestureDetector(
-            child: buildDashBoardCard(
-                title: 'Total Bookings', collectionID: 'bookings'),
+            child: Cardd(
+              title: 'Total Bookings',
+              collectionId: 'bookings',
+              s: ['active', 'cancelled', 'upcoming', 'completed'],
+            ),
             onTap: () {
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) => BookingDetails()));
@@ -99,26 +106,25 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
 
         if (i == 5) {
           return GestureDetector(
-            child: buildDashBoardCard(
-                title: 'Total Confirm',
-                collectionID: 'bookings',
-                iss: true,
-                state: 'completed'),
+            child: Cardd(
+                title: 'Upcoming Bookings',
+                collectionId: 'bookings',
+                s: ['upcoming']),
             onTap: () {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => BookingDetails1(st: 'completed')));
+                      builder: (context) => BookingDetails1(st: 'upcoming')));
             },
           );
         }
         if (i == 6) {
           return GestureDetector(
-            child: buildDashBoardCard(
-                title: 'Total Active',
-                collectionID: 'bookings',
-                state: 'active',
-                iss: true),
+            child: Cardd(
+              title: 'Total Active',
+              collectionId: 'bookings',
+              s: ['active'],
+            ),
             onTap: () {
               Navigator.push(
                   context,
@@ -129,11 +135,10 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
         }
         if (i == 7) {
           return GestureDetector(
-            child: buildDashBoardCard(
+            child: Cardd(
                 title: 'Total Complete',
-                iss: true,
-                state: 'completed',
-                collectionID: 'bookings'),
+                s: ['completed'],
+                collectionId: 'bookings'),
             onTap: () {
               Navigator.push(
                   context,
@@ -144,12 +149,11 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
         }
         if (i == 8) {
           return GestureDetector(
-            child: buildDashBoardCard(
-                title: 'Total Cancel',
-                count: 4,
-                collectionID: 'bookings',
-                state: 'cancelled',
-                iss: true),
+            child: Cardd(
+              title: 'Total Cancel',
+              collectionId: 'bookings',
+              s: ['cancelled'],
+            ),
             onTap: () {
               Navigator.push(
                   context,
@@ -160,15 +164,17 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
         }
         if (i == 9) {
           return GestureDetector(
-            child: buildDashBoardCard(
-                title: 'Total Bookings', collectionID: 'bookings'),
+            child: Cardd(
+              title: 'Total Users',
+              collectionId: 'user_details',
+            ),
             onTap: () {
               Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => BookingDetails()));
+                  MaterialPageRoute(builder: (context) => UserInformation()));
             },
           );
         }
-        return buildDashBoardCard();
+        return Spacer();
       },
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 4,
@@ -311,8 +317,12 @@ class _showLatestBookingState extends State<showLatestBooking> {
                   child: StreamBuilder<QuerySnapshot>(
                     stream: FirebaseFirestore.instance
                         .collection('bookings')
-                        .where('booking_status',
-                            whereIn: ['upcoming', 'active', 'completed' , 'cancelled'])
+                        .where('booking_status', whereIn: [
+                          'upcoming',
+                          'active',
+                          'completed',
+                          'cancelled'
+                        ])
                         .orderBy("order_date", descending: true)
                         .snapshots(),
                     builder: (context, AsyncSnapshot snapshot) {
@@ -439,8 +449,9 @@ class _showLatestBookingState extends State<showLatestBooking> {
           ? Text(data['booking_plan'].toString())
           : const Text("")),
       DataCell(data['gym_details']['name'] != null
-          ? Text('${data['gym_details']['name']}\n ${data['gym_details']['branch']}'.toString())
-          : const Text("")),
+          ? Text('${data['gym_details']['name']}\n ${data['gym_details']['branch']}'.toString()):const Text('')),
+
+
       DataCell(data['booking_date'] != null
           ? Text(DateFormat('dd MMM , yyyy')
               .format(data['booking_date'].toDate())
@@ -487,14 +498,106 @@ class _showLatestBookingState extends State<showLatestBooking> {
           ),
         ),
       ),
-
       DataCell(data["payment_method"] != null
           ? Text(data['payment_method'].toString().toUpperCase())
           : const Text("")),
       DataCell(data["grand_total"] != null
           ? Text(data['grand_total'].toString().toUpperCase())
           : const Text("")),
-
     ]);
+  }
+}
+
+class Cardd extends StatelessWidget {
+  Cardd({Key? key, this.title, this.collectionId, this.color, this.s})
+      : super(key: key);
+  final title;
+  final collectionId;
+  final color;
+  final s;
+  bool isHovering = false;
+
+  // @override
+  // void initState() {
+  //   // TODO: implement initState
+  //   categoryStream = FirebaseFirestore.instance.collection("category");
+  //   productStream = FirebaseFirestore.instance.collection("product_details");
+  //   bannerStream = FirebaseFirestore.instance.collection("banner_details");
+  //   bookingStream = FirebaseFirestore.instance.collection("bookings");
+  //
+  //   super.initState();
+  // }
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder(
+        stream: FirebaseFirestore.instance
+            .collection(collectionId)
+            .where('booking_status', whereIn: s)
+            .snapshots(),
+        builder: (context, AsyncSnapshot snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          int count = snapshot.data.docs.length.toInt();
+          return InkWell(
+            hoverColor: isHovering == true ? Colors.green : Colors.amber,
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+              width: 300,
+              height: 100,
+              decoration: BoxDecoration(
+                color: color != null
+                    ? color
+                    : (count % 2 == 0)
+                        ? Colors.red
+                        : Colors.blue,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  CircleAvatar(
+                    backgroundColor: Colors.white,
+                    radius: 30,
+                    child: Icon(
+                      Icons.trending_up,
+                      color: Colors.blue,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: FittedBox(
+                      child: Column(
+                        // mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Text(
+                            title!,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 14,
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 8,
+                          ),
+                          Text(
+                            snapshot.data.docs.length.toString(),
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 25,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
   }
 }

@@ -23,6 +23,7 @@ import 'package:admin_panel_vyam/services/CustomTextFieldClass.dart';
 List<String> arr = [];
 List<String> workoutArray = [];
 List<String> d = [];
+var image;
 
 class ProductDetails extends StatefulWidget {
   const ProductDetails({
@@ -63,6 +64,7 @@ class _ProductDetailsState extends State<ProductDetails> {
         child: Material(
           elevation: 8,
           child: Container(
+            // margin: EdgeInsets.only(bottom: 10),
             height: 800,
             width: 1450,
             padding: const EdgeInsets.symmetric(horizontal: 5),
@@ -172,7 +174,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                           child: DataTable(
                               // ? DATATABLE
                               dataRowHeight: 65,
-                              columns: const [
+                              columns:  const [
                                 DataColumn(
                                     label: Text(
                                   'Index',
@@ -324,6 +326,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                       },
                     ),
                   ),
+// <<<<<<< HEAD
                   const SizedBox(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -353,9 +356,56 @@ class _ProductDetailsState extends State<ProductDetails> {
                           print("Next Page");
                         },
                       ),
-                    ],
+
+
+                  SizedBox(height: 20),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        ElevatedButton(
+                          child: Text("Previous Page"),
+                          onPressed: () {
+                            setState(() {
+                              if (start >= 1) page--;
+                              if (start > 0 && end > 0) {
+                                start = start - 10;
+                                end = end - 10;
+                              }
+                            });
+                            print("Previous Page");
+                          },
+                        ),
+                        Container(
+                          margin: EdgeInsets.symmetric(horizontal: 20),
+                          child: Text(
+                            page.toString(),
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15,
+                                color: Colors.teal),
+                          ),
+                        ),
+                        ElevatedButton(
+                          child: Text("Next Page"),
+                          onPressed: () {
+                            setState(() {
+                              if (end <= length) page++;
+                              if (end < length) {
+                                start = start + 10;
+                                end = end + 10;
+                              }
+                            });
+                            print("Next Page");
+                          },
+                        ),
+                      ],
+                    ),
                   ),
-                ],
+                 ]
+                  )
+                    ],
               ),
             ),
           ),
@@ -372,38 +422,8 @@ class _ProductDetailsState extends State<ProductDetails> {
     return [];
   }
 
-  // Future<String> uploadimage(XFile image) async {
-  //   var x = Random().nextInt(9999);
-  //   if (x < 1000) {
-  //     x = x + 1000;
-  //   }
-  //   Reference db =
-  //       FirebaseStorage.instance.ref().child("product_image").child("${x}");
-  //   await db.putFile(File(image.path));
-  //   // await db.putFile(File(image.path));
-  //   return await db.getDownloadURL();
-  // }
-  //
-  // String getImageName(XFile image) {
-  //   return image.path.split("/").last;
-  // }
-  //
-  // Future<List<String>> multiimageuploader(List<XFile> list) async {
-  //   List<String> _path = [];
-  //   for (XFile _image in list) {
-  //     _path.add(await uploadimage(_image));
-  //   }
-  //   return _path;
-  // }
-
-  // final TextEditingController morning = TextEditingController();
-  // final TextEditingController evening = TextEditingController();
-  // final TextEditingController closed = TextEditingController();
-  // final TextEditingController morning_days = TextEditingController();
-  // final TextEditingController evening_days = TextEditingController();
-
   var start = 0;
-
+  var page = 1;
   var end = 10;
   var length;
   List<DataRow> _buildlist(
@@ -822,7 +842,7 @@ class _ShowAddBoxState extends State<ShowAddBox> {
   var dic;
   var multipic;
   var impath;
-  var image;
+  bool isloading = false;
 
   // var xs;
   bool selected = false;
@@ -1185,35 +1205,42 @@ class _ShowAddBoxState extends State<ShowAddBox> {
               const SizedBox(
                 height: 20,
               ),
-              Row(
-                children: [
-                  ElevatedButton(
-                    onPressed: () async {
-                      // dic = await chooseImage();
-                      image = uploadToStroagees();
-                    },
-                    child: const Text(
-                      'Upload Gym Image',
-                      style: TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.w700),
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 20,
-                  ),
-                  image != null
-                      ? Image(
-                          image: NetworkImage('$image'),
-                          height: 200,
-                          width: 200,
-                        )
-                      : Container(
-                          color: Colors.black,
-                          height: 200,
-                          width: 200,
-                        )
-                ],
-              ),
+              loadimage(id: _addgymownerid.text),
+              // Row(
+              //   children: [
+              //     ElevatedButton(
+              //       onPressed: () async {
+              //         // dic = await chooseImage();
+              //         setState(() {
+              //           isloading = true;
+              //         });
+              //         image = await uploadToStroagees();
+              //         setState(() {
+              //           isloading = false;
+              //         });
+              //       },
+              //       child: const Text(
+              //         'Upload Gym Image',
+              //         style: TextStyle(
+              //             color: Colors.white, fontWeight: FontWeight.w700),
+              //       ),
+              //     ),
+              //     const SizedBox(
+              //       width: 20,
+              //     ),
+              //     isloading
+              //         ? Container(
+              //             child: CircularProgressIndicator(),
+              //             height: 200,
+              //             width: 200,
+              //           )
+              //         : Image(
+              //             image: NetworkImage('$image'),
+              //             height: 200,
+              //             width: 200,
+              //           )
+              //   ],
+              // ),
 
               const SizedBox(height: 10),
               Text(
@@ -1374,6 +1401,60 @@ class _ShowAddBoxState extends State<ShowAddBox> {
       ),
     );
   }
+}
+
+class loadimage extends StatefulWidget {
+  const loadimage({Key? key, required this.id}) : super(key: key);
+  final id;
+  @override
+  State<loadimage> createState() => _loadimageState();
+}
+
+class _loadimageState extends State<loadimage> {
+  bool isloading = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        child: Row(
+      children: [
+        ElevatedButton(
+          onPressed: () async {
+            // dic = await chooseImage();
+            setState(() {
+              isloading = true;
+            });
+            image = await uploadToStroagees();
+            // .then(setState(() {
+            //   isloading = false;
+            // }));
+          },
+          child: const Text(
+            'Upload Gym Image',
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
+          ),
+        ),
+        const SizedBox(
+          width: 20,
+        ),
+        isloading
+            ? Container(
+                child: image != null
+                    ? Image(
+                        image: NetworkImage('$image'),
+                        height: 200,
+                        width: 200,
+                      )
+                    : Center(child: CircularProgressIndicator()))
+            : Container(
+                child: Text(
+                "Please Upload Image",
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                textAlign: TextAlign.center,
+              ))
+      ],
+    ));
+  }
 
   uploadToStroagees() {
     InputElement input = FileUploadInputElement() as InputElement
@@ -1387,10 +1468,8 @@ class _ShowAddBoxState extends State<ShowAddBox> {
 
       reader.readAsDataUrl(file!);
       reader.onLoadEnd.listen((event) async {
-        var snapshot = await fs
-            .ref()
-            .child('product_image/${_addgymownerid.text}')
-            .putBlob(file);
+        var snapshot =
+            await fs.ref().child('product_image/${widget.id}').putBlob(file);
         String downloadUrl = await snapshot.ref.getDownloadURL();
         setState(() {
           image = downloadUrl;

@@ -200,7 +200,16 @@ class _CategoryInfoScreenState extends State<CategoryInfoScreen> {
                         print("Previous Page");
                       },
                     ),
-                    SizedBox(width: 20),
+                    Container(
+                      margin: EdgeInsets.symmetric(horizontal: 20),
+                      child: Text(
+                        page.toString(),
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15,
+                            color: Colors.teal),
+                      ),
+                    ),
                     ElevatedButton(
                       child: Text("Next Page"),
                       onPressed: () {
@@ -224,7 +233,7 @@ class _CategoryInfoScreenState extends State<CategoryInfoScreen> {
   }
 
   var start = 0;
-
+  var page = 1;
   var end = 10;
   var length;
 
@@ -257,11 +266,11 @@ class _CategoryInfoScreenState extends State<CategoryInfoScreen> {
       DataCell(
         data['image'] != null
             ? Image.network(
-          data['image'] ?? "",
-          scale: 0.5,
-          height: 150,
-          width: 150,
-        )
+                data['image'] ?? "",
+                scale: 0.5,
+                height: 150,
+                width: 150,
+              )
             : const Text(""),
       ),
       DataCell(
@@ -271,8 +280,14 @@ class _CategoryInfoScreenState extends State<CategoryInfoScreen> {
               bool temp = status;
               temp = !temp;
 
-              DocumentReference documentReference =
-              FirebaseFirestore.instance.collection('category').doc(data.id);
+// <<<<<<< dewansh_new
+              DocumentReference documentReference = FirebaseFirestore.instance
+                  .collection('category')
+                  .doc(data.id);
+// =======
+//               DocumentReference documentReference =
+//               FirebaseFirestore.instance.collection('category').doc(data.id);
+// >>>>>>> Diptesh
               await documentReference
                   .update({'status': temp})
                   .whenComplete(() => print("Legitimate toggled"))
@@ -452,7 +467,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
       final _firebaseStorage = FirebaseStorage.instance.ref().child("category");
 
       Reference _reference =
-      _firebaseStorage.child('category/${Path.basename(pickedFile!.path)}');
+          _firebaseStorage.child('category/${Path.basename(pickedFile!.path)}');
       await _reference.putData(
         await pickedFile.readAsBytes(),
         SettableMetadata(contentType: 'image/jpeg'),

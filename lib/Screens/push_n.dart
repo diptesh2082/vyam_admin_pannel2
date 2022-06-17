@@ -64,7 +64,7 @@ class _PushState extends State<Push> {
                       textStyle: const TextStyle(fontSize: 15),
                     ),
                     onPressed: () async {
-                    // await  FirebaseMessaging.instance.subscribeToTopic("push_notifications");
+                      // await  FirebaseMessaging.instance.subscribeToTopic("push_notifications");
                       Get.to(() => const pushNew());
                     },
                     child: Text('Add Push Notification'),
@@ -137,6 +137,8 @@ class _PushState extends State<Push> {
                       child: Text("Previous Page"),
                       onPressed: () {
                         setState(() {
+                          if (start >= 1) page--;
+
                           if (start > 0 && end > 0) {
                             start = start - 10;
                             end = end - 10;
@@ -145,11 +147,21 @@ class _PushState extends State<Push> {
                         print("Previous Page");
                       },
                     ),
-                    const SizedBox(width: 20),
+                    Container(
+                      margin: EdgeInsets.symmetric(horizontal: 20),
+                      child: Text(
+                        page.toString(),
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15,
+                            color: Colors.teal),
+                      ),
+                    ),
                     ElevatedButton(
                       child: Text("Next Page"),
                       onPressed: () {
                         setState(() {
+                          if (end <= length) page++;
                           if (end < length) {
                             start = start + 10;
                             end = end + 10;
@@ -169,7 +181,7 @@ class _PushState extends State<Push> {
   }
 
   var start = 0;
-
+  var page = 1;
   var end = 10;
   var length;
 

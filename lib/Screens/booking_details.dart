@@ -62,46 +62,53 @@ class _BookingDetailsState extends State<BookingDetails> {
                           Get.to(const addbookings()); //showAddbox,
                         },
                         child: const Text('Add Booking')),),
+
                  const SizedBox(height: 15,),
-                 Row(
+                 // Row(
+                  Column(
                     children: [
-                      ElevatedButton.icon(
-                          onPressed: () async {
-                            setState(() async {
-                              startDate = await pickDate(context);
-                            });
+                      Row(
+                        children: [
 
-                            print(startDate.toString());
-                          },
-                          icon: const Icon(Icons.date_range),
-                          label: const Text('Start Date')),
+                          ElevatedButton.icon(
+                              onPressed: () async {
+                                setState(() async {
+                                  startDate = await pickDate(context);
+                                });
 
-                      const SizedBox(width: 20,),
-                      ElevatedButton.icon(
-                          onPressed: () async {
-                            setState(() async {
-                              endDate = await pickDate(context);
-                            });
+                                print(startDate.toString());
+                              },
+                              icon: const Icon(Icons.date_range),
+                              label: const Text('Start Date')),
 
-                            print(endDate.toString());
-                          },
-                          icon: const Icon(Icons.date_range),
-                          label: const Text('End Date')),
-                      const SizedBox(
-                        width: 20,
-                      ),
-                      ElevatedButton.icon(
-                        onPressed: () async {
-                          setState(() {
-                            startDate = DateTime(DateTime.now().year - 5);
-                            endDate = DateTime(DateTime.now().year + 5);
-                            searchVendorId = "";
-                            print(startDate);
-                            print(endDate);
-                          });
-                        },
-                        icon: const Icon(Icons.clear),
-                        label: const Text('Clear'),
+                          const SizedBox(width: 20,),
+                          ElevatedButton.icon(
+                              onPressed: () async {
+                                setState(() async {
+                                  endDate = await pickDate(context);
+                                });
+
+                                print(endDate.toString());
+                              },
+                              icon: const Icon(Icons.date_range),
+                              label: const Text('End Date')),
+                          const SizedBox(
+                            width: 20,
+                          ),
+                          ElevatedButton.icon(
+                            onPressed: () async {
+                              setState(() {
+                                startDate = DateTime(DateTime.now().year - 5);
+                                endDate = DateTime(DateTime.now().year + 5);
+                                searchVendorId = "";
+                                print(startDate);
+                                print(endDate);
+                              });
+                            },
+                            icon: const Icon(Icons.clear),
+                            label: const Text('Clear'),
+                          ),
+                        ],
                       ),
                     ],
                   ),
@@ -112,14 +119,6 @@ class _BookingDetailsState extends State<BookingDetails> {
 
         ]),
 
-//                 Container(
-//                   width: 500,
-//                   height: 51,
-//                   decoration: BoxDecoration(
-//                     borderRadius: BorderRadius.circular(14),
-//                     color: Colors.white12,
-// // >>>>>>> ae7259e7ba6e19ed4976a35667cb3a762fe66e2c
-//                   ),
                   Container(
                     width: 500,
                     height: 51,
@@ -168,6 +167,8 @@ class _BookingDetailsState extends State<BookingDetails> {
                             'completed',
                             'active',
                             'upcoming',
+                            'cancelled'
+                                'completed',
                           ])
                           .orderBy("order_date", descending: true)
                           .snapshots(),
@@ -186,12 +187,9 @@ class _BookingDetailsState extends State<BookingDetails> {
                         }
                         var doc = snapshot.data.docs;
 
-// <<<<<<< HEAD
                         if (searchVendorId.isNotEmpty) {
                           doc = doc.where((element) {
                             return element
-// <<<<<<< HEA
-// =======
 
                                     .get('user_name')
                                     .toString()
@@ -369,6 +367,7 @@ class _BookingDetailsState extends State<BookingDetails> {
                         child: const Text("Previous Page"),
                         onPressed: () {
                           setState(() {
+                            if (start >= 1) page--;
                             if (start > 0 && end > 0) {
                               start = start - 10;
                               end = end - 10;
@@ -378,10 +377,21 @@ class _BookingDetailsState extends State<BookingDetails> {
                         },
                       ),
                       const SizedBox(width: 20),
+                      Container(
+                        margin: EdgeInsets.symmetric(horizontal: 20),
+                        child: Text(
+                          page.toString(),
+                          style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15,
+                              color: Colors.teal),
+                        ),
+                      ),
                       ElevatedButton(
                         child: const Text("Next Page"),
                         onPressed: () {
                           setState(() {
+                            if (end <= length) page++;
                             if (end < length) {
                               start = start + 10;
                               end = end + 10;
@@ -392,7 +402,8 @@ class _BookingDetailsState extends State<BookingDetails> {
                       ),
                     ],
                   ),
-                ],
+
+                     ]
               ),
             ),
           ),
@@ -402,7 +413,7 @@ class _BookingDetailsState extends State<BookingDetails> {
   }
 
   var start = 0;
-
+  var page = 1;
   var end = 10;
   var length;
   List<DataRow> _buildlist(BuildContext context,
@@ -416,7 +427,6 @@ class _BookingDetailsState extends State<BookingDetails> {
 
     snapshot.forEach((element) {
       var x = element['booking_date'].toDate();
-// <<<<<<< HEAD
       if (x.isAfter(startDate) && x.isBefore(endDate) ||
           x == startDate ||
           x == endDate) {
@@ -596,39 +606,6 @@ class _BookingDetailsState extends State<BookingDetails> {
       DataCell(const Text(""), showEditIcon: true, onTap: () {
         Get.to(
           () => ProductEditBox(
-// <<<<<<< HEAD
-// <<<<<<< HEAD
-// =======
-// =======
-//       DataCell(data['booking_plan'] != null
-//           ? Text(data['booking_plan'].toString())
-//           : const Text("")),
-//       DataCell(data['grand_total'] != null
-//           ? Text('₹${data['grand_total'].toString()}')
-//           : const Text("")),
-
-//       DataCell(const Text(""), showEditIcon: true, onTap: () {
-//         Get.to(
-//               () => ProductEditBox(
-// >>>>>>> Diptesh
-// >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
-// =======
-//     <<<<<<< HEAD
-//     =======
-// // =======
-// //       DataCell(data['booking_plan'] != null
-// //           ? Text(data['booking_plan'].toString())
-// //           : const Text("")),
-// //       DataCell(data['grand_total'] != null
-// //           ? Text('₹${data['grand_total'].toString()}')
-// //           : const Text("")),
-//
-// //       DataCell(const Text(""), showEditIcon: true, onTap: () {
-// //         Get.to(
-// //               () => ProductEditBox(
-// // >>>>>>> Diptesh
-//     >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
-// >>>>>>> ae7259e7ba6e19ed4976a35667cb3a762fe66e2c
             vendorid: data['vendorId'],
             username: data['user_name'],
             userid: data['userId'],
