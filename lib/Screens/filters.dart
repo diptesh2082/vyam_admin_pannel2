@@ -18,6 +18,8 @@ class _filtersState extends State<filters> {
   String namee = "edgefitness.kestopur@vyam.com";
   String place = "";
   String search = '';
+  bool showStartDate = false;
+  bool showEndDate = false;
 
   @override
   void initState() {
@@ -27,7 +29,7 @@ class _filtersState extends State<filters> {
   }
 
   DateTime? date;
-  DateTime startDate = DateTime(DateTime.now().year - 5);
+  DateTime startDate = DateTime(DateTime.now().year -5);
   DateTime endDate = DateTime(DateTime.now().year + 5);
 
   @override
@@ -134,28 +136,40 @@ class _filtersState extends State<filters> {
               ),
               Row(
                 children: [
-                  ElevatedButton.icon(
-                    onPressed: () async {
-                      setState(() async {
-                        startDate = await pickDate(context);
-                        print(startDate);
-                      });
-                    },
-                    icon: const Icon(Icons.date_range),
-                    label: const Text('Start Date'),
+                  Column(
+                    children: [
+                      ElevatedButton.icon(
+                        onPressed: () async {
+                          setState(() async {
+                            showStartDate = true;
+                            startDate = await pickDate(context);
+                            print(startDate);
+                          });
+                        },
+                        icon: const Icon(Icons.date_range),
+                        label: const Text('Start Date'),
+                      ),
+                        showStartDate !=false ? Text(DateFormat("MMM, dd, yyyy").format(startDate),style: const TextStyle(fontWeight: FontWeight.bold)):const SizedBox(),
+                    ],
                   ),
                   const SizedBox(
                     width: 20,
                   ),
-                  ElevatedButton.icon(
-                    onPressed: () async {
-                      setState(() async {
-                        endDate = await pickDate(context);
-                        print(endDate);
-                      });
-                    },
-                    icon: const Icon(Icons.date_range),
-                    label: const Text('End Date'),
+                  Column(
+                    children: [
+                      ElevatedButton.icon(
+                        onPressed: () async {
+                          setState(() async {
+                            showEndDate = true;
+                            endDate = await pickDate(context);
+                            print(endDate);
+                          });
+                        },
+                        icon: const Icon(Icons.date_range),
+                        label: const Text('End Date'),
+                      ),
+                        showEndDate !=false ? Text(DateFormat("MMM ,dd , yyyy").format(endDate),style: const TextStyle(fontWeight: FontWeight.bold)):const SizedBox(),
+                    ],
                   ),
                   const SizedBox(
                     width: 20,
@@ -166,6 +180,8 @@ class _filtersState extends State<filters> {
                         startDate = DateTime(DateTime.now().year - 5);
                         endDate = DateTime(DateTime.now().year + 5);
                         search = "";
+                        showStartDate = false;
+                        showEndDate = false;
                         print(startDate);
                         print(endDate);
                         print(search);
@@ -177,11 +193,12 @@ class _filtersState extends State<filters> {
                   ),
                 ],
               ),
-              Row(children:[
-                Text(DateFormat("MMM, dd, yyyy").format(startDate) , style: const TextStyle(fontWeight: FontWeight.bold),),
-                const SizedBox(width: 25,),
-                Text(DateFormat("MMM, dd, yyyy").format(endDate) , style: const TextStyle(fontWeight: FontWeight.bold),)
-              ]),
+              // Row(children:[
+              //   Text(DateFormat("MMM, dd, yyyy").format(startDate) , style: const TextStyle(fontWeight: FontWeight.bold),),
+              //   Text(DateFormat("MMM, dd, yyyy").format(endDate) , style: const TextStyle(fontWeight: FontWeight.bold),),
+              //   const SizedBox(width: 25,),
+              //
+              // ]),
               Container(
                 width: 500,
                 height: 51,
@@ -373,7 +390,6 @@ class _filtersState extends State<filters> {
                     onPressed: () {
                       setState(() {
                         if (start >= 1) page--;
-
                         if (start > 0 && end > 0) {
                           start = start - 10;
                           end = end - 10;
@@ -382,13 +398,12 @@ class _filtersState extends State<filters> {
                       print("Previous Page");
                     },
                   ),
-
                   const SizedBox(width: 20),
-               Container(
-                    margin: EdgeInsets.symmetric(horizontal: 20),
+                  Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 20),
                     child: Text(
                       page.toString(),
-                      style: TextStyle(
+                      style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 15,
                           color: Colors.teal),
@@ -468,7 +483,7 @@ class _filtersState extends State<filters> {
           : const Text("")),
       DataCell(data['user_name'] != null
           ? Text(data['user_name'].toString())
-          : Text("")),
+          : const Text("")),
       DataCell(data['package_type'] != null
           ? Text(data['package_type'].toString().toUpperCase())
           : const Text("")),
