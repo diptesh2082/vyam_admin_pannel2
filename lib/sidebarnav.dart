@@ -150,17 +150,17 @@ class _SideNavBar1State extends State<SideNavBar1> {
                 Navigator.pop(context);
               },
             ),
-            ListTile(
-              title: Text(
-                'Feedback',
-                style: kTextStyle,
-              ),
-              onTap: () {
-                index = 6;
-                setState(() {});
-                Navigator.pop(context);
-              },
-            ),
+            // ListTile(
+            //   title: Text(
+            //     'Feedback',
+            //     style: kTextStyle,
+            //   ),
+            //   onTap: () {
+            //     index = 6;
+            //     setState(() {});
+            //     Navigator.pop(context);
+            //   },
+            // ),
             ListTile(
               title: Text(
                 'Category',
@@ -328,7 +328,7 @@ class _SideNavBar1State extends State<SideNavBar1> {
           index == 3 ? const UserInformation() : Container(),
           index == 4 ? const BookingDetails() : Container(),
           index == 5 ? const Coupon() : Container(),
-          index == 6 ? const FeedBackInfo() : Container(),
+          // index == 6 ? const FeedBackInfo() : Container(),
           index == 7 ? const CategoryInfoScreen() : Container(),
           index == 8 ? const AmenetiesScreen() : Container(),
           index == 9 ? const PaymentsPage() : Container(),

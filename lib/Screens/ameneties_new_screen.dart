@@ -25,7 +25,7 @@ class _newAmenetiesState extends State<newAmeneties> {
   final amenityId = FirebaseFirestore.instance.collection('amenities').doc().id;
   final TextEditingController _addName = TextEditingController();
   final TextEditingController _addId = TextEditingController();
-
+  final _formKey = GlobalKey<FormState>();
   // customTextField3(hinttext: "Name", addcontroller: _addName),
 
   @override
@@ -35,55 +35,60 @@ class _newAmenetiesState extends State<newAmeneties> {
       appBar: AppBar(
         title: Text('Add Amenites'),
       ),
-      body: Center(
-        child: SizedBox(
-          height: 480,
-          width: 800,
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  'Add Records',
-                  style: TextStyle(
-                      fontFamily: 'poppins',
-                      fontWeight: FontWeight.w600,
-                      fontSize: 14),
-                ),
-                customTextField(hinttext: "Name", addcontroller: _addName),
-                // customTextField(
-                //     hinttext: "Image", addcontroller: _addImage),
-                loadimage(),
-                // customTextField(hinttext: "ID", addcontroller: _addId),
-                Center(
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      await FirebaseFirestore.instance
-                          .collection('amenities')
-                          .doc(amenityId)
-                          .set(
-                        {
-                          'name': _addName.text,
-                          'image': ds,
-                          'id': '',
-                          'amenity_id': amenityId,
-                          'gym_id': [],
-                        },
-                      ).whenComplete(() {
-                        setState(() {
-                          ds = null;
-                        });
-                      });
-                      //     .then((snapshot) async {
-                      //   await uploadImageToAmenities(image, amenityId);
-                      // });
-
-                      Navigator.pop(context);
-                    },
-                    child: const Text('Done'),
+      body: Form(
+        key: _formKey,
+        child: Center(
+          child: SizedBox(
+            height: 480,
+            width: 800,
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Add Records',
+                    style: TextStyle(
+                        fontFamily: 'poppins',
+                        fontWeight: FontWeight.w600,
+                        fontSize: 14),
                   ),
-                )
-              ],
+                  customTextField3(hinttext: "Name", addcontroller: _addName),
+                  // customTextField(
+                  //     hinttext: "Image", addcontroller: _addImage),
+                  loadimage(),
+                  // customTextField(hinttext: "ID", addcontroller: _addId),
+                  Center(
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        if (_formKey.currentState!.validate()) {
+                          await FirebaseFirestore.instance
+                              .collection('amenities')
+                              .doc(amenityId)
+                              .set(
+                            {
+                              'name': _addName.text,
+                              'image': ds,
+                              'id': '',
+                              'amenity_id': amenityId,
+                              'gym_id': [],
+                            },
+                          ).whenComplete(() {
+                            setState(() {
+                              ds = null;
+                            });
+                          });
+                          //     .then((snapshot) async {
+                          //   await uploadImageToAmenities(image, amenityId);
+                          // });
+
+                          Navigator.pop(context);
+                        }
+                      },
+                      child: const Text('Done'),
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
         ),
