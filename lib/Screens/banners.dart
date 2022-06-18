@@ -324,49 +324,60 @@ class _BannerPageState extends State<BannerPage> {
         //     uniqueDocId: banner_id,
         //     imagess: data['image']);
 
-        showDialog(context: context, builder: (context)=>  AlertDialog(
-          shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(16))),
-          content: SizedBox(
-            height: 170,
-            width: 280,
-            child: Stack(
-              children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children:  [
-                    const Text('Do you want to delete?' , style: TextStyle(fontWeight: FontWeight.bold),),
-                    const SizedBox(height: 15,),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const SizedBox(height: 15),
-                        ElevatedButton.icon(
-                          onPressed: (){
-                            deleteMethodI(
-                                stream: bannerStream,
-                                uniqueDocId: banner_id,
-                                imagess: data['image']);
-                            Navigator.pop(context);
-                          } ,
-                          icon: const Icon(Icons.check),
-                          label: const Text('Yes'),
-                        ),
-                        const SizedBox(width: 20,),
-                        ElevatedButton.icon(onPressed: (){
-                          Navigator.pop(context);
-                        } ,
-                          icon: const Icon(Icons.clear),
-                          label: const Text('No'),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ],
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(16))),
+            content: SizedBox(
+              height: 170,
+              width: 280,
+              child: Stack(
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text(
+                        'Do you want to delete?',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const SizedBox(height: 15),
+                          ElevatedButton.icon(
+                            onPressed: () {
+                              deleteMethodI(
+                                  stream: bannerStream,
+                                  uniqueDocId: banner_id,
+                                  imagess: data['image']);
+                              Navigator.pop(context);
+                            },
+                            icon: const Icon(Icons.check),
+                            label: const Text('Yes'),
+                          ),
+                          const SizedBox(
+                            width: 20,
+                          ),
+                          ElevatedButton.icon(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            icon: const Icon(Icons.clear),
+                            label: const Text('No'),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
-        ),);
-
+        );
       })
     ]);
   }
@@ -538,7 +549,10 @@ class _EditBoxState extends State<EditBox> {
                       )),
                   //CustomTextField(hinttext: "Image url", addcontroller: _image),
 
-                  loadimage(),
+                  editim(
+                    imagea: image,
+                    idd: id,
+                  ),
 
                   Padding(
                     padding: EdgeInsets.all(50),
@@ -554,13 +568,17 @@ class _EditBoxState extends State<EditBox> {
                             {
                               'position_id': _position.text,
                               'name': _name.text,
-                              'image': imgUrl1 == null ? image : imgUrl1,
+                              'image': image3,
                               'id': id,
                               'access': access,
                               'gym_id': namee,
                               'navigation': _navigation.text,
                             },
-                          );
+                          ).whenComplete(() {
+                            setState(() {
+                              image3 = null;
+                            });
+                          });
                           Navigator.pop(context);
                         },
                         child: const Text('Done'),
@@ -580,104 +598,103 @@ class _EditBoxState extends State<EditBox> {
           ),
         ));
   }
-
-  getUrlImage(XFile? pickedFile) async {
-    if (kIsWeb) {
-      final _firebaseStorage = FirebaseStorage.instance.ref().child("banner");
-
-      Reference _reference = _firebaseStorage
-          .child('banner_details/${Path.basename(pickedFile!.path)}');
-      await _reference.putData(
-        await pickedFile.readAsBytes(),
-        SettableMetadata(contentType: 'image/jpeg'),
-      );
-
-      String imageUrl = await _reference.getDownloadURL();
-
-      setState(() {
-        imgUrl1 = imageUrl;
-      });
-    }
-  }
 }
 
-class loadimage extends StatefulWidget {
-  const loadimage({Key? key}) : super(key: key);
+var ds;
 
+class editim extends StatefulWidget {
+  const editim({Key? key, required this.imagea, required this.idd})
+      : super(key: key);
+  final String imagea;
+  final String idd;
   @override
-  State<loadimage> createState() => _loadimageState();
+  State<editim> createState() => _editimState();
 }
 
-class _loadimageState extends State<loadimage> {
+var image3;
+
+class _editimState extends State<editim> {
+  @override
+  String i2 = '';
+  void initState() {
+    // TODO: implement initState
+    i2 = widget.imagea;
+    super.initState();
+  }
+
+// <<<<<<< HEAD
   @override
   bool isloading = false;
+  var imagee;
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(20),
       child: Row(
         children: [
-          const Text(
-            'Upload Image: ',
-            style: TextStyle(
-                color: Colors.grey, fontWeight: FontWeight.bold, fontSize: 15),
+          ElevatedButton(
+            onPressed: () async {
+              setState(() {
+                isloading = true;
+              });
+              var dic = await chooseImage();
+              await addImageToStorage(dic, widget.idd);
+              setState(() {
+                isloading = false;
+                i2 = image3;
+              });
+            },
+            child: const Text(
+              'Upload Gym Image',
+              style:
+                  TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
+            ),
           ),
           const SizedBox(
             width: 20,
           ),
-          InkWell(
-            onTap: () async {
-              setState(() {
-                isloading = true;
-              });
-              image = await chooseImage();
-              await getUrlImage(image);
-            },
-            child: const Icon(
-              Icons.upload_file_outlined,
-            ),
-          ),
-          SizedBox(
-              width: 300,
-              height: 200,
-              child: isloading
-                  ? imgUrl1 != null
-                      ? Container(
-                          child: Image.network(imgUrl1),
-                        )
-                      : Container(
-                          child: Center(child: CircularProgressIndicator()))
-                  : Container(
-                      color: Colors.white,
-                      child: Center(
-                          child: Text(
-                        'Please Upload Image',
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 24),
-                      )),
-                    ))
+          isloading
+              ? Container(
+                  height: 100,
+                  width: 200,
+                  child: Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                )
+              : Container(
+                  height: 100,
+                  width: 200,
+                  child: Image.network(i2),
+                ),
         ],
       ),
     );
   }
 
-  getUrlImage(XFile? pickedFile) async {
+  addImageToStorage(XFile? pickedFile, String? id) async {
     if (kIsWeb) {
-      final _firebaseStorage = FirebaseStorage.instance.ref().child("banner");
-
-      Reference _reference = _firebaseStorage
-          .child('banner_details/${Path.basename(pickedFile!.path)}');
-      await _reference.putData(
-        await pickedFile.readAsBytes(),
+      Reference _reference = FirebaseStorage.instance
+          .ref()
+          .child("banner_details")
+          .child('images/$id');
+      await _reference
+          .putData(
+        await pickedFile!.readAsBytes(),
         SettableMetadata(contentType: 'image/jpeg'),
-      );
-
-      String imageUrl = await _reference.getDownloadURL();
-
-      setState(() {
-        imgUrl1 = imageUrl;
+      )
+          .whenComplete(() async {
+        await _reference.getDownloadURL().then((value) async {
+          var uploadedPhotoUrl = value;
+          setState(() {
+            image3 = value;
+          });
+          print(value);
+          await FirebaseFirestore.instance
+              .collection("banner_details")
+              .doc(id)
+              .update({"image": value});
+        });
       });
+    } else {
+//write a code for android or ios
     }
   }
 }

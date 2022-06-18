@@ -1,4 +1,5 @@
 import 'package:admin_panel_vyam/Screens/ameneties_new_screen.dart';
+import 'package:admin_panel_vyam/Screens/category_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
@@ -278,7 +279,7 @@ class _AmenetiesScreenState extends State<AmenetiesScreen> {
               name: data['name'],
               image: data['image'],
               amenityId: data['id'],
-              am: data['amenity_id']));
+              am: amenitiesId));
           // showDialog(
           //   context: context,
           //   builder: (context) {
@@ -302,50 +303,61 @@ class _AmenetiesScreenState extends State<AmenetiesScreen> {
         //     uniqueDocId: amenitiesId,
         //     imagess: data['image']);
 
-        showDialog(context: context, builder: (context)=>  AlertDialog(
-          shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(16))),
-          content: SizedBox(
-            height: 170,
-            width: 280,
-            child: Stack(
-              children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children:  [
-                    const Text('Do you want to delete?' , style: TextStyle(fontWeight: FontWeight.bold),),
-                    const SizedBox(height: 15,),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const SizedBox(height: 15),
-                        ElevatedButton.icon(
-                          onPressed: (){
-                            deleteMethodI(
-                                stream: FirebaseFirestore.instance.collection('amenities'),
-                                uniqueDocId: amenitiesId,
-                                imagess: data['image']);
-                            Navigator.pop(context);
-                          } ,
-                          icon: const Icon(Icons.check),
-                          label: const Text('Yes'),
-                        ),
-                        const SizedBox(width: 20,),
-                        ElevatedButton.icon(onPressed: (){
-                          Navigator.pop(context);
-                        } ,
-                          icon: const Icon(Icons.clear),
-                          label: const Text('No'),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ],
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(16))),
+            content: SizedBox(
+              height: 170,
+              width: 280,
+              child: Stack(
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text(
+                        'Do you want to delete?',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const SizedBox(height: 15),
+                          ElevatedButton.icon(
+                            onPressed: () {
+                              deleteMethodI(
+                                  stream: FirebaseFirestore.instance
+                                      .collection('amenities'),
+                                  uniqueDocId: amenitiesId,
+                                  imagess: data['image']);
+                              Navigator.pop(context);
+                            },
+                            icon: const Icon(Icons.check),
+                            label: const Text('Yes'),
+                          ),
+                          const SizedBox(
+                            width: 20,
+                          ),
+                          ElevatedButton.icon(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            icon: const Icon(Icons.clear),
+                            label: const Text('No'),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
-        ),);
-
-
+        );
       })
     ]);
   }
@@ -353,84 +365,6 @@ class _AmenetiesScreenState extends State<AmenetiesScreen> {
   final TextEditingController _addName = TextEditingController();
   final TextEditingController _addImage = TextEditingController();
   final TextEditingController _addId = TextEditingController();
-  var image;
-
-  // showAddbox() => showDialog(
-  //     context: context,
-  //     builder: (context) => AlertDialog(
-  //           shape: const RoundedRectangleBorder(
-  //               borderRadius: BorderRadius.all(Radius.circular(30))),
-  // content: SizedBox(
-  //   height: 480,
-  //   width: 800,
-  //   child: SingleChildScrollView(
-  //     child: Column(
-  //       crossAxisAlignment: CrossAxisAlignment.start,
-  //       children: [
-  //         const Text(
-  //           'Add Records',
-  //           style: TextStyle(
-  //               fontFamily: 'poppins',
-  //               fontWeight: FontWeight.w600,
-  //               fontSize: 14),
-  //         ),
-  //         customTextField(hinttext: "Name", addcontroller: _addName),
-  //         // customTextField(
-  //         //     hinttext: "Image", addcontroller: _addImage),
-  //         Container(
-  //           padding: EdgeInsets.all(20),
-  //           child: Row(
-  //             children: [
-  //               Text(
-  //                 'Upload Image: ',
-  //                 style: TextStyle(
-  //                     color: Colors.grey,
-  //                     fontWeight: FontWeight.bold,
-  //                     fontSize: 15),
-  //               ),
-  //               const SizedBox(
-  //                 width: 20,
-  //               ),
-  //               InkWell(
-  //                 onTap: () async {
-  //                   image = await chooseImage();
-  //                 },
-  //                 child: const Icon(
-  //                   Icons.upload_file_outlined,
-  //                 ),
-  //               )
-  //             ],
-  //           ),
-  //         ),
-  //         customTextField(hinttext: "ID", addcontroller: _addId),
-  //         Center(
-  //           child: ElevatedButton(
-  //             onPressed: () async {
-  //               await FirebaseFirestore.instance
-  //                   .collection('amenities')
-  //                   .doc(amenityId)
-  //                   .set(
-  //                 {
-  //                   'name': _addName.text,
-  //                   // 'image': _addImage.text,
-  //                   'id': _addId.text,
-  //                   'amenity_id': amenityId,
-  //                   'gym_id': [],
-  //                 },
-  //               ).then((snapshot) async {
-  //                 await uploadImageToAmenities(image, amenityId);
-  //               });
-  //
-  //               Navigator.pop(context);
-  //             },
-  //             child: const Text('Done'),
-  //           ),
-  //         )
-  //       ],
-  //     ),
-  //   ),
-  // ),
-  // ));
 }
 
 //EDIT FEATURE
@@ -457,19 +391,18 @@ class _ProductEditBoxState extends State<ProductEditBox> {
   final TextEditingController _name = TextEditingController();
   final TextEditingController _image = TextEditingController();
   final TextEditingController _amenityId = TextEditingController();
-  late String amm;
-  var imgUrl1;
+  String amm = '';
+  var im1;
 
   @override
   void initState() {
     super.initState();
-    _image.text = widget.image;
+    im1 = widget.image;
     _amenityId.text = widget.amenityId;
     _name.text = widget.name;
     amm = widget.am;
   }
 
-  var imagee;
   bool checker = false;
 
   @override
@@ -496,86 +429,34 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                 ),
                 customTextField3(hinttext: "Name", addcontroller: _name),
                 // customTextField(hinttext: "Image", addcontroller: _image),
-                Container(
-                  padding: EdgeInsets.all(20),
-                  child: Row(
-                    children: [
-                      const Text(
-                        'Upload Image: ',
-                        style: TextStyle(
-                            color: Colors.grey,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15),
-                      ),
-                      const SizedBox(
-                        width: 20,
-                      ),
-                      InkWell(
-                        onTap: () async {
-                          setState(() {
-                            checker = (checker == false) ? true : false;
-                          });
-                          imagee = await chooseImage();
-                          await getUrlImage(imagee);
-                        },
-                        child: const Icon(
-                          Icons.upload_file_outlined,
-                        ),
-                      ),
-                      SizedBox(
-                        width: 300,
-                        height: 200,
-                        child: Container(
-                          child: Image.network(
-                            (imgUrl1 == null) ? ' ' : imgUrl1,
-                            fit: BoxFit.contain,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                customTextField(hinttext: "ID", addcontroller: _amenityId),
+                editim(imagea: im1, amid: amm),
+                // customTextField(hinttext: "ID", addcontroller: _amenityId),
                 Padding(
                   padding: const EdgeInsets.all(12.0),
                   child: Center(
                     child: ElevatedButton(
                       onPressed: () async {
                         print("The Gym id is : ${_amenityId.text}");
-                        if (checker == true) {
-                          FirebaseFirestore.instance
-                              .collection('amenities')
-                              .doc(amm)
-                              .update(
-                            {
-                              'name': _name.text,
-                              'image': imgUrl1,
-                              'id': _amenityId.text,
-                              'amenity_id': amm,
-                              'gym_id': [],
-                            },
-                          );
-                          //     .then((snapshot) async {
-                          //   await uploadImageToAmenities(imagee, amm);
-                          // });
 
-                          Navigator.pop(context);
-                        } else {
-                          FirebaseFirestore.instance
-                              .collection('amenities')
-                              .doc(amm)
-                              .update(
-                            {
-                              'name': _name.text,
-                              'image': imgUrl1,
-                              'id': _amenityId.text,
-                              'amenity_id': amm,
-                              'gym_id': [],
-                            },
-                          );
+                        FirebaseFirestore.instance
+                            .collection('amenities')
+                            .doc(amm)
+                            .update(
+                          {
+                            'name': _name.text,
+                            'image': image3,
+                            'id': _amenityId.text,
+                            'amenity_id': amm,
+                            'gym_id': [],
+                          },
+                        ).whenComplete(() {
+                          image3 = null;
+                        });
+                        //     .then((snapshot) async {
+                        //   await uploadImageToAmenities(imagee, amm);
+                        // });
 
-                          Navigator.pop(context);
-                        }
+                        Navigator.pop(context);
                       },
                       child: const Text('Done'),
                     ),
@@ -588,23 +469,101 @@ class _ProductEditBoxState extends State<ProductEditBox> {
       ),
     );
   }
+}
 
-  getUrlImage(XFile? pickedFile) async {
+class editim extends StatefulWidget {
+  const editim({Key? key, required this.imagea, required this.amid})
+      : super(key: key);
+  final String imagea;
+  final String amid;
+  @override
+  State<editim> createState() => _editimState();
+}
+
+var image3;
+
+class _editimState extends State<editim> {
+  @override
+  String i2 = '';
+  String di = '';
+  void initState() {
+    // TODO: implement initState
+    i2 = widget.imagea;
+    di = widget.amid;
+    super.initState();
+  }
+
+// <<<<<<< HEAD
+  @override
+  bool isloading = false;
+  var imagee;
+  Widget build(BuildContext context) {
+    return Container(
+      child: Row(
+        children: [
+          ElevatedButton(
+            onPressed: () async {
+              setState(() {
+                isloading = true;
+              });
+              var dic = await chooseImage();
+              await addImageToStorage(dic, di);
+              setState(() {
+                isloading = false;
+                i2 = image3;
+              });
+            },
+            child: const Text(
+              'Upload Gym Image',
+              style:
+                  TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
+            ),
+          ),
+          const SizedBox(
+            width: 20,
+          ),
+          isloading
+              ? Container(
+                  height: 100,
+                  width: 200,
+                  child: Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                )
+              : Container(
+                  height: 100,
+                  width: 200,
+                  child: Image.network(i2),
+                ),
+        ],
+      ),
+    );
+  }
+
+  addImageToStorage(XFile? pickedFile, String? id) async {
     if (kIsWeb) {
-      final _firebaseStorage = FirebaseStorage.instance.ref().child("banner");
-
-      Reference _reference = _firebaseStorage
-          .child('banner_details/${Path.basename(pickedFile!.path)}');
-      await _reference.putData(
-        await pickedFile.readAsBytes(),
+      Reference _reference =
+          FirebaseStorage.instance.ref().child("amenities").child('images/$id');
+      await _reference
+          .putData(
+        await pickedFile!.readAsBytes(),
         SettableMetadata(contentType: 'image/jpeg'),
-      );
-
-      String imageUrl = await _reference.getDownloadURL();
-
-      setState(() {
-        imgUrl1 = imageUrl;
+      )
+          .whenComplete(() async {
+        await _reference.getDownloadURL().then((value) async {
+          var uploadedPhotoUrl = value;
+          setState(() {
+            image3 = value;
+          });
+          print(value);
+          await FirebaseFirestore.instance
+              .collection("amenities")
+              .doc(id)
+              .update({"image": value});
+        });
       });
+    } else {
+//write a code for android or ios
     }
   }
 }

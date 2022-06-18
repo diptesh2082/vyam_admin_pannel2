@@ -19,7 +19,7 @@ class newAmeneties extends StatefulWidget {
 }
 
 var image;
-var imgUrl1;
+var ds;
 
 class _newAmenetiesState extends State<newAmeneties> {
   final amenityId = FirebaseFirestore.instance.collection('amenities').doc().id;
@@ -64,12 +64,16 @@ class _newAmenetiesState extends State<newAmeneties> {
                           .set(
                         {
                           'name': _addName.text,
-                          'image': imgUrl1,
+                          'image': ds,
                           'id': '',
                           'amenity_id': amenityId,
                           'gym_id': [],
                         },
-                      );
+                      ).whenComplete(() {
+                        setState(() {
+                          ds = null;
+                        });
+                      });
                       //     .then((snapshot) async {
                       //   await uploadImageToAmenities(image, amenityId);
                       // });
@@ -127,9 +131,9 @@ class _loadimageState extends State<loadimage> {
               width: 300,
               height: 200,
               child: isloading
-                  ? imgUrl1 != null
+                  ? ds != null
                       ? Container(
-                          child: Image.network(imgUrl1),
+                          child: Image.network(ds),
                         )
                       : Container(
                           child: Center(child: CircularProgressIndicator()))
@@ -164,7 +168,7 @@ class _loadimageState extends State<loadimage> {
       String imageUrl = await _reference.getDownloadURL();
 
       setState(() {
-        imgUrl1 = imageUrl;
+        ds = imageUrl;
       });
     }
   }
