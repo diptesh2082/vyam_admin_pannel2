@@ -260,40 +260,14 @@ class _UserInformationState extends State<UserInformation> {
                     },
                   ),
                 ),
-                // SizedBox(height: 20),
-                // Row(
-                //   mainAxisAlignment: MainAxisAlignment.center,
-                //   children: [
-                //     ElevatedButton(
-                //       child: Text("Previous Page"),
-                //       onPressed: () {
-                //         setState(() {
-                //           if (start > 0 && end > 0) {
-                //             start = start - 10;
-                //             end = end - 10;
-                //           }
-                //         });
-                //         print("Previous Page");
-                //       },
-                //     ),
-                Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Text(
-                    page.toString(),
-                    style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 15,
-                        color: Colors.teal),
-                  ),
-                ),
-
-                const SizedBox(height: 20),
+                SizedBox(height: 20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     ElevatedButton(
                       child: const Text("Previous Page"),
                       onPressed: () {
+                        if (start > 0) page--;
                         setState(() {
                           if (start > 0 && end > 0) {
                             start = start - 10;
@@ -301,6 +275,29 @@ class _UserInformationState extends State<UserInformation> {
                           }
                         });
                         print("Previous Page");
+                      },
+                    ),
+                    Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Text(
+                        page.toString(),
+                        style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15,
+                            color: Colors.teal),
+                      ),
+                    ),
+                    ElevatedButton(
+                      child: const Text("Next Page"),
+                      onPressed: () {
+                        setState(() {
+                          if (end <= length) page++;
+                          if (end < length) {
+                            start = start + 10;
+                            end = end + 10;
+                          }
+                        });
+                        print("Next Page");
                       },
                     ),
                   ],
@@ -698,10 +695,6 @@ class _EditBoxState extends State<EditBox> {
                               'gender': _gender.text,
                               'image': image3,
                               'name': _name.text,
-                              // 'pincode': "",
-                              // 'userId': _userid.text,
-                              // 'locality': "",
-                              // 'subLocality': "",
                               'email': _email.text,
                               'number': '+91${_number.text}',
                             };
@@ -789,12 +782,12 @@ class _editimState extends State<editim> {
             onPressed: () async {
               setState(() {
                 isloading = true;
+                i2 = image3;
               });
               var dic = await chooseImage();
               await addImageToStorage(dic, widget.gymid);
               setState(() {
                 isloading = false;
-                i2 = image3;
               });
             },
             child: const Text(
