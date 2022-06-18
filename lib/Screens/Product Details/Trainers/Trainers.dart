@@ -66,6 +66,9 @@ class _TrainerPageState extends State<TrainerPage> {
   Widget build(BuildContext context) {
     print("Current Document_id -->${widget.tGymId}"); //Printing for information
     return Scaffold(
+      appBar: AppBar(
+        title: Text("Trainer"),
+      ),
       body: SafeArea(
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 5),
@@ -78,26 +81,22 @@ class _TrainerPageState extends State<TrainerPage> {
               children: [
                 Padding(
                   padding: const EdgeInsets.only(top: 8.0, left: 8.0),
-                  child: GestureDetector(
-                    onTap: () {
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(onPrimary: Colors.purple),
+                    onPressed: () {
                       Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => ShowAddbox(
-                                    gymid: globalGymId,
-                                  )));
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ShowAddbox(
+                            gymid: globalGymId,
+                          ),
+                        ),
+                      );
                     },
-                    child: Container(
-                      width: 120,
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(20.0)),
-                      child: Row(
-                        children: const [
-                          Icon(Icons.add),
-                          Text('Add Product',
-                              style: TextStyle(fontWeight: FontWeight.w400)),
-                        ],
+                    child: const Text(
+                      'Add Trainer',
+                      style: TextStyle(
+                        color: Colors.white,
                       ),
                     ),
                   ),
@@ -269,45 +268,59 @@ class _TrainerPageState extends State<TrainerPage> {
       DataCell(Icon(Icons.delete), onTap: () {
         // deleteMethod(stream: trainerStream, uniqueDocId: trainerId);
 
-        showDialog(context: context, builder: (context)=>  AlertDialog(
-          shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(16))),
-          content: SizedBox(
-            height: 170,
-            width: 280,
-            child: Stack(
-              children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children:  [
-                    const Text('Do you want to delete?' , style: TextStyle(fontWeight: FontWeight.bold),),
-                    const SizedBox(height: 15,),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const SizedBox(height: 15),
-                        ElevatedButton.icon(
-                          onPressed: (){
-                            deleteMethod(stream: trainerStream, uniqueDocId: trainerId);
-                            Navigator.pop(context);
-                          } ,
-                          icon: const Icon(Icons.check),
-                          label: const Text('Yes'),
-                        ),
-                        const SizedBox(width: 20,),
-                        ElevatedButton.icon(onPressed: (){
-                          Navigator.pop(context);
-                        } ,
-                          icon: const Icon(Icons.clear),
-                          label: const Text('No'),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ],
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(16))),
+            content: SizedBox(
+              height: 170,
+              width: 280,
+              child: Stack(
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text(
+                        'Do you want to delete?',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const SizedBox(height: 15),
+                          ElevatedButton.icon(
+                            onPressed: () {
+                              deleteMethod(
+                                  stream: trainerStream,
+                                  uniqueDocId: trainerId);
+                              Navigator.pop(context);
+                            },
+                            icon: const Icon(Icons.check),
+                            label: const Text('Yes'),
+                          ),
+                          const SizedBox(
+                            width: 20,
+                          ),
+                          ElevatedButton.icon(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            icon: const Icon(Icons.clear),
+                            label: const Text('No'),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
-        ),);
+        );
       }),
     ]);
   }
@@ -550,7 +563,8 @@ class _ShowAddboxState extends State<ShowAddbox> {
               ]),
               Text(
                 "$certification",
-                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                style:
+                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
               ),
               Row(
                 children: [
@@ -896,7 +910,10 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                     },
                     child: const Text("Remove Specialization")),
               ]),
-              Text("$spec", style: TextStyle(fontWeight: FontWeight.bold , fontSize: 20),),
+              Text(
+                "$spec",
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+              ),
               const SizedBox(
                 height: 40,
               ),
@@ -928,7 +945,10 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                     },
                     child: const Text("Remove Certification")),
               ]),
-              Text("$cert" , style: TextStyle(fontWeight: FontWeight.bold , fontSize: 20),),
+              Text(
+                "$cert",
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+              ),
 
               Padding(
                 padding: const EdgeInsets.all(12.0),

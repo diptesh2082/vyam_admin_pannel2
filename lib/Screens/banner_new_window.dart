@@ -1,5 +1,4 @@
-
-
+import 'package:admin_panel_vyam/services/CustomTextFieldClass.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_dropzone/flutter_dropzone.dart';
@@ -125,11 +124,11 @@ class _bannerNewPageState extends State<bannerNewPage> {
                               );
                             },
                           )),
-                      CustomTextField(
+                      customTextField3(
                           hinttext: "Name", addcontroller: _addname),
-                      CustomTextField(
+                      customTextField3(
                           hinttext: "Position", addcontroller: _addposition),
-                      CustomTextField(
+                      customTextField3(
                           hinttext: "Navigation",
                           addcontroller: _addnavigation),
 
