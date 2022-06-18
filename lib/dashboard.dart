@@ -86,7 +86,7 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
             child: Cardd(title: 'Banner', collectionId: 'banner_details'),
             onTap: () {
               Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => BannerPage()));
+                  MaterialPageRoute(builder: (context) => const BannerPage()));
             },
           );
         }
@@ -158,7 +158,7 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => BookingDetails1(st: 'cancelled')));
+                      builder: (context) => const BookingDetails1(st: 'cancelled')));
             },
           );
         }
@@ -293,7 +293,7 @@ class _showLatestBookingState extends State<showLatestBooking> {
         Container(
           height: MediaQuery.of(context).size.height * 0.50,
           width: MediaQuery.of(context).size.width,
-          child: DashBoardScreen(),
+          child: const DashBoardScreen(),
         ),
         const SizedBox(height: 100),
         Container(
@@ -343,6 +343,18 @@ class _showLatestBookingState extends State<showLatestBooking> {
                       return SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
                         child: DataTable(
+                          border: TableBorder.all(
+                            width: 2.0,
+                          ),
+                            showBottomBorder: true,
+                            dividerThickness: 5,
+                            // decoration: BoxDecoration(
+                            //   border:Border(
+                            //       right: Divider.createBorderSide(context, width: 5.0),
+                            //       left: Divider.createBorderSide(context, width: 5.0)
+                            //   ),
+                            //   // color: AppColors.secondaryColor,
+                            // ),
                             dataRowHeight: 65,
                             columns: const [
                               DataColumn(
@@ -351,54 +363,99 @@ class _showLatestBookingState extends State<showLatestBooking> {
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
+                              // DataColumn(
+                              //   label: Text(
+                              //       ""
+                              //   ),
+                              // ),
                               DataColumn(
                                 label: Text(
                                   'User Name',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
+                              // DataColumn(
+                              //   label: Text(
+                              //       ""
+                              //   ),
+                              // ),
                               DataColumn(
                                 label: Text(
                                   'Mobile',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
+                              // DataColumn(
+                              //   label: Text(
+                              //       ""
+                              //   ),
+                              // ),
                               DataColumn(
                                 label: Text(
                                   'Booking \nPlan',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
+                              // DataColumn(
+                              //   label: Text(
+                              //       ""
+                              //   ),
+                              // ),
                               DataColumn(
                                 label: Text(
                                   'Vendor \n Name',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
+                              // DataColumn(
+                              //   label: Text(
+                              //       ""
+                              //   ),
+                              // ),
                               DataColumn(
                                 label: Text(
                                   'Start \n Date',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
+                              // DataColumn(
+                              //   label: Text(
+                              //       ""
+                              //   ),
+                              // ),
                               DataColumn(
                                 label: Text(
                                   'End \n Date',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
+                              // DataColumn(
+                              //   label: Text(
+                              //       ""
+                              //   ),
+                              // ),
                               DataColumn(
                                 label: Text(
                                   'Booking \n Status',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
+                              // DataColumn(
+                              //   label: Text(
+                              //       ""
+                              //   ),
+                              // ),
                               DataColumn(
                                 label: Text(
                                   'Payment \n Type',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
+                              // DataColumn(
+                              //   label: Text(
+                              //     ""
+                              //   ),
+                              // ),
                               DataColumn(
                                 label: Text(
                                   'Grand \n Total',
@@ -439,28 +496,34 @@ class _showLatestBookingState extends State<showLatestBooking> {
     return DataRow(cells: [
       DataCell(
           data["id"] != null ? Text(data['id'].toString()) : const Text("")),
+      // const DataCell(VerticalDivider()),
       DataCell(data["user_name"] != null
           ? Text(data['user_name'].toString())
           : const Text("")),
+      // const DataCell(VerticalDivider()),
       DataCell(data['userId'] != null
           ? Text(data['userId'].toString().substring(3, 13))
           : Text("")),
+      // const DataCell(VerticalDivider()),
       DataCell(data['booking_plan'] != null
           ? Text(data['booking_plan'].toString())
           : const Text("")),
+      // const DataCell(VerticalDivider()),
       DataCell(data['gym_details']['name'] != null
           ? Text('${data['gym_details']['name']}\n ${data['gym_details']['branch']}'.toString()):const Text('')),
-
+      // const DataCell(VerticalDivider()),
       DataCell(data['booking_date'] != null
           ? Text(DateFormat('dd MMM , yyyy')
               .format(data['booking_date'].toDate())
               .toString())
           : const Text("")),
+      // const DataCell(VerticalDivider()),
       DataCell(data['plan_end_duration'] != null
           ? Text(DateFormat('dd MMM , yyyy')
               .format(data['plan_end_duration'].toDate())
               .toString())
           : const Text("")),
+      // const DataCell(VerticalDivider()),
       DataCell(
         Center(
           child: Container(
@@ -497,9 +560,14 @@ class _showLatestBookingState extends State<showLatestBooking> {
           ),
         ),
       ),
+      // const DataCell(VerticalDivider()),
+
       DataCell(data["payment_method"] != null
           ? Text(data['payment_method'].toString().toUpperCase())
           : const Text("")),
+
+      // const DataCell(VerticalDivider()),
+
       DataCell(data["grand_total"] != null
           ? Text('₹${data['grand_total']}'.toString().toUpperCase())
           : const Text("")),

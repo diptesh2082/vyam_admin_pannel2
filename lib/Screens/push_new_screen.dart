@@ -36,12 +36,14 @@ class _pushNewState extends State<pushNew> {
   final TextEditingController _adddefiniton = TextEditingController();
 
   var millis, dt, d12, image;
+  final _formKey = GlobalKey<FormState>();
 
   date() {
     millis = Timestamp.now().millisecondsSinceEpoch;
     dt = DateTime.fromMillisecondsSinceEpoch(millis);
 
     d12 = DateFormat('dd/MMM/yyyy, hh:mm a').format(dt);
+
   }
 
   @override
@@ -49,105 +51,108 @@ class _pushNewState extends State<pushNew> {
     return Scaffold(
       backgroundColor: Colors.white10,
       appBar: AppBar(
-        title: Text('New Push Notification'),
+        title: const Text('New Push Notification'),
       ),
-      body: Center(
-        child: SizedBox(
-          height: 480,
-          width: 800,
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  'Add Records',
-                  style: TextStyle(
-                      fontFamily: 'poppins',
-                      fontWeight: FontWeight.w600,
-                      fontSize: 14),
-                ),
-                customTextField(hinttext: "Title", addcontroller: _addtitle),
-                customTextField(
-                    hinttext: "Description", addcontroller: _adddefiniton),
-                Container(
-                  padding: EdgeInsets.all(20),
-                  child: Row(
-                    children: [
-                      Text(
-                        'Upload Image: ',
-                        style: TextStyle(
-                            color: Colors.grey,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15),
-                      ),
-                      SizedBox(
-                        width: 20,
-                      ),
-                      InkWell(
-                        onTap: () async {
-                          image = await chooseImage();
-                          getUrlImage(image);
-
-                        },
-                        child: Icon(
-                          Icons.upload_file_outlined,
+      body: Form(
+        key: _formKey,
+        child: Center(
+          child: SizedBox(
+            height: 480,
+            width: 800,
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Add Records',
+                    style: TextStyle(
+                        fontFamily: 'poppins',
+                        fontWeight: FontWeight.w600,
+                        fontSize: 14),
+                  ),
+                  customTextField3(hinttext: "Title", addcontroller: _addtitle),
+                  customTextField3(
+                      hinttext: "Description", addcontroller: _adddefiniton),
+                  Container(
+                    padding: const EdgeInsets.all(20),
+                    child: Row(
+                      children: [
+                        const Text(
+                          'Upload Image: ',
+                          style: TextStyle(
+                              color: Colors.grey,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15),
                         ),
-                      ),
+                        const SizedBox(
+                          width: 20,
+                        ),
+                        InkWell(
+                          onTap: () async {
+                            image = await chooseImage();
+                            getUrlImage(image);
 
-                      SizedBox(
-                          width: 300,
-                          height: 200,
-                          child: image != null
-                              ? Container(
-                            child: Image.network(image),
-                          )
-                              : Container(
-                            color: Colors.white,
-                            child: Center(
-                                child: Text(
-                                  'Please Upload Image',
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 24),
-                                )),
-                          )),
+                          },
+                          child: const Icon(
+                            Icons.upload_file_outlined,
+                          ),
+                        ),
 
-
-                    ],
+                        SizedBox(
+                            width: 300,
+                            height: 200,
+                            child: image != null
+                                ? Container(
+                              child: Image.network(image),
+                            )
+                                : Container(
+                              color: Colors.white,
+                              child: const Center(
+                                  child: Text(
+                                    'Please Upload Image',
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 24),
+                                  )),
+                            )),
+                      ],
+                    ),
                   ),
-                ),
-                // Text(
-                //   '$timestamp',
-                // ),
-                // customTextField(
-                //     hinttext: "Discount", addcontroller: _adddiscount),
-                // customTextField(
-                //     hinttext: "Title", addcontroller: _addtitle),
-                Center(
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      date();
-                      // await matchID(
-                      //     newId: id, matchStream: pushStream, idField: 'id');
-                      await FirebaseFirestore.instance
-                          .collection('push_notifications')
-                          .doc()
-                          .set(
-                        {
-                          'title': _addtitle.text,
-                          'definition': _adddefiniton.text,
-                          'image': image ,
-                          // 'id': "id",
-                          'timestamp': d12,
-                        },
-                      );
-                      Navigator.pop(context);
-                    },
-                    child: const Text('Done'),
-                  ),
-                )
-              ],
+                  // Text(
+                  //   '$timestamp',
+                  // ),
+                  // customTextField(
+                  //     hinttext: "Discount", addcontroller: _adddiscount),
+                  // customTextField(
+                  //     hinttext: "Title", addcontroller: _addtitle),
+                  Center(
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        date();
+                        if (_formKey.currentState!.validate()) {
+                          // await matchID(
+                          //     newId: id, matchStream: pushStream, idField: 'id');
+                          await FirebaseFirestore.instance
+                              .collection('push_notifications')
+                              .doc()
+                              .set(
+                            {
+                              'title': _addtitle.text,
+                              'definition': _adddefiniton.text,
+                              'image': image,
+                              // 'id': "id",
+                              'timestamp': d12,
+                            },
+                          );
+                          Navigator.pop(context);
+                        }
+                      },
+                      child: const Text('Done'),
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
         ),
