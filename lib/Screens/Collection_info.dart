@@ -782,12 +782,12 @@ class _editimState extends State<editim> {
             onPressed: () async {
               setState(() {
                 isloading = true;
+                i2 = image3;
               });
               var dic = await chooseImage();
               await addImageToStorage(dic, widget.gymid);
               setState(() {
                 isloading = false;
-                i2 = image3;
               });
             },
             child: const Text(
