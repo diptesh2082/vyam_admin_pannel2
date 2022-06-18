@@ -67,7 +67,9 @@ class _TrainerPageState extends State<TrainerPage> {
     print("Current Document_id -->${widget.tGymId}"); //Printing for information
     return Scaffold(
       appBar: AppBar(
+
         title: Text("Trainers"),
+
       ),
       body: SafeArea(
         child: Container(
@@ -81,26 +83,22 @@ class _TrainerPageState extends State<TrainerPage> {
               children: [
                 Padding(
                   padding: const EdgeInsets.only(top: 8.0, left: 8.0),
-                  child: GestureDetector(
-                    onTap: () {
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(onPrimary: Colors.purple),
+                    onPressed: () {
                       Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => ShowAddbox(
-                                    gymid: globalGymId,
-                                  )));
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ShowAddbox(
+                            gymid: globalGymId,
+                          ),
+                        ),
+                      );
                     },
-                    child: Container(
-                      width: 120,
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(20.0)),
-                      child: Row(
-                        children: const [
-                          Icon(Icons.add),
-                          Text('Add Product',
-                              style: TextStyle(fontWeight: FontWeight.w400)),
-                        ],
+                    child: const Text(
+                      'Add Trainer',
+                      style: TextStyle(
+                        color: Colors.white,
                       ),
                     ),
                   ),

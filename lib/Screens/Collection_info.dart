@@ -23,6 +23,7 @@ class UserInformation extends StatefulWidget {
 }
 
 class _UserInformationState extends State<UserInformation> {
+
   CollectionReference? userDetailStream;
   String searchUser = '';
   @override
@@ -43,7 +44,7 @@ class _UserInformationState extends State<UserInformation> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("User Details"),
+        title: const Text("User Details"),
       ),
       body: SafeArea(
         child: Container(
@@ -125,7 +126,7 @@ class _UserInformationState extends State<UserInformation> {
 
                       var doc = snapshot.data.docs;
 
-                      if (searchUser.length > 0) {
+                      if (searchUser.isNotEmpty) {
                         doc = doc.where((element) {
                           return element
                                   .get('name')
@@ -141,7 +142,13 @@ class _UserInformationState extends State<UserInformation> {
                                   .get('address')
                                   .toString()
                                   .toLowerCase()
+                                  .contains(searchUser.toString()) ||
+                              element
+                                  .get('userId')
+                                  .toString()
+                                  .toLowerCase()
                                   .contains(searchUser.toString());
+
                         }).toList();
                       }
 
@@ -796,7 +803,7 @@ class _editimState extends State<editim> {
               ? Container(
                   height: 100,
                   width: 200,
-                  child: Center(
+                  child: const Center(
                     child: CircularProgressIndicator(),
                   ),
                 )
@@ -870,116 +877,118 @@ class _detailsaddState extends State<detailsadd> {
   final TextEditingController _addpincode = TextEditingController();
   final TextEditingController _addsublocality = TextEditingController();
   final TextEditingController _adduserid = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white10,
       appBar: AppBar(
-        title: Text('Add User Details'),
+        title: const Text('Add User Details'),
       ),
-      body: SingleChildScrollView(
-        child: Container(
-          padding: EdgeInsets.all(20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'Add Records',
-                style: TextStyle(
-                    fontFamily: 'poppins',
-                    fontWeight: FontWeight.w600,
-                    fontSize: 14),
-              ),
+      body: Form(
+        key: _formKey,
+        child: SingleChildScrollView(
+          child: Container(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Add Records',
+                  style: TextStyle(
+                      fontFamily: 'poppins',
+                      fontWeight: FontWeight.w600,
+                      fontSize: 14),
+                ),
 
-              customTextField(
-                  hinttext: "Contact Number", addcontroller: _addnumber),
-              // customTextField(
-              //
-              //     hinttext: "UserID", addcontroller: _adduserid),
-              customTextField(hinttext: "Name", addcontroller: _addname),
-              customTextField(hinttext: "Email", addcontroller: _addemail),
-              Row(
-                children: [
-                  const Text(
-                    "Gender: ",
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
-                  ),
-                  const SizedBox(
-                    width: 20,
-                  ),
-                  DropdownButton(
-                      value: gender,
-                      items: const [
-                        DropdownMenuItem(
-                          child: Text("Not Specified"),
-                          value: "Not Specified",
-                        ),
-                        DropdownMenuItem(
-                          child: Text("Male"),
-                          value: "male",
-                        ),
-                        DropdownMenuItem(
-                          child: Text("Female"),
-                          value: "female",
-                        ),
-                      ],
-                      onChanged: (value) {
-                        setState(() {
-                          gender = value as String;
-                        });
-                      }),
-                ],
-              ),
-              loadimage(id: "+91${_addnumber.text}"),
-              Row(
-                children: [
-                  ElevatedButton(
-                    onPressed: () async {
-                      FirebaseFirestore.instance
-                          .collection('user_details')
-                          .doc("+91${_addnumber.text}")
-                          .set(
-                        {
-                          'address': "",
-                          'userId': "+91${_addnumber.text}",
-                          'name': _addname.text,
-                          'email': _addemail.text,
-                          'gender': gender,
-                          'image': ds,
-                          'number': "+91${_addnumber.text}",
-                          'locality': "",
-                          'subLocality': "",
-                          'pincode': "",
-                          'long': " ",
-                          'lat': " ",
-                          'legit': true
-                          // 'image': ""
-                        },
-                      ).whenComplete(() {
-                        print("Item Updated");
-                        print(ds);
-                        setState(() {
-                          ds = "";
-                        });
-                        print("value:$ds");
-                      }).catchError((e) => print(e));
-                      ;
-                      Navigator.pop(context);
-                    },
-                    child: const Text('Done'),
-                  ),
-                  const SizedBox(
-                    width: 20,
-                  ),
-                  ElevatedButton(
-                      onPressed: () {
-                        Navigator.pop(context);
+                customTextField3(
+                    hinttext: "Contact Number", addcontroller: _addnumber),
+                customTextField3(hinttext: "Name", addcontroller: _addname),
+                customTextField3(hinttext: "Email", addcontroller: _addemail),
+                Row(
+                  children: [
+                    const Text(
+                      "Gender: ",
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+                    ),
+                    const SizedBox(
+                      width: 20,
+                    ),
+                    DropdownButton(
+                        value: gender,
+                        items: const [
+                          DropdownMenuItem(
+                            child: Text("Not Specified"),
+                            value: "Not Specified",
+                          ),
+                          DropdownMenuItem(
+                            child: Text("Male"),
+                            value: "male",
+                          ),
+                          DropdownMenuItem(
+                            child: Text("Female"),
+                            value: "female",
+                          ),
+                        ],
+                        onChanged: (value) {
+                          setState(() {
+                            gender = value as String;
+                          });
+                        }),
+                  ],
+                ),
+                loadimage(id: "+91${_addnumber.text}"),
+                Row(
+                  children: [
+                    ElevatedButton(
+                      onPressed: () async {
+                       if (_formKey.currentState!.validate()) {
+                         FirebaseFirestore.instance
+                             .collection('user_details')
+                             .doc("+91${_addnumber.text}")
+                             .set(
+                           {
+                             'address': "",
+                             'userId': "+91${_addnumber.text}",
+                             'name': _addname.text,
+                             'email': _addemail.text,
+                             'gender': gender,
+                             'image': ds,
+                             'number': "+91${_addnumber.text}",
+                             'locality': "",
+                             'subLocality': "",
+                             'pincode': "",
+                             'long': " ",
+                             'lat': " ",
+                             'legit': true
+                             // 'image': ""
+                           },
+                         ).whenComplete(() {
+                           print("Item Updated");
+                           print(ds);
+                           setState(() {
+                             ds = "";
+                           });
+                           print("value:$ds");
+                         }).catchError((e) => print(e));
+                         Navigator.pop(context);
+                       }
                       },
-                      child: const Text('Close')),
-                ],
-              ),
-            ],
+                      child: const Text('Done'),
+                    ),
+                    const SizedBox(
+                      width: 20,
+                    ),
+                    ElevatedButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: const Text('Close')),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -1029,7 +1038,7 @@ class _loadimageState extends State<loadimage> {
               ? Container(
                   height: 100,
                   width: 200,
-                  child: Center(
+                  child: const Center(
                     child: CircularProgressIndicator(),
                   ),
                 )
@@ -1042,7 +1051,7 @@ class _loadimageState extends State<loadimage> {
                   : Container(
                       height: 100,
                       width: 200,
-                      child: Text("Please Upload Image"),
+                      child: const Text("Please Upload Image"),
                     ),
         ),
       ],
