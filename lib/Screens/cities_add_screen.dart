@@ -178,7 +178,7 @@ class _citiesAddState extends State<citiesAdd> {
                         child: Text('No Item Found'),
                       ),
                       textFieldConfiguration: TextFieldConfiguration(
-                        scrollPadding: EdgeInsets.all(20),
+                        scrollPadding: const EdgeInsets.all(20),
                         cursorWidth: 2.0,
                         controller: _addAddress,
                       ),
@@ -233,7 +233,6 @@ class _citiesAddState extends State<citiesAdd> {
 //                           'Status': true,
                           'Address': _addAddress.text,
                           'Status': true,
-// >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
                           'id': id,
                           //'index' : _addIndex,
                         },
