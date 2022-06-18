@@ -364,8 +364,8 @@ class _ProductDetailsState extends State<ProductDetails> {
                             child: const Text("Previous Page"),
                             onPressed: () {
                               setState(() {
-                                if (start >= 1) page--;
-                                if (start > 0 && end > 0) {
+                                if (page > 1) page--;
+                                if (start > 1 && end < length) {
                                   start = start - 10;
                                   end = end - 10;
                                 }
@@ -387,7 +387,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                             child: Text("Next Page"),
                             onPressed: () {
                               setState(() {
-                                if (end <= length) page++;
+                                if (page <= endpage) page++;
                                 if (end < length) {
                                   start = start + 10;
                                   end = end + 10;
@@ -420,6 +420,7 @@ class _ProductDetailsState extends State<ProductDetails> {
   var start = 0;
   var page = 1;
   var end = 10;
+  var endpage;
   var length;
   List<DataRow> _buildlist(
       BuildContext context, List<DocumentSnapshot> snapshot) {
@@ -427,6 +428,7 @@ class _ProductDetailsState extends State<ProductDetails> {
     var s = start + 1;
     var snap = [];
     length = snapshot.length;
+    endpage = (length / 10).floor() + 1;
     snapshot.forEach((element) {
       if (end >= d++ && start <= d) {
         snap.add(element);
