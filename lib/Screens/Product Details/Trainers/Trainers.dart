@@ -67,7 +67,9 @@ class _TrainerPageState extends State<TrainerPage> {
     print("Current Document_id -->${widget.tGymId}"); //Printing for information
     return Scaffold(
       appBar: AppBar(
-        title: Text("Trainer"),
+
+        title: Text("Trainers"),
+
       ),
       body: SafeArea(
         child: Container(

@@ -1,5 +1,3 @@
-
-
 import 'package:admin_panel_vyam/services/deleteMethod.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -269,7 +267,7 @@ class _CancelationPageState extends State<CancelationPage> {
           data['booking_id'] != null
               ? SizedBox(
                   width: 100.0,
-                  child: Text(data['booking_id'] ?? ""),
+                  child: Text(data['booking_id'].toString()),
                 )
               : const Text(""),
         ),

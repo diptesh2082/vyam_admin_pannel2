@@ -53,372 +53,389 @@ class _BookingDetailsState extends State<BookingDetails> {
                 borderRadius: BorderRadius.circular(20.0)),
             child: SingleChildScrollView(
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(top: 8.0, left: 8.0),
-                    child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          textStyle: const TextStyle(fontSize: 15),
-                        ),
-                        onPressed: () {
-                          Get.to(const addbookings()); //showAddbox,
-                        },
-                        child: const Text('Add Booking')),),
-
-                 const SizedBox(height: 15,),
-                 // Row(
-                  Column(
-                    children: [
-                      Row(
-                        children: [
-
-                          Column(
-                            children:[ ElevatedButton.icon(
-                                onPressed: () async {
-                                  setState(() async {
-                                    showStartDate = true;
-                                    startDate = await pickDate(context);
-                                  });
-
-                                  print(startDate.toString());
-                                },
-                                icon: const Icon(Icons.date_range),
-                                label: const Text('Start Date')),
-                              showStartDate !=false ? Text(DateFormat("MMM, dd, yyyy").format(startDate),style: const TextStyle(fontWeight: FontWeight.bold)):const SizedBox(),
-                         ],
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(top: 8.0, left: 8.0),
+                      child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            textStyle: const TextStyle(fontSize: 15),
                           ),
-                          const SizedBox(
-                            width: 20,
-                          ),
-                          Column(
-                            children:[ ElevatedButton.icon(
-                                onPressed: () async {
-                                  setState(() async {
-                                    showEndDate = true;
-                                    endDate = await pickDate(context);
-                                  });
-
-                                  print(endDate.toString());
-                                },
-                                icon: const Icon(Icons.date_range),
-                                label: const Text('End Date')),
-                              showEndDate !=false ? Text(DateFormat("MMM ,dd , yyyy").format(endDate), style: const TextStyle(fontWeight: FontWeight.bold),):const SizedBox(),
-                            ],
-                          ),
-                          const SizedBox(
-                            width: 20,
-                          ),
-                          ElevatedButton.icon(
-                            onPressed: () async {
-                              setState(() {
-                                startDate = DateTime(DateTime.now().year - 5);
-                                endDate = DateTime(DateTime.now().year + 5);
-                                showEndDate = false;
-                                showStartDate = false;
-                                searchVendorId = "";
-                                print(startDate);
-                                print(endDate);
-                              });
-                            },
-                            icon: const Icon(Icons.clear),
-                            label: const Text('Clear'),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-        //           Row(children:[
-        //             Text(DateFormat("MMM, dd, yyyy").format(startDate) , style: const TextStyle(fontWeight: FontWeight.bold),),
-        //             const SizedBox(width: 25,),
-        //             Text(DateFormat("MMM, dd, yyyy").format(endDate) , style: const TextStyle(fontWeight: FontWeight.bold),)
-        //
-        // ]),
-
-                  Container(
-                    width: 500,
-                    height: 51,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(14),
-                      color: Colors.white12,
+                          onPressed: () {
+                            Get.to(const addbookings()); //showAddbox,
+                          },
+                          child: const Text('Add Booking')),
                     ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(15),
-                      child: TextField(
-                        // focusNode: _node,
-                        autofocus: false,
-                        textAlignVertical: TextAlignVertical.bottom,
-                        onSubmitted: (value) async {
-                          FocusScope.of(context).unfocus();
-                        },
-                        // controller: searchController,
-                        onChanged: (value) {
-                          if (value.isEmpty) {
-                            // _node.canRequestFocus=false;
-                            // FocusScope.of(context).unfocus();
-                          }
-                          if (mounted) {
-                            setState(() {
-                              searchVendorId = value.toString();
-                            });
-                          }
-                        },
-                        decoration: InputDecoration(
-                          prefixIcon: const Icon(Icons.search),
-                          hintText: 'Search',
-                          hintStyle: GoogleFonts.poppins(
-                              fontSize: 16, fontWeight: FontWeight.w500),
-                          border: InputBorder.none,
-                          filled: true,
-                          fillColor: Colors.white12,
-                        ),
-                      ),
+
+                    const SizedBox(
+                      height: 15,
                     ),
-                  ),
-                  Center(
-                    child: StreamBuilder<QuerySnapshot>(
-                      stream: FirebaseFirestore.instance
-                          .collection('bookings')
-                          .where('booking_status', whereIn: [
-                            'completed',
-                            'active',
-                            'upcoming',
-                            'cancelled'
-                                'completed',
-                          ])
-                          .orderBy("order_date", descending: true)
-                          .snapshots(),
-                      builder: (context, AsyncSnapshot snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return const CircularProgressIndicator();
-                        }
-                        if (snapshot.data == null) {
-                          print(snapshot.error);
-                          return Container();
-                        }
-                        if (snapshot.hasError) {
-                          print(snapshot.error);
-                          return Container();
-                        }
-                        var doc = snapshot.data.docs;
+                    // Row(
+                    Column(
+                      children: [
+                        Row(
+                          children: [
+                            Column(
+                              children: [
+                                ElevatedButton.icon(
+                                    onPressed: () async {
+                                      setState(() async {
+                                        showStartDate = true;
+                                        startDate = await pickDate(context);
+                                      });
 
-                        if (searchVendorId.isNotEmpty) {
-                          doc = doc.where((element) {
-                            return element
-                                    .get('user_name')
-                                    .toString()
-                                    .toLowerCase()
-                                    .contains(searchVendorId.toString()) ||
-                                element
-                                    .get('userId')
-                                    .toString()
-                                    .toLowerCase()
-                                    .contains(searchVendorId.toString()) ||
-                                element
-                                    .get('grand_total')
-                                    .toString()
-                                    .toLowerCase()
-                                    .contains(searchVendorId.toString()) ||
-                                element
-                                    .get('id')
-                                    .toString()
-                                    .contains(searchVendorId.toString());
-                          }).toList();
-                        }
-
-                        return SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: DataTable(
-                              dataRowHeight: 65,
-                              columns: const [
-                                DataColumn(
-                                    label: Text(
-                                  'Booking ID',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                )),
-                                // DataColumn(
-                                //
-                                //     label: Text(
-                                //       'Vendor Name',
-                                //       style: TextStyle(fontWeight: FontWeight.w600),
-                                //     )),
-                                DataColumn(
-                                  // >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
-                                  label: Text(
-                                    'User Name',
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.w600),
-                                  ),
-                                ),
-                                DataColumn(
-                                  label: Text(
-                                    'User ID',
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.w600),
-                                  ),
-                                ),
-                                DataColumn(
-                                    label: Text(
-                                  'Vendor Name',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                )),
-                                DataColumn(
-                                  label: Text(
-                                    'Category',
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.w600),
-                                  ),
-                                ),
-                                DataColumn(
-                                  label: Text(
-                                    'Package \n Type',
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.w600),
-                                  ),
-                                ),
-                                // DataColumn(
-                                //   label: Text(
-                                //     'Total Days',
-                                //     style:
-                                //         TextStyle(fontWeight: FontWeight.w600),
-                                //   ),
-                                // ),
-                                DataColumn(
-                                  label: Text(
-                                    'Start \n Date',
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.w600),
-                                  ),
-                                ),
-
-                                DataColumn(
-                                  label: Text(
-                                    'End \n Date',
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.w600),
-                                  ),
-                                ),
-                                DataColumn(
-                                  label: Text(
-                                    'Booking \n Date',
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.w600),
-                                  ),
-                                ),
-                                DataColumn(
-                                  label: Text(
-                                    'Total \n Price',
-                                    style:
-                                    TextStyle(fontWeight: FontWeight.w600),
-                                  ),
-                                ),
-                                DataColumn(
-                                  label: Text(
-                                    'Discount',
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.w600),
-                                  ),
-                                ),
-                                DataColumn(
-                                  label: Text(
-                                    'Grand \n Total',
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.w600),
-                                  ),
-                                ),
-                                // <<<<<<< HEAD
-                                // // DataColumn(
-                                // //   label: Text(
-                                // //     'Payment done',
-                                // //     style: TextStyle(fontWeight: FontWeight.w600),
-                                // //   ),
-                                // // ),
-                                // DataColumn(
-                                // label: Text(
-                                // 'Booking Date',
-                                // style: TextStyle(fontWeight: FontWeight.w600),
-                                // ),
-                                // ),
-                                // DataColumn(
-                                // label: Text(
-                                // =======
-
-                                DataColumn(
-                                  label: Text(
-                                    // >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
-                                    'Booking \n Status',
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.w600),
-                                  ),
-                                ),
-                                DataColumn(
-                                  label: Text(
-                                    'Edit',
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.w600),
-                                  ),
-                                ),
-                                DataColumn(
-                                  label: Text(
-                                    'Delete',
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.w600),
-                                  ),
-                                ),
+                                      print(startDate.toString());
+                                    },
+                                    icon: const Icon(Icons.date_range),
+                                    label: const Text('Start Date')),
+                                showStartDate != false
+                                    ? Text(
+                                        DateFormat("MMM, dd, yyyy")
+                                            .format(startDate),
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.bold))
+                                    : const SizedBox(),
                               ],
-                              rows:
-                                  _buildlist(context, doc, startDate, endDate)),
-                        );
-                      },
+                            ),
+                            const SizedBox(
+                              width: 20,
+                            ),
+                            Column(
+                              children: [
+                                ElevatedButton.icon(
+                                    onPressed: () async {
+                                      setState(() async {
+                                        showEndDate = true;
+                                        endDate = await pickDate(context);
+                                      });
+
+                                      print(endDate.toString());
+                                    },
+                                    icon: const Icon(Icons.date_range),
+                                    label: const Text('End Date')),
+                                showEndDate != false
+                                    ? Text(
+                                        DateFormat("MMM ,dd , yyyy")
+                                            .format(endDate),
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      )
+                                    : const SizedBox(),
+                              ],
+                            ),
+                            const SizedBox(
+                              width: 20,
+                            ),
+                            ElevatedButton.icon(
+                              onPressed: () async {
+                                setState(() {
+                                  startDate = DateTime(DateTime.now().year - 5);
+                                  endDate = DateTime(DateTime.now().year + 5);
+                                  showEndDate = false;
+                                  showStartDate = false;
+                                  searchVendorId = "";
+                                  print(startDate);
+                                  print(endDate);
+                                });
+                              },
+                              icon: const Icon(Icons.clear),
+                              label: const Text('Clear'),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
-                  ),
-                  const SizedBox(height: 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      ElevatedButton(
-                        child: const Text("Previous Page"),
-                        onPressed: () {
-                          setState(() {
-                            if (start >= 1) page--;
-                            if (start > 0 && end > 0) {
-                              start = start - 10;
-                              end = end - 10;
-                            }
-                          });
-                          print("Previous Page");
-                        },
+                    //           Row(children:[
+                    //             Text(DateFormat("MMM, dd, yyyy").format(startDate) , style: const TextStyle(fontWeight: FontWeight.bold),),
+                    //             const SizedBox(width: 25,),
+                    //             Text(DateFormat("MMM, dd, yyyy").format(endDate) , style: const TextStyle(fontWeight: FontWeight.bold),)
+                    //
+                    // ]),
+
+                    Container(
+                      width: 500,
+                      height: 51,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(14),
+                        color: Colors.white12,
                       ),
-                      const SizedBox(width: 20),
-                      Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 20),
-                        child: Text(
-                          page.toString(),
-                          style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 15,
-                              color: Colors.teal),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(15),
+                        child: TextField(
+                          // focusNode: _node,
+                          autofocus: false,
+                          textAlignVertical: TextAlignVertical.bottom,
+                          onSubmitted: (value) async {
+                            FocusScope.of(context).unfocus();
+                          },
+                          // controller: searchController,
+                          onChanged: (value) {
+                            if (value.isEmpty) {
+                              // _node.canRequestFocus=false;
+                              // FocusScope.of(context).unfocus();
+                            }
+                            if (mounted) {
+                              setState(() {
+                                searchVendorId = value.toString();
+                              });
+                            }
+                          },
+                          decoration: InputDecoration(
+                            prefixIcon: const Icon(Icons.search),
+                            hintText: 'Search',
+                            hintStyle: GoogleFonts.poppins(
+                                fontSize: 16, fontWeight: FontWeight.w500),
+                            border: InputBorder.none,
+                            filled: true,
+                            fillColor: Colors.white12,
+                          ),
                         ),
                       ),
-                      ElevatedButton(
-                        child: const Text("Next Page"),
-                        onPressed: () {
-                          setState(() {
-                            if (end <= length) page++;
-                            if (end < length) {
-                              start = start + 10;
-                              end = end + 10;
-                            }
-                          });
-                          print("Next Page");
+                    ),
+                    Center(
+                      child: StreamBuilder<QuerySnapshot>(
+                        stream: FirebaseFirestore.instance
+                            .collection('bookings')
+                            .where('booking_status', whereIn: [
+                              'completed',
+                              'active',
+                              'upcoming',
+                              'cancelled'
+                                  'completed',
+                            ])
+                            .orderBy("order_date", descending: true)
+                            .snapshots(),
+                        builder: (context, AsyncSnapshot snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const CircularProgressIndicator();
+                          }
+                          if (snapshot.data == null) {
+                            print(snapshot.error);
+                            return Container();
+                          }
+                          if (snapshot.hasError) {
+                            print(snapshot.error);
+                            return Container();
+                          }
+                          var doc = snapshot.data.docs;
+
+                          if (searchVendorId.isNotEmpty) {
+                            doc = doc.where((element) {
+                              return element
+                                      .get('user_name')
+                                      .toString()
+                                      .toLowerCase()
+                                      .contains(searchVendorId.toString()) ||
+                                  element
+                                      .get('userId')
+                                      .toString()
+                                      .toLowerCase()
+                                      .contains(searchVendorId.toString()) ||
+                                  element
+                                      .get('grand_total')
+                                      .toString()
+                                      .toLowerCase()
+                                      .contains(searchVendorId.toString()) ||
+                                  element
+                                      .get('id')
+                                      .toString()
+                                      .contains(searchVendorId.toString());
+                            }).toList();
+                          }
+
+                          return SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: DataTable(
+                                dataRowHeight: 65,
+                                columns: const [
+                                  DataColumn(
+                                      label: Text(
+                                    'Booking ID',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.w600),
+                                  )),
+                                  // DataColumn(
+                                  //
+                                  //     label: Text(
+                                  //       'Vendor Name',
+                                  //       style: TextStyle(fontWeight: FontWeight.w600),
+                                  //     )),
+                                  DataColumn(
+                                    // >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
+                                    label: Text(
+                                      'User Name',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w600),
+                                    ),
+                                  ),
+                                  DataColumn(
+                                    label: Text(
+                                      'User ID',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w600),
+                                    ),
+                                  ),
+                                  DataColumn(
+                                      label: Text(
+                                    'Vendor Name',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.w600),
+                                  )),
+                                  DataColumn(
+                                    label: Text(
+                                      'Category',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w600),
+                                    ),
+                                  ),
+                                  DataColumn(
+                                    label: Text(
+                                      'Package \n Type',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w600),
+                                    ),
+                                  ),
+                                  // DataColumn(
+                                  //   label: Text(
+                                  //     'Total Days',
+                                  //     style:
+                                  //         TextStyle(fontWeight: FontWeight.w600),
+                                  //   ),
+                                  // ),
+                                  DataColumn(
+                                    label: Text(
+                                      'Start \n Date',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w600),
+                                    ),
+                                  ),
+
+                                  DataColumn(
+                                    label: Text(
+                                      'End \n Date',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w600),
+                                    ),
+                                  ),
+                                  DataColumn(
+                                    label: Text(
+                                      'Booking \n Date',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w600),
+                                    ),
+                                  ),
+                                  DataColumn(
+                                    label: Text(
+                                      'Total \n Price',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w600),
+                                    ),
+                                  ),
+                                  DataColumn(
+                                    label: Text(
+                                      'Discount',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w600),
+                                    ),
+                                  ),
+                                  DataColumn(
+                                    label: Text(
+                                      'Grand \n Total',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w600),
+                                    ),
+                                  ),
+                                  // <<<<<<< HEAD
+                                  // // DataColumn(
+                                  // //   label: Text(
+                                  // //     'Payment done',
+                                  // //     style: TextStyle(fontWeight: FontWeight.w600),
+                                  // //   ),
+                                  // // ),
+                                  // DataColumn(
+                                  // label: Text(
+                                  // 'Booking Date',
+                                  // style: TextStyle(fontWeight: FontWeight.w600),
+                                  // ),
+                                  // ),
+                                  // DataColumn(
+                                  // label: Text(
+                                  // =======
+
+                                  DataColumn(
+                                    label: Text(
+                                      // >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
+                                      'Booking \n Status',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w600),
+                                    ),
+                                  ),
+                                  DataColumn(
+                                    label: Text(
+                                      'Edit',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w600),
+                                    ),
+                                  ),
+                                  DataColumn(
+                                    label: Text(
+                                      'Delete',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w600),
+                                    ),
+                                  ),
+                                ],
+                                rows: _buildlist(
+                                    context, doc, startDate, endDate)),
+                          );
                         },
                       ),
-                    ],
-                  ),
-
-                     ]
-              ),
+                    ),
+                    const SizedBox(height: 20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        ElevatedButton(
+                          child: const Text("Previous Page"),
+                          onPressed: () {
+                            setState(() {
+                              if (start >= 1) page--;
+                              if (start > 0 && end > 0) {
+                                start = start - 10;
+                                end = end - 10;
+                              }
+                            });
+                            print("Previous Page");
+                          },
+                        ),
+                        const SizedBox(width: 20),
+                        Container(
+                          margin: const EdgeInsets.symmetric(horizontal: 20),
+                          child: Text(
+                            page.toString(),
+                            style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15,
+                                color: Colors.teal),
+                          ),
+                        ),
+                        ElevatedButton(
+                          child: const Text("Next Page"),
+                          onPressed: () {
+                            setState(() {
+                              if (end <= length) page++;
+                              if (end < length) {
+                                start = start + 10;
+                                end = end + 10;
+                              }
+                            });
+                            print("Next Page");
+                          },
+                        ),
+                      ],
+                    ),
+                  ]),
             ),
           ),
         ),
@@ -447,30 +464,7 @@ class _BookingDetailsState extends State<BookingDetails> {
         if (end >= ds++ && start <= ds) {
           d.add(element);
         }
-// =======
-        // var y = endDate.difference(startDate).inDays;
-        // <<<<<<< HEAD
-        // print('XXXXXXXXXXXXXXXXXXX???????????????????////////////');
-        // print(x);
-        // if (x.isAfter(startDate) && x.isBefore(endDate) ||
-        // x == startDate ||
-        // x == endDate) {
-        // d.add(element);
-        // }
-        // print('/////////////////DDDDDDDDDDDDDDDDDDDD???????????????');
-        // print(d);
-        // =======
-        // print('XXXXXXXXXXXXXXXXXXX???????????????????////////////');
-        // print(x);
-//       if (x.isAfter(startDate) && x.isBefore(endDate) ||
-//           x == startDate ||
-//           x == endDate) {
-//         d.add(element);
-// >>>>>>> ae7259e7ba6e19ed4976a35667cb3a762fe66e2c
       }
-      // print('/////////////////DDDDDDDDDDDDDDDDDDDD???????????????');
-      // print(d);
-      // >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
     });
     return d
         .map((data) => _buildListItem(context, data, s, start, end))
@@ -629,11 +623,13 @@ class _BookingDetailsState extends State<BookingDetails> {
             planendyear: data['plan_end_duration'].toDate().year.toString(),
             planendmonth: data['plan_end_duration'].toDate().month.toString(),
             planendday: data['plan_end_duration'].toDate().day.toString(),
+            planedate: data['plan_end_duration'].toDate().toString(),
             paymentdone: data['payment_done'].toString(),
             packagetype: data['package_type'],
             orderyear: data['order_date'].toDate().year.toString(),
             ordermonth: data['order_date'].toDate().month.toString(),
             orderday: data['order_date'].toDate().day.toString(),
+            orderdate: data['order_date'].toDate().toString(),
             gymname: data["gym_details"]['name'],
             gymaddress: data['gym_address'].toString(),
             grandtotal: data['grand_total'].toString(),
@@ -645,6 +641,7 @@ class _BookingDetailsState extends State<BookingDetails> {
             bookingid: data['booking_id'],
             bookingyear: data['booking_date'].toDate().year.toString(),
             bookingmonth: data['booking_date'].toDate().month.toString(),
+            bookingdate: data['booking_date'].toDate().toString(),
             bookingday: data['booking_date'].toDate().day.toString(),
             bookingaccepted: data['booking_accepted'].toString(),
           ),
@@ -690,158 +687,62 @@ class _BookingDetailsState extends State<BookingDetails> {
       DataCell(const Icon(Icons.delete), onTap: () {
         // deleteMethod(stream: bookingStream, uniqueDocId: bookingId);
 
-        showDialog(context: context, builder: (context)=>  AlertDialog(
-          shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(16))),
-          content: SizedBox(
-            height: 170,
-            width: 280,
-            child: Stack(
-              children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children:  [
-                    const Text('Do you want to delete?' , style: TextStyle(fontWeight: FontWeight.bold),),
-                    const SizedBox(height: 15,),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const SizedBox(height: 15),
-                        ElevatedButton.icon(
-                          onPressed: (){
-                            deleteMethod(stream: bookingStream, uniqueDocId: bookingId);
-                            Navigator.pop(context);
-                          } ,
-                          icon: const Icon(Icons.check),
-                          label: const Text('Yes'),
-                        ),
-                        const SizedBox(width: 20,),
-                        ElevatedButton.icon(onPressed: (){
-                          Navigator.pop(context);
-                        } ,
-                          icon: const Icon(Icons.clear),
-                          label: const Text('No'),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ],
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(16))),
+            content: SizedBox(
+              height: 170,
+              width: 280,
+              child: Stack(
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text(
+                        'Do you want to delete?',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const SizedBox(height: 15),
+                          ElevatedButton.icon(
+                            onPressed: () {
+                              deleteMethod(
+                                  stream: bookingStream,
+                                  uniqueDocId: bookingId);
+                              Navigator.pop(context);
+                            },
+                            icon: const Icon(Icons.check),
+                            label: const Text('Yes'),
+                          ),
+                          const SizedBox(
+                            width: 20,
+                          ),
+                          ElevatedButton.icon(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            icon: const Icon(Icons.clear),
+                            label: const Text('No'),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
-        ),);
+        );
       })
     ]);
   }
-
-//
-// showAddbox() => showDialog(
-//     context: context,
-//     builder: (context) => AlertDialog(
-//           shape: const RoundedRectangleBorder(
-//               borderRadius: BorderRadius.all(Radius.circular(30))),
-//           content: SizedBox(
-//             height: 480,
-//             width: 800,
-//             child: SingleChildScrollView(
-//               child: Column(
-//                 crossAxisAlignment: CrossAxisAlignment.start,
-//                 children: [
-//                   const Text(
-//                     'Add Records',
-//                     style: TextStyle(
-//                         fontFamily: 'poppins',
-//                         fontWeight: FontWeight.w600,
-//                         fontSize: 14),
-//                   ),
-//                   CustomTextField(
-//                       hinttext: "Vendor ID", addcontroller: _addvendorid),
-//                   CustomTextField(
-//                       hinttext: "User Name", addcontroller: _addusername),
-//                   CustomTextField(
-//                       hinttext: "User ID", addcontroller: _adduserid),
-//                   CustomTextField(
-//                       hinttext: "Total Price", addcontroller: _addtotalprice),
-//                   CustomTextField(
-//                       hinttext: "Total Days", addcontroller: _addtotaldays),
-//                   CustomTextField(
-//                       hinttext: "Tax Pay", addcontroller: _addtaxpay),
-//                   CustomTextField(
-//                       hinttext: "Plan End Y", addcontroller: _addplanendyear),
-//                   CustomTextField(
-//                       hinttext: "Plan End M",
-//                       addcontroller: _addplanendmonth),
-//                   CustomTextField(
-//                       hinttext: "Name", addcontroller: _addplanendday),
-//                   CustomTextField(
-//                       hinttext: "Name", addcontroller: _addpaymentdone),
-//                   CustomTextField(
-//                       hinttext: "Name", addcontroller: _addpackagetype),
-//                   CustomTextField(
-//                       hinttext: "Name", addcontroller: _addorderyear),
-//                   CustomTextField(
-//                       hinttext: "Name", addcontroller: _addordermonth),
-//                   CustomTextField(
-//                       hinttext: "Name", addcontroller: _addorderday),
-//                   CustomTextField(
-//                       hinttext: "Name", addcontroller: _addgymname),
-//                   CustomTextField(
-//                       hinttext: "Name", addcontroller: _addgymaddress),
-//                   CustomTextField(
-//                       hinttext: "Name", addcontroller: _addgrandtotal),
-//                   CustomTextField(
-//                       hinttext: "Name", addcontroller: _adddiscount),
-//                   CustomTextField(
-//                       hinttext: "Name", addcontroller: _adddaysletf),
-//                   CustomTextField(
-//                       hinttext: "Name", addcontroller: _addbookingstatus),
-//                   CustomTextField(
-//                       hinttext: "Name", addcontroller: _addbookingprice),
-//                   CustomTextField(
-//                       hinttext: "Name", addcontroller: _addbookingplan),
-//                   CustomTextField(
-//                       hinttext: "Name", addcontroller: _addbookingid),
-//                   CustomTextField(
-//                       hinttext: "Name", addcontroller: _addbookingyear),
-//                   CustomTextField(
-//                       hinttext: "Name", addcontroller: _addbookingmonth),
-//                   CustomTextField(
-//                       hinttext: "Name", addcontroller: _addbookingday),
-//                   CustomTextField(
-//                       hinttext: "Name", addcontroller: _addbookingaccepted),
-//                   Center(
-//                     child: ElevatedButton(
-//                       onPressed: () async {
-//                         final querySnapshot = FirebaseFirestore.instance
-//                             .collection('bookings')
-//                             .doc("'data['userId']'")
-//                             .collection('user_booking')
-//                             .doc("data['booking_id']");
-//                         querySnapshot.update({'booking_price': 20});
-//                         // FirebaseFirestore.instance
-//                         //     .collectionGroup('user_booking')
-//                         //     .doc(_addgymId.text)
-//                         //     .set(
-//                         //   {
-//                         //     // 'address': _addaddress.text,
-//                         //     // 'gender': _addgender.text,
-//                         //     // 'name': _addname.text,
-//                         //     // 'pincode': _addpincode.text,
-//                         //     // 'location': _addlocation.text,
-//                         //     // 'gym_id': _addlandmark.text,
-//                         //     // 'gym_owner': _addgymowner.text,
-//                         //     // 'landmark': _addlandmark.text
-//                         //   },
-//                         // );
-//                         Navigator.pop(context);
-//                       },
-//                       child: const Text('Done'),
-//                     ),
-//                   )
-//                 ],
-//               ),
-//             ),
-//           ),
-//         ));
 
   Future pickDate(BuildContext context) async {
     final intialDate = DateTime.now();
@@ -883,22 +784,8 @@ class _CustomTextFieldState extends State<CustomTextField> {
       height: 50,
       child: Card(
           child: TextField(
-// <<<<<<< HEAD
-//         autofocus: true,
-//         style: const TextStyle(
-//           fontSize: 20,
-//           fontFamily: 'poppins',
-//           fontWeight: FontWeight.w400,
-//         ),
-//         controller: widget.addcontroller,
-//         maxLines: 3,
-//         decoration: InputDecoration(
-//             border: InputBorder.none,
-//             hintStyle: const TextStyle(
-// =======
         autofocus: true,
         style: const TextStyle(
-// >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
           fontSize: 20,
           fontFamily: 'poppins',
           fontWeight: FontWeight.w400,
@@ -920,39 +807,45 @@ class _CustomTextFieldState extends State<CustomTextField> {
 }
 
 class ProductEditBox extends StatefulWidget {
-  const ProductEditBox({
-    Key? key,
-    required this.vendorid,
-    required this.username,
-    required this.userid,
-    required this.totalprice,
-    required this.totaldays,
-    required this.taxpay,
-    required this.planendyear,
-    required this.planendmonth,
-    required this.planendday,
-    required this.paymentdone,
-    required this.packagetype,
-    required this.orderyear,
-    required this.ordermonth,
-    required this.orderday,
-    required this.gymname,
-    required this.gymaddress,
-    required this.grandtotal,
-    required this.discount,
-    required this.daysleft,
-    required this.bookingstatus,
-    required this.bookingprice,
-    required this.bookingplan,
-    required this.bookingid,
-    required this.bookingyear,
-    required this.bookingmonth,
-    required this.bookingday,
-    required this.bookingaccepted,
-  }) : super(key: key);
+  const ProductEditBox(
+      {Key? key,
+      required this.vendorid,
+      required this.username,
+      required this.userid,
+      required this.totalprice,
+      required this.totaldays,
+      required this.taxpay,
+      required this.planendyear,
+      required this.planendmonth,
+      required this.planendday,
+      required this.paymentdone,
+      required this.packagetype,
+      required this.orderyear,
+      required this.ordermonth,
+      required this.orderday,
+      required this.gymname,
+      required this.gymaddress,
+      required this.grandtotal,
+      required this.discount,
+      required this.daysleft,
+      required this.bookingstatus,
+      required this.bookingprice,
+      required this.bookingplan,
+      required this.bookingid,
+      required this.bookingyear,
+      required this.bookingmonth,
+      required this.bookingday,
+      required this.bookingaccepted,
+      required this.planedate,
+      required this.orderdate,
+      required this.bookingdate})
+      : super(key: key);
 
   final String vendorid;
   final String username;
+  final String planedate;
+  final String orderdate;
+  final String bookingdate;
   final String userid;
   final String totalprice;
   final String totaldays;
@@ -1014,6 +907,9 @@ class _ProductEditBoxState extends State<ProductEditBox> {
   DateTime bookingtimedata = DateTime.now();
   DateTime ordertimedata = DateTime.now();
   DateTime endtimedata = DateTime.now();
+  DateTime bookingdate = DateTime.now();
+  DateTime planedate = DateTime.now();
+  DateTime orderdatee = DateTime.now();
   DateTime? date;
   DateTime? plandate;
   TimeOfDay? time;
@@ -1065,6 +961,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
     _addbookingmonth.text = widget.bookingmonth;
     _addbookingday.text = widget.bookingday;
     _addbookingaccepted.text = widget.bookingaccepted;
+
     // print(widget.address);
     // _address.text = widget.address;
     // _gender.text = widget.gender;
@@ -1105,211 +1002,467 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                           fontSize: 25),
                     ),
                   ),
-                  const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Text('Vendor ID:',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 15)),
-                  ),
-                  Container(
-                      child: StreamBuilder<QuerySnapshot>(
-// // <<<<<<< HEAD
-//                     stream: vendorIdStream!.snapshots(),
-//                     builder: (context, AsyncSnapshot snapshot) {
-//                       if (snapshot.connectionState == ConnectionState.waiting) {
-//                         return const CircularProgressIndicator();
-//                       }
-//                       if (snapshot.data == null) {
-//                         return Container();
-//                       }
-//                       print("-----------------------------------");
-//                       var doc = snapshot.data.docs;
-//                       return Container(
-//                         width: 500,
-//                         height: 200,
-//                         child: ListView.builder(
-//                             itemCount: doc.length,
-//                             itemBuilder: (BuildContext context, int index) {
-//                               bool check = false;
-//                               return RadioListTile<String>(
-//                                 value: doc[index]["gym_id"],
-//                                 groupValue: abc3,
-//                                 onChanged: (val) => setState(
-//                                   () {
-//                                     abc3 = val!;
-//                                   },
-//                                 ),
-//                                 title: Text(doc[index]["gym_id"]),
-//                               );
-//                               // ListTile(
-//                               //   title: Text(doc[index]["name"]),
-//                               //   onTap: () {
-//                               //     _addgymname.text = doc[index]["name"];
-//                               //   },
-//                               // );
-//                             }),
-//                       );
-//                     },
-//                   )),
-//                   const SizedBox(height: 15),
-//                   // customTextField(
-//                   //     hinttext: "Vendor ID", addcontroller: _addvendorid),
-//                   customTextField(
-//                       hinttext: "User Name", addcontroller: _addusername),
-//                   customTextField(
-//                       hinttext: "User ID", addcontroller: _adduserid),
-//                   // CustomTextField(
-//                   //     hinttext: "Total Price", addcontroller: _addtotalprice),
-//                   customTextField(
-//                       hinttext: "Total Days", addcontroller: _addtotaldays),
-//                   // CustomTextField(
-//                   //     hinttext: "Tax Pay", addcontroller: _addtaxpay),
-//                   // Container(
-//                   //   child: Row(
-//                   //     children: [
-//                   //       ElevatedButton(
-//                   //         child: const Text('Select Date & Time for Plan'),
-//                   //         onPressed: () => pickDateTime(context, endtimedata),
-//                   //       ),
-//                   //       SizedBox(width: 15),
-//                   //     ],
-//                   //   ),
-//                   // ),
-//                   Container(
-//                     child: Row(
-//                       children: [
-//                         const Padding(
-//                           padding: EdgeInsets.all(8.0),
-//                           child: Text('Select Date & Time For Plan:',
-//                               style: TextStyle(
-//                                 fontSize: 20,
-//                                 fontWeight: FontWeight.bold,
-//                               )),
-//                         ),
-//                         ElevatedButton(
-//                           child: const Text('Select Date & Time For Plan'),
-//                           onPressed: () => pickplanDateTime(context),
-//                         ),
-//                         SizedBox(width: 15),
-//                       ],
-//                     ),
-//                   ),
-//                   // customTextField(
-//                   //     hinttext: "Plan End Y", addcontroller: _addplanendyear),
-//                   // customTextField(
-//                   //     hinttext: "Plan End M", addcontroller: _addplanendmonth),
-//                   // customTextField(
-//                   //     hinttext: "Plan End D", addcontroller: _addplanendday),
-//                   const SizedBox(height: 15),
-//                   const Padding(
-//                     padding: EdgeInsets.all(8.0),
-//                     child: Text('Payment Done:',
-//                         style: TextStyle(
-//                             fontWeight: FontWeight.bold, fontSize: 15)),
-//                   ),
-//                   DropdownButton<String>(
-//                     isExpanded: true,
-//                     hint: Text("Payment Done"),
-//                     items: _do.map<DropdownMenuItem<String>>((String value) {
-//                       return DropdownMenuItem<String>(
-//                         value: value,
-//                         child: Text(value),
-//                       );
-//                     }).toList(),
-//                     onChanged: (String? newValue) {
-//                       setState(() {
-//                         this._dropdownValue = newValue!;
-//                         _addpaymentdone.text = _dropdownValue;
-//                         print(_dropdownValue);
-//                       });
-//                     },
-//                     value: _dropdownValue,
-//                   ),
-//                   // customTextField(
-
-// <<<<<<< HEAD
-// <<<<<<< HEAD
-// =======
-//
-// >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
-// =======
-                    // <<<<<<< HEAD
-                    // =======
-                    //
-                    // >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
-// >>>>>>> ae7259e7ba6e19ed4976a35667cb3a762fe66e2c
-                    stream: vendorIdStream!.snapshots(),
-                    builder: (context, AsyncSnapshot snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const CircularProgressIndicator();
-                      }
-                      if (snapshot.data == null) {
-                        return Container();
-                      }
-                      print("-----------------------------------");
-                      var doc = snapshot.data.docs;
-                      return Container(
-                        width: 500,
-                        height: 200,
-                        child: ListView.builder(
-                            itemCount: doc.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              bool check = false;
-                              return RadioListTile<String>(
-                                value: doc[index]["gym_id"],
-                                groupValue: abc3,
-                                onChanged: (val) => setState(
-                                  () {
-                                    abc3 = val!;
-                                  },
-                                ),
-                                title: Text(doc[index]["gym_id"]),
-                              );
-                              // ListTile(
-                              //   title: Text(doc[index]["name"]),
-                              //   onTap: () {
-                              //     _addgymname.text = doc[index]["name"];
-                              //   },
-                              // );
-                            }),
-                      );
-                    },
-                  )),
-// <<<<<<< HEAD
-// <<<<<<< HEAD
-// =======
-//
-// >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
-// =======
-                  //     <<<<<<< HEAD
-                  // =======
-                  //
-                  // >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
-// >>>>>>> ae7259e7ba6e19ed4976a35667cb3a762fe66e2c
-                  const SizedBox(height: 15),
-                  // customTextField(
-                  //     hinttext: "Vendor ID", addcontroller: _addvendorid),
-                  customTextField(
-                      hinttext: "User Name", addcontroller: _addusername),
-                  customTextField(
-                      hinttext: "User ID", addcontroller: _adduserid),
-                  // CustomTextField(
-                  //     hinttext: "Total Price", addcontroller: _addtotalprice),
-                  customTextField(
-                      hinttext: "Total Days", addcontroller: _addtotaldays),
-                  // CustomTextField(
-                  //     hinttext: "Tax Pay", addcontroller: _addtaxpay),
                   // Container(
-                  //   child: Row(
-                  //     children: [
-                  //       ElevatedButton(
-                  //         child: const Text('Select Date & Time for Plan'),
-                  //         onPressed: () => pickDateTime(context, endtimedata),
-                  //       ),
-                  //       SizedBox(width: 15),
-                  //     ],
+                  //   child: Padding(
+                  //     padding: const EdgeInsets.all(8.0),
+                  //     child: Row(
+                  //       children: [
+                  //         Text(
+                  //           'Vendor ID:',
+                  //           style: TextStyle(
+                  //             fontSize: 20,
+                  //             fontFamily: 'poppins',
+                  //             fontWeight: FontWeight.w400,
+                  //           ),
+                  //         ),
+                  //         SizedBox(
+                  //           width: 20,
+                  //         ),
+                  //         Text(widget.vendorid,
+                  //             style: TextStyle(
+                  //                 fontWeight: FontWeight.bold, fontSize: 15)),
+                  //       ],
+                  //     ),
+                  //   ),
+                  //   decoration: BoxDecoration(
+                  //     border: Border.all(width: 0.5, color: Colors.grey),
+                  //     borderRadius: BorderRadius.circular(10),
                   //   ),
                   // ),
+                  // SizedBox(
+                  //   height: 20,
+                  // ),
+                  Container(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: [
+                          Text(
+                            "User Name: ",
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontFamily: 'poppins',
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                          SizedBox(
+                            width: 20,
+                          ),
+                          Text(_addusername.text,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 15)),
+                        ],
+                      ),
+                    ),
+                    decoration: BoxDecoration(
+                      border: Border.all(width: 0.5, color: Colors.grey),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Container(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: [
+                          Text(
+                            "User ID:",
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontFamily: 'poppins',
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                          SizedBox(
+                            width: 20,
+                          ),
+                          Text(widget.userid,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 15)),
+                        ],
+                      ),
+                    ),
+                    decoration: BoxDecoration(
+                      border: Border.all(width: 0.5, color: Colors.grey),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Container(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: [
+                          Text(
+                            "Gym Name:",
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontFamily: 'poppins',
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                          SizedBox(
+                            width: 20,
+                          ),
+                          Text(widget.gymname,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 15)),
+                        ],
+                      ),
+                    ),
+                    decoration: BoxDecoration(
+                      border: Border.all(width: 0.5, color: Colors.grey),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Container(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: [
+                          Text(
+                            "Gym Address:",
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontFamily: 'poppins',
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                          SizedBox(
+                            width: 20,
+                          ),
+                          Text(_addgymaddress.text,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 15)),
+                        ],
+                      ),
+                    ),
+                    decoration: BoxDecoration(
+                      border: Border.all(width: 0.5, color: Colors.grey),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Container(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: [
+                          Text(
+                            "Total Days:",
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontFamily: 'poppins',
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                          SizedBox(
+                            width: 20,
+                          ),
+                          Text(_addtotaldays.text,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 15)),
+                        ],
+                      ),
+                    ),
+                    decoration: BoxDecoration(
+                      border: Border.all(width: 0.5, color: Colors.grey),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  // customTextField(
+                  //     hinttext: "Days Left", addcontroller: _adddaysletf),
+                  Container(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: [
+                          Text(
+                            "Days Left:",
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontFamily: 'poppins',
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                          SizedBox(
+                            width: 20,
+                          ),
+                          Text(_adddaysletf.text,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 15)),
+                        ],
+                      ),
+                    ),
+                    decoration: BoxDecoration(
+                      border: Border.all(width: 0.5, color: Colors.grey),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Container(
+                    child: Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Row(
+                        children: [
+                          Text(
+                            'Payment Done:',
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontFamily: 'poppins',
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                          SizedBox(
+                            width: 20,
+                          ),
+                          Text(widget.paymentdone.toString().toUpperCase(),
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 15)),
+                        ],
+                      ),
+                    ),
+                    decoration: BoxDecoration(
+                      border: Border.all(width: 0.5, color: Colors.grey),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Container(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: [
+                          Text(
+                            "Package Type:",
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontFamily: 'poppins',
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                          SizedBox(
+                            width: 20,
+                          ),
+                          Text(_addpackagetype.text,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 15)),
+                        ],
+                      ),
+                    ),
+                    decoration: BoxDecoration(
+                      border: Border.all(width: 0.5, color: Colors.grey),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Container(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: [
+                          Text("Booking Plan",
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontFamily: 'poppins',
+                                fontWeight: FontWeight.w400,
+                              )),
+                          SizedBox(
+                            width: 20,
+                          ),
+                          Text(_addbookingplan.text,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 15)),
+                        ],
+                      ),
+                    ),
+                    decoration: BoxDecoration(
+                      border: Border.all(width: 0.5, color: Colors.grey),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Container(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: [
+                          Text("Booking Price (₹)",
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontFamily: 'poppins',
+                                fontWeight: FontWeight.w400,
+                              )),
+                          SizedBox(
+                            width: 20,
+                          ),
+                          Text(_addbookingprice.text,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 15)),
+                        ],
+                      ),
+                    ),
+                    decoration: BoxDecoration(
+                      border: Border.all(width: 0.5, color: Colors.grey),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Container(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: [
+                          Text(
+                            "Discount (₹):",
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontFamily: 'poppins',
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                          SizedBox(
+                            width: 20,
+                          ),
+                          Text(_adddiscount.text,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 15)),
+                        ],
+                      ),
+                    ),
+                    decoration: BoxDecoration(
+                      border: Border.all(width: 0.5, color: Colors.grey),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Container(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: [
+                          Text(
+                            "Grand Total (₹):",
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontFamily: 'poppins',
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                          SizedBox(
+                            width: 20,
+                          ),
+                          Text(_addgrandtotal.text,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 15)),
+                        ],
+                      ),
+                    ),
+                    decoration: BoxDecoration(
+                      border: Border.all(width: 0.5, color: Colors.grey),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Container(
+                    child: Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Row(
+                        children: [
+                          Text(
+                            'Booking Status:',
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontFamily: 'poppins',
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                          SizedBox(width: 20),
+                          DropdownButton(
+                            value: dropdownstatusvalue,
+                            icon: const Icon(Icons.keyboard_arrow_down),
+                            items: _bookstatus.map((String items) {
+                              return DropdownMenuItem(
+                                value: items,
+                                child: Text(items),
+                              );
+                            }).toList(),
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                dropdownstatusvalue = newValue!;
+                                _addbookingstatus.text = dropdownstatusvalue;
+                              });
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                    decoration: BoxDecoration(
+                      border: Border.all(width: 0.5, color: Colors.grey),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+
+                  SizedBox(
+                    height: 20,
+                  ),
+                  // CustomTextField(
+                  //     hinttext: "booking ID", addcontroller: _addbookingid),
+
+                  Container(
+                    child: Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Row(
+                        children: [
+                          Text('Booking Accepted:',
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontFamily: 'poppins',
+                                fontWeight: FontWeight.w400,
+                              )),
+                          SizedBox(width: 20),
+                          Text(_addbookingaccepted.text,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 15)),
+                        ],
+                      ),
+                    ),
+                    decoration: BoxDecoration(
+                      border: Border.all(width: 0.5, color: Colors.grey),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
                   Container(
                     child: Row(
                       children: [
@@ -1321,6 +1474,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                                 fontWeight: FontWeight.bold,
                               )),
                         ),
+                        SizedBox(width: 40),
                         ElevatedButton(
                           child: const Text('Select Date & Time For Plan'),
                           onPressed: () => pickplanDateTime(context),
@@ -1329,152 +1483,9 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                       ],
                     ),
                   ),
-                  // customTextField(
-                  //     hinttext: "Plan End Y", addcontroller: _addplanendyear),
-                  // customTextField(
-                  //     hinttext: "Plan End M", addcontroller: _addplanendmonth),
-                  // customTextField(
-                  //     hinttext: "Plan End D", addcontroller: _addplanendday),
-                  const SizedBox(height: 15),
-                  const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Text('Payment Done:',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 15)),
+                  SizedBox(
+                    height: 20,
                   ),
-                  DropdownButton<String>(
-                    isExpanded: true,
-                    hint: Text("Payment Done"),
-                    items: _do.map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                      );
-                    }).toList(),
-                    onChanged: (String? newValue) {
-                      setState(() {
-                        this._dropdownValue = newValue!;
-                        _addpaymentdone.text = _dropdownValue;
-                        print(_dropdownValue);
-                      });
-                    },
-                    value: _dropdownValue,
-                  ),
-                  // customTextField(
-// >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
-                  //     hinttext: "Payment Done", addcontroller: _addpaymentdone),
-                  customTextField(
-                      hinttext: "Package Type", addcontroller: _addpackagetype),
-                  const SizedBox(height: 15),
-                  const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Text('Package Type:',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 15)),
-                  ),
-                  Container(
-                    child: StreamBuilder<QuerySnapshot>(
-                      stream: categoryStream!.snapshots(),
-                      builder: (context, AsyncSnapshot snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return const CircularProgressIndicator();
-                        }
-                        if (snapshot.data == null) {
-                          return Container();
-                        }
-                        print("-----------------------------------");
-                        var doc = snapshot.data.docs;
-                        return Container(
-                          width: 400,
-                          height: 200,
-                          child: ListView.builder(
-                              itemCount: doc.length,
-                              itemBuilder: (BuildContext context, int index) {
-                                bool check = false;
-                                return
-// <<<<<<< HEAD
-// <<<<<<< HEAD
-// =======
-//
-// >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
-// =======
-                                    // <<<<<<< HEAD
-                                    // =======
-                                    //
-                                    // >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
-// >>>>>>> ae7259e7ba6e19ed4976a35667cb3a762fe66e2c
-                                    // RadioBoxx(
-                                    //   doc[index]["name"],
-                                    //   doc[index]["category_id"],
-                                    //   _addpackagetype.text,
-                                    // );
-                                    RadioListTile<String>(
-                                  value: doc[index]["name"],
-                                  groupValue: abc,
-                                  onChanged: (val) => setState(
-                                    () {
-                                      abc = val!;
-                                    },
-                                  ),
-                                  title: Text(doc[index]["name"]),
-                                );
-// <<<<<<< HEAD
-// <<<<<<< HEAD
-// =======
-
-// >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
-// =======
-                                // <<<<<<< HEAD
-                                // =======
-
-                                // >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
-// >>>>>>> ae7259e7ba6e19ed4976a35667cb3a762fe66e2c
-// =======
-                                // RadioBoxx(
-                                //   doc[index]["name"],
-                                //   doc[index]["category_id"],
-                                //   _addpackagetype.text,
-                                // );
-                                RadioListTile<String>(
-                                  value: doc[index]["name"],
-                                  groupValue: abc,
-                                  onChanged: (val) => setState(
-                                    () {
-                                      abc = val!;
-                                    },
-                                  ),
-                                  title: Text(doc[index]["name"]),
-                                );
-// >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
-                                //     ListTile(
-                                //   tileColor: a,
-                                //   title: Text(doc[index]["name"]),
-                                //   onTap: () {
-                                //     _addpackagetype.text = doc[index]["name"];
-                                //     print(doc[index]["name"]);
-                                //     setState(() {
-                                //       a = Colors.black12;
-                                //     });
-                                //   },
-                                // );
-                              }),
-                        );
-                      },
-                    ),
-                  ),
-                  // )),
-                  // Container(
-                  //   child: Row(
-                  //     children: [
-                  //       ElevatedButton(
-                  //         child: const Text('Select Date & Time for Order'),
-                  //         onPressed: () => pickDateTime(context, ordertimedata),
-                  //       ),
-                  //       SizedBox(width: 15),
-                  //     ],
-                  //   ),
-                  // ),
                   Container(
                     child: Row(
                       children: [
@@ -1486,6 +1497,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                                 fontWeight: FontWeight.bold,
                               )),
                         ),
+                        SizedBox(width: 40),
                         ElevatedButton(
                           child: const Text('Select Date & Time For Order'),
                           onPressed: () => pickorderDateTime(context),
@@ -1494,127 +1506,9 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                       ],
                     ),
                   ),
-                  // customTextField(
-                  //     hinttext: "Order Date Y", addcontroller: _addorderyear),
-                  // customTextField(
-                  //     hinttext: "Order Date M", addcontroller: _addordermonth),
-                  // customTextField(
-                  //     hinttext: "Order Date D", addcontroller: _addorderday),
-                  const SizedBox(height: 15),
-                  const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Text('Gym Name:',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 15)),
+                  SizedBox(
+                    height: 20,
                   ),
-                  Container(
-                      child: StreamBuilder<QuerySnapshot>(
-//
-// <<<<<<< HEAD
-// <<<<<<< HEAD
-// =======
-//
-// >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
-// =======
-//               <<<<<<< HEAD
-//               =======
-//
-//               >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
-// >>>>>>> ae7259e7ba6e19ed4976a35667cb3a762fe66e2c
-                    stream: vendorIdStream!.snapshots(),
-                    builder: (context, AsyncSnapshot snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const CircularProgressIndicator();
-                      }
-                      if (snapshot.data == null) {
-                        return Container();
-                      }
-                      print("-----------------------------------");
-                      var doc = snapshot.data.docs;
-                      return Container(
-                        width: 400,
-                        height: 300,
-                        child: ListView.builder(
-                            itemCount: doc.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              bool check = false;
-                              return RadioListTile<String>(
-                                value: doc[index]["name"],
-                                groupValue: abc2,
-                                onChanged: (val) => setState(
-                                  () {
-                                    abc2 = val!;
-                                  },
-                                ),
-                                title: Text(doc[index]["name"]),
-                              );
-                              // ListTile(
-                              //   title: Text(doc[index]["name"]),
-                              //   onTap: () {
-                              //     _addgymname.text = doc[index]["name"];
-                              //   },
-                              // );
-                            }),
-                      );
-                    },
-                  )),
-// <<<<<<< HEAD
-// <<<<<<< HEAD
-// =======
-//
-// >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
-// =======
-                  //     <<<<<<< HEAD
-                  // =======
-                  //
-                  // >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
-// >>>>>>> ae7259e7ba6e19ed4976a35667cb3a762fe66e2c
-
-                  // customTextField(
-                  //     hinttext: "Gym Name", addcontroller: _addgymname),
-                  customTextField(
-                      hinttext: "Gym Address", addcontroller: _addgymaddress),
-                  customTextField(
-                      hinttext: "Grand Total (₹)",
-                      addcontroller: _addgrandtotal),
-                  customTextField(
-                      hinttext: "Discount (₹)", addcontroller: _adddiscount),
-                  customTextField(
-                      hinttext: "Days Left", addcontroller: _adddaysletf),
-                  const SizedBox(height: 15),
-                  const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Text('Booking Status:',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w700, fontSize: 15)),
-                  ),
-                  DropdownButton(
-                    value: dropdownstatusvalue,
-                    icon: const Icon(Icons.keyboard_arrow_down),
-                    items: _bookstatus.map((String items) {
-                      return DropdownMenuItem(
-                        value: items,
-                        child: Text(items),
-                      );
-                    }).toList(),
-                    onChanged: (String? newValue) {
-                      setState(() {
-                        dropdownstatusvalue = newValue!;
-                        _addbookingstatus.text = dropdownstatusvalue;
-                      });
-                    },
-                  ),
-                  // customTextField(
-                  //     hinttext: "Booking Status",
-                  //     addcontroller: _addbookingstatus),
-                  customTextField(
-                      hinttext: "Booking Price (₹)",
-                      addcontroller: _addbookingprice),
-                  customTextField(
-                      hinttext: "Booking Plan", addcontroller: _addbookingplan),
-                  // CustomTextField(
-                  //     hinttext: "booking ID", addcontroller: _addbookingid),
-
                   Container(
                     child: Row(
                       children: [
@@ -1626,51 +1520,20 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                                 fontWeight: FontWeight.bold,
                               )),
                         ),
+                        SizedBox(width: 40),
                         ElevatedButton(
-                          child: const Text('Select Date & Time For Bookings'),
-                          onPressed: () => pickDateTime(context),
-                        ),
+                            child:
+                                const Text('Select Date & Time For Bookings'),
+                            onPressed: () {
+                              // DateFormat("MMM, dd, yyyy")
+                              //     .format(data["booking_date"].toDate());
+                              pickDateTime(context);
+                            }),
                         const SizedBox(width: 15),
                       ],
                     ),
                   ),
-                  // customTextField(
-                  //     hinttext: "Booking Date Y",
-                  //     addcontroller: _addbookingyear),
-                  // customTextField(
-                  //     hinttext: "Booking Date M",
-                  //     addcontroller: _addbookingmonth),
-                  // customTextField(
-                  //     hinttext: "Booking Date D",
-                  //     addcontroller: _addbookingday),
-                  const SizedBox(height: 15),
-                  const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Text('Booking Accepted:',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w700, fontSize: 15)),
-                  ),
-                  DropdownButton<String>(
-                    isExpanded: true,
-                    hint: const Text("Booking Accepted"),
-                    items: _do.map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                      );
-                    }).toList(),
-                    onChanged: (String? newValue) {
-                      setState(() {
-                        this._dropdownValue = newValue!;
-                        _addbookingaccepted.text = _dropdownValue;
-                        print(_dropdownValue);
-                      });
-                    },
-                    value: _dropdownValue,
-                  ),
-                  // customTextField(
-                  //     hinttext: "Booking Accepted",
-                  //     addcontroller: _addbookingaccepted),
+
                   Padding(
                     padding: const EdgeInsets.all(12.0),
                     child: Center(
@@ -1680,81 +1543,42 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                           ElevatedButton(
                             onPressed: () async {
                               DocumentReference documentReference =
-// <<<<<<< HEAD
-// <<<<<<< HEAD
-// <<<<<<< HEAD
-//                                   FirebaseFirestore.instance
-//                                       .collection('bookings')
-//                                       .doc(_addbookingid.text);
-// =======
-                                  // FirebaseFirestore.instance
-                                  //     .collection('bookings')
-                                  //     .doc(_addbookingid.text);
-// >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
-// =======
                                   FirebaseFirestore.instance
                                       .collection('bookings')
                                       .doc(_addbookingid.text);
-// >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
-                              // DateTime endtimedata = DateTime.parse(
-                              //     '${_addplanendyear.text}-${isLess(_addplanendmonth.text) ? '0' + _addplanendmonth.text : _addplanendday.text}-${isLess(_addplanendday.text) ? '0' + _addplanendday.text : _addplanendday.text} 00:00:04Z');
-                              // DateTime ordertimedata = DateTime.parse(
-                              //     '${_addorderyear.text}-${isLess(_addordermonth.text) ? '0' + _addordermonth.text : _addordermonth.text}-${isLess(_addorderday.text) ? '0' + _addorderday.text : _addorderday.text} 00:00:04Z');
-                              // DateTime bookingtimedata = DateTime.parse(
-                              //     '${_addbookingyear.text}-${isLess(_addbookingmonth.text) ? '0' + _addbookingmonth.text : _addbookingmonth.text}-${isLess(_addbookingday.text) ? '0' + _addbookingday.text : _addbookingday.text} 00:00:04Z');
-// =======
+
                               FirebaseFirestore.instance
                                   .collection('bookings')
                                   .doc(_addbookingid.text);
-                              //\ '0' + _addbookingmonth.text : _addbookingmonth.text}-${isLess(_addbookingday.text) ? '0' + _addbookingday.text : _addbookingday.text} 00:00:04Z');
-// >>>>>>> ae7259e7ba6e19ed4976a35667cb3a762fe66e2c
 
                               Map<String, dynamic> data = <String, dynamic>{
-                                'vandorId': abc3,
-                                'user_name': _addusername.text,
-                                'userId': _adduserid.text,
+                                // 'vandorId': abc3,
+                                // 'user_name': _addusername.text,
+                                // 'userId': _adduserid.text,
                                 // 'total_price': _addtotalprice.text,
-                                'totalDays': _addtotaldays.text,
-                                'tax_pay': _addtaxpay.text,
+                                // 'totalDays': _addtotaldays.text,
+                                // 'tax_pay': _addtaxpay.text,
                                 'plan_end_duration': endtimedata,
-                                'payment_done': _addpaymentdone.text == 'true'
-                                    ? true
-                                    : false,
-                                'package_type': abc,
-                                'order_date': ordertimedata,
-                                'gym_name': abc2,
-                                'gym_address': _addgymaddress.text,
-                                'grand_total': _addgrandtotal.text,
-                                'discount': _adddiscount.text,
-                                'daysLeft': _adddaysletf.text,
-                                'booking_status': _addbookingstatus.text,
-                                'booking_price': _addbookingprice.text,
-                                'booking_plan': _addbookingplan.text,
-                                'booking_id': _addbookingid.text,
-                                'booking_date': bookingtimedata,
-// <<<<<<< HEAD
-// <<<<<<< HEAD///
-//                                 'booking_accepted':
-// <<<<<<< HEAD
-//                                     _addbookingaccepted.text == 'true'
-//                                         ? true
-//                                         : false,
-// =======
-//                                     _addbookingaccepted.text == 'true'
+                                // 'payment_done': _addpaymentdone.text == 'true'
                                 //     ? true
                                 //     : false,
-// >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
-// =======
-                                'booking_accepted':
-                                    _addbookingaccepted.text == 'true'
-                                        ? true
-                                        : false,
-// >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
-// =======
+                                // 'package_type': abc,
+                                'order_date': ordertimedata,
+                                // 'gym_name': abc2,
+                                // 'gym_address': _addgymaddress.text,
+                                // 'grand_total': _addgrandtotal.text,
+                                // 'discount': _adddiscount.text,
+                                // 'daysLeft': _adddaysletf.text,
+                                'booking_status': _addbookingstatus.text,
+                                // 'booking_price': _addbookingprice.text,
+                                // 'booking_plan': _addbookingplan.text,
+                                // 'booking_id': _addbookingid.text,
+                                'booking_date': bookingtimedata,
 
-                                // 'booking_accepted': true ? true : false,
-                                // >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
-// >>>>>>> ae7259e7ba6e19ed4976a35667cb3a762fe66e2c
+                                // 'booking_accepted':
+                                //     _addbookingaccepted.text == 'true'
+                                //         ? true
+                                //         : false,
                               };
                               await documentReference
                                   .update(data)

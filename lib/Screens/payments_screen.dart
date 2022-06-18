@@ -330,6 +330,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
     d12 = widget.d12;
   }
 
+  final _formKey = GlobalKey<FormState>();
   DateTime? date;
   TimeOfDay? time;
   DateTime? dateTime;
@@ -351,153 +352,158 @@ class _PaymentScreenState extends State<PaymentScreen> {
       ),
       body: Container(
         padding: const EdgeInsets.all(20),
-        child: Center(
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  'Add Records',
-                  style: TextStyle(
-                      fontFamily: 'poppins',
-                      fontWeight: FontWeight.w600,
-                      fontSize: 14),
-                ),
-                const Text("Choose Vendor"),
-                SizedBox(
-                    height: 400,
-                    width: 400,
-                    child: StreamBuilder<QuerySnapshot>(
-                      stream: productStream!.snapshots(),
-                      builder: (context, AsyncSnapshot snapshot) {
-                        String check = "Jee";
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return const CircularProgressIndicator();
-                        }
-                        if (snapshot.data == null) {
-                          return Container();
-                        }
-                        print("-----------------------------------");
-                        var doc = snapshot.data.docs;
-                        print(snapshot.data.docs);
-                        return ListView.builder(
-                          itemCount: doc.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            return RadioListTile<String>(
-                                value: doc[index]['gym_id'],
-                                title: Text(
-                                    "${doc[index]['name'].toString()} || ${doc[index]['branch']}"),
-                                groupValue: namee,
-                                onChanged: (String? valuee) {
-                                  setState(() {
-                                    namee = valuee!;
-                                    place = doc[index]['branch'];
+        child: Form(
+          key: _formKey,
+          child: Center(
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Add Records',
+                    style: TextStyle(
+                        fontFamily: 'poppins',
+                        fontWeight: FontWeight.w600,
+                        fontSize: 14),
+                  ),
+                  const Text("Choose Vendor"),
+                  SizedBox(
+                      height: 400,
+                      width: 400,
+                      child: StreamBuilder<QuerySnapshot>(
+                        stream: productStream!.snapshots(),
+                        builder: (context, AsyncSnapshot snapshot) {
+                          String check = "Jee";
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const CircularProgressIndicator();
+                          }
+                          if (snapshot.data == null) {
+                            return Container();
+                          }
+                          print("-----------------------------------");
+                          var doc = snapshot.data.docs;
+                          print(snapshot.data.docs);
+                          return ListView.builder(
+                            itemCount: doc.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return RadioListTile<String>(
+                                  value: doc[index]['gym_id'],
+                                  title: Text(
+                                      "${doc[index]['name'].toString()} || ${doc[index]['branch']}"),
+                                  groupValue: namee,
+                                  onChanged: (String? valuee) {
+                                    setState(() {
+                                      namee = valuee!;
+                                      place = doc[index]['branch'];
+                                    });
+                                    print(namee);
                                   });
-                                  print(namee);
-                                });
-                          },
-                        );
-                      },
-                    )),
-                customTextField(hinttext: "Amount", addcontroller: _addAmount),
-                // customTextField(hinttext: "Place", addcontroller: _addPlace),
-                // customTextField(
-                //     hinttext: "TimeStamp",
-                //     addcontroller: _addTimestamp),
-                const SizedBox(width: 15),
+                            },
+                          );
+                        },
+                      )),
+                  customTextField3(hinttext: "Amount", addcontroller: _addAmount),
+                  // customTextField(hinttext: "Place", addcontroller: _addPlace),
+                  // customTextField(
+                  //     hinttext: "TimeStamp",
+                  //     addcontroller: _addTimestamp),
+                  const SizedBox(width: 15),
 
-                Container(
-                  child: Row(
+                  Container(
+                    child: Row(
+                      children: [
+                        ElevatedButton(
+                          child: const Text('Select Date & Time '),
+                          onPressed: () => pickDateTime(context),
+                        ),
+                        const SizedBox(width: 15),
+                      ],
+                    ),
+                  ),
+
+                  Row(
                     children: [
-                      ElevatedButton(
-                        child: const Text('Select Date & Time '),
-                        onPressed: () => pickDateTime(context),
-                      ),
+                      const Text('Payment Type'),
                       const SizedBox(width: 15),
+                      DropdownButton(
+                          value: selectedValue,
+                          items: const [
+                            DropdownMenuItem(
+                              child: Text("Online"),
+                              value: "ONLINE",
+                            ),
+                            DropdownMenuItem(
+                              child: Text("Cash"),
+                              value: "Cash",
+                            ),
+                          ],
+                          onChanged: (value) {
+                            setState(() {
+                              selectedValue = value as String;
+                            });
+                          }),
                     ],
                   ),
-                ),
 
-                Row(
-                  children: [
-                    const Text('Payment Type'),
-                    const SizedBox(width: 15),
-                    DropdownButton(
-                        value: selectedValue,
-                        items: const [
-                          DropdownMenuItem(
-                            child: Text("Online"),
-                            value: "ONLINE",
-                          ),
-                          DropdownMenuItem(
-                            child: Text("Cash"),
-                            value: "Cash",
-                          ),
-                        ],
-                        onChanged: (value) {
-                          setState(() {
-                            selectedValue = value as String;
-                          });
-                        }),
-                  ],
-                ),
-
-                // Container(
-                //   padding: EdgeInsets.all(10),
-                //   decoration: BoxDecoration(
-                //     borderRadius: BorderRadius.circular(12),
-                //   ),
-                //   child: Text(
-                //     'Date And Time: $d12',
-                //     style: TextStyle(
-                //       fontSize: 14,
-                //       fontFamily: 'poppins',
-                //       fontWeight: FontWeight.w400,
-                //     ),
-                //   ),
-                // ),
-                Row(
-                  children: [
-                    ElevatedButton(
-                      onPressed: () async {
-                        FirebaseFirestore.instance
-                            .collection("payment")
-                            .doc(userid)
-                            .set(
-                          {
-                            'amount': _addAmount.text,
-                            'gym_id': namee,
-                            'place': place,
-                            // 'payment_id': paymentid,
-                            'name': namee,
-                            'timestamp': dateTime,
-                            'userid': userid,
-                            'type': selectedValue,
-                          },
-                        );
-                        //     .then((snapshot) async {
-                        //   await FirebaseFirestore.instance
-                        //       .collection("payment")
-                        //       .doc(userid)
-                        //       .update({'timestamp': dtime});
-                        // }
-                        // );
-                        Navigator.pop(context);
-                      },
-                      child: const Text('Done'),
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    ElevatedButton(
-                        onPressed: () {
-                          Navigator.pop(context);
+                  // Container(
+                  //   padding: EdgeInsets.all(10),
+                  //   decoration: BoxDecoration(
+                  //     borderRadius: BorderRadius.circular(12),
+                  //   ),
+                  //   child: Text(
+                  //     'Date And Time: $d12',
+                  //     style: TextStyle(
+                  //       fontSize: 14,
+                  //       fontFamily: 'poppins',
+                  //       fontWeight: FontWeight.w400,
+                  //     ),
+                  //   ),
+                  // ),
+                  Row(
+                    children: [
+                      ElevatedButton(
+                        onPressed: () async {
+                          if (_formKey.currentState!.validate()) {
+                            FirebaseFirestore.instance
+                                .collection("payment")
+                                .doc(userid)
+                                .set(
+                              {
+                                'amount': _addAmount.text,
+                                'gym_id': namee,
+                                'place': place,
+                                // 'payment_id': paymentid,
+                                'name': namee,
+                                'timestamp': dateTime,
+                                'userid': userid,
+                                'type': selectedValue,
+                              },
+                            );
+                            //     .then((snapshot) async {
+                            //   await FirebaseFirestore.instance
+                            //       .collection("payment")
+                            //       .doc(userid)
+                            //       .update({'timestamp': dtime});
+                            // }
+                            // );
+                            Navigator.pop(context);
+                          }
                         },
-                        child: const Text('Close'))
-                  ],
-                )
-              ],
+                        child: const Text('Done'),
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      ElevatedButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: const Text('Close'))
+                    ],
+                  )
+                ],
+              ),
             ),
           ),
         ),
