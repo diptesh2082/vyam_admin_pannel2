@@ -317,47 +317,60 @@ class _CategoryInfoScreenState extends State<CategoryInfoScreen> {
         },
       ),
       DataCell(const Icon(Icons.delete), onTap: () {
-
-        showDialog(context: context, builder: (context)=>  AlertDialog(
-          shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(16))),
-          content: SizedBox(
-            height: 170,
-            width: 280,
-            child: Stack(
-              children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children:  [
-                    const Text('Do you want to delete?' , style: TextStyle(fontWeight: FontWeight.bold),),
-                    const SizedBox(height: 15,),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const SizedBox(height: 15),
-                        ElevatedButton.icon(
-                          onPressed: (){
-                          deleteMethodI(
-                              stream: categoryStream, uniqueDocId: data['category_id'], imagess: img);
-                          Navigator.pop(context);
-                        } ,
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(16))),
+            content: SizedBox(
+              height: 170,
+              width: 280,
+              child: Stack(
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text(
+                        'Do you want to delete?',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const SizedBox(height: 15),
+                          ElevatedButton.icon(
+                            onPressed: () {
+                              deleteMethodI(
+                                  stream: categoryStream,
+                                  uniqueDocId: data['category_id'],
+                                  imagess: img);
+                              Navigator.pop(context);
+                            },
                             icon: const Icon(Icons.check),
                             label: const Text('Yes'),
-                        ),
-                        const SizedBox(width: 20,),
-                        ElevatedButton.icon(onPressed: (){
-                          Navigator.pop(context);
-                        } ,
-                          icon: const Icon(Icons.clear),
-                          label: const Text('No'),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ],
+                          ),
+                          const SizedBox(
+                            width: 20,
+                          ),
+                          ElevatedButton.icon(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            icon: const Icon(Icons.clear),
+                            label: const Text('No'),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
-        ),);
+        );
       })
     ]);
   }
@@ -393,8 +406,6 @@ class _ProductEditBoxState extends State<ProductEditBox> {
   // final TextEditingController _image = TextEditingController();
   var categoryId;
   var image;
-  var imgUrl1;
-
   @override
   void initState() {
     super.initState();
@@ -428,46 +439,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                 ),
                 customTextField(hinttext: "Name", addcontroller: _name),
                 customTextField(hinttext: "Position", addcontroller: _position),
-                //customTextField(hinttext: "Image", addcontroller: _image),
-
-                Container(
-                  padding: EdgeInsets.all(20),
-                  child: Row(
-                    children: [
-                      const Text(
-                        'Upload Image: ',
-                        style: TextStyle(
-                            color: Colors.grey,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15),
-                      ),
-                      const SizedBox(
-                        width: 20,
-                      ),
-                      InkWell(
-                        onTap: () async {
-                          image = await chooseImage();
-                          await getUrlImage(image);
-                        },
-                        child: const Icon(
-                          Icons.upload_file_outlined,
-                        ),
-                      ),
-                      SizedBox(
-                        width: 300,
-                        height: 200,
-                        child: imgUrl1!=null?Container(
-                          child: Image.network(imgUrl1,
-                            fit: BoxFit.contain,
-                          ),
-                        ):Image.network(image,
-                          fit: BoxFit.contain,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-
+                editim(imagea: image, catid: categoryId),
                 Padding(
                   padding: const EdgeInsets.all(12.0),
                   child: Center(
@@ -480,12 +452,14 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                             .doc(categoryId)
                             .update(
                           {
-                            'image': imgUrl1!=null?imgUrl1:image,
+                            'image': image3,
                             'name': _name.text,
                             'category_id': categoryId,
                             'position': _position.text,
                           },
-                        );
+                        ).whenComplete(() {
+                          image3 = null;
+                        });
 
                         Navigator.pop(context);
                       },
@@ -500,23 +474,99 @@ class _ProductEditBoxState extends State<ProductEditBox> {
       ),
     );
   }
+}
 
-  getUrlImage(XFile? pickedFile) async {
+class editim extends StatefulWidget {
+  const editim({Key? key, required this.imagea, required this.catid})
+      : super(key: key);
+  final String imagea;
+  final String catid;
+  @override
+  State<editim> createState() => _editimState();
+}
+
+var image3;
+
+class _editimState extends State<editim> {
+  @override
+  String i2 = '';
+  void initState() {
+    // TODO: implement initState
+    i2 = widget.imagea;
+    super.initState();
+  }
+
+// <<<<<<< HEAD
+  @override
+  bool isloading = false;
+  var imagee;
+  Widget build(BuildContext context) {
+    return Container(
+      child: Row(
+        children: [
+          ElevatedButton(
+            onPressed: () async {
+              setState(() {
+                isloading = true;
+              });
+              var dic = await chooseImage();
+              await addImageToStorage(dic, widget.catid);
+              setState(() {
+                isloading = false;
+                i2 = image3;
+              });
+            },
+            child: const Text(
+              'Upload Gym Image',
+              style:
+                  TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
+            ),
+          ),
+          const SizedBox(
+            width: 20,
+          ),
+          isloading
+              ? Container(
+                  height: 100,
+                  width: 200,
+                  child: Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                )
+              : Container(
+                  height: 100,
+                  width: 200,
+                  child: Image.network(i2),
+                ),
+        ],
+      ),
+    );
+  }
+
+  addImageToStorage(XFile? pickedFile, String? id) async {
     if (kIsWeb) {
-      final _firebaseStorage = FirebaseStorage.instance.ref().child("category");
-
       Reference _reference =
-          _firebaseStorage.child('category/${Path.basename(pickedFile!.path)}');
-      await _reference.putData(
-        await pickedFile.readAsBytes(),
+          FirebaseStorage.instance.ref().child("category").child('images/$id');
+      await _reference
+          .putData(
+        await pickedFile!.readAsBytes(),
         SettableMetadata(contentType: 'image/jpeg'),
-      );
-
-      String imageUrl = await _reference.getDownloadURL();
-
-      setState(() {
-        imgUrl1 = imageUrl;
+      )
+          .whenComplete(() async {
+        await _reference.getDownloadURL().then((value) async {
+          var uploadedPhotoUrl = value;
+          setState(() {
+            image3 = value;
+          });
+          print(value);
+          await FirebaseFirestore.instance
+              .collection("category")
+              .doc(id)
+              .update({"image": value});
+        });
       });
+    } else {
+//write a code for android or ios
     }
   }
 }
