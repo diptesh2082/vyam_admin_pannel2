@@ -525,8 +525,7 @@ class _ProductDetailsState extends State<ProductDetails> {
             Container(
               child: GestureDetector(
                 onTap: () async {
-                  var image = await chooseImage();
-                  await addImageToStorage(image, gymId);
+                  send(gymId);
                 },
                 child: const Center(
                   child: Icon(
@@ -722,40 +721,8 @@ class _ProductDetailsState extends State<ProductDetails> {
         ),
       ),
 
-      DataCell(
-        Center(
-          child: Row(
-            children: [
-              Column(
-                children: [
-                  IconButton(
-                      onPressed: () async {
-                        // print('OS: ${Platform.operatingSystem}');
-                        // var dic = await chooseImage();
-                        // await uploadImageToStorage(dic, gymId);
-                        send(gymId);
-                        // await pickImage();
-                        // await saveData(gymId);
-                      },
-                      icon: const Icon(Icons.camera_alt_outlined)),
-                  const Text("Display Picture"),
-                ],
-              ),
-              data['display_picture'] != null
-                  ? Image(
-                      image: NetworkImage(data['display_picture']),
-                      height: 200,
-                      width: 200,
-                    )
-                  : Container(
-                      color: Colors.black,
-                      height: 200,
-                      width: 200,
-                    )
-            ],
-          ),
-        ),
-      ),
+      DataCell(datacelldisplay(
+          disimg: data['display_picture'], idd: data['gym_id'])),
 
       DataCell(
         const Text(""),
@@ -2359,28 +2326,6 @@ class _editimState extends State<editim> {
 //write a code for android or ios
     }
   }
-// <<<<<<< HEAD
-  // uploadToStroagees() {
-  //   InputElement input = FileUploadInputElement() as InputElement
-  //     ..accept = 'image/*';
-  //   FirebaseStorage fs = FirebaseStorage.instance;
-  //
-  //   input.click();
-  //   input.onChange.listen((event) {
-  //     final file = input.files?.first;
-  //     final reader = FileReader();
-  //
-  //     reader.readAsDataUrl(file!);
-  //     reader.onLoadEnd.listen((event) async {
-  //       var snapshot =
-  //           await fs.ref().child('product_image/${widget.gymid}').putBlob(file);
-  //       String downloadUrl = await snapshot.ref.getDownloadURL();
-  //       setState(() {
-  //         image2 = downloadUrl;
-  //       });
-  //     });
-  //   });
-  // }
 }
 
 ///////Edit Change

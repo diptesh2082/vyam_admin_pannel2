@@ -31,8 +31,6 @@ class _categoryAddScreenState extends State<categoryAddScreen> {
     super.initState();
   }
 
-  var image;
-  var imgUrl1;
   var catId = FirebaseFirestore.instance.collection('category').doc().id;
   CollectionReference? categoryStream;
 
@@ -110,106 +108,7 @@ class _categoryAddScreenState extends State<categoryAddScreen> {
 
                   customTextField3(
                       hinttext: "Position", addcontroller: _addPosition),
-                  loadimage(),
-
-                  // Container(
-                  //   padding: const EdgeInsets.all(20),
-                  //   child: Row(
-                  //     children: [
-                  //       const Text(
-                  //         'Upload Image: ',
-                  //         style: TextStyle(
-                  //             color: Colors.grey,
-                  //             fontWeight: FontWeight.bold,
-                  //             fontSize: 15),
-                  //       ),
-                  //       const SizedBox(
-                  //         width: 20,
-                  //       ),
-                  //       InkWell(
-                  //         onTap: () async {
-                  //           image = await chooseImage();
-                  //           await getUrlImage(image);
-                  //         },
-                  //         child: const Icon(
-                  //           Icons.upload_file_outlined,
-                  //         ),
-                  //       ),
-                  //       SizedBox(
-                  //           width: 300,
-                  //           height: 200,
-                  //           child: imgUrl1 != null
-                  //               ? Container(
-                  //             child: Image.network(imgUrl1),
-                  //           )
-                  //               : Container(
-                  //             color: Colors.white,
-                  //             child: const Center(
-                  //                 child: Text(
-                  //                   'Please Upload Image',
-                  //                   style: TextStyle(
-                  //                       color: Colors.black,
-                  //                       fontWeight: FontWeight.bold,
-                  //                       fontSize: 24),
-                  //                 )),
-                  //           )),
-                  //     ],
-                  //   ),
-                  // ),
-                  //
-                  // Column(
-                  //   children: [
-                  //     // const Text(
-                  //     //   "Status",
-                  //     //   style: TextStyle(
-                  //     //       fontSize: 20, fontWeight: FontWeight.w100),
-                  //     // ),
-                  //     // Container(
-                  //     //   color: Colors.white10,
-                  //     //   width: 120,
-                  //     //   child: DropdownButton(
-                  //     //       hint: Text('$print_type'),
-                  //     //       items: const [
-                  //     //         DropdownMenuItem(
-                  //     //           child: Text("TRUE"),
-                  //     //           value: true,
-                  //     //         ),
-                  //     //         DropdownMenuItem(
-                  //     //           child: Text("FALSE"),
-                  //     //           value: false,
-                  //     //         ),
-                  //     //       ],
-                  //     //       onChanged: dropDowntype),
-                  //     // ),
-                  //   ],
-                  // ),
-
-                  // Column(
-                  //   children: [
-                  //     const Text(
-                  //       "Status",
-                  //       style: TextStyle(
-                  //           fontSize: 20, fontWeight: FontWeight.w100),
-                  //     ),
-                  //     Container(
-                  //       color: Colors.white10,
-                  //       width: 120,
-                  //       child: DropdownButton(
-                  //           hint: Text('$print_type'),
-                  //           items: const [
-                  //             DropdownMenuItem(
-                  //               child: Text("TRUE"),
-                  //               value: true,
-                  //             ),
-                  //             DropdownMenuItem(
-                  //               child: Text("FALSE"),
-                  //               value: false,
-                  //             ),
-                  //           ],
-                  //           onChanged: dropDowntype),
-                  //     ),
-                  //   ],
-                  // ),
+                  loadimage(id: catId),
                   Center(
                     child: ElevatedButton(
                       onPressed: () async {
@@ -231,11 +130,7 @@ class _categoryAddScreenState extends State<categoryAddScreen> {
                             },
                           ).whenComplete(() {
                             setState(() {
-// <<<<<<< HE/AD
-                              ds = "";
-// =======
-//                               ds = null;
-// >>>>>>> 21d9c030cebb9d9fd030fc57983203910f0655fa
+                              ds = null;
                             });
                           });
 
@@ -256,8 +151,8 @@ class _categoryAddScreenState extends State<categoryAddScreen> {
 }
 
 class loadimage extends StatefulWidget {
-  loadimage({Key? key}) : super(key: key);
-
+  loadimage({Key? key, required this.id}) : super(key: key);
+  final String id;
   @override
   State<loadimage> createState() => _loadimageState();
 }
@@ -268,7 +163,6 @@ class _loadimageState extends State<loadimage> {
   @override
   Widget build(BuildContext context) {
     return Container(
-// <<<<<<< HEAD
         child: Row(
       children: [
         const Text(
@@ -300,55 +194,6 @@ class _loadimageState extends State<loadimage> {
                   width: 200,
                   child: Center(
                     child: CircularProgressIndicator(),
-// =======
-//       padding: const EdgeInsets.all(20),
-//       child: Row(
-//         children: [
-//           const Text(
-//             'Upload Image: ',
-//             style: TextStyle(
-//                 color: Colors.grey, fontWeight: FontWeight.bold, fontSize: 15),
-//           ),
-//           const SizedBox(
-//             width: 20,
-//           ),
-//           InkWell(
-//             onTap: () async {
-//               setState(() {
-//                 isloading = true;
-//               });
-//                var image = await chooseImage();
-//
-//               await getUrlImage(image);
-//             },
-//             child: const Icon(
-//               Icons.upload_file_outlined,
-//             ),
-//           ),
-//           SizedBox(
-//             width: 300,
-//             height: 200,
-//             child: isloading
-//                 ? ds != null
-//                     ? Container(
-//                         child: Image.network(ds),
-//                       )
-//                     : Container(
-//                         child: const Center(
-//                           child: CircularProgressIndicator(),
-//                         ),
-//                       )
-//                 : Container(
-//                     color: Colors.white,
-//                     child: const Center(
-//                         child: Text(
-//                       'Please Upload Image',
-//                       style: TextStyle(
-//                           color: Colors.black,
-//                           fontWeight: FontWeight.bold,
-//                           fontSize: 24),
-//                     )),
-// >>>>>>> 21d9c030cebb9d9fd030fc57983203910f0655fa
                   ),
                 )
               : ds != null
@@ -369,7 +214,8 @@ class _loadimageState extends State<loadimage> {
 
   getUrlImage(XFile? pickedFile) async {
     if (kIsWeb) {
-      final _firebaseStorage = FirebaseStorage.instance.ref().child("category");
+      final _firebaseStorage =
+          FirebaseStorage.instance.ref().child("user_details");
 
       Reference _reference =
           _firebaseStorage.child('category/${Path.basename(pickedFile!.path)}');
@@ -381,13 +227,8 @@ class _loadimageState extends State<loadimage> {
       String imageUrl = await _reference.getDownloadURL();
 
       setState(() {
-// <<<<<<< HEAD
-        imgUrl1 = imageUrl;
+        var imgUrl1 = imageUrl;
         ds = imgUrl1;
-// =======
-//             var imgUrl1 = imageUrl;
-//             ds = imgUrl1;
-// >>>>>>> 21d9c030cebb9d9fd030fc57983203910f0655fa
       });
     }
   }

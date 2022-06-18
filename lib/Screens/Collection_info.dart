@@ -296,15 +296,14 @@ class _UserInformationState extends State<UserInformation> {
                         print("Previous Page");
                       },
                     ),
-        ],
-                  ),
-               ],
+                  ],
                 ),
-              ),
+              ],
+            ),
           ),
         ),
-      );
-
+      ),
+    );
   }
 
   var start = 0;
@@ -416,46 +415,59 @@ class _UserInformationState extends State<UserInformation> {
       DataCell(Icon(Icons.delete), onTap: () {
         // deleteMethod(stream: userDetailStream, uniqueDocId: userIDData);
 
-        showDialog(context: context, builder: (context)=>  AlertDialog(
-          shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(16))),
-          content: SizedBox(
-            height: 170,
-            width: 280,
-            child: Stack(
-              children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children:  [
-                    const Text('Do you want to delete?' , style: TextStyle(fontWeight: FontWeight.bold),),
-                    const SizedBox(height: 15,),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const SizedBox(height: 15),
-                        ElevatedButton.icon(
-                          onPressed: (){
-                            deleteMethod(stream: userDetailStream, uniqueDocId: userIDData);
-                            Navigator.pop(context);
-                          } ,
-                          icon: const Icon(Icons.check),
-                          label: const Text('Yes'),
-                        ),
-                        const SizedBox(width: 20,),
-                        ElevatedButton.icon(onPressed: (){
-                          Navigator.pop(context);
-                        } ,
-                          icon: const Icon(Icons.clear),
-                          label: const Text('No'),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ],
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(16))),
+            content: SizedBox(
+              height: 170,
+              width: 280,
+              child: Stack(
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text(
+                        'Do you want to delete?',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const SizedBox(height: 15),
+                          ElevatedButton.icon(
+                            onPressed: () {
+                              deleteMethod(
+                                  stream: userDetailStream,
+                                  uniqueDocId: userIDData);
+                              Navigator.pop(context);
+                            },
+                            icon: const Icon(Icons.check),
+                            label: const Text('Yes'),
+                          ),
+                          const SizedBox(
+                            width: 20,
+                          ),
+                          ElevatedButton.icon(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            icon: const Icon(Icons.clear),
+                            label: const Text('No'),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
-        ),);
-
+        );
       }),
     ]);
   }
@@ -521,7 +533,6 @@ class _EditBoxState extends State<EditBox> {
   TextEditingController _sublocality = TextEditingController();
   TextEditingController _userid = TextEditingController();
   var img;
-  var imgUrl1;
   @override
   var x;
   void initState() {
@@ -661,7 +672,7 @@ class _EditBoxState extends State<EditBox> {
                   const SizedBox(
                     width: 20,
                   ),
-                  loadimage(id: x, img: img),
+                  editim(imagea: img.toString(), gymid: x),
                   Padding(
                     padding: const EdgeInsets.all(12.0),
                     child: Row(
@@ -678,7 +689,7 @@ class _EditBoxState extends State<EditBox> {
                             Map<String, dynamic> data = <String, dynamic>{
                               // 'address':'',
                               'gender': _gender.text,
-                              'image': ds,
+                              'image': image3,
                               'name': _name.text,
                               // 'pincode': "",
                               // 'userId': _userid.text,
@@ -693,7 +704,7 @@ class _EditBoxState extends State<EditBox> {
                               print("Item Updated");
                               print(ds);
                               setState(() {
-                                ds = "";
+                                image3 = "";
                               });
                               print("value:$ds");
                             }).catchError((e) => print(e));
@@ -732,9 +743,113 @@ class _EditBoxState extends State<EditBox> {
       String imageUrl = await _reference.getDownloadURL();
 
       setState(() {
-        imgUrl1 = imageUrl;
+        var imgUrl1 = imageUrl;
         ds = imgUrl1;
       });
+    }
+  }
+}
+
+class editim extends StatefulWidget {
+  const editim({Key? key, required this.imagea, required this.gymid})
+      : super(key: key);
+  final String imagea;
+  final String gymid;
+  @override
+  State<editim> createState() => _editimState();
+}
+
+var image3;
+
+class _editimState extends State<editim> {
+  @override
+  String i2 = '';
+  void initState() {
+    // TODO: implement initState
+    i2 = widget.imagea;
+    super.initState();
+  }
+
+// <<<<<<< HEAD
+  @override
+  bool isloading = false;
+  var imagee;
+  Widget build(BuildContext context) {
+    return Container(
+      child: Row(
+        children: [
+          ElevatedButton(
+            onPressed: () async {
+              setState(() {
+                isloading = true;
+              });
+              var dic = await chooseImage();
+              await addImageToStorage(dic, widget.gymid);
+              setState(() {
+                isloading = false;
+                i2 = image3;
+              });
+            },
+            child: const Text(
+              'Upload Gym Image',
+              style:
+                  TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
+            ),
+          ),
+          const SizedBox(
+            width: 20,
+          ),
+          isloading
+              ? Container(
+                  height: 100,
+                  width: 200,
+                  child: Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                )
+              : Container(
+                  height: 100,
+                  width: 200,
+                  child: Image.network(i2),
+                ),
+        ],
+      ),
+    );
+  }
+
+  addImageToStorage(XFile? pickedFile, String? id) async {
+    if (kIsWeb) {
+      Reference _reference =
+          FirebaseStorage.instance.ref().child("Users").child('images/$id');
+      await _reference
+          .putData(
+        await pickedFile!.readAsBytes(),
+        SettableMetadata(contentType: 'image/jpeg'),
+      )
+          .whenComplete(() async {
+        await _reference.getDownloadURL().then((value) async {
+          var uploadedPhotoUrl = value;
+          setState(() {
+            image3 = value;
+          });
+          print(value);
+          await FirebaseFirestore.instance
+              .collection("user_details")
+              .doc(id)
+              .update({"image": value});
+// =======
+//       reader.readAsDataUrl(file!);
+//       reader.onLoadEnd.listen((event) async {
+//         var snapshot =
+//         await fs.ref().child('product_image/${widget.gymId}').putBlob(file);
+//         String downloadUrl = await snapshot.ref.getDownloadURL();
+//         setState(() {
+//           image = downloadUrl;
+// >>>>>>> 21d9c030cebb9d9fd030fc57983203910f0655fa
+        });
+      });
+    } else {
+//write a code for android or ios
     }
   }
 }
@@ -823,7 +938,7 @@ class _detailsaddState extends State<detailsadd> {
                       }),
                 ],
               ),
-              loadimage(id: "+91${_addnumber.text}", img: ""),
+              loadimage(id: "+91${_addnumber.text}"),
               Row(
                 children: [
                   ElevatedButton(
@@ -880,9 +995,8 @@ class _detailsaddState extends State<detailsadd> {
 }
 
 class loadimage extends StatefulWidget {
-  loadimage({Key? key, required this.id, required this.img}) : super(key: key);
+  loadimage({Key? key, required this.id}) : super(key: key);
   final String id;
-  final String img;
   @override
   State<loadimage> createState() => _loadimageState();
 }
@@ -935,7 +1049,7 @@ class _loadimageState extends State<loadimage> {
                   : Container(
                       height: 100,
                       width: 200,
-                      child: Image.network(widget.img.toString()),
+                      child: Text("Please Upload Image"),
                     ),
         ),
       ],
