@@ -89,7 +89,7 @@ class _bannerNewPageState extends State<bannerNewPage> {
                             fontWeight: FontWeight.w600,
                             fontSize: 14),
                       ),
-                      SizedBox(height: 50),
+                      const SizedBox(height: 50),
                       SizedBox(
                           height: 400,
                           width: 400,
