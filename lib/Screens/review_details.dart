@@ -42,7 +42,7 @@ class _ReviewInfoState extends State<ReviewInfo> {
                 Padding(
                   padding: const EdgeInsets.only(top: 8.0, left: 8.0),
                   child: GestureDetector(
-                    onTap: showAddbox,
+                    onTap: () {},
                     child: Container(
                       width: 130,
                       decoration: BoxDecoration(
@@ -104,12 +104,12 @@ class _ReviewInfoState extends State<ReviewInfo> {
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
-                              DataColumn(
-                                label: Text(
-                                  'Edit',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
-                              ),
+                              // DataColumn(
+                              //   label: Text(
+                              //     'Edit',
+                              //     style: TextStyle(fontWeight: FontWeight.w600),
+                              //   ),
+                              // ),
                               DataColumn(
                                 label: Text(
                                   'Delete',
@@ -141,21 +141,19 @@ class _ReviewInfoState extends State<ReviewInfo> {
       DataCell(data != null ? Text(data['rating'] ?? "") : Text("")),
       DataCell(data != null ? Text(data['title'] ?? "") : Text("")),
       DataCell(data != null ? Text(data['user_id'] ?? "") : Text("")),
-      DataCell(const Text(""), showEditIcon: true, onTap: () {
-        showDialog(
-            context: context,
-            builder: (context) {
-              return SingleChildScrollView(
-                child: EditBox(
-                  reviewid: data['review_id'],
-                  userid: data['user_id'],
-                  title: data['title'],
-                  experience: data['experience'],
-                  rating: data['rating'],
-                ),
-              );
-            });
-      }),
+      // DataCell(const Text(""), showEditIcon: true, onTap: () {
+      //   Navigator.push(
+      //       context,
+      //       MaterialPageRoute(
+      //         builder: (context) => EditBox(
+      //           reviewid: data['review_id'],
+      //           userid: data['user_id'],
+      //           title: data['title'],
+      //           experience: data['experience'],
+      //           rating: data['rating'],
+      //         ),
+      //       ));
+      // }),
       DataCell(
         Icon(Icons.delete),
       ),
@@ -168,61 +166,61 @@ class _ReviewInfoState extends State<ReviewInfo> {
   TextEditingController _adduserid = TextEditingController();
   TextEditingController _addgymid = TextEditingController();
 
-  showAddbox() => showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-            shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(30))),
-            content: SizedBox(
-              height: 480,
-              width: 800,
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Add Records',
-                      style: TextStyle(
-                          fontFamily: 'poppins',
-                          fontWeight: FontWeight.w600,
-                          fontSize: 14),
-                    ),
-                    CustomTextField(
-                        hinttext: "Experience", addcontroller: _addexperience),
-                    CustomTextField(
-                        hinttext: "Rating", addcontroller: _addrating),
-                    CustomTextField(
-                        hinttext: "Title", addcontroller: _addtitle),
-                    CustomTextField(
-                        hinttext: "UserID", addcontroller: _adduserid),
-                    CustomTextField(
-                        hinttext: "Gym ID", addcontroller: _addgymid),
-                    Center(
-                      child: ElevatedButton(
-                        onPressed: () async {
-                          await createReview(id);
-                          await FirebaseFirestore.instance
-                              .collection('Reviews')
-                              .doc(id)
-                              .update(
-                            {
-                              'experience': _addexperience.text,
-                              'rating': _addrating.text,
-                              'title': _addtitle.text,
-                              'user_id': _adduserid.text,
-                              'gym_id': _addgymid.text
-                            },
-                          );
-                          Navigator.pop(context);
-                        },
-                        child: Text('Done'),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ),
-          ));
+  // showAddbox() => showDialog(
+  //     context: context,
+  //     builder: (context) => AlertDialog(
+  //           shape: const RoundedRectangleBorder(
+  //               borderRadius: BorderRadius.all(Radius.circular(30))),
+  //           content: SizedBox(
+  //             height: 480,
+  //             width: 800,
+  //             child: SingleChildScrollView(
+  //               child: Column(
+  //                 crossAxisAlignment: CrossAxisAlignment.start,
+  //                 children: [
+  //                   const Text(
+  //                     'Add Records',
+  //                     style: TextStyle(
+  //                         fontFamily: 'poppins',
+  //                         fontWeight: FontWeight.w600,
+  //                         fontSize: 14),
+  //                   ),
+  //                   CustomTextField(
+  //                       hinttext: "Experience", addcontroller: _addexperience),
+  //                   CustomTextField(
+  //                       hinttext: "Rating", addcontroller: _addrating),
+  //                   CustomTextField(
+  //                       hinttext: "Title", addcontroller: _addtitle),
+  //                   CustomTextField(
+  //                       hinttext: "UserID", addcontroller: _adduserid),
+  //                   CustomTextField(
+  //                       hinttext: "Gym ID", addcontroller: _addgymid),
+  //                   Center(
+  //                     child: ElevatedButton(
+  //                       onPressed: () async {
+  //                         await createReview(id);
+  //                         await FirebaseFirestore.instance
+  //                             .collection('Reviews')
+  //                             .doc(id)
+  //                             .update(
+  //                           {
+  //                             'experience': _addexperience.text,
+  //                             'rating': _addrating.text,
+  //                             'title': _addtitle.text,
+  //                             'user_id': _adduserid.text,
+  //                             'gym_id': _addgymid.text
+  //                           },
+  //                         );
+  //                         Navigator.pop(context);
+  //                       },
+  //                       child: Text('Done'),
+  //                     ),
+  //                   )
+  //                 ],
+  //               ),
+  //             ),
+  //           ),
+  //         ));
 }
 
 class CustomTextField extends StatelessWidget {
@@ -238,7 +236,7 @@ class CustomTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 50,
+      height: 70,
       child: Card(
           child: TextField(
         autofocus: true,
@@ -250,6 +248,7 @@ class CustomTextField extends StatelessWidget {
         controller: addcontroller,
         maxLines: 3,
         decoration: InputDecoration(
+            contentPadding: EdgeInsets.all(20),
             border: InputBorder.none,
             hintStyle: const TextStyle(
               fontSize: 14,
@@ -263,97 +262,89 @@ class CustomTextField extends StatelessWidget {
   }
 }
 
-class EditBox extends StatefulWidget {
-  const EditBox(
-      {Key? key,
-      required this.experience,
-      required this.rating,
-      required this.title,
-      required this.userid,
-      required this.reviewid})
-      : super(key: key);
-
-  final String experience;
-  final String rating;
-  final String title;
-  final String userid;
-  final String reviewid;
-
-  @override
-  _EditBoxState createState() => _EditBoxState();
-}
-
-class _EditBoxState extends State<EditBox> {
-  TextEditingController _experience = TextEditingController();
-  TextEditingController _rating = TextEditingController();
-  TextEditingController _title = TextEditingController();
-  TextEditingController _userid = TextEditingController();
-
-  @override
-  void initState() {
-    super.initState();
-    _experience.text = widget.experience;
-    _rating.text = widget.rating;
-    _title.text = widget.title;
-    _userid.text = widget.userid;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-      shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(30))),
-      content: SizedBox(
-        height: 580,
-        width: 800,
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'Update Records for this doc',
-                style: TextStyle(
-                    fontFamily: 'poppins',
-                    fontWeight: FontWeight.w600,
-                    fontSize: 14),
-              ),
-              CustomTextField(
-                  hinttext: "Experience", addcontroller: _experience),
-              CustomTextField(hinttext: "Rating", addcontroller: _rating),
-              CustomTextField(hinttext: "Title", addcontroller: _title),
-              CustomTextField(hinttext: "User ID", addcontroller: _userid),
-              Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: Center(
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      print("/////");
-
-                      DocumentReference documentReference = FirebaseFirestore
-                          .instance
-                          .collection('Reviews')
-                          .doc(widget.reviewid);
-
-                      Map<String, dynamic> data = <String, dynamic>{
-                        'experience': _experience.text,
-                        'rating': _rating.text,
-                        'title': _title.text,
-                        'user_id': _userid.text,
-                      };
-                      await documentReference
-                          .update(data)
-                          .whenComplete(() => print("Item Updated"))
-                          .catchError((e) => print(e));
-                      Navigator.pop(context);
-                    },
-                    child: const Text('Done'),
-                  ),
-                ),
-              )
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
+// class EditBox extends StatefulWidget {
+//   const EditBox(
+//       {Key? key,
+//       required this.experience,
+//       required this.rating,
+//       required this.title,
+//       required this.userid,
+//       required this.reviewid})
+//       : super(key: key);
+//
+//   final String experience;
+//   final String rating;
+//   final String title;
+//   final String userid;
+//   final String reviewid;
+//
+//   @override
+//   _EditBoxState createState() => _EditBoxState();
+// }
+//
+// class _EditBoxState extends State<EditBox> {
+//   TextEditingController _experience = TextEditingController();
+//   TextEditingController _rating = TextEditingController();
+//   TextEditingController _title = TextEditingController();
+//   TextEditingController _userid = TextEditingController();
+//
+//   @override
+//   void initState() {
+//     super.initState();
+//     _experience.text = widget.experience;
+//     _rating.text = widget.rating;
+//     _title.text = widget.title;
+//     _userid.text = widget.userid;
+//   }
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(title: Text("Edit Box")),
+//       body: Column(
+//         crossAxisAlignment: CrossAxisAlignment.start,
+//         children: [
+//           const Text(
+//             'Update Records for this doc',
+//             style: TextStyle(
+//                 fontFamily: 'poppins',
+//                 fontWeight: FontWeight.w600,
+//                 fontSize: 14),
+//           ),
+//           CustomTextField(hinttext: "Experience", addcontroller: _experience),
+//           CustomTextField(hinttext: "Rating", addcontroller: _rating),
+//           CustomTextField(hinttext: "Title", addcontroller: _title),
+//           CustomTextField(hinttext: "User ID", addcontroller: _userid),
+//           Padding(
+//             padding: const EdgeInsets.all(12.0),
+//             child: Center(
+//               child: ElevatedButton(
+//                 onPressed: () async {
+//                   print("/////");
+//
+//                   DocumentReference documentReference = FirebaseFirestore
+//                       .instance
+//                       .collection('Reviews')
+//                       .doc(widget.reviewid);
+//
+//                   Map<String, dynamic> data = <String, dynamic>{
+//                     'experience': _experience.text,
+//                     'rating': _rating.text,
+//                     'title': _title.text,
+//                     'user_id': _userid.text,
+//                   };
+//                   await documentReference
+//                       .update(data)
+//                       .whenComplete(() => print("Item Updated"))
+//                       .catchError((e) => print(e));
+//                   Navigator.pop(context);
+//                 },
+//                 child: const Text('Done'),
+//               ),
+//             ),
+//           )
+//         ],
+//       ),
+//     );
+//   }
+// }

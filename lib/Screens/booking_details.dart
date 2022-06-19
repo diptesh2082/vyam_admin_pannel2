@@ -362,7 +362,14 @@ class _BookingDetailsState extends State<BookingDetails> {
                                   // DataColumn(
                                   // label: Text(
                                   // =======
-
+                                  DataColumn(
+                                    label: Text(
+                                      // >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
+                                      'Payment \n Type',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w600),
+                                    ),
+                                  ),
                                   DataColumn(
                                     label: Text(
                                       // >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
@@ -515,7 +522,8 @@ class _BookingDetailsState extends State<BookingDetails> {
           ? Text(data['booking_plan'].toString())
           : const Text("")),
 
-      DataCell(data['booking_date'] != null ? Text(orderDate) : const Text("")),
+      DataCell(
+          data['booking_date'] != null ? Text(bookingDate) : const Text("")),
 
       DataCell(data['plan_end_duration'] != null
           ? Text(durationEnd)
@@ -529,6 +537,9 @@ class _BookingDetailsState extends State<BookingDetails> {
           : const Text("")),
       DataCell(data['grand_total'] != null
           ? Text('₹${data['grand_total'].toString()}')
+          : const Text("")),
+      DataCell(data['payment_method'] != null
+          ? Text('${data['payment_method'].toString().toUpperCase()}')
           : const Text("")),
       // DataCell(Center(
       //   child: ElevatedButton(
@@ -577,6 +588,7 @@ class _BookingDetailsState extends State<BookingDetails> {
                       setState(() {
                         selectedValue = value as String;
                       });
+
                       await FirebaseFirestore.instance
                           .collection('bookings')
                           .doc(bookingId)
@@ -588,6 +600,19 @@ class _BookingDetailsState extends State<BookingDetails> {
                             .doc(bookingId)
                             .update({'payment_done': true});
                       }
+
+                      await FirebaseFirestore.instance
+                          .collection("booking_notifications")
+                          .doc()
+                          .set({
+                        "title": "Booking Details",
+                        "status": selectedValue,
+                        // "payment_done": false,
+                        "user_id": data['userId'],
+                        "user_name": data["user_name"],
+                        "vendor_id": data['vendorId'],
+                        "vendor_name": data['gym_details']['name'],
+                      });
                     }),
               ],
             ),
@@ -614,6 +639,7 @@ class _BookingDetailsState extends State<BookingDetails> {
       DataCell(const Text(""), showEditIcon: true, onTap: () {
         Get.to(
           () => ProductEditBox(
+            vendorname: data['gym_details']['name'],
             vendorid: data['vendorId'],
             username: data['user_name'],
             userid: data['userId'],
@@ -838,11 +864,13 @@ class ProductEditBox extends StatefulWidget {
       required this.bookingaccepted,
       required this.planedate,
       required this.orderdate,
-      required this.bookingdate})
+      required this.bookingdate,
+      required this.vendorname})
       : super(key: key);
 
   final String vendorid;
   final String username;
+  final String vendorname;
   final String planedate;
   final String orderdate;
   final String bookingdate;
@@ -880,6 +908,8 @@ class _ProductEditBoxState extends State<ProductEditBox> {
   final TextEditingController _addvendorid = TextEditingController();
   final TextEditingController _addusername = TextEditingController();
   final TextEditingController _adduserid = TextEditingController();
+  final TextEditingController _addvendorname = TextEditingController();
+
   //final TextEditingController _addtotalprice = TextEditingController();
   final TextEditingController _addtotaldays = TextEditingController();
   final TextEditingController _addtaxpay = TextEditingController();
@@ -907,18 +937,18 @@ class _ProductEditBoxState extends State<ProductEditBox> {
   DateTime bookingtimedata = DateTime.now();
   DateTime ordertimedata = DateTime.now();
   DateTime endtimedata = DateTime.now();
-  DateTime bookingdate = DateTime.now();
-  DateTime planedate = DateTime.now();
-  DateTime orderdatee = DateTime.now();
+  // DateTime bookingdate = DateTime.now();
+  // DateTime orderdatee = DateTime.now();
   DateTime? date;
   DateTime? plandate;
+  DateTime? bookingdate;
+  DateTime? orderdate;
   TimeOfDay? time;
   TimeOfDay? ptime;
   TimeOfDay? otime;
   DateTime? dateTime;
   DateTime? pdateTime;
-  DateTime? orderdate;
-  List<String> _bookstatus = ['active', 'upcoming', 'completed'];
+  List<String> _bookstatus = ['active', 'upcoming', 'completed', 'cancelled'];
   List<String> _do = ['true', 'false'];
   String _dropdownValue = 'true';
   String dropdownstatusvalue = 'active';
@@ -935,6 +965,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
   void initState() {
     super.initState();
     _addvendorid.text = widget.vendorid;
+    _addvendorname.text = widget.vendorname;
     _addusername.text = widget.username;
     _adduserid.text = widget.userid;
     // _addtotalprice.text = widget.totalprice;
@@ -961,6 +992,21 @@ class _ProductEditBoxState extends State<ProductEditBox> {
     _addbookingmonth.text = widget.bookingmonth;
     _addbookingday.text = widget.bookingday;
     _addbookingaccepted.text = widget.bookingaccepted;
+    bookingdate = DateTime(
+      int.parse(_addbookingyear.text),
+      int.parse(_addbookingmonth.text),
+      int.parse(_addbookingday.text),
+    );
+    orderdate = DateTime(
+      int.parse(_addorderyear.text),
+      int.parse(_addordermonth.text),
+      int.parse(_addorderday.text),
+    );
+    plandate = DateTime(
+      int.parse(_addplanendyear.text),
+      int.parse(_addplanendmonth.text),
+      int.parse(_addplanendday.text),
+    );
 
     // print(widget.address);
     // _address.text = widget.address;
@@ -980,6 +1026,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
 
   @override
   Widget build(BuildContext context) {
+    bool check = false;
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -1419,6 +1466,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                               setState(() {
                                 dropdownstatusvalue = newValue!;
                                 _addbookingstatus.text = dropdownstatusvalue;
+                                check = true;
                               });
                             },
                           ),
@@ -1442,14 +1490,14 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                       padding: EdgeInsets.all(8.0),
                       child: Row(
                         children: [
-                          Text('Booking Accepted:',
+                          Text('Booking Accepted By GYM Owner:',
                               style: TextStyle(
                                 fontSize: 20,
                                 fontFamily: 'poppins',
                                 fontWeight: FontWeight.w400,
                               )),
                           SizedBox(width: 20),
-                          Text(_addbookingaccepted.text,
+                          Text(_addbookingaccepted.text.toUpperCase(),
                               style: TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 15)),
                         ],
@@ -1460,48 +1508,58 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  SizedBox(
-                    height: 20,
-                  ),
                   Container(
                     child: Row(
                       children: [
                         const Padding(
                           padding: EdgeInsets.all(8.0),
-                          child: Text('Select Date & Time For Plan:',
+                          child: Text('Start Date:',
                               style: TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
                               )),
                         ),
                         SizedBox(width: 40),
+                        Text(bookingdate.toString()),
+                        SizedBox(width: 40),
                         ElevatedButton(
-                          child: const Text('Select Date & Time For Plan'),
-                          onPressed: () => pickplanDateTime(context),
-                        ),
-                        SizedBox(width: 15),
+                            child: const Text('Edit'),
+                            onPressed: () {
+                              // DateFormat("MMM, dd, yyyy")
+                              //     .format(data["booking_date"].toDate());
+                              // print(_addbookingyear);
+
+                              print(bookingdate);
+                              pickDateTime(context);
+                            }),
+                        const SizedBox(width: 15),
                       ],
                     ),
                   ),
                   SizedBox(
                     height: 20,
                   ),
+
                   Container(
                     child: Row(
                       children: [
                         const Padding(
                           padding: EdgeInsets.all(8.0),
-                          child: Text('Select Date & Time For Order:',
+                          child: Text('Order Date:',
                               style: TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
                               )),
                         ),
                         SizedBox(width: 40),
+                        Text(orderdate.toString()),
+                        SizedBox(width: 40),
                         ElevatedButton(
-                          child: const Text('Select Date & Time For Order'),
-                          onPressed: () => pickorderDateTime(context),
-                        ),
+                            child: const Text('Edit'),
+                            onPressed: () {
+                              print(orderdate);
+                              pickorderDateTime(context);
+                            }),
                         SizedBox(width: 20),
                       ],
                     ),
@@ -1514,24 +1572,27 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                       children: [
                         const Padding(
                           padding: EdgeInsets.all(8.0),
-                          child: Text('Select Date & Time For Bookings:',
+                          child: Text('End Date:',
                               style: TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
                               )),
                         ),
                         SizedBox(width: 40),
+                        Text(plandate.toString()),
+                        SizedBox(width: 40),
                         ElevatedButton(
-                            child:
-                                const Text('Select Date & Time For Bookings'),
+                            child: const Text('Edit'),
                             onPressed: () {
-                              // DateFormat("MMM, dd, yyyy")
-                              //     .format(data["booking_date"].toDate());
-                              pickDateTime(context);
+                              print(plandate);
+                              pickplanDateTime(context);
                             }),
-                        const SizedBox(width: 15),
+                        SizedBox(width: 15),
                       ],
                     ),
+                  ),
+                  SizedBox(
+                    height: 20,
                   ),
 
                   Padding(
@@ -1552,28 +1613,13 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                                   .doc(_addbookingid.text);
 
                               Map<String, dynamic> data = <String, dynamic>{
-                                // 'vandorId': abc3,
-                                // 'user_name': _addusername.text,
-                                // 'userId': _adduserid.text,
-                                // 'total_price': _addtotalprice.text,
-                                // 'totalDays': _addtotaldays.text,
-                                // 'tax_pay': _addtaxpay.text,
-                                'plan_end_duration': endtimedata,
-                                // 'payment_done': _addpaymentdone.text == 'true'
-                                //     ? true
-                                //     : false,
-                                // 'package_type': abc,
-                                'order_date': ordertimedata,
-                                // 'gym_name': abc2,
-                                // 'gym_address': _addgymaddress.text,
-                                // 'grand_total': _addgrandtotal.text,
-                                // 'discount': _adddiscount.text,
-                                // 'daysLeft': _adddaysletf.text,
+                                'plan_end_duration': plandate,
+
+                                'order_date': orderdate,
+
                                 'booking_status': _addbookingstatus.text,
-                                // 'booking_price': _addbookingprice.text,
-                                // 'booking_plan': _addbookingplan.text,
-                                // 'booking_id': _addbookingid.text,
-                                'booking_date': bookingtimedata,
+
+                                'booking_date': bookingdate,
 
                                 // 'booking_accepted':
                                 //     _addbookingaccepted.text == 'true'
@@ -1584,6 +1630,23 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                                   .update(data)
                                   .whenComplete(() => print("Item Updated"))
                                   .catchError((e) => print(e));
+                              if (check = true) {
+                                await FirebaseFirestore.instance
+                                    .collection("booking_notifications")
+                                    .doc()
+                                    .set({
+                                  "title": "Booking Details",
+                                  "status": _addbookingstatus.text,
+                                  // "payment_done": false,
+                                  "user_id": _adduserid.text,
+                                  "user_name": _addusername.text,
+                                  "vendor_id": _addvendorid.text,
+                                  "vendor_name": _addvendorname.text,
+                                });
+                                setState(() {
+                                  check = false;
+                                });
+                              }
                               Navigator.pop(context);
                             },
                             child: const Text('Done'),
@@ -1741,12 +1804,10 @@ class _ProductEditBoxState extends State<ProductEditBox> {
     if (time == null) return;
 
     setState(() {
-      bookingtimedata = DateTime(
+      bookingdate = DateTime(
         date.year,
         date.month,
         date.day,
-        time.hour,
-        time.minute,
       );
     });
   }
@@ -1799,19 +1860,17 @@ class _ProductEditBoxState extends State<ProductEditBox> {
 
   //for 'plan_end_duration'
   Future pickplanDateTime(BuildContext context) async {
-    final plandate = await pickplanDate(context);
+    var plandate = await pickplanDate(context);
     if (plandate == null) return;
 
     final ptime = await pickplanTime(context);
     if (ptime == null) return;
 
     setState(() {
-      endtimedata = DateTime(
+      plandate = DateTime(
         plandate.year,
         plandate.month,
         plandate.day,
-        ptime.hour,
-        ptime.minute,
       );
     });
   }
@@ -1864,19 +1923,17 @@ class _ProductEditBoxState extends State<ProductEditBox> {
 
   //for 'order_date'
   Future pickorderDateTime(BuildContext context) async {
-    final orderdate = await pickorderDate(context);
+    var orderdate = await pickorderDate(context);
     if (orderdate == null) return;
 
     final otime = await pickorderTime(context);
     if (otime == null) return;
 
     setState(() {
-      ordertimedata = DateTime(
+      orderdate = DateTime(
         orderdate.year,
         orderdate.month,
         orderdate.day,
-        otime.hour,
-        otime.minute,
       );
     });
   }

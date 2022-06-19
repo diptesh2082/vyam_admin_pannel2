@@ -351,46 +351,59 @@ class _CouponState extends State<Coupon> {
       DataCell(Icon(Icons.delete), onTap: () {
         // deleteMethod(stream: couponStream, uniqueDocId: couponIdData);
 
-
-        showDialog(context: context, builder: (context)=>  AlertDialog(
-          shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(16))),
-          content: SizedBox(
-            height: 170,
-            width: 280,
-            child: Stack(
-              children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children:  [
-                    const Text('Do you want to delete?' , style: TextStyle(fontWeight: FontWeight.bold),),
-                    const SizedBox(height: 15,),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const SizedBox(height: 15),
-                        ElevatedButton.icon(
-                          onPressed: (){
-                            deleteMethod(stream: couponStream, uniqueDocId: couponIdData);
-                            Navigator.pop(context);
-                          } ,
-                          icon: const Icon(Icons.check),
-                          label: const Text('Yes'),
-                        ),
-                        const SizedBox(width: 20,),
-                        ElevatedButton.icon(onPressed: (){
-                          Navigator.pop(context);
-                        } ,
-                          icon: const Icon(Icons.clear),
-                          label: const Text('No'),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ],
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(16))),
+            content: SizedBox(
+              height: 170,
+              width: 280,
+              child: Stack(
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text(
+                        'Do you want to delete?',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const SizedBox(height: 15),
+                          ElevatedButton.icon(
+                            onPressed: () {
+                              deleteMethod(
+                                  stream: couponStream,
+                                  uniqueDocId: couponIdData);
+                              Navigator.pop(context);
+                            },
+                            icon: const Icon(Icons.check),
+                            label: const Text('Yes'),
+                          ),
+                          const SizedBox(
+                            width: 20,
+                          ),
+                          ElevatedButton.icon(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            icon: const Icon(Icons.clear),
+                            label: const Text('No'),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
-        ),);
+        );
       }),
     ]);
   }
@@ -514,7 +527,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
   }
 
   CollectionReference? couponStream;
-  String descriptionn = 'My great package';
+  String descriptionn = 'Add Description';
 
   @override
   Widget build(BuildContext context) {
@@ -725,7 +738,8 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                               "max_dis": _max_dis.text,
                               "minimum_cart_value": _minimum_cart_value.text,
                               "offer_type": coupontype,
-                              "package_type": Select_Package_type!.trim(),
+                              "package_type":
+                                  Select_Package_type!.trim().toLowerCase(),
                               "price": _price.text,
                               "tag": _tag.text,
                               'description': descriptionn,
