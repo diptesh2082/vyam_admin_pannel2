@@ -35,7 +35,7 @@ class _TimingsState extends State<Timings> {
     print(finalPackID);
     return Scaffold(
       appBar: AppBar(
-        title: Text(' '),
+        title: Text('Timings'),
       ),
       body: SafeArea(
         child: Container(
@@ -49,22 +49,39 @@ class _TimingsState extends State<Timings> {
               children: [
                 Padding(
                   padding: const EdgeInsets.only(top: 8.0, left: 8.0),
-                  child: GestureDetector(
-                    onTap: showAddbox,
-                    child: Container(
-                      width: 120,
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(20.0)),
-                      child: Row(
-                        children: const [
-                          Icon(Icons.add),
-                          Text('Add Product',
-                              style: TextStyle(fontWeight: FontWeight.w400)),
-                        ],
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(onPrimary: Colors.purple),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => showAddbox(),
+                        ),
+                      );
+                    },
+                    child: const Text(
+                      'Add Timing',
+                      style: TextStyle(
+                        color: Colors.white,
                       ),
                     ),
                   ),
+                  // GestureDetector(
+                  //   onTap: showAddbox,
+                  //   child: Container(
+                  //     width: 120,
+                  //     decoration: BoxDecoration(
+                  //         color: Colors.white,
+                  //         borderRadius: BorderRadius.circular(20.0)),
+                  //     child: Row(
+                  //       children: const [
+                  //         Icon(Icons.add),
+                  //         Text('Add Product',
+                  //             style: TextStyle(fontWeight: FontWeight.w400)),
+                  //       ],
+                  //     ),
+                  //   ),
+                  // ),
                 ),
                 Center(
                   child: StreamBuilder<QuerySnapshot>(

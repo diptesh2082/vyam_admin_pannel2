@@ -39,7 +39,6 @@ class _citiesAddState extends State<citiesAdd> {
   late List<PlacesApiHelperModel>? _list = [];
   FocusNode myFocousNode = FocusNode();
 
-
   final TextEditingController _addAddress = TextEditingController();
   final TextEditingController _addIndex = TextEditingController();
 
@@ -52,10 +51,6 @@ class _citiesAddState extends State<citiesAdd> {
     "Chennai",
     "Ahmedabad",
   ];
-
-
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -87,8 +82,8 @@ class _citiesAddState extends State<citiesAdd> {
                     Container(
                       height: MediaQuery.of(context).size.height * .75,
                       decoration: const BoxDecoration(
-                          border: Border(
-                              bottom: BorderSide(color: Colors.grey))),
+                          border:
+                              Border(bottom: BorderSide(color: Colors.grey))),
                       child: Stack(
                         children: [
                           MapView(
@@ -104,50 +99,50 @@ class _citiesAddState extends State<citiesAdd> {
                       ),
                     ),
 
-          // SizedBox(
-          //   width: MediaQuery.of(context).size.width,
-          //   child: TextFormField(
-          //     controller: _addAddress,
-          //     autofocus: false,
-          //     focusNode: myFocousNode,
-          //     onChanged: (value) async {
-          //       _list =
-          //       await RequestHelper().getPlaces(query: value);
-          //       setState(() {});
-          //       if (value.isEmpty) {
-          //         _list!.clear();
-          //         setState(() {
-          //           _addAddress.text = value;
-          //           print('PRINTING LIST /////////////');
-          //           print(_list);
-          //         });
-          //       }
-          //     },
-          //     style: const TextStyle(
-          //       fontSize: 12,
-          //       fontFamily: 'Poppins',
-          //       fontWeight: FontWeight.w500,
-          //     ),
-          //     decoration: InputDecoration(
-          //         prefixIcon: const Icon(Icons.abc),
-          //         suffixIcon: IconButton(
-          //           onPressed: () {
-          //             _addAddress.clear();
-          //             FocusScope.of(context)
-          //                 .requestFocus(myFocousNode);
-          //           },
-          //           icon: const Icon(Icons.edit_outlined),
-          //         ),
-          //         // border: InputBorde,
-          //         hintStyle: const TextStyle(
-          //             fontSize: 12,
-          //             fontFamily: 'Poppins',
-          //             fontWeight: FontWeight.w500,
-          //             color: Colors.green),
-          //         hintMaxLines: 2,
-          //         hintText: 'Search your location here'),
-          //   ),
-          // ),
+                    // SizedBox(
+                    //   width: MediaQuery.of(context).size.width,
+                    //   child: TextFormField(
+                    //     controller: _addAddress,
+                    //     autofocus: false,
+                    //     focusNode: myFocousNode,
+                    //     onChanged: (value) async {
+                    //       _list =
+                    //       await RequestHelper().getPlaces(query: value);
+                    //       setState(() {});
+                    //       if (value.isEmpty) {
+                    //         _list!.clear();
+                    //         setState(() {
+                    //           _addAddress.text = value;
+                    //           print('PRINTING LIST /////////////');
+                    //           print(_list);
+                    //         });
+                    //       }
+                    //     },
+                    //     style: const TextStyle(
+                    //       fontSize: 12,
+                    //       fontFamily: 'Poppins',
+                    //       fontWeight: FontWeight.w500,
+                    //     ),
+                    //     decoration: InputDecoration(
+                    //         prefixIcon: const Icon(Icons.abc),
+                    //         suffixIcon: IconButton(
+                    //           onPressed: () {
+                    //             _addAddress.clear();
+                    //             FocusScope.of(context)
+                    //                 .requestFocus(myFocousNode);
+                    //           },
+                    //           icon: const Icon(Icons.edit_outlined),
+                    //         ),
+                    //         // border: InputBorde,
+                    //         hintStyle: const TextStyle(
+                    //             fontSize: 12,
+                    //             fontFamily: 'Poppins',
+                    //             fontWeight: FontWeight.w500,
+                    //             color: Colors.green),
+                    //         hintMaxLines: 2,
+                    //         hintText: 'Search your location here'),
+                    //   ),
+                    // ),
                   ],
                 ),
                 const SizedBox(
@@ -178,7 +173,7 @@ class _citiesAddState extends State<citiesAdd> {
                         child: Text('No Item Found'),
                       ),
                       textFieldConfiguration: TextFieldConfiguration(
-                        scrollPadding: EdgeInsets.all(20),
+                        scrollPadding: const EdgeInsets.all(20),
                         cursorWidth: 2.0,
                         controller: _addAddress,
                       ),
@@ -233,7 +228,6 @@ class _citiesAddState extends State<citiesAdd> {
 //                           'Status': true,
                           'Address': _addAddress.text,
                           'Status': true,
-// >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
                           'id': id,
                           //'index' : _addIndex,
                         },

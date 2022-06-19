@@ -91,7 +91,13 @@ class _PackagesPageState extends State<PackagesPage> {
                     },
                     child: const Text(
                       'Add Packages',
-                      style: TextStyle(color: Colors.white),
+// <<<<<<< HEAD
+//                       style: TextStyle(color: Colors.white),
+// =======
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+// >>>>>>> f5cd80d50f3eb7ba38395ee1c411898cfb3f5838
                     ),
                     // Container(
                     //   width: 120,
