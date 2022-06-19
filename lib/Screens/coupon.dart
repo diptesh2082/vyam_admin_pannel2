@@ -144,7 +144,7 @@ class _CouponState extends State<Coupon> {
                               )),
                               DataColumn(
                                 label: Text(
-                                  'Title',
+                                  'Tag',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
@@ -351,46 +351,59 @@ class _CouponState extends State<Coupon> {
       DataCell(Icon(Icons.delete), onTap: () {
         // deleteMethod(stream: couponStream, uniqueDocId: couponIdData);
 
-
-        showDialog(context: context, builder: (context)=>  AlertDialog(
-          shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(16))),
-          content: SizedBox(
-            height: 170,
-            width: 280,
-            child: Stack(
-              children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children:  [
-                    const Text('Do you want to delete?' , style: TextStyle(fontWeight: FontWeight.bold),),
-                    const SizedBox(height: 15,),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const SizedBox(height: 15),
-                        ElevatedButton.icon(
-                          onPressed: (){
-                            deleteMethod(stream: couponStream, uniqueDocId: couponIdData);
-                            Navigator.pop(context);
-                          } ,
-                          icon: const Icon(Icons.check),
-                          label: const Text('Yes'),
-                        ),
-                        const SizedBox(width: 20,),
-                        ElevatedButton.icon(onPressed: (){
-                          Navigator.pop(context);
-                        } ,
-                          icon: const Icon(Icons.clear),
-                          label: const Text('No'),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ],
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(16))),
+            content: SizedBox(
+              height: 170,
+              width: 280,
+              child: Stack(
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text(
+                        'Do you want to delete?',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const SizedBox(height: 15),
+                          ElevatedButton.icon(
+                            onPressed: () {
+                              deleteMethod(
+                                  stream: couponStream,
+                                  uniqueDocId: couponIdData);
+                              Navigator.pop(context);
+                            },
+                            icon: const Icon(Icons.check),
+                            label: const Text('Yes'),
+                          ),
+                          const SizedBox(
+                            width: 20,
+                          ),
+                          ElevatedButton.icon(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            icon: const Icon(Icons.clear),
+                            label: const Text('No'),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
-        ),);
+        );
       }),
     ]);
   }
@@ -524,235 +537,238 @@ class _ProductEditBoxState extends State<ProductEditBox> {
         title: Text('Edit Coupon'),
       ),
       body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Update Records for this doc',
-              style: TextStyle(
-                  fontFamily: 'poppins',
-                  fontWeight: FontWeight.w600,
-                  fontSize: 14),
-            ),
-            Image.asset(
-              'Assets/images/coupon.png',
-              height: 400,
-              width: 400,
-              alignment: Alignment.topRight,
-            ),
+        child: Padding(
+          padding: const EdgeInsets.all(15.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Update Records for this doc',
+                style: TextStyle(
+                    fontFamily: 'poppins',
+                    fontWeight: FontWeight.w600,
+                    fontSize: 14),
+              ),
+              Image.asset(
+                'Assets/images/coupon.png',
+                height: 400,
+                width: 400,
+                alignment: Alignment.topRight,
+              ),
 
-            customTextField(hinttext: "Code", addcontroller: _code),
-            const SizedBox(
-              height: 8,
-            ),
-            customTextField(hinttext: "Details", addcontroller: _detail),
-            const SizedBox(
-              height: 8,
-            ),
-            customTextField(hinttext: "Discount", addcontroller: _discount),
-            const SizedBox(
-              height: 8,
-            ),
-            // customTextField(
-            //     hinttext: "Description", addcontroller: description),
-            const SizedBox(
-              height: 8,
-            ),
-            MarkdownTextInput(
-              (String value) => setState(() => descriptionn = value),
-              descriptionn,
-              label: 'Description',
-              maxLines: 10,
-              actions: actions,
-              controller: controller,
-            ),
-            const SizedBox(
-              height: 8,
-            ),
+              customTextField(hinttext: "Code", addcontroller: _code),
+              const SizedBox(
+                height: 8,
+              ),
+              customTextField(hinttext: "Details", addcontroller: _detail),
+              const SizedBox(
+                height: 8,
+              ),
+              customTextField(hinttext: "Discount", addcontroller: _discount),
+              const SizedBox(
+                height: 8,
+              ),
+              // customTextField(
+              //     hinttext: "Description", addcontroller: description),
+              const SizedBox(
+                height: 8,
+              ),
+              MarkdownTextInput(
+                (String value) => setState(() => descriptionn = value),
+                descriptionn,
+                label: 'Description',
+                maxLines: 10,
+                actions: actions,
+                controller: controller,
+              ),
+              const SizedBox(
+                height: 8,
+              ),
 
-            customTextField(hinttext: "price", addcontroller: _price),
-            const SizedBox(
-              height: 8,
-            ),
-            customTextField(hinttext: "tag", addcontroller: _tag),
-            // const SizedBox(
-            //   height: 8,
-            // ),
-            // customTextField(
-            //     hinttext: "package_type", addcontroller: package_type),
-            const SizedBox(
-              height: 8,
-            ),
-            customTextField(
-                hinttext: "minimum_cart_value",
-                addcontroller: _minimum_cart_value),
-            const SizedBox(
-              height: 8,
-            ),
-            customTextField(hinttext: "max_dis", addcontroller: _max_dis),
-            const SizedBox(
-              height: 8,
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(
-                  height: 8,
-                ),
-                Row(
-                  children: [
-                    Container(
-                      child: Row(
-                        children: [
-                          ElevatedButton(
-                            child: const Text('Select Start Date '),
-                            onPressed: () async {
-                              start_date = await pickDate(context);
-                            },
-                          ),
-                          const SizedBox(width: 15),
-                        ],
+              customTextField(hinttext: "price", addcontroller: _price),
+              const SizedBox(
+                height: 8,
+              ),
+              customTextField(hinttext: "tag", addcontroller: _tag),
+              // const SizedBox(
+              //   height: 8,
+              // ),
+              // customTextField(
+              //     hinttext: "package_type", addcontroller: package_type),
+              const SizedBox(
+                height: 8,
+              ),
+              customTextField(
+                  hinttext: "minimum_cart_value",
+                  addcontroller: _minimum_cart_value),
+              const SizedBox(
+                height: 8,
+              ),
+              customTextField(hinttext: "max_dis", addcontroller: _max_dis),
+              const SizedBox(
+                height: 8,
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(
+                    height: 8,
+                  ),
+                  Row(
+                    children: [
+                      Container(
+                        child: Row(
+                          children: [
+                            ElevatedButton(
+                              child: const Text('Select Start Date '),
+                              onPressed: () async {
+                                start_date = await pickDate(context);
+                              },
+                            ),
+                            const SizedBox(width: 15),
+                          ],
+                        ),
                       ),
-                    ),
-                    Container(
-                      child: Row(
-                        children: [
-                          ElevatedButton(
-                            child: const Text('Select End Date '),
-                            onPressed: () async {
-                              end_date = await pickDate(context);
-                            },
-                          ),
-                          const SizedBox(width: 15),
-                        ],
+                      Container(
+                        child: Row(
+                          children: [
+                            ElevatedButton(
+                              child: const Text('Select End Date '),
+                              onPressed: () async {
+                                end_date = await pickDate(context);
+                              },
+                            ),
+                            const SizedBox(width: 15),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 8,
-                ),
-                Column(
-                  children: [
-                    InkWell(
-                      onTap: () {
-                        print(start_date);
-                      },
-                      child: const Text(
-                        "Select Package type",
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 8,
+                  ),
+                  Column(
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          print(start_date);
+                        },
+                        child: const Text(
+                          "Select Package type",
+                          style: TextStyle(
+                              fontSize: 30, fontWeight: FontWeight.w500),
+                        ),
+                      ),
+                      Container(
+                        color: Colors.yellowAccent,
+                        width: 280,
+                        child: DropdownButton(
+                            hint: Text("${Select_Package_type}"),
+                            items: const [
+                              DropdownMenuItem(
+                                child: Text("pay per session"),
+                                value: "pay per session",
+                              ),
+                              DropdownMenuItem(
+                                child: Text("package"),
+                                value: "package",
+                              ),
+                            ],
+                            onChanged: dropDownPackage),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 8,
+                  ),
+                  Column(
+                    children: [
+                      const Text(
+                        "Select Coupon type",
                         style: TextStyle(
                             fontSize: 30, fontWeight: FontWeight.w500),
                       ),
-                    ),
-                    Container(
-                      color: Colors.yellowAccent,
-                      width: 280,
-                      child: DropdownButton(
-                          hint: Text("${Select_Package_type}"),
-                          items: const [
-                            DropdownMenuItem(
-                              child: Text("pay per session"),
-                              value: "pay per session",
-                            ),
-                            DropdownMenuItem(
-                              child: Text("package"),
-                              value: "package",
-                            ),
-                          ],
-                          onChanged: dropDownPackage),
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 8,
-                ),
-                Column(
-                  children: [
-                    const Text(
-                      "Select Coupon type",
-                      style:
-                          TextStyle(fontSize: 30, fontWeight: FontWeight.w500),
-                    ),
-                    Container(
-                      color: Colors.yellowAccent,
-                      width: 280,
-                      child: DropdownButton(
-                          hint: Text("${print_type}"),
-                          items: const [
-                            DropdownMenuItem(
-                              child: Text("Percentage"),
-                              value: true,
-                            ),
-                            DropdownMenuItem(
-                              child: Text("Flat"),
-                              value: false,
-                            ),
-                          ],
-                          onChanged: dropDowntype),
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 30,
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: Row(
-                    children: [
-                      Center(
-                        child: ElevatedButton(
-                          onPressed: () async {
-                            print("/////");
-                            print(start_date);
-                            print(end_date);
-                            DocumentReference documentReference =
-                                FirebaseFirestore.instance
-                                    .collection('coupon')
-                                    .doc(widget.couponId);
-                            Map<String, dynamic> data = <String, dynamic>{
-                              // 'code': _code.text,
-                              // 'detail': _detail.text,
-                              // 'discount': _discount.text,
-                              // // 'title': _title.text,
-                              // 'tag': _title.text,
-                              // 'coupon_id': widget.couponId,
-                              // 'max_dis': _max_dis.text,
-                              'code': _code.text.toUpperCase(),
-                              'detail': _detail.text,
-                              'discount': _discount.text,
-                              "end_date": end_date,
-                              "start_date": start_date,
-                              "max_dis": _max_dis.text,
-                              "minimum_cart_value": _minimum_cart_value.text,
-                              "offer_type": coupontype,
-                              "package_type": Select_Package_type!.trim(),
-                              "price": _price.text,
-                              "tag": _tag.text,
-                              'description': descriptionn,
-                            };
-                            await documentReference
-                                .update(data)
-                                .whenComplete(() => print("Item Updated"))
-                                .catchError((e) => print(e));
-                            Navigator.pop(context);
-                          },
-                          child: const Text('Done'),
-                        ),
+                      Container(
+                        color: Colors.yellowAccent,
+                        width: 280,
+                        child: DropdownButton(
+                            hint: Text("${print_type}"),
+                            items: const [
+                              DropdownMenuItem(
+                                child: Text("Percentage"),
+                                value: true,
+                              ),
+                              DropdownMenuItem(
+                                child: Text("Flat"),
+                                value: false,
+                              ),
+                            ],
+                            onChanged: dropDowntype),
                       ),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      ElevatedButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          child: Text('Close'))
                     ],
                   ),
-                )
-              ],
-            ),
-          ],
+                  const SizedBox(
+                    height: 30,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Row(
+                      children: [
+                        Center(
+                          child: ElevatedButton(
+                            onPressed: () async {
+                              print("/////");
+                              print(start_date);
+                              print(end_date);
+                              DocumentReference documentReference =
+                                  FirebaseFirestore.instance
+                                      .collection('coupon')
+                                      .doc(widget.couponId);
+                              Map<String, dynamic> data = <String, dynamic>{
+                                // 'code': _code.text,
+                                // 'detail': _detail.text,
+                                // 'discount': _discount.text,
+                                // // 'title': _title.text,
+                                // 'tag': _title.text,
+                                // 'coupon_id': widget.couponId,
+                                // 'max_dis': _max_dis.text,
+                                'code': _code.text.toUpperCase(),
+                                'detail': _detail.text,
+                                'discount': _discount.text,
+                                "end_date": end_date,
+                                "start_date": start_date,
+                                "max_dis": _max_dis.text,
+                                "minimum_cart_value": _minimum_cart_value.text,
+                                "offer_type": coupontype,
+                                "package_type": Select_Package_type!.trim(),
+                                "price": _price.text,
+                                "tag": _tag.text,
+                                'description': descriptionn,
+                              };
+                              await documentReference
+                                  .update(data)
+                                  .whenComplete(() => print("Item Updated"))
+                                  .catchError((e) => print(e));
+                              Navigator.pop(context);
+                            },
+                            child: const Text('Done'),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        ElevatedButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: Text('Close'))
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
