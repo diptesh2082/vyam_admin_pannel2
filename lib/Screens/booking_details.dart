@@ -907,17 +907,17 @@ class _ProductEditBoxState extends State<ProductEditBox> {
   DateTime bookingtimedata = DateTime.now();
   DateTime ordertimedata = DateTime.now();
   DateTime endtimedata = DateTime.now();
-  DateTime bookingdate = DateTime.now();
-  DateTime planedate = DateTime.now();
-  DateTime orderdatee = DateTime.now();
+  // DateTime bookingdate = DateTime.now();
+  // DateTime orderdatee = DateTime.now();
   DateTime? date;
   DateTime? plandate;
+  DateTime? bookingdate;
+  DateTime? orderdate;
   TimeOfDay? time;
   TimeOfDay? ptime;
   TimeOfDay? otime;
   DateTime? dateTime;
   DateTime? pdateTime;
-  DateTime? orderdate;
   List<String> _bookstatus = ['active', 'upcoming', 'completed'];
   List<String> _do = ['true', 'false'];
   String _dropdownValue = 'true';
@@ -961,6 +961,21 @@ class _ProductEditBoxState extends State<ProductEditBox> {
     _addbookingmonth.text = widget.bookingmonth;
     _addbookingday.text = widget.bookingday;
     _addbookingaccepted.text = widget.bookingaccepted;
+    bookingdate = DateTime(
+      int.parse(_addbookingyear.text),
+      int.parse(_addbookingmonth.text),
+      int.parse(_addbookingday.text),
+    );
+    orderdate = DateTime(
+      int.parse(_addorderyear.text),
+      int.parse(_addordermonth.text),
+      int.parse(_addorderday.text),
+    );
+    plandate = DateTime(
+      int.parse(_addplanendyear.text),
+      int.parse(_addplanendmonth.text),
+      int.parse(_addplanendday.text),
+    );
 
     // print(widget.address);
     // _address.text = widget.address;
@@ -1475,10 +1490,14 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                               )),
                         ),
                         SizedBox(width: 40),
+                        Text(plandate.toString()),
+                        SizedBox(width: 40),
                         ElevatedButton(
-                          child: const Text('Select Date & Time For Plan'),
-                          onPressed: () => pickplanDateTime(context),
-                        ),
+                            child: const Text('Select Date & Time For Plan'),
+                            onPressed: () {
+                              print(plandate);
+                              pickplanDateTime(context);
+                            }),
                         SizedBox(width: 15),
                       ],
                     ),
@@ -1498,10 +1517,14 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                               )),
                         ),
                         SizedBox(width: 40),
+                        Text(orderdate.toString()),
+                        SizedBox(width: 40),
                         ElevatedButton(
-                          child: const Text('Select Date & Time For Order'),
-                          onPressed: () => pickorderDateTime(context),
-                        ),
+                            child: const Text('Select Date & Time For Order'),
+                            onPressed: () {
+                              print(orderdate);
+                              pickorderDateTime(context);
+                            }),
                         SizedBox(width: 20),
                       ],
                     ),
@@ -1521,12 +1544,17 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                               )),
                         ),
                         SizedBox(width: 40),
+                        Text(bookingdate.toString()),
+                        SizedBox(width: 40),
                         ElevatedButton(
                             child:
                                 const Text('Select Date & Time For Bookings'),
                             onPressed: () {
                               // DateFormat("MMM, dd, yyyy")
                               //     .format(data["booking_date"].toDate());
+                              // print(_addbookingyear);
+
+                              print(bookingdate);
                               pickDateTime(context);
                             }),
                         const SizedBox(width: 15),
@@ -1558,12 +1586,12 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                                 // 'total_price': _addtotalprice.text,
                                 // 'totalDays': _addtotaldays.text,
                                 // 'tax_pay': _addtaxpay.text,
-                                'plan_end_duration': endtimedata,
+                                'plan_end_duration': plandate,
                                 // 'payment_done': _addpaymentdone.text == 'true'
                                 //     ? true
                                 //     : false,
                                 // 'package_type': abc,
-                                'order_date': ordertimedata,
+                                'order_date': orderdate,
                                 // 'gym_name': abc2,
                                 // 'gym_address': _addgymaddress.text,
                                 // 'grand_total': _addgrandtotal.text,
@@ -1573,7 +1601,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                                 // 'booking_price': _addbookingprice.text,
                                 // 'booking_plan': _addbookingplan.text,
                                 // 'booking_id': _addbookingid.text,
-                                'booking_date': bookingtimedata,
+                                'booking_date': bookingdate,
 
                                 // 'booking_accepted':
                                 //     _addbookingaccepted.text == 'true'
@@ -1741,12 +1769,10 @@ class _ProductEditBoxState extends State<ProductEditBox> {
     if (time == null) return;
 
     setState(() {
-      bookingtimedata = DateTime(
+      bookingdate = DateTime(
         date.year,
         date.month,
         date.day,
-        time.hour,
-        time.minute,
       );
     });
   }
@@ -1799,14 +1825,14 @@ class _ProductEditBoxState extends State<ProductEditBox> {
 
   //for 'plan_end_duration'
   Future pickplanDateTime(BuildContext context) async {
-    final plandate = await pickplanDate(context);
+    var plandate = await pickplanDate(context);
     if (plandate == null) return;
 
     final ptime = await pickplanTime(context);
     if (ptime == null) return;
 
     setState(() {
-      endtimedata = DateTime(
+      plandate = DateTime(
         plandate.year,
         plandate.month,
         plandate.day,
@@ -1864,14 +1890,14 @@ class _ProductEditBoxState extends State<ProductEditBox> {
 
   //for 'order_date'
   Future pickorderDateTime(BuildContext context) async {
-    final orderdate = await pickorderDate(context);
+    var orderdate = await pickorderDate(context);
     if (orderdate == null) return;
 
     final otime = await pickorderTime(context);
     if (otime == null) return;
 
     setState(() {
-      ordertimedata = DateTime(
+      orderdate = DateTime(
         orderdate.year,
         orderdate.month,
         orderdate.day,
