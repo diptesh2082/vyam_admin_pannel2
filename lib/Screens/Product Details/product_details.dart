@@ -58,7 +58,7 @@ class _ProductDetailsState extends State<ProductDetails> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Product Details"),
+        title: Text("Vendor Details"),
       ),
       body: SafeArea(
         child: Material(
@@ -364,7 +364,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                             child: Text("Previous Page"),
                             onPressed: () {
                               setState(() {
-                                if (start >= 0) page--;
+                                if (start >= 1) page--;
 
                                 if (start > 0 && end > 0) {
                                   start = start - 10;
