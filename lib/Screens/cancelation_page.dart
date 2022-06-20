@@ -138,25 +138,19 @@ class _CancelationPageState extends State<CancelationPage> {
                             ),
                             DataColumn(
                               label: Text(
-                                'Vendor ID',
+                                'User Number',
                                 style: TextStyle(fontWeight: FontWeight.w600),
                               ),
                             ),
                             DataColumn(
                               label: Text(
-                                'Vendor Name',
+                                'Vendor Name || Vendor Branch',
                                 style: TextStyle(fontWeight: FontWeight.w600),
                               ),
                             ),
                             DataColumn(
                               label: Text(
-                                'Phone number',
-                                style: TextStyle(fontWeight: FontWeight.w600),
-                              ),
-                            ),
-                            DataColumn(
-                              label: Text(
-                                'Cancel Choice',
+                                'Cancel Reason',
                                 style: TextStyle(fontWeight: FontWeight.w600),
                               ),
                             ),
@@ -259,6 +253,8 @@ class _CancelationPageState extends State<CancelationPage> {
 
   DataRow _buildListItem(BuildContext context, DocumentSnapshot data, int index,
       int start, int end) {
+    final String numbers = data['user_number'];
+
     String Id = data.id;
     return DataRow(
       cells: [
@@ -279,29 +275,28 @@ class _CancelationPageState extends State<CancelationPage> {
                 )
               : const Text(""),
         ),
-        DataCell(
-          data['vendor_id'] != null
-              ? SizedBox(
-                  width: 200.0,
-                  child: Text(
-                    data['cancel_remark'],
-                  ),
-                )
-              : const Text(""),
-        ),
+        DataCell(data['user_number'] != null
+            ? SizedBox(
+                width: 120,
+                child: Text((data['user_number'])
+                    .toString()
+                    .substring(0, numbers.length)))
+            : Text("")),
+        // DataCell(
+        //   data['vendor_id'] != null
+        //       ? SizedBox(
+        //           width: 200.0,
+        //           child: Text(
+        //             data['cancel_remark'],
+        //           ),
+        //         )
+        //       : const Text(""),
+        // ),
         DataCell(
           data['vendor_name'] != null
               ? SizedBox(
                   width: 100.0,
                   child: Text(data['vendor_name'] ?? ""),
-                )
-              : const Text(""),
-        ),
-        DataCell(
-          data['user_number'] != null
-              ? SizedBox(
-                  width: 100.0,
-                  child: Text(data['user_number'] ?? ""),
                 )
               : const Text(""),
         ),
@@ -327,24 +322,17 @@ class _CancelationPageState extends State<CancelationPage> {
           const Text(''),
           showEditIcon: true,
           onTap: () {
-            showDialog(
-                context: context,
-                builder: (context) {
-                  return GestureDetector(
-                    child: SingleChildScrollView(
-                      child: CancelationEditBox(
-                        user_name: data['user_name'],
-                        user_number: data['user_number'],
-                        cancel_choice: data['cancel_choice'],
-                        cancel_remark: data['cancel_remark'],
-                        Id: data['Id'],
-                      ),
-                    ),
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
-                  );
-                });
+            Navigator.push(
+                (context),
+                MaterialPageRoute(
+                  builder: (context) => CancelationEditBox(
+                    user_name: data['user_name'],
+                    user_number: data['user_number'],
+                    cancel_choice: data['cancel_choice'],
+                    cancel_remark: data['cancel_remark'],
+                    Id: data.id,
+                  ),
+                ));
           },
         ),
         DataCell(
@@ -395,146 +383,149 @@ class _CancelationEditBoxState extends State<CancelationEditBox> {
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(30))),
-      content: SizedBox(
-        // height: 580,
-        // width: 800,
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'Update Records for this doc',
-                style: TextStyle(
-                    fontFamily: 'poppins',
-                    fontWeight: FontWeight.w600,
-                    fontSize: 14),
-              ),
-              SizedBox(
-                height: 50,
-                child: Card(
-                    child: TextField(
-                  autofocus: true,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w400,
-                  ),
-                  controller: _user_name,
-                  maxLines: 3,
-                  decoration: const InputDecoration(
-                      border: InputBorder.none,
-                      hintStyle: TextStyle(
-                        fontSize: 14,
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w400,
-                      ),
-                      hintMaxLines: 2,
-                      hintText: 'User Name'),
-                )),
-              ),
-              SizedBox(
-                height: 50,
-                child: Card(
-                    child: TextField(
-                  autofocus: true,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w400,
-                  ),
-                  controller: _user_number,
-                  maxLines: 3,
-                  decoration: const InputDecoration(
-                      border: InputBorder.none,
-                      hintStyle: TextStyle(
-                        fontSize: 14,
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w400,
-                      ),
-                      hintMaxLines: 2,
-                      hintText: 'Phone number'),
-                )),
-              ),
-              SizedBox(
-                height: 50,
-                child: Card(
-                    child: TextField(
-                  autofocus: true,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w400,
-                  ),
-                  controller: _cancel_choice,
-                  maxLines: 3,
-                  decoration: const InputDecoration(
-                      border: InputBorder.none,
-                      hintStyle: TextStyle(
-                        fontSize: 14,
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w400,
-                      ),
-                      hintMaxLines: 2,
-                      hintText: 'Question'),
-                )),
-              ),
-              SizedBox(
-                height: 50,
-                child: Card(
-                    child: TextField(
-                  autofocus: true,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w400,
-                  ),
-                  controller: _cancel_remark,
-                  maxLines: 3,
-                  decoration: const InputDecoration(
-                      border: InputBorder.none,
-                      hintStyle: TextStyle(
-                        fontSize: 14,
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w400,
-                      ),
-                      hintMaxLines: 2,
-                      hintText: 'Answer'),
-                )),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: Center(
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      print("/////");
-                      print('${widget.Id}');
-
-                      DocumentReference documentReference = FirebaseFirestore
-                          .instance
-                          .collection('Cancellation Data')
-                          .doc(widget.Id);
-                      Map<String, dynamic> data = {
-                        'user_name': _user_name.text,
-                        'user_number': _user_number.text,
-                        'cancel_choice': _cancel_choice.text,
-                        'cancel_remark': _cancel_remark.text,
-                      };
-                      await FirebaseFirestore.instance
-                          .collection('Cancellation Data')
-                          .doc(widget.Id)
-                          .update(data);
-                      print("after");
-                      Navigator.pop(context);
-                    },
-                    child: const Text('Done'),
-                  ),
+    return Scaffold(
+      appBar: AppBar(title: Text("Edit Box")),
+      body: Container(
+        padding: EdgeInsets.all(20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Update Records for this doc',
+              style: TextStyle(
+                  fontFamily: 'poppins',
+                  fontWeight: FontWeight.w600,
+                  fontSize: 14),
+            ),
+            SizedBox(
+              height: 70,
+              child: Card(
+                  child: TextField(
+                readOnly: true,
+                autofocus: true,
+                style: const TextStyle(
+                  fontSize: 14,
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.w400,
                 ),
-              )
-            ],
-          ),
+                controller: _user_name,
+                maxLines: 3,
+                decoration: const InputDecoration(
+                    contentPadding: EdgeInsets.all(20),
+                    border: InputBorder.none,
+                    hintStyle: TextStyle(
+                      fontSize: 14,
+                      fontFamily: 'Poppins',
+                      fontWeight: FontWeight.w400,
+                    ),
+                    hintMaxLines: 2,
+                    hintText: 'User Name'),
+              )),
+            ),
+            SizedBox(
+              height: 70,
+              child: Card(
+                  child: TextField(
+                readOnly: true,
+                autofocus: true,
+                style: const TextStyle(
+                  fontSize: 14,
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.w400,
+                ),
+                controller: _user_number,
+                maxLines: 3,
+                decoration: const InputDecoration(
+                    contentPadding: EdgeInsets.all(20),
+                    border: InputBorder.none,
+                    hintStyle: TextStyle(
+                      fontSize: 14,
+                      fontFamily: 'Poppins',
+                      fontWeight: FontWeight.w400,
+                    ),
+                    hintMaxLines: 2,
+                    hintText: 'Phone number'),
+              )),
+            ),
+            SizedBox(
+              height: 70,
+              child: Card(
+                  child: TextField(
+                readOnly: true,
+                autofocus: true,
+                style: const TextStyle(
+                  fontSize: 14,
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.w400,
+                ),
+                controller: _cancel_choice,
+                maxLines: 3,
+                decoration: const InputDecoration(
+                    contentPadding: EdgeInsets.all(20),
+                    border: InputBorder.none,
+                    hintStyle: TextStyle(
+                      fontSize: 14,
+                      fontFamily: 'Poppins',
+                      fontWeight: FontWeight.w400,
+                    ),
+                    hintMaxLines: 2,
+                    hintText: 'Question'),
+              )),
+            ),
+            SizedBox(
+              height: 70,
+              child: Card(
+                  child: TextField(
+                autofocus: true,
+                style: const TextStyle(
+                  fontSize: 14,
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.w400,
+                ),
+                controller: _cancel_remark,
+                maxLines: 3,
+                decoration: const InputDecoration(
+                    contentPadding: EdgeInsets.all(20),
+                    border: InputBorder.none,
+                    hintStyle: TextStyle(
+                      fontSize: 14,
+                      fontFamily: 'Poppins',
+                      fontWeight: FontWeight.w400,
+                    ),
+                    hintMaxLines: 2,
+                    hintText: 'Answer'),
+              )),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Center(
+                child: ElevatedButton(
+                  onPressed: () async {
+                    print("/////");
+                    print('${widget.Id}');
+
+                    DocumentReference documentReference = FirebaseFirestore
+                        .instance
+                        .collection('Cancellation Data')
+                        .doc(widget.Id);
+                    Map<String, dynamic> data = {
+                      'user_name': _user_name.text,
+                      'user_number': _user_number.text,
+                      'cancel_choice': _cancel_choice.text,
+                      'cancel_remark': _cancel_remark.text,
+                    };
+                    await FirebaseFirestore.instance
+                        .collection('Cancellation Data')
+                        .doc(widget.Id)
+                        .update(data);
+                    print("after");
+                    Navigator.pop(context);
+                  },
+                  child: const Text('Done'),
+                ),
+              ),
+            )
+          ],
         ),
       ),
     );
