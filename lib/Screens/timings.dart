@@ -66,22 +66,6 @@ class _TimingsState extends State<Timings> {
                       ),
                     ),
                   ),
-                  // GestureDetector(
-                  //   onTap: showAddbox,
-                  //   child: Container(
-                  //     width: 120,
-                  //     decoration: BoxDecoration(
-                  //         color: Colors.white,
-                  //         borderRadius: BorderRadius.circular(20.0)),
-                  //     child: Row(
-                  //       children: const [
-                  //         Icon(Icons.add),
-                  //         Text('Add Product',
-                  //             style: TextStyle(fontWeight: FontWeight.w400)),
-                  //       ],
-                  //     ),
-                  //   ),
-                  // ),
                 ),
                 Center(
                   child: StreamBuilder<QuerySnapshot>(

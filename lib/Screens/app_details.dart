@@ -47,7 +47,7 @@ class _appDetailsState extends State<appDetails> {
                       onPressed: () {
                         Get.to(const addappdetail()); //showAddbox,
                       },
-                      child: Text('Add Question')),
+                      child: Text('Add App Details')),
                 ),
                 Center(
                   child: StreamBuilder<QuerySnapshot>(

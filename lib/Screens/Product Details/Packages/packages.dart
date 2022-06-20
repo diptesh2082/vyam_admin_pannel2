@@ -286,7 +286,9 @@ class _PackagesPageState extends State<PackagesPage> {
             context,
             MaterialPageRoute(
                 builder: (context) => ProductEditBox(
+                      validity: data['validity'],
                       gym_id: widget.pGymId,
+                      price: data["price"],
                       type: data['type'],
                       package_type: data['package_type'],
                       index: data['index'],
@@ -380,7 +382,7 @@ class _addboxxState extends State<addboxx> {
   final TextEditingController _title = TextEditingController();
   final TextEditingController _type = TextEditingController();
   final TextEditingController _validity = TextEditingController();
-  final TextEditingController _price = TextEditingController();
+  // final TextEditingController _price = TextEditingController();
   var selectedvaluee = 'pay per session';
   var selectedd = 'gym';
   CollectionReference? categoryStream;
@@ -482,7 +484,7 @@ class _addboxxState extends State<addboxx> {
               ],
             ),
             customTextField(hinttext: "validity", addcontroller: _validity),
-            customTextField(hinttext: "price", addcontroller: _price),
+            // customTextField(hinttext: "price", addcontroller: _price),
 
             const Text(
               'Category',
@@ -555,14 +557,14 @@ class _addboxxState extends State<addboxx> {
 
 //                               "type": _type.text,
 //                               "id": finalPackID,
-//                               "validity": _validity.text,
+                      "validity": _validity.text,
 //                               "price": _price.text,
 
 // =======
                       "type": selectedd,
                       "id": finalPackID,
-                      "validity": _validity.text,
-                      "price": _price.text,
+                      // "validity": _validity.text,
+                      "price": "0",
                       "package_type": selectedvaluee,
                       'description': descriptionn,
                       'trending': true,
@@ -589,6 +591,7 @@ class _addboxxState extends State<addboxx> {
 class ProductEditBox extends StatefulWidget {
   const ProductEditBox({
     Key? key,
+    required this.price,
     required this.gym_id,
     required this.type,
     required this.index,
@@ -598,11 +601,14 @@ class ProductEditBox extends StatefulWidget {
     required this.id,
     required this.package_type,
     required this.description,
+    required this.validity,
   }) : super(key: key);
 
   final String discount;
+  final String validity;
   final String originalprice;
   final int index;
+  final String price;
   final String title;
   final String type;
   final String id;
@@ -619,6 +625,8 @@ class _ProductEditBoxState extends State<ProductEditBox> {
   final TextEditingController _originalprice = TextEditingController();
   final TextEditingController _index = TextEditingController();
   final TextEditingController _title = TextEditingController();
+  // final TextEditingController _price = TextEditingController();
+  final TextEditingController _validity = TextEditingController();
   // final TextEditingController _type = TextEditingController();
   var selectedvaluee;
   var sele;
@@ -638,6 +646,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
     categoryStream = FirebaseFirestore.instance.collection("category");
 
     _discount.text = widget.discount;
+    _validity.text = widget.validity;
     _originalprice.text = widget.originalprice;
     _index.text = widget.index.toString();
     _title.text = widget.title;
@@ -666,6 +675,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                     fontWeight: FontWeight.w600,
                     fontSize: 14),
               ),
+              customTextField(hinttext: "title", addcontroller: _title),
               customTextField(hinttext: "discount", addcontroller: _discount),
               customTextField(
                   hinttext: "original price", addcontroller: _originalprice),
@@ -685,9 +695,6 @@ class _ProductEditBoxState extends State<ProductEditBox> {
               const SizedBox(
                 height: 8,
               ),
-              customTextField(hinttext: "title", addcontroller: _title),
-              // customTextField(hinttext: "type", addcontroller: _type),
-
               Row(
                 children: [
                   const Text('Type:',
@@ -715,6 +722,14 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                         });
                       }),
                 ],
+              ),
+              customTextField(hinttext: "validity", addcontroller: _validity),
+              // customTextField(hinttext: "price", addcontroller: _price),
+              const Text('Category:',
+                  style: const TextStyle(
+                      fontWeight: FontWeight.w700, fontSize: 15)),
+              const SizedBox(
+                width: 20,
               ),
               StreamBuilder(
                   stream: categoryStream!.snapshots(),
@@ -747,7 +762,6 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                           }),
                     );
                   }),
-
               Padding(
                 padding: const EdgeInsets.all(12.0),
                 child: Center(
@@ -770,6 +784,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                         'index': int.parse(_index.text),
                         'title': _title.text,
                         'description': description,
+                        // 'price': _price.text,
 //                         "type": _type.text
                         "package_type": selectedvaluee,
 
