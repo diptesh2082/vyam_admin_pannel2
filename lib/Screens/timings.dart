@@ -55,7 +55,7 @@ class _TimingsState extends State<Timings> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => showAddbox(),
+                          builder: (context) => ShowAddBox(),
                         ),
                       );
                     },
@@ -158,31 +158,46 @@ class _TimingsState extends State<Timings> {
       DataCell(data != null ? Text(data['morning_days'] ?? "") : Text("")),
       DataCell(data != null ? Text(data['evening_days'] ?? "") : Text("")),
       DataCell(const Text(""), showEditIcon: true, onTap: () {
-        showDialog(
-            context: context,
-            builder: (context) {
-              return GestureDetector(
-                onTap: () => Navigator.pop(context),
-                child: SingleChildScrollView(
-                  child: ProductEditBox(
-                    gymId: widget.pGymId,
-                    typeId: timeId,
-                    closed: data['closed'],
-                    eveninging_days: data['evening_days'],
-                    morning: data["Morning"],
-                    morning_days: data['morning_days'],
-                    evening: data['Evening'],
-                  ),
-                ),
-              );
-            });
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ProductEditBox(
+                gymId: widget.pGymId,
+                typeId: timeId,
+                closed: data['closed'],
+                eveninging_days: data['evening_days'],
+                morning: data["Morning"],
+                morning_days: data['morning_days'],
+                evening: data['Evening'],
+              ),
+            ));
       }),
       DataCell(Icon(Icons.delete), onTap: () {
         deleteMethod(stream: packageStream, uniqueDocId: timeId);
       })
     ]);
   }
+}
 
+class ShowAddBox extends StatefulWidget {
+  const ShowAddBox({Key? key}) : super(key: key);
+
+  @override
+  State<ShowAddBox> createState() => _ShowAddBoxState();
+}
+
+class _ShowAddBoxState extends State<ShowAddBox> {
+  @override
+  // var idd;
+  // Future<void> initState() async {
+  //   // TODO: implement initState
+  //   idd= await FirebaseFirestore.instance
+  //       .collection('product_details')
+  //       .doc(globalGymId)
+  //       .collection('timings').id;
+  //
+  //   super.initState();
+  // }
   final TextEditingController typecon = TextEditingController();
   final TextEditingController morning = TextEditingController();
   final TextEditingController evening = TextEditingController();
@@ -190,71 +205,68 @@ class _TimingsState extends State<Timings> {
   final TextEditingController morning_days = TextEditingController();
   final TextEditingController evening_days = TextEditingController();
 
-  showAddbox() => showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-            shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(30))),
-            content: SizedBox(
-              height: 480,
-              width: 800,
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Add Timings Records',
-                      style: TextStyle(
-                          fontFamily: 'poppins',
-                          fontWeight: FontWeight.w600,
-                          fontSize: 14),
-                    ),
-                    customTextField(
-                        hinttext: "Timing Type", addcontroller: typecon),
-                    customTextField(
-                        hinttext: "Morning timings :6.00AM-12.00PM ",
-                        addcontroller: morning),
-                    customTextField(
-                        hinttext: "Evening Timings : 5.00PM-10.00PM",
-                        addcontroller: evening),
-                    customTextField(
-                        hinttext: "Closed : Saturday and Sunday",
-                        addcontroller: closed),
-                    customTextField(
-                      addcontroller: morning_days,
-                      hinttext: "Morning Days : Morning(mon-fri)",
-                    ),
-                    customTextField(
-                        hinttext: "Evening Days : Evening(mon-fri)",
-                        addcontroller: evening_days),
-                    Center(
-                      child: ElevatedButton(
-                        onPressed: () async {
-                          await FirebaseFirestore.instance
-                              .collection('product_details')
-                              .doc(widget.pGymId)
-                              .collection('timings')
-                              .doc(typecon.text)
-                              .set(
-                            {
-                              "Morning": morning.text,
-                              "Evening": evening.text,
-                              "closed": closed.text,
-                              "morning_days": morning_days.text,
-                              "evening_days": evening_days.text,
-                              'timing_id': typecon.text,
-                            },
-                          );
-                          Navigator.pop(context);
-                        },
-                        child: const Text('Done'),
-                      ),
-                    )
-                  ],
-                ),
-              ),
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Add Timings"),
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Add Timings Records',
+              style: TextStyle(
+                  fontFamily: 'poppins',
+                  fontWeight: FontWeight.w600,
+                  fontSize: 14),
             ),
-          ));
+            customTextField(hinttext: "Timing Type", addcontroller: typecon),
+            customTextField(
+                hinttext: "Morning timings :6.00AM-12.00PM ",
+                addcontroller: morning),
+            customTextField(
+                hinttext: "Evening Timings : 5.00PM-10.00PM",
+                addcontroller: evening),
+            customTextField(
+                hinttext: "Closed : Saturday and Sunday",
+                addcontroller: closed),
+            customTextField(
+              addcontroller: morning_days,
+              hinttext: "Morning Days : Morning(mon-fri)",
+            ),
+            customTextField(
+                hinttext: "Evening Days : Evening(mon-fri)",
+                addcontroller: evening_days),
+            Center(
+              child: ElevatedButton(
+                onPressed: () async {
+                  await FirebaseFirestore.instance
+                      .collection('product_details')
+                      .doc(globalGymId)
+                      .collection('timings')
+                      .doc(typecon.text)
+                      .set(
+                    {
+                      "Morning": morning.text,
+                      "Evening": evening.text,
+                      "closed": closed.text,
+                      "morning_days": morning_days.text,
+                      "evening_days": evening_days.text,
+                      'timing_id': typecon.text,
+                    },
+                  );
+                  Navigator.pop(context);
+                },
+                child: const Text('Done'),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
 }
 
 class ProductEditBox extends StatefulWidget {
@@ -303,12 +315,11 @@ class _ProductEditBoxState extends State<ProductEditBox> {
   Widget build(BuildContext context) {
     print("The Gym id is : ${typecon.text}");
     print("The Gym id is : ${widget.gymId}");
-    return AlertDialog(
-      shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(30))),
-      content: SizedBox(
-        height: 580,
-        width: 800,
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Edit"),
+      ),
+      body: Container(
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -320,7 +331,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                     fontWeight: FontWeight.w600,
                     fontSize: 14),
               ),
-              customTextField(hinttext: "Timing Type", addcontroller: typecon),
+              // customTextField(hinttext: "Timing Type", addcontroller: typecon),
               customTextField(
                   hinttext: "Morning timings :6.00AM-12.00PM ",
                   addcontroller: morning),
@@ -374,15 +385,6 @@ class _ProductEditBoxState extends State<ProductEditBox> {
     );
   }
 }
-
-
-
-
-
-
-
-
-
 
 // import 'package:admin_panel_vyam/dashboard.dart';
 // import 'package:admin_panel_vyam/services/deleteMethod.dart';

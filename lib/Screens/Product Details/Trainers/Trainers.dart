@@ -67,9 +67,7 @@ class _TrainerPageState extends State<TrainerPage> {
     print("Current Document_id -->${widget.tGymId}"); //Printing for information
     return Scaffold(
       appBar: AppBar(
-
         title: Text("Trainers"),
-
       ),
       body: SafeArea(
         child: Container(
@@ -765,6 +763,7 @@ class _ShowAddboxState extends State<ShowAddbox> {
                         'certification': certification,
                         'specialization': specialization,
                         'clients': _addclients.text,
+                        'insta_id': social.text
                       },
                     );
                     Navigator.pop(context);

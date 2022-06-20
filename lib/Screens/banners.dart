@@ -167,7 +167,7 @@ class _BannerPageState extends State<BannerPage> {
                               ),
                               DataColumn(
                                 label: Text(
-                                  'Access',
+                                  'Banners',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
@@ -264,7 +264,10 @@ class _BannerPageState extends State<BannerPage> {
   DataRow _buildListItem(BuildContext context, DocumentSnapshot data, int index,
       int start, int end) {
     bool access = data['access'];
+    bool visible = data['visible'];
     String banner_id = data['id'];
+    bool setnavv = data['navigation'] == "/gym_details" ? true : false;
+    String com = '';
 
     return DataRow(cells: [
       DataCell(data['position_id'] != null
@@ -273,35 +276,51 @@ class _BannerPageState extends State<BannerPage> {
       DataCell(
           data['name'] != null ? Text(data['name'] ?? "") : const Text("")),
       DataCell(Image.network(data['image'])),
-      DataCell(data['navigation'] != null
-          ? Text(data['navigation'] ?? "")
-          : const Text("")),
+      DataCell(ElevatedButton(
+        onPressed: () async {
+          setnavv = !setnavv;
+          com = setnavv ? "/gym_details" : "";
+
+          print("New ${com}");
+          DocumentReference documentReference = FirebaseFirestore.instance
+              .collection('banner_details')
+              .doc(banner_id);
+          await documentReference
+              .update({'navigation': com})
+              .whenComplete(() => print("Legitimate toggled"))
+              .catchError((e) => print(e));
+          await documentReference
+              .update({'access': setnavv})
+              .whenComplete(() => print("Legitimate toggled"))
+              .catchError((e) => print(e));
+        },
+        child: Text(
+          setnavv ? "Activated" : "Deactivated",
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+        style: ElevatedButton.styleFrom(
+            primary: setnavv ? Colors.green : Colors.red),
+      )),
       DataCell(
         Center(
           child: ElevatedButton(
             onPressed: () async {
-              bool temp = access;
+              bool temp = visible;
               temp = !temp;
               DocumentReference documentReference = FirebaseFirestore.instance
                   .collection('banner_details')
                   .doc(banner_id);
               await documentReference
-                  .update({'access': temp})
+                  .update({'visible': temp})
                   .whenComplete(() => print("Legitimate toggled"))
                   .catchError((e) => print(e));
             },
 // <<<<<<< HEAD
 // <<<<<<< HEAD
-            child: Text(access ? "Clickable" : "Non-Clickable"),
-// =======
-//             child: Text(access ? 'Clickable' : 'Non-Clickable'),
-// >>>>>>> 1f09f104c279e9107f7b92c5d9c2cf410db6e92c
-// =======
-//             child: Text(access ? "Clickable" : "Non-Clickable"),
-//
-// >>>>>>> db16c184745ea062b80bb6d62b73b5f64792dc9e
+            child: Text(visible ? "Enable" : "Disable"),
+
             style: ElevatedButton.styleFrom(
-                primary: access ? Colors.green : Colors.red),
+                primary: visible ? Colors.green : Colors.red),
           ),
         ),
       ),
@@ -431,6 +450,69 @@ class CustomTextField extends StatelessWidget {
   }
 }
 
+class navedit extends StatefulWidget {
+  const navedit({Key? key, required this.navtext}) : super(key: key);
+  final String navtext;
+  @override
+  State<navedit> createState() => _naveditState();
+}
+
+String navcommandedit = '';
+
+class _naveditState extends State<navedit> {
+  bool setnav = false;
+  var rs;
+  @override
+  void initState() {
+    // TODO: implement initState
+    if (widget.navtext == "/gym_details")
+      setState(() {
+        setnav = true;
+      });
+
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Row(
+        children: [
+          Text("Set Navigation"),
+          SizedBox(
+            width: 20,
+          ),
+          ElevatedButton(
+            onPressed: () {
+              if (setnav == false) {
+                setState(() {
+                  setnav = true;
+                  navcommandedit = "/gym_details";
+                  print("Set NAv Activated In Edit");
+                });
+              } else {
+                setState(() {
+                  setnav = false;
+                  navcommandedit = "";
+                  print("SET NAV DEACTIVATED In Edit");
+                });
+              }
+              print("New ${navcommandedit}");
+            },
+            child: Text(
+              setnav ? "Activated" : "Deactivated",
+              style:
+                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+            ),
+            style: ElevatedButton.styleFrom(
+                primary: setnav ? Colors.green : Colors.red),
+          )
+        ],
+      ),
+    );
+  }
+}
+
 class EditBox extends StatefulWidget {
   const EditBox(
       {Key? key,
@@ -509,8 +591,9 @@ class _EditBoxState extends State<EditBox> {
                   CustomTextField(hinttext: "Name", addcontroller: _name),
                   CustomTextField(
                       hinttext: "Position", addcontroller: _position),
-                  CustomTextField(
-                      hinttext: "Navigation", addcontroller: _navigation),
+                  // CustomTextField(
+                  //     hinttext: "Navigation", addcontroller: _navigation),
+                  navedit(navtext: _navigation.text),
 
                   SizedBox(
                       height: 400,
@@ -554,44 +637,50 @@ class _EditBoxState extends State<EditBox> {
                     idd: id,
                   ),
 
-                  Padding(
-                    padding: EdgeInsets.all(50),
-                    child: Center(
-                      child: ElevatedButton(
-                        onPressed: () async {
-                          print("/////");
+                  Row(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.all(50),
+                        child: Center(
+                          child: ElevatedButton(
+                            onPressed: () async {
+                              print("/////");
 
-                          FirebaseFirestore.instance
-                              .collection('banner_details')
-                              .doc(id)
-                              .update(
-                            {
-                              'position_id': _position.text,
-                              'name': _name.text,
-                              'image': image3,
-                              'id': id,
-                              'access': access,
-                              'gym_id': namee,
-                              'navigation': _navigation.text,
+                              FirebaseFirestore.instance
+                                  .collection('banner_details')
+                                  .doc(id)
+                                  .update(
+                                {
+                                  'position_id': _position.text,
+                                  'name': _name.text,
+                                  'image':
+                                      image3 != null ? image3 : widget.image,
+                                  'id': id,
+                                  'access': access,
+                                  'gym_id': namee,
+                                  'navigation': navcommandedit,
+                                },
+                              ).whenComplete(() {
+                                setState(() {
+                                  image3 = null;
+                                  navcommandedit = '';
+                                });
+                              });
+                              Navigator.pop(context);
                             },
-                          ).whenComplete(() {
-                            setState(() {
-                              image3 = null;
-                            });
-                          });
+                            child: const Text('Done'),
+                          ),
+                        ),
+                      ),
+                      Center(
+                          child: ElevatedButton(
+                        onPressed: () {
                           Navigator.pop(context);
                         },
-                        child: const Text('Done'),
-                      ),
-                    ),
-                  ),
-                  Center(
-                      child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: const Text('Close'),
-                  )),
+                        child: const Text('Close'),
+                      )),
+                    ],
+                  )
                 ],
               ),
             ),
