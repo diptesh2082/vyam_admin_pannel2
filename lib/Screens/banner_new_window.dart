@@ -6,6 +6,7 @@ import 'package:flutter_dropzone/flutter_dropzone.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../services/image_picker_api.dart';
@@ -35,6 +36,7 @@ class _bannerNewPageState extends State<bannerNewPage> {
   String namee = "";
   String place = "";
   bool setnav = false;
+  String searchGymName = '';
 
   void dropDowntype(bool? selecetValue) {
     // if(selecetValue is String){
@@ -76,6 +78,44 @@ class _bannerNewPageState extends State<bannerNewPage> {
           padding: EdgeInsets.all(30),
           child: Column(
             children: <Widget>[
+              Container(
+                width: 400,
+                height: 51,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(14),
+                  color: Colors.white12,
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(15),
+                  child: TextField(
+                    // focusNode: _node,
+
+                    autofocus: false,
+                    textAlignVertical: TextAlignVertical.bottom,
+                    onSubmitted: (value) async {
+                      FocusScope.of(context).unfocus(); // <<<<<<< HEAD
+                    },
+
+                    onChanged: (value) {
+                      if (value.isEmpty) {}
+                      if (mounted) {
+                        setState(() {
+                          searchGymName = value.toString();
+                        });
+                      }
+                    },
+                    decoration: InputDecoration(
+                      prefixIcon: const Icon(Icons.search),
+                      hintText: 'Search',
+                      hintStyle: GoogleFonts.poppins(
+                          fontSize: 16, fontWeight: FontWeight.w500),
+                      border: InputBorder.none,
+                      filled: true,
+                      fillColor: Colors.white12,
+                    ),
+                  ),
+                ),
+              ),
               Center(
                 child: Form(
                   key: _formKey,
@@ -90,41 +130,69 @@ class _bannerNewPageState extends State<bannerNewPage> {
                             fontSize: 14),
                       ),
                       const SizedBox(height: 50),
-                      SizedBox(
-                          height: 400,
-                          width: 400,
-                          child: StreamBuilder<QuerySnapshot>(
-                            stream: productStream!.snapshots(),
-                            builder: (context, AsyncSnapshot snapshot) {
-                              if (snapshot.connectionState ==
-                                  ConnectionState.waiting) {
-                                return const CircularProgressIndicator();
-                              }
-                              if (snapshot.data == null) {
-                                return Container();
-                              }
-                              print("-----------------------------------");
-                              var doc = snapshot.data.docs;
-                              print(snapshot.data.docs);
-                              return ListView.builder(
-                                itemCount: doc.length,
-                                itemBuilder: (BuildContext context, int index) {
-                                  return RadioListTile<String>(
-                                      value: doc[index]['gym_id'],
-                                      title: Text(
-                                          "${doc[index]['name'].toString()} || ${doc[index]['branch']}"),
-                                      groupValue: namee,
-                                      onChanged: (String? valuee) {
-                                        setState(() {
-                                          namee = valuee!;
-                                          place = doc[index]['branch'];
-                                        });
-                                        print(namee);
-                                      });
+                      Column(
+                        children: [
+                          SizedBox(
+                              height: 400,
+                              width: 400,
+                              child: StreamBuilder<QuerySnapshot>(
+                                stream: productStream!.snapshots(),
+                                builder: (context, AsyncSnapshot snapshot) {
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return const CircularProgressIndicator();
+                                  }
+                                  if (snapshot.data == null) {
+                                    return Container();
+                                  }
+                                  var doc = snapshot.data.docs;
+
+                                  print("-----------------------------------");
+                                  if (searchGymName.isNotEmpty) {
+                                    doc = doc.where((element) {
+                                      return element
+                                              .get('name')
+                                              .toString()
+                                              .toLowerCase()
+                                              .contains(
+                                                  searchGymName.toString()) ||
+                                          element
+                                              .get('gym_id')
+                                              .toString()
+                                              .toLowerCase()
+                                              .contains(
+                                                  searchGymName.toString()) ||
+                                          element
+                                              .get('address')
+                                              .toString()
+                                              .toLowerCase()
+                                              .contains(
+                                                  searchGymName.toString());
+                                    }).toList();
+                                  }
+                                  print(snapshot.data.docs);
+                                  return ListView.builder(
+                                    itemCount: doc.length,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      return RadioListTile<String>(
+                                          value: doc[index]['gym_id'],
+                                          title: Text(
+                                              "${doc[index]['name'].toString()} || ${doc[index]['branch']}"),
+                                          groupValue: namee,
+                                          onChanged: (String? valuee) {
+                                            setState(() {
+                                              namee = valuee!;
+                                              place = doc[index]['branch'];
+                                            });
+                                            print(namee);
+                                          });
+                                    },
+                                  );
                                 },
-                              );
-                            },
-                          )),
+                              )),
+                        ],
+                      ),
                       SizedBox(
                         height: 20,
                       ),

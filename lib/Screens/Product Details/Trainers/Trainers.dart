@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:html';
 import 'dart:io';
 import 'package:admin_panel_vyam/services/MatchIDMethod.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -271,6 +272,7 @@ class _TrainerPageState extends State<TrainerPage> {
   DataRow _buildListItem(BuildContext context, DocumentSnapshot data, int index,
       int start, int end) {
     String imageUrl = data['image'];
+
     String trainerId = data['trainer_id'];
     // var cert = data['certification'];
     // String gymid = data['gym_id'];
@@ -401,20 +403,20 @@ class _TrainerPageState extends State<TrainerPage> {
     return [];
   }
 
-  Future<List<String>> multiimageuploader(List<XFile> list) async {
-    List<String> _path = [];
-    for (XFile _image in list) {
-      _path.add(await uploadimage(_image));
-    }
-    return _path;
-  }
+  // Future<List<String>> multiimageuploader(List<XFile> list) async {
+  //   List<String> _path = [];
+  //   for (XFile _image in list) {
+  //     _path.add(await uploadimage(_image));
+  //   }
+  //   return _path;
+  // }
 
-  Future<String> uploadimage(XFile image) async {
-    Reference db = FirebaseStorage.instance
-        .ref("/gyms/FitnessFantasy2.0/Images/trainers${getImageName(image)}");
-    await db.putFile(File(image.path));
-    return await db.getDownloadURL();
-  }
+  // Future<String> uploadimage(XFile image) async {
+  //   Reference db = FirebaseStorage.instance
+  //       .ref("/gyms/FitnessFantasy2.0/Images/trainers${getImageName(image)}");
+  //   await db.putFile(File(image.path));
+  //   return await db.getDownloadURL();
+  // }
 
   // Future creatUserImage(String url)async{
   //   final docUser = FirebaseFirestore.instance
@@ -484,6 +486,92 @@ class FirebaseFile {
   const FirebaseFile({required this.ref, required this.url});
 }
 
+var image3;
+
+class loadimage extends StatefulWidget {
+  loadimage({Key? key, required this.id}) : super(key: key);
+  final String id;
+  @override
+  State<loadimage> createState() => _loadimageState();
+}
+
+class _loadimageState extends State<loadimage> {
+  bool isloading = false;
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        child: Row(
+      children: [
+        const Text(
+          "User Image",
+          style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
+        ),
+        const SizedBox(
+          width: 20,
+        ),
+        InkWell(
+          child: const Icon(Icons.camera_alt),
+          onTap: () async {
+            setState(() {
+              isloading = true;
+            });
+            var profileImage = await chooseImage();
+            await getUrlImage(profileImage);
+            setState(() {
+              isloading = false;
+            });
+          },
+        ),
+        SizedBox(
+          width: 200,
+          height: 100,
+          child: isloading
+              ? Container(
+                  height: 100,
+                  width: 200,
+                  child: Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                )
+              : image3 != null
+                  ? Container(
+                      height: 100,
+                      width: 200,
+                      child: Image.network(image3),
+                    )
+                  : Container(
+                      height: 100,
+                      width: 200,
+                      child: Center(child: Text("Please Upload Image")),
+                    ),
+        ),
+      ],
+    ));
+  }
+
+  getUrlImage(XFile? pickedFile) async {
+    if (kIsWeb) {
+      final _firebaseStorage = FirebaseStorage.instance
+          .ref()
+          .child('product_details')
+          .child('trainers');
+
+      Reference _reference =
+          _firebaseStorage.child('trainers/${Path.basename(pickedFile!.path)}');
+      await _reference.putData(
+        await pickedFile.readAsBytes(),
+        SettableMetadata(contentType: 'image/jpeg'),
+      );
+
+      String imageUrl = await _reference.getDownloadURL();
+
+      setState(() {
+        image3 = imageUrl;
+      });
+    }
+  }
+}
+
 class ShowAddbox extends StatefulWidget {
   final String gymid;
   const ShowAddbox({required this.gymid, Key? key}) : super(key: key);
@@ -498,6 +586,7 @@ class _ShowAddboxState extends State<ShowAddbox> {
   var image;
   var imgUrl1;
   final id = FirebaseFirestore.instance.collection('product_details').doc().id;
+
   bool imagecheck = false;
 
   final TextEditingController _addname = TextEditingController();
@@ -623,65 +712,66 @@ class _ShowAddboxState extends State<ShowAddbox> {
                   style: const TextStyle(
                       fontWeight: FontWeight.bold, fontSize: 20),
                 ),
-                Row(
-                  children: [
-                    SizedBox(
-                      width: 150,
-                      child: ListTile(
-                        leading: Icon(
-                          Icons.file_upload_outlined,
-                          size: 20,
-                        ),
-                        trailing: InkWell(
-                          child: const Text("Add photos",
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontFamily: 'Poppins',
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w600)),
-                          onTap: () async {
-                            image = await chooseImage();
-                            await getUrlImage(image);
-                            setState(() {
-                              imagecheck = true;
-                            });
-                            // String res = await ImagePickerAPI()
-                            //     .pickImage(ImageSource.gallery);
-                            // File file = File.fromUri(Uri.file(res));
-                            // print(file.path);
-                          },
-                          // onTap: ()async {
-                          //   String res = await ImagePickerAPI().pickImage(ImageSource.gallery);
-                          //   File file = File.fromUri(Uri.file(res));
-                          //   print(file.path);
-                          // },
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      width: 300,
-                      height: 200,
-                      child: Container(
-                          child: imgUrl1 != null
-                              ? Image.network(
-                                  imgUrl1 != null ? imgUrl1 : " ",
-                                  fit: BoxFit.contain,
-                                )
-                              : Container(
-                                  child: Text(
-                                    'Please Upload Image',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 20),
-                                  ),
-                                )),
-                    ),
-                  ],
-                ),
+                loadimage(id: id),
+                // Row(
+                //   children: [
+                //     SizedBox(
+                //       width: 150,
+                //       child: ListTile(
+                //         leading: Icon(
+                //           Icons.file_upload_outlined,
+                //           size: 20,
+                //         ),
+                //         trailing: InkWell(
+                //           child: const Text("Add photos",
+                //               style: TextStyle(
+                //                   color: Colors.black,
+                //                   fontFamily: 'Poppins',
+                //                   fontSize: 14,
+                //                   fontWeight: FontWeight.w600)),
+                //           onTap: () async {
+                //             image = await chooseImage();
+                //             await getUrlImage(image);
+                //             setState(() {
+                //               imagecheck = true;
+                //             });
+                //             // String res = await ImagePickerAPI()
+                //             //     .pickImage(ImageSource.gallery);
+                //             // File file = File.fromUri(Uri.file(res));
+                //             // print(file.path);
+                //           },
+                //           // onTap: ()async {
+                //           //   String res = await ImagePickerAPI().pickImage(ImageSource.gallery);
+                //           //   File file = File.fromUri(Uri.file(res));
+                //           //   print(file.path);
+                //           // },
+                //         ),
+                //       ),
+                //     ),
+                //     SizedBox(
+                //       width: 300,
+                //       height: 200,
+                //       child: Container(
+                //           child: imgUrl1 != null
+                //               ? Image.network(
+                //                   imgUrl1 != null ? imgUrl1 : " ",
+                //                   fit: BoxFit.contain,
+                //                 )
+                //               : Container(
+                //                   child: Text(
+                //                     'Please Upload Image',
+                //                     style: TextStyle(
+                //                         fontWeight: FontWeight.bold,
+                //                         fontSize: 20),
+                //                   ),
+                //                 )),
+                //     ),
+                //   ],
+                // ),
                 Center(
                   child: ElevatedButton(
                     onPressed: () async {
-                      if (imagecheck && _formKey.currentState!.validate()) {
+                      if (_formKey.currentState!.validate()) {
                         await matchID(
                             newId: id,
                             matchStream: trainerStream,
@@ -697,7 +787,7 @@ class _ShowAddboxState extends State<ShowAddbox> {
                             'name': _addname.text,
                             'branch': gymname,
                             'place': branch,
-                            'image': imgUrl1,
+                            'image': image3 != null ? image3 : "",
                             'experience': _addexperience.text,
                             'about': _addabout.text,
                             'certification': certification,
@@ -737,7 +827,7 @@ class _ShowAddboxState extends State<ShowAddbox> {
       String imageUrl = await _reference.getDownloadURL();
 
       setState(() {
-        imgUrl1 = imageUrl;
+        image3 = imageUrl;
       });
     }
   }
@@ -897,61 +987,62 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                   "$cert",
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                 ),
-                Row(
-                  children: [
-                    SizedBox(
-                      width: 150,
-                      child: ListTile(
-                        leading: Icon(
-                          Icons.file_upload_outlined,
-                          size: 20,
-                        ),
-                        trailing: InkWell(
-                          child: const Text("Add photos",
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontFamily: 'Poppins',
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w600)),
-                          onTap: () async {
-                            var image = await chooseImage();
-                            await getUrlImage(image);
-
-                            // String res = await ImagePickerAPI()
-                            //     .pickImage(ImageSource.gallery);
-                            // File file = File.fromUri(Uri.file(res));
-                            // print(file.path);
-                          },
-                          // onTap: ()async {
-                          //   String res = await ImagePickerAPI().pickImage(ImageSource.gallery);
-                          //   File file = File.fromUri(Uri.file(res));
-                          //   print(file.path);
-                          // },
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      width: 300,
-                      height: 200,
-                      child: Container(
-                          child: imgUrl11 != null
-                              ? Image.network(
-                                  imgUrl11 != null ? imgUrl11 : " ",
-                                  fit: BoxFit.contain,
-                                )
-                              : Container(
-                                  child: Center(
-                                    child: Text(
-                                      'Please Upload Image',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 20),
-                                    ),
-                                  ),
-                                )),
-                    ),
-                  ],
-                ),
+                // Row(
+                //   children: [
+                //     SizedBox(
+                //       width: 150,
+                //       child: ListTile(
+                //         leading: Icon(
+                //           Icons.file_upload_outlined,
+                //           size: 20,
+                //         ),
+                //         trailing: InkWell(
+                //           child: const Text("Add photos",
+                //               style: TextStyle(
+                //                   color: Colors.black,
+                //                   fontFamily: 'Poppins',
+                //                   fontSize: 14,
+                //                   fontWeight: FontWeight.w600)),
+                //           onTap: () async {
+                //             var image = await chooseImage();
+                //             await getUrlImage(image);
+                //
+                //             // String res = await ImagePickerAPI()
+                //             //     .pickImage(ImageSource.gallery);
+                //             // File file = File.fromUri(Uri.file(res));
+                //             // print(file.path);
+                //           },
+                //           // onTap: ()async {
+                //           //   String res = await ImagePickerAPI().pickImage(ImageSource.gallery);
+                //           //   File file = File.fromUri(Uri.file(res));
+                //           //   print(file.path);
+                //           // },
+                //         ),
+                //       ),
+                //     ),
+                //     SizedBox(
+                //       width: 300,
+                //       height: 200,
+                //       child: Container(
+                //           child: imgUrl11 != null
+                //               ? Image.network(
+                //                   imgUrl11 != null ? imgUrl11 : " ",
+                //                   fit: BoxFit.contain,
+                //                 )
+                //               : Container(
+                //                   child: Center(
+                //                     child: Text(
+                //                       'Please Upload Image',
+                //                       style: TextStyle(
+                //                           fontWeight: FontWeight.bold,
+                //                           fontSize: 20),
+                //                     ),
+                //                   ),
+                //                 )),
+                //     ),
+                //   ],
+                // ),
+                editim(imagea: widget.images, gymid: widget.trainerId),
 
                 Padding(
                   padding: const EdgeInsets.all(12.0),
@@ -974,7 +1065,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                           'certification': cert,
                           'specialization': spec,
                           'insta_id': _social.text,
-                          'image': imgUrl11
+                          'image': image2
                         };
                         await documentReference
                             .update(data)
@@ -991,26 +1082,112 @@ class _ProductEditBoxState extends State<ProductEditBox> {
           )),
     );
   }
+}
 
-  getUrlImage(XFile? pickedFile) async {
+class editim extends StatefulWidget {
+  const editim({Key? key, required this.imagea, required this.gymid})
+      : super(key: key);
+  final String imagea;
+  final String gymid;
+  @override
+  State<editim> createState() => _editimState();
+}
+
+class _editimState extends State<editim> {
+  @override
+  String i2 = '';
+  void initState() {
+    // TODO: implement initState
+    i2 = widget.imagea;
+    super.initState();
+  }
+
+// <<<<<<< HEAD
+  @override
+  bool isloading = false;
+  var imagee;
+  Widget build(BuildContext context) {
+    return Container(
+      child: Row(
+        children: [
+          ElevatedButton(
+            onPressed: () async {
+              setState(() {
+                isloading = true;
+              });
+              var dic = await chooseImage();
+              await addImageToStorage(dic, widget.gymid);
+              setState(() {
+                isloading = false;
+              });
+            },
+            child: const Text(
+              'Upload Gym Image',
+              style:
+                  TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
+            ),
+          ),
+          const SizedBox(
+            width: 20,
+          ),
+          isloading
+              ? Container(
+                  height: 200, width: 200, child: CircularProgressIndicator())
+              : image2 != null
+                  ? Image(
+                      image: NetworkImage(image2.toString()),
+                      height: 200,
+                      width: 200,
+                    )
+                  : Image(
+                      image: NetworkImage(i2),
+                      height: 200,
+                      width: 200,
+                    )
+        ],
+      ),
+    );
+  }
+
+  addImageToStorage(XFile? pickedFile, String? id) async {
     if (kIsWeb) {
-      final _firebaseStorage = FirebaseStorage.instance
+      Reference _reference = FirebaseStorage.instance
           .ref()
-          .child('product_details')
-          .child('trainers');
-
-      Reference _reference =
-          _firebaseStorage.child('trainers/${Path.basename(pickedFile!.path)}');
-      await _reference.putData(
-        await pickedFile.readAsBytes(),
+          .child("product_image")
+          .child('trainer/$id');
+      await _reference
+          .putData(
+        await pickedFile!.readAsBytes(),
         SettableMetadata(contentType: 'image/jpeg'),
-      );
-
-      String imageUrl = await _reference.getDownloadURL();
-
-      setState(() {
-        imgUrl11 = imageUrl;
+      )
+          .whenComplete(() async {
+        await _reference.getDownloadURL().then((value) async {
+          var uploadedPhotoUrl = value;
+          setState(() {
+            image2 = value;
+          });
+          print(value);
+          await FirebaseFirestore.instance
+              .collection('product_details')
+              .doc(globalGymId)
+              .collection('trainer')
+              .doc(id)
+              .update({'image': image2});
+// =======
+//       reader.readAsDataUrl(file!);
+//       reader.onLoadEnd.listen((event) async {
+//         var snapshot =
+//         await fs.ref().child('product_image/${widget.gymId}').putBlob(file);
+//         String downloadUrl = await snapshot.ref.getDownloadURL();
+//         setState(() {
+//           image = downloadUrl;
+// >>>>>>> 21d9c030cebb9d9fd030fc57983203910f0655fa
+        });
       });
+    } else {
+//write a code for android or ios
     }
   }
 }
+
+var image2;
