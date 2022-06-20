@@ -91,9 +91,13 @@ class _PackagesPageState extends State<PackagesPage> {
                     },
                     child: const Text(
                       'Add Packages',
+// <<<<<<< HEAD
+//                       style: TextStyle(color: Colors.white),
+// =======
                       style: TextStyle(
                         color: Colors.white,
                       ),
+// >>>>>>> f5cd80d50f3eb7ba38395ee1c411898cfb3f5838
                     ),
                     // Container(
                     //   width: 120,
@@ -323,7 +327,14 @@ class _PackagesPageState extends State<PackagesPage> {
                         children: [
                           const SizedBox(height: 15),
                           ElevatedButton.icon(
-                            onPressed: () {
+                            onPressed: () async {
+                              await FirebaseFirestore.instance
+                                  .collection('product_details')
+                                  .doc(widget.pGymId)
+                                  .update({
+                                'service':
+                                    FieldValue.arrayRemove([data['type']])
+                              });
                               deleteMethod(
                                   stream: packageStream, uniqueDocId: packId);
                               Navigator.pop(context);
@@ -559,6 +570,12 @@ class _addboxxState extends State<addboxx> {
                       'trending': true,
                     },
                   );
+                  await FirebaseFirestore.instance
+                      .collection('product_details')
+                      .doc(widget.pGymID)
+                      .update({
+                    'service': FieldValue.arrayUnion([selectedd])
+                  });
                   Navigator.pop(context);
                 },
                 child: const Text('Done'),
@@ -777,6 +794,12 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                           .update(data)
                           .whenComplete(() => print("Item Updated"))
                           .catchError((e) => print(e));
+                      await FirebaseFirestore.instance
+                          .collection('product_details')
+                          .doc(widget.gym_id)
+                          .update({
+                        'service': FieldValue.arrayUnion([sele])
+                      });
                       Navigator.pop(context);
                     },
                     child: const Text('Done'),

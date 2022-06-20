@@ -58,7 +58,7 @@ class _ProductDetailsState extends State<ProductDetails> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Product Details"),
+        title: Text("Vendor Details"),
       ),
       body: SafeArea(
         child: Material(
@@ -327,44 +327,45 @@ class _ProductDetailsState extends State<ProductDetails> {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                    // ElevatedButton(
-                    //   child: const Text("Previous Page"),
-                    //   onPressed: () {
-                    //     setState(() {
-                    //       if (start > 0 && end > 0) {
-                    //         start = start - 10;
-                    //         end = end - 10;
-                    //       }
-                    //     });
-                    //     print("Previous Page");
-                    //   },
-                    // ),
-                    // const SizedBox(width: 20),
-                    // ElevatedButton(
-                    //   child: const Text("Next Page"),
-                    //   onPressed: () {
-                    //     setState(() {
-                    //       if (end < length) {
-                    //         start = start + 10;
-                    //         end = end + 10;
-                    //       }
-                    //     });
-                    //     print("Next Page");
-                    //   },
-                    // ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      // ElevatedButton(
+                      //   child: const Text("Previous Page"),
+                      //   onPressed: () {
+                      //     setState(() {
+                      //       if (start > 0 && end > 0) {
+                      //         start = start - 10;
+                      //         end = end - 10;
+                      //       }
+                      //     });
+                      //     print("Previous Page");
+                      //   },
+                      // ),
+                      // const SizedBox(width: 20),
+                      // ElevatedButton(
+                      //   child: const Text("Next Page"),
+                      //   onPressed: () {
+                      //     setState(() {
+                      //       if (end < length) {
+                      //         start = start + 10;
+                      //         end = end + 10;
+                      //       }
+                      //     });
+                      //     print("Next Page");
+                      //   },
+                      // ),
 
-                    const SizedBox(height: 20),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
+                      SizedBox(height: 20),
+                      Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           ElevatedButton(
-                            child: const Text("Previous Page"),
+                            child: Text("Previous Page"),
                             onPressed: () {
                               setState(() {
                                 if (start >= 1) page--;
+
                                 if (start > 0 && end > 0) {
                                   start = start - 10;
                                   end = end - 10;
@@ -374,7 +375,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                             },
                           ),
                           Container(
-                            margin: const EdgeInsets.symmetric(horizontal: 20),
+                            margin: EdgeInsets.symmetric(horizontal: 20),
                             child: Text(
                               page.toString(),
                               style: const TextStyle(
@@ -384,7 +385,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                             ),
                           ),
                           ElevatedButton(
-                            child: Text("Next Page"),
+                            child: const Text("Next Page"),
                             onPressed: () {
                               setState(() {
                                 if (end <= length) page++;
@@ -398,8 +399,8 @@ class _ProductDetailsState extends State<ProductDetails> {
                           ),
                         ],
                       ),
-                    ),
-                  ])
+                    ],
+                  ),
                 ],
               ),
             ),

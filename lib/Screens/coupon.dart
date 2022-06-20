@@ -527,7 +527,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
   }
 
   CollectionReference? couponStream;
-  String descriptionn = 'My great package';
+  String descriptionn = 'Add Description';
 
   @override
   Widget build(BuildContext context) {
@@ -649,14 +649,56 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                   ),
                   Column(
                     children: [
-                      InkWell(
-                        onTap: () {
-                          print(start_date);
-                        },
-                        child: const Text(
-                          "Select Package type",
-                          style: TextStyle(
-                              fontSize: 30, fontWeight: FontWeight.w500),
+// <<<<<<< nihal_new
+//                       InkWell(
+//                         onTap: () {
+//                           print(start_date);
+//                         },
+//                         child: const Text(
+//                           "Select Package type",
+//                           style: TextStyle(
+//                               fontSize: 30, fontWeight: FontWeight.w500),
+// =======
+                      Center(
+                        child: ElevatedButton(
+                          onPressed: () async {
+                            print("/////");
+                            print(start_date);
+                            print(end_date);
+                            DocumentReference documentReference =
+                                FirebaseFirestore.instance
+                                    .collection('coupon')
+                                    .doc(widget.couponId);
+                            Map<String, dynamic> data = <String, dynamic>{
+                              // 'code': _code.text,
+                              // 'detail': _detail.text,
+                              // 'discount': _discount.text,
+                              // // 'title': _title.text,
+                              // 'tag': _title.text,
+                              // 'coupon_id': widget.couponId,
+                              // 'max_dis': _max_dis.text,
+                              'code': _code.text.toUpperCase(),
+                              'detail': _detail.text,
+                              'discount': _discount.text,
+                              "end_date": end_date,
+                              "start_date": start_date,
+                              "max_dis": _max_dis.text,
+                              "minimum_cart_value": _minimum_cart_value.text,
+                              "offer_type": coupontype,
+                              "package_type":
+                                  Select_Package_type!.trim().toLowerCase(),
+                              "price": _price.text,
+                              "tag": _tag.text,
+                              'description': descriptionn,
+                            };
+                            await documentReference
+                                .update(data)
+                                .whenComplete(() => print("Item Updated"))
+                                .catchError((e) => print(e));
+                            Navigator.pop(context);
+                          },
+                          child: const Text('Done'),
+// >>>>>>> Diptesh
                         ),
                       ),
                       Container(
