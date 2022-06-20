@@ -980,6 +980,9 @@ class _ProductEditBoxState extends State<ProductEditBox> {
   String idss = '';
   DateTime? datetimee;
   DateTime? datetimee2;
+  DateTime? d1;
+  DateTime? d2;
+  DateTime? d3;
   @override
   void initState() {
     super.initState();
@@ -1645,13 +1648,13 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                                   .doc(_addbookingid.text);
 
                               Map<String, dynamic> data = <String, dynamic>{
-                                'plan_end_duration': plandate,
+                                'plan_end_duration': d2 != null ? d2 : plandate,
 
                                 'order_date': datetimee2,
 
                                 'booking_status': _addbookingstatus.text,
 
-                                'booking_date': bookingdate,
+                                'booking_date': d1 != null ? d1 : bookingdate,
 
                                 // 'booking_accepted':
                                 //     _addbookingaccepted.text == 'true'
@@ -1713,12 +1716,10 @@ class _ProductEditBoxState extends State<ProductEditBox> {
     if (time == null) return;
 
     setState(() {
-      bookingdate = DateTime(
-        date.year,
-        date.month,
-        date.day,
-      );
+      bookingdate =
+          DateTime(date.year, date.month, date.day, time.hour, time.minute);
     });
+    d1 = bookingdate;
   }
 
   Future pickDate(BuildContext context) async {
@@ -1776,12 +1777,10 @@ class _ProductEditBoxState extends State<ProductEditBox> {
     if (ptime == null) return;
 
     setState(() {
-      plandate = DateTime(
-        plandate.year,
-        plandate.month,
-        plandate.day,
-      );
+      plandate = DateTime(plandate.year, plandate.month, plandate.day,
+          ptime.hour, ptime.minute);
     });
+    d2 = plandate;
   }
 
   Future pickplanDate(BuildContext context) async {
