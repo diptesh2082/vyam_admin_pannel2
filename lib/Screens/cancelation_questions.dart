@@ -81,12 +81,6 @@ class _CancelationQuestionState extends State<CancelationQuestion> {
                             ),
                             DataColumn(
                               label: Text(
-                                'User ID',
-                                style: TextStyle(fontWeight: FontWeight.w600),
-                              ),
-                            ),
-                            DataColumn(
-                              label: Text(
                                 'Edit',
                                 style: TextStyle(fontWeight: FontWeight.w600),
                               ),
@@ -129,14 +123,6 @@ class _CancelationQuestionState extends State<CancelationQuestion> {
               ? SizedBox(
                   width: 100.0,
                   child: Text(data['question'] ?? ""),
-                )
-              : const Text(""),
-        ),
-        DataCell(
-          data['id'] != null
-              ? SizedBox(
-                  width: 100.0,
-                  child: Text(data['user_id'] ?? ""),
                 )
               : const Text(""),
         ),
@@ -183,14 +169,12 @@ class _QuestionEditBoxState extends State<QuestionEditBox> {
   CollectionReference? userStream;
   final TextEditingController question = TextEditingController();
   final TextEditingController _index = TextEditingController();
-  String abc = 'false';
 
   @override
   void initState() {
     super.initState();
     question.text = widget.question;
     _index.text = widget.index;
-    userStream = FirebaseFirestore.instance.collection("user_details");
   }
 
   @override
@@ -212,44 +196,6 @@ class _QuestionEditBoxState extends State<QuestionEditBox> {
                     fontWeight: FontWeight.w600,
                     fontSize: 25),
               ),
-              const Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Text('User Name:',
-                    style:
-                        TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
-              ),
-              StreamBuilder<QuerySnapshot>(
-                stream: userStream!.snapshots(),
-                builder: (context, AsyncSnapshot snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const CircularProgressIndicator();
-                  }
-                  if (snapshot.data == null) {
-                    return Container();
-                  }
-                  print("-----------------------------------");
-                  var doc = snapshot.data.docs;
-                  return Container(
-                    width: 400,
-                    height: 200,
-                    child: ListView.builder(
-                        itemCount: doc.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          bool check = false;
-                          return RadioListTile<String>(
-                            value: doc[index]["name"],
-                            groupValue: abc,
-                            onChanged: (val) => setState(
-                              () {
-                                abc = val!;
-                              },
-                            ),
-                            title: Text(doc[index]["name"]),
-                          );
-                        }),
-                  );
-                },
-              ),
               customTextField(hinttext: "Question", addcontroller: question),
               customTextField(hinttext: "Index", addcontroller: _index),
               Padding(
@@ -265,7 +211,6 @@ class _QuestionEditBoxState extends State<QuestionEditBox> {
                           .collection('cancelation question')
                           .doc(widget.Id);
                       Map<String, dynamic> data = {
-                        'user_id': abc,
                         'question': question.text,
                         'index': _index.text,
                       };
