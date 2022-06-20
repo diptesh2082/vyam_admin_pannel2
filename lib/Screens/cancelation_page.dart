@@ -144,13 +144,13 @@ class _CancelationPageState extends State<CancelationPage> {
                             ),
                             DataColumn(
                               label: Text(
-                                'Vendor Name \n|| Vendor Branch',
+                                'Vendor Name || Vendor Branch',
                                 style: TextStyle(fontWeight: FontWeight.w600),
                               ),
                             ),
                             DataColumn(
                               label: Text(
-                                'Cancel Choice',
+                                'Cancel Reason',
                                 style: TextStyle(fontWeight: FontWeight.w600),
                               ),
                             ),
@@ -253,6 +253,8 @@ class _CancelationPageState extends State<CancelationPage> {
 
   DataRow _buildListItem(BuildContext context, DocumentSnapshot data, int index,
       int start, int end) {
+    final String numbers = data['user_number'];
+
     String Id = data.id;
     return DataRow(
       cells: [
@@ -273,14 +275,13 @@ class _CancelationPageState extends State<CancelationPage> {
                 )
               : const Text(""),
         ),
-        DataCell(
-          data['user_number'] != null
-              ? SizedBox(
-                  width: 100.0,
-                  child: Text(data['user_number'] ?? ""),
-                )
-              : const Text(""),
-        ),
+        DataCell(data['user_number'] != null
+            ? SizedBox(
+                width: 120,
+                child: Text((data['user_number'])
+                    .toString()
+                    .substring(0, numbers.length)))
+            : Text("")),
         // DataCell(
         //   data['vendor_id'] != null
         //       ? SizedBox(

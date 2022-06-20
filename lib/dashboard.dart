@@ -2,6 +2,7 @@ import 'package:admin_panel_vyam/Screens/Collection_info.dart';
 import 'package:admin_panel_vyam/Screens/Product%20Details/Trainers/Trainers.dart';
 import 'package:admin_panel_vyam/Screens/banners.dart';
 import 'package:admin_panel_vyam/Screens/category_screen.dart';
+import 'package:admin_panel_vyam/Screens/perday.dart';
 import 'package:admin_panel_vyam/services/deleteMethod.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
@@ -74,10 +75,10 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
         }
         if (i == 2) {
           return GestureDetector(
-            child: Cardd(title: 'Per Day', collectionId: 'product_details'),
+            child: Carddb(title: 'Per Day', collectionId: 'bookings'),
             onTap: () {
-              // Navigator.push(context,
-              //   MaterialPageRoute(builder: (context) => ProductDetails()));
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => perday()));
             },
           );
         }
@@ -158,7 +159,8 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => const BookingDetails1(st: 'cancelled')));
+                      builder: (context) =>
+                          const BookingDetails1(st: 'cancelled')));
             },
           );
         }
@@ -215,7 +217,8 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
               width: 300,
               height: 100,
               decoration: BoxDecoration(
-                color: count!.isEven ? Colors.red : Colors.lightBlueAccent, //TODO
+                color:
+                    count!.isEven ? Colors.red : Colors.lightBlueAccent, //TODO
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -324,6 +327,7 @@ class _showLatestBookingState extends State<showLatestBooking> {
                           'cancelled'
                         ])
                         .orderBy("order_date", descending: true)
+                        .orderBy("id", descending: true)
                         .snapshots(),
                     builder: (context, AsyncSnapshot snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
@@ -343,9 +347,9 @@ class _showLatestBookingState extends State<showLatestBooking> {
                       return SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
                         child: DataTable(
-                          border: TableBorder.all(
-                            width: 2.0,
-                          ),
+                            border: TableBorder.all(
+                              width: 2.0,
+                            ),
                             showBottomBorder: true,
                             dividerThickness: 5,
                             // decoration: BoxDecoration(
@@ -510,7 +514,10 @@ class _showLatestBookingState extends State<showLatestBooking> {
           : const Text("")),
       // const DataCell(VerticalDivider()),
       DataCell(data['gym_details']['name'] != null
-          ? Text('${data['gym_details']['name']}\n ${data['gym_details']['branch']}'.toString()):const Text('')),
+          ? Text(
+              '${data['gym_details']['name']}\n ${data['gym_details']['branch']}'
+                  .toString())
+          : const Text('')),
       // const DataCell(VerticalDivider()),
       DataCell(data['booking_date'] != null
           ? Text(DateFormat('dd MMM , yyyy')
@@ -554,6 +561,19 @@ class _showLatestBookingState extends State<showLatestBooking> {
                           .collection('bookings')
                           .doc(bookingId)
                           .update({'booking_status': value});
+                      await FirebaseFirestore.instance
+                          .collection("booking_notifications")
+                          .doc()
+                          .set({
+                        "title": "Booking Details",
+                        "status": data['booking_status'],
+                        // "payment_done": false,
+                        "user_id": data['userId'],
+                        "user_name": data['user_name'],
+                        "vendor_id": data['vendorId'],
+                        "vendor_name": data['gym_details']['name'],
+                        'time': DateTime.now()
+                      }).whenComplete(() => print("Message Send"));
                     }),
               ],
             ),
@@ -652,6 +672,100 @@ class Cardd extends StatelessWidget {
                           ),
                           Text(
                             snapshot.data.docs.length.toString(),
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 25,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
+  }
+}
+
+class Carddb extends StatelessWidget {
+  Carddb({Key? key, this.title, this.collectionId, this.color})
+      : super(key: key);
+  final title;
+  final collectionId;
+  final color;
+  bool isHovering = false;
+
+  // @override
+  // void initState() {
+  //   // TODO: implement initState
+  //   categoryStream = FirebaseFirestore.instance.collection("category");
+  //   productStream = FirebaseFirestore.instance.collection("product_details");
+  //   bannerStream = FirebaseFirestore.instance.collection("banner_details");
+  //   bookingStream = FirebaseFirestore.instance.collection("bookings");
+  //
+  //   super.initState();
+  // }
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder(
+        stream: FirebaseFirestore.instance
+            .collection(collectionId)
+            .where('booking_plan', isEqualTo: "pay per session")
+            .snapshots(),
+        builder: (context, AsyncSnapshot snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          int count = snapshot.data.docs.length;
+          print(count);
+          return InkWell(
+            hoverColor: isHovering == true ? Colors.green : Colors.amber,
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+              width: 300,
+              height: 100,
+              decoration: BoxDecoration(
+                color: color != null
+                    ? color
+                    : (count % 2 == 0)
+                        ? Colors.red
+                        : Colors.blue,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  CircleAvatar(
+                    backgroundColor: Colors.white,
+                    radius: 30,
+                    child: Icon(
+                      Icons.trending_up,
+                      color: Colors.blue,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: FittedBox(
+                      child: Column(
+                        // mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Text(
+                            title!,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 14,
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 8,
+                          ),
+                          Text(
+                            count.toString(),
                             style: const TextStyle(
                               color: Colors.white,
                               fontSize: 25,
