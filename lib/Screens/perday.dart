@@ -10,18 +10,14 @@ import 'package:intl/intl.dart';
 import 'package:get/get.dart';
 import '../services/deleteMethod.dart';
 
-class BookingDetails1 extends StatefulWidget {
-  const BookingDetails1({
-    Key? key,
-    required this.st,
-  }) : super(key: key);
-  final String st;
+class perday extends StatefulWidget {
+  const perday({Key? key}) : super(key: key);
 
   @override
-  State<BookingDetails1> createState() => _BookingDetails1State();
+  State<perday> createState() => _perdayState();
 }
 
-class _BookingDetails1State extends State<BookingDetails1> {
+class _perdayState extends State<perday> {
   CollectionReference bookingStream =
       FirebaseFirestore.instance.collection('bookings');
   String searchVendorId = '';
@@ -207,9 +203,9 @@ class _BookingDetails1State extends State<BookingDetails1> {
                     child: StreamBuilder<QuerySnapshot>(
                       stream: FirebaseFirestore.instance
                           .collection('bookings')
-                          .where('booking_status', isEqualTo: widget.st)
+                          .where('booking_plan',
+                              whereIn: ['pay per session', 'PAY PER SESSION'])
                           .orderBy("order_date", descending: true)
-                          .orderBy("id", descending: true)
                           .snapshots(),
                       builder: (context, AsyncSnapshot snapshot) {
                         if (snapshot.connectionState ==
@@ -631,7 +627,6 @@ class _BookingDetails1State extends State<BookingDetails1> {
                           "user_name": data["user_name"],
                           "vendor_id": data['vendorId'],
                           "vendor_name": data['gym_details']['name'],
-                          'time': DateTime.now()
                         });
                       }
                     }),
