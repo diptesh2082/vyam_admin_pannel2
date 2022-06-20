@@ -67,7 +67,13 @@ class _SideNavBar1State extends State<SideNavBar1> {
       // ),
       appBar: AppBar(
         elevation: 0,
-        title: const Text('VYAM'),
+        title: GestureDetector(
+          child: const Text('VYAM'),
+          onTap: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => SideNavBar1()));
+          },
+        ),
       ),
       drawer: Drawer(
         backgroundColor: Colors.teal,
