@@ -10,19 +10,12 @@ class addQuestion extends StatefulWidget {
 }
 
 class _addQuestionState extends State<addQuestion> {
-  CollectionReference? userStream;
   final id =
       FirebaseFirestore.instance.collection('cancelation question').doc().id;
   final TextEditingController _addquestion = TextEditingController();
   final TextEditingController _addindex = TextEditingController();
-  String abc = 'false';
   CollectionReference? questionStream;
   final _formKey = GlobalKey<FormState>();
-  @override
-  void initState() {
-    super.initState();
-    userStream = FirebaseFirestore.instance.collection("user_details");
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,45 +44,6 @@ class _addQuestionState extends State<addQuestion> {
                               fontSize: 25),
                         ),
                       ),
-                      const Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text('User Name:',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 15)),
-                      ),
-                      StreamBuilder<QuerySnapshot>(
-                        stream: userStream!.snapshots(),
-                        builder: (context, AsyncSnapshot snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.waiting) {
-                            return const CircularProgressIndicator();
-                          }
-                          if (snapshot.data == null) {
-                            return Container();
-                          }
-                          print("-----------------------------------");
-                          var doc = snapshot.data.docs;
-                          return Container(
-                            width: 400,
-                            height: 200,
-                            child: ListView.builder(
-                                itemCount: doc.length,
-                                itemBuilder: (BuildContext context, int index) {
-                                  bool check = false;
-                                  return RadioListTile<String>(
-                                    value: doc[index]["name"],
-                                    groupValue: abc,
-                                    onChanged: (val) => setState(
-                                      () {
-                                        abc = val!;
-                                      },
-                                    ),
-                                    title: Text(doc[index]["name"]),
-                                  );
-                                }),
-                          );
-                        },
-                      ),
                       customTextField(
                           hinttext: "Question", addcontroller: _addquestion),
                       customTextField(
@@ -108,7 +62,6 @@ class _addQuestionState extends State<addQuestion> {
                                   .doc(id)
                                   .set(
                                 {
-                                  'user_id': abc,
                                   'id': id,
                                   'index': _addindex.text,
                                   'question': _addquestion.text,

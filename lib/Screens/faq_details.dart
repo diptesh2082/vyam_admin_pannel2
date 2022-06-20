@@ -202,24 +202,17 @@ class _FaqDetailsState extends State<FaqDetails> {
       //     ? Text(data['user_id'] ?? "")
       //     : const Text("")),
       DataCell(const Text(""), showEditIcon: true, onTap: () {
-        showDialog(
-            context: context,
-            builder: (context) {
-              return GestureDetector(
-                child: SingleChildScrollView(
-                  child: EditBox(
-                    userid: data['user_id'],
-                    answer: data['answer'],
-                    gymid: data['gym_id'],
-                    question: data['question'],
-                    id: data['id'],
-                  ),
-                ),
-                onTap: () {
-                  Navigator.pop(context);
-                },
-              );
-            });
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => EditBox(
+                userid: data['user_id'],
+                answer: data['answer'],
+                gymid: data['gym_id'],
+                question: data['question'],
+                id: data['id'],
+              ),
+            ));
       }),
       DataCell(Icon(Icons.delete), onTap: () {
         deleteMethod(stream: faqStream, uniqueDocId: idData);
@@ -324,146 +317,102 @@ class _EditBoxState extends State<EditBox> {
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(30))),
-      content: SizedBox(
-        height: 580,
-        width: 800,
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'Update Records for this doc',
-                style: TextStyle(
-                    fontFamily: 'poppins',
-                    fontWeight: FontWeight.w600,
-                    fontSize: 14),
-              ),
-              SizedBox(
-                height: 50,
-                child: Card(
-                    child: TextField(
-                  autofocus: true,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w400,
-                  ),
-                  controller: _question,
-                  maxLines: 3,
-                  decoration: const InputDecoration(
-                      border: InputBorder.none,
-                      hintStyle: TextStyle(
-                        fontSize: 14,
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w400,
-                      ),
-                      hintMaxLines: 2,
-                      hintText: 'Question'),
-                )),
-              ),
-              SizedBox(
-                height: 50,
-                child: Card(
-                    child: TextField(
-                  autofocus: true,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w400,
-                  ),
-                  controller: _answer,
-                  maxLines: 3,
-                  decoration: const InputDecoration(
-                      border: InputBorder.none,
-                      hintStyle: TextStyle(
-                        fontSize: 14,
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w400,
-                      ),
-                      hintMaxLines: 2,
-                      hintText: 'Answer'),
-                )),
-              ),
-              SizedBox(
-                height: 50,
-                child: Card(
-                    child: TextField(
-                  autofocus: true,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w400,
-                  ),
-                  controller: _gymid,
-                  maxLines: 3,
-                  decoration: const InputDecoration(
-                      border: InputBorder.none,
-                      hintStyle: TextStyle(
-                        fontSize: 14,
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w400,
-                      ),
-                      hintMaxLines: 2,
-                      hintText: 'Gym ID'),
-                )),
-              ),
-              SizedBox(
-                height: 50,
-                child: Card(
-                    child: TextField(
-                  autofocus: true,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w400,
-                  ),
-                  controller: _userid,
-                  maxLines: 3,
-                  decoration: const InputDecoration(
-                      border: InputBorder.none,
-                      hintStyle: TextStyle(
-                        fontSize: 14,
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w400,
-                      ),
-                      hintMaxLines: 2,
-                      hintText: 'User ID'),
-                )),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: Center(
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      print("/////");
-
-                      DocumentReference documentReference = FirebaseFirestore
-                          .instance
-                          .collection('faq')
-                          .doc(widget.id);
-                      Map<String, dynamic> data = <String, dynamic>{
-                        'question': _question.text,
-                        'answer': _answer.text,
-                        'gym_id': _gymid.text,
-                        'user_id': _userid.text,
-                      };
-                      await documentReference
-                          .update(data)
-                          .whenComplete(() => print("Item Updated"))
-                          .catchError((e) => print(e));
-                      Navigator.pop(context);
-                    },
-                    child: const Text('Done'),
-                  ),
-                ),
-              )
-            ],
-          ),
+    return Scaffold(
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          title: Text('Edit Booking'),
         ),
-      ),
-    );
+        body: SafeArea(
+          child: Container(
+            padding: EdgeInsets.all(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Update Records for this doc',
+                  style: TextStyle(
+                      fontFamily: 'poppins',
+                      fontWeight: FontWeight.w600,
+                      fontSize: 14),
+                ),
+                SizedBox(
+                  height: 70,
+                  child: Card(
+                      child: TextField(
+                    autofocus: true,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontFamily: 'Poppins',
+                      fontWeight: FontWeight.w400,
+                    ),
+                    controller: _question,
+                    maxLines: 3,
+                    decoration: const InputDecoration(
+                        contentPadding: EdgeInsets.all(20),
+                        border: InputBorder.none,
+                        hintStyle: TextStyle(
+                          fontSize: 14,
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w400,
+                        ),
+                        hintMaxLines: 2,
+                        hintText: 'Question'),
+                  )),
+                ),
+                SizedBox(
+                  height: 70,
+                  child: Card(
+                      child: TextField(
+                    autofocus: true,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontFamily: 'Poppins',
+                      fontWeight: FontWeight.w400,
+                    ),
+                    controller: _answer,
+                    maxLines: 3,
+                    decoration: const InputDecoration(
+                        contentPadding: EdgeInsets.all(20),
+                        border: InputBorder.none,
+                        hintStyle: TextStyle(
+                          fontSize: 14,
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w400,
+                        ),
+                        hintMaxLines: 2,
+                        hintText: 'Answer'),
+                  )),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Center(
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        print("/////");
+
+                        DocumentReference documentReference = FirebaseFirestore
+                            .instance
+                            .collection('faq')
+                            .doc(widget.id);
+                        Map<String, dynamic> data = <String, dynamic>{
+                          'question': _question.text,
+                          'answer': _answer.text,
+                          'gym_id': _gymid.text,
+                          'user_id': _userid.text,
+                        };
+                        await documentReference
+                            .update(data)
+                            .whenComplete(() => print("Item Updated"))
+                            .catchError((e) => print(e));
+                        Navigator.pop(context);
+                      },
+                      child: const Text('Done'),
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+        ));
   }
 }

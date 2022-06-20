@@ -212,6 +212,14 @@ class _PaymentsPageState extends State<PaymentsPage> {
   DataRow _buildListItem(BuildContext context, DocumentSnapshot data, int index,
       int start, int end) {
     Timestamp timestamp = data['timestamp'];
+    var ds;
+    var z = FirebaseFirestore.instance
+        .collection('product_details')
+        .doc(data['name'])
+        .get()
+        .then((d) {
+      ds = d['name'];
+    });
     dss = DateTime.fromMillisecondsSinceEpoch(timestamp.millisecondsSinceEpoch);
     d122 = DateFormat('dd/MM/yyyy, HH:mm').format(dss);
     String stamp = timestamp.toString();
@@ -223,7 +231,15 @@ class _PaymentsPageState extends State<PaymentsPage> {
 
     return DataRow(cells: [
       DataCell(data != null
-          ? Text("${data['name']} | ${data['place'].toString().toUpperCase()}")
+          ? StreamBuilder<DocumentSnapshot>(
+              stream: FirebaseFirestore.instance
+                  .collection('product_details')
+                  .doc(data['name'])
+                  .snapshots(),
+              builder: (context, AsyncSnapshot snapshot) {
+                return Text(
+                    "${snapshot.data.get('name')} | ${data['place'].toString().toUpperCase()}");
+              })
           : const Text("")),
       DataCell(data != null ? Text(data['amount'] ?? "") : const Text("")),
       // DataCell(data != null ? Text(data['place'] ?? "") : Text("")),
@@ -253,45 +269,59 @@ class _PaymentsPageState extends State<PaymentsPage> {
       DataCell(const Icon(Icons.delete), onTap: () {
         // deleteMethod(stream: paymentStream, uniqueDocId: data['userid']);
 
-        showDialog(context: context, builder: (context)=>  AlertDialog(
-          shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(16))),
-          content: SizedBox(
-            height: 170,
-            width: 280,
-            child: Stack(
-              children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children:  [
-                    const Text('Do you want to delete?' , style: TextStyle(fontWeight: FontWeight.bold),),
-                    const SizedBox(height: 15,),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const SizedBox(height: 15),
-                        ElevatedButton.icon(
-                          onPressed: (){
-                            deleteMethod(stream: paymentStream, uniqueDocId: data['userid']);
-                            Navigator.pop(context);
-                          } ,
-                          icon: const Icon(Icons.check),
-                          label: const Text('Yes'),
-                        ),
-                        const SizedBox(width: 20,),
-                        ElevatedButton.icon(onPressed: (){
-                          Navigator.pop(context);
-                        } ,
-                          icon: const Icon(Icons.clear),
-                          label: const Text('No'),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ],
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(16))),
+            content: SizedBox(
+              height: 170,
+              width: 280,
+              child: Stack(
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text(
+                        'Do you want to delete?',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const SizedBox(height: 15),
+                          ElevatedButton.icon(
+                            onPressed: () {
+                              deleteMethod(
+                                  stream: paymentStream,
+                                  uniqueDocId: data['userid']);
+                              Navigator.pop(context);
+                            },
+                            icon: const Icon(Icons.check),
+                            label: const Text('Yes'),
+                          ),
+                          const SizedBox(
+                            width: 20,
+                          ),
+                          ElevatedButton.icon(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            icon: const Icon(Icons.clear),
+                            label: const Text('No'),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
-        ),);
+        );
       })
     ]);
   }
@@ -403,7 +433,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
                           );
                         },
                       )),
-                  customTextField3(hinttext: "Amount", addcontroller: _addAmount),
+                  customTextField3(
+                      hinttext: "Amount", addcontroller: _addAmount),
                   // customTextField(hinttext: "Place", addcontroller: _addPlace),
                   // customTextField(
                   //     hinttext: "TimeStamp",
@@ -603,7 +634,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
   late String gym_id;
   var selectedValue = "ONLINE";
   String namee = "Fitness Break";
-  late String place;
+  String place = "";
   CollectionReference? productStream;
 
   @override
@@ -673,7 +704,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                                 onChanged: (String? valuee) {
                                   setState(() {
                                     namee = valuee!;
-                                    place = doc[index]['branch'];
+                                    _place.text = doc[index]['branch'];
                                   });
                                   print(namee);
                                 });
@@ -725,7 +756,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                             'gym_id': namee,
                             'name': namee,
                             // 'payment_id': _paymentid,
-                            'place': place,
+                            'place': _place.text,
                             'timestamp': r,
                             'userid': userid,
                             'type': selectedValue,

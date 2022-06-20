@@ -341,8 +341,8 @@ class _SideNavBar1State extends State<SideNavBar1> {
           index == 15 ? const BannerPage() : Container(),
           index == 17 ? const workoutsGym() : Container(),
           index == 18 ? const filters() : Container(),
-          index == 19 ? const CancelationQuestion() : Container(),
-          index == 20 ? const appDetails() : Container(),
+          index == 19 ? const appDetails() : Container(),
+          index == 20 ? const CancelationQuestion() : Container(),
         ],
       ),
     );

@@ -23,7 +23,6 @@ class UserInformation extends StatefulWidget {
 }
 
 class _UserInformationState extends State<UserInformation> {
-
   CollectionReference? userDetailStream;
   String searchUser = '';
   @override
@@ -148,7 +147,6 @@ class _UserInformationState extends State<UserInformation> {
                                   .toString()
                                   .toLowerCase()
                                   .contains(searchUser.toString());
-
                         }).toList();
                       }
 
@@ -375,7 +373,7 @@ class _UserInformationState extends State<UserInformation> {
       DataCell(data != null ? Text(data['address'] ?? "") : Text("")),
       DataCell(data != null ? Text(data['locality'] ?? "") : Text("")),
       // DataCell(data != null ? Text(data['subLocality'] ?? "") : Text("")),
-      DataCell(data != null ? Text(data['pincode'] ?? "") : Text("")),
+      DataCell(data != null ? Text(data['pincode'].toString()) : Text("")),
       DataCell(
         Center(
           child: ElevatedButton(
@@ -901,7 +899,6 @@ class _detailsaddState extends State<detailsadd> {
                       fontWeight: FontWeight.w600,
                       fontSize: 14),
                 ),
-
                 customTextField3(
                     hinttext: "Contact Number", addcontroller: _addnumber),
                 customTextField3(hinttext: "Name", addcontroller: _addname),
@@ -910,7 +907,8 @@ class _detailsaddState extends State<detailsadd> {
                   children: [
                     const Text(
                       "Gender: ",
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
                     ),
                     const SizedBox(
                       width: 20,
@@ -943,37 +941,37 @@ class _detailsaddState extends State<detailsadd> {
                   children: [
                     ElevatedButton(
                       onPressed: () async {
-                       if (_formKey.currentState!.validate()) {
-                         FirebaseFirestore.instance
-                             .collection('user_details')
-                             .doc("+91${_addnumber.text}")
-                             .set(
-                           {
-                             'address': "",
-                             'userId': "+91${_addnumber.text}",
-                             'name': _addname.text,
-                             'email': _addemail.text,
-                             'gender': gender,
-                             'image': ds,
-                             'number': "+91${_addnumber.text}",
-                             'locality': "",
-                             'subLocality': "",
-                             'pincode': "",
-                             'long': " ",
-                             'lat': " ",
-                             'legit': true
-                             // 'image': ""
-                           },
-                         ).whenComplete(() {
-                           print("Item Updated");
-                           print(ds);
-                           setState(() {
-                             ds = "";
-                           });
-                           print("value:$ds");
-                         }).catchError((e) => print(e));
-                         Navigator.pop(context);
-                       }
+                        if (_formKey.currentState!.validate()) {
+                          FirebaseFirestore.instance
+                              .collection('user_details')
+                              .doc("+91${_addnumber.text}")
+                              .set(
+                            {
+                              'address': "",
+                              'userId': "+91${_addnumber.text}",
+                              'name': _addname.text,
+                              'email': _addemail.text,
+                              'gender': gender,
+                              'image': ds,
+                              'number': "+91${_addnumber.text}",
+                              'locality': "",
+                              'subLocality': "",
+                              'pincode': "",
+                              'long': " ",
+                              'lat': " ",
+                              'legit': true
+                              // 'image': ""
+                            },
+                          ).whenComplete(() {
+                            print("Item Updated");
+                            print(ds);
+                            setState(() {
+                              ds = "";
+                            });
+                            print("value:$ds");
+                          }).catchError((e) => print(e));
+                          Navigator.pop(context);
+                        }
                       },
                       child: const Text('Done'),
                     ),
