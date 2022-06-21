@@ -157,17 +157,17 @@ class _PaymentsPageState extends State<PaymentsPage> {
                       },
                     ),
                     Container(
-                      margin: EdgeInsets.symmetric(horizontal: 20),
+                      margin: const EdgeInsets.symmetric(horizontal: 20),
                       child: Text(
                         page.toString(),
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 15,
                             color: Colors.teal),
                       ),
                     ),
                     ElevatedButton(
-                      child: Text("Next Page"),
+                      child: const Text("Next Page"),
                       onPressed: () {
                         setState(() {
                           if (end < length) {
