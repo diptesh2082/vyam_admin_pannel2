@@ -226,38 +226,6 @@ class _BookingDetails1State extends State<BookingDetails1> {
                         }
                         var doc = snapshot.data.docs;
 
-// <<<<<<< HEAD
-                        if (searchVendorId.isNotEmpty) {
-                          doc = doc.where((element) {
-                            return element
-// <<<<<<< HEAD
-//                                   .get('user_name')
-// =======
-
-                                    .get('user_name')
-                                    .toString()
-                                    .toLowerCase()
-                                    .contains(searchVendorId.toString()) ||
-                                element
-                                    .get('userId')
-
-// >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
-                                    .toString()
-                                    .toLowerCase()
-                                    .contains(searchVendorId.toString()) ||
-                                element
-                                    .get('grand_total')
-                                    .toString()
-                                    .toLowerCase()
-                                    .contains(searchVendorId.toString()) ||
-                                element
-                                    .get('grand_total')
-                                    .toString()
-                                    .toLowerCase()
-                                    .contains(searchVendorId.toString());
-                          }).toList();
-                        }
-
                         return SingleChildScrollView(
                           scrollDirection: Axis.horizontal,
                           child: DataTable(
@@ -268,12 +236,6 @@ class _BookingDetails1State extends State<BookingDetails1> {
                                   'Booking ID',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 )),
-                                // DataColumn(
-                                //
-                                //     label: Text(
-                                //       'Vendor Name',
-                                //       style: TextStyle(fontWeight: FontWeight.w600),
-                                //     )),
                                 DataColumn(
                                   // >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
                                   label: Text(
@@ -322,7 +284,6 @@ class _BookingDetails1State extends State<BookingDetails1> {
                                         TextStyle(fontWeight: FontWeight.w600),
                                   ),
                                 ),
-
                                 DataColumn(
                                   label: Text(
                                     'End Date',
@@ -351,23 +312,6 @@ class _BookingDetails1State extends State<BookingDetails1> {
                                         TextStyle(fontWeight: FontWeight.w600),
                                   ),
                                 ),
-                                // <<<<<<< HEAD
-                                // // DataColumn(
-                                // //   label: Text(
-                                // //     'Payment done',
-                                // //     style: TextStyle(fontWeight: FontWeight.w600),
-                                // //   ),
-                                // // ),
-                                // DataColumn(
-                                // label: Text(
-                                // 'Booking Date',
-                                // style: TextStyle(fontWeight: FontWeight.w600),
-                                // ),
-                                // ),
-                                // DataColumn(
-                                // label: Text(
-                                // =======
-
                                 DataColumn(
                                   label: Text(
                                     // >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
@@ -470,26 +414,6 @@ class _BookingDetails1State extends State<BookingDetails1> {
         if (end >= ds++ && start <= ds) {
           d.add(element);
         }
-// =======
-        // var y = endDate.difference(startDate).inDays;
-        // <<<<<<< HEAD
-        // print('XXXXXXXXXXXXXXXXXXX???????????????????////////////');
-        // print(x);
-        // if (x.isAfter(startDate) && x.isBefore(endDate) ||
-        // x == startDate ||
-        // x == endDate) {
-        // d.add(element);
-        // }
-        // print('/////////////////DDDDDDDDDDDDDDDDDDDD???????????????');
-        // print(d);
-        // =======
-        // print('XXXXXXXXXXXXXXXXXXX???????????????????////////////');
-        // print(x);
-//       if (x.isAfter(startDate) && x.isBefore(endDate) ||
-//           x == startDate ||
-//           x == endDate) {
-//         d.add(element);
-// >>>>>>> ae7259e7ba6e19ed4976a35667cb3a762fe66e2c
       }
       // print('/////////////////DDDDDDDDDDDDDDDDDDDD???????????????');
       // print(d);
@@ -620,6 +544,7 @@ class _BookingDetails1State extends State<BookingDetails1> {
                             .collection('bookings')
                             .doc(bookingId)
                             .update({'payment_done': true});
+                        // var x=await FirebaseFirestore.instance.collection("booking_notifications").id;
                         await FirebaseFirestore.instance
                             .collection("booking_notifications")
                             .doc()
@@ -627,6 +552,7 @@ class _BookingDetails1State extends State<BookingDetails1> {
                           "title": "Booking Details",
                           "status": selectedValue,
                           // "payment_done": false,
+
                           "user_id": data['userId'],
                           "user_name": data["user_name"],
                           "vendor_id": data['vendorId'],
@@ -1029,6 +955,9 @@ class _ProductEditBoxState extends State<ProductEditBox> {
   String idss = '';
   DateTime? datetimee;
   DateTime? datetimee2;
+  DateTime? d1;
+  DateTime? d2;
+  DateTime? d3;
   @override
   void initState() {
     super.initState();
@@ -1694,13 +1623,13 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                                   .doc(_addbookingid.text);
 
                               Map<String, dynamic> data = <String, dynamic>{
-                                'plan_end_duration': plandate,
+                                'plan_end_duration': d2 != null ? d2 : plandate,
 
                                 'order_date': datetimee2,
 
                                 'booking_status': _addbookingstatus.text,
 
-                                'booking_date': bookingdate,
+                                'booking_date': d1 != null ? d1 : bookingdate,
 
                                 // 'booking_accepted':
                                 //     _addbookingaccepted.text == 'true'
@@ -1712,19 +1641,44 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                                   .whenComplete(() => print("Item Updated"))
                                   .catchError((e) => print(e));
                               if (check = true) {
+                                var xps = await FirebaseFirestore.instance
+                                    .collection('booking_notifications')
+                                    .doc()
+                                    .id;
+
                                 await FirebaseFirestore.instance
                                     .collection("booking_notifications")
-                                    .doc()
+                                    .doc(xps)
                                     .set({
                                   "title": "Booking Details",
                                   "status": _addbookingstatus.text,
+                                  "booking_id": widget.bookingid,
                                   // "payment_done": false,
+                                  "notification_id": xps.toString(),
                                   "user_id": _adduserid.text,
                                   "user_name": _addusername.text,
                                   "vendor_id": _addvendorid.text,
                                   "vendor_name": _addvendorname.text,
                                   'time': DateTime.now()
                                 });
+                                // var x = await FirebaseFirestore.instance
+                                //     .collection("booking_notifications")
+                                //     .doc()
+                                //     .id;
+                                // await FirebaseFirestore.instance
+                                //     .collection("booking_notifications")
+                                //     .doc(x)
+                                //     .set({
+                                //   "title": "Booking Details",
+                                //   "status": _addbookingstatus.text,
+                                //   // "payment_done": false,
+                                //   "notification_id": x.toString(),
+                                //   "user_id": _adduserid.text,
+                                //   "user_name": _addusername.text,
+                                //   "vendor_id": _addvendorid.text,
+                                //   "vendor_name": _addvendorname.text,
+                                //   'time': DateTime.now()
+                                // });
                                 setState(() {
                                   check = false;
                                 });
@@ -1762,12 +1716,10 @@ class _ProductEditBoxState extends State<ProductEditBox> {
     if (time == null) return;
 
     setState(() {
-      bookingdate = DateTime(
-        date.year,
-        date.month,
-        date.day,
-      );
+      bookingdate =
+          DateTime(date.year, date.month, date.day, time.hour, time.minute);
     });
+    d1 = bookingdate;
   }
 
   Future pickDate(BuildContext context) async {
@@ -1825,12 +1777,10 @@ class _ProductEditBoxState extends State<ProductEditBox> {
     if (ptime == null) return;
 
     setState(() {
-      plandate = DateTime(
-        plandate.year,
-        plandate.month,
-        plandate.day,
-      );
+      plandate = DateTime(plandate.year, plandate.month, plandate.day,
+          ptime.hour, ptime.minute);
     });
+    d2 = plandate;
   }
 
   Future pickplanDate(BuildContext context) async {

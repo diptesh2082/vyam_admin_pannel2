@@ -601,14 +601,20 @@ class _BookingDetailsState extends State<BookingDetails> {
                             .doc(bookingId)
                             .update({'payment_done': true});
                       }
+                      var xps = await FirebaseFirestore.instance
+                          .collection('booking_notifications')
+                          .doc()
+                          .id;
 
                       await FirebaseFirestore.instance
                           .collection("booking_notifications")
-                          .doc()
+                          .doc(xps)
                           .set({
                         "title": "Booking Details",
                         "status": selectedValue,
+                        "booking_id": data['booking_id'],
                         // "payment_done": false,
+                        "notification_id": xps.toString(),
                         "user_id": data['userId'],
                         "user_name": data["user_name"],
                         "vendor_id": data['vendorId'],
@@ -1666,19 +1672,44 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                                   .whenComplete(() => print("Item Updated"))
                                   .catchError((e) => print(e));
                               if (check = true) {
+                                var xps = await FirebaseFirestore.instance
+                                    .collection('booking_notifications')
+                                    .doc()
+                                    .id;
+
                                 await FirebaseFirestore.instance
                                     .collection("booking_notifications")
-                                    .doc()
+                                    .doc(xps)
                                     .set({
                                   "title": "Booking Details",
                                   "status": _addbookingstatus.text,
+                                  "booking_id": widget.bookingid,
                                   // "payment_done": false,
+                                  "notification_id": xps.toString(),
                                   "user_id": _adduserid.text,
                                   "user_name": _addusername.text,
                                   "vendor_id": _addvendorid.text,
                                   "vendor_name": _addvendorname.text,
                                   'time': DateTime.now()
                                 });
+                                // var x = await FirebaseFirestore.instance
+                                //     .collection("booking_notifications")
+                                //     .doc()
+                                //     .id;
+                                // await FirebaseFirestore.instance
+                                //     .collection("booking_notifications")
+                                //     .doc(x)
+                                //     .set({
+                                //   "title": "Booking Details",
+                                //   "status": _addbookingstatus.text,
+                                //   // "payment_done": false,
+                                //   "notification_id": x.toString(),
+                                //   "user_id": _adduserid.text,
+                                //   "user_name": _addusername.text,
+                                //   "vendor_id": _addvendorid.text,
+                                //   "vendor_name": _addvendorname.text,
+                                //   'time': DateTime.now()
+                                // });
                                 setState(() {
                                   check = false;
                                 });

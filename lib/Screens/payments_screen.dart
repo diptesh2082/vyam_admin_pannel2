@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
 import '../services/CustomTextFieldClass.dart';
@@ -32,6 +33,8 @@ class _PaymentsPageState extends State<PaymentsPage> {
 
     super.initState();
   }
+
+  String searchGymName = '';
 
   @override
   Widget build(BuildContext context) {
@@ -78,6 +81,44 @@ class _PaymentsPageState extends State<PaymentsPage> {
                     //     ],
                     //   ),
                     // ),
+                  ),
+                ),
+                Container(
+                  width: 400,
+                  height: 51,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(14),
+                    color: Colors.white12,
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(15),
+                    child: TextField(
+                      // focusNode: _node,
+
+                      autofocus: false,
+                      textAlignVertical: TextAlignVertical.bottom,
+                      onSubmitted: (value) async {
+                        FocusScope.of(context).unfocus(); // <<<<<<< HEAD
+                      },
+
+                      onChanged: (value) {
+                        if (value.isEmpty) {}
+                        if (mounted) {
+                          setState(() {
+                            searchGymName = value.toString();
+                          });
+                        }
+                      },
+                      decoration: InputDecoration(
+                        prefixIcon: const Icon(Icons.search),
+                        hintText: 'Search',
+                        hintStyle: GoogleFonts.poppins(
+                            fontSize: 16, fontWeight: FontWeight.w500),
+                        border: InputBorder.none,
+                        filled: true,
+                        fillColor: Colors.white12,
+                      ),
+                    ),
                   ),
                 ),
                 Center(
@@ -238,7 +279,7 @@ class _PaymentsPageState extends State<PaymentsPage> {
                   .snapshots(),
               builder: (context, AsyncSnapshot snapshot) {
                 return Text(
-                    "${snapshot.data.get('name')} | ${data['place'].toString().toUpperCase()}");
+                    "${snapshot.data.get('name')} | ${snapshot.data.get('branch').toString().toUpperCase()}");
               })
           : const Text("")),
       DataCell(data != null ? Text(data['amount'] ?? "") : const Text("")),
@@ -364,6 +405,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
   DateTime? date;
   TimeOfDay? time;
   DateTime? dateTime;
+  String searchGymName = '';
 
   final TextEditingController _addAmount = TextEditingController();
   // final TextEditingController _addPlace = TextEditingController();
@@ -397,6 +439,44 @@ class _PaymentScreenState extends State<PaymentScreen> {
                         fontSize: 14),
                   ),
                   const Text("Choose Vendor"),
+                  Container(
+                    width: 400,
+                    height: 51,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(14),
+                      color: Colors.white12,
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(15),
+                      child: TextField(
+                        // focusNode: _node,
+
+                        autofocus: false,
+                        textAlignVertical: TextAlignVertical.bottom,
+                        onSubmitted: (value) async {
+                          FocusScope.of(context).unfocus(); // <<<<<<< HEAD
+                        },
+
+                        onChanged: (value) {
+                          if (value.isEmpty) {}
+                          if (mounted) {
+                            setState(() {
+                              searchGymName = value.toString();
+                            });
+                          }
+                        },
+                        decoration: InputDecoration(
+                          prefixIcon: const Icon(Icons.search),
+                          hintText: 'Search',
+                          hintStyle: GoogleFonts.poppins(
+                              fontSize: 16, fontWeight: FontWeight.w500),
+                          border: InputBorder.none,
+                          filled: true,
+                          fillColor: Colors.white12,
+                        ),
+                      ),
+                    ),
+                  ),
                   SizedBox(
                       height: 400,
                       width: 400,
@@ -411,8 +491,28 @@ class _PaymentScreenState extends State<PaymentScreen> {
                           if (snapshot.data == null) {
                             return Container();
                           }
-                          print("-----------------------------------");
                           var doc = snapshot.data.docs;
+
+                          if (searchGymName.isNotEmpty) {
+                            doc = doc.where((element) {
+                              return element
+                                      .get('name')
+                                      .toString()
+                                      .toLowerCase()
+                                      .contains(searchGymName.toString()) ||
+                                  element
+                                      .get('gym_id')
+                                      .toString()
+                                      .toLowerCase()
+                                      .contains(searchGymName.toString()) ||
+                                  element
+                                      .get('address')
+                                      .toString()
+                                      .toLowerCase()
+                                      .contains(searchGymName.toString());
+                            }).toList();
+                          }
+                          print("-----------------------------------");
                           print(snapshot.data.docs);
                           return ListView.builder(
                             itemCount: doc.length,
@@ -635,6 +735,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
   var selectedValue = "ONLINE";
   String namee = "Fitness Break";
   String place = "";
+  String searchGymName = '';
   CollectionReference? productStream;
 
   @override
@@ -677,6 +778,44 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                       fontSize: 14),
                 ),
                 const Text("Choose Vendor"),
+                Container(
+                  width: 400,
+                  height: 51,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(14),
+                    color: Colors.white12,
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(15),
+                    child: TextField(
+                      // focusNode: _node,
+
+                      autofocus: false,
+                      textAlignVertical: TextAlignVertical.bottom,
+                      onSubmitted: (value) async {
+                        FocusScope.of(context).unfocus(); // <<<<<<< HEAD
+                      },
+
+                      onChanged: (value) {
+                        if (value.isEmpty) {}
+                        if (mounted) {
+                          setState(() {
+                            searchGymName = value.toString();
+                          });
+                        }
+                      },
+                      decoration: InputDecoration(
+                        prefixIcon: const Icon(Icons.search),
+                        hintText: 'Search',
+                        hintStyle: GoogleFonts.poppins(
+                            fontSize: 16, fontWeight: FontWeight.w500),
+                        border: InputBorder.none,
+                        filled: true,
+                        fillColor: Colors.white12,
+                      ),
+                    ),
+                  ),
+                ),
                 SizedBox(
                     height: 400,
                     width: 400,
@@ -693,12 +832,31 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                         }
                         print("-----------------------------------");
                         var doc = snapshot.data.docs;
+                        if (searchGymName.isNotEmpty) {
+                          doc = doc.where((element) {
+                            return element
+                                    .get('name')
+                                    .toString()
+                                    .toLowerCase()
+                                    .contains(searchGymName.toString()) ||
+                                element
+                                    .get('gym_id')
+                                    .toString()
+                                    .toLowerCase()
+                                    .contains(searchGymName.toString()) ||
+                                element
+                                    .get('address')
+                                    .toString()
+                                    .toLowerCase()
+                                    .contains(searchGymName.toString());
+                          }).toList();
+                        }
                         print(snapshot.data.docs);
                         return ListView.builder(
                           itemCount: doc.length,
                           itemBuilder: (BuildContext context, int index) {
                             return RadioListTile<String>(
-                                value: doc[index]['name'],
+                                value: doc[index]['gym_id'],
                                 title: Text(doc[index]['name'].toString()),
                                 groupValue: namee,
                                 onChanged: (String? valuee) {

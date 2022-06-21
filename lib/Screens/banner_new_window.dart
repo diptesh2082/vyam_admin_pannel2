@@ -78,44 +78,6 @@ class _bannerNewPageState extends State<bannerNewPage> {
           padding: EdgeInsets.all(30),
           child: Column(
             children: <Widget>[
-              Container(
-                width: 400,
-                height: 51,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(14),
-                  color: Colors.white12,
-                ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(15),
-                  child: TextField(
-                    // focusNode: _node,
-
-                    autofocus: false,
-                    textAlignVertical: TextAlignVertical.bottom,
-                    onSubmitted: (value) async {
-                      FocusScope.of(context).unfocus(); // <<<<<<< HEAD
-                    },
-
-                    onChanged: (value) {
-                      if (value.isEmpty) {}
-                      if (mounted) {
-                        setState(() {
-                          searchGymName = value.toString();
-                        });
-                      }
-                    },
-                    decoration: InputDecoration(
-                      prefixIcon: const Icon(Icons.search),
-                      hintText: 'Search',
-                      hintStyle: GoogleFonts.poppins(
-                          fontSize: 16, fontWeight: FontWeight.w500),
-                      border: InputBorder.none,
-                      filled: true,
-                      fillColor: Colors.white12,
-                    ),
-                  ),
-                ),
-              ),
               Center(
                 child: Form(
                   key: _formKey,
@@ -128,6 +90,44 @@ class _bannerNewPageState extends State<bannerNewPage> {
                             fontFamily: 'poppins',
                             fontWeight: FontWeight.w600,
                             fontSize: 14),
+                      ),
+                      Container(
+                        width: 400,
+                        height: 51,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(14),
+                          color: Colors.white12,
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(15),
+                          child: TextField(
+                            // focusNode: _node,
+
+                            autofocus: false,
+                            textAlignVertical: TextAlignVertical.bottom,
+                            onSubmitted: (value) async {
+                              FocusScope.of(context).unfocus(); // <<<<<<< HEAD
+                            },
+
+                            onChanged: (value) {
+                              if (value.isEmpty) {}
+                              if (mounted) {
+                                setState(() {
+                                  searchGymName = value.toString();
+                                });
+                              }
+                            },
+                            decoration: InputDecoration(
+                              prefixIcon: const Icon(Icons.search),
+                              hintText: 'Search',
+                              hintStyle: GoogleFonts.poppins(
+                                  fontSize: 16, fontWeight: FontWeight.w500),
+                              border: InputBorder.none,
+                              filled: true,
+                              fillColor: Colors.white12,
+                            ),
+                          ),
+                        ),
                       ),
                       const SizedBox(height: 50),
                       Column(

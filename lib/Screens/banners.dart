@@ -546,7 +546,7 @@ class _EditBoxState extends State<EditBox> {
   var imgUrl1;
   bool access = false;
   var gym_id = '';
-
+  String searchGymName = '';
   // final TextEditingController _image = TextEditingController();
   CollectionReference? productStream;
   String namee = "edgefitness.kestopur@vyam.com";
@@ -594,7 +594,44 @@ class _EditBoxState extends State<EditBox> {
                   // CustomTextField(
                   //     hinttext: "Navigation", addcontroller: _navigation),
                   navedit(navtext: _navigation.text),
+                  Container(
+                    width: 400,
+                    height: 51,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(14),
+                      color: Colors.white12,
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(15),
+                      child: TextField(
+                        // focusNode: _node,
 
+                        autofocus: false,
+                        textAlignVertical: TextAlignVertical.bottom,
+                        onSubmitted: (value) async {
+                          FocusScope.of(context).unfocus(); // <<<<<<< HEAD
+                        },
+
+                        onChanged: (value) {
+                          if (value.isEmpty) {}
+                          if (mounted) {
+                            setState(() {
+                              searchGymName = value.toString();
+                            });
+                          }
+                        },
+                        decoration: InputDecoration(
+                          prefixIcon: const Icon(Icons.search),
+                          hintText: 'Search',
+                          hintStyle: GoogleFonts.poppins(
+                              fontSize: 16, fontWeight: FontWeight.w500),
+                          border: InputBorder.none,
+                          filled: true,
+                          fillColor: Colors.white12,
+                        ),
+                      ),
+                    ),
+                  ),
                   SizedBox(
                       height: 400,
                       width: 400,
@@ -609,8 +646,28 @@ class _EditBoxState extends State<EditBox> {
                           if (snapshot.data == null) {
                             return Container();
                           }
-                          print("-----------------------------------");
                           var doc = snapshot.data.docs;
+
+                          print("-----------------------------------");
+                          if (searchGymName.isNotEmpty) {
+                            doc = doc.where((element) {
+                              return element
+                                      .get('name')
+                                      .toString()
+                                      .toLowerCase()
+                                      .contains(searchGymName.toString()) ||
+                                  element
+                                      .get('gym_id')
+                                      .toString()
+                                      .toLowerCase()
+                                      .contains(searchGymName.toString()) ||
+                                  element
+                                      .get('address')
+                                      .toString()
+                                      .toLowerCase()
+                                      .contains(searchGymName.toString());
+                            }).toList();
+                          }
                           print(snapshot.data.docs);
                           return ListView.builder(
                             itemCount: doc.length,
