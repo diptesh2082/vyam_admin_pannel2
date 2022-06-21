@@ -6,6 +6,7 @@ import 'package:flutter_dropzone/flutter_dropzone.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../services/image_picker_api.dart';
@@ -34,6 +35,8 @@ class _bannerNewPageState extends State<bannerNewPage> {
   String? print_type = 'Clickable';
   String namee = "";
   String place = "";
+  bool setnav = false;
+  String searchGymName = '';
 
   void dropDowntype(bool? selecetValue) {
     // if(selecetValue is String){
@@ -58,7 +61,7 @@ class _bannerNewPageState extends State<bannerNewPage> {
   void initState() {
     // TODO: implement initState
     productStream = FirebaseFirestore.instance.collection("product_details");
-
+    setnav = false;
     super.initState();
   }
 
@@ -69,15 +72,53 @@ class _bannerNewPageState extends State<bannerNewPage> {
       appBar: AppBar(
         title: const Text('New Banners'),
       ),
-      body: Column(
-        children: <Widget>[
-          Center(
-            child: Form(
-              key: _formKey,
-              child: SizedBox(
-                height: 600,
-                width: 800,
-                child: SingleChildScrollView(
+      body: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Container(
+          padding: EdgeInsets.all(30),
+          child: Column(
+            children: <Widget>[
+              Container(
+                width: 400,
+                height: 51,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(14),
+                  color: Colors.white12,
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(15),
+                  child: TextField(
+                    // focusNode: _node,
+
+                    autofocus: false,
+                    textAlignVertical: TextAlignVertical.bottom,
+                    onSubmitted: (value) async {
+                      FocusScope.of(context).unfocus(); // <<<<<<< HEAD
+                    },
+
+                    onChanged: (value) {
+                      if (value.isEmpty) {}
+                      if (mounted) {
+                        setState(() {
+                          searchGymName = value.toString();
+                        });
+                      }
+                    },
+                    decoration: InputDecoration(
+                      prefixIcon: const Icon(Icons.search),
+                      hintText: 'Search',
+                      hintStyle: GoogleFonts.poppins(
+                          fontSize: 16, fontWeight: FontWeight.w500),
+                      border: InputBorder.none,
+                      filled: true,
+                      fillColor: Colors.white12,
+                    ),
+                  ),
+                ),
+              ),
+              Center(
+                child: Form(
+                  key: _formKey,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
@@ -89,80 +130,120 @@ class _bannerNewPageState extends State<bannerNewPage> {
                             fontSize: 14),
                       ),
                       const SizedBox(height: 50),
-                      SizedBox(
-                          height: 400,
-                          width: 400,
-                          child: StreamBuilder<QuerySnapshot>(
-                            stream: productStream!.snapshots(),
-                            builder: (context, AsyncSnapshot snapshot) {
-                              if (snapshot.connectionState ==
-                                  ConnectionState.waiting) {
-                                return const CircularProgressIndicator();
-                              }
-                              if (snapshot.data == null) {
-                                return Container();
-                              }
-                              print("-----------------------------------");
-                              var doc = snapshot.data.docs;
-                              print(snapshot.data.docs);
-                              return ListView.builder(
-                                itemCount: doc.length,
-                                itemBuilder: (BuildContext context, int index) {
-                                  return RadioListTile<String>(
-                                      value: doc[index]['gym_id'],
-                                      title: Text(
-                                          "${doc[index]['name'].toString()} || ${doc[index]['branch']}"),
-                                      groupValue: namee,
-                                      onChanged: (String? valuee) {
-                                        setState(() {
-                                          namee = valuee!;
-                                          place = doc[index]['branch'];
-                                        });
-                                        print(namee);
-                                      });
+                      Column(
+                        children: [
+                          SizedBox(
+                              height: 400,
+                              width: 400,
+                              child: StreamBuilder<QuerySnapshot>(
+                                stream: productStream!.snapshots(),
+                                builder: (context, AsyncSnapshot snapshot) {
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return const CircularProgressIndicator();
+                                  }
+                                  if (snapshot.data == null) {
+                                    return Container();
+                                  }
+                                  var doc = snapshot.data.docs;
+
+                                  print("-----------------------------------");
+                                  if (searchGymName.isNotEmpty) {
+                                    doc = doc.where((element) {
+                                      return element
+                                              .get('name')
+                                              .toString()
+                                              .toLowerCase()
+                                              .contains(
+                                                  searchGymName.toString()) ||
+                                          element
+                                              .get('gym_id')
+                                              .toString()
+                                              .toLowerCase()
+                                              .contains(
+                                                  searchGymName.toString()) ||
+                                          element
+                                              .get('address')
+                                              .toString()
+                                              .toLowerCase()
+                                              .contains(
+                                                  searchGymName.toString());
+                                    }).toList();
+                                  }
+                                  print(snapshot.data.docs);
+                                  return ListView.builder(
+                                    itemCount: doc.length,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      return RadioListTile<String>(
+                                          value: doc[index]['gym_id'],
+                                          title: Text(
+                                              "${doc[index]['name'].toString()} || ${doc[index]['branch']}"),
+                                          groupValue: namee,
+                                          onChanged: (String? valuee) {
+                                            setState(() {
+                                              namee = valuee!;
+                                              place = doc[index]['branch'];
+                                            });
+                                            print(namee);
+                                          });
+                                    },
+                                  );
                                 },
-                              );
-                            },
-                          )),
+                              )),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+
                       customTextField3(
                           hinttext: "Name", addcontroller: _addname),
+                      SizedBox(
+                        height: 20,
+                      ),
+
                       customTextField3(
                           hinttext: "Position", addcontroller: _addposition),
-                      customTextField3(
-                          hinttext: "Navigation",
-                          addcontroller: _addnavigation),
+                      // customTextField3(
+                      //     hinttext: "Navigation",
+                      //     addcontroller: _addnavigation),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      nav(),
 
                       //CustomTextField(
                       //hinttext: "Image url", addcontroller: _addimage),
                       loadimage(id: id),
-                      Row(
-                        children: [
-                          const Text(
-                            "Accessible",
-                            style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.w100),
-                          ),
-                          SizedBox(
-                            width: 20,
-                          ),
-                          Container(
-                            color: Colors.white10,
-                            child: DropdownButton(
-                                hint: Text('$print_type'),
-                                items: const [
-                                  DropdownMenuItem(
-                                    child: Text("Clickable"),
-                                    value: true,
-                                  ),
-                                  DropdownMenuItem(
-                                    child: Text("Non-Clickable"),
-                                    value: false,
-                                  ),
-                                ],
-                                onChanged: dropDowntype),
-                          ),
-                        ],
-                      ),
+                      // Row(
+                      //   children: [
+                      //     const Text(
+                      //       "Accessible",
+                      //       style: TextStyle(
+                      //           fontSize: 20, fontWeight: FontWeight.w100),
+                      //     ),
+                      //     SizedBox(
+                      //       width: 20,
+                      //     ),
+                      //     Container(
+                      //       color: Colors.white10,
+                      //       child: DropdownButton(
+                      //           hint: Text('$print_type'),
+                      //           items: const [
+                      //             DropdownMenuItem(
+                      //               child: Text("Clickable"),
+                      //               value: true,
+                      //             ),
+                      //             DropdownMenuItem(
+                      //               child: Text("Non-Clickable"),
+                      //               value: false,
+                      //             ),
+                      //           ],
+                      //           onChanged: dropDowntype),
+                      //     ),
+                      //   ],
+                      // ),
 
                       Center(
                         child: ElevatedButton(
@@ -181,14 +262,18 @@ class _bannerNewPageState extends State<bannerNewPage> {
                                   'position_id': _addposition.text,
                                   'name': _addname.text,
                                   'image': image3,
-                                  'access': _accesible,
+                                  'access': navcommand == "/gym_details"
+                                      ? true
+                                      : false,
                                   'id': id,
                                   'gym_id': namee != null ? namee : "",
-                                  'navigation': _addnavigation.text.toString()
+                                  'navigation': navcommand,
+                                  'visible': true
                                 },
                               ).whenComplete(() {
                                 setState(() {
                                   image3 = null;
+                                  navcommand = '';
                                 });
                               });
                               //     .then(
@@ -207,8 +292,60 @@ class _bannerNewPageState extends State<bannerNewPage> {
                   ),
                 ),
               ),
-            ),
+            ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+String navcommand = '';
+
+class nav extends StatefulWidget {
+  const nav({Key? key}) : super(key: key);
+
+  @override
+  State<nav> createState() => _navState();
+}
+
+class _navState extends State<nav> {
+  @override
+  bool setnav = false;
+
+  Widget build(BuildContext context) {
+    return Container(
+      child: Row(
+        children: [
+          Text("Set Navigation"),
+          SizedBox(
+            width: 20,
+          ),
+          ElevatedButton(
+            onPressed: () {
+              if (setnav == false) {
+                setState(() {
+                  setnav = true;
+                  navcommand = "/gym_details";
+                  print("Set NAv Activated");
+                });
+              } else {
+                setState(() {
+                  setnav = false;
+                  navcommand = "";
+                  print("SET NAV DEACTIVATED");
+                });
+              }
+              print("New ${navcommand}");
+            },
+            child: Text(
+              setnav ? "Activated" : "Deactivated",
+              style:
+                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+            ),
+            style: ElevatedButton.styleFrom(
+                primary: setnav ? Colors.green : Colors.red),
+          )
         ],
       ),
     );
@@ -271,7 +408,7 @@ class _loadimageState extends State<loadimage> {
                   : Container(
                       height: 100,
                       width: 200,
-                      child: Text("Please Upload Image"),
+                      child: Center(child: Text("Please Upload Image")),
                     ),
         ),
       ],
