@@ -5,6 +5,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/get_navigation.dart';
+import 'package:markdown_editable_textinput/format_markdown.dart';
+import 'package:markdown_editable_textinput/markdown_text_input.dart';
 
 class appDetails extends StatefulWidget {
   const appDetails({Key? key}) : super(key: key);
@@ -15,9 +17,6 @@ class appDetails extends StatefulWidget {
 
 class _appDetailsState extends State<appDetails> {
   CollectionReference? appdetailStream;
-  final Id =
-      FirebaseFirestore.instance.collection('app details').doc().id.toString();
-
   @override
   void initState() {
     appdetailStream = FirebaseFirestore.instance.collection('app details');
@@ -27,6 +26,217 @@ class _appDetailsState extends State<appDetails> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text("App Details"),
+      ),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            height: 10.0,
+          ),
+          StreamBuilder<DocumentSnapshot>(
+            stream: appdetailStream!.doc('contact_us').snapshots(),
+            builder: (context, AsyncSnapshot snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const CircularProgressIndicator();
+              }
+              if (snapshot.data == null) {
+                return Container();
+              }
+              String aemail = snapshot.data.get('email').toString();
+              return Column(
+                children: [
+                  TextButton(
+                      child: Container(
+                        color: Colors.white54,
+                        padding: EdgeInsets.only(right: 200),
+                        child: Text(
+                          "Contact",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 25.0,
+                          ),
+                        ),
+                      ),
+                      onPressed: () {
+                        // print(snapshot.data['email']);
+                        Get.to(
+                          () => ContactUs(
+                            email: snapshot.data.get('email').toString(),
+                            instaId: snapshot.data['instaId'].toString(),
+                            phonenumber:
+                                snapshot.data['phonenumber'].toString(),
+                            website: snapshot.data['website'].toString(),
+                          ),
+                        );
+                      })
+                ],
+              );
+            },
+          ),
+          const SizedBox(
+            height: 70,
+          ),
+          StreamBuilder<DocumentSnapshot>(
+            stream: appdetailStream!.doc('about_us').snapshots(),
+            builder: (context, AsyncSnapshot snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const CircularProgressIndicator();
+              }
+              if (snapshot.data == null) {
+                return Container();
+              }
+              return Column(
+                children: [
+                  TextButton(
+                      child: Container(
+                        color: Colors.white54,
+                        padding: EdgeInsets.only(right: 200),
+                        child: Text(
+                          "About",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 25.0,
+                          ),
+                        ),
+                      ),
+                      onPressed: () {
+                        // print(snapshot.data['email']);
+                        Get.to(
+                          () => AboutUs(
+                            about: snapshot.data.get('about').toString(),
+                          ),
+                        );
+                      })
+                ],
+              );
+            },
+          ),
+          const SizedBox(
+            height: 70,
+          ),
+          StreamBuilder<DocumentSnapshot>(
+            stream: appdetailStream!.doc('t&c').snapshots(),
+            builder: (context, AsyncSnapshot snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const CircularProgressIndicator();
+              }
+              if (snapshot.data == null) {
+                return Container();
+              }
+              return Column(
+                children: [
+                  TextButton(
+                      child: Container(
+                        color: Colors.white54,
+                        padding: EdgeInsets.only(right: 200),
+                        child: Text(
+                          "Terms And Conditions",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 25.0,
+                          ),
+                        ),
+                      ),
+                      onPressed: () {
+                        // print(snapshot.data['email']);
+                        Get.to(
+                          () => TandC(
+                            tnc: snapshot.data.get('tnc').toString(),
+                          ),
+                        );
+                      })
+                ],
+              );
+            },
+          ),
+          const SizedBox(
+            height: 70,
+          ),
+          StreamBuilder<DocumentSnapshot>(
+            stream: appdetailStream!.doc('privacy_policy').snapshots(),
+            builder: (context, AsyncSnapshot snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const CircularProgressIndicator();
+              }
+              if (snapshot.data == null) {
+                return Container();
+              }
+              return Column(
+                children: [
+                  TextButton(
+                      child: Container(
+                        color: Colors.white54,
+                        padding: EdgeInsets.only(right: 200),
+                        child: const Text(
+                          "Policy Policy",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 25.0,
+                          ),
+                        ),
+                      ),
+                      onPressed: () {
+                        // print(snapshot.data['email']);
+                        Get.to(
+                          () => PrivacyPolicy(
+                            policy: snapshot.data.get('policy').toString(),
+                          ),
+                        );
+                      })
+                ],
+              );
+            },
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+//Contact Us
+class ContactUs extends StatefulWidget {
+  const ContactUs({
+    required this.email,
+    required this.instaId,
+    required this.phonenumber,
+    required this.website,
+    Key? key,
+  }) : super(key: key);
+
+  final String email;
+  final String instaId;
+  final String phonenumber;
+  final String website;
+
+  @override
+  State<ContactUs> createState() => _ContactUsState();
+}
+
+class _ContactUsState extends State<ContactUs> {
+  final TextEditingController _email = TextEditingController();
+  final TextEditingController _instaId = TextEditingController();
+  final TextEditingController _phonenumber = TextEditingController();
+  final TextEditingController _website = TextEditingController();
+  CollectionReference? appdetailStream;
+
+  @override
+  void initState() {
+    _email.text = widget.email;
+    _instaId.text = widget.instaId;
+    _phonenumber.text = widget.phonenumber;
+    _website.text = widget.website;
+    appdetailStream = FirebaseFirestore.instance.collection('app details');
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Contact Us"),
+      ),
       body: SafeArea(
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 5),
@@ -34,196 +244,290 @@ class _appDetailsState extends State<appDetails> {
             color: Colors.grey.shade100,
             borderRadius: BorderRadius.circular(20.0),
           ),
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 8.0, left: 8.0),
-                  child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        textStyle: const TextStyle(fontSize: 15),
-                      ),
-                      onPressed: () {
-                        Get.to(const addappdetail()); //showAddbox,
-                      },
-                      child: Text('Add App Details')),
-                ),
-                Center(
-                  child: StreamBuilder<QuerySnapshot>(
-                    stream: appdetailStream?.snapshots(),
-                    builder: (context, AsyncSnapshot snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const CircularProgressIndicator();
-                      }
-                      if (snapshot.data == null) {
-                        return Container();
-                      }
-                      var doc = snapshot.data.docs;
-                      return SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: DataTable(
-                          // dataRowHeight: 75.0,
-                          columns: const [
-                            DataColumn(
-                                label: Text(
-                              'ID',
-                              style: TextStyle(fontWeight: FontWeight.w600),
-                            )),
-                            DataColumn(
-                                label: Text(
-                              'Details',
-                              style: TextStyle(fontWeight: FontWeight.w600),
-                            )),
-                            DataColumn(
-                              label: Text(
-                                'Edit',
-                                style: TextStyle(fontWeight: FontWeight.w600),
-                              ),
-                            ),
-                            DataColumn(
-                              label: Text(
-                                'Delete',
-                                style: TextStyle(fontWeight: FontWeight.w600),
-                              ),
-                            ),
-                          ],
-                          rows: _buildlist(context, doc),
+          child: StreamBuilder<QuerySnapshot>(
+            stream: appdetailStream!.snapshots(),
+            builder: (context, AsyncSnapshot snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const CircularProgressIndicator();
+              }
+              if (snapshot.data == null) {
+                return Container();
+              }
+              return Container(
+                child: Column(
+                  children: [
+                    customTextField(hinttext: "Email", addcontroller: _email),
+                    customTextField(
+                        hinttext: "Instagram User Name",
+                        addcontroller: _instaId),
+                    customTextField(
+                        hinttext: "Phone Number", addcontroller: _phonenumber),
+                    customTextField(
+                        hinttext: "Website Link", addcontroller: _website),
+                    Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: Center(
+                        child: ElevatedButton(
+                          onPressed: () async {
+                            print("/////");
+                            print('${widget.email}');
+
+                            DocumentReference documentReference =
+                                FirebaseFirestore.instance
+                                    .collection('app details')
+                                    .doc('contact_us');
+                            Map<String, dynamic> data = {
+                              'email': _email.text,
+                              'instaId': _instaId.text,
+                              'phonenumber': _phonenumber.text,
+                              'website': _website.text,
+                            };
+                            await FirebaseFirestore.instance
+                                .collection('app details')
+                                .doc('contact_us')
+                                .update(data);
+                            print("after");
+                            Navigator.pop(context);
+                          },
+                          child: const Text('Done'),
                         ),
-                      );
-                    },
-                  ),
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              );
+            },
           ),
         ),
       ),
     );
   }
-
-  List<DataRow> _buildlist(
-      BuildContext context, List<DocumentSnapshot> snapshot) {
-    var d = 1;
-    return snapshot.map((data) => _buildListItem(context, data, d++)).toList();
-  }
-
-  DataRow _buildListItem(
-      BuildContext context, DocumentSnapshot data, int index) {
-    return DataRow(
-      cells: [
-        DataCell(data != null ? Text(index.toString()) : const Text("")),
-        // DataCell(
-        //   data['id'] != null
-        //       ? SizedBox(
-        //           width: 100.0,
-        //           child: Text(data['id'] ?? ""),
-        //         )
-        //       : const Text(""),
-        // ),
-        DataCell(
-          data['details'] != null
-              ? SizedBox(
-                  width: 100.0,
-                  child: Text(data['details'] ?? ""),
-                )
-              : const Text(""),
-        ),
-        DataCell(const Text(''), showEditIcon: true, onTap: () {
-          Get.to(
-            () => appDetailEditBox(
-              details: data['details'],
-              Id: data['id'],
-            ),
-          );
-          onTap:
-          () {
-            Navigator.pop(context);
-          };
-        }),
-        DataCell(
-          Icon(Icons.delete),
-          onTap: () {
-            deleteMethod(stream: appdetailStream, uniqueDocId: Id);
-          },
-        ),
-      ],
-    );
-  }
 }
 
-class appDetailEditBox extends StatefulWidget {
-  const appDetailEditBox({
-    Key? key,
-    required this.details,
-    required this.Id,
-  }) : super(key: key);
-
-  final String details;
-  final String Id;
+//About Us
+class AboutUs extends StatefulWidget {
+  const AboutUs({required this.about, Key? key}) : super(key: key);
+  final String about;
 
   @override
-  State<appDetailEditBox> createState() => _appDetailEditBoxState();
+  State<AboutUs> createState() => _AboutUsState();
 }
 
-class _appDetailEditBoxState extends State<appDetailEditBox> {
-  final TextEditingController _details = TextEditingController();
-
+class _AboutUsState extends State<AboutUs> {
+  TextEditingController controller = TextEditingController();
+  List<MarkdownType> actions = const [
+    MarkdownType.bold,
+    MarkdownType.italic,
+    MarkdownType.title,
+    MarkdownType.link,
+    MarkdownType.list
+  ];
+  String descriptionn = 'About Us';
   @override
   void initState() {
+    controller.text = widget.about;
+    descriptionn = widget.about;
     super.initState();
-    _details.text = widget.details;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Edit cancelation questions"),
+        title: Text("About Us"),
       ),
-      body: Container(
-        margin: EdgeInsets.all(15.0),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'Update Records for this doc',
-                style: TextStyle(
-                    fontFamily: 'poppins',
-                    fontWeight: FontWeight.w600,
-                    fontSize: 25),
-              ),
-              customTextField(hinttext: "Details", addcontroller: _details),
-              Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: Center(
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      print("/////");
-                      print('${widget.Id}');
-
-                      DocumentReference documentReference = FirebaseFirestore
-                          .instance
-                          .collection('app details')
-                          .doc(widget.Id);
-                      Map<String, dynamic> data = {
-                        'details': _details.text,
-                      };
-                      await FirebaseFirestore.instance
-                          .collection('app details')
-                          .doc(widget.Id)
-                          .update(data);
-                      print("after");
-                      Navigator.pop(context);
-                    },
-                    child: const Text('Done'),
-                  ),
-                ),
-              )
-            ],
+      body: Column(
+        children: [
+          Container(
+            margin: EdgeInsets.all(8),
+            child: MarkdownTextInput(
+              (String value) => setState(() => descriptionn = value),
+              descriptionn,
+              label: 'Description',
+              actions: actions,
+              controller: controller,
+            ),
           ),
-        ),
+          Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Center(
+              child: ElevatedButton(
+                onPressed: () async {
+                  print("/////");
+                  print('${widget.about}');
+
+                  DocumentReference documentReference = FirebaseFirestore
+                      .instance
+                      .collection('app details')
+                      .doc('about_us');
+                  Map<String, dynamic> data = {
+                    'about': descriptionn,
+                  };
+                  await FirebaseFirestore.instance
+                      .collection('app details')
+                      .doc('about_us')
+                      .update(data);
+                  print("after");
+                  Navigator.pop(context);
+                },
+                child: const Text('Done'),
+              ),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+}
+
+//T and C
+class TandC extends StatefulWidget {
+  TandC({required this.tnc, Key? key}) : super(key: key);
+  String tnc;
+
+  @override
+  State<TandC> createState() => _TandC();
+}
+
+class _TandC extends State<TandC> {
+  TextEditingController controller = TextEditingController();
+  List<MarkdownType> actions = const [
+    MarkdownType.bold,
+    MarkdownType.italic,
+    MarkdownType.title,
+    MarkdownType.link,
+    MarkdownType.list
+  ];
+  String descriptionn = 'Terms And Conditions';
+  @override
+  void initState() {
+    controller.text = widget.tnc;
+    descriptionn = widget.tnc;
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Terms And Conditions"),
+      ),
+      body: Column(
+        children: [
+          Container(
+            margin: EdgeInsets.all(8),
+            child: MarkdownTextInput(
+              (String value) => setState(() => descriptionn = value),
+              descriptionn,
+              label: 'Description',
+              actions: actions,
+              controller: controller,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Center(
+              child: ElevatedButton(
+                onPressed: () async {
+                  print("/////");
+                  print('${widget.tnc}');
+
+                  DocumentReference documentReference = FirebaseFirestore
+                      .instance
+                      .collection('app details')
+                      .doc('t&c');
+                  Map<String, dynamic> data = {
+                    'tnc': descriptionn,
+                  };
+                  await FirebaseFirestore.instance
+                      .collection('app details')
+                      .doc('t&c')
+                      .update(data);
+                  print("after");
+                  Navigator.pop(context);
+                },
+                child: const Text('Done'),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+//Privacy Policy
+class PrivacyPolicy extends StatefulWidget {
+  PrivacyPolicy({required this.policy, Key? key}) : super(key: key);
+
+  String policy;
+
+  @override
+  State<PrivacyPolicy> createState() => _PrivacyPolicy();
+}
+
+class _PrivacyPolicy extends State<PrivacyPolicy> {
+  TextEditingController controller = TextEditingController();
+  List<MarkdownType> actions = const [
+    MarkdownType.bold,
+    MarkdownType.italic,
+    MarkdownType.title,
+    MarkdownType.link,
+    MarkdownType.list
+  ];
+  String descriptionn = 'Privacy Policy';
+  @override
+  void initState() {
+    controller.text = widget.policy;
+    descriptionn = widget.policy;
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Privacy Policy"),
+      ),
+      body: Column(
+        children: [
+          Container(
+            margin: EdgeInsets.all(8),
+            child: MarkdownTextInput(
+              (String value) => setState(() => descriptionn = value),
+              descriptionn,
+              label: 'Description',
+              actions: actions,
+              controller: controller,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Center(
+              child: ElevatedButton(
+                onPressed: () async {
+                  print("/////");
+                  print('${widget.policy}');
+
+                  DocumentReference documentReference = FirebaseFirestore
+                      .instance
+                      .collection('app details')
+                      .doc('privacy_policy');
+                  Map<String, dynamic> data = {
+                    'policy': descriptionn,
+                  };
+                  await FirebaseFirestore.instance
+                      .collection('app details')
+                      .doc('privacy_policy')
+                      .update(data);
+                  print("after");
+                  Navigator.pop(context);
+                },
+                child: const Text('Done'),
+              ),
+            ),
+          )
+        ],
       ),
     );
   }
