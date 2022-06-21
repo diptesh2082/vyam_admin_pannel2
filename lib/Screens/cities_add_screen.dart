@@ -99,50 +99,50 @@ class _citiesAddState extends State<citiesAdd> {
                       ),
                     ),
 
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width,
-                      child: TextFormField(
-                        controller: _addAddress,
-                        autofocus: false,
-                        focusNode: myFocousNode,
-                        onChanged: (value) async {
-                          _list =
-                          await RequestHelper().getPlaces(query: value);
-                          setState(() {});
-                          if (value.isEmpty) {
-                            _list!.clear();
-                            setState(() {
-                              _addAddress.text = value;
-                              print('PRINTING LIST /////////////');
-                              print(_list);
-                            });
-                          }
-                        },
-                        style: const TextStyle(
-                          fontSize: 12,
-                          fontFamily: 'Poppins',
-                          fontWeight: FontWeight.w500,
-                        ),
-                        decoration: InputDecoration(
-                            prefixIcon: const Icon(Icons.abc),
-                            suffixIcon: IconButton(
-                              onPressed: () {
-                                _addAddress.clear();
-                                FocusScope.of(context)
-                                    .requestFocus(myFocousNode);
-                              },
-                              icon: const Icon(Icons.edit_outlined),
-                            ),
-                            // border: InputBorde,
-                            hintStyle: const TextStyle(
-                                fontSize: 12,
-                                fontFamily: 'Poppins',
-                                fontWeight: FontWeight.w500,
-                                color: Colors.green),
-                            hintMaxLines: 2,
-                            hintText: 'Search your location here'),
-                      ),
-                    ),
+                    // SizedBox(
+                    //   width: MediaQuery.of(context).size.width,
+                    //   child: TextFormField(
+                    //     controller: _addAddress,
+                    //     autofocus: false,
+                    //     focusNode: myFocousNode,
+                    //     onChanged: (value) async {
+                    //       _list =
+                    //       await RequestHelper().getPlaces(query: value);
+                    //       setState(() {});
+                    //       if (value.isEmpty) {
+                    //         _list!.clear();
+                    //         setState(() {
+                    //           _addAddress.text = value;
+                    //           print('PRINTING LIST /////////////');
+                    //           print(_list);
+                    //         });
+                    //       }
+                    //     },
+                    //     style: const TextStyle(
+                    //       fontSize: 12,
+                    //       fontFamily: 'Poppins',
+                    //       fontWeight: FontWeight.w500,
+                    //     ),
+                    //     decoration: InputDecoration(
+                    //         prefixIcon: const Icon(Icons.abc),
+                    //         suffixIcon: IconButton(
+                    //           onPressed: () {
+                    //             _addAddress.clear();
+                    //             FocusScope.of(context)
+                    //                 .requestFocus(myFocousNode);
+                    //           },
+                    //           icon: const Icon(Icons.edit_outlined),
+                    //         ),
+                    //         // border: InputBorde,
+                    //         hintStyle: const TextStyle(
+                    //             fontSize: 12,
+                    //             fontFamily: 'Poppins',
+                    //             fontWeight: FontWeight.w500,
+                    //             color: Colors.green),
+                    //         hintMaxLines: 2,
+                    //         hintText: 'Search your location here'),
+                    //   ),
+                    // ),
                   ],
                 ),
                 const SizedBox(
