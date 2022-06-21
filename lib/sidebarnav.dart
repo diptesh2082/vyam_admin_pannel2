@@ -5,6 +5,7 @@ import 'package:admin_panel_vyam/Screens/Review.dart';
 import 'package:admin_panel_vyam/Screens/Tracking/TrackingScreen.dart';
 import 'package:admin_panel_vyam/Screens/app_details.dart';
 import 'package:admin_panel_vyam/Screens/booking_details.dart';
+import 'package:admin_panel_vyam/Screens/booking_notification.dart';
 import 'package:admin_panel_vyam/Screens/cancelation_page.dart';
 import 'package:admin_panel_vyam/Screens/cancelation_questions.dart';
 import 'package:admin_panel_vyam/Screens/category_screen.dart';
@@ -312,6 +313,18 @@ class _SideNavBar1State extends State<SideNavBar1> {
                 setState(() {});
               },
             ),
+
+            ListTile(
+              title: Text(
+                'Booking Notification',
+                style: kTextStyle,
+              ),
+              onTap: () {
+                index = 21;
+                setState(() {});
+              },
+            ),
+
             ListTile(
               title: Text(
                 'Logout',
@@ -349,6 +362,7 @@ class _SideNavBar1State extends State<SideNavBar1> {
           index == 18 ? const filters() : Container(),
           index == 19 ? const appDetails() : Container(),
           index == 20 ? const CancelationQuestion() : Container(),
+          index == 21 ?const  bookingNotification() : Container(),
         ],
       ),
     );

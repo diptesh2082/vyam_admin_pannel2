@@ -116,7 +116,7 @@ class _AmenetiesScreenState extends State<AmenetiesScreen> {
             print("Open Edit Box");
           },
         ),
-        DataCell(Icon(Icons.delete), onTap: () {
+        DataCell(const Icon(Icons.delete), onTap: () {
           //   deleteMethod(stream: FirebaseFirestore.instance.collection('amenities') , uniqueDocId: );
         })
       ],

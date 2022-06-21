@@ -737,16 +737,14 @@ class Carddb extends StatelessWidget {
               width: 300,
               height: 100,
               decoration: BoxDecoration(
-                color: color != null
-                    ? color
-                    : (count % 2 == 0)
+                color: color ?? (count % 2 == 0)
                         ? Colors.red
                         : Colors.blue,
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  CircleAvatar(
+                  const CircleAvatar(
                     backgroundColor: Colors.white,
                     radius: 30,
                     child: Icon(
