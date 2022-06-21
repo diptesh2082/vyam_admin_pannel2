@@ -234,7 +234,7 @@ class _SideNavBar1State extends State<SideNavBar1> {
             ),
             ListTile(
               title: Text(
-                'Cancelation Data',
+                'Cancellation Data',
                 style: kTextStyle,
               ),
               onTap: () {

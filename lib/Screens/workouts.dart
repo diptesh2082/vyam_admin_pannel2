@@ -141,6 +141,12 @@ class _workoutsGymState extends State<workoutsGym> {
                         columns: const [
                           DataColumn(
                             label: Text(
+                              'Index',
+                              style: TextStyle(fontWeight: FontWeight.w600),
+                            ),
+                          ),
+                          DataColumn(
+                            label: Text(
                               'ID',
                               style: TextStyle(fontWeight: FontWeight.w600),
                             ),
@@ -246,6 +252,7 @@ class _workoutsGymState extends State<workoutsGym> {
     String id1 = data['id'];
 
     return DataRow(cells: [
+      DataCell(data != null ? Text(index.toString()) : const Text("")),
       DataCell(data != null ? Text(data['gym_id'] ?? "") : const Text("")),
       DataCell(data != null ? Text(data['type'] ?? "") : const Text("")),
       DataCell(const Text(""), showEditIcon: true, onTap: () {

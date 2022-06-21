@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:markdown_editable_textinput/format_markdown.dart';
 import 'package:markdown_editable_textinput/markdown_text_input.dart';
 import '../../../services/CustomTextFieldClass.dart';
-import '../../../services/MatchIDMethod.dart';
+
 
 String globalGymId = '';
 String name = '';
@@ -380,7 +380,7 @@ class _addboxxState extends State<addboxx> {
   final TextEditingController _originalprice = TextEditingController();
   final TextEditingController _index = TextEditingController();
   final TextEditingController _title = TextEditingController();
-  final TextEditingController _type = TextEditingController();
+  // final TextEditingController _type = TextEditingController();
   final TextEditingController _validity = TextEditingController();
   // final TextEditingController _price = TextEditingController();
   var selectedvaluee = 'pay per session';

@@ -1,3 +1,4 @@
+import 'package:admin_panel_vyam/Screens/Product%20Details/Trainers/Trainers.dart';
 import 'package:admin_panel_vyam/services/deleteMethod.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -22,8 +23,8 @@ class _CancelationPageState extends State<CancelationPage> {
 
   @override
   void initState() {
-    cancellationStream =
-        FirebaseFirestore.instance.collection("Cancellation Data");
+    // cancellationStream =
+    //     as CollectionReference<Object?>?;
     super.initState();
   }
 
@@ -84,7 +85,10 @@ class _CancelationPageState extends State<CancelationPage> {
                 ),
                 Center(
                   child: StreamBuilder<QuerySnapshot>(
-                    stream: cancellationStream?.snapshots(),
+                    stream: FirebaseFirestore.instance
+                        .collection("Cancellation Data")
+                        .orderBy('timestamp', descending: true)
+                        .snapshots(),
                     builder: (context, AsyncSnapshot snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return const CircularProgressIndicator();
@@ -142,12 +146,12 @@ class _CancelationPageState extends State<CancelationPage> {
                                 style: TextStyle(fontWeight: FontWeight.w600),
                               ),
                             ),
-                            DataColumn(
-                              label: Text(
-                                'Vendor Name || Vendor Branch',
-                                style: TextStyle(fontWeight: FontWeight.w600),
-                              ),
-                            ),
+                            // DataColumn(
+                            //   label: Text(
+                            //     'Vendor Name || Vendor Branch',
+                            //     style: TextStyle(fontWeight: FontWeight.w600),
+                            //   ),
+                            // ),
                             DataColumn(
                               label: Text(
                                 'Cancel Reason',
@@ -160,6 +164,12 @@ class _CancelationPageState extends State<CancelationPage> {
                                 style: TextStyle(fontWeight: FontWeight.w600),
                               ),
                             ),
+                            // DataColumn(
+                            //   label: Text(
+                            //     'Timings',
+                            //     style: TextStyle(fontWeight: FontWeight.w600),
+                            //   ),
+                            // ),
                             DataColumn(
                               label: Text(
                                 'Edit',
@@ -254,6 +264,10 @@ class _CancelationPageState extends State<CancelationPage> {
   DataRow _buildListItem(BuildContext context, DocumentSnapshot data, int index,
       int start, int end) {
     final String numbers = data['user_number'];
+    // final Timestamp time = data['timestamp'];
+    // dss = DateTime.fromMillisecondsSinceEpoch(time.millisecondsSinceEpoch);
+    // d122 = DateFormat('dd/MM/yyyy, HH:mm').format(dss);
+    // String vendor_branch=data['branch'];
 
     String Id = data.id;
     return DataRow(
@@ -292,14 +306,14 @@ class _CancelationPageState extends State<CancelationPage> {
         //         )
         //       : const Text(""),
         // ),
-        DataCell(
-          data['vendor_name'] != null
-              ? SizedBox(
-                  width: 100.0,
-                  child: Text(data['vendor_name'] ?? ""),
-                )
-              : const Text(""),
-        ),
+        // DataCell(
+        //   data['vendor_name'] != null
+        //       ? SizedBox(
+        //           width: 100.0,
+        //           child: Text("${data['vendor_name']} ||\n${branch}" ?? ""),
+        //         )
+        //       : const Text(""),
+        // ),
         DataCell(
           data['cancel_choice'] != null
               ? SizedBox(
@@ -318,6 +332,16 @@ class _CancelationPageState extends State<CancelationPage> {
                 )
               : const Text(""),
         ),
+        // DataCell(
+        //   d122 != null
+        //       ? SizedBox(
+        //           width: 200.0,
+        //           child: Text(
+        //             d122.toString(),
+        //           ),
+        //         )
+        //       : const Text(""),
+        // ),
         DataCell(
           const Text(''),
           showEditIcon: true,
