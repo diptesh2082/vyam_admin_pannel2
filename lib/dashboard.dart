@@ -561,19 +561,26 @@ class _showLatestBookingState extends State<showLatestBooking> {
                           .collection('bookings')
                           .doc(bookingId)
                           .update({'booking_status': value});
+                      var xps = await FirebaseFirestore.instance
+                          .collection('booking_notifications')
+                          .doc()
+                          .id;
+
                       await FirebaseFirestore.instance
                           .collection("booking_notifications")
-                          .doc()
+                          .doc(xps)
                           .set({
                         "title": "Booking Details",
-                        "status": data['booking_status'],
+                        "status": selectedValue,
+                        "booking_id": data['booking_id'],
                         // "payment_done": false,
+                        "notification_id": xps.toString(),
                         "user_id": data['userId'],
-                        "user_name": data['user_name'],
+                        "user_name": data["user_name"],
                         "vendor_id": data['vendorId'],
                         "vendor_name": data['gym_details']['name'],
                         'time': DateTime.now()
-                      }).whenComplete(() => print("Message Send"));
+                      });
                     }),
               ],
             ),
