@@ -1114,7 +1114,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                       padding: const EdgeInsets.all(8.0),
                       child: Row(
                         children: [
-                          Text(
+                          const Text(
                             "User ID:",
                             style: TextStyle(
                               fontSize: 20,
