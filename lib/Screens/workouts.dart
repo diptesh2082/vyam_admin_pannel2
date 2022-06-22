@@ -35,6 +35,7 @@ class _workoutsGymState extends State<workoutsGym> {
       // appBar: AppBar(title: const Text('Workouts'),
       // backgroundColor: Colors.white10,
       // ),
+      appBar: AppBar(title: Text("Workouts")),
       body: Container(
         padding: const EdgeInsets.symmetric(horizontal: 5),
         decoration: BoxDecoration(
@@ -139,6 +140,12 @@ class _workoutsGymState extends State<workoutsGym> {
                     child: DataTable(
                         dataRowHeight: 65,
                         columns: const [
+                          DataColumn(
+                            label: Text(
+                              'Index',
+                              style: TextStyle(fontWeight: FontWeight.w600),
+                            ),
+                          ),
                           DataColumn(
                             label: Text(
                               'ID',
@@ -246,6 +253,7 @@ class _workoutsGymState extends State<workoutsGym> {
     String id1 = data['id'];
 
     return DataRow(cells: [
+      DataCell(data != null ? Text(index.toString()) : const Text("")),
       DataCell(data != null ? Text(data['gym_id'] ?? "") : const Text("")),
       DataCell(data != null ? Text(data['type'] ?? "") : const Text("")),
       DataCell(const Text(""), showEditIcon: true, onTap: () {

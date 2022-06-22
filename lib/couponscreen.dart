@@ -1,4 +1,3 @@
-
 import 'dart:html';
 import 'dart:math';
 import 'package:markdown_editable_textinput/format_markdown.dart';
@@ -74,8 +73,8 @@ class _CouponScreenState extends State<CouponScreen> {
   final TextEditingController offer_type = TextEditingController();
   // final TextEditingController package_type = TextEditingController();
   // DateTime date=DateTime.now();
-  DateTime start_date = DateTime.now();
-  DateTime end_date = DateTime.now();
+  DateTime? start_date;
+  DateTime? end_date;
   DateTime? date;
   String? packageType;
   String? Select_Package_type = "Select Package type";
@@ -92,6 +91,8 @@ class _CouponScreenState extends State<CouponScreen> {
     MarkdownType.link,
     MarkdownType.list
   ];
+  bool showStartDate = false;
+  bool showEndDate = false;
   TextEditingController controller = TextEditingController();
   @override
   void initState() {
@@ -109,7 +110,7 @@ class _CouponScreenState extends State<CouponScreen> {
         padding: EdgeInsets.all(50),
         child: SingleChildScrollView(
           child: Column(
-            //crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
                 'Add Records',
@@ -126,6 +127,41 @@ class _CouponScreenState extends State<CouponScreen> {
                 alignment: Alignment.topRight,
               ),
 
+              Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  InkWell(
+                    onTap: () {
+                      print(start_date);
+                    },
+                    child: const Text(
+                      "Select Package type",
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+                    ),
+                  ),
+                  Container(
+                    width: 280,
+                    child: DropdownButton(
+                        hint: Text("${Select_Package_type}"),
+                        items: const [
+                          DropdownMenuItem(
+                            child: Text("pay per session"),
+                            value: "pay per session",
+                          ),
+                          DropdownMenuItem(
+                            child: Text("package"),
+                            value: "package",
+                          ),
+                        ],
+                        onChanged: dropDownPackage),
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 8,
+              ),
               customTextField(hinttext: "Code", addcontroller: _addCode),
               const SizedBox(
                 height: 8,
@@ -139,11 +175,22 @@ class _CouponScreenState extends State<CouponScreen> {
               const SizedBox(
                 height: 8,
               ),
-              // customTextField(
-              //     hinttext: "Description", addcontroller: description),
+              customTextField(hinttext: "max_dis", addcontroller: max_dis),
               const SizedBox(
                 height: 8,
               ),
+              customTextField(
+                  hinttext: "minimum_cart_value",
+                  addcontroller: munimum_cart_value),
+              const SizedBox(
+                height: 8,
+              ),
+
+              // customTextField(
+              //     hinttext: "Description", addcontroller: description),
+              // const SizedBox(
+              //   height: 8,
+              // ),
               MarkdownTextInput(
                 (String value) => setState(() => descriptionn = value),
                 descriptionn,
@@ -155,11 +202,10 @@ class _CouponScreenState extends State<CouponScreen> {
               const SizedBox(
                 height: 8,
               ),
-
-              customTextField(hinttext: "price", addcontroller: price),
-              const SizedBox(
-                height: 8,
-              ),
+              // customTextField(hinttext: "price", addcontroller: price),
+              // const SizedBox(
+              //   height: 8,
+              // ),
               customTextField(hinttext: "tag", addcontroller: tag),
               // const SizedBox(
               //   height: 8,
@@ -169,83 +215,63 @@ class _CouponScreenState extends State<CouponScreen> {
               const SizedBox(
                 height: 8,
               ),
-              customTextField(
-                  hinttext: "minimum_cart_value",
-                  addcontroller: munimum_cart_value),
-              const SizedBox(
-                height: 8,
-              ),
-              customTextField(hinttext: "max_dis", addcontroller: max_dis),
-              const SizedBox(
-                height: 8,
-              ),
+
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SizedBox(
-                    height: 8,
-                  ),
                   Row(
                     children: [
-                      Container(
-                        child: Row(
-                          children: [
-                            ElevatedButton(
+                      Column(
+                        children: [
+                          Container(
+                            child: ElevatedButton(
                               child: const Text('Select Start Date '),
                               onPressed: () async {
-                                start_date = await pickDate(context);
+                                setState(() async {
+                                  showStartDate = true;
+                                  start_date = await pickDate(context);
+                                });
                               },
                             ),
-                            const SizedBox(width: 15),
-                          ],
-                        ),
+                          ),
+                          Text(
+                            showStartDate != false
+                                ? DateFormat("MMM ,dd , yyyy")
+                                    .format(start_date!)
+                                    .toString()
+                                : "",
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ],
                       ),
-                      Container(
-                        child: Row(
-                          children: [
-                            ElevatedButton(
-                              child: const Text('Select End Date '),
-                              onPressed: () async {
-                                end_date = await pickDate(context);
-                              },
+                      const SizedBox(width: 15),
+                      Column(
+                        children: [
+                          Container(
+                            child: Row(
+                              children: [
+                                ElevatedButton(
+                                  child: const Text('Select End Date '),
+                                  onPressed: () async {
+                                    setState(() async {
+                                      showEndDate = true;
+                                      end_date = await pickDate(context);
+                                    });
+                                  },
+                                ),
+                                const SizedBox(width: 15),
+                              ],
                             ),
-                            const SizedBox(width: 15),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 8,
-                  ),
-                  Column(
-                    children: [
-                      InkWell(
-                        onTap: () {
-                          print(start_date);
-                        },
-                        child: const Text(
-                          "Select Package type",
-                          style: TextStyle(
-                              fontSize: 30, fontWeight: FontWeight.w500),
-                        ),
-                      ),
-                      Container(
-                        color: Colors.yellowAccent,
-                        width: 280,
-                        child: DropdownButton(
-                            hint: Text("${Select_Package_type}"),
-                            items: const [
-                              DropdownMenuItem(
-                                child: Text("pay per session"),
-                                value: "pay per session",
-                              ),
-                              DropdownMenuItem(
-                                child: Text("package"),
-                                value: "package",
-                              ),
-                            ],
-                            onChanged: dropDownPackage),
+                          ),
+                          Text(
+                            showEndDate != false
+                                ? DateFormat("MMM ,dd , yyyy")
+                                    .format(end_date!)
+                                    .toString()
+                                : "",
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ],
                       ),
                     ],
                   ),
@@ -257,10 +283,9 @@ class _CouponScreenState extends State<CouponScreen> {
                       const Text(
                         "Select Coupon type",
                         style: TextStyle(
-                            fontSize: 30, fontWeight: FontWeight.w500),
+                            fontSize: 20, fontWeight: FontWeight.w500),
                       ),
                       Container(
-                        color: Colors.yellowAccent,
                         width: 280,
                         child: DropdownButton(
                             hint: Text("${print_type}"),
@@ -305,7 +330,7 @@ class _CouponScreenState extends State<CouponScreen> {
                               "minimum_cart_value": munimum_cart_value.text,
                               "offer_type": coupontype,
                               "package_type": packageType!.trim().toUpperCase(),
-                              "price": price.text,
+                              // "price": price.text,
                               "tag": tag.text,
                               "user_id": [],
                               "validity": true,

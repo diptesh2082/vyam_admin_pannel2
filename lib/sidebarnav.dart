@@ -235,7 +235,7 @@ class _SideNavBar1State extends State<SideNavBar1> {
             ),
             ListTile(
               title: Text(
-                'Cancelation Data',
+                'Cancellation Data',
                 style: kTextStyle,
               ),
               onTap: () {
@@ -344,7 +344,7 @@ class _SideNavBar1State extends State<SideNavBar1> {
         children: [
           index == 1 ? const showLatestBooking() : Container(),
           index == 2 ? const ProductDetails() : Container(),
-          index == 3 ? const UserInformation() : Container(),
+          index == 3 ? UserInformation() : Container(),
           index == 4 ? const BookingDetails() : Container(),
           index == 5 ? const Coupon() : Container(),
           // index == 6 ? const FeedBackInfo() : Container(),
@@ -362,7 +362,7 @@ class _SideNavBar1State extends State<SideNavBar1> {
           index == 18 ? const filters() : Container(),
           index == 19 ? const appDetails() : Container(),
           index == 20 ? const CancelationQuestion() : Container(),
-          index == 21 ?const  bookingNotification() : Container(),
+          index == 21 ? const bookingNotification() : Container(),
         ],
       ),
     );

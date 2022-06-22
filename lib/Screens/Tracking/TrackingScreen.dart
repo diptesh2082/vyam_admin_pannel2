@@ -28,6 +28,7 @@ class _TrackingScreenState extends State<TrackingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(title: Text("Tracking")),
       body: SafeArea(
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 5),
@@ -84,7 +85,7 @@ class _TrackingScreenState extends State<TrackingScreen> {
                     stream: FirebaseFirestore.instance
                         .collection('bookings')
                         .where('booking_status', isEqualTo: 'incomplete')
-                        .orderBy('order_date' , descending: true)
+                        .orderBy('order_date', descending: true)
                         .snapshots(),
                     builder: (context, AsyncSnapshot snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
@@ -316,7 +317,7 @@ class _TrackingScreenState extends State<TrackingScreen> {
       }
     });
     return snap
-        .map((data) => _buildListItem(context, data, s++, start, end ))
+        .map((data) => _buildListItem(context, data, s++, start, end))
         .toList();
   }
 
@@ -332,9 +333,7 @@ class _TrackingScreenState extends State<TrackingScreen> {
     String bookingDate =
         "${data['booking_date'].toDate().year}/${data['booking_date'].toDate().month}/${data['booking_date'].toDate().day}";
     return DataRow(cells: [
-      DataCell(index != null
-          ? Text(index.toString())
-          : const Text("")),
+      DataCell(index != null ? Text(index.toString()) : const Text("")),
       DataCell(data['user_name'] != null
           ? Text(data['user_name'].toString())
           : const Text("")),

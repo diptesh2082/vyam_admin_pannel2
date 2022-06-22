@@ -1,4 +1,6 @@
+import 'package:admin_panel_vyam/Screens/Product%20Details/Trainers/Trainers.dart';
 import 'package:admin_panel_vyam/services/deleteMethod.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -22,14 +24,15 @@ class _CancelationPageState extends State<CancelationPage> {
 
   @override
   void initState() {
-    cancellationStream =
-        FirebaseFirestore.instance.collection("Cancellation Data");
+    // cancellationStream =
+    //     as CollectionReference<Object?>?;
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(title: Text("Cancellation Data")),
       body: SafeArea(
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 5),
@@ -84,7 +87,11 @@ class _CancelationPageState extends State<CancelationPage> {
                 ),
                 Center(
                   child: StreamBuilder<QuerySnapshot>(
-                    stream: cancellationStream?.snapshots(),
+                    stream: FirebaseFirestore.instance
+                        .collection("Cancellation Data")
+                        .orderBy('time_stamp', descending: true)
+                        // .orderBy('booking_id', descending: true)
+                        .snapshots(),
                     builder: (context, AsyncSnapshot snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return const CircularProgressIndicator();
@@ -157,6 +164,12 @@ class _CancelationPageState extends State<CancelationPage> {
                             DataColumn(
                               label: Text(
                                 'Cancel Remark',
+                                style: TextStyle(fontWeight: FontWeight.w600),
+                              ),
+                            ),
+                            DataColumn(
+                              label: Text(
+                                'Timings',
                                 style: TextStyle(fontWeight: FontWeight.w600),
                               ),
                             ),
@@ -254,6 +267,10 @@ class _CancelationPageState extends State<CancelationPage> {
   DataRow _buildListItem(BuildContext context, DocumentSnapshot data, int index,
       int start, int end) {
     final String numbers = data['user_number'];
+    final Timestamp time = data['time_stamp'];
+    var dss = DateTime.fromMillisecondsSinceEpoch(time.millisecondsSinceEpoch);
+    var d122 = DateFormat('dd/MMM/yyyy, hh:mm a').format(dss);
+    // String vendor_branch=data['branch'];
 
     String Id = data.id;
     return DataRow(
@@ -295,8 +312,9 @@ class _CancelationPageState extends State<CancelationPage> {
         DataCell(
           data['vendor_name'] != null
               ? SizedBox(
-                  width: 100.0,
-                  child: Text(data['vendor_name'] ?? ""),
+                  width: 150.0,
+                  height: 100,
+                  child: Text("${data['vendor_name']} ||\n${branch}"),
                 )
               : const Text(""),
         ),
@@ -314,6 +332,16 @@ class _CancelationPageState extends State<CancelationPage> {
                   width: 200.0,
                   child: Text(
                     data['cancel_remark'],
+                  ),
+                )
+              : const Text(""),
+        ),
+        DataCell(
+          d122 != null
+              ? SizedBox(
+                  width: 200.0,
+                  child: Text(
+                    d122.toString(),
                   ),
                 )
               : const Text(""),
