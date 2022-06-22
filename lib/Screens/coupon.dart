@@ -1,5 +1,6 @@
 import 'package:admin_panel_vyam/services/deleteMethod.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/rendering.dart';
 import 'package:markdown_editable_textinput/format_markdown.dart';
 import 'package:markdown_editable_textinput/markdown_text_input.dart';
 import 'package:flutter/material.dart';
@@ -39,6 +40,9 @@ class _CouponState extends State<Coupon> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text("Coupons"),
+      ),
       body: SafeArea(
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 5),
@@ -546,6 +550,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
         child: Padding(
           padding: const EdgeInsets.all(15.0),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
@@ -561,12 +566,38 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                 width: 400,
                 alignment: Alignment.topRight,
               ),
-
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  const Text(
+                    "Select Package type",
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+                  ),
+                  Container(
+                    width: 280,
+                    child: DropdownButton(
+                        hint: Text("${Select_Package_type}"),
+                        items: const [
+                          DropdownMenuItem(
+                            child: Text("pay per session"),
+                            value: "pay per session",
+                          ),
+                          DropdownMenuItem(
+                            child: Text("package"),
+                            value: "package",
+                          ),
+                        ],
+                        onChanged: dropDownPackage),
+                  ),
+                ],
+              ),
               customTextField(hinttext: "Code", addcontroller: _code),
               const SizedBox(
                 height: 8,
               ),
               customTextField(hinttext: "Details", addcontroller: _detail),
+
               const SizedBox(
                 height: 8,
               ),
@@ -574,6 +605,19 @@ class _ProductEditBoxState extends State<ProductEditBox> {
               const SizedBox(
                 height: 8,
               ),
+              customTextField(hinttext: "max_dis", addcontroller: _max_dis),
+              customTextField(hinttext: "tag", addcontroller: _tag),
+
+              const SizedBox(
+                height: 8,
+              ),
+              customTextField(
+                  hinttext: "minimum_cart_value",
+                  addcontroller: _minimum_cart_value),
+              const SizedBox(
+                height: 8,
+              ),
+
               // customTextField(
               //     hinttext: "Description", addcontroller: description),
               const SizedBox(
@@ -595,25 +639,11 @@ class _ProductEditBoxState extends State<ProductEditBox> {
               const SizedBox(
                 height: 8,
               ),
-              customTextField(hinttext: "tag", addcontroller: _tag),
               // const SizedBox(
               //   height: 8,
               // ),
               // customTextField(
               //     hinttext: "package_type", addcontroller: package_type),
-              const SizedBox(
-                height: 8,
-              ),
-              customTextField(
-                  hinttext: "minimum_cart_value",
-                  addcontroller: _minimum_cart_value),
-              const SizedBox(
-                height: 8,
-              ),
-              customTextField(hinttext: "max_dis", addcontroller: _max_dis),
-              const SizedBox(
-                height: 8,
-              ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -670,34 +700,17 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                       ),
                     ],
                   ),
-                  const SizedBox(
-                    height: 8,
+                  SizedBox(
+                    height: 20,
                   ),
                   Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
+                      Text(
                         "Select Coupon type",
                         style: TextStyle(
-                            fontSize: 30, fontWeight: FontWeight.w500),
-                      ),
-                      Container(
-                        width: 280,
-                        child: DropdownButton(
-                            hint: Text("${Select_Package_type}"),
-                            items: const [
-                              DropdownMenuItem(
-                                child: Text("pay per session"),
-                                value: "pay per session",
-                              ),
-                              DropdownMenuItem(
-                                child: Text("package"),
-                                value: "package",
-                              ),
-                            ],
-                            onChanged: dropDownPackage),
-                      ),
-                      SizedBox(
-                        height: 20,
+                            fontSize: 20, fontWeight: FontWeight.w500),
                       ),
                       Container(
                         width: 280,

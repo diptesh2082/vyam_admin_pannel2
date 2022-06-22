@@ -22,6 +22,7 @@ class bannerNewPage extends StatefulWidget {
 
 String namee = "";
 bool ischeckk = false;
+bool load1 = false;
 
 class _bannerNewPageState extends State<bannerNewPage> {
   final id = FirebaseFirestore.instance.collection('banner_details').doc().id;
@@ -36,7 +37,7 @@ class _bannerNewPageState extends State<bannerNewPage> {
   final _formKey = GlobalKey<FormState>();
   String? selectedType;
   String? print_type = 'Clickable';
-  String namee = "";
+  // String namee = "";
   String place = "";
   bool setnav = false;
   String searchGymName = '';
@@ -181,6 +182,7 @@ class _bannerNewPageState extends State<bannerNewPage> {
                                         (BuildContext context, int index) {
                                       return RadioListTile<String>(
                                           value: doc[index]['gym_id'],
+                                          toggleable: true,
                                           title: Text(
                                               "${doc[index]['name'].toString()} || ${doc[index]['branch']}"),
                                           groupValue: namee,
@@ -332,13 +334,17 @@ class _navState extends State<nav> {
           ElevatedButton(
             onPressed: () {
               setState(() {
+                print(load1);
+                load1 = !load1;
                 // setnav = false;
                 navcommand = "";
                 namee = "";
                 print("SET NAV DEACTIVATED and Nav Command==$navcommand");
+                print(load1);
                 ischeckk = false;
+                load1 = !load1;
               });
-
+              print("Value of namee: $namee");
               print(navcommand.toString());
             },
             child: Text(

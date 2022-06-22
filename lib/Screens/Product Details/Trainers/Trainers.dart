@@ -1099,7 +1099,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                           'certification': cert,
                           'specialization': spec,
                           'insta_id': _social.text,
-                          'image': image2
+                          'image': image2 != null ? image2 : imgUrl11,
                         };
                         await documentReference
                             .update(data)

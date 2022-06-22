@@ -36,6 +36,9 @@ class _AmenetiesScreenState extends State<AmenetiesScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text("Amenities"),
+      ),
       body: SafeArea(
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 5),

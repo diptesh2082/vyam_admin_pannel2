@@ -47,6 +47,7 @@ class _PushState extends State<Push> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(title: Text("Push Notifications")),
       body: SafeArea(
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 5),
@@ -225,46 +226,58 @@ class _PushState extends State<Push> {
       DataCell(const Icon(Icons.delete), onTap: () {
         // deleteMethod(stream: pushStream, uniqueDocId: pushIdData);
 
-        showDialog(context: context, builder: (context)=>  AlertDialog(
-          shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(16))),
-          content: SizedBox(
-            height: 170,
-            width: 280,
-            child: Stack(
-              children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children:  [
-                    const Text('Do you want to delete?' , style: TextStyle(fontWeight: FontWeight.bold),),
-                    const SizedBox(height: 15,),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const SizedBox(height: 15),
-                        ElevatedButton.icon(
-                          onPressed: (){
-                            deleteMethod(stream: pushStream, uniqueDocId: pushIdData);
-                            Navigator.pop(context);
-                          } ,
-                          icon: const Icon(Icons.check),
-                          label: const Text('Yes'),
-                        ),
-                        const SizedBox(width: 20,),
-                        ElevatedButton.icon(onPressed: (){
-                          Navigator.pop(context);
-                        } ,
-                          icon: const Icon(Icons.clear),
-                          label: const Text('No'),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ],
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(16))),
+            content: SizedBox(
+              height: 170,
+              width: 280,
+              child: Stack(
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text(
+                        'Do you want to delete?',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const SizedBox(height: 15),
+                          ElevatedButton.icon(
+                            onPressed: () {
+                              deleteMethod(
+                                  stream: pushStream, uniqueDocId: pushIdData);
+                              Navigator.pop(context);
+                            },
+                            icon: const Icon(Icons.check),
+                            label: const Text('Yes'),
+                          ),
+                          const SizedBox(
+                            width: 20,
+                          ),
+                          ElevatedButton.icon(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            icon: const Icon(Icons.clear),
+                            label: const Text('No'),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
-        ),);
-
+        );
       }),
     ]);
   }

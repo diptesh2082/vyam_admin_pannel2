@@ -32,6 +32,7 @@ class _CancelationPageState extends State<CancelationPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(title: Text("Cancellation Data")),
       body: SafeArea(
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 5),
@@ -311,7 +312,7 @@ class _CancelationPageState extends State<CancelationPage> {
         DataCell(
           data['vendor_name'] != null
               ? SizedBox(
-                  width: 100.0,
+                  width: 150.0,
                   height: 100,
                   child: Text("${data['vendor_name']} ||\n${branch}"),
                 )

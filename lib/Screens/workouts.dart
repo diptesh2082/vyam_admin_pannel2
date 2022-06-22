@@ -35,6 +35,7 @@ class _workoutsGymState extends State<workoutsGym> {
       // appBar: AppBar(title: const Text('Workouts'),
       // backgroundColor: Colors.white10,
       // ),
+      appBar: AppBar(title: Text("Workouts")),
       body: Container(
         padding: const EdgeInsets.symmetric(horizontal: 5),
         decoration: BoxDecoration(

@@ -29,12 +29,13 @@ class _filtersState extends State<filters> {
   }
 
   DateTime? date;
-  DateTime startDate = DateTime(DateTime.now().year -5);
+  DateTime startDate = DateTime(DateTime.now().year - 5);
   DateTime endDate = DateTime(DateTime.now().year + 5);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(title: Text("Filters")),
       backgroundColor: Colors.white10,
       body: Padding(
         padding: const EdgeInsets.all(25.0),
@@ -149,7 +150,11 @@ class _filtersState extends State<filters> {
                         icon: const Icon(Icons.date_range),
                         label: const Text('Start Date'),
                       ),
-                        showStartDate !=false ? Text(DateFormat("MMM, dd, yyyy").format(startDate),style: const TextStyle(fontWeight: FontWeight.bold)):const SizedBox(),
+                      showStartDate != false
+                          ? Text(DateFormat("MMM, dd, yyyy").format(startDate),
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold))
+                          : const SizedBox(),
                     ],
                   ),
                   const SizedBox(
@@ -168,7 +173,11 @@ class _filtersState extends State<filters> {
                         icon: const Icon(Icons.date_range),
                         label: const Text('End Date'),
                       ),
-                        showEndDate !=false ? Text(DateFormat("MMM ,dd , yyyy").format(endDate),style: const TextStyle(fontWeight: FontWeight.bold)):const SizedBox(),
+                      showEndDate != false
+                          ? Text(DateFormat("MMM ,dd , yyyy").format(endDate),
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold))
+                          : const SizedBox(),
                     ],
                   ),
                   const SizedBox(

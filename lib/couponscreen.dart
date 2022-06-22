@@ -110,7 +110,7 @@ class _CouponScreenState extends State<CouponScreen> {
         padding: EdgeInsets.all(50),
         child: SingleChildScrollView(
           child: Column(
-            //crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
                 'Add Records',
@@ -127,6 +127,41 @@ class _CouponScreenState extends State<CouponScreen> {
                 alignment: Alignment.topRight,
               ),
 
+              Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  InkWell(
+                    onTap: () {
+                      print(start_date);
+                    },
+                    child: const Text(
+                      "Select Package type",
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+                    ),
+                  ),
+                  Container(
+                    width: 280,
+                    child: DropdownButton(
+                        hint: Text("${Select_Package_type}"),
+                        items: const [
+                          DropdownMenuItem(
+                            child: Text("pay per session"),
+                            value: "pay per session",
+                          ),
+                          DropdownMenuItem(
+                            child: Text("package"),
+                            value: "package",
+                          ),
+                        ],
+                        onChanged: dropDownPackage),
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 8,
+              ),
               customTextField(hinttext: "Code", addcontroller: _addCode),
               const SizedBox(
                 height: 8,
@@ -140,11 +175,22 @@ class _CouponScreenState extends State<CouponScreen> {
               const SizedBox(
                 height: 8,
               ),
-              // customTextField(
-              //     hinttext: "Description", addcontroller: description),
+              customTextField(hinttext: "max_dis", addcontroller: max_dis),
               const SizedBox(
                 height: 8,
               ),
+              customTextField(
+                  hinttext: "minimum_cart_value",
+                  addcontroller: munimum_cart_value),
+              const SizedBox(
+                height: 8,
+              ),
+
+              // customTextField(
+              //     hinttext: "Description", addcontroller: description),
+              // const SizedBox(
+              //   height: 8,
+              // ),
               MarkdownTextInput(
                 (String value) => setState(() => descriptionn = value),
                 descriptionn,
@@ -156,11 +202,10 @@ class _CouponScreenState extends State<CouponScreen> {
               const SizedBox(
                 height: 8,
               ),
-
               // customTextField(hinttext: "price", addcontroller: price),
-              const SizedBox(
-                height: 8,
-              ),
+              // const SizedBox(
+              //   height: 8,
+              // ),
               customTextField(hinttext: "tag", addcontroller: tag),
               // const SizedBox(
               //   height: 8,
@@ -170,22 +215,10 @@ class _CouponScreenState extends State<CouponScreen> {
               const SizedBox(
                 height: 8,
               ),
-              customTextField(
-                  hinttext: "minimum_cart_value",
-                  addcontroller: munimum_cart_value),
-              const SizedBox(
-                height: 8,
-              ),
-              customTextField(hinttext: "max_dis", addcontroller: max_dis),
-              const SizedBox(
-                height: 8,
-              ),
+
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SizedBox(
-                    height: 8,
-                  ),
                   Row(
                     children: [
                       Column(
@@ -230,9 +263,6 @@ class _CouponScreenState extends State<CouponScreen> {
                               ],
                             ),
                           ),
-                          SizedBox(
-                            height: 20,
-                          ),
                           Text(
                             showEndDate != false
                                 ? DateFormat("MMM ,dd , yyyy")
@@ -250,43 +280,10 @@ class _CouponScreenState extends State<CouponScreen> {
                   ),
                   Column(
                     children: [
-                      InkWell(
-                        onTap: () {
-                          print(start_date);
-                        },
-                        child: const Text(
-                          "Select Package type",
-                          style: TextStyle(
-                              fontSize: 30, fontWeight: FontWeight.w500),
-                        ),
-                      ),
-                      Container(
-                        width: 280,
-                        child: DropdownButton(
-                            hint: Text("${Select_Package_type}"),
-                            items: const [
-                              DropdownMenuItem(
-                                child: Text("pay per session"),
-                                value: "pay per session",
-                              ),
-                              DropdownMenuItem(
-                                child: Text("package"),
-                                value: "package",
-                              ),
-                            ],
-                            onChanged: dropDownPackage),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 8,
-                  ),
-                  Column(
-                    children: [
                       const Text(
                         "Select Coupon type",
                         style: TextStyle(
-                            fontSize: 30, fontWeight: FontWeight.w500),
+                            fontSize: 20, fontWeight: FontWeight.w500),
                       ),
                       Container(
                         width: 280,

@@ -328,7 +328,24 @@ class _BookingDetails1State extends State<BookingDetails1> {
                   ),
                   SizedBox(height: 20),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
+                      ElevatedButton(
+                        child: Text("Previous Page"),
+                        onPressed: () {
+                          setState(() {
+                            if (start >= 1) page--;
+                            if (start > 0 && end > 0) {
+                              start = start - 10;
+                              end = end - 10;
+                            }
+                          });
+                          print("Previous Page");
+                        },
+                      ),
+                      SizedBox(
+                        width: 20,
+                      ),
                       StreamBuilder<QuerySnapshot>(
                           stream: FirebaseFirestore.instance
                               .collection('bookings')
@@ -355,7 +372,7 @@ class _BookingDetails1State extends State<BookingDetails1> {
                                 borderRadius: BorderRadius.circular(3),
                               ),
                               height: 50,
-                              width: double.infinity,
+                              width: 100,
                               child: ListView.builder(
                                   scrollDirection: Axis.horizontal,
                                   itemCount: int.parse(
@@ -367,24 +384,14 @@ class _BookingDetails1State extends State<BookingDetails1> {
                                       (BuildContext context, int index) {
                                     return GestureDetector(
                                         child: Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
                                           children: [
-                                            // ElevatedButton(
-                                            //       child: Text("Previous Page"),
-                                            //       onPressed: () {
-                                            //         setState(() {
-                                            //           if (start >= 1) page--;
-                                            //           if (start > 0 && end > 0) {
-                                            //             start = start - 10;
-                                            //             end = end - 10;
-                                            //           }
-                                            //         });
-                                            //         print("Previous Page");
-                                            //       },
-                                            //     ),
+                                            SizedBox(
+                                              width: 20,
+                                            ),
                                             Container(
-                                              color: index == index2
+                                              color: page == index + 1
                                                   ? Colors.red
                                                   : Colors.teal,
                                               height: 20,
@@ -400,7 +407,7 @@ class _BookingDetails1State extends State<BookingDetails1> {
                                             ),
                                             SizedBox(
                                               width: 20,
-                                            )
+                                            ),
                                           ],
                                         ),
                                         onTap: () {
@@ -411,12 +418,29 @@ class _BookingDetails1State extends State<BookingDetails1> {
                                             index2 = index;
                                             start = ((index + 1) - 1) * 10;
                                             end = (index + 1) * 10;
+                                            page = index + 1;
                                           });
                                           print(index2);
                                         });
                                   }),
                             );
                           }),
+                      SizedBox(
+                        width: 20,
+                      ),
+                      ElevatedButton(
+                        child: Text("Next Page"),
+                        onPressed: () {
+                          setState(() {
+                            if (end <= length) page++;
+                            if (end < length) {
+                              start = start + 10;
+                              end = end + 10;
+                            }
+                          });
+                          print("Next Page");
+                        },
+                      ),
                     ],
                   )
                   // Row(
