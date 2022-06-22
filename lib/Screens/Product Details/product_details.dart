@@ -1286,7 +1286,7 @@ class _ShowAddBoxState extends State<ShowAddBox> {
                 ),
               ),
               const SizedBox(height: 10),
-              Text("Categories",
+              const Text("Categories",
                   style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
               Container(
                 child: StreamBuilder<QuerySnapshot>(
@@ -1493,9 +1493,9 @@ class _loadimageState extends State<loadimage> {
                         height: 200,
                         width: 200,
                       )
-                    : Center(child: CircularProgressIndicator()))
+                    : Center(child: const CircularProgressIndicator()))
             : Container(
-                child: Text(
+                child: const Text(
                 "Please Upload Image",
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                 textAlign: TextAlign.center,
@@ -1733,7 +1733,7 @@ class _ECheckServiceState extends State<ECheckService> {
   bool check = false;
 
   checkBoxWorkout() async {
-    if (widget.serviceArray.contains(widget.id)) {
+    if (widget.serviceArray.contains(widget.type)) {
       setState(() {
         check = true;
       });
@@ -1914,6 +1914,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
   String imagess = '';
   CollectionReference? amenitiesStream;
   CollectionReference? workoutStream;
+  CollectionReference? categoryStream;
   @override
   void initState() {
     super.initState();
@@ -1930,6 +1931,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
     _description.text = widget.description;
     amenitiesStream = FirebaseFirestore.instance.collection("amenities");
     workoutStream = FirebaseFirestore.instance.collection("workouts");
+    categoryStream = FirebaseFirestore.instance.collection('category');
     // _location.text = "${widget.location.latitude}, ${widget.location.latitude}";
     // _latitudeController.text = widget.location.latitude.toString();
     // _longitudeController.text = widget.location.longitude.toString();
@@ -1969,7 +1971,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
               customTextField(hinttext: "Landmark", addcontroller: _landmark),
               customTextField(hinttext: "Pincode", addcontroller: _pincode),
               editim(imagea: imagess.toString(), gymid: _gymiid.text),
-              Text(
+              const Text(
                 "Choose Amenities",
                 style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
               ),
@@ -2004,7 +2006,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
               const SizedBox(
                 height: 20,
               ),
-              Text(
+              const Text(
                 "Choose Workout",
                 style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
               ),
@@ -2040,15 +2042,14 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                     }),
               ),
 
-              Text(
+              const Text(
                 "Choose Categories",
                 style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
               ),
 
               Container(
                 child: StreamBuilder<QuerySnapshot>(
-                    stream: FirebaseFirestore.instance
-                        .collection("category")
+                    stream: categoryStream!
                         .snapshots(),
                     builder: (context, AsyncSnapshot snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
@@ -2078,8 +2079,6 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                       );
                     }),
               ),
-
-// >>>>>>> db16c184745ea062b80bb6d62b73b5f64792dc9e
               // Text(image),
               Padding(
                 padding: const EdgeInsets.all(12.0),
@@ -2103,10 +2102,8 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                         'gym_owner': _gymowner.text,
                         'landmark': _landmark.text,
                         'description': _description.text,
-// <<<<<<< HEAD
                         'display_picture': image2 != null ? image2 : imagess,
-// =======
-// >>>>>>> 21d9c030cebb9d9fd030fc57983203910f0655fa
+
                       };
                       await documentReference.update(data).whenComplete(() {
                         print("Item Updated");
@@ -2272,7 +2269,7 @@ class _datacelldisplayState extends State<datacelldisplay> {
             ? Container(
                 height: 100,
                 width: 200,
-                child: Center(
+                child: const Center(
                   child: CircularProgressIndicator(),
                 ),
               )
@@ -2285,6 +2282,4 @@ class _datacelldisplayState extends State<datacelldisplay> {
     );
   }
 }
-// =======
-// }
-// >>>>>>> 21d9c030cebb9d9fd030fc57983203910f0655fa
+
