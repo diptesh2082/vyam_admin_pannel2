@@ -200,8 +200,7 @@ class _BookingDetailsState extends State<BookingDetails> {
                               'completed',
                               'active',
                               'upcoming',
-                              'cancelled'
-                                  'completed',
+                              'cancelled',
                             ])
                             .orderBy("order_date", descending: true)
                             .orderBy("id", descending: true)
@@ -620,7 +619,7 @@ class _BookingDetailsState extends State<BookingDetails> {
                         "vendor_id": data['vendorId'],
                         "vendor_name": data['gym_details']['name'],
                         'time': DateTime.now()
-                      }).whenComplete(() => Text('COMPLETED BOOKING'));
+                      }).whenComplete(() => const Text('COMPLETED BOOKING'));
                     }),
               ],
             ),

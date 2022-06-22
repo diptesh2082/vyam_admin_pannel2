@@ -279,13 +279,18 @@ class _TrainerPageState extends State<TrainerPage> {
     return DataRow(cells: [
       DataCell(data != null
           ? CircleAvatar(backgroundImage: NetworkImage(imageUrl))
-          : Text("")),
+          : const Text("")),
       // DataCell(data != null ? Text(trainerId) : Text("")),
       DataCell(data != null ? Text(data['name'] ?? "") : Text("")),
       DataCell(data != null ? Text(data['branch'] ?? "") : Text("")),
       DataCell(data != null ? Text(data['place'] ?? "") : Text("")),
       DataCell(data != null ? Text(data['experience'] ?? "") : Text("")),
-      DataCell(data != null ? Text(data['about'] ?? "") : Text("")),
+      DataCell(data != null ? SingleChildScrollView(
+        child: Container(
+          width: 400,
+            height:300,
+            child: Text(data['about'] ?? "")),
+      ) : Text("")),
       DataCell(data != null ? Text(data['clients'] ?? "") : Text("")),
 
       // DataCell(ListView.builder(
@@ -320,7 +325,7 @@ class _TrainerPageState extends State<TrainerPage> {
               ),
             ));
       }),
-      DataCell(Icon(Icons.delete), onTap: () {
+      DataCell(const Icon(Icons.delete), onTap: () {
         // deleteMethod(stream: trainerStream, uniqueDocId: trainerId);
 
         showDialog(
@@ -899,7 +904,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Edit Box")),
+      appBar: AppBar(title: const Text("Edit Box")),
       body: Container(
           padding: EdgeInsets.all(30),
           child: SingleChildScrollView(
@@ -934,8 +939,8 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                         });
                         print(spec);
                       },
-                      child: Text("Add Specialization")),
-                  SizedBox(
+                      child: const Text("Add Specialization")),
+                  const SizedBox(
                     width: 20,
                   ),
                   ElevatedButton(
