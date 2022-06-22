@@ -20,6 +20,9 @@ class bannerNewPage extends StatefulWidget {
   State<bannerNewPage> createState() => _bannerNewPageState();
 }
 
+String namee = "";
+bool ischeckk = false;
+
 class _bannerNewPageState extends State<bannerNewPage> {
   final id = FirebaseFirestore.instance.collection('banner_details').doc().id;
   final TextEditingController _addname = TextEditingController();
@@ -62,6 +65,7 @@ class _bannerNewPageState extends State<bannerNewPage> {
     // TODO: implement initState
     productStream = FirebaseFirestore.instance.collection("product_details");
     setnav = false;
+    ischeckk = false;
     super.initState();
   }
 
@@ -184,6 +188,10 @@ class _bannerNewPageState extends State<bannerNewPage> {
                                             setState(() {
                                               namee = valuee!;
                                               place = doc[index]['branch'];
+                                              ischeckk = true;
+                                              setnav = true;
+                                              navcommand = "/gym_details";
+                                              print(navcommand);
                                             });
                                             print(namee);
                                           });
@@ -211,7 +219,7 @@ class _bannerNewPageState extends State<bannerNewPage> {
                       SizedBox(
                         height: 20,
                       ),
-                      nav(),
+                      nav(checking: ischeckk),
 
                       //CustomTextField(
                       //hinttext: "Image url", addcontroller: _addimage),
@@ -266,7 +274,7 @@ class _bannerNewPageState extends State<bannerNewPage> {
                                       ? true
                                       : false,
                                   'id': id,
-                                  'gym_id': namee != null ? namee : "",
+                                  'gym_id': ischeckk != false ? namee : "",
                                   'navigation': navcommand,
                                   'visible': true
                                 },
@@ -303,16 +311,16 @@ class _bannerNewPageState extends State<bannerNewPage> {
 String navcommand = '';
 
 class nav extends StatefulWidget {
-  const nav({Key? key}) : super(key: key);
-
+  const nav({Key? key, required this.checking}) : super(key: key);
+  final bool checking;
   @override
   State<nav> createState() => _navState();
 }
 
+bool setnav = false;
+
 class _navState extends State<nav> {
   @override
-  bool setnav = false;
-
   Widget build(BuildContext context) {
     return Container(
       child: Row(
@@ -323,28 +331,23 @@ class _navState extends State<nav> {
           ),
           ElevatedButton(
             onPressed: () {
-              if (setnav == false) {
-                setState(() {
-                  setnav = true;
-                  navcommand = "/gym_details";
-                  print("Set NAv Activated");
-                });
-              } else {
-                setState(() {
-                  setnav = false;
-                  navcommand = "";
-                  print("SET NAV DEACTIVATED");
-                });
-              }
-              print("New ${navcommand}");
+              setState(() {
+                // setnav = false;
+                navcommand = "";
+                namee = "";
+                print("SET NAV DEACTIVATED and Nav Command==$navcommand");
+                ischeckk = false;
+              });
+
+              print(navcommand.toString());
             },
             child: Text(
-              setnav ? "Activated" : "Deactivated",
+              ischeckk ? "Activated" : "Deactivated",
               style:
                   TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
             ),
             style: ElevatedButton.styleFrom(
-                primary: setnav ? Colors.green : Colors.red),
+                primary: ischeckk ? Colors.green : Colors.red),
           )
         ],
       ),

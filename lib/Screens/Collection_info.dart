@@ -690,8 +690,9 @@ class _EditBoxState extends State<EditBox> {
                                     .doc("${x}");
                             Map<String, dynamic> data = <String, dynamic>{
                               // 'address':'',
-                              'gender': _gender.text,
-                              'image': image3,
+                              'gender':
+                                  _gender.text != null ? _gender.text : "",
+                              'image': image3 != null ? image3 : "",
                               'name': _name.text,
                               'email': _email.text,
                               'number': '+91${_number.text}',

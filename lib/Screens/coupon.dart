@@ -21,6 +21,9 @@ class Coupon extends StatefulWidget {
   State<Coupon> createState() => _CouponState();
 }
 
+bool showStartDate = false;
+bool showEndDate = false;
+
 class _CouponState extends State<Coupon> {
   final id =
       FirebaseFirestore.instance.collection('coupon').doc().id.toString();
@@ -334,19 +337,19 @@ class _CouponState extends State<Coupon> {
             context,
             MaterialPageRoute(
                 builder: (context) => ProductEditBox(
-                      details: data['detail'],
-                      discount: data['discount'],
-                      title: data['tag'],
-                      code: data['code'],
-                      couponId: data['coupon_id'],
-                      max_dis: data['max_dis'],
-                      price: data['price'],
-                      tag: data['tag'],
-                      minimum_cart_value: data['minimum_cart_value'],
-                      start_date: data['start_date'].toDate(),
-                      end_date: data['end_date'].toDate(),
-                      selectedPackagetype: data['package_type'],
-                    )));
+                    details: data['detail'],
+                    discount: data['discount'],
+                    title: data['tag'],
+                    code: data['code'],
+                    couponId: data['coupon_id'],
+                    max_dis: data['max_dis'],
+                    // price: data['price'],
+                    tag: data['tag'],
+                    minimum_cart_value: data['minimum_cart_value'],
+                    start_date: data['start_date'].toDate(),
+                    end_date: data['end_date'].toDate(),
+                    selectedPackagetype: data['package_type'],
+                    offer_type: data['offer_type'])));
       }),
       DataCell(Icon(Icons.delete), onTap: () {
         // deleteMethod(stream: couponStream, uniqueDocId: couponIdData);
@@ -436,12 +439,13 @@ class ProductEditBox extends StatefulWidget {
     required this.code,
     required this.couponId,
     required this.max_dis,
-    required this.price,
+    // required this.price,
     required this.tag,
     required this.minimum_cart_value,
     required this.end_date,
     required this.start_date,
     required this.selectedPackagetype,
+    required this.offer_type,
   }) : super(key: key);
 
   final String details;
@@ -450,7 +454,8 @@ class ProductEditBox extends StatefulWidget {
   final String code;
   final String couponId;
   final String max_dis;
-  final String price;
+  // final String price;
+  final bool offer_type;
   final String tag;
   final DateTime end_date;
   final DateTime start_date;
@@ -466,7 +471,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
   final TextEditingController _detail = TextEditingController();
   final TextEditingController _discount = TextEditingController();
   final TextEditingController _title = TextEditingController();
-  final TextEditingController _price = TextEditingController();
+  // final TextEditingController _price = TextEditingController();
   final TextEditingController _tag = TextEditingController();
   final TextEditingController _minimum_cart_value = TextEditingController();
 
@@ -495,12 +500,13 @@ class _ProductEditBoxState extends State<ProductEditBox> {
     _discount.text = widget.discount;
     _title.text = widget.title;
     _max_dis.text = widget.max_dis;
-    _price.text = widget.price;
+    // _price.text = widget.price;
     _tag.text = widget.tag;
     _minimum_cart_value.text = widget.minimum_cart_value;
     start_date = widget.start_date;
     end_date = widget.end_date;
     Select_Package_type = widget.selectedPackagetype;
+    coupontype = widget.offer_type;
   }
 
   void dropDownPackage(String? selecetValue) {
@@ -585,7 +591,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                 height: 8,
               ),
 
-              customTextField(hinttext: "price", addcontroller: _price),
+              // customTextField(hinttext: "price", addcontroller: _price),
               const SizedBox(
                 height: 8,
               ),
@@ -611,36 +617,56 @@ class _ProductEditBoxState extends State<ProductEditBox> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SizedBox(
-                    height: 8,
-                  ),
                   Row(
                     children: [
-                      Container(
-                        child: Row(
-                          children: [
-                            ElevatedButton(
-                              child: const Text('Select Start Date '),
-                              onPressed: () async {
-                                start_date = await pickDate(context);
-                              },
+                      Column(
+                        children: [
+                          Container(
+                            child: Row(
+                              children: [
+                                ElevatedButton(
+                                  child: const Text('Select Start Date '),
+                                  onPressed: () async {
+                                    setState(() async {
+                                      showStartDate = true;
+                                      start_date = await pickDate(context);
+                                    });
+                                  },
+                                ),
+                              ],
                             ),
-                            const SizedBox(width: 15),
-                          ],
-                        ),
+                          ),
+                          Text(showStartDate != false
+                              ? DateFormat("MMM ,dd , yyyy")
+                                  .format(start_date)
+                                  .toString()
+                              : ""),
+                        ],
                       ),
-                      Container(
-                        child: Row(
-                          children: [
-                            ElevatedButton(
-                              child: const Text('Select End Date '),
-                              onPressed: () async {
-                                end_date = await pickDate(context);
-                              },
+                      const SizedBox(width: 15),
+                      Column(
+                        children: [
+                          Container(
+                            child: Row(
+                              children: [
+                                ElevatedButton(
+                                  child: const Text('Select End Date '),
+                                  onPressed: () async {
+                                    setState(() async {
+                                      showEndDate = true;
+                                      end_date = await pickDate(context);
+                                    });
+                                  },
+                                ),
+                              ],
                             ),
-                            const SizedBox(width: 15),
-                          ],
-                        ),
+                          ),
+                          Text(showStartDate != false
+                              ? DateFormat("MMM ,dd , yyyy")
+                                  .format(end_date)
+                                  .toString()
+                              : "")
+                        ],
                       ),
                     ],
                   ),
@@ -649,60 +675,12 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                   ),
                   Column(
                     children: [
-// <<<<<<< nihal_new
-//                       InkWell(
-//                         onTap: () {
-//                           print(start_date);
-//                         },
-//                         child: const Text(
-//                           "Select Package type",
-//                           style: TextStyle(
-//                               fontSize: 30, fontWeight: FontWeight.w500),
-// =======
-                      Center(
-                        child: ElevatedButton(
-                          onPressed: () async {
-                            print("/////");
-                            print(start_date);
-                            print(end_date);
-                            DocumentReference documentReference =
-                                FirebaseFirestore.instance
-                                    .collection('coupon')
-                                    .doc(widget.couponId);
-                            Map<String, dynamic> data = <String, dynamic>{
-                              // 'code': _code.text,
-                              // 'detail': _detail.text,
-                              // 'discount': _discount.text,
-                              // // 'title': _title.text,
-                              // 'tag': _title.text,
-                              // 'coupon_id': widget.couponId,
-                              // 'max_dis': _max_dis.text,
-                              'code': _code.text.toUpperCase(),
-                              'detail': _detail.text,
-                              'discount': _discount.text,
-                              "end_date": end_date,
-                              "start_date": start_date,
-                              "max_dis": _max_dis.text,
-                              "minimum_cart_value": _minimum_cart_value.text,
-                              "offer_type": coupontype,
-                              "package_type":
-                                  Select_Package_type!.trim().toLowerCase(),
-                              "price": _price.text,
-                              "tag": _tag.text,
-                              'description': descriptionn,
-                            };
-                            await documentReference
-                                .update(data)
-                                .whenComplete(() => print("Item Updated"))
-                                .catchError((e) => print(e));
-                            Navigator.pop(context);
-                          },
-                          child: const Text('Done'),
-// >>>>>>> Diptesh
-                        ),
+                      const Text(
+                        "Select Coupon type",
+                        style: TextStyle(
+                            fontSize: 30, fontWeight: FontWeight.w500),
                       ),
                       Container(
-                        color: Colors.yellowAccent,
                         width: 280,
                         child: DropdownButton(
                             hint: Text("${Select_Package_type}"),
@@ -718,23 +696,14 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                             ],
                             onChanged: dropDownPackage),
                       ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 8,
-                  ),
-                  Column(
-                    children: [
-                      const Text(
-                        "Select Coupon type",
-                        style: TextStyle(
-                            fontSize: 30, fontWeight: FontWeight.w500),
+                      SizedBox(
+                        height: 20,
                       ),
                       Container(
-                        color: Colors.yellowAccent,
                         width: 280,
                         child: DropdownButton(
-                            hint: Text("${print_type}"),
+                            hint: Text(
+                                coupontype == true ? "Percentage" : "Flat"),
                             items: const [
                               DropdownMenuItem(
                                 child: Text("Percentage"),
@@ -783,7 +752,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                                 "minimum_cart_value": _minimum_cart_value.text,
                                 "offer_type": coupontype,
                                 "package_type": Select_Package_type!.trim(),
-                                "price": _price.text,
+                                // "price": _price.text,
                                 "tag": _tag.text,
                                 'description': descriptionn,
                               };

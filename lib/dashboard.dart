@@ -96,7 +96,7 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
             child: Cardd(
               title: 'Total Bookings',
               collectionId: 'bookings',
-              s: ['active', 'cancelled', 'upcoming', 'completed'],
+              s: ['active', 'upcoming', 'completed', 'cancelled'],
             ),
             onTap: () {
               Navigator.push(context,
@@ -496,6 +496,7 @@ class _showLatestBookingState extends State<showLatestBooking> {
   DataRow _buildListItem(BuildContext context, DocumentSnapshot data) {
     String bookingId = data['booking_id'];
     bool bookingAccepted = data["booking_accepted"];
+    String statement = "";
 
     return DataRow(cells: [
       DataCell(
@@ -561,20 +562,35 @@ class _showLatestBookingState extends State<showLatestBooking> {
                           .collection('bookings')
                           .doc(bookingId)
                           .update({'booking_status': value});
-                      var xps = await FirebaseFirestore.instance
-                          .collection('booking_notifications')
-                          .doc()
-                          .id;
 
+                      if (selectedValue == "upcoming") {
+                        setState(() {
+                          statement = "Upcoming Booking";
+                        });
+                      }
+                      if (selectedValue == "cancelled") {
+                        setState(() {
+                          statement = "Cancelled Booking";
+                        });
+                      }
+                      if (selectedValue == "active") {
+                        setState(() {
+                          statement = "Active Booking";
+                        });
+                      }
+                      if (selectedValue == "completed") {
+                        setState(() {
+                          statement = "Completed Booking";
+                        });
+                      }
                       await FirebaseFirestore.instance
                           .collection("booking_notifications")
-                          .doc(xps)
+                          .doc()
                           .set({
-                        "title": "Booking Details",
+                        "title": statement,
                         "status": selectedValue,
                         "booking_id": data['booking_id'],
                         // "payment_done": false,
-                        "notification_id": xps.toString(),
                         "user_id": data['userId'],
                         "user_name": data["user_name"],
                         "vendor_id": data['vendorId'],
@@ -720,7 +736,7 @@ class Carddb extends StatelessWidget {
     return StreamBuilder(
         stream: FirebaseFirestore.instance
             .collection(collectionId)
-            .where('booking_plan', isEqualTo: "pay per session")
+            .where('booking_plan', isEqualTo: "Pay per Day")
             .snapshots(),
         builder: (context, AsyncSnapshot snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -737,16 +753,12 @@ class Carddb extends StatelessWidget {
               width: 300,
               height: 100,
               decoration: BoxDecoration(
-                color: color != null
-                    ? color
-                    : (count % 2 == 0)
-                        ? Colors.red
-                        : Colors.blue,
+                color: color ?? (count % 2 == 0) ? Colors.red : Colors.blue,
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  CircleAvatar(
+                  const CircleAvatar(
                     backgroundColor: Colors.white,
                     radius: 30,
                     child: Icon(
