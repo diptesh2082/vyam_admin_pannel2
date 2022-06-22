@@ -68,7 +68,7 @@ class _TrainerPageState extends State<TrainerPage> {
     print("Current Document_id -->${widget.tGymId}"); //Printing for information
     return Scaffold(
       appBar: AppBar(
-        title: Text("Trainers"),
+        title: const Text("Trainers"),
       ),
       body: SafeArea(
         child: Container(
@@ -181,6 +181,12 @@ class _TrainerPageState extends State<TrainerPage> {
                               // )),
                               DataColumn(
                                 label: Text(
+                                  'Position',
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
+                              ),
+                              DataColumn(
+                                label: Text(
                                   'Edit',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
@@ -197,12 +203,12 @@ class _TrainerPageState extends State<TrainerPage> {
                     },
                   ),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     ElevatedButton(
-                      child: Text("Previous Page"),
+                      child: const Text("Previous Page"),
                       onPressed: () {
                         setState(() {
                           if (start >= 1) page--;
@@ -216,7 +222,7 @@ class _TrainerPageState extends State<TrainerPage> {
                       },
                     ),
                     Container(
-                      margin: EdgeInsets.symmetric(horizontal: 20),
+                      margin: const EdgeInsets.symmetric(horizontal: 20),
                       child: Text(
                         page.toString(),
                         style: const TextStyle(
@@ -281,17 +287,17 @@ class _TrainerPageState extends State<TrainerPage> {
           ? CircleAvatar(backgroundImage: NetworkImage(imageUrl))
           : const Text("")),
       // DataCell(data != null ? Text(trainerId) : Text("")),
-      DataCell(data != null ? Text(data['name'] ?? "") : Text("")),
-      DataCell(data != null ? Text(data['branch'] ?? "") : Text("")),
-      DataCell(data != null ? Text(data['place'] ?? "") : Text("")),
-      DataCell(data != null ? Text(data['experience'] ?? "") : Text("")),
+      DataCell(data != null ? Text(data['name'] ?? "") : const Text("")),
+      DataCell(data != null ? Text(data['branch'] ?? "") : const Text("")),
+      DataCell(data != null ? Text(data['place'] ?? "") : const Text("")),
+      DataCell(data != null ? Text(data['experience'] ?? "") : const Text("")),
       DataCell(data != null ? SingleChildScrollView(
         child: Container(
           width: 400,
             height:300,
             child: Text(data['about'] ?? "")),
-      ) : Text("")),
-      DataCell(data != null ? Text(data['clients'] ?? "") : Text("")),
+      ) : const Text("")),
+      DataCell(data != null ? Text(data['clients'] ?? "") : const Text("")),
 
       // DataCell(ListView.builder(
       //     itemCount: cert.length,
@@ -308,6 +314,7 @@ class _TrainerPageState extends State<TrainerPage> {
       //         },
       //         icon: Icon(FontAwesome.instagram))
       //     : Text("")),
+      DataCell(data != null ? Text(data['position'] ?? "") : const Text("")),
       DataCell(const Text(""), showEditIcon: true, onTap: () {
         Navigator.push(
             context,
@@ -322,6 +329,7 @@ class _TrainerPageState extends State<TrainerPage> {
                 certification: data['certification'],
                 specialization: data['specialization'],
                 trainerId: data['trainer_id'],
+                position: data['position'],
               ),
             ));
       }),
@@ -534,7 +542,7 @@ class _loadimageState extends State<loadimage> {
               ? Container(
                   height: 100,
                   width: 200,
-                  child: Center(
+                  child: const Center(
                     child: CircularProgressIndicator(),
                   ),
                 )
@@ -547,7 +555,7 @@ class _loadimageState extends State<loadimage> {
                   : Container(
                       height: 100,
                       width: 200,
-                      child: Center(child: Text("Please Upload Image")),
+                      child: const Center(child: Text("Please Upload Image")),
                     ),
         ),
       ],
@@ -603,6 +611,7 @@ class _ShowAddboxState extends State<ShowAddbox> {
   final TextEditingController _addreview = TextEditingController();
   final TextEditingController _addspecialization = TextEditingController();
   final TextEditingController social = TextEditingController();
+  final TextEditingController postion = TextEditingController();
 
   List<String> certification = [];
   List<String> specialization = [];
@@ -622,11 +631,11 @@ class _ShowAddboxState extends State<ShowAddbox> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Add Trainer"),
+        title: const Text("Add Trainer"),
       ),
       body: SingleChildScrollView(
         child: Container(
-          padding: EdgeInsets.all(30),
+          padding: const EdgeInsets.all(30),
           child: Form(
             key: _formKey,
             child: Column(
@@ -639,6 +648,7 @@ class _ShowAddboxState extends State<ShowAddbox> {
                       fontWeight: FontWeight.w600,
                       fontSize: 14),
                 ),
+                customTextField3(hinttext: "position", addcontroller: postion),
                 customTextField3(hinttext: "name", addcontroller: _addname),
                 customTextField3(hinttext: "about", addcontroller: _addabout),
                 customTextField3(
@@ -659,8 +669,8 @@ class _ShowAddboxState extends State<ShowAddbox> {
                         });
                         print(specialization);
                       },
-                      child: Text("Add Specialization")),
-                  SizedBox(
+                      child: const Text("Add Specialization")),
+                  const SizedBox(
                     width: 20,
                   ),
                   ElevatedButton(
@@ -671,7 +681,7 @@ class _ShowAddboxState extends State<ShowAddbox> {
                         });
                         print(specialization);
                       },
-                      child: Text("Remove Specialization")),
+                      child: const Text("Remove Specialization")),
                 ]),
                 Text(
                   "$specialization",
@@ -710,7 +720,7 @@ class _ShowAddboxState extends State<ShowAddbox> {
                         });
                         print(certification);
                       },
-                      child: Text("Remove Certification")),
+                      child: const Text("Remove Certification")),
                 ]),
                 Text(
                   "$certification",
@@ -788,6 +798,7 @@ class _ShowAddboxState extends State<ShowAddbox> {
                             .doc(id)
                             .set(
                           {
+                            'position' : postion,
                             'trainer_id': id,
                             'name': _addname.text,
                             'branch': gymname,
@@ -851,6 +862,7 @@ class ProductEditBox extends StatefulWidget {
     required this.trainerId,
     required this.certification,
     required this.social_link,
+    required this.position,
   }) : super(key: key);
   final String social_link;
   final String name;
@@ -863,6 +875,7 @@ class ProductEditBox extends StatefulWidget {
   final List specialization;
   // final String socialMedia;
   final String trainerId;
+  final String position;
 
   @override
   _ProductEditBoxState createState() => _ProductEditBoxState();
@@ -880,6 +893,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
   final TextEditingController _specialization =
       TextEditingController(); //todo: later
   final TextEditingController _socialMedia = TextEditingController();
+  final TextEditingController _position = TextEditingController();
   List<dynamic> cert = [];
   List<dynamic> spec = [];
   var imgUrl11;
@@ -897,6 +911,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
     // _review.text = widget.review;
     spec = widget.specialization;
     _social.text = widget.social_link;
+    _position.text = widget.position;
 
     // _socialMedia.text = widget.socialMedia;
   }
@@ -906,7 +921,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
     return Scaffold(
       appBar: AppBar(title: const Text("Edit Box")),
       body: Container(
-          padding: EdgeInsets.all(30),
+          padding: const EdgeInsets.all(30),
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -919,6 +934,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                       fontSize: 14),
                 ),
                 // customTextField(hinttext: "Image", addcontroller: _images),
+                customTextField(hinttext: "Position", addcontroller: _position),
                 customTextField(hinttext: "Name", addcontroller: _name),
                 customTextField(hinttext: "About", addcontroller: _about),
                 // CustomTextField(hinttext: "Certifications", addcontroller: _certifications),
@@ -955,7 +971,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                 ]),
                 Text(
                   "$spec",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                 ),
                 const SizedBox(
                   height: 40,
@@ -990,7 +1006,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                 ]),
                 Text(
                   "$cert",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                 ),
                 // Row(
                 //   children: [
@@ -1070,7 +1086,8 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                           'certification': cert,
                           'specialization': spec,
                           'insta_id': _social.text,
-                          'image': image2
+                          'image': image2,
+                          'position':_position.text,
                         };
                         await documentReference
                             .update(data)
@@ -1137,7 +1154,7 @@ class _editimState extends State<editim> {
           ),
           isloading
               ? Container(
-                  height: 200, width: 200, child: CircularProgressIndicator())
+                  height: 200, width: 200, child: const CircularProgressIndicator())
               : image2 != null
                   ? Image(
                       image: NetworkImage(image2.toString()),
