@@ -26,6 +26,7 @@ class BannerPage extends StatefulWidget {
 
 var image;
 var imgUrl1;
+bool ischeckk = false;
 
 class _BannerPageState extends State<BannerPage> {
   final id = FirebaseFirestore.instance.collection('banner_details').doc().id;
@@ -450,6 +451,8 @@ class CustomTextField extends StatelessWidget {
   }
 }
 
+bool setnav = false;
+
 class navedit extends StatefulWidget {
   const navedit({Key? key, required this.navtext}) : super(key: key);
   final String navtext;
@@ -460,7 +463,6 @@ class navedit extends StatefulWidget {
 String navcommandedit = '';
 
 class _naveditState extends State<navedit> {
-  bool setnav = false;
   var rs;
   @override
   void initState() {
@@ -680,6 +682,7 @@ class _EditBoxState extends State<EditBox> {
                                   onChanged: (String? valuee) {
                                     setState(() {
                                       namee = valuee!;
+                                      ischeckk = true;
                                     });
                                     print(namee);
                                   });

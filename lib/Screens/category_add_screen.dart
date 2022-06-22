@@ -92,6 +92,13 @@ class _categoryAddScreenState extends State<categoryAddScreen> {
                         stream: categoryStream!.snapshots(),
                         builder: (context, AsyncSnapshot snapshot) {
                           var doc = snapshot.data.docs;
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const CircularProgressIndicator();
+                          }
+                          if (snapshot.data == null) {
+                            return Container();
+                          }
                           return ListView.builder(
                               scrollDirection: Axis.horizontal,
                               itemCount: snapshot.data.docs.length,
@@ -205,7 +212,12 @@ class _loadimageState extends State<loadimage> {
                   : Container(
                       height: 100,
                       width: 200,
-                      child: Text("Please Upload Image"),
+                      child: Text(
+                        "Please Upload Image",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 24),
+                      ),
                     ),
         ),
       ],

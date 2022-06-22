@@ -17,6 +17,9 @@ class perday extends StatefulWidget {
   State<perday> createState() => _perdayState();
 }
 
+bool showEndDate = false;
+bool showStartDate = false;
+
 class _perdayState extends State<perday> {
   CollectionReference bookingStream =
       FirebaseFirestore.instance.collection('bookings');
@@ -63,96 +66,83 @@ class _perdayState extends State<perday> {
 // <<<<<<< HEAD
 // =======
                   ),
+                  SizedBox(
+                    height: 30,
+                  ),
                   Column(
                     children: [
-                      Padding(
-                          padding: const EdgeInsets.only(left: 900),
-                          child: ElevatedButton.icon(
-                              onPressed: () async {
-                                setState(() async {
-                                  startDate = await pickDate(context);
-                                });
+                      Row(
+                        children: [
+                          Column(
+                            children: [
+                              ElevatedButton.icon(
+                                  onPressed: () async {
+                                    setState(() async {
+                                      showStartDate = true;
+                                      startDate = await pickDate(context);
+                                    });
 
-                                print(startDate.toString());
-                              },
-                              icon: const Icon(Icons.date_range),
-                              label: const Text('Start Date'))),
-                      Padding(
-                          padding: const EdgeInsets.only(left: 900),
-                          child: ElevatedButton.icon(
-                              onPressed: () async {
-                                setState(() async {
-                                  endDate = await pickDate(context);
-                                });
+                                    print(startDate.toString());
+                                  },
+                                  icon: const Icon(Icons.date_range),
+                                  label: const Text('Start Date')),
+                              showStartDate != false
+                                  ? Text(
+                                      DateFormat("MMM, dd, yyyy")
+                                          .format(startDate),
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.bold))
+                                  : const SizedBox(),
+                            ],
+                          ),
+                          const SizedBox(
+                            width: 20,
+                          ),
+                          Column(
+                            children: [
+                              ElevatedButton.icon(
+                                  onPressed: () async {
+                                    setState(() async {
+                                      showEndDate = true;
+                                      endDate = await pickDate(context);
+                                    });
 
-                                print(endDate.toString());
-                              },
-                              icon: const Icon(Icons.date_range),
-                              label: const Text('End Date'))),
+                                    print(endDate.toString());
+                                  },
+                                  icon: const Icon(Icons.date_range),
+                                  label: const Text('End Date')),
+                              showEndDate != false
+                                  ? Text(
+                                      DateFormat("MMM ,dd , yyyy")
+                                          .format(endDate),
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    )
+                                  : const SizedBox(),
+                            ],
+                          ),
+                          const SizedBox(
+                            width: 20,
+                          ),
+                          ElevatedButton.icon(
+                            onPressed: () async {
+                              setState(() {
+                                startDate = DateTime(DateTime.now().year - 5);
+                                endDate = DateTime(DateTime.now().year + 5);
+                                showEndDate = false;
+                                showStartDate = false;
+                                searchVendorId = "";
+                                print(startDate);
+                                print(endDate);
+                              });
+                            },
+                            icon: const Icon(Icons.clear),
+                            label: const Text('Clear'),
+                          ),
+                        ],
+                      ),
                     ],
-
-// >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
-// =======
-                    // child: Container(
-                    //   padding: const EdgeInsets.symmetric(horizontal: 5),
-                    //   decoration: BoxDecoration(
-                    //       color: Colors.grey.shade100,
-                    //       borderRadius: BorderRadius.circular(20.0)),
-                    //   child: SingleChildScrollView(
-                    //     child: Column(
-                    //       crossAxisAlignment: CrossAxisAlignment.start,
-                    //       children: [
-                    //         Padding(
-                    //           padding: const EdgeInsets.only(top: 8.0, left: 8.0),
-                    //           child: ElevatedButton(
-                    //               style: ElevatedButton.styleFrom(
-                    //                 textStyle: const TextStyle(fontSize: 15),
-                    //               ),
-                    //               onPressed: () {
-                    //                 Get.to(const addbookings()); //showAddbox,
-                    //               },
-                    //               child: const Text('Add Booking')),
-                    //           // <<<<<<< HEAD
-                    //           // =======
-                    //         ),
-                    //         Column(
-                    //           children: [
-                    //             Padding(
-                    //                 padding: const EdgeInsets.only(left: 900),
-                    //                 child: ElevatedButton.icon(
-                    //                     onPressed: () async {
-                    //                       setState(() async {
-                    //                         startDate = await pickDate(context);
-                    //                       });
-                    //
-                    //                       print(startDate.toString());
-                    //                     },
-                    //                     icon: const Icon(Icons.date_range),
-                    //                     label: const Text('Start Date'))),
-                    //             Padding(
-                    //                 padding: const EdgeInsets.only(left: 900),
-                    //                 child: ElevatedButton.icon(
-                    //                     onPressed: () async {
-                    //                       setState(() async {
-                    //                         endDate = await pickDate(context);
-                    //                       });
-                    //
-                    //                       print(endDate.toString());
-                    //                     },
-                    //                     icon: const Icon(Icons.date_range),
-                    //                     label: const Text('End Date'))),
-                    //           ],
-
-                    // >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
                   ),
-//                 Container(
-//                   width: 500,
-//                   height: 51,
-//                   decoration: BoxDecoration(
-//                     borderRadius: BorderRadius.circular(14),
-//                     color: Colors.white12,
-// // >>>>>>> ae7259e7ba6e19ed4976a35667cb3a762fe66e2c
-//                   ),
                   Container(
                     width: 500,
                     height: 51,
@@ -203,10 +193,10 @@ class _perdayState extends State<perday> {
                     child: StreamBuilder<QuerySnapshot>(
                       stream: FirebaseFirestore.instance
                           .collection('bookings')
-                          .where('booking_plan',
-                              whereIn: ['pay per session', 'PAY PER SESSION'])
-                          .orderBy("order_date", descending: true)
-                          .snapshots(),
+                          .where('booking_plan', whereIn: [
+                        'pay per session',
+                        'PAY PER SESSION'
+                      ]).snapshots(),
                       builder: (context, AsyncSnapshot snapshot) {
                         if (snapshot.connectionState ==
                             ConnectionState.waiting) {

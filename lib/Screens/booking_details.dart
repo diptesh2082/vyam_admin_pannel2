@@ -404,43 +404,220 @@ class _BookingDetailsState extends State<BookingDetails> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        ElevatedButton(
-                          child: const Text("Previous Page"),
-                          onPressed: () {
-                            setState(() {
-                              if (start >= 1) page--;
-                              if (start > 0 && end > 0) {
-                                start = start - 10;
-                                end = end - 10;
-                              }
-                            });
-                            print("Previous Page");
-                          },
-                        ),
-                        const SizedBox(width: 20),
-                        Container(
-                          margin: const EdgeInsets.symmetric(horizontal: 20),
-                          child: Text(
-                            page.toString(),
-                            style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 15,
-                                color: Colors.teal),
-                          ),
-                        ),
-                        ElevatedButton(
-                          child: const Text("Next Page"),
-                          onPressed: () {
-                            setState(() {
-                              if (end <= length) page++;
-                              if (end < length) {
-                                start = start + 10;
-                                end = end + 10;
-                              }
-                            });
-                            print("Next Page");
-                          },
-                        ),
+                        // ElevatedButton(
+                        //   child: const Text("Previous Page"),
+                        //   onPressed: () {
+                        //     setState(() {
+                        //       if (start > 0 && end > 0) {
+                        //         start = start - 10;
+                        //         end = end - 10;
+                        //       }
+                        //     });
+                        //     print("Previous Page");
+                        //   },
+                        // ),
+                        // const SizedBox(width: 20),
+                        // ElevatedButton(
+                        //   child: const Text("Next Page"),
+                        //   onPressed: () {
+                        //     setState(() {
+                        //       if (end < length) {
+                        //         start = start + 10;
+                        //         end = end + 10;
+                        //       }
+                        //     });
+                        //     print("Next Page");
+                        //   },
+                        // ),
+
+                        SizedBox(height: 20),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            ElevatedButton(
+                              child: Text("Previous Page"),
+                              onPressed: () {
+                                setState(() {
+                                  if (start >= 1) page--;
+                                  if (start > 0 && end > 0) {
+                                    start = start - 10;
+                                    end = end - 10;
+                                  }
+                                });
+                                print("Previous Page");
+                              },
+                            ),
+                            SizedBox(
+                              width: 20,
+                            ),
+                            StreamBuilder<QuerySnapshot>(
+                                stream: FirebaseFirestore.instance
+                                    .collection('bookings')
+                                    .where('booking_status', whereIn: [
+                                  'completed',
+                                  'active',
+                                  'upcoming',
+                                  'cancelled'
+                                      'completed',
+                                ]).snapshots(),
+                                builder: (context, AsyncSnapshot snapshot) {
+                                  fd = int.parse(
+                                      ((snapshot.data.docs.length / 10).floor())
+                                          .toString());
+                                  int index2 = 0;
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return const CircularProgressIndicator();
+                                  }
+                                  if (snapshot.data == null) {
+                                    print(snapshot.error);
+                                    return Container();
+                                  }
+                                  if (snapshot.hasError) {
+                                    print(snapshot.error);
+                                    return Container();
+                                  }
+                                  return Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(3),
+                                    ),
+                                    height: 50,
+                                    width: 100,
+                                    child: ListView.builder(
+                                        scrollDirection: Axis.horizontal,
+                                        itemCount: int.parse(
+                                                ((snapshot.data.docs.length /
+                                                            10)
+                                                        .floor())
+                                                    .toString()) +
+                                            1,
+                                        itemBuilder:
+                                            (BuildContext context, int index) {
+                                          return GestureDetector(
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                children: [
+                                                  SizedBox(
+                                                    width: 20,
+                                                  ),
+                                                  Container(
+                                                    color: page == index + 1
+                                                        ? Colors.red
+                                                        : Colors.teal,
+                                                    height: 20,
+                                                    width: 20,
+                                                    child: Text(
+                                                      "${index + 1}",
+                                                      style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontWeight:
+                                                              FontWeight.bold),
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                    ),
+                                                  ),
+                                                  SizedBox(width: 20),
+                                                ],
+                                              ),
+                                              onTap: () {
+                                                // print(
+                                                //     "start=${((index + 1) - 1) * 10} end= ${(index + 1) * 10}");
+                                                print(index2);
+                                                setState(() {
+                                                  index2 = index;
+                                                  start =
+                                                      ((index + 1) - 1) * 10;
+                                                  end = (index + 1) * 10;
+                                                  page = index + 1;
+                                                });
+                                                print(index2);
+                                              });
+                                        }),
+                                  );
+                                }),
+                            SizedBox(
+                              width: 20,
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  start = ((fd + 1) - 1) * 10;
+                                  end = (fd + 1) * 10;
+                                  page = fd + 1;
+                                });
+                              },
+                              child: Container(
+                                height: 20,
+                                width: 80,
+                                color: Colors.teal,
+                                child: Text(
+                                  "Last Page",
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
+                            SizedBox(width: 20),
+                            ElevatedButton(
+                              child: Text("Next Page"),
+                              onPressed: () {
+                                setState(() {
+                                  if (end <= length) page++;
+                                  if (end < length) {
+                                    start = start + 10;
+                                    end = end + 10;
+                                  }
+                                });
+                                print("Next Page");
+                              },
+                            ),
+                          ],
+                        )
+                        // Row(
+                        //   mainAxisAlignment: MainAxisAlignment.center,
+                        //   children: [
+                        //     ElevatedButton(
+                        //       child: Text("Previous Page"),
+                        //       onPressed: () {
+                        //         setState(() {
+                        //           if (start >= 1) page--;
+                        //
+                        //           if (start > 0 && end > 0) {
+                        //             start = start - 10;
+                        //             end = end - 10;
+                        //           }
+                        //         });
+                        //         print("Previous Page");
+                        //       },
+                        //     ),
+                        //     Container(
+                        //       margin: EdgeInsets.symmetric(horizontal: 20),
+                        //       child: Text(
+                        //         page.toString(),
+                        //         style: const TextStyle(
+                        //             fontWeight: FontWeight.bold,
+                        //             fontSize: 15,
+                        //             color: Colors.teal),
+                        //       ),
+                        //     ),
+                        //     ElevatedButton(
+                        //       child: const Text("Next Page"),
+                        //       onPressed: () {
+                        //         setState(() {
+                        //           if (end <= length) page++;
+                        //           if (end < length) {
+                        //             start = start + 10;
+                        //             end = end + 10;
+                        //           }
+                        //         });
+                        //         print("Next Page");
+                        //       },
+                        //     ),
+                        //   ],
+                        // ),
                       ],
                     ),
                   ]),
@@ -495,6 +672,7 @@ class _BookingDetailsState extends State<BookingDetails> {
         DateFormat("MMM, dd, yyyy").format(data["booking_date"].toDate());
     // "${data['booking_date'].toDate().year}/${data['booking_date'].toDate().month}/${data['booking_date'].toDate().day}";
     String x;
+    String statement = "";
     return DataRow(cells: [
       DataCell(
           data["id"] != null ? Text(data['id'].toString()) : const Text("")),
@@ -594,32 +772,52 @@ class _BookingDetailsState extends State<BookingDetails> {
                           .collection('bookings')
                           .doc(bookingId)
                           .update({'booking_status': value});
-
+                      if (value == "upcoming") {
+                        setState(() {
+                          statement = "Upcoming Booking";
+                        });
+                      }
+                      if (value == "cancelled") {
+                        setState(() {
+                          statement = "Cancelled Booking";
+                        });
+                      }
+                      if (value == "active") {
+                        setState(() {
+                          statement = "Active Booking";
+                        });
+                      }
+                      if (value == "completed") {
+                        setState(() {
+                          statement = "Completed Booking";
+                        });
+                      }
                       if (value == "active") {
                         await FirebaseFirestore.instance
                             .collection('bookings')
                             .doc(bookingId)
                             .update({'payment_done': true});
                       }
-                      var xps = await FirebaseFirestore.instance
-                          .collection('booking_notifications')
-                          .doc()
-                          .id;
+                      // var xps = await FirebaseFirestore.instance
+                      //     .collection('booking_notifications')
+                      //     .doc()
+                      //     .id;
 
                       await FirebaseFirestore.instance
                           .collection("booking_notifications")
-                          .doc(xps)
+                          .doc()
                           .set({
-                        "title": "Booking Details",
+                        "title": statement,
                         "status": selectedValue,
                         "booking_id": data['booking_id'],
                         // "payment_done": false,
-                        "notification_id": xps.toString(),
+                        // "notification_id": xps.toString(),
                         "user_id": data['userId'],
                         "user_name": data["user_name"],
                         "vendor_id": data['vendorId'],
                         "vendor_name": data['gym_details']['name'],
-                        'time': DateTime.now()
+                        'time_stamp': DateTime.now(),
+                        'seen': false
                       }).whenComplete(() => Text('COMPLETED BOOKING'));
                     }),
               ],
@@ -989,6 +1187,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
   DateTime? d1;
   DateTime? d2;
   DateTime? d3;
+  String statement = "";
   @override
   void initState() {
     super.initState();
@@ -1503,6 +1702,26 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                                 _addbookingstatus.text = dropdownstatusvalue;
                                 check = true;
                               });
+                              if (_addbookingstatus.text == "upcoming") {
+                                setState(() {
+                                  statement = "Upcoming Booking";
+                                });
+                              }
+                              if (_addbookingstatus.text == "cancelled") {
+                                setState(() {
+                                  statement = "Cancelled Booking";
+                                });
+                              }
+                              if (_addbookingstatus.text == "active") {
+                                setState(() {
+                                  statement = "Active Booking";
+                                });
+                              }
+                              if (_addbookingstatus.text == "completed") {
+                                setState(() {
+                                  statement = "Completed Booking";
+                                });
+                              }
                             },
                           ),
                         ],
@@ -1517,33 +1736,6 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                   const SizedBox(
                     height: 20,
                   ),
-                  // CustomTextField(
-                  //     hinttext: "booking ID", addcontroller: _addbookingid),
-
-                  // Container(
-                  //   child: Padding(
-                  //     padding: EdgeInsets.all(8.0),
-                  //     child: Row(
-                  //       children: [
-                  //         Text('Booking Accepted By GYM Owner:',
-                  //             style: TextStyle(
-                  //               fontSize: 20,
-                  //               fontFamily: 'poppins',
-                  //               fontWeight: FontWeight.w400,
-                  //             )),
-                  //         SizedBox(width: 20),
-                  //         Text(_addbookingaccepted.text.toUpperCase(),
-                  //             style: TextStyle(
-                  //                 fontWeight: FontWeight.bold, fontSize: 15)),
-                  //       ],
-                  //     ),
-                  //   ),
-                  //   decoration: BoxDecoration(
-                  //     border: Border.all(width: 0.5, color: Colors.grey),
-                  //     borderRadius: BorderRadius.circular(10),
-                  //   ),
-                  // ),
-
                   Container(
                     child: Row(
                       children: [
@@ -1673,26 +1865,24 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                                   .whenComplete(() => print("Item Updated"))
                                   .catchError((e) => print(e));
                               if (check = true) {
-                                var xps = await FirebaseFirestore.instance
-                                    .collection('booking_notifications')
-                                    .doc()
-                                    .id;
-
                                 await FirebaseFirestore.instance
                                     .collection("booking_notifications")
-                                    .doc(xps)
+                                    .doc()
                                     .set({
-                                  "title": "Booking Details",
+                                  "title": statement,
                                   "status": _addbookingstatus.text,
                                   "booking_id": widget.bookingid,
                                   // "payment_done": false,
-                                  "notification_id": xps.toString(),
+                                  // "notification_id": xps.toString(),
                                   "user_id": _adduserid.text,
                                   "user_name": _addusername.text,
                                   "vendor_id": _addvendorid.text,
                                   "vendor_name": _addvendorname.text,
-                                  'time': DateTime.now()
-                                });
+                                  'time_stamp': DateTime.now(),
+                                  'seen': false
+                                }).whenComplete(
+                                        () => Text('COMPLETED BOOKING'));
+
                                 // var x = await FirebaseFirestore.instance
                                 //     .collection("booking_notifications")
                                 //     .doc()

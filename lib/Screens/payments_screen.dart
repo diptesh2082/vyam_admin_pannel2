@@ -39,6 +39,9 @@ class _PaymentsPageState extends State<PaymentsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text("Payments"),
+      ),
       body: SafeArea(
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 5),
@@ -278,6 +281,18 @@ class _PaymentsPageState extends State<PaymentsPage> {
                   .doc(data['name'])
                   .snapshots(),
               builder: (context, AsyncSnapshot snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const CircularProgressIndicator();
+                }
+                if (snapshot.data == null) {
+                  print(snapshot.error);
+                  return Container();
+                }
+                if (snapshot.hasError) {
+                  print(snapshot.error);
+                  return Container();
+                }
+
                 return Text(
                     "${snapshot.data.get('name')} | ${snapshot.data.get('branch').toString().toUpperCase()}");
               })
@@ -406,6 +421,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
   TimeOfDay? time;
   DateTime? dateTime;
   String searchGymName = '';
+  bool showDate = false;
+  DateTime? sdate = DateTime.now();
 
   final TextEditingController _addAmount = TextEditingController();
   // final TextEditingController _addPlace = TextEditingController();
@@ -545,10 +562,21 @@ class _PaymentScreenState extends State<PaymentScreen> {
                     child: Row(
                       children: [
                         ElevatedButton(
-                          child: const Text('Select Date & Time '),
-                          onPressed: () => pickDateTime(context),
-                        ),
+                            child: const Text('Select Date & Time '),
+                            onPressed: () async {
+                              setState(() async {
+                                showDate = true;
+                                sdate = await pickDateTime(context);
+                              });
+                            }),
                         const SizedBox(width: 15),
+                        showDate != false
+                            ? Text(
+                                DateFormat('dd/MMM/yyyy, hh:mm a')
+                                    .format(sdate!),
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold))
+                            : const SizedBox(),
                       ],
                     ),
                   ),
@@ -658,6 +686,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
         time.minute,
       );
     });
+    return dateTime;
   }
 
   Future pickDate(BuildContext context) async {
@@ -858,13 +887,13 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                             return RadioListTile<String>(
                                 value: doc[index]['gym_id'],
                                 title: Text(doc[index]['name'].toString()),
-                                groupValue: namee,
+                                groupValue: gym_id,
                                 onChanged: (String? valuee) {
                                   setState(() {
-                                    namee = valuee!;
+                                    gym_id = valuee!;
                                     _place.text = doc[index]['branch'];
                                   });
-                                  print(namee);
+                                  print(gym_id.toString());
                                 });
                           },
                         );
@@ -911,8 +940,8 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                               .doc(userid)
                               .update({
                             'amount': _amount.text,
-                            'gym_id': namee,
-                            'name': namee,
+                            'gym_id': gym_id,
+                            'name': gym_id,
                             // 'payment_id': _paymentid,
                             'place': _place.text,
                             'timestamp': r,

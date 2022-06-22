@@ -168,6 +168,11 @@ class _TrainerPageState extends State<TrainerPage> {
                                 'Clients',
                                 style: TextStyle(fontWeight: FontWeight.w600),
                               )),
+                              DataColumn(
+                                  label: Text(
+                                'Enable/Disable',
+                                style: TextStyle(fontWeight: FontWeight.w600),
+                              )),
                               // DataColumn(
                               //   label: Text(
                               //     'Certification',
@@ -272,6 +277,7 @@ class _TrainerPageState extends State<TrainerPage> {
   DataRow _buildListItem(BuildContext context, DocumentSnapshot data, int index,
       int start, int end) {
     String imageUrl = data['image'];
+    bool tvalid = data['eligible'];
 
     String trainerId = data['trainer_id'];
     // var cert = data['certification'];
@@ -303,6 +309,32 @@ class _TrainerPageState extends State<TrainerPage> {
       //         },
       //         icon: Icon(FontAwesome.instagram))
       //     : Text("")),
+      DataCell(
+        Center(
+          child: ElevatedButton(
+            onPressed: () async {
+              bool temp = tvalid;
+              temp = !temp;
+              DocumentReference documentReference = FirebaseFirestore.instance
+                  .collection('product_details')
+                  .doc(globalGymId)
+                  .collection('trainer')
+                  .doc(trainerId);
+              await documentReference
+                  .update({'eligible': temp})
+                  .whenComplete(() => print("Legitimate toggled"))
+                  .catchError((e) => print(e));
+            },
+// <<<<<<< HEAD
+//             child: Text(y = legit ? 'YES' : 'NO'),
+// =======
+            child: Text(tvalid ? 'Enable' : 'Disable'),
+// >>>>>>> cf1997613ff877c63a56c61e3009bdfe3639ccfa
+            style: ElevatedButton.styleFrom(
+                primary: tvalid ? Colors.green : Colors.red),
+          ),
+        ),
+      ),
       DataCell(const Text(""), showEditIcon: true, onTap: () {
         Navigator.push(
             context,
@@ -320,6 +352,7 @@ class _TrainerPageState extends State<TrainerPage> {
               ),
             ));
       }),
+
       DataCell(Icon(Icons.delete), onTap: () {
         // deleteMethod(stream: trainerStream, uniqueDocId: trainerId);
 
@@ -793,7 +826,8 @@ class _ShowAddboxState extends State<ShowAddbox> {
                             'certification': certification,
                             'specialization': specialization,
                             'clients': _addclients.text,
-                            'insta_id': social.text
+                            'insta_id': social.text,
+                            'eligible': true,
                           },
                         );
                         Navigator.pop(context);
@@ -1065,7 +1099,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                           'certification': cert,
                           'specialization': spec,
                           'insta_id': _social.text,
-                          'image': image2
+                          'image': image2 != null ? image2 : imgUrl11,
                         };
                         await documentReference
                             .update(data)

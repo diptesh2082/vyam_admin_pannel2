@@ -17,120 +17,126 @@ class _bookingNotificationState extends State<bookingNotification> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        appBar: AppBar(
+          title: Text("Booking Notifications"),
+        ),
         backgroundColor: Colors.white10,
-        body: Column(
-          children: [
-            StreamBuilder<QuerySnapshot>(
-              stream: FirebaseFirestore.instance
-                  .collection('booking_notifications')!
-                  .snapshots(),
-              builder: (context, AsyncSnapshot snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const CircularProgressIndicator();
-                }
-                if (snapshot.data == null) {
-                  return Container();
-                }
-                return SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: DataTable(
-                    dataRowHeight: 65,
-                    columns: const [
-                      DataColumn(
-                        label: Text(
-                          'Index',
-                          style: TextStyle(fontWeight: FontWeight.w600),
+        body: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: Column(
+            children: [
+              StreamBuilder<QuerySnapshot>(
+                stream: FirebaseFirestore.instance
+                    .collection('booking_notifications')
+                    .snapshots(),
+                builder: (context, AsyncSnapshot snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const CircularProgressIndicator();
+                  }
+                  if (snapshot.data == null) {
+                    return Container();
+                  }
+                  return SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: DataTable(
+                      dataRowHeight: 65,
+                      columns: const [
+                        DataColumn(
+                          label: Text(
+                            'Index',
+                            style: TextStyle(fontWeight: FontWeight.w600),
+                          ),
                         ),
-                      ),
-                      DataColumn(
-                        label: Text(
-                          'Name',
-                          style: TextStyle(fontWeight: FontWeight.w600),
+                        DataColumn(
+                          label: Text(
+                            'Name',
+                            style: TextStyle(fontWeight: FontWeight.w600),
+                          ),
                         ),
-                      ),
-                      DataColumn(
-                        label: Text(
-                          'Number',
-                          style: TextStyle(fontWeight: FontWeight.w600),
+                        DataColumn(
+                          label: Text(
+                            'Number',
+                            style: TextStyle(fontWeight: FontWeight.w600),
+                          ),
                         ),
-                      ),
-                      DataColumn(
-                        label: Text(
-                          'Vendor Name',
-                          style: TextStyle(fontWeight: FontWeight.w600),
+                        DataColumn(
+                          label: Text(
+                            'Vendor Name',
+                            style: TextStyle(fontWeight: FontWeight.w600),
+                          ),
                         ),
-                      ),
-                      DataColumn(
-                        label: Text(
-                          'Title',
-                          style: TextStyle(fontWeight: FontWeight.w600),
+                        DataColumn(
+                          label: Text(
+                            'Title',
+                            style: TextStyle(fontWeight: FontWeight.w600),
+                          ),
                         ),
-                      ),
-                      DataColumn(
-                        label: Text(
-                          'Status',
-                          style: TextStyle(fontWeight: FontWeight.w600),
+                        DataColumn(
+                          label: Text(
+                            'Status',
+                            style: TextStyle(fontWeight: FontWeight.w600),
+                          ),
                         ),
-                      ),
-                      DataColumn(
-                        label: Text(
-                          'Date and Time',
-                          style: TextStyle(fontWeight: FontWeight.w600),
+                        DataColumn(
+                          label: Text(
+                            'Date and Time',
+                            style: TextStyle(fontWeight: FontWeight.w600),
+                          ),
                         ),
-                      ),
-                      DataColumn(
-                        label: Text(
-                          'Delete',
-                          style: TextStyle(fontWeight: FontWeight.w600),
+                        DataColumn(
+                          label: Text(
+                            'Delete',
+                            style: TextStyle(fontWeight: FontWeight.w600),
+                          ),
                         ),
-                      ),
-                    ],
-                    rows: _buildlist(context, snapshot.data!.docs),
+                      ],
+                      rows: _buildlist(context, snapshot.data!.docs),
+                    ),
+                  );
+                },
+              ),
+              SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    child: Text("Previous Page"),
+                    onPressed: () {
+                      setState(() {
+                        if (start > 0 && end > 0) {
+                          start = start - 10;
+                          end = end - 10;
+                        }
+                      });
+                      print("Previous Page");
+                    },
                   ),
-                );
-              },
-            ),
-            SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ElevatedButton(
-                  child: Text("Previous Page"),
-                  onPressed: () {
-                    setState(() {
-                      if (start > 0 && end > 0) {
-                        start = start - 10;
-                        end = end - 10;
-                      }
-                    });
-                    print("Previous Page");
-                  },
-                ),
-                Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Text(
-                    page.toString(),
-                    style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 15,
-                        color: Colors.teal),
+                  Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Text(
+                      page.toString(),
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15,
+                          color: Colors.teal),
+                    ),
                   ),
-                ),
-                ElevatedButton(
-                  child: const Text("Next Page"),
-                  onPressed: () {
-                    setState(() {
-                      if (end < length) {
-                        start = start + 10;
-                        end = end + 10;
-                      }
-                    });
-                    print("Next Page");
-                  },
-                ),
-              ],
-            ),
-          ],
+                  ElevatedButton(
+                    child: const Text("Next Page"),
+                    onPressed: () {
+                      setState(() {
+                        if (end < length) {
+                          start = start + 10;
+                          end = end + 10;
+                        }
+                      });
+                      print("Next Page");
+                    },
+                  ),
+                ],
+              ),
+            ],
+          ),
         ));
   }
 
@@ -157,10 +163,10 @@ class _bookingNotificationState extends State<bookingNotification> {
 
   DataRow _buildListItem(BuildContext context, DocumentSnapshot data, int index,
       int start, int end) {
-    String bookingId = data['notification_id'];
+    // String bookingId = data['notification_id'];
 
     String time =
-    DateFormat("MMM, dd, yyyy").format(data["time"].toDate());
+        DateFormat("dd/MMM/yyyy, hh:mm a").format(data["time_stamp"].toDate());
 
     return DataRow(cells: [
       DataCell(
@@ -192,9 +198,7 @@ class _bookingNotificationState extends State<bookingNotification> {
             : const Text(""),
       ),
       DataCell(
-        data['time'] != null
-            ? Text(time)
-            : const Text(""),
+        data['time_stamp'] != null ? Text(time) : const Text(""),
       ),
       DataCell(const Icon(Icons.delete), onTap: () {
         showDialog(
@@ -226,7 +230,7 @@ class _bookingNotificationState extends State<bookingNotification> {
                               deleteMethod(
                                   stream: FirebaseFirestore.instance
                                       .collection('booking_notifications'),
-                                  uniqueDocId: bookingId);
+                                  uniqueDocId: data.id);
                               Navigator.pop(context);
                             },
                             icon: const Icon(Icons.check),

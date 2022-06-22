@@ -22,6 +22,10 @@ class UserInformation extends StatefulWidget {
   State<UserInformation> createState() => _UserInformationState();
 }
 
+var docs;
+int fd = 0;
+int index = 0;
+
 class _UserInformationState extends State<UserInformation> {
   CollectionReference? userDetailStream;
   String searchUser = '';
@@ -124,6 +128,7 @@ class _UserInformationState extends State<UserInformation> {
                       print("-----------------------------------");
 
                       var doc = snapshot.data.docs;
+                      docs = snapshot.data.docs;
 
                       if (searchUser.isNotEmpty) {
                         doc = doc.where((element) {
@@ -262,42 +267,211 @@ class _UserInformationState extends State<UserInformation> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    ElevatedButton(
-                      child: const Text("Previous Page"),
-                      onPressed: () {
-                        if (start > 0) page--;
-                        setState(() {
-                          if (start > 0 && end > 0) {
-                            start = start - 10;
-                            end = end - 10;
-                          }
-                        });
-                        print("Previous Page");
-                      },
-                    ),
-                    Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 20),
-                      child: Text(
-                        page.toString(),
-                        style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15,
-                            color: Colors.teal),
-                      ),
-                    ),
-                    ElevatedButton(
-                      child: const Text("Next Page"),
-                      onPressed: () {
-                        setState(() {
-                          if (end <= length) page++;
-                          if (end < length) {
-                            start = start + 10;
-                            end = end + 10;
-                          }
-                        });
-                        print("Next Page");
-                      },
-                    ),
+                    // ElevatedButton(
+                    //   child: const Text("Previous Page"),
+                    //   onPressed: () {
+                    //     setState(() {
+                    //       if (start > 0 && end > 0) {
+                    //         start = start - 10;
+                    //         end = end - 10;
+                    //       }
+                    //     });
+                    //     print("Previous Page");
+                    //   },
+                    // ),
+                    // const SizedBox(width: 20),
+                    // ElevatedButton(
+                    //   child: const Text("Next Page"),
+                    //   onPressed: () {
+                    //     setState(() {
+                    //       if (end < length) {
+                    //         start = start + 10;
+                    //         end = end + 10;
+                    //       }
+                    //     });
+                    //     print("Next Page");
+                    //   },
+                    // ),
+
+                    SizedBox(height: 20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        ElevatedButton(
+                          child: Text("Previous Page"),
+                          onPressed: () {
+                            setState(() {
+                              if (start >= 1) page--;
+                              if (start > 0 && end > 0) {
+                                start = start - 10;
+                                end = end - 10;
+                              }
+                            });
+                            print("Previous Page");
+                          },
+                        ),
+                        SizedBox(
+                          width: 20,
+                        ),
+                        StreamBuilder<QuerySnapshot>(
+                            stream: FirebaseFirestore.instance
+                                .collection("user_details")
+                                .snapshots(),
+                            builder: (context, AsyncSnapshot snapshot) {
+                              fd = int.parse(
+                                  ((snapshot.data.docs.length / 10).floor())
+                                      .toString());
+                              int index2 = 0;
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return const CircularProgressIndicator();
+                              }
+                              if (snapshot.data == null) {
+                                print(snapshot.error);
+                                return Container();
+                              }
+                              if (snapshot.hasError) {
+                                print(snapshot.error);
+                                return Container();
+                              }
+                              return Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(3),
+                                ),
+                                height: 50,
+                                width: 100,
+                                child: ListView.builder(
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount: int.parse(
+                                            ((snapshot.data.docs.length / 10)
+                                                    .floor())
+                                                .toString()) +
+                                        1,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      return GestureDetector(
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            children: [
+                                              SizedBox(
+                                                width: 20,
+                                              ),
+                                              Container(
+                                                color: page == index + 1
+                                                    ? Colors.red
+                                                    : Colors.teal,
+                                                height: 20,
+                                                width: 20,
+                                                child: Text(
+                                                  "${index + 1}",
+                                                  style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                  textAlign: TextAlign.center,
+                                                ),
+                                              ),
+                                              SizedBox(width: 20),
+                                            ],
+                                          ),
+                                          onTap: () {
+                                            // print(
+                                            //     "start=${((index + 1) - 1) * 10} end= ${(index + 1) * 10}");
+                                            print(index2);
+                                            setState(() {
+                                              index2 = index;
+                                              start = ((index + 1) - 1) * 10;
+                                              end = (index + 1) * 10;
+                                              page = index + 1;
+                                            });
+                                            print(index2);
+                                          });
+                                    }),
+                              );
+                            }),
+                        SizedBox(
+                          width: 20,
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              start = ((fd + 1) - 1) * 10;
+                              end = (fd + 1) * 10;
+                              page = fd + 1;
+                            });
+                          },
+                          child: Container(
+                            height: 20,
+                            width: 80,
+                            color: Colors.teal,
+                            child: Text(
+                              "Last Page",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 20),
+                        ElevatedButton(
+                          child: Text("Next Page"),
+                          onPressed: () {
+                            setState(() {
+                              if (end <= length) page++;
+                              if (end < length) {
+                                start = start + 10;
+                                end = end + 10;
+                              }
+                            });
+                            print("Next Page");
+                          },
+                        ),
+                      ],
+                    )
+                    // Row(
+                    //   mainAxisAlignment: MainAxisAlignment.center,
+                    //   children: [
+                    //     ElevatedButton(
+                    //       child: Text("Previous Page"),
+                    //       onPressed: () {
+                    //         setState(() {
+                    //           if (start >= 1) page--;
+                    //
+                    //           if (start > 0 && end > 0) {
+                    //             start = start - 10;
+                    //             end = end - 10;
+                    //           }
+                    //         });
+                    //         print("Previous Page");
+                    //       },
+                    //     ),
+                    //     Container(
+                    //       margin: EdgeInsets.symmetric(horizontal: 20),
+                    //       child: Text(
+                    //         page.toString(),
+                    //         style: const TextStyle(
+                    //             fontWeight: FontWeight.bold,
+                    //             fontSize: 15,
+                    //             color: Colors.teal),
+                    //       ),
+                    //     ),
+                    //     ElevatedButton(
+                    //       child: const Text("Next Page"),
+                    //       onPressed: () {
+                    //         setState(() {
+                    //           if (end <= length) page++;
+                    //           if (end < length) {
+                    //             start = start + 10;
+                    //             end = end + 10;
+                    //           }
+                    //         });
+                    //         print("Next Page");
+                    //       },
+                    //     ),
+                    //   ],
+                    // ),
                   ],
                 ),
               ],
@@ -690,8 +864,9 @@ class _EditBoxState extends State<EditBox> {
                                     .doc("${x}");
                             Map<String, dynamic> data = <String, dynamic>{
                               // 'address':'',
-                              'gender': _gender.text,
-                              'image': image3,
+                              'gender':
+                                  _gender.text != null ? _gender.text : "",
+                              'image': image3 != null ? image3 : "",
                               'name': _name.text,
                               'email': _email.text,
                               'number': '+91${_number.text}',
