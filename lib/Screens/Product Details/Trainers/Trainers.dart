@@ -305,24 +305,6 @@ class _TrainerPageState extends State<TrainerPage> {
       ) : const Text("")),
       DataCell(data != null ? Text(data['clients'] ?? "") : const Text("")),
 
-      // DataCell(ListView.builder(
-      //     itemCount: cert.length,
-      //     itemBuilder: (context, int index) {
-      //       return Text(cert[index]);
-      //     })),
-      // DataCell(
-      //     data != null ? Text(data['specialisation'].toString()) : Text("")),
-
-      // DataCell(data != null
-      //     ? IconButton(
-      //         onPressed: () {
-      //           launch(data['social_media']);
-      //         },
-      //         icon: Icon(FontAwesome.instagram))
-      //     : Text("")),
-// <<<<<<< someshwar
-      DataCell(data != null ? Text(data['position'] ?? "") : const Text("")),
-// =======
       DataCell(
         Center(
           child: ElevatedButton(
@@ -349,7 +331,9 @@ class _TrainerPageState extends State<TrainerPage> {
           ),
         ),
       ),
-// >>>>>>> Diptesh
+
+      DataCell(data != null ? Text(data['position'] ?? "") : const Text("")),
+
       DataCell(const Text(""), showEditIcon: true, onTap: () {
         Navigator.push(
             context,

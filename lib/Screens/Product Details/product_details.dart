@@ -1452,6 +1452,10 @@ class _ShowAddBoxState extends State<ShowAddBox> {
 }
 
 // <<<<<<< HEAD
+// <<<<<<< HEAD
+// =======
+// <<<<<<< dewansh_new
+// >>>>>>> 38dd6d5074aaa10b19649b11160fb9d2e51fa7d9
 // =======
 class loadimage extends StatefulWidget {
   const loadimage({Key? key, required this.id}) : super(key: key);
@@ -1529,7 +1533,11 @@ class _loadimageState extends State<loadimage> {
   }
 }
 
+// <<<<<<< HEAD
 // >>>>>>> 3924bca1e564ec0c3d3c9e1da255159690d475d9
+// =======
+// >>>>>>> Diptesh
+// >>>>>>> 38dd6d5074aaa10b19649b11160fb9d2e51fa7d9
 class CheckBoxx extends StatefulWidget {
   final String doc;
   final String id;
