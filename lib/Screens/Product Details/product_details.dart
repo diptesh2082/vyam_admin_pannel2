@@ -1451,6 +1451,8 @@ class _ShowAddBoxState extends State<ShowAddBox> {
   }
 }
 
+// <<<<<<< dewansh_new
+// =======
 class loadimage extends StatefulWidget {
   const loadimage({Key? key, required this.id}) : super(key: key);
   final id;
@@ -1527,6 +1529,7 @@ class _loadimageState extends State<loadimage> {
   }
 }
 
+// >>>>>>> Diptesh
 class CheckBoxx extends StatefulWidget {
   final String doc;
   final String id;

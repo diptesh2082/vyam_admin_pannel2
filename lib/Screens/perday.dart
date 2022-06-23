@@ -194,8 +194,10 @@ class _perdayState extends State<perday> {
                       stream: FirebaseFirestore.instance
                           .collection('bookings')
                           .where('booking_plan', whereIn: [
+                        'Pay per Day',
                         'pay per session',
-                        'PAY PER SESSION'
+                        'PAY PER SESSION',
+                        'Pay per session'
                       ]).snapshots(),
                       builder: (context, AsyncSnapshot snapshot) {
                         if (snapshot.connectionState ==
@@ -354,14 +356,14 @@ class _perdayState extends State<perday> {
                                 // label: Text(
                                 // =======
 
-                                DataColumn(
-                                  label: Text(
-                                    // >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
-                                    'Booking Status',
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.w600),
-                                  ),
-                                ),
+                                // DataColumn(
+                                //   label: Text(
+                                //     // >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
+                                //     'Booking Status',
+                                //     style:
+                                //         TextStyle(fontWeight: FontWeight.w600),
+                                //   ),
+                                // ),
                                 DataColumn(
                                   label: Text(
                                     'Edit',
@@ -570,61 +572,61 @@ class _perdayState extends State<perday> {
       // DataCell(
       //     data['booking_date'] != null ? Text(bookingDate) : const Text("")),
 
-      DataCell(
-        Center(
-          child: Container(
-            child: Row(
-              children: [
-                DropdownButton(
-                    hint: Text(data['booking_status'].toString()),
-                    value: data['booking_status'].toString(),
-                    items: const [
-                      DropdownMenuItem(
-                        child: Text("Active"),
-                        value: "active",
-                      ),
-                      DropdownMenuItem(
-                        child: Text("Upcoming"),
-                        value: "upcoming",
-                      ),
-                      DropdownMenuItem(
-                          child: Text("Completed"), value: "completed"),
-                      DropdownMenuItem(
-                          child: Text("Cancelled"), value: "cancelled"),
-                    ],
-                    onChanged: (value) async {
-                      setState(() {
-                        selectedValue = value as String;
-                      });
-                      await FirebaseFirestore.instance
-                          .collection('bookings')
-                          .doc(bookingId)
-                          .update({'booking_status': value});
-
-                      if (value == "active") {
-                        await FirebaseFirestore.instance
-                            .collection('bookings')
-                            .doc(bookingId)
-                            .update({'payment_done': true});
-                        await FirebaseFirestore.instance
-                            .collection("booking_notifications")
-                            .doc()
-                            .set({
-                          "title": "Booking Details",
-                          "status": selectedValue,
-                          // "payment_done": false,
-                          "user_id": data['userId'],
-                          "user_name": data["user_name"],
-                          "vendor_id": data['vendorId'],
-                          "vendor_name": data['gym_details']['name'],
-                        });
-                      }
-                    }),
-              ],
-            ),
-          ),
-        ),
-      ),
+      // DataCell(
+      //   Center(
+      //     child: Container(
+      //       child: Row(
+      //         children: [
+      //           DropdownButton(
+      //               hint: Text(data['booking_status'].toString()),
+      //               value: data['booking_status'].toString(),
+      //               items: const [
+      //                 DropdownMenuItem(
+      //                   child: Text("Active"),
+      //                   value: "active",
+      //                 ),
+      //                 DropdownMenuItem(
+      //                   child: Text("Upcoming"),
+      //                   value: "upcoming",
+      //                 ),
+      //                 DropdownMenuItem(
+      //                     child: Text("Completed"), value: "completed"),
+      //                 DropdownMenuItem(
+      //                     child: Text("Cancelled"), value: "cancelled"),
+      //               ],
+      //               onChanged: (value) async {
+      //                 setState(() {
+      //                   selectedValue = value as String;
+      //                 });
+      //                 await FirebaseFirestore.instance
+      //                     .collection('bookings')
+      //                     .doc(bookingId)
+      //                     .update({'booking_status': value});
+      //
+      //                 if (value == "active") {
+      //                   await FirebaseFirestore.instance
+      //                       .collection('bookings')
+      //                       .doc(bookingId)
+      //                       .update({'payment_done': true});
+      //                   await FirebaseFirestore.instance
+      //                       .collection("booking_notifications")
+      //                       .doc()
+      //                       .set({
+      //                     "title": "Booking Details",
+      //                     "status": selectedValue,
+      //                     // "payment_done": false,
+      //                     "user_id": data['userId'],
+      //                     "user_name": data["user_name"],
+      //                     "vendor_id": data['vendorId'],
+      //                     "vendor_name": data['gym_details']['name'],
+      //                   });
+      //                 }
+      //               }),
+      //         ],
+      //       ),
+      //     ),
+      //   ),
+      // ),
 // <<<<<<< HEAD
 // <<<<<<< HEAD
 // =======
