@@ -28,6 +28,7 @@ class _bookingNotificationState extends State<bookingNotification> {
               StreamBuilder<QuerySnapshot>(
                 stream: FirebaseFirestore.instance
                     .collection('booking_notifications')
+                    .orderBy('time_stamp' , descending: true)
                     .snapshots(),
                 builder: (context, AsyncSnapshot snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
