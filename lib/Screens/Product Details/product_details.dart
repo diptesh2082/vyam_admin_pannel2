@@ -1286,7 +1286,7 @@ class _ShowAddBoxState extends State<ShowAddBox> {
                 ),
               ),
               const SizedBox(height: 10),
-              Text("Categories",
+              const Text("Categories",
                   style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
               Container(
                 child: StreamBuilder<QuerySnapshot>(
@@ -1451,6 +1451,85 @@ class _ShowAddBoxState extends State<ShowAddBox> {
   }
 }
 
+// <<<<<<< HEAD
+// =======
+class loadimage extends StatefulWidget {
+  const loadimage({Key? key, required this.id}) : super(key: key);
+  final id;
+  @override
+  State<loadimage> createState() => _loadimageState();
+}
+
+class _loadimageState extends State<loadimage> {
+  bool isloading = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        child: Row(
+      children: [
+        ElevatedButton(
+          onPressed: () async {
+            // dic = await chooseImage();
+            setState(() {
+              isloading = true;
+            });
+            image = await uploadToStroagees();
+            // .then(setState(() {
+            //   isloading = false;
+            // }));
+          },
+          child: const Text(
+            'Upload Gym Image',
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
+          ),
+        ),
+        const SizedBox(
+          width: 20,
+        ),
+        isloading
+            ? Container(
+                child: image != null
+                    ? Image(
+                        image: NetworkImage('$image'),
+                        height: 200,
+                        width: 200,
+                      )
+                    : Center(child: const CircularProgressIndicator()))
+            : Container(
+                child: const Text(
+                "Please Upload Image",
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                textAlign: TextAlign.center,
+              ))
+      ],
+    ));
+  }
+
+  uploadToStroagees() {
+    InputElement input = FileUploadInputElement() as InputElement
+      ..accept = 'image/*';
+    FirebaseStorage fs = FirebaseStorage.instance;
+
+    input.click();
+    input.onChange.listen((event) {
+      final file = input.files?.first;
+      final reader = FileReader();
+
+      reader.readAsDataUrl(file!);
+      reader.onLoadEnd.listen((event) async {
+        var snapshot =
+            await fs.ref().child('product_image/${widget.id}').putBlob(file);
+        String downloadUrl = await snapshot.ref.getDownloadURL();
+        setState(() {
+          image = downloadUrl;
+        });
+      });
+    });
+  }
+}
+
+// >>>>>>> 3924bca1e564ec0c3d3c9e1da255159690d475d9
 class CheckBoxx extends StatefulWidget {
   final String doc;
   final String id;
@@ -1657,7 +1736,7 @@ class _ECheckServiceState extends State<ECheckService> {
   bool check = false;
 
   checkBoxWorkout() async {
-    if (widget.serviceArray.contains(widget.id)) {
+    if (widget.serviceArray.contains(widget.type)) {
       setState(() {
         check = true;
       });
@@ -1838,6 +1917,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
   String imagess = '';
   CollectionReference? amenitiesStream;
   CollectionReference? workoutStream;
+  CollectionReference? categoryStream;
   @override
   void initState() {
     super.initState();
@@ -1854,6 +1934,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
     _description.text = widget.description;
     amenitiesStream = FirebaseFirestore.instance.collection("amenities");
     workoutStream = FirebaseFirestore.instance.collection("workouts");
+    categoryStream = FirebaseFirestore.instance.collection('category');
     // _location.text = "${widget.location.latitude}, ${widget.location.latitude}";
     // _latitudeController.text = widget.location.latitude.toString();
     // _longitudeController.text = widget.location.longitude.toString();
@@ -1893,7 +1974,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
               customTextField(hinttext: "Landmark", addcontroller: _landmark),
               customTextField(hinttext: "Pincode", addcontroller: _pincode),
               editim(imagea: imagess.toString(), gymid: _gymiid.text),
-              Text(
+              const Text(
                 "Choose Amenities",
                 style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
               ),
@@ -1928,7 +2009,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
               const SizedBox(
                 height: 20,
               ),
-              Text(
+              const Text(
                 "Choose Workout",
                 style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
               ),
@@ -1964,16 +2045,14 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                     }),
               ),
 
-              Text(
+              const Text(
                 "Choose Categories",
                 style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
               ),
 
               Container(
                 child: StreamBuilder<QuerySnapshot>(
-                    stream: FirebaseFirestore.instance
-                        .collection("category")
-                        .snapshots(),
+                    stream: categoryStream!.snapshots(),
                     builder: (context, AsyncSnapshot snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return const CircularProgressIndicator();
@@ -2002,8 +2081,6 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                       );
                     }),
               ),
-
-// >>>>>>> db16c184745ea062b80bb6d62b73b5f64792dc9e
               // Text(image),
               Padding(
                 padding: const EdgeInsets.all(12.0),
@@ -2027,10 +2104,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                         'gym_owner': _gymowner.text,
                         'landmark': _landmark.text,
                         'description': _description.text,
-// <<<<<<< HEAD
                         'display_picture': image2 != null ? image2 : imagess,
-// =======
-// >>>>>>> 21d9c030cebb9d9fd030fc57983203910f0655fa
                       };
                       await documentReference.update(data).whenComplete(() {
                         print("Item Updated");
@@ -2196,7 +2270,7 @@ class _datacelldisplayState extends State<datacelldisplay> {
             ? Container(
                 height: 100,
                 width: 200,
-                child: Center(
+                child: const Center(
                   child: CircularProgressIndicator(),
                 ),
               )
@@ -2209,6 +2283,3 @@ class _datacelldisplayState extends State<datacelldisplay> {
     );
   }
 }
-// =======
-// }
-// >>>>>>> 21d9c030cebb9d9fd030fc57983203910f0655fa

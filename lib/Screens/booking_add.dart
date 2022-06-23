@@ -190,7 +190,7 @@ class _addbookingsState extends State<addbookings> {
                                       .doc(id)
                                       .set(
                                     {
-                                      'vandorId': _addvendorid.text,
+                                      'vendorId': _addvendorid.text,
                                       'user_name': _addusername.text,
                                       'userId': _adduserid.text,
                                       'total_price': _addtotalprice.text,
@@ -219,12 +219,6 @@ class _addbookingsState extends State<addbookings> {
                                               : false,
                                     },
                                   );
-                                  //     .then(
-                                  //   (snapshot) async {
-                                  //     await uploadImageToBanner(image  , id);
-                                  //   },
-                                  // );
-
                                   Navigator.pop(context);
                                 }
                               },
@@ -247,7 +241,6 @@ class _addbookingsState extends State<addbookings> {
                   )),
                 ),
               ))
-// >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
             ],
           ),
         ),
@@ -292,16 +285,9 @@ class _addbookingsState extends State<addbookings> {
   }
 
   Future pickTime(BuildContext context) async {
-// <<<<<<< HEAD
-//     final intialTime = TimeOfDay(hour: 9, minute: 0);
-//     final newTime =
-//         await showTimePicker(context: context, initialTime: time ?? intialTime);
-// =======
     const intialTime = const TimeOfDay(hour: 9, minute: 0);
     final newTime =
         await showTimePicker(context: context, initialTime: time ?? intialTime);
-// >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
-
     if (newTime == null) return;
 
     setState(() {
