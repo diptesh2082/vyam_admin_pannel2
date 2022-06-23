@@ -736,8 +736,12 @@ class Carddb extends StatelessWidget {
     return StreamBuilder(
         stream: FirebaseFirestore.instance
             .collection(collectionId)
-            .where('booking_plan', isEqualTo: "Pay per Day")
-            .snapshots(),
+            .where('booking_plan', whereIn: [
+          "Pay per Day",
+          "pay per session",
+          "Pay Per Session",
+          "PAY PER SESSION"
+        ]).snapshots(),
         builder: (context, AsyncSnapshot snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(

@@ -711,11 +711,13 @@ class _EditBoxState extends State<EditBox> {
   var img;
   @override
   var x;
+  String gvalue = '';
   void initState() {
     super.initState();
     print(widget.address);
     _address.text = widget.address;
     _gender.text = widget.gender;
+    gvalue = widget.gender;
     _email.text = widget.email;
     // _latitude.text = widget.latitude.toString();
     // _longitude.text = widget.longitude.toString();
@@ -799,29 +801,63 @@ class _EditBoxState extends State<EditBox> {
                           hintText: 'email'),
                     )),
                   ),
-                  SizedBox(
-                    height: 50,
-                    child: Card(
-                        child: TextField(
-                      autofocus: true,
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w400,
+                  Row(
+                    children: [
+                      const Text(
+                        "Gender: ",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 15),
                       ),
-                      controller: _gender,
-                      maxLines: 3,
-                      decoration: const InputDecoration(
-                          border: InputBorder.none,
-                          hintStyle: TextStyle(
-                            fontSize: 14,
-                            fontFamily: 'Poppins',
-                            fontWeight: FontWeight.w400,
-                          ),
-                          hintMaxLines: 2,
-                          hintText: 'Gender'),
-                    )),
+                      const SizedBox(
+                        width: 20,
+                      ),
+                      DropdownButton(
+                          hint: Text(gvalue),
+                          value: gvalue,
+                          items: const [
+                            DropdownMenuItem(
+                              child: Text("Not Specified"),
+                              value: "Not Specified",
+                            ),
+                            DropdownMenuItem(
+                              child: Text("Male"),
+                              value: "male",
+                            ),
+                            DropdownMenuItem(
+                              child: Text("Female"),
+                              value: "female",
+                            ),
+                          ],
+                          onChanged: (value) {
+                            setState(() {
+                              gvalue = value as String;
+                            });
+                          }),
+                    ],
                   ),
+                  // SizedBox(
+                  //   height: 50,
+                  //   child: Card(
+                  //       child: TextField(
+                  //     autofocus: true,
+                  //     style: const TextStyle(
+                  //       fontSize: 14,
+                  //       fontFamily: 'Poppins',
+                  //       fontWeight: FontWeight.w400,
+                  //     ),
+                  //     controller: _gender,
+                  //     maxLines: 3,
+                  //     decoration: const InputDecoration(
+                  //         border: InputBorder.none,
+                  //         hintStyle: TextStyle(
+                  //           fontSize: 14,
+                  //           fontFamily: 'Poppins',
+                  //           fontWeight: FontWeight.w400,
+                  //         ),
+                  //         hintMaxLines: 2,
+                  //         hintText: 'Gender'),
+                  //   )),
+                  // ),
                   SizedBox(
                     height: 50,
                     child: Card(
@@ -864,9 +900,8 @@ class _EditBoxState extends State<EditBox> {
                                     .doc("${x}");
                             Map<String, dynamic> data = <String, dynamic>{
                               // 'address':'',
-                              'gender':
-                                  _gender.text != null ? _gender.text : "",
-                              'image': image3 != null ? image3 : "",
+                              'gender': gvalue != null ? gvalue : "",
+                              'image': image5 != null ? image5 : "",
                               'name': _name.text,
                               'email': _email.text,
                               'number': '+91${_number.text}',
@@ -955,10 +990,10 @@ class _editimState extends State<editim> {
             onPressed: () async {
               setState(() {
                 isloading = true;
-                i2 = image3;
+                i2 = image5;
               });
               var dic = await chooseImage();
-              await addImageToStorage(dic, widget.gymid);
+              await getUrlImage(dic, widget.gymid);
               setState(() {
                 isloading = false;
               });
@@ -990,42 +1025,28 @@ class _editimState extends State<editim> {
     );
   }
 
-  addImageToStorage(XFile? pickedFile, String? id) async {
+  getUrlImage(XFile? pickedFile, String? id) async {
     if (kIsWeb) {
-      Reference _reference =
+      final _firebaseStorage =
           FirebaseStorage.instance.ref().child("Users").child('images/$id');
-      await _reference
-          .putData(
-        await pickedFile!.readAsBytes(),
+
+      Reference _reference = _firebaseStorage
+          .child('user_details/${Path.basename(pickedFile!.path)}');
+      await _reference.putData(
+        await pickedFile.readAsBytes(),
         SettableMetadata(contentType: 'image/jpeg'),
-      )
-          .whenComplete(() async {
-        await _reference.getDownloadURL().then((value) async {
-          var uploadedPhotoUrl = value;
-          setState(() {
-            image3 = value;
-          });
-          print(value);
-          await FirebaseFirestore.instance
-              .collection("user_details")
-              .doc(id)
-              .update({"image": value});
-// =======
-//       reader.readAsDataUrl(file!);
-//       reader.onLoadEnd.listen((event) async {
-//         var snapshot =
-//         await fs.ref().child('product_image/${widget.gymId}').putBlob(file);
-//         String downloadUrl = await snapshot.ref.getDownloadURL();
-//         setState(() {
-//           image = downloadUrl;
-// >>>>>>> 21d9c030cebb9d9fd030fc57983203910f0655fa
-        });
+      );
+
+      String imageUrl = await _reference.getDownloadURL();
+
+      setState(() {
+        image5 = imageUrl;
       });
-    } else {
-//write a code for android or ios
     }
   }
 }
+
+var image5;
 
 class detailsadd extends StatefulWidget {
   const detailsadd({Key? key}) : super(key: key);
@@ -1224,7 +1245,12 @@ class _loadimageState extends State<loadimage> {
                   : Container(
                       height: 100,
                       width: 200,
-                      child: const Text("Please Upload Image"),
+                      child: Center(
+                        child: const Text(
+                          "Please Upload Image",
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
                     ),
         ),
       ],

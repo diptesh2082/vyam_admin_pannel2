@@ -43,7 +43,6 @@ class _pushNewState extends State<pushNew> {
     dt = DateTime.fromMillisecondsSinceEpoch(millis);
 
     d12 = DateFormat('dd/MMM/yyyy, hh:mm a').format(dt);
-
   }
 
   @override
@@ -73,52 +72,7 @@ class _pushNewState extends State<pushNew> {
                   customTextField3(hinttext: "Title", addcontroller: _addtitle),
                   customTextField3(
                       hinttext: "Description", addcontroller: _adddefiniton),
-                  Container(
-                    padding: const EdgeInsets.all(20),
-                    child: Row(
-                      children: [
-                        const Text(
-                          'Upload Image: ',
-                          style: TextStyle(
-                              color: Colors.grey,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 15),
-                        ),
-                        const SizedBox(
-                          width: 20,
-                        ),
-                        InkWell(
-                          onTap: () async {
-                            image = await chooseImage();
-                            getUrlImage(image);
-
-                          },
-                          child: const Icon(
-                            Icons.upload_file_outlined,
-                          ),
-                        ),
-
-                        SizedBox(
-                            width: 300,
-                            height: 200,
-                            child: image != null
-                                ? Container(
-                              child: Image.network(image),
-                            )
-                                : Container(
-                              color: Colors.white,
-                              child: const Center(
-                                  child: Text(
-                                    'Please Upload Image',
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 24),
-                                  )),
-                            )),
-                      ],
-                    ),
-                  ),
+                  loadimage(),
                   // Text(
                   //   '$timestamp',
                   // ),
@@ -140,7 +94,7 @@ class _pushNewState extends State<pushNew> {
                             {
                               'title': _addtitle.text,
                               'definition': _adddefiniton.text,
-                              'image': image,
+                              'image': image4 != null ? image4 : "",
                               // 'id': "id",
                               'timestamp': d12,
                             },
@@ -160,13 +114,96 @@ class _pushNewState extends State<pushNew> {
     );
   }
 
+  // getUrlImage(XFile? pickedFile) async {
+  //   if (kIsWeb) {
+  //     final _firebaseStorage =
+  //         FirebaseStorage.instance.ref().child("amenities");
+  //
+  //     Reference _reference = _firebaseStorage
+  //         .child('amenities/${Path.basename(pickedFile!.path)}');
+  //     await _reference.putData(
+  //       await pickedFile.readAsBytes(),
+  //       SettableMetadata(contentType: 'image/jpeg'),
+  //     );
+  //
+  //     String imageUrl = await _reference.getDownloadURL();
+  //
+  //     setState(() {
+  //       image = imageUrl;
+  //     });
+  //   }
+  // }
+}
+
+var image4;
+
+class loadimage extends StatefulWidget {
+  loadimage({Key? key}) : super(key: key);
+
+  @override
+  State<loadimage> createState() => _loadimageState();
+}
+
+class _loadimageState extends State<loadimage> {
+  bool isloading = false;
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        child: Row(
+      children: [
+        const Text(
+          "User Image",
+          style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
+        ),
+        const SizedBox(
+          width: 20,
+        ),
+        InkWell(
+          child: const Icon(Icons.camera_alt),
+          onTap: () async {
+            setState(() {
+              isloading = true;
+            });
+            var profileImage = await chooseImage();
+            await getUrlImage(profileImage);
+            setState(() {
+              isloading = false;
+            });
+          },
+        ),
+        SizedBox(
+          width: 200,
+          height: 100,
+          child: isloading
+              ? Container(
+                  height: 100,
+                  width: 200,
+                  child: Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                )
+              : image4 != null
+                  ? Container(
+                      height: 100,
+                      width: 200,
+                      child: Image.network(image4),
+                    )
+                  : Container(
+                      height: 100,
+                      width: 200,
+                      child: Center(child: Text("Please Upload Image")),
+                    ),
+        ),
+      ],
+    ));
+  }
+
   getUrlImage(XFile? pickedFile) async {
     if (kIsWeb) {
       final _firebaseStorage =
-      FirebaseStorage.instance.ref().child("amenities");
-
+          FirebaseStorage.instance.ref().child('push_notifications');
       Reference _reference = _firebaseStorage
-          .child('amenities/${Path.basename(pickedFile!.path)}');
+          .child('push_notifications/${Path.basename(pickedFile!.path)}');
       await _reference.putData(
         await pickedFile.readAsBytes(),
         SettableMetadata(contentType: 'image/jpeg'),
@@ -175,10 +212,8 @@ class _pushNewState extends State<pushNew> {
       String imageUrl = await _reference.getDownloadURL();
 
       setState(() {
-        image = imageUrl;
+        image4 = imageUrl;
       });
     }
   }
-
-
 }
