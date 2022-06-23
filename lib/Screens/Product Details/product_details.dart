@@ -1451,7 +1451,11 @@ class _ShowAddBoxState extends State<ShowAddBox> {
   }
 }
 
+// <<<<<<< HEAD
+// <<<<<<< HEAD
+// =======
 // <<<<<<< dewansh_new
+// >>>>>>> 38dd6d5074aaa10b19649b11160fb9d2e51fa7d9
 // =======
 class loadimage extends StatefulWidget {
   const loadimage({Key? key, required this.id}) : super(key: key);
@@ -1529,7 +1533,11 @@ class _loadimageState extends State<loadimage> {
   }
 }
 
+// <<<<<<< HEAD
+// >>>>>>> 3924bca1e564ec0c3d3c9e1da255159690d475d9
+// =======
 // >>>>>>> Diptesh
+// >>>>>>> 38dd6d5074aaa10b19649b11160fb9d2e51fa7d9
 class CheckBoxx extends StatefulWidget {
   final String doc;
   final String id;
@@ -2052,8 +2060,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
 
               Container(
                 child: StreamBuilder<QuerySnapshot>(
-                    stream: categoryStream!
-                        .snapshots(),
+                    stream: categoryStream!.snapshots(),
                     builder: (context, AsyncSnapshot snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return const CircularProgressIndicator();
@@ -2106,7 +2113,6 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                         'landmark': _landmark.text,
                         'description': _description.text,
                         'display_picture': image2 != null ? image2 : imagess,
-
                       };
                       await documentReference.update(data).whenComplete(() {
                         print("Item Updated");
@@ -2285,4 +2291,3 @@ class _datacelldisplayState extends State<datacelldisplay> {
     );
   }
 }
-

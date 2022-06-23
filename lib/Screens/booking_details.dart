@@ -811,6 +811,7 @@ class _BookingDetailsState extends State<BookingDetails> {
                         "booking_id": data['booking_id'],
                         // "payment_done": false,
                         // "notification_id": xps.toString(),
+                        "branch": data['gym_details']['branch'],
                         "user_id": data['userId'],
                         "user_name": data["user_name"],
                         "vendor_id": data['vendorId'],
@@ -845,6 +846,7 @@ class _BookingDetailsState extends State<BookingDetails> {
       DataCell(const Text(""), showEditIcon: true, onTap: () {
         Get.to(
           () => ProductEditBox(
+            branch: data['gym_details']['branch'],
             ids: data['id'].toString(),
             payment_method: data['payment_method'],
             vendorname: data['gym_details']['name'],
@@ -1079,11 +1081,14 @@ class ProductEditBox extends StatefulWidget {
     required this.payment_method,
     required this.ids,
     required this.ordertimestamp,
+    required this.branch,
   }) : super(key: key);
 
   final String vendorid;
+  final String branch;
   // final String planedatehour;
   final String username;
+
   final Timestamp ordertimestamp;
   final String ids;
   final String vendorname;
@@ -1879,6 +1884,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                                   "vendor_id": _addvendorid.text,
                                   "vendor_name": _addvendorname.text,
                                   'time_stamp': DateTime.now(),
+                                  'branch': widget.branch,
                                   'seen': false
                                 }).whenComplete(
                                         () => Text('COMPLETED BOOKING'));

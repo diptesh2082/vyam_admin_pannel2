@@ -678,7 +678,7 @@ class _BookingDetails1State extends State<BookingDetails1> {
                           "status": selectedValue,
                           // "payment_done": false,
                           'booking_id': data['booking_id'],
-
+                          'branch': data['gym_details']['branch'],
                           "user_id": data['userId'],
                           "user_name": data["user_name"],
                           "vendor_id": data['vendorId'],
@@ -713,6 +713,7 @@ class _BookingDetails1State extends State<BookingDetails1> {
       DataCell(const Text(""), showEditIcon: true, onTap: () {
         Get.to(() => ProductEditBox(
               vendorname: data['gym_details']['name'],
+              branch: data['gym_details']['name'],
               vendorid: data['vendorId'],
               username: data['user_name'],
               userid: data['userId'],
@@ -977,10 +978,12 @@ class ProductEditBox extends StatefulWidget {
     required this.payment_method,
     required this.ids,
     required this.ordertimestamp,
+    required this.branch,
   }) : super(key: key);
 
   final String vendorid;
   // final String planedatehour;
+  final String branch;
   final String username;
   final Timestamp ordertimestamp;
   final String ids;
@@ -1803,6 +1806,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                                   "vendor_id": _addvendorid.text,
                                   "vendor_name": _addvendorname.text,
                                   'time_stamp': DateTime.now(),
+                                  'branch': widget.branch,
                                   'seen': false
                                 });
                                 // var x = await FirebaseFirestore.instance

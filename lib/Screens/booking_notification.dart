@@ -61,7 +61,7 @@ class _bookingNotificationState extends State<bookingNotification> {
                         ),
                         DataColumn(
                           label: Text(
-                            'Vendor Name',
+                            'Vendor Name\nVendor Branch',
                             style: TextStyle(fontWeight: FontWeight.w600),
                           ),
                         ),
@@ -186,7 +186,7 @@ class _bookingNotificationState extends State<bookingNotification> {
       ),
       DataCell(
         data['vendor_name'] != null
-            ? Text(data['vendor_name'].toString())
+            ? Text("${data['vendor_name'].toString()}\n${data["branch"]}")
             : const Text(""),
       ),
       DataCell(
