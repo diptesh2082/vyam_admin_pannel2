@@ -9,7 +9,7 @@ import 'package:image_picker/image_picker.dart';
 
 chooseImage() async {
   XFile? pickedFile = await ImagePicker()
-      .pickImage(source: ImageSource.gallery, imageQuality: 50);
+      .pickImage(source: ImageSource.gallery, imageQuality: 70);
   // pickedFile=await
   //
   return pickedFile;

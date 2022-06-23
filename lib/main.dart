@@ -10,7 +10,7 @@ Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: const FirebaseOptions(
-        apiKey: "AIzaSyD-lbw_9Rs2jniKN2iVZ1zhh_9dtFvN7IM",
+        apiKey: "AIzaSyBueDk3xi4f8z5oGKwI8VLu-A190d89I8A",
         authDomain: "vyam-f99ab.firebaseapp.com",
         projectId: "vyam-f99ab",
         storageBucket: "vyam-f99ab.appspot.com",
