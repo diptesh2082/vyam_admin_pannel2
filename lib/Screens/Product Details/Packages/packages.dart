@@ -496,7 +496,8 @@ class _addboxxState extends State<addboxx> {
             MarkdownTextInput(
               (String value) => setState(() => descriptionn = value),
               descriptionn,
-              label: 'Description',
+              label:
+                  'Note - if you book for an off-day, dont worry it will get adjusted.',
               maxLines: 10,
               actions: actions,
               controller: controller,
@@ -741,7 +742,8 @@ class _ProductEditBoxState extends State<ProductEditBox> {
               MarkdownTextInput(
                 (String value) => setState(() => description = value),
                 description,
-                label: 'Description',
+                label:
+                    'Note - if you book for an off-day, dont worry it will get adjusted.',
                 maxLines: 10,
                 actions: actions,
                 controller: controller,

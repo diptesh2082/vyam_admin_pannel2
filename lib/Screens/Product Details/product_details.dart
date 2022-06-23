@@ -231,7 +231,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                                 // ),
                                 DataColumn(
                                   label: Text(
-                                    'Landmark',
+                                    'Branch',
                                     style:
                                         TextStyle(fontWeight: FontWeight.w600),
                                   ),
@@ -617,7 +617,7 @@ class _ProductDetailsState extends State<ProductDetails> {
       //         },
       //         child: Text(loctext))
       //: const Text("")),
-      DataCell(data != null ? Text(data['landmark'] ?? "") : const Text("")),
+      DataCell(data != null ? Text(data['branch'] ?? "") : const Text("")),
 // >>>>>>> cf1997613ff877c63a56c61e3009bdfe3639ccfa
       DataCell(data != null ? Text(data['pincode'] ?? "") : const Text("")),
 
@@ -876,9 +876,10 @@ class _ProductDetailsState extends State<ProductDetails> {
                         gender: data['gender'],
                         name: data['name'],
                         pincode: data['pincode'],
+                        branch: data['branch'],
                         gymId: data['gym_id'],
                         gymOwner: data['gym_owner'],
-                        landmark: data['landmark'],
+                        // landmark: data['landmark'],
                         password: data['password'],
                         imagee: data['display_picture'],
                         arr2: arr2,
@@ -987,7 +988,7 @@ class _ShowAddBoxState extends State<ShowAddBox> {
   final TextEditingController _addgender = TextEditingController();
   final TextEditingController _addname = TextEditingController();
   final TextEditingController _addpincode = TextEditingController();
-  final TextEditingController _addlandmark = TextEditingController();
+  // final TextEditingController _addlandmark = TextEditingController();
   final TextEditingController _addgymownerid = TextEditingController();
   final TextEditingController _addpassword = TextEditingController();
 
@@ -1194,14 +1195,14 @@ class _ShowAddBoxState extends State<ShowAddBox> {
                 ],
               ),
               const SizedBox(height: 15),
-              const Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Text('Landmark:',
-                    style:
-                        TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
-              ),
-              customTextField(
-                  hinttext: "Landmark", addcontroller: _addlandmark),
+              // const Padding(
+              //   padding: EdgeInsets.all(8.0),
+              //   child: Text('Landmark:',
+              //       style:
+              //           TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
+              // ),
+              // customTextField(
+              //     hinttext: "Landmark", addcontroller: _addlandmark),
               const SizedBox(height: 15),
               const Padding(
                 padding: EdgeInsets.all(8.0),
@@ -1391,7 +1392,7 @@ class _ShowAddBoxState extends State<ShowAddBox> {
                           'location': dataForGeoPint,
                           'gym_id': _addgymownerid.text,
                           'gym_owner': _addgymownerid.text,
-                          'landmark': _addlandmark.text,
+                          // 'landmark': _addlandmark.text,
                           'total_booking': "",
                           'total_sales': "",
                           'legit': false,
@@ -1879,7 +1880,7 @@ class ProductEditBox extends StatefulWidget {
     required this.gymOwner,
     required this.gender,
     // required this.location,
-    required this.landmark,
+    // required this.landmark,
     required this.pincode,
     required this.imagee,
     this.arr2,
@@ -1887,16 +1888,18 @@ class ProductEditBox extends StatefulWidget {
     this.serviceArray,
     this.description,
     required this.password,
+    required this.branch,
   }) : super(key: key);
 
   final String name;
   final String address;
   final String gymId;
+  final String branch;
   final String gymOwner;
   final String gender;
   final String password;
   // final GeoPoint location;
-  final String landmark;
+  // final String landmark;
   final String pincode;
   final String imagee;
   final arr2;
@@ -1917,7 +1920,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
   final TextEditingController _gymowner = TextEditingController();
   final TextEditingController _gender = TextEditingController();
   final TextEditingController _password = TextEditingController();
-  final TextEditingController _landmark = TextEditingController();
+  final TextEditingController _branch = TextEditingController();
   final TextEditingController _pincode = TextEditingController();
   final TextEditingController _description = TextEditingController();
   final TextEditingController _latitudeController = TextEditingController();
@@ -1936,7 +1939,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
     _pincode.text = widget.pincode;
     _gymiid.text = widget.gymId;
     _gymowner.text = widget.gymOwner;
-    _landmark.text = widget.landmark;
+    _branch.text = widget.branch;
     imagess = widget.imagee;
     _password.text = widget.password;
     _description.text = widget.description;
@@ -1979,9 +1982,9 @@ class _ProductEditBoxState extends State<ProductEditBox> {
               customTextField(hinttext: 'Password', addcontroller: _password),
               // customTextField(
               //     hinttext: 'Longitude', addcontroller: _longitudeController),
-              customTextField(hinttext: "Landmark", addcontroller: _landmark),
+              customTextField(hinttext: "Branch", addcontroller: _branch),
               customTextField(hinttext: "Pincode", addcontroller: _pincode),
-              editim(imagea: imagess.toString(), gymid: _gymiid.text),
+              editim(imagea: widget.imagee, gymid: _gymiid.text),
               const Text(
                 "Choose Amenities",
                 style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
@@ -2110,15 +2113,13 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                         'password': _password.text,
                         'gym_id': _gymiid.text,
                         'gym_owner': _gymowner.text,
-                        'landmark': _landmark.text,
+                        'branch': _branch.text,
                         'description': _description.text,
-                        'display_picture': image2 != null ? image2 : imagess,
+                        'display_picture':
+                            image2 != null ? image2 : widget.imagee,
                       };
                       await documentReference.update(data).whenComplete(() {
                         print("Item Updated");
-                        setState(() {
-                          image2 = "";
-                        });
                       }).catchError((e) => print(e));
                       Navigator.pop(context);
                     },
@@ -2156,7 +2157,7 @@ class _editimState extends State<editim> {
 // <<<<<<< HEAD
   @override
   bool isloading = false;
-  var imagee;
+  // var imagee;
   Widget build(BuildContext context) {
     return Container(
       child: Row(
@@ -2240,7 +2241,7 @@ class _editimState extends State<editim> {
 }
 
 ///////Edit Change
-var image2;
+var image2 = null;
 
 class datacelldisplay extends StatefulWidget {
   const datacelldisplay({Key? key, required this.disimg, required this.idd})

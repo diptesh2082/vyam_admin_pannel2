@@ -1,5 +1,6 @@
 import 'package:admin_panel_vyam/services/deleteMethod.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -194,12 +195,12 @@ class _TrackingScreenState extends State<TrackingScreen> {
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
-                              DataColumn(
-                                label: Text(
-                                  'Discount',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
-                              ),
+                              // DataColumn(
+                              //   label: Text(
+                              //     'Discount',
+                              //     style: TextStyle(fontWeight: FontWeight.w600),
+                              //   ),
+                              // ),
                               DataColumn(
                                 label: Text(
                                   'Grand \n Total',
@@ -316,6 +317,7 @@ class _TrackingScreenState extends State<TrackingScreen> {
         snap.add(element);
       }
     });
+
     return snap
         .map((data) => _buildListItem(context, data, s++, start, end))
         .toList();
@@ -323,6 +325,12 @@ class _TrackingScreenState extends State<TrackingScreen> {
 
   DataRow _buildListItem(BuildContext context, DocumentSnapshot data, int index,
       int start, int end) {
+    String stime = DateFormat("dd/MMM/yyyy, hh:mm a")
+        .format(data["booking_date"].toDate());
+    String etime = DateFormat("dd/MMM/yyyy, hh:mm a")
+        .format(data["plan_end_duration"].toDate());
+    String btime =
+        DateFormat("dd/MMM/yyyy, hh:mm a").format(data["order_date"].toDate());
     String bookingId = data['booking_id'];
     bool paymentDoneBool = data['payment_done'];
     bool bookingAccepted = data['booking_accepted'];
@@ -359,11 +367,12 @@ class _TrackingScreenState extends State<TrackingScreen> {
       DataCell(data['plan_end_duration'] != null
           ? Text(durationEnd)
           : const Text("")),
-      DataCell(data['order_date'] != null ? Text(orderDate) : const Text("")),
+      DataCell(
+          data['order_date'] != null ? Text(btime.toString()) : const Text("")),
 
-      DataCell(data['discount'] != null
-          ? Text('₹${data['discount'].toString()}')
-          : const Text("")),
+      // DataCell(data['discount'] != null
+      //     ? Text('₹${data['discount'].toString()}')
+      //     : const Text("")),
       DataCell(data['grand_total'] != null
           ? Text('₹${data['grand_total'].toString()}')
           : const Text("")),
