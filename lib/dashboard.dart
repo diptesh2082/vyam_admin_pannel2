@@ -3,6 +3,7 @@ import 'package:admin_panel_vyam/Screens/Product%20Details/Trainers/Trainers.dar
 import 'package:admin_panel_vyam/Screens/banners.dart';
 import 'package:admin_panel_vyam/Screens/category_screen.dart';
 import 'package:admin_panel_vyam/Screens/perday.dart';
+import 'package:admin_panel_vyam/Screens/todaybook.dart';
 import 'package:admin_panel_vyam/services/deleteMethod.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
@@ -173,6 +174,18 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
             onTap: () {
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) => UserInformation()));
+            },
+          );
+        }
+        if (i == 10) {
+          return GestureDetector(
+            child: cardss(
+              title: 'Today Bookings',
+              collectionId: 'bookings',
+            ),
+            onTap: () {
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => today()));
             },
           );
         }
@@ -652,6 +665,112 @@ class Cardd extends StatelessWidget {
             );
           }
           int count = snapshot.data.docs.length.toInt();
+          return InkWell(
+            hoverColor: isHovering == true ? Colors.green : Colors.amber,
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+              width: 300,
+              height: 100,
+              decoration: BoxDecoration(
+                color: color != null
+                    ? color
+                    : (count % 2 == 0)
+                        ? Colors.red
+                        : Colors.blue,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  CircleAvatar(
+                    backgroundColor: Colors.white,
+                    radius: 30,
+                    child: Icon(
+                      Icons.trending_up,
+                      color: Colors.blue,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: FittedBox(
+                      child: Column(
+                        // mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Text(
+                            title!,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 14,
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 8,
+                          ),
+                          Text(
+                            snapshot.data.docs.length.toString(),
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 25,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
+  }
+}
+
+class cardss extends StatelessWidget {
+  cardss({Key? key, this.title, this.collectionId, this.color, this.s})
+      : super(key: key);
+  final title;
+  final collectionId;
+  final color;
+  final s;
+  bool isHovering = false;
+
+  // @override
+  // void initState() {
+  //   // TODO: implement initState
+  //   categoryStream = FirebaseFirestore.instance.collection("category");
+  //   productStream = FirebaseFirestore.instance.collection("product_details");
+  //   bannerStream = FirebaseFirestore.instance.collection("banner_details");
+  //   bookingStream = FirebaseFirestore.instance.collection("bookings");
+  //
+  //   super.initState();
+  // }
+  var tdate = DateTime.now().day.toString();
+  var tmonth = DateTime.now().month.toString();
+  var tyear = DateTime.now().year.toString();
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder(
+        stream: FirebaseFirestore.instance
+            .collection(collectionId)
+            .where('booking_status', isEqualTo: 'upcoming')
+            .snapshots(),
+        builder: (context, AsyncSnapshot snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          var docs = snapshot.data.docs;
+          List<DocumentSnapshot> doc = [];
+// <<<<<<< HEAD
+          docs.forEach((element) {
+            if (element.get('order_date').toDate().day.toString() == tdate &&
+                element.get('order_date').toDate().month.toString() == tmonth &&
+                element.get('order_date').toDate().year.toString() == tyear) {
+              doc.add(element);
+            }
+          });
+          int count = doc.length.toInt();
           return InkWell(
             hoverColor: isHovering == true ? Colors.green : Colors.amber,
             child: Container(
