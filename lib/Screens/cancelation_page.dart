@@ -15,7 +15,7 @@ class CancelationPage extends StatefulWidget {
 class _CancelationPageState extends State<CancelationPage> {
   CollectionReference? cancellationStream;
   final Id = FirebaseFirestore.instance
-      .collection('Cancellation Data')
+      .collection('Cancellation_Data')
       .doc()
       .id
       .toString();
@@ -88,7 +88,7 @@ class _CancelationPageState extends State<CancelationPage> {
                 Center(
                   child: StreamBuilder<QuerySnapshot>(
                     stream: FirebaseFirestore.instance
-                        .collection("Cancellation Data")
+                        .collection("Cancellation_Data")
                         .orderBy('time_stamp', descending: true)
                         // .orderBy('booking_id', descending: true)
                         .snapshots(),
@@ -534,7 +534,7 @@ class _CancelationEditBoxState extends State<CancelationEditBox> {
 
                     DocumentReference documentReference = FirebaseFirestore
                         .instance
-                        .collection('Cancellation Data')
+                        .collection('Cancellation_Data')
                         .doc(widget.Id);
                     Map<String, dynamic> data = {
                       'user_name': _user_name.text,
@@ -543,7 +543,7 @@ class _CancelationEditBoxState extends State<CancelationEditBox> {
                       'cancel_remark': _cancel_remark.text,
                     };
                     await FirebaseFirestore.instance
-                        .collection('Cancellation Data')
+                        .collection('Cancellation_Data')
                         .doc(widget.Id)
                         .update(data);
                     print("after");

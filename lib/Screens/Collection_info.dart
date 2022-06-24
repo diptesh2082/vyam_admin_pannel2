@@ -362,7 +362,7 @@ class _UserInformationState extends State<UserInformation> {
                                                     ? Colors.red
                                                     : Colors.teal,
                                                 height: 20,
-                                                width: 20,
+                                                width: 50,
                                                 child: Text(
                                                   "${index + 1}",
                                                   style: TextStyle(

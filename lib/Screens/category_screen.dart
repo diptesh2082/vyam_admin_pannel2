@@ -192,6 +192,8 @@ class _CategoryInfoScreenState extends State<CategoryInfoScreen> {
                       child: Text("Previous Page"),
                       onPressed: () {
                         setState(() {
+                          if (start > 1) page--;
+
                           if (start > 0 && end > 0) {
                             start = start - 10;
                             end = end - 10;
@@ -214,6 +216,8 @@ class _CategoryInfoScreenState extends State<CategoryInfoScreen> {
                       child: Text("Next Page"),
                       onPressed: () {
                         setState(() {
+                          if (end <= length) page++;
+
                           if (end < length) {
                             start = start + 10;
                             end = end + 10;
@@ -452,7 +456,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                             .doc(categoryId)
                             .update(
                           {
-                            'image': image3,
+                            'image': image3 != null ? image3 : widget.image,
                             'name': _name.text,
                             'category_id': categoryId,
                             'position': _position.text,

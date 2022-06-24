@@ -16,7 +16,7 @@ class CancelationQuestion extends StatefulWidget {
 class _CancelationQuestionState extends State<CancelationQuestion> {
   CollectionReference? questionStream;
   final Id = FirebaseFirestore.instance
-      .collection('cancelation question')
+      .collection('cancellation_question')
       .doc()
       .id
       .toString();
@@ -24,7 +24,7 @@ class _CancelationQuestionState extends State<CancelationQuestion> {
   @override
   void initState() {
     questionStream =
-        FirebaseFirestore.instance.collection('cancelation question');
+        FirebaseFirestore.instance.collection('cancellation_question');
     super.initState();
   }
 
@@ -209,14 +209,14 @@ class _QuestionEditBoxState extends State<QuestionEditBox> {
 
                       DocumentReference documentReference = FirebaseFirestore
                           .instance
-                          .collection('cancelation question')
+                          .collection('cancellation_question')
                           .doc(widget.Id);
                       Map<String, dynamic> data = {
                         'question': question.text,
                         'index': _index.text,
                       };
                       await FirebaseFirestore.instance
-                          .collection('cancelation question')
+                          .collection('cancellation_question')
                           .doc(widget.Id)
                           .update(data);
                       print("after");

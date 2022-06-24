@@ -19,7 +19,7 @@ class _appDetailsState extends State<appDetails> {
   CollectionReference? appdetailStream;
   @override
   void initState() {
-    appdetailStream = FirebaseFirestore.instance.collection('app details');
+    appdetailStream = FirebaseFirestore.instance.collection('app_details');
     super.initState();
   }
 
@@ -227,7 +227,7 @@ class _ContactUsState extends State<ContactUs> {
     _instaId.text = widget.instaId;
     _phonenumber.text = widget.phonenumber;
     _website.text = widget.website;
-    appdetailStream = FirebaseFirestore.instance.collection('app details');
+    appdetailStream = FirebaseFirestore.instance.collection('app_details');
     super.initState();
   }
 
@@ -274,7 +274,7 @@ class _ContactUsState extends State<ContactUs> {
 
                             DocumentReference documentReference =
                                 FirebaseFirestore.instance
-                                    .collection('app details')
+                                    .collection('app_details')
                                     .doc('contact_us');
                             Map<String, dynamic> data = {
                               'email': _email.text,
@@ -283,7 +283,7 @@ class _ContactUsState extends State<ContactUs> {
                               'website': _website.text,
                             };
                             await FirebaseFirestore.instance
-                                .collection('app details')
+                                .collection('app_details')
                                 .doc('contact_us')
                                 .update(data);
                             print("after");
@@ -358,13 +358,13 @@ class _AboutUsState extends State<AboutUs> {
 
                   DocumentReference documentReference = FirebaseFirestore
                       .instance
-                      .collection('app details')
+                      .collection('app_details')
                       .doc('about_us');
                   Map<String, dynamic> data = {
                     'about': descriptionn,
                   };
                   await FirebaseFirestore.instance
-                      .collection('app details')
+                      .collection('app_details')
                       .doc('about_us')
                       .update(data);
                   print("after");
@@ -434,13 +434,13 @@ class _TandC extends State<TandC> {
 
                   DocumentReference documentReference = FirebaseFirestore
                       .instance
-                      .collection('app details')
+                      .collection('app_details')
                       .doc('t&c');
                   Map<String, dynamic> data = {
                     'tnc': descriptionn,
                   };
                   await FirebaseFirestore.instance
-                      .collection('app details')
+                      .collection('app_details')
                       .doc('t&c')
                       .update(data);
                   print("after");
@@ -511,13 +511,13 @@ class _PrivacyPolicy extends State<PrivacyPolicy> {
 
                   DocumentReference documentReference = FirebaseFirestore
                       .instance
-                      .collection('app details')
+                      .collection('app_details')
                       .doc('privacy_policy');
                   Map<String, dynamic> data = {
                     'policy': descriptionn,
                   };
                   await FirebaseFirestore.instance
-                      .collection('app details')
+                      .collection('app_details')
                       .doc('privacy_policy')
                       .update(data);
                   print("after");

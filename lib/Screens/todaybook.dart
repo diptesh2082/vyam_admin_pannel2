@@ -199,7 +199,7 @@ class _todayState extends State<today> {
                       stream: FirebaseFirestore.instance
                           .collection('bookings')
                           .where('booking_status',
-                              whereIn: ['upcoming']).snapshots(),
+                              whereIn: ['upcoming', 'active']).snapshots(),
                       builder: (context, AsyncSnapshot snapshot) {
                         if (snapshot.connectionState ==
                             ConnectionState.waiting) {
@@ -357,6 +357,13 @@ class _todayState extends State<today> {
                                 DataColumn(
                                   label: Text(
                                     'Grand Total',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.w600),
+                                  ),
+                                ),
+                                DataColumn(
+                                  label: Text(
+                                    'Booking Status',
                                     style:
                                         TextStyle(fontWeight: FontWeight.w600),
                                   ),
@@ -547,6 +554,9 @@ class _todayState extends State<today> {
           : const Text("")),
       DataCell(data['grand_total'] != null
           ? Text('₹${data['grand_total'].toString()}')
+          : const Text("")),
+      DataCell(data['booking_status'] != null
+          ? Text(data['booking_status'].toString())
           : const Text("")),
       // DataCell(Center(
       //   child: ElevatedButton(

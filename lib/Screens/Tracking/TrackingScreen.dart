@@ -363,7 +363,8 @@ class _TrackingScreenState extends State<TrackingScreen> {
           ? Text(data['totalDays'].toString())
           : const Text("")),
 
-      DataCell(data['booking_date'] != null ? Text(orderDate) : const Text("")),
+      DataCell(
+          data['booking_date'] != null ? Text(bookingDate) : const Text("")),
       DataCell(data['plan_end_duration'] != null
           ? Text(durationEnd)
           : const Text("")),
