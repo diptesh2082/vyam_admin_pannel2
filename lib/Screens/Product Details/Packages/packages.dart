@@ -20,6 +20,8 @@ class PackagesPage extends StatefulWidget {
   State<PackagesPage> createState() => _PackagesPageState();
 }
 
+String? print_type = "Select Coupon type";
+
 class _PackagesPageState extends State<PackagesPage> {
   CollectionReference? packageStream;
   CollectionReference? categoryStream;
@@ -27,6 +29,7 @@ class _PackagesPageState extends State<PackagesPage> {
   var catagory;
   var drop = [];
   var catagory_type;
+
   void dropDownPackage(String? selecetValue) {
     // if(selecetValue is String){
     setState(() {
@@ -347,6 +350,7 @@ class _PackagesPageState extends State<PackagesPage> {
                       originalprice: data['original_price'],
                       id: packId,
                       description: data['description'],
+                      ptype: data['ptype'],
                     )));
       }),
       DataCell(const Icon(Icons.delete), onTap: () {
@@ -446,6 +450,22 @@ class _addboxxState extends State<addboxx> {
   ];
   String descriptionn = 'Description';
   var finalPackID;
+  void dropDowntype(bool? selecetValue) {
+    // if(selecetValue is String){
+    setState(() {
+      packagetype = selecetValue;
+      if (selecetValue == true) {
+        print_type = "Percentage";
+      }
+      if (selecetValue == false) {
+        print_type = "Flat";
+      }
+    });
+    // }
+  }
+
+  // String? print_type = "Select Coupon type";
+  bool? packagetype = false;
 
   @override
   void initState() {
@@ -534,6 +554,32 @@ class _addboxxState extends State<addboxx> {
                     }),
               ],
             ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                const Text(
+                  "Select Package type",
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+                ),
+                Container(
+                  width: 280,
+                  child: DropdownButton(
+                      hint: Text("${print_type}"),
+                      items: const [
+                        DropdownMenuItem(
+                          child: Text("Percentage"),
+                          value: true,
+                        ),
+                        DropdownMenuItem(
+                          child: Text("Flat"),
+                          value: false,
+                        ),
+                      ],
+                      onChanged: dropDowntype),
+                ),
+              ],
+            ),
             customTextField(hinttext: "validity", addcontroller: _validity),
             // customTextField(hinttext: "price", addcontroller: _price),
 
@@ -618,6 +664,7 @@ class _addboxxState extends State<addboxx> {
                       "package_type": selectedvaluee,
                       'description': descriptionn,
                       'trending': true,
+                      'ptype': packagetype
                     },
                   );
                   await FirebaseFirestore.instance
@@ -657,6 +704,7 @@ class ProductEditBox extends StatefulWidget {
     required this.package_type,
     required this.description,
     required this.validity,
+    required this.ptype,
   }) : super(key: key);
 
   final String discount;
@@ -670,6 +718,7 @@ class ProductEditBox extends StatefulWidget {
   final gym_id;
   final String package_type;
   final String description;
+  final bool ptype;
 
   @override
   _ProductEditBoxState createState() => _ProductEditBoxState();
@@ -686,6 +735,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
   var selectedvaluee;
   var sele;
   String description = '';
+
   @override
   CollectionReference? categoryStream;
   TextEditingController controller = TextEditingController();
@@ -696,6 +746,22 @@ class _ProductEditBoxState extends State<ProductEditBox> {
     MarkdownType.link,
     MarkdownType.list
   ];
+  bool packagetype = false;
+  String ptypee = '';
+  void dropDowntype(bool? selecetValue) {
+    // if(selecetValue is String){
+    setState(() {
+      packagetype = selecetValue!;
+      if (selecetValue == true) {
+        ptypee = "Percentage";
+      }
+      if (selecetValue == false) {
+        ptypee = "Flat";
+      }
+    });
+    // }
+  }
+
   void initState() {
     super.initState();
     categoryStream = FirebaseFirestore.instance.collection("category");
@@ -708,6 +774,9 @@ class _ProductEditBoxState extends State<ProductEditBox> {
     sele = widget.type;
     selectedvaluee = widget.package_type;
     description = widget.description;
+    packagetype = widget.ptype;
+    ptypee = widget.ptype ? "Percentage" : "Flat";
+
     // _type.text = widget.type;
   }
 
@@ -779,6 +848,30 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                       }),
                 ],
               ),
+              Column(
+                children: [
+                  const Text(
+                    "Select Package type",
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+                  ),
+                  Container(
+                    width: 280,
+                    child: DropdownButton(
+                        hint: Text("${ptypee}"),
+                        items: const [
+                          DropdownMenuItem(
+                            child: Text("Percentage"),
+                            value: true,
+                          ),
+                          DropdownMenuItem(
+                            child: Text("Flat"),
+                            value: false,
+                          ),
+                        ],
+                        onChanged: dropDowntype),
+                  ),
+                ],
+              ),
               customTextField(hinttext: "validity", addcontroller: _validity),
               const Text('Category:',
                   style: const TextStyle(
@@ -844,6 +937,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                         "package_type": selectedvaluee,
                         'validity': _validity.text,
                         "type": sele,
+                        'ptype': packagetype,
                       };
                       await documentReference
                           .update(data)
