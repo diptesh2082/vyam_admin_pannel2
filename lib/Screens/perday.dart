@@ -339,6 +339,7 @@ class _perdayState extends State<perday> {
                                         TextStyle(fontWeight: FontWeight.w600),
                                   ),
                                 ),
+
                                 // <<<<<<< HEAD
                                 // // DataColumn(
                                 // //   label: Text(

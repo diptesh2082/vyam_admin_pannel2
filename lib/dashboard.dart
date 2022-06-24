@@ -750,10 +750,9 @@ class cardss extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-        stream: FirebaseFirestore.instance
-            .collection(collectionId)
-            .where('booking_status', isEqualTo: 'upcoming')
-            .snapshots(),
+        stream: FirebaseFirestore.instance.collection(collectionId).where(
+            'booking_status',
+            whereIn: ['upcoming', 'active']).snapshots(),
         builder: (context, AsyncSnapshot snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(
