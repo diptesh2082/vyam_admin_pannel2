@@ -31,7 +31,8 @@ send(String id) async {
 choosemulti() async {
   List<XFile>? _imageFileList = [];
 
-  final List<XFile>? selectedImages = await _picker.pickMultiImage();
+  final List<XFile>? selectedImages =
+      await _picker.pickMultiImage(imageQuality: 70);
   if (selectedImages!.isNotEmpty) {
     _imageFileList.addAll(selectedImages);
   }
@@ -179,7 +180,8 @@ class ImagePickerAPI {
 
   Future pickImage(ImageSource imageSource) async {
     try {
-      XFile? file = await _imagePicker.pickImage(source: imageSource);
+      XFile? file =
+          await _imagePicker.pickImage(source: imageSource, imageQuality: 70);
       return file!.path;
     } catch (e) {
       print(e);

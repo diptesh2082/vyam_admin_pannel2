@@ -117,6 +117,11 @@ class _TimingsState extends State<Timings> {
                                 style: TextStyle(fontWeight: FontWeight.w600),
                               )),
                               DataColumn(
+                                  label: Text(
+                                'Position',
+                                style: TextStyle(fontWeight: FontWeight.w600),
+                              )),
+                              DataColumn(
                                 label: Text(
                                   'Edit',
                                   style: TextStyle(fontWeight: FontWeight.w600),
@@ -212,19 +217,20 @@ class _TimingsState extends State<Timings> {
       DataCell(data != null ? Text(data['closed'] ?? "") : Text("")),
       DataCell(data != null ? Text(data['morning_days'] ?? "") : Text("")),
       DataCell(data != null ? Text(data['evening_days'] ?? "") : Text("")),
+      DataCell(data != null ? Text(data['position'] ?? "") : Text("")),
       DataCell(const Text(""), showEditIcon: true, onTap: () {
         Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => ProductEditBox(
-                gymId: widget.pGymId,
-                typeId: timeId,
-                closed: data['closed'],
-                eveninging_days: data['evening_days'],
-                morning: data["Morning"],
-                morning_days: data['morning_days'],
-                evening: data['Evening'],
-              ),
+                  gymId: widget.pGymId,
+                  typeId: timeId,
+                  closed: data['closed'],
+                  eveninging_days: data['evening_days'],
+                  morning: data["Morning"],
+                  morning_days: data['morning_days'],
+                  evening: data['Evening'],
+                  position: data['position']),
             ));
       }),
       DataCell(Icon(Icons.delete), onTap: () {
@@ -259,6 +265,7 @@ class _ShowAddBoxState extends State<ShowAddBox> {
   final TextEditingController closed = TextEditingController();
   final TextEditingController morning_days = TextEditingController();
   final TextEditingController evening_days = TextEditingController();
+  final TextEditingController position = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -294,6 +301,7 @@ class _ShowAddBoxState extends State<ShowAddBox> {
             customTextField(
                 hinttext: "Evening Days : Evening(mon-fri)",
                 addcontroller: evening_days),
+            customTextField(hinttext: "Position", addcontroller: position),
             Center(
               child: ElevatedButton(
                 onPressed: () async {
@@ -310,6 +318,7 @@ class _ShowAddBoxState extends State<ShowAddBox> {
                       "morning_days": morning_days.text,
                       "evening_days": evening_days.text,
                       'timing_id': typecon.text,
+                      'position': position.text
                     },
                   );
                   Navigator.pop(context);
@@ -334,6 +343,7 @@ class ProductEditBox extends StatefulWidget {
     required this.eveninging_days,
     required this.typeId,
     required this.gymId,
+    required this.position,
   }) : super(key: key);
 
   final String morning;
@@ -343,6 +353,7 @@ class ProductEditBox extends StatefulWidget {
   final String eveninging_days;
   final String typeId;
   final String gymId;
+  final String position;
 
   @override
   _ProductEditBoxState createState() => _ProductEditBoxState();
@@ -355,6 +366,8 @@ class _ProductEditBoxState extends State<ProductEditBox> {
   final TextEditingController closed = TextEditingController();
   final TextEditingController morning_days = TextEditingController();
   final TextEditingController evening_days = TextEditingController();
+  final TextEditingController position = TextEditingController();
+
   @override
   void initState() {
     super.initState();
@@ -364,6 +377,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
     closed.text = widget.closed;
     morning_days.text = widget.morning_days;
     evening_days.text = widget.eveninging_days;
+    position.text = widget.position;
   }
 
   @override
@@ -403,6 +417,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
               customTextField(
                   hinttext: "Evening Days : Evening(mon-fri)",
                   addcontroller: evening_days),
+              customTextField(hinttext: "Position", addcontroller: position),
               Padding(
                 padding: const EdgeInsets.all(12.0),
                 child: Center(
@@ -422,6 +437,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                         "morning_days": morning_days.text,
                         "evening_days": evening_days.text,
                         'timing_id': typecon.text,
+                        'position': position.text,
                       };
                       await documentReference
                           .update(data)
