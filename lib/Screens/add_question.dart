@@ -11,7 +11,7 @@ class addQuestion extends StatefulWidget {
 
 class _addQuestionState extends State<addQuestion> {
   final id =
-      FirebaseFirestore.instance.collection('cancelation question').doc().id;
+      FirebaseFirestore.instance.collection('cancellation_question').doc().id;
   final TextEditingController _addquestion = TextEditingController();
   final TextEditingController _addindex = TextEditingController();
   CollectionReference? questionStream;
@@ -58,7 +58,7 @@ class _addQuestionState extends State<addQuestion> {
                             if (_formKey.currentState!.validate()) {
                               // await createReview(id);
                               await FirebaseFirestore.instance
-                                  .collection('cancelation question')
+                                  .collection('cancellation_question')
                                   .doc(id)
                                   .set(
                                 {
