@@ -447,7 +447,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                             .update(
                           {
                             'name': _name.text,
-                            'image': image3,
+                            'image': image3 != null ? image3 : im1,
                             'id': _amenityId.text,
                             'amenity_id': amm,
                             'gym_id': [],
