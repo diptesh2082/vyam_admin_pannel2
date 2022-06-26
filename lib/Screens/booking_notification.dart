@@ -28,7 +28,7 @@ class _bookingNotificationState extends State<bookingNotification> {
               StreamBuilder<QuerySnapshot>(
                 stream: FirebaseFirestore.instance
                     .collection('booking_notifications')
-                    .orderBy('time_stamp' , descending: true)
+                    .orderBy('time_stamp', descending: true)
                     .snapshots(),
                 builder: (context, AsyncSnapshot snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
@@ -104,6 +104,7 @@ class _bookingNotificationState extends State<bookingNotification> {
                     child: Text("Previous Page"),
                     onPressed: () {
                       setState(() {
+                        if (start >= 1) page--;
                         if (start > 0 && end > 0) {
                           start = start - 10;
                           end = end - 10;
@@ -126,6 +127,8 @@ class _bookingNotificationState extends State<bookingNotification> {
                     child: const Text("Next Page"),
                     onPressed: () {
                       setState(() {
+                        if (end <= length) page++;
+
                         if (end < length) {
                           start = start + 10;
                           end = end + 10;

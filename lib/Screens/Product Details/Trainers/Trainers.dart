@@ -297,12 +297,12 @@ class _TrainerPageState extends State<TrainerPage> {
       DataCell(data != null ? Text(data['branch'] ?? "") : const Text("")),
       DataCell(data != null ? Text(data['place'] ?? "") : const Text("")),
       DataCell(data != null ? Text(data['experience'] ?? "") : const Text("")),
-      DataCell(data != null ? SingleChildScrollView(
-        child: Container(
-          width: 400,
-            height:300,
-            child: Text(data['about'] ?? "")),
-      ) : const Text("")),
+      DataCell(data != null
+          ? SingleChildScrollView(
+              child: Container(
+                  width: 400, height: 300, child: Text(data['about'] ?? "")),
+            )
+          : const Text("")),
       DataCell(data != null ? Text(data['clients'] ?? "") : const Text("")),
 
       DataCell(
@@ -748,61 +748,6 @@ class _ShowAddboxState extends State<ShowAddbox> {
                       fontWeight: FontWeight.bold, fontSize: 20),
                 ),
                 loadimage(id: id),
-                // Row(
-                //   children: [
-                //     SizedBox(
-                //       width: 150,
-                //       child: ListTile(
-                //         leading: Icon(
-                //           Icons.file_upload_outlined,
-                //           size: 20,
-                //         ),
-                //         trailing: InkWell(
-                //           child: const Text("Add photos",
-                //               style: TextStyle(
-                //                   color: Colors.black,
-                //                   fontFamily: 'Poppins',
-                //                   fontSize: 14,
-                //                   fontWeight: FontWeight.w600)),
-                //           onTap: () async {
-                //             image = await chooseImage();
-                //             await getUrlImage(image);
-                //             setState(() {
-                //               imagecheck = true;
-                //             });
-                //             // String res = await ImagePickerAPI()
-                //             //     .pickImage(ImageSource.gallery);
-                //             // File file = File.fromUri(Uri.file(res));
-                //             // print(file.path);
-                //           },
-                //           // onTap: ()async {
-                //           //   String res = await ImagePickerAPI().pickImage(ImageSource.gallery);
-                //           //   File file = File.fromUri(Uri.file(res));
-                //           //   print(file.path);
-                //           // },
-                //         ),
-                //       ),
-                //     ),
-                //     SizedBox(
-                //       width: 300,
-                //       height: 200,
-                //       child: Container(
-                //           child: imgUrl1 != null
-                //               ? Image.network(
-                //                   imgUrl1 != null ? imgUrl1 : " ",
-                //                   fit: BoxFit.contain,
-                //                 )
-                //               : Container(
-                //                   child: Text(
-                //                     'Please Upload Image',
-                //                     style: TextStyle(
-                //                         fontWeight: FontWeight.bold,
-                //                         fontSize: 20),
-                //                   ),
-                //                 )),
-                //     ),
-                //   ],
-                // ),
                 Center(
                   child: ElevatedButton(
                     onPressed: () async {
@@ -818,7 +763,7 @@ class _ShowAddboxState extends State<ShowAddbox> {
                             .doc(id)
                             .set(
                           {
-                            'position' : postion,
+                            'position': postion.text,
                             'trainer_id': id,
                             'name': _addname.text,
                             'branch': gymname,
@@ -992,7 +937,8 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                 ]),
                 Text(
                   "$spec",
-                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: 20),
                 ),
                 const SizedBox(
                   height: 40,
@@ -1027,7 +973,8 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                 ]),
                 Text(
                   "$cert",
-                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: 20),
                 ),
                 // Row(
                 //   children: [
@@ -1108,8 +1055,8 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                           'specialization': spec,
                           'insta_id': _social.text,
 // <<<<<<< someshwar
-                         
-                          'position':_position.text,
+
+                          'position': _position.text,
 // =======
                           'image': image2 != null ? image2 : imgUrl11,
 // >>>>>>> Diptesh
@@ -1179,7 +1126,9 @@ class _editimState extends State<editim> {
           ),
           isloading
               ? Container(
-                  height: 200, width: 200, child: const CircularProgressIndicator())
+                  height: 200,
+                  width: 200,
+                  child: const CircularProgressIndicator())
               : image2 != null
                   ? Image(
                       image: NetworkImage(image2.toString()),
