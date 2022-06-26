@@ -725,34 +725,41 @@ class Cardd extends StatelessWidget {
   }
 }
 
-class cardss extends StatelessWidget {
+class cardss extends StatefulWidget {
   cardss({Key? key, this.title, this.collectionId, this.color, this.s})
       : super(key: key);
   final title;
   final collectionId;
   final color;
   final s;
+
+  @override
+  State<cardss> createState() => _cardssState();
+}
+
+class _cardssState extends State<cardss> {
   bool isHovering = false;
 
   // @override
   // void initState() {
   //   // TODO: implement initState
-  //   categoryStream = FirebaseFirestore.instance.collection("category");
-  //   productStream = FirebaseFirestore.instance.collection("product_details");
-  //   bannerStream = FirebaseFirestore.instance.collection("banner_details");
-  //   bookingStream = FirebaseFirestore.instance.collection("bookings");
+  //
   //
   //   super.initState();
   // }
+
   var tdate = DateTime.now().day.toString();
+
   var tmonth = DateTime.now().month.toString();
+
   var tyear = DateTime.now().year.toString();
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-        stream: FirebaseFirestore.instance.collection(collectionId).where(
-            'booking_status',
-            whereIn: ['upcoming', 'active']).snapshots(),
+        stream: FirebaseFirestore.instance
+            .collection(widget.collectionId)
+            .where('booking_status', whereIn: ['upcoming']).snapshots(),
         builder: (context, AsyncSnapshot snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(
@@ -777,8 +784,8 @@ class cardss extends StatelessWidget {
               width: 300,
               height: 100,
               decoration: BoxDecoration(
-                color: color != null
-                    ? color
+                color: widget.color != null
+                    ? widget.color
                     : (count % 2 == 0)
                         ? Colors.red
                         : Colors.blue,
@@ -802,7 +809,7 @@ class cardss extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
                           Text(
-                            title!,
+                            widget.title!,
                             style: const TextStyle(
                               color: Colors.white,
                               fontSize: 14,

@@ -199,7 +199,7 @@ class _todayState extends State<today> {
                       stream: FirebaseFirestore.instance
                           .collection('bookings')
                           .where('booking_status',
-                              whereIn: ['upcoming', 'active']).snapshots(),
+                              whereIn: ['upcoming']).snapshots(),
                       builder: (context, AsyncSnapshot snapshot) {
                         if (snapshot.connectionState ==
                             ConnectionState.waiting) {
