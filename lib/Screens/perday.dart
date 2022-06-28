@@ -197,7 +197,8 @@ class _perdayState extends State<perday> {
                         'Pay per Day',
                         'pay per session',
                         'PAY PER SESSION',
-                        'Pay per session'
+                        'Pay per session',
+                        'pay per day'
                       ]).snapshots(),
                       builder: (context, AsyncSnapshot snapshot) {
                         if (snapshot.connectionState ==
@@ -212,7 +213,19 @@ class _perdayState extends State<perday> {
                           print(snapshot.error);
                           return Container();
                         }
-                        var doc = snapshot.data.docs;
+                        String d = 'upcoming';
+                        var docs = snapshot.data.docs;
+                        List<DocumentSnapshot> doc = [];
+                        docs.forEach((element) {
+                          if ((element.get('booking_status').toString() ==
+                                  'upcoming') ||
+                              (element.get('booking_status').toString() ==
+                                  'completed') ||
+                              (element.get('booking_status').toString() ==
+                                  'active')) {
+                            doc.add(element);
+                          }
+                        });
 
 // <<<<<<< HEAD
                         if (searchVendorId.isNotEmpty) {
@@ -365,6 +378,13 @@ class _perdayState extends State<perday> {
                                 //         TextStyle(fontWeight: FontWeight.w600),
                                 //   ),
                                 // ),
+                                DataColumn(
+                                  label: Text(
+                                    'Booking Status',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.w600),
+                                  ),
+                                ),
                                 DataColumn(
                                   label: Text(
                                     'Edit',
@@ -552,99 +572,9 @@ class _perdayState extends State<perday> {
       DataCell(data['grand_total'] != null
           ? Text('₹${data['grand_total'].toString()}')
           : const Text("")),
-      // DataCell(Center(
-      //   child: ElevatedButton(
-      //     onPressed: () async {
-      //       bool temp = paymentDoneBool;
-      //       temp = !temp;
-      //       DocumentReference documentReference = FirebaseFirestore.instance
-      //           .collection('bookings')
-      //           .doc(bookingId);
-      //       await documentReference
-      //           .update({'payment_done': temp})
-      //           .whenComplete(() => print("Payment done updated"))
-      //           .catchError((e) => print(e));
-      //     },
-      //     child: Text(x = paymentDoneBool ? 'YES' : 'NO'),
-      //     style: ElevatedButton.styleFrom(
-      //         primary: paymentDoneBool ? Colors.green : Colors.red),
-      //   ),
-      // )),
-      // DataCell(
-      //     data['booking_date'] != null ? Text(bookingDate) : const Text("")),
-
-      // DataCell(
-      //   Center(
-      //     child: Container(
-      //       child: Row(
-      //         children: [
-      //           DropdownButton(
-      //               hint: Text(data['booking_status'].toString()),
-      //               value: data['booking_status'].toString(),
-      //               items: const [
-      //                 DropdownMenuItem(
-      //                   child: Text("Active"),
-      //                   value: "active",
-      //                 ),
-      //                 DropdownMenuItem(
-      //                   child: Text("Upcoming"),
-      //                   value: "upcoming",
-      //                 ),
-      //                 DropdownMenuItem(
-      //                     child: Text("Completed"), value: "completed"),
-      //                 DropdownMenuItem(
-      //                     child: Text("Cancelled"), value: "cancelled"),
-      //               ],
-      //               onChanged: (value) async {
-      //                 setState(() {
-      //                   selectedValue = value as String;
-      //                 });
-      //                 await FirebaseFirestore.instance
-      //                     .collection('bookings')
-      //                     .doc(bookingId)
-      //                     .update({'booking_status': value});
-      //
-      //                 if (value == "active") {
-      //                   await FirebaseFirestore.instance
-      //                       .collection('bookings')
-      //                       .doc(bookingId)
-      //                       .update({'payment_done': true});
-      //                   await FirebaseFirestore.instance
-      //                       .collection("booking_notifications")
-      //                       .doc()
-      //                       .set({
-      //                     "title": "Booking Details",
-      //                     "status": selectedValue,
-      //                     // "payment_done": false,
-      //                     "user_id": data['userId'],
-      //                     "user_name": data["user_name"],
-      //                     "vendor_id": data['vendorId'],
-      //                     "vendor_name": data['gym_details']['name'],
-      //                   });
-      //                 }
-      //               }),
-      //         ],
-      //       ),
-      //     ),
-      //   ),
-      // ),
-// <<<<<<< HEAD
-// <<<<<<< HEAD
-// =======
-// <<<<<<< nihal_new
-// >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
-// =======
-//     <<<<<<< HEAD
-//     =======
-// // <<<<<<< nihal_new
-//     >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
-// >>>>>>> ae7259e7ba6e19ed4976a35667cb3a762fe66e2c
-      // DataCell(data['booking_plan'] != null
-      //     ? Text(data['booking_plan'].toString())
-      //     : const Text("")),
-      // DataCell(data['grand_total'] != null
-      //     ? Text('₹${data['grand_total'].toString()}')
-      //     : const Text("")),
+      DataCell(data['booking_status'] != null
+          ? Text('${data['booking_status'].toString()}')
+          : const Text("")),
       DataCell(const Text(""), showEditIcon: true, onTap: () {
         Get.to(() => ProductEditBox(
               vendorname: data['gym_details']['name'],
