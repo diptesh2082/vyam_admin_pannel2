@@ -587,7 +587,7 @@ class _ProductDetailsState extends State<ProductDetails> {
     bool status = data["gym_status"];
     bool online_pay = data["online_pay"];
     List imgList = data['images'];
-    String landmark = data['landmark'];
+    // String landmark = data['landmark'];
     String imagess = data['display_picture'];
     List<dynamic> arr2 = data['amenities'];
     List<dynamic> WorkoutArray = data['workouts'];
@@ -639,7 +639,7 @@ class _ProductDetailsState extends State<ProductDetails> {
         onPressed: () {
           Navigator.of(context).push(MaterialPageRoute(
             builder: (context) =>
-                PackagesPage(pGymId: gymId, o: name, land: landmark),
+                PackagesPage(pGymId: gymId, o: name, land: ""),
           ));
         },
       )),
@@ -1415,6 +1415,7 @@ class _ShowAddBoxState extends State<ShowAddBox> {
                           "amenities": arr,
                           "workouts": workoutArray,
                           "password": _addpassword.text,
+                          'valid': true
                         },
                         // ).then((snapshot) async {
                         //   await uploadImageToStorage(dic, _addgymownerid.text);

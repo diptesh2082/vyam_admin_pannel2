@@ -865,7 +865,8 @@ class Carddb extends StatelessWidget {
           "Pay per Day",
           "pay per session",
           "Pay Per Session",
-          "PAY PER SESSION"
+          "PAY PER SESSION",
+          'pay per day'
         ]).snapshots(),
         builder: (context, AsyncSnapshot snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -873,7 +874,15 @@ class Carddb extends StatelessWidget {
               child: CircularProgressIndicator(),
             );
           }
-          int count = snapshot.data.docs.length;
+          var docs = snapshot.data.docs;
+          List<DocumentSnapshot> doc = [];
+          docs.forEach((element) {
+            if ((element.get('booking_status').toString() == 'upcoming') ||
+                (element.get('booking_status').toString() == 'completed')) {
+              doc.add(element);
+            }
+          });
+          int count = doc.length;
           print(count);
           return InkWell(
             hoverColor: isHovering == true ? Colors.green : Colors.amber,
