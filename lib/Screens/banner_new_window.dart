@@ -1,3 +1,7 @@
+import 'dart:collection';
+// import 'package:google_maps/google_maps.dart';
+import 'globalVar.dart';
+import 'map_view.dart';
 import 'package:admin_panel_vyam/services/CustomTextFieldClass.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
@@ -29,6 +33,7 @@ class _bannerNewPageState extends State<bannerNewPage> {
   final TextEditingController _addname = TextEditingController();
   final TextEditingController _addposition = TextEditingController();
   final TextEditingController _addnavigation = TextEditingController();
+  final TextEditingController _addaddress = TextEditingController();
 
   final bool _accesible = false;
   var image;
@@ -37,10 +42,14 @@ class _bannerNewPageState extends State<bannerNewPage> {
   final _formKey = GlobalKey<FormState>();
   String? selectedType;
   String? print_type = 'Clickable';
+  String? acs = 'true';
+  bool area = false;
   // String namee = "";
   String place = "";
   bool setnav = false;
   String searchGymName = '';
+  final _latitudeController = 0;
+  final _longitudeController = 0;
 
   void dropDowntype(bool? selecetValue) {
     // if(selecetValue is String){
@@ -53,6 +62,17 @@ class _bannerNewPageState extends State<bannerNewPage> {
         print_type = "Non-Clickable";
       }
       print(selectedType);
+    });
+
+    // }
+  }
+
+  void dropDowntype2(bool? selecetValue) {
+    // if(selecetValue is String){
+    setState(() {
+      acs = selecetValue.toString();
+      area = selecetValue!;
+      print(area);
     });
 
     // }
@@ -222,7 +242,58 @@ class _bannerNewPageState extends State<bannerNewPage> {
                         height: 20,
                       ),
                       nav(checking: ischeckk),
-
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Row(
+                        children: [
+                          Text('Area Selection: '),
+                          SizedBox(
+                            width: 20,
+                          ),
+                          Container(
+                            color: Colors.white10,
+                            child: DropdownButton(
+                                hint: Text('$acs'),
+                                items: const [
+                                  DropdownMenuItem(
+                                    child: Text("True"),
+                                    value: true,
+                                  ),
+                                  DropdownMenuItem(
+                                    child: Text("False"),
+                                    value: false,
+                                  ),
+                                ],
+                                onChanged: dropDowntype2),
+                          ),
+                        ],
+                      ),
+                      Stack(
+                        children: [
+                          Container(
+                            height: MediaQuery.of(context).size.height * .75,
+                            width: 900,
+                            decoration: const BoxDecoration(
+                                border: Border(
+                                    bottom: BorderSide(color: Colors.grey))),
+                            child: Stack(
+                              children: [
+                                MapView(
+                                  address_con: _addaddress,
+                                ),
+                                Center(
+                                  child: Icon(
+                                    Icons.location_on_rounded,
+                                    size: 40,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
                       //CustomTextField(
                       //hinttext: "Image url", addcontroller: _addimage),
                       loadimage(id: id),
@@ -278,7 +349,11 @@ class _bannerNewPageState extends State<bannerNewPage> {
                                   'id': id,
                                   'gym_id': ischeckk != false ? namee : "",
                                   'navigation': navcommand,
-                                  'visible': true
+                                  'visible': true,
+                                  'area': area,
+                                  'selected_area': area
+                                      ? GeoPoint(lat, long)
+                                      : GeoPoint(0, 0),
                                 },
                               ).whenComplete(() {
                                 setState(() {

@@ -351,6 +351,7 @@ class _PackagesPageState extends State<PackagesPage> {
                       id: packId,
                       description: data['description'],
                       ptype: data['ptype'],
+                      banner: data['banner'],
                     )));
       }),
       DataCell(const Icon(Icons.delete), onTap: () {
@@ -436,6 +437,8 @@ class _addboxxState extends State<addboxx> {
   final TextEditingController _title = TextEditingController();
   // final TextEditingController _type = TextEditingController();
   final TextEditingController _validity = TextEditingController();
+  final TextEditingController _banner = TextEditingController();
+
   // final TextEditingController _price = TextEditingController();
   var selectedvaluee = 'pay per session';
   var selectedd = 'gym';
@@ -507,8 +510,9 @@ class _addboxxState extends State<addboxx> {
             customTextField(
                 hinttext: "Discount Percentage", addcontroller: _discount),
             customTextField(
-                hinttext: "original price", addcontroller: _originalprice),
-            customTextField(hinttext: "index", addcontroller: _index),
+                hinttext: "Original price", addcontroller: _originalprice),
+            customTextField(hinttext: "Index", addcontroller: _index),
+            customTextField(hinttext: "Banner", addcontroller: _banner),
             const SizedBox(
               height: 8,
             ),
@@ -664,7 +668,8 @@ class _addboxxState extends State<addboxx> {
                       "package_type": selectedvaluee,
                       'description': descriptionn,
                       'trending': true,
-                      'ptype': packagetype
+                      'ptype': packagetype,
+                      'banner': _banner.text
                     },
                   );
                   await FirebaseFirestore.instance
@@ -705,6 +710,7 @@ class ProductEditBox extends StatefulWidget {
     required this.description,
     required this.validity,
     required this.ptype,
+    required this.banner,
   }) : super(key: key);
 
   final String discount;
@@ -715,6 +721,7 @@ class ProductEditBox extends StatefulWidget {
   final String title;
   final String type;
   final String id;
+  final String banner;
   final gym_id;
   final String package_type;
   final String description;
@@ -731,6 +738,8 @@ class _ProductEditBoxState extends State<ProductEditBox> {
   final TextEditingController _title = TextEditingController();
   // final TextEditingController _price = TextEditingController();
   final TextEditingController _validity = TextEditingController();
+  final TextEditingController _banner = TextEditingController();
+
   // final TextEditingController _type = TextEditingController();
   var selectedvaluee;
   var sele;
@@ -765,7 +774,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
   void initState() {
     super.initState();
     categoryStream = FirebaseFirestore.instance.collection("category");
-
+    _banner.text = widget.banner;
     _discount.text = widget.discount;
     _validity.text = widget.validity;
     _originalprice.text = widget.originalprice;
@@ -804,6 +813,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
               customTextField(
                   hinttext: "original price", addcontroller: _originalprice),
               customTextField(hinttext: "index", addcontroller: _index),
+              customTextField(hinttext: "Banner", addcontroller: _banner),
               const SizedBox(
                 height: 8,
               ),
@@ -938,6 +948,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                         'validity': _validity.text,
                         "type": sele,
                         'ptype': packagetype,
+                        'banner': _banner.text
                       };
                       await documentReference
                           .update(data)

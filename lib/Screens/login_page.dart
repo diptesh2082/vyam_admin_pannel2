@@ -21,7 +21,7 @@ class _LoginPageState extends State<LoginPage> {
     super.initState();
 
     email.text = "vyamtesting@gmail.com";
-    password.text = "vyam123";
+    password.text = "12345678";
   }
 
   @override

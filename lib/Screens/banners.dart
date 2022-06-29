@@ -1,5 +1,5 @@
 import 'dart:ui';
-
+import 'map_view.dart';
 import 'package:admin_panel_vyam/Screens/banner_edit.dart';
 import 'package:admin_panel_vyam/Screens/banner_new_window.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -7,6 +7,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+// import 'package:google_maps/google_maps.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../services/image_picker_api.dart';
 import '../services/CustomTextFieldClass.dart';
@@ -328,14 +329,15 @@ class _BannerPageState extends State<BannerPage> {
       DataCell(const Text(""), showEditIcon: true, onTap: () {
         Get.to(
           () => EditBox(
-            position: data['position_id'],
-            name: data['name'],
-            image: data['image'],
-            id: data['id'],
-            access: data['access'],
-            navigation: data['navigation'],
-            gym_id: data['gym_id'],
-          ),
+              position: data['position_id'],
+              name: data['name'],
+              image: data['image'],
+              id: data['id'],
+              access: data['access'],
+              navigation: data['navigation'],
+              gym_id: data['gym_id'],
+              area: data['area'],
+              selectedArea: data['selected_area']),
         );
       }),
       DataCell(const Icon(Icons.delete), onTap: () {
@@ -524,11 +526,15 @@ class EditBox extends StatefulWidget {
       required this.id,
       required this.access,
       required this.navigation,
-      required this.gym_id})
+      required this.gym_id,
+      required this.area,
+      required this.selectedArea})
       : super(key: key);
   final String position;
   final String gym_id;
   final String navigation;
+  final GeoPoint selectedArea;
+  final bool area;
   final String name;
   final String image;
   final String id;
@@ -538,15 +544,19 @@ class EditBox extends StatefulWidget {
   _EditBoxState createState() => _EditBoxState();
 }
 
+late GeoPoint sa;
+
 class _EditBoxState extends State<EditBox> {
   final TextEditingController _name = TextEditingController();
   final TextEditingController _position = TextEditingController();
   final TextEditingController _navigation = TextEditingController();
+  final TextEditingController _addaddress = TextEditingController();
 
   var id;
   var image;
   var imgUrl1;
   bool access = false;
+  bool area = false;
   var gym_id = '';
   String searchGymName = '';
   // final TextEditingController _image = TextEditingController();
@@ -561,9 +571,21 @@ class _EditBoxState extends State<EditBox> {
     _position.text = widget.position;
     _name.text = widget.name;
     id = widget.id;
+    area = widget.area;
     image = widget.image;
     namee = widget.gym_id;
+    sa = widget.selectedArea;
     _navigation.text = widget.navigation;
+  }
+
+  void dropDowntype2(bool? selecetValue) {
+    // if(selecetValue is String){
+    setState(() {
+      area = selecetValue!;
+      print(area);
+    });
+
+    // }
   }
 
   @override
@@ -691,6 +713,55 @@ class _EditBoxState extends State<EditBox> {
                         },
                       )),
                   //CustomTextField(hinttext: "Image url", addcontroller: _image),
+                  Row(
+                    children: [
+                      Text('Area Selection: '),
+                      SizedBox(
+                        width: 20,
+                      ),
+                      Container(
+                        color: Colors.white10,
+                        child: DropdownButton(
+                            hint: Text('$area'),
+                            items: const [
+                              DropdownMenuItem(
+                                child: Text("true"),
+                                value: true,
+                              ),
+                              DropdownMenuItem(
+                                child: Text("false"),
+                                value: false,
+                              ),
+                            ],
+                            onChanged: dropDowntype2),
+                      ),
+                    ],
+                  ),
+                  Stack(
+                    children: [
+                      Container(
+                        height: MediaQuery.of(context).size.height * .75,
+                        width: 900,
+                        decoration: const BoxDecoration(
+                            border:
+                                Border(bottom: BorderSide(color: Colors.grey))),
+                        child: Stack(
+                          children: [
+                            MapView(
+                              address_con: _addaddress,
+                            ),
+                            Center(
+                              child: Icon(
+                                Icons.location_on_rounded,
+                                size: 40,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
 
                   editim(
                     imagea: image,
@@ -719,6 +790,8 @@ class _EditBoxState extends State<EditBox> {
                                   'access': access,
                                   'gym_id': namee,
                                   'navigation': navcommandedit,
+                                  'area': area,
+                                  'selected_area': sa
                                 },
                               ).whenComplete(() {
                                 setState(() {
