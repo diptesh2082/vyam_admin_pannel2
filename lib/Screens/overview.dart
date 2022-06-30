@@ -120,7 +120,7 @@ class _overviewState extends State<overview> {
                       int.parse(element['grand_total'].toString()) +
                           Get.find<calculator>().cash.value;
                 }
-                if ((["upcoming", "active"]
+                if ((["upcoming", "active", "completed"]
                             .contains(element['booking_status']) &&
                         ["online", "offline"]
                             .contains(element['payment_method'])) &&
