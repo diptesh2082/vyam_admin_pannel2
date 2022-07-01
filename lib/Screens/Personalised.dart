@@ -2,39 +2,32 @@ import 'package:admin_panel_vyam/Screens/push_new_screen.dart';
 import 'package:admin_panel_vyam/services/deleteMethod.dart';
 import 'package:admin_panel_vyam/services/image_picker_api.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/foundation.dart';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
-import 'package:intl/intl.dart';
-
+import 'package:image_picker/image_picker.dart';
 import '../services/CustomTextFieldClass.dart';
-import '../services/MatchIDMethod.dart';
 
 class Personalised extends StatefulWidget {
   const Personalised({
     Key? key,
-    required this.idds,
   }) : super(key: key);
-  final String idds;
   @override
   State<Personalised> createState() => _PersonalisedState();
 }
 
 class _PersonalisedState extends State<Personalised> {
-  CollectionReference? pushStream;
+  CollectionReference? personalisedStream;
   @override
   void initState() {
-    pushStream = FirebaseFirestore.instance.collection("push_notifications");
+    personalisedStream =
+        FirebaseFirestore.instance.collection("personalised_notification");
     super.initState();
   }
-
-  // var id = FirebaseFirestore.instance
-  //     .collection('push_notifications')
-  //     .doc()
-  //     .id
-  //     .toString();
 
   @override
   Widget build(BuildContext context) {
@@ -58,17 +51,15 @@ class _PersonalisedState extends State<Personalised> {
                     ),
                     onPressed: () async {
                       // await  FirebaseMessaging.instance.subscribeToTopic("push_notifications");
-                      Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => pnew(idd: widget.idds)));
+                      Navigator.pushReplacement(context,
+                          MaterialPageRoute(builder: (context) => pnew()));
                     },
                     child: Text('Add Personalised Notification'),
                   ),
                 ),
                 Center(
                   child: StreamBuilder<QuerySnapshot>(
-                    stream: pushStream!.snapshots(),
+                    stream: personalisedStream!.snapshots(),
                     builder: (context, AsyncSnapshot snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return const CircularProgressIndicator();
@@ -89,6 +80,18 @@ class _PersonalisedState extends State<Personalised> {
                                 'Title',
                                 style: TextStyle(fontWeight: FontWeight.w600),
                               )),
+                              DataColumn(
+                                label: Text(
+                                  'Description',
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
+                              ),
+                              DataColumn(
+                                label: Text(
+                                  'TimeStamp',
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
+                              ),
                               DataColumn(
                                 label: Text(
                                   'Validity',
@@ -188,17 +191,24 @@ class _PersonalisedState extends State<Personalised> {
   DataRow _buildListItem(BuildContext context, DocumentSnapshot data, int index,
       int start, int end) {
     String pushIdData = data.id;
+    var millis = data['timestamp'].millisecondsSinceEpoch;
+    var dt = DateTime.fromMillisecondsSinceEpoch(millis);
+    var d12 = DateFormat('dd/MMM/yyyy, hh:mm a').format(dt);
     bool not = data['valid'];
     return DataRow(cells: [
       DataCell(data['p_title'] != null
           ? Text(data['p_title'] ?? "")
           : const Text("")),
+      DataCell(data['description'] != null
+          ? Text(data['description'])
+          : const Text("")),
+      DataCell(data['timestamp'] != null ? Text(d12) : const Text("")),
       DataCell(ElevatedButton(
         onPressed: () async {
           bool temp = not;
           temp = !temp;
           DocumentReference documentReference = FirebaseFirestore.instance
-              .collection('push_notifications')
+              .collection('personalised_notification')
               .doc(pushIdData);
           await documentReference
               .update({'valid': temp})
@@ -212,6 +222,9 @@ class _PersonalisedState extends State<Personalised> {
       DataCell(const Text(""), showEditIcon: true, onTap: () {
         Get.to(() => ProductEditBox(
               title: data['p_title'],
+              image: data['image'],
+              description: data['description'],
+              replacement: data['replacement'],
               id: data.id,
             ));
       }),
@@ -245,7 +258,8 @@ class _PersonalisedState extends State<Personalised> {
                           ElevatedButton.icon(
                             onPressed: () {
                               deleteMethod(
-                                  stream: pushStream, uniqueDocId: pushIdData);
+                                  stream: personalisedStream,
+                                  uniqueDocId: pushIdData);
                               Navigator.pop(context);
                             },
                             icon: const Icon(Icons.check),
@@ -280,10 +294,15 @@ class ProductEditBox extends StatefulWidget {
     Key? key,
     required this.title,
     required this.id,
+    required this.image,
+    required this.description,
+    required this.replacement,
   }) : super(key: key);
 
   final String id;
-
+  final String image;
+  final String description;
+  final List replacement;
   final String title;
 
   @override
@@ -292,12 +311,21 @@ class ProductEditBox extends StatefulWidget {
 
 class _ProductEditBoxState extends State<ProductEditBox> {
   final TextEditingController _title = TextEditingController();
-  late final String id;
+  final TextEditingController _description = TextEditingController();
+  final TextEditingController _replacement = TextEditingController();
+
+  late final String ids;
+  var image;
+  List<dynamic> repla = [];
 
   @override
   void initState() {
     super.initState();
+    ids = widget.id;
     _title.text = widget.title;
+    image = widget.image;
+    _description.text = widget.description;
+    repla = widget.replacement;
   }
 
   @override
@@ -318,7 +346,42 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                   fontWeight: FontWeight.w600,
                   fontSize: 14),
             ),
-            customTextField(hinttext: "Title", addcontroller: _title),
+            customTextField(hinttext: _title.text, addcontroller: _title),
+            customTextField(
+                hinttext: _description.text, addcontroller: _description),
+            customTextField(
+                hinttext: "Add Replacement", addcontroller: _replacement),
+            Row(
+              children: [
+                ElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        repla.add(_replacement.text);
+                        _replacement.text = "";
+                      });
+                    },
+                    child: Text("Add Replacement")),
+                SizedBox(
+                  width: 20,
+                ),
+                ElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        repla.removeLast();
+                        _replacement.text = "";
+                      });
+                    },
+                    child: Text("Remove Replacement")),
+              ],
+            ),
+            Text(
+              repla.toString(),
+              style: TextStyle(
+                  color: Colors.grey,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20),
+            ),
+            editim(imagea: widget.image, notifyid: widget.id),
             Padding(
               padding: const EdgeInsets.all(12.0),
               child: Center(
@@ -327,10 +390,14 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                     print("/////");
                     DocumentReference documentReference = FirebaseFirestore
                         .instance
-                        .collection('push_notifications')
+                        .collection('personalised_notification')
                         .doc(widget.id);
                     Map<String, dynamic> data = <String, dynamic>{
                       'p_title': _title.text,
+                      'description': _description.text,
+                      'replacement': repla,
+                      'timestamp': DateTime.now(),
+                      'image': image8 != null ? image8 : widget.image,
                       // 'id': id,
                     };
                     await documentReference
@@ -350,23 +417,127 @@ class _ProductEditBoxState extends State<ProductEditBox> {
   }
 }
 
+class editim extends StatefulWidget {
+  const editim({Key? key, required this.imagea, required this.notifyid})
+      : super(key: key);
+  final String imagea;
+  final String notifyid;
+  @override
+  State<editim> createState() => _editimState();
+}
+
+class _editimState extends State<editim> {
+  @override
+  String i2 = '';
+  void initState() {
+    // TODO: implement initState
+    i2 = widget.imagea;
+    super.initState();
+  }
+
+// <<<<<<< HEAD
+  @override
+  bool isloading = false;
+  var imagee;
+  Widget build(BuildContext context) {
+    return Container(
+      child: Row(
+        children: [
+          ElevatedButton(
+            onPressed: () async {
+              setState(() {
+                isloading = true;
+              });
+              var dic = await chooseImage();
+              await addImageToStorage(dic, widget.notifyid);
+              setState(() {
+                isloading = false;
+              });
+            },
+            child: const Text(
+              'Upload Gym Image',
+              style:
+                  TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
+            ),
+          ),
+          const SizedBox(
+            width: 20,
+          ),
+          isloading
+              ? Container(
+                  height: 200,
+                  width: 200,
+                  child: const CircularProgressIndicator())
+              : image8 != null
+                  ? Image(
+                      image: NetworkImage(image8.toString()),
+                      height: 200,
+                      width: 200,
+                    )
+                  : Image(
+                      image: NetworkImage(i2),
+                      height: 200,
+                      width: 200,
+                    )
+        ],
+      ),
+    );
+  }
+
+  addImageToStorage(XFile? pickedFile, String? id) async {
+    if (kIsWeb) {
+      Reference _reference = FirebaseStorage.instance
+          .ref()
+          .child("peronalised_notification")
+          .child('$id');
+      await _reference
+          .putData(
+        await pickedFile!.readAsBytes(),
+        SettableMetadata(contentType: 'image/jpeg'),
+      )
+          .whenComplete(() async {
+        await _reference.getDownloadURL().then((value) async {
+          var uploadedPhotoUrl = value;
+          setState(() {
+            image8 = value;
+          });
+          print(value);
+        });
+      });
+    }
+  }
+}
+
+var image8;
+
 class pnew extends StatefulWidget {
-  const pnew({Key? key, required this.idd}) : super(key: key);
-  final String idd;
+  const pnew({
+    Key? key,
+  }) : super(key: key);
+  // final String idd;
   @override
   State<pnew> createState() => _pnewState();
 }
 
 class _pnewState extends State<pnew> {
-  CollectionReference? pushStream;
+  CollectionReference? personalisedStream;
 
   @override
   void initState() {
-    pushStream = FirebaseFirestore.instance.collection("push_notifications");
+    personalisedStream =
+        FirebaseFirestore.instance.collection("personalised_notification");
     super.initState();
   }
 
+  var id = FirebaseFirestore.instance
+      .collection('personalised_notification')
+      .doc()
+      .id
+      .toString();
   final TextEditingController _addtitle = TextEditingController();
+  final TextEditingController _adddescription = TextEditingController();
+  final TextEditingController _addreplacement = TextEditingController();
+  List<String> replacement = [];
 
   final _formKey = GlobalKey<FormState>();
   @override
@@ -394,18 +565,58 @@ class _pnewState extends State<pnew> {
                         fontSize: 14),
                   ),
                   customTextField3(hinttext: "Title", addcontroller: _addtitle),
+                  customTextField3(
+                      hinttext: "Description", addcontroller: _adddescription),
+                  customTextField(
+                      hinttext: "Add Replacement",
+                      addcontroller: _addreplacement),
+                  Row(
+                    children: [
+                      ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              replacement.add(_addreplacement.text);
+                              _addreplacement.text = "";
+                            });
+                          },
+                          child: Text("Add Replacement")),
+                      SizedBox(
+                        width: 20,
+                      ),
+                      ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              replacement.removeLast();
+                              _addreplacement.text = "";
+                            });
+                          },
+                          child: Text("Remove Replacement")),
+                    ],
+                  ),
+                  Text(
+                    replacement.toString(),
+                    style: TextStyle(
+                        color: Colors.grey,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20),
+                  ),
+                  SizedBox(height: 20),
+                  loadimage(id: id),
                   Center(
                     child: ElevatedButton(
                       onPressed: () async {
                         if (_formKey.currentState!.validate()) {
-                          // await matchID(
-                          //     newId: id, matchStream: pushStream, idField: 'id');
                           await FirebaseFirestore.instance
-                              .collection('push_notifications')
-                              .doc(widget.idd)
-                              .update(
+                              .collection('personalised_notification')
+                              .doc(id)
+                              .set(
                             {
+                              ///
                               'p_title': _addtitle.text,
+                              'description': _adddescription.text,
+                              'replacement': replacement,
+                              'image': image7 != null ? image7 : "",
+                              'timestamp': DateTime.now(),
                               'valid': false,
                             },
                           );
@@ -422,5 +633,88 @@ class _pnewState extends State<pnew> {
         ),
       ),
     );
+  }
+}
+
+var image7;
+
+class loadimage extends StatefulWidget {
+  loadimage({Key? key, required this.id}) : super(key: key);
+  final String id;
+  @override
+  State<loadimage> createState() => _loadimageState();
+}
+
+class _loadimageState extends State<loadimage> {
+  bool isloading = false;
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        child: Row(
+      children: [
+        const Text(
+          "User Image",
+          style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
+        ),
+        const SizedBox(
+          width: 20,
+        ),
+        InkWell(
+          child: const Icon(Icons.camera_alt),
+          onTap: () async {
+            setState(() {
+              isloading = true;
+            });
+            var profileImage = await chooseImage();
+            await getUrlImage(profileImage);
+            setState(() {
+              isloading = false;
+            });
+          },
+        ),
+        SizedBox(
+          width: 200,
+          height: 100,
+          child: isloading
+              ? Container(
+                  height: 100,
+                  width: 200,
+                  child: Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                )
+              : image7 != null
+                  ? Container(
+                      height: 100,
+                      width: 200,
+                      child: Image.network(image7),
+                    )
+                  : Container(
+                      height: 100,
+                      width: 200,
+                      child: Center(child: Text("Please Upload Image")),
+                    ),
+        ),
+      ],
+    ));
+  }
+
+  getUrlImage(XFile? pickedFile) async {
+    if (kIsWeb) {
+      final _firebaseStorage =
+          FirebaseStorage.instance.ref().child('personalised_notification');
+      Reference _reference =
+          _firebaseStorage.child('personalised_notification/${widget.id}');
+      await _reference.putData(
+        await pickedFile!.readAsBytes(),
+        SettableMetadata(contentType: 'image/jpeg'),
+      );
+
+      String imageUrl = await _reference.getDownloadURL();
+
+      setState(() {
+        image7 = imageUrl;
+      });
+    }
   }
 }
