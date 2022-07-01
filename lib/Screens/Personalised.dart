@@ -1,4 +1,3 @@
-import 'package:admin_panel_vyam/Screens/Personalised.dart';
 import 'package:admin_panel_vyam/Screens/push_new_screen.dart';
 import 'package:admin_panel_vyam/services/deleteMethod.dart';
 import 'package:admin_panel_vyam/services/image_picker_api.dart';
@@ -13,16 +12,17 @@ import 'package:intl/intl.dart';
 import '../services/CustomTextFieldClass.dart';
 import '../services/MatchIDMethod.dart';
 
-class Push extends StatefulWidget {
-  const Push({
+class Personalised extends StatefulWidget {
+  const Personalised({
     Key? key,
+    required this.idds,
   }) : super(key: key);
-
+  final String idds;
   @override
-  State<Push> createState() => _PushState();
+  State<Personalised> createState() => _PersonalisedState();
 }
 
-class _PushState extends State<Push> {
+class _PersonalisedState extends State<Personalised> {
   CollectionReference? pushStream;
   @override
   void initState() {
@@ -36,19 +36,10 @@ class _PushState extends State<Push> {
   //     .id
   //     .toString();
 
-  var millis, dt, d12, image;
-
-  date() {
-    millis = Timestamp.now().millisecondsSinceEpoch;
-    dt = DateTime.fromMillisecondsSinceEpoch(millis);
-
-    d12 = DateFormat('dd/MMM/yyyy, hh:mm a').format(dt);
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Push Notifications")),
+      appBar: AppBar(title: Text("Personalised Notification")),
       body: SafeArea(
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 5),
@@ -67,9 +58,12 @@ class _PushState extends State<Push> {
                     ),
                     onPressed: () async {
                       // await  FirebaseMessaging.instance.subscribeToTopic("push_notifications");
-                      Get.to(() => const pushNew());
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => pnew(idd: widget.idds)));
                     },
-                    child: Text('Add Push Notification'),
+                    child: Text('Add Personalised Notification'),
                   ),
                 ),
                 Center(
@@ -97,29 +91,10 @@ class _PushState extends State<Push> {
                               )),
                               DataColumn(
                                 label: Text(
-                                  'Definitions',
+                                  'Validity',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
-                              // DataColumn(
-                              //   label: Text(
-                              //     'ID',
-                              //     style: TextStyle(fontWeight: FontWeight.w600),
-                              //   ),
-                              // ),
-                              DataColumn(
-                                label: Text(
-                                  'Personalised Notification',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
-                              ),
-                              DataColumn(
-                                label: Text(
-                                  'Timestamp',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
-                              ),
-
                               DataColumn(
                                 label: Text(
                                   'Edit',
@@ -213,30 +188,32 @@ class _PushState extends State<Push> {
   DataRow _buildListItem(BuildContext context, DocumentSnapshot data, int index,
       int start, int end) {
     String pushIdData = data.id;
+    bool not = data['valid'];
     return DataRow(cells: [
-      DataCell(
-          data['title'] != null ? Text(data['title'] ?? "") : const Text("")),
-      DataCell(data['definition'] != null
-          ? Text(data['definition'] ?? "")
+      DataCell(data['p_title'] != null
+          ? Text(data['p_title'] ?? "")
           : const Text("")),
-      // DataCell(data['id'] != null ? Text(data['id'] ?? "") : const Text("")),
       DataCell(ElevatedButton(
-        onPressed: () => Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => Personalised(idds: pushIdData))),
-        child: Text("Personalised Notification"),
+        onPressed: () async {
+          bool temp = not;
+          temp = !temp;
+          DocumentReference documentReference = FirebaseFirestore.instance
+              .collection('push_notifications')
+              .doc(pushIdData);
+          await documentReference
+              .update({'valid': temp})
+              .whenComplete(() => print("Legitimate toggled"))
+              .catchError((e) => print(e));
+        },
+        child: Text(not ? "Yes" : "No"),
+        style:
+            ElevatedButton.styleFrom(primary: not ? Colors.green : Colors.red),
       )),
-      DataCell(data['timestamp'] != null
-          ? Text(data['timestamp'] ?? "")
-          : const Text("")),
       DataCell(const Text(""), showEditIcon: true, onTap: () {
         Get.to(() => ProductEditBox(
-            title: data['title'],
-            definition: data['definition'],
-            id: data.id,
-            timestamp: data['timestamp'],
-            image: data['image'].toString()));
+              title: data['p_title'],
+              id: data.id,
+            ));
       }),
       DataCell(const Icon(Icons.delete), onTap: () {
         // deleteMethod(stream: pushStream, uniqueDocId: pushIdData);
@@ -296,118 +273,17 @@ class _PushState extends State<Push> {
       }),
     ]);
   }
-
-  final TextEditingController _addtitle = TextEditingController();
-  final TextEditingController _adddefiniton = TextEditingController();
-  // var id = FirebaseFirestore.instance
-  //     .collection('push_notifications')
-  //     .doc()
-  //     .id
-  //     .toString();
-
-  // showAddbox() => showDialog(
-  //     context: context,
-  //     builder: (context) => AlertDialog(
-  //           shape: const RoundedRectangleBorder(
-  //               borderRadius: BorderRadius.all(Radius.circular(30))),
-  //           content: SizedBox(
-  //             height: 480,
-  //             width: 800,
-  //             child: SingleChildScrollView(
-  //               child: Column(
-  //                 crossAxisAlignment: CrossAxisAlignment.start,
-  //                 children: [
-  //                   const Text(
-  //                     'Add Records',
-  //                     style: TextStyle(
-  //                         fontFamily: 'poppins',
-  //                         fontWeight: FontWeight.w600,
-  //                         fontSize: 14),
-  //                   ),
-  //                   customTextField(
-  //                       hinttext: "Title", addcontroller: _addtitle),
-  //                   customTextField(
-  //                       hinttext: "Definition", addcontroller: _adddefiniton),
-  //                   Container(
-  //                     padding: EdgeInsets.all(20),
-  //                     child: Row(
-  //                       children: [
-  //                         Text(
-  //                           'Upload Image: ',
-  //                           style: TextStyle(
-  //                               color: Colors.grey,
-  //                               fontWeight: FontWeight.bold,
-  //                               fontSize: 15),
-  //                         ),
-  //                         SizedBox(
-  //                           width: 20,
-  //                         ),
-  //                         InkWell(
-  //                           onTap: () async {
-  //                             image = await chooseImage();
-  //                           },
-  //                           child: Icon(
-  //                             Icons.upload_file_outlined,
-  //                           ),
-  //                         )
-  //                       ],
-  //                     ),
-  //                   ),
-  //                   // Text(
-  //                   //   '$timestamp',
-  //                   // ),
-  //                   // customTextField(
-  //                   //     hinttext: "Discount", addcontroller: _adddiscount),
-  //                   // customTextField(
-  //                   //     hinttext: "Title", addcontroller: _addtitle),
-  //                   Center(
-  //                     child: ElevatedButton(
-  //                       onPressed: () async {
-  //                         date();
-  //                         await matchID(
-  //                             newId: id,
-  //                             matchStream: pushStream,
-  //                             idField: 'id');
-  //                         await FirebaseFirestore.instance
-  //                             .collection('push_notifications')
-  //                             .doc(id)
-  //                             .set(
-  //                           {
-  //                             'title': _addtitle.text,
-  //                             'definition': _adddefiniton.text,
-  //                             // 'image': ,
-  //                             'id': id,
-  //                             'timestamp': d12,
-  //                           },
-  //                         ).then((snapshot) async {
-  //                           await uploadImageToPush(image, id);
-  //                         });
-  //                         Navigator.pop(context);
-  //                       },
-  //                       child: const Text('Done'),
-  //                     ),
-  //                   )
-  //                 ],
-  //               ),
-  //             ),
-  //           ),
-  //         ));
 }
 
 class ProductEditBox extends StatefulWidget {
-  const ProductEditBox(
-      {Key? key,
-      required this.title,
-      required this.definition,
-      required this.id,
-      required this.timestamp,
-      required this.image})
-      : super(key: key);
+  const ProductEditBox({
+    Key? key,
+    required this.title,
+    required this.id,
+  }) : super(key: key);
 
-  final String definition;
   final String id;
-  final String timestamp;
-  final String image;
+
   final String title;
 
   @override
@@ -416,27 +292,12 @@ class ProductEditBox extends StatefulWidget {
 
 class _ProductEditBoxState extends State<ProductEditBox> {
   final TextEditingController _title = TextEditingController();
-  final TextEditingController _definition = TextEditingController();
-  late final String image;
-  late final String timestamp;
   late final String id;
-  var millis, dt, d12;
-
-  date() {
-    millis = Timestamp.now().millisecondsSinceEpoch;
-    dt = DateTime.fromMillisecondsSinceEpoch(millis);
-
-    d12 = DateFormat('dd/MMM/yyyy, hh:mm a').format(dt);
-  }
 
   @override
   void initState() {
     super.initState();
     _title.text = widget.title;
-    _definition.text = widget.definition;
-    image = widget.image;
-    // id = widget.id;
-    timestamp = widget.timestamp;
   }
 
   @override
@@ -444,7 +305,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
     return Scaffold(
       backgroundColor: Colors.white10,
       appBar: AppBar(
-        title: Text('Edit Push Notification'),
+        title: Text('Edit Personalised Push Notification'),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -458,25 +319,18 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                   fontSize: 14),
             ),
             customTextField(hinttext: "Title", addcontroller: _title),
-            customTextField(
-                hinttext: "Description", addcontroller: _definition),
-            //
             Padding(
               padding: const EdgeInsets.all(12.0),
               child: Center(
                 child: ElevatedButton(
                   onPressed: () async {
-                    date();
                     print("/////");
                     DocumentReference documentReference = FirebaseFirestore
                         .instance
                         .collection('push_notifications')
                         .doc(widget.id);
                     Map<String, dynamic> data = <String, dynamic>{
-                      'title': _title.text,
-                      'definition': _definition.text,
-                      'image': image,
-                      'timestamp': d12,
+                      'p_title': _title.text,
                       // 'id': id,
                     };
                     await documentReference
@@ -490,6 +344,81 @@ class _ProductEditBoxState extends State<ProductEditBox> {
               ),
             )
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class pnew extends StatefulWidget {
+  const pnew({Key? key, required this.idd}) : super(key: key);
+  final String idd;
+  @override
+  State<pnew> createState() => _pnewState();
+}
+
+class _pnewState extends State<pnew> {
+  CollectionReference? pushStream;
+
+  @override
+  void initState() {
+    pushStream = FirebaseFirestore.instance.collection("push_notifications");
+    super.initState();
+  }
+
+  final TextEditingController _addtitle = TextEditingController();
+
+  final _formKey = GlobalKey<FormState>();
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.white10,
+      appBar: AppBar(
+        title: const Text('New Push Notification'),
+      ),
+      body: Form(
+        key: _formKey,
+        child: Center(
+          child: SizedBox(
+            height: 480,
+            width: 800,
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Add Records',
+                    style: TextStyle(
+                        fontFamily: 'poppins',
+                        fontWeight: FontWeight.w600,
+                        fontSize: 14),
+                  ),
+                  customTextField3(hinttext: "Title", addcontroller: _addtitle),
+                  Center(
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        if (_formKey.currentState!.validate()) {
+                          // await matchID(
+                          //     newId: id, matchStream: pushStream, idField: 'id');
+                          await FirebaseFirestore.instance
+                              .collection('push_notifications')
+                              .doc(widget.idd)
+                              .update(
+                            {
+                              'p_title': _addtitle.text,
+                              'valid': false,
+                            },
+                          );
+                          Navigator.pop(context);
+                        }
+                      },
+                      child: const Text('Done'),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ),
         ),
       ),
     );

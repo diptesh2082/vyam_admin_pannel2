@@ -309,6 +309,13 @@ class _ProductDetailsState extends State<ProductDetails> {
                                 ),
                                 DataColumn(
                                   label: Text(
+                                    'Cash Pay Status',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.w600),
+                                  ),
+                                ),
+                                DataColumn(
+                                  label: Text(
                                     'Upload Display Image',
                                     style:
                                         TextStyle(fontWeight: FontWeight.w600),
@@ -594,6 +601,7 @@ class _ProductDetailsState extends State<ProductDetails> {
     bool legit = data['legit'];
     bool status = data["gym_status"];
     bool online_pay = data["online_pay"];
+    bool cash_pay = data['cash_pay'];
     List imgList = data['images'];
     // String landmark = data['landmark'];
     String imagess = data['display_picture'];
@@ -861,6 +869,26 @@ class _ProductDetailsState extends State<ProductDetails> {
             child: Text(online_pay ? "ON" : "OFF"),
             style: ElevatedButton.styleFrom(
                 primary: online_pay ? Colors.green : Colors.red),
+          ),
+        ),
+      ),
+      DataCell(
+        Center(
+          child: ElevatedButton(
+            onPressed: () async {
+              bool temp = cash_pay;
+              temp = !temp;
+              DocumentReference documentReference = FirebaseFirestore.instance
+                  .collection('product_details')
+                  .doc(gymId);
+              await documentReference
+                  .update({'cash_pay': temp})
+                  .whenComplete(() => print("Legitimate toggled"))
+                  .catchError((e) => print(e));
+            },
+            child: Text(cash_pay ? "ON" : "OFF"),
+            style: ElevatedButton.styleFrom(
+                primary: cash_pay ? Colors.green : Colors.red),
           ),
         ),
       ),

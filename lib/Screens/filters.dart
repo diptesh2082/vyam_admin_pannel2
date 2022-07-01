@@ -452,7 +452,6 @@ class _filtersState extends State<filters> {
     var snap = [];
     length = snapshot.length;
     snapshot.forEach((element) {});
-
     snapshot.forEach((element) {
       var x = element['booking_date'].toDate();
 // <<<<<<< HEAD

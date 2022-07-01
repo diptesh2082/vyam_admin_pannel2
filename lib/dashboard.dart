@@ -8,9 +8,12 @@ import 'package:admin_panel_vyam/services/deleteMethod.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:intl/intl.dart';
 import 'Screens/Product Details/product_details.dart';
 import 'Screens/booking_details.dart';
+import 'Screens/globalVar.dart';
 import 'bookfilter.dart';
 
 class DashBoardScreen extends StatefulWidget {
@@ -39,6 +42,7 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Get.lazyPut(() => calculator(), fenix: true);
     return GridView.builder(
       padding: const EdgeInsets.all(10.0),
       itemCount: 11,
