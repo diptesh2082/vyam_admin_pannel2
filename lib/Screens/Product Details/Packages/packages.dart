@@ -51,6 +51,7 @@ class _PackagesPageState extends State<PackagesPage> {
         .collection('package')
         .doc("normal_package")
         .collection("gym");
+
     globalGymId = widget.pGymId;
     name = widget.o;
     landmark = widget.land;
@@ -59,9 +60,6 @@ class _PackagesPageState extends State<PackagesPage> {
   @override
   Widget build(BuildContext context) {
     return
-        // loadig?
-        //   const Center(child: CircularProgressIndicator())
-        //   :
         Scaffold(
       appBar: AppBar(
         title: Center(
@@ -93,27 +91,10 @@ class _PackagesPageState extends State<PackagesPage> {
                     },
                     child: const Text(
                       'Add Packages',
-// <<<<<<< HEAD
-//                       style: TextStyle(color: Colors.white),
-// =======
                       style: TextStyle(
                         color: Colors.white,
                       ),
-// >>>>>>> f5cd80d50f3eb7ba38395ee1c411898cfb3f5838
                     ),
-                    // Container(
-                    //   width: 120,
-                    //   decoration: BoxDecoration(
-                    //       color: Colors.white,
-                    //       borderRadius: BorderRadius.circular(20.0)),
-                    //   child: Row(
-                    //     children: const [
-                    //       Icon(Icons.add),
-                    //       Text('Add Product',
-                    //           style: TextStyle(fontWeight: FontWeight.w400)),
-                    //     ],
-                    //   ),
-                    // ),
                   ),
                 ),
                 Center(
@@ -202,7 +183,7 @@ class _PackagesPageState extends State<PackagesPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     ElevatedButton(
-                      child: Text("Previous Page"),
+                      child: const Text("Previous Page"),
                       onPressed: () {
                         setState(() {
                           if (start > 0 && end > 0) {
@@ -512,7 +493,7 @@ class _addboxxState extends State<addboxx> {
             const SizedBox(
               height: 8,
             ),
-            Text("Description"),
+            const Text("Description"),
             MarkdownTextInput(
               (String value) => setState(() => descriptionn = value),
               descriptionn,
@@ -587,7 +568,6 @@ class _addboxxState extends State<addboxx> {
               'Category',
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
-// >>>>>>> 020d3fb78ac8558cc588ec004fcb0f0492d313ff
 
             StreamBuilder(
                 stream: categoryStream!.snapshots(),
@@ -656,7 +636,6 @@ class _addboxxState extends State<addboxx> {
 //                               "id": finalPackID,
                       "validity": _validity.text,
 //                               "price": _price.text,
-// =======
                       "type": selectedd,
                       "id": finalPackID,
                       // "validity": _validity.text,
