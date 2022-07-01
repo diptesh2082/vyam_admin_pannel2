@@ -796,7 +796,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
               const SizedBox(
                 height: 8,
               ),
-              Text("Description"),
+              const Text("Description"),
               MarkdownTextInput(
                 (String value) => setState(() => description = value),
                 description,
@@ -812,7 +812,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
               Row(
                 children: [
                   const Text('Type:',
-                      style: const TextStyle(
+                      style: TextStyle(
                           fontWeight: FontWeight.w700, fontSize: 15)),
                   const SizedBox(
                     width: 20,
@@ -863,7 +863,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
               ),
               customTextField(hinttext: "validity", addcontroller: _validity),
               const Text('Category:',
-                  style: const TextStyle(
+                  style: TextStyle(
                       fontWeight: FontWeight.w700, fontSize: 15)),
               const SizedBox(
                 width: 20,
