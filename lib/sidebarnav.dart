@@ -25,6 +25,7 @@ import 'package:flutter/material.dart';
 //import 'package:flutter/painting.dart';
 import 'package:image_picker/image_picker.dart';
 import 'Screens/filters.dart';
+import 'Screens/overview.dart';
 import 'Screens/workouts.dart';
 import 'dashboard.dart';
 
@@ -324,6 +325,16 @@ class _SideNavBar1State extends State<SideNavBar1> {
                 setState(() {});
               },
             ),
+            ListTile(
+              title: Text(
+                'Overview',
+                style: kTextStyle,
+              ),
+              onTap: () {
+                index = 22;
+                setState(() {});
+              },
+            ),
 
             ListTile(
               title: Text(
@@ -363,6 +374,7 @@ class _SideNavBar1State extends State<SideNavBar1> {
           index == 19 ? const appDetails() : Container(),
           index == 20 ? const CancelationQuestion() : Container(),
           index == 21 ? const bookingNotification() : Container(),
+          index == 22 ? const overview() : Container(),
         ],
       ),
     );

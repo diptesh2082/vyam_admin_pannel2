@@ -51,6 +51,7 @@ class _PackagesPageState extends State<PackagesPage> {
         .collection('package')
         .doc("normal_package")
         .collection("gym");
+
     globalGymId = widget.pGymId;
     name = widget.o;
     landmark = widget.land;
@@ -59,9 +60,6 @@ class _PackagesPageState extends State<PackagesPage> {
   @override
   Widget build(BuildContext context) {
     return
-        // loadig?
-        //   const Center(child: CircularProgressIndicator())
-        //   :
         Scaffold(
       appBar: AppBar(
         title: Center(
@@ -93,27 +91,10 @@ class _PackagesPageState extends State<PackagesPage> {
                     },
                     child: const Text(
                       'Add Packages',
-// <<<<<<< HEAD
-//                       style: TextStyle(color: Colors.white),
-// =======
                       style: TextStyle(
                         color: Colors.white,
                       ),
-// >>>>>>> f5cd80d50f3eb7ba38395ee1c411898cfb3f5838
                     ),
-                    // Container(
-                    //   width: 120,
-                    //   decoration: BoxDecoration(
-                    //       color: Colors.white,
-                    //       borderRadius: BorderRadius.circular(20.0)),
-                    //   child: Row(
-                    //     children: const [
-                    //       Icon(Icons.add),
-                    //       Text('Add Product',
-                    //           style: TextStyle(fontWeight: FontWeight.w400)),
-                    //     ],
-                    //   ),
-                    // ),
                   ),
                 ),
                 Center(
@@ -202,7 +183,7 @@ class _PackagesPageState extends State<PackagesPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     ElevatedButton(
-                      child: Text("Previous Page"),
+                      child: const Text("Previous Page"),
                       onPressed: () {
                         setState(() {
                           if (start > 0 && end > 0) {
@@ -351,6 +332,7 @@ class _PackagesPageState extends State<PackagesPage> {
                       id: packId,
                       description: data['description'],
                       ptype: data['ptype'],
+                      banner: data['banner'],
                     )));
       }),
       DataCell(const Icon(Icons.delete), onTap: () {
@@ -436,6 +418,8 @@ class _addboxxState extends State<addboxx> {
   final TextEditingController _title = TextEditingController();
   // final TextEditingController _type = TextEditingController();
   final TextEditingController _validity = TextEditingController();
+  final TextEditingController _banner = TextEditingController();
+
   // final TextEditingController _price = TextEditingController();
   var selectedvaluee = 'pay per session';
   var selectedd = 'gym';
@@ -507,12 +491,13 @@ class _addboxxState extends State<addboxx> {
             customTextField(
                 hinttext: "Discount Percentage", addcontroller: _discount),
             customTextField(
-                hinttext: "original price", addcontroller: _originalprice),
-            customTextField(hinttext: "index", addcontroller: _index),
+                hinttext: "Original price", addcontroller: _originalprice),
+            customTextField(hinttext: "Index", addcontroller: _index),
+            customTextField(hinttext: "Banner", addcontroller: _banner),
             const SizedBox(
               height: 8,
             ),
-            Text("Description"),
+            const Text("Description"),
             MarkdownTextInput(
               (String value) => setState(() => descriptionn = value),
               descriptionn,
@@ -587,7 +572,6 @@ class _addboxxState extends State<addboxx> {
               'Category',
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
-// >>>>>>> 020d3fb78ac8558cc588ec004fcb0f0492d313ff
 
             StreamBuilder(
                 stream: categoryStream!.snapshots(),
@@ -656,7 +640,6 @@ class _addboxxState extends State<addboxx> {
 //                               "id": finalPackID,
                       "validity": _validity.text,
 //                               "price": _price.text,
-// =======
                       "type": selectedd,
                       "id": finalPackID,
                       // "validity": _validity.text,
@@ -664,7 +647,8 @@ class _addboxxState extends State<addboxx> {
                       "package_type": selectedvaluee,
                       'description': descriptionn,
                       'trending': true,
-                      'ptype': packagetype
+                      'ptype': packagetype,
+                      'banner': _banner.text
                     },
                   );
                   await FirebaseFirestore.instance
@@ -705,6 +689,7 @@ class ProductEditBox extends StatefulWidget {
     required this.description,
     required this.validity,
     required this.ptype,
+    required this.banner,
   }) : super(key: key);
 
   final String discount;
@@ -715,6 +700,7 @@ class ProductEditBox extends StatefulWidget {
   final String title;
   final String type;
   final String id;
+  final String banner;
   final gym_id;
   final String package_type;
   final String description;
@@ -731,6 +717,8 @@ class _ProductEditBoxState extends State<ProductEditBox> {
   final TextEditingController _title = TextEditingController();
   // final TextEditingController _price = TextEditingController();
   final TextEditingController _validity = TextEditingController();
+  final TextEditingController _banner = TextEditingController();
+
   // final TextEditingController _type = TextEditingController();
   var selectedvaluee;
   var sele;
@@ -765,7 +753,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
   void initState() {
     super.initState();
     categoryStream = FirebaseFirestore.instance.collection("category");
-
+    _banner.text = widget.banner;
     _discount.text = widget.discount;
     _validity.text = widget.validity;
     _originalprice.text = widget.originalprice;
@@ -804,10 +792,11 @@ class _ProductEditBoxState extends State<ProductEditBox> {
               customTextField(
                   hinttext: "original price", addcontroller: _originalprice),
               customTextField(hinttext: "index", addcontroller: _index),
+              customTextField(hinttext: "Banner", addcontroller: _banner),
               const SizedBox(
                 height: 8,
               ),
-              Text("Description"),
+              const Text("Description"),
               MarkdownTextInput(
                 (String value) => setState(() => description = value),
                 description,
@@ -823,7 +812,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
               Row(
                 children: [
                   const Text('Type:',
-                      style: const TextStyle(
+                      style: TextStyle(
                           fontWeight: FontWeight.w700, fontSize: 15)),
                   const SizedBox(
                     width: 20,
@@ -874,7 +863,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
               ),
               customTextField(hinttext: "validity", addcontroller: _validity),
               const Text('Category:',
-                  style: const TextStyle(
+                  style: TextStyle(
                       fontWeight: FontWeight.w700, fontSize: 15)),
               const SizedBox(
                 width: 20,
@@ -938,6 +927,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                         'validity': _validity.text,
                         "type": sele,
                         'ptype': packagetype,
+                        'banner': _banner.text
                       };
                       await documentReference
                           .update(data)

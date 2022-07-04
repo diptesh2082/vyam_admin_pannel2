@@ -461,8 +461,7 @@ class _BookingDetailsState extends State<BookingDetails> {
                                   'completed',
                                   'active',
                                   'upcoming',
-                                  'cancelled'
-                                      'completed',
+                                  'completed',
                                 ]).snapshots(),
                                 builder: (context, AsyncSnapshot snapshot) {
                                   fd = int.parse(

@@ -10,13 +10,13 @@ Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: const FirebaseOptions(
-        apiKey: "AIzaSyBueDk3xi4f8z5oGKwI8VLu-A190d89I8A",
-        authDomain: "vyam-f99ab.firebaseapp.com",
-        projectId: "vyam-f99ab",
-        storageBucket: "vyam-f99ab.appspot.com",
-        messagingSenderId: "307925634075",
-        appId: "1:307925634075:web:a895e0e16b2db1ae08fcbe",
-        measurementId: "G-N5WNBKEP64"),
+      apiKey: "AIzaSyB0bPGwnXX0G1ueIvMMz18VhjQZOVVVUps",
+      authDomain: "vyam-2.firebaseapp.com",
+      projectId: "vyam-2",
+      storageBucket: "vyam-2.appspot.com",
+      messagingSenderId: "649320715683",
+      appId: "1:649320715683:web:4938b14e4ac5bfa8683616",
+    ),
   );
   runApp(const HomePage());
 }

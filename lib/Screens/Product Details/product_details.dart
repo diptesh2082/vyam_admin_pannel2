@@ -2,6 +2,7 @@ import 'dart:html';
 import 'dart:io';
 // import 'dart:html';
 import 'dart:math';
+import 'package:admin_panel_vyam/Screens/Product%20Details/offers/offers.dart';
 import 'package:admin_panel_vyam/Screens/banners.dart';
 import 'package:admin_panel_vyam/Screens/map_view.dart';
 import 'package:admin_panel_vyam/Screens/timings.dart';
@@ -257,7 +258,14 @@ class _ProductDetailsState extends State<ProductDetails> {
                                     style:
                                         TextStyle(fontWeight: FontWeight.w600),
                                   ),
-                                ), //!For Package
+                                ),
+                                DataColumn(
+                                  label: Text(
+                                    'Offers',
+                                    style:
+                                    TextStyle(fontWeight: FontWeight.w600),
+                                  ),
+                                ),//!For Package
                                 // DataColumn(
                                 //   label: Text(
                                 //     'Extra Packages',
@@ -295,6 +303,13 @@ class _ProductDetailsState extends State<ProductDetails> {
                                 DataColumn(
                                   label: Text(
                                     'Online Pay Status',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.w600),
+                                  ),
+                                ),
+                                DataColumn(
+                                  label: Text(
+                                    'Cash Pay Status',
                                     style:
                                         TextStyle(fontWeight: FontWeight.w600),
                                   ),
@@ -586,6 +601,7 @@ class _ProductDetailsState extends State<ProductDetails> {
     bool legit = data['legit'];
     bool status = data["gym_status"];
     bool online_pay = data["online_pay"];
+    bool cash_pay = data['cash_pay'];
     List imgList = data['images'];
     // String landmark = data['landmark'];
     String imagess = data['display_picture'];
@@ -618,7 +634,6 @@ class _ProductDetailsState extends State<ProductDetails> {
       //         child: Text(loctext))
       //: const Text("")),
       DataCell(data != null ? Text(data['branch'] ?? "") : const Text("")),
-// >>>>>>> cf1997613ff877c63a56c61e3009bdfe3639ccfa
       DataCell(data != null ? Text(data['pincode'] ?? "") : const Text("")),
 
       DataCell(ElevatedButton(
@@ -643,22 +658,19 @@ class _ProductDetailsState extends State<ProductDetails> {
           ));
         },
       )),
-//       DataCell(const Text('Extra Package '), onTap: () {
-//         Navigator.of(context).push(MaterialPageRoute(
-//           builder: (context) => ExtraPackagesPage(
-//             pGymId: gymId,
-// // <<<<<<< HEAD
-// // =======
-//           ),
-//         ));
-//       }),
-//       DataCell(const Text('Extra Package '), onTap: () {
-//         Navigator.of(context).push(MaterialPageRoute(
-//           builder: (context) => ExtraPackagesPage(
-//             pGymId: gymId,
-//           ),
-//         ));
-//       }),
+
+      DataCell(ElevatedButton(
+        child: const Text('Offers'),
+        onPressed: () {
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) =>
+                 offersPage( offerId: gymId, name: name, landmark:data['branch']),
+          ));
+        },
+      )),
+
+
+
       DataCell(
         Row(
           children: [
@@ -857,6 +869,26 @@ class _ProductDetailsState extends State<ProductDetails> {
             child: Text(online_pay ? "ON" : "OFF"),
             style: ElevatedButton.styleFrom(
                 primary: online_pay ? Colors.green : Colors.red),
+          ),
+        ),
+      ),
+      DataCell(
+        Center(
+          child: ElevatedButton(
+            onPressed: () async {
+              bool temp = cash_pay;
+              temp = !temp;
+              DocumentReference documentReference = FirebaseFirestore.instance
+                  .collection('product_details')
+                  .doc(gymId);
+              await documentReference
+                  .update({'cash_pay': temp})
+                  .whenComplete(() => print("Legitimate toggled"))
+                  .catchError((e) => print(e));
+            },
+            child: Text(cash_pay ? "ON" : "OFF"),
+            style: ElevatedButton.styleFrom(
+                primary: cash_pay ? Colors.green : Colors.red),
           ),
         ),
       ),

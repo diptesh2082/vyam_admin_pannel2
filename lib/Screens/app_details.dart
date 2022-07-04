@@ -143,7 +143,7 @@ class _appDetailsState extends State<appDetails> {
                         // print(snapshot.data['email']);
                         Get.to(
                           () => TandC(
-                            tnc: snapshot.data.get('tnc').toString(),
+                            tnc: snapshot.data.get('t&c').toString(),
                           ),
                         );
                       })
@@ -170,7 +170,7 @@ class _appDetailsState extends State<appDetails> {
                         color: Colors.white54,
                         padding: EdgeInsets.only(right: 200),
                         child: const Text(
-                          "Policy Policy",
+                          "Policy",
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 25.0,
@@ -437,7 +437,7 @@ class _TandC extends State<TandC> {
                       .collection('app_details')
                       .doc('t&c');
                   Map<String, dynamic> data = {
-                    'tnc': descriptionn,
+                    't&c': descriptionn,
                   };
                   await FirebaseFirestore.instance
                       .collection('app_details')

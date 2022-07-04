@@ -143,6 +143,11 @@ class _UserInformationState extends State<UserInformation> {
                                   .toLowerCase()
                                   .contains(searchUser.toString()) ||
                               element
+                                  .get('email')
+                                  .toString()
+                                  .toLowerCase()
+                                  .contains(searchUser.toString()) ||
+                              element
                                   .get('address')
                                   .toString()
                                   .toLowerCase()
