@@ -2,6 +2,7 @@ import 'dart:html';
 import 'dart:io';
 // import 'dart:html';
 import 'dart:math';
+import 'package:admin_panel_vyam/Screens/Product%20Details/offers/offers.dart';
 import 'package:admin_panel_vyam/Screens/banners.dart';
 import 'package:admin_panel_vyam/Screens/map_view.dart';
 import 'package:admin_panel_vyam/Screens/timings.dart';
@@ -257,7 +258,14 @@ class _ProductDetailsState extends State<ProductDetails> {
                                     style:
                                         TextStyle(fontWeight: FontWeight.w600),
                                   ),
-                                ), //!For Package
+                                ),
+                                DataColumn(
+                                  label: Text(
+                                    'Offers',
+                                    style:
+                                    TextStyle(fontWeight: FontWeight.w600),
+                                  ),
+                                ),//!For Package
                                 // DataColumn(
                                 //   label: Text(
                                 //     'Extra Packages',
@@ -626,7 +634,6 @@ class _ProductDetailsState extends State<ProductDetails> {
       //         child: Text(loctext))
       //: const Text("")),
       DataCell(data != null ? Text(data['branch'] ?? "") : const Text("")),
-// >>>>>>> cf1997613ff877c63a56c61e3009bdfe3639ccfa
       DataCell(data != null ? Text(data['pincode'] ?? "") : const Text("")),
 
       DataCell(ElevatedButton(
@@ -651,22 +658,19 @@ class _ProductDetailsState extends State<ProductDetails> {
           ));
         },
       )),
-//       DataCell(const Text('Extra Package '), onTap: () {
-//         Navigator.of(context).push(MaterialPageRoute(
-//           builder: (context) => ExtraPackagesPage(
-//             pGymId: gymId,
-// // <<<<<<< HEAD
-// // =======
-//           ),
-//         ));
-//       }),
-//       DataCell(const Text('Extra Package '), onTap: () {
-//         Navigator.of(context).push(MaterialPageRoute(
-//           builder: (context) => ExtraPackagesPage(
-//             pGymId: gymId,
-//           ),
-//         ));
-//       }),
+
+      DataCell(ElevatedButton(
+        child: const Text('Offers'),
+        onPressed: () {
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) =>
+                 offersPage( offerId: gymId, name: name, landmark:data['branch']),
+          ));
+        },
+      )),
+
+
+
       DataCell(
         Row(
           children: [

@@ -455,7 +455,7 @@ class _editimState extends State<editim> {
               });
             },
             child: const Text(
-              'Upload Gym Image',
+              'Personalised Image',
               style:
                   TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
             ),
