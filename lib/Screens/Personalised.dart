@@ -653,7 +653,7 @@ class _loadimageState extends State<loadimage> {
         child: Row(
       children: [
         const Text(
-          "User Image",
+          "Personalised Image",
           style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
         ),
         const SizedBox(
@@ -692,7 +692,7 @@ class _loadimageState extends State<loadimage> {
                   : Container(
                       height: 100,
                       width: 200,
-                      child: Center(child: Text("Please Upload Image")),
+                      child: Center(child: Text("Upload Personalised Image")),
                     ),
         ),
       ],
