@@ -487,9 +487,7 @@ class _OffersEditBoxState extends State<OffersEditBox> {
                   child: const Text('Done'),
                 ),
               ),
-            )
-
-
+            ),
           ],
         ),
       ),
