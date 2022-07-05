@@ -1571,9 +1571,7 @@ class _loadimageState extends State<loadimage> {
         ElevatedButton(
           onPressed: () async {
             // dic = await chooseImage();
-            setState(() {
-              isloading = true;
-            });
+
             image = await uploadToStroagees();
             // .then(setState(() {
             //   isloading = false;
@@ -1617,6 +1615,9 @@ class _loadimageState extends State<loadimage> {
       final reader = FileReader();
 
       reader.readAsDataUrl(file!);
+      setState(() {
+        isloading = true;
+      });
       reader.onLoadEnd.listen((event) async {
         var snapshot =
             await fs.ref().child('product_image/${widget.id}').putBlob(file);
@@ -2330,7 +2331,7 @@ class _editimState extends State<editim> {
           const SizedBox(
             width: 20,
           ),
-          isloading
+          isloading && image2 == null
               ? Container(
                   height: 200, width: 200, child: CircularProgressIndicator())
               : image2 != null
@@ -2410,14 +2411,19 @@ class _datacelldisplayState extends State<datacelldisplay> {
           children: [
             IconButton(
                 onPressed: () async {
-                  setState(() {
-                    isloadingg = true;
-                  });
-                  var image2 = await chooseImage();
-                  await addImageToStorage(image2, widget.idd);
-                  setState(() {
-                    isloadingg = false;
-                  });
+                  try {
+                    var image2 = await chooseImage();
+                    if (image2 != null) {
+                      setState(() {
+                        isloadingg = true;
+                      });
+                    }
+                    await addImageToStorage(image2, widget.idd);
+                  } finally {
+                    setState(() {
+                      isloadingg = false;
+                    });
+                  }
                 },
                 icon: const Icon(Icons.camera_alt_outlined)),
             const Text("Display Picture"),
