@@ -48,7 +48,7 @@ class _PushState extends State<Push> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Push Notifications")),
+      appBar: AppBar(title: const Text("Push Notifications")),
       body: SafeArea(
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 5),
@@ -71,16 +71,16 @@ class _PushState extends State<Push> {
                           // await  FirebaseMessaging.instance.subscribeToTopic("push_notifications");
                           Get.to(() => const pushNew());
                         },
-                        child: Text('Add Push Notification'),
+                        child: const Text('Add Push Notification'),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 25,
                       ),
                       ElevatedButton(
                         onPressed: () => Navigator.of(context).push(
                             MaterialPageRoute(
-                                builder: (context) => Personalised())),
-                        child: Text("Personalised Notification"),
+                                builder: (context) => const Personalised())),
+                        child: const Text("Personalised Notification"),
                       ),
                     ],
                   ),
@@ -151,7 +151,7 @@ class _PushState extends State<Push> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     ElevatedButton(
-                      child: Text("Previous Page"),
+                      child: const Text("Previous Page"),
                       onPressed: () {
                         setState(() {
                           if (start >= 1) page--;
@@ -446,7 +446,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
     return Scaffold(
       backgroundColor: Colors.white10,
       appBar: AppBar(
-        title: Text('Edit Push Notification'),
+        title: const Text('Edit Push Notification'),
       ),
       body: SingleChildScrollView(
         child: Column(
