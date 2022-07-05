@@ -100,7 +100,7 @@ class _bannerNewPageState extends State<bannerNewPage> {
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Container(
-          padding: EdgeInsets.all(30),
+          padding: const EdgeInsets.all(30),
           child: Column(
             children: <Widget>[
               Center(
@@ -223,13 +223,13 @@ class _bannerNewPageState extends State<bannerNewPage> {
                               )),
                         ],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 20,
                       ),
 
                       customTextField3(
                           hinttext: "Name", addcontroller: _addname),
-                      SizedBox(
+                      const SizedBox(
                         height: 20,
                       ),
 
@@ -238,17 +238,17 @@ class _bannerNewPageState extends State<bannerNewPage> {
                       // customTextField3(
                       //     hinttext: "Navigation",
                       //     addcontroller: _addnavigation),
-                      SizedBox(
+                      const SizedBox(
                         height: 20,
                       ),
                       nav(checking: ischeckk),
-                      SizedBox(
+                      const SizedBox(
                         height: 20,
                       ),
                       Row(
                         children: [
-                          Text('Area Selection: '),
-                          SizedBox(
+                          const Text('Area Selection: '),
+                          const SizedBox(
                             width: 20,
                           ),
                           Container(
@@ -282,7 +282,7 @@ class _bannerNewPageState extends State<bannerNewPage> {
                                 MapView(
                                   address_con: _addaddress,
                                 ),
-                                Center(
+                                const Center(
                                   child: Icon(
                                     Icons.location_on_rounded,
                                     size: 40,
@@ -353,7 +353,7 @@ class _bannerNewPageState extends State<bannerNewPage> {
                                   'area': area,
                                   'selected_area': area
                                       ? GeoPoint(lat, long)
-                                      : GeoPoint(0, 0),
+                                      : const GeoPoint(0, 0),
                                 },
                               ).whenComplete(() {
                                 setState(() {
@@ -402,8 +402,8 @@ class _navState extends State<nav> {
     return Container(
       child: Row(
         children: [
-          Text("Set Navigation"),
-          SizedBox(
+          const Text("Set Navigation"),
+          const SizedBox(
             width: 20,
           ),
           ElevatedButton(
@@ -424,8 +424,8 @@ class _navState extends State<nav> {
             },
             child: Text(
               ischeckk ? "Activated" : "Deactivated",
-              style:
-                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+              style: const TextStyle(
+                  color: Colors.white, fontWeight: FontWeight.bold),
             ),
             style: ElevatedButton.styleFrom(
                 primary: ischeckk ? Colors.green : Colors.red),
@@ -462,11 +462,23 @@ class _loadimageState extends State<loadimage> {
         InkWell(
           child: const Icon(Icons.camera_alt),
           onTap: () async {
-            setState(() {
-              isloading = true;
-            });
-            var profileImage = await chooseImage();
-            await getUrlImage(profileImage);
+            try {
+              var profileImage = await chooseImage();
+              if (profileImage != null) {
+                setState(() {
+                  isloading = true;
+                });
+              }
+              await getUrlImage(profileImage);
+              setState(() {
+                isloading = false;
+              });
+            } finally {
+              print("++++++++++++++++++");
+              setState(() {
+                isloading = false;
+              });
+            }
             setState(() {
               isloading = false;
             });
@@ -479,7 +491,7 @@ class _loadimageState extends State<loadimage> {
               ? Container(
                   height: 100,
                   width: 200,
-                  child: Center(
+                  child: const Center(
                     child: CircularProgressIndicator(),
                   ),
                 )
@@ -492,7 +504,7 @@ class _loadimageState extends State<loadimage> {
                   : Container(
                       height: 100,
                       width: 200,
-                      child: Center(child: Text("Please Upload Image")),
+                      child: const Center(child: Text("Please Upload Image")),
                     ),
         ),
       ],
