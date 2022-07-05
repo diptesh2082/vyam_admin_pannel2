@@ -97,6 +97,8 @@ class _pushNewState extends State<pushNew> {
                               'image': image4 != null ? image4 : "",
                               // 'id': "id",
                               'timestamp': d12,
+                              'p_title': "",
+                              'valid': false,
                             },
                           );
                           Navigator.pop(context);

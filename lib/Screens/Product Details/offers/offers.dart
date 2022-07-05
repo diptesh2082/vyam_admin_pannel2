@@ -25,6 +25,8 @@ class offersPage extends StatefulWidget {
   State<offersPage> createState() => _offersPageState();
 }
 
+List offersdescription = [];
+
 class _offersPageState extends State<offersPage> {
   CollectionReference? offersStream;
   var landmark;
@@ -358,11 +360,41 @@ class _addboxxState extends State<addboxx> {
                     fontSize: 14),
               ),
               customTextField(hinttext: "Title", addcontroller: _title),
-              customTextField(
-                  hinttext: 'Description', addcontroller: _description),
               customTextField(hinttext: "Offer", addcontroller: _offer),
               customTextField(
                   hinttext: "Offer Type", addcontroller: _offer_type),
+              customTextField(
+                  hinttext: 'Description', addcontroller: _description),
+              SizedBox(
+                height: 20,
+              ),
+              Text(
+                offersdescription.toString(),
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+              Row(
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      offersdescription.add(_description.text);
+                      setState(() {
+                        _description.text = "";
+                      });
+                    },
+                    child: Text("Add Description"),
+                  ),
+                  SizedBox(width: 20),
+                  ElevatedButton(
+                    onPressed: () {
+                      offersdescription.removeLast();
+                      setState(() {
+                        _description.text = "";
+                      });
+                    },
+                    child: Text("Remove Description"),
+                  ),
+                ],
+              ),
               Center(
                 child: ElevatedButton(
                   onPressed: () async {
@@ -374,7 +406,7 @@ class _addboxxState extends State<addboxx> {
                         .set(
                       {
                         'title': _title.text,
-                        'description': _description.text,
+                        'description': offersdescription,
                         'offer': _offer.text,
                         'offer_type': _offer_type.text,
                       },
@@ -405,7 +437,7 @@ class OffersEditBox extends StatefulWidget {
   var title;
   var offer_type;
   var offer;
-  var description;
+  List description;
   var id;
   var gym_id;
 
@@ -416,7 +448,7 @@ class OffersEditBox extends StatefulWidget {
       required this.offer,
       required this.offer_type,
       required this.id,
-        required this.gym_id})
+      required this.gym_id})
       : super(key: key);
 
   @override
@@ -429,18 +461,22 @@ class _OffersEditBoxState extends State<OffersEditBox> {
   final TextEditingController _description = TextEditingController();
   final TextEditingController _offer = TextEditingController();
   final TextEditingController _offer_type = TextEditingController();
-
+  List<dynamic> rs = [];
   @override
   void initState() {
     // TODO: implement initState
-    offerStream = FirebaseFirestore.instance.collection('product_details').doc(widget.id).collection('offers');
+    offerStream = FirebaseFirestore.instance
+        .collection('product_details')
+        .doc(widget.id)
+        .collection('offers');
     _title.text = widget.title;
-    _description.text = widget.description;
     _offer_type.text = widget.offer_type;
     _offer.text = widget.offer;
+    rs = widget.description;
 
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -450,14 +486,46 @@ class _OffersEditBoxState extends State<OffersEditBox> {
       backgroundColor: Colors.white10,
       body: SafeArea(
         child: Column(
-          children:  [
-            const Text('Update Offers' , style: TextStyle(fontSize: 22 , fontWeight: FontWeight.bold),),
-
-            customTextField(hinttext: 'Title' , addcontroller: _title),
-            customTextField(hinttext: 'Description' , addcontroller: _description),
-            customTextField(hinttext: 'Offer' , addcontroller: _offer),
-            customTextField(hinttext: 'Offer Type' , addcontroller: _offer_type),
-
+          children: [
+            const Text(
+              'Update Offers',
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+            ),
+            customTextField(hinttext: 'Title', addcontroller: _title),
+            customTextField(hinttext: 'Offer', addcontroller: _offer),
+            customTextField(hinttext: 'Offer Type', addcontroller: _offer_type),
+            customTextField(
+                hinttext: 'Description', addcontroller: _description),
+            SizedBox(
+              height: 20,
+            ),
+            Text(
+              rs.toString(),
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            Row(
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    rs.add(_description.text);
+                    setState(() {
+                      _description.text = "";
+                    });
+                  },
+                  child: Text("Add Description"),
+                ),
+                SizedBox(width: 20),
+                ElevatedButton(
+                  onPressed: () {
+                    rs.removeLast();
+                    setState(() {
+                      _description.text = "";
+                    });
+                  },
+                  child: Text("Remove Description"),
+                ),
+              ],
+            ),
             Padding(
               padding: const EdgeInsets.all(12.0),
               child: Center(
@@ -469,12 +537,12 @@ class _OffersEditBoxState extends State<OffersEditBox> {
                     DocumentReference documentReference = FirebaseFirestore
                         .instance
                         .collection('product_details')
-                        .doc(widget.gym_id )
+                        .doc(widget.gym_id)
                         .collection('offers')
                         .doc(widget.id);
                     Map<String, dynamic> data = <String, dynamic>{
                       'title': _title.text,
-                      'description': _description.text,
+                      'description': rs,
                       'offer': _offer.text,
                       'offer_type': _offer_type.text,
                     };
@@ -482,7 +550,7 @@ class _OffersEditBoxState extends State<OffersEditBox> {
                         .update(data)
                         .whenComplete(() => print("Item Updated"))
                         .catchError((e) => print(e));
-                       Navigator.pop(context);
+                    Navigator.pop(context);
                   },
                   child: const Text('Done'),
                 ),

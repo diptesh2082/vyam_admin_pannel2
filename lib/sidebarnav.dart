@@ -20,6 +20,7 @@ import 'package:admin_panel_vyam/Screens/payments_screen.dart';
 import 'package:admin_panel_vyam/Screens/push_n.dart';
 
 import 'package:admin_panel_vyam/services/image_picker_api.dart';
+import 'package:admin_panel_vyam/user2.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 //import 'package:flutter/painting.dart';
@@ -335,7 +336,16 @@ class _SideNavBar1State extends State<SideNavBar1> {
                 setState(() {});
               },
             ),
-
+            ListTile(
+              title: Text(
+                'User2',
+                style: kTextStyle,
+              ),
+              onTap: () {
+                index = 23;
+                setState(() {});
+              },
+            ),
             ListTile(
               title: Text(
                 'Logout',
@@ -375,6 +385,7 @@ class _SideNavBar1State extends State<SideNavBar1> {
           index == 20 ? const CancelationQuestion() : Container(),
           index == 21 ? const bookingNotification() : Container(),
           index == 22 ? const overview() : Container(),
+          index == 23 ? const user2() : Container(),
         ],
       ),
     );

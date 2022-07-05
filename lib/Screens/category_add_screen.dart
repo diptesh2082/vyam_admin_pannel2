@@ -180,22 +180,29 @@ class _loadimageState extends State<loadimage> {
           width: 20,
         ),
         InkWell(
-          child: const Icon(Icons.camera_alt),
-          onTap: () async {
-            setState(() {
-              isloading = true;
-            });
-            var profileImage = await chooseImage();
-            await getUrlImage(profileImage);
-            setState(() {
-              isloading = false;
-            });
-          },
-        ),
+            child: const Icon(Icons.camera_alt),
+            onTap: () async {
+              try {
+                var profileImage = await chooseImage();
+                if (profileImage != null) {
+                  setState(() {
+                    isloading = true;
+                  });
+                }
+                await getUrlImage(profileImage);
+                setState(() {
+                  isloading = false;
+                });
+              } finally {
+                setState(() {
+                  isloading = false;
+                });
+              }
+            }),
         SizedBox(
           width: 200,
           height: 100,
-          child: isloading
+          child: isloading && ds == null
               ? Container(
                   height: 100,
                   width: 200,

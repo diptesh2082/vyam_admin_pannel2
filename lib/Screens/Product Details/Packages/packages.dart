@@ -1,9 +1,13 @@
 import 'package:admin_panel_vyam/services/deleteMethod.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:markdown_editable_textinput/format_markdown.dart';
 import 'package:markdown_editable_textinput/markdown_text_input.dart';
 import '../../../services/CustomTextFieldClass.dart';
+import '../../../services/image_picker_api.dart';
 
 String globalGymId = '';
 String name = '';
@@ -59,8 +63,7 @@ class _PackagesPageState extends State<PackagesPage> {
 
   @override
   Widget build(BuildContext context) {
-    return
-        Scaffold(
+    return Scaffold(
       appBar: AppBar(
         title: Center(
           child: Text(
@@ -320,20 +323,21 @@ class _PackagesPageState extends State<PackagesPage> {
             context,
             MaterialPageRoute(
                 builder: (context) => ProductEditBox(
-                      validity: data['validity'],
-                      gym_id: widget.pGymId,
-                      price: data["price"],
-                      type: data['type'],
-                      package_type: data['package_type'],
-                      index: data['index'],
-                      discount: data['discount'],
-                      title: data['title'],
-                      originalprice: data['original_price'],
-                      id: packId,
-                      description: data['description'],
-                      ptype: data['ptype'],
-                      banner: data['banner'],
-                    )));
+                    validity: data['validity'],
+                    gym_id: widget.pGymId,
+                    price: data["price"],
+                    type: data['type'],
+                    package_type: data['package_type'],
+                    index: data['index'],
+                    discount: data['discount'],
+                    title: data['title'],
+                    originalprice: data['original_price'],
+                    id: packId,
+                    description: data['description'],
+                    ptype: data['ptype'],
+                    banner: data['banner'],
+                    trending_img: data['trending_img'],
+                    t_describe: data['tdescribe'])));
       }),
       DataCell(const Icon(Icons.delete), onTap: () {
         // deleteMethod(stream: packageStream, uniqueDocId: packId);
@@ -419,6 +423,7 @@ class _addboxxState extends State<addboxx> {
   // final TextEditingController _type = TextEditingController();
   final TextEditingController _validity = TextEditingController();
   final TextEditingController _banner = TextEditingController();
+  final TextEditingController _tdescribe = TextEditingController();
 
   // final TextEditingController _price = TextEditingController();
   var selectedvaluee = 'pay per session';
@@ -494,6 +499,13 @@ class _addboxxState extends State<addboxx> {
                 hinttext: "Original price", addcontroller: _originalprice),
             customTextField(hinttext: "Index", addcontroller: _index),
             customTextField(hinttext: "Banner", addcontroller: _banner),
+            customTextField(
+                hinttext: "Trending Description", addcontroller: _tdescribe),
+
+            const SizedBox(
+              height: 8,
+            ),
+            loadimage(id: finalPackID),
             const SizedBox(
               height: 8,
             ),
@@ -648,7 +660,9 @@ class _addboxxState extends State<addboxx> {
                       'description': descriptionn,
                       'trending': true,
                       'ptype': packagetype,
-                      'banner': _banner.text
+                      'banner': _banner.text,
+                      'tdescribe': _tdescribe.text,
+                      'trending_img': image12 != null ? image12 : ""
                     },
                   );
                   await FirebaseFirestore.instance
@@ -666,6 +680,104 @@ class _addboxxState extends State<addboxx> {
         ),
       ),
     );
+  }
+}
+
+var image12;
+
+class loadimage extends StatefulWidget {
+  loadimage({Key? key, required this.id}) : super(key: key);
+  final String id;
+  @override
+  State<loadimage> createState() => _loadimageState();
+}
+
+class _loadimageState extends State<loadimage> {
+  bool isloading = false;
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        child: Row(
+      children: [
+        const Text(
+          "Trending Icon",
+          style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
+        ),
+        const SizedBox(
+          width: 20,
+        ),
+        InkWell(
+          child: const Icon(Icons.camera_alt),
+          onTap: () async {
+            try {
+              var profileImage = await chooseImage();
+              if (profileImage != null) {
+                setState(() {
+                  isloading = true;
+                });
+              }
+
+              await getUrlImage(profileImage);
+              setState(() {
+                isloading = false;
+              });
+            } finally {
+              print("++++++++++++++++++");
+              setState(() {
+                isloading = false;
+              });
+            }
+            setState(() {
+              isloading = false;
+            });
+          },
+        ),
+        SizedBox(
+          width: 200,
+          height: 100,
+          child: isloading && image12 == null
+              ? Container(
+                  height: 100,
+                  width: 200,
+                  child: const Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                )
+              : image12 != null && isloading == false
+                  ? Container(
+                      height: 100,
+                      width: 200,
+                      child: Image.network(image12),
+                    )
+                  : Container(
+                      height: 100,
+                      width: 200,
+                      child: const Center(child: Text("Please Upload Image")),
+                    ),
+        ),
+      ],
+    ));
+  }
+
+  getUrlImage(XFile? pickedFile) async {
+    if (kIsWeb) {
+      final _firebaseStorage = FirebaseStorage.instance
+          .ref()
+          .child('product_details')
+          .child('packages');
+
+      Reference _reference = _firebaseStorage.child('packages/${widget.id}');
+      await _reference.putData(
+        await pickedFile!.readAsBytes(),
+        SettableMetadata(contentType: 'image/jpeg'),
+      );
+
+      String imageUrl = await _reference.getDownloadURL();
+
+      setState(() {
+        image12 = imageUrl;
+      });
+    }
   }
 }
 
@@ -690,6 +802,8 @@ class ProductEditBox extends StatefulWidget {
     required this.validity,
     required this.ptype,
     required this.banner,
+    required this.trending_img,
+    required this.t_describe,
   }) : super(key: key);
 
   final String discount;
@@ -705,6 +819,8 @@ class ProductEditBox extends StatefulWidget {
   final String package_type;
   final String description;
   final bool ptype;
+  final String trending_img;
+  final String t_describe;
 
   @override
   _ProductEditBoxState createState() => _ProductEditBoxState();
@@ -718,6 +834,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
   // final TextEditingController _price = TextEditingController();
   final TextEditingController _validity = TextEditingController();
   final TextEditingController _banner = TextEditingController();
+  final TextEditingController _tdescribe = TextEditingController();
 
   // final TextEditingController _type = TextEditingController();
   var selectedvaluee;
@@ -764,6 +881,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
     description = widget.description;
     packagetype = widget.ptype;
     ptypee = widget.ptype ? "Percentage" : "Flat";
+    _tdescribe.text = widget.t_describe;
 
     // _type.text = widget.type;
   }
@@ -793,6 +911,12 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                   hinttext: "original price", addcontroller: _originalprice),
               customTextField(hinttext: "index", addcontroller: _index),
               customTextField(hinttext: "Banner", addcontroller: _banner),
+              customTextField(
+                  hinttext: "Description", addcontroller: _tdescribe),
+              const SizedBox(
+                height: 8,
+              ),
+              editim(imagea: widget.trending_img, gymid: widget.id),
               const SizedBox(
                 height: 8,
               ),
@@ -812,8 +936,8 @@ class _ProductEditBoxState extends State<ProductEditBox> {
               Row(
                 children: [
                   const Text('Type:',
-                      style: TextStyle(
-                          fontWeight: FontWeight.w700, fontSize: 15)),
+                      style:
+                          TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
                   const SizedBox(
                     width: 20,
                   ),
@@ -863,8 +987,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
               ),
               customTextField(hinttext: "validity", addcontroller: _validity),
               const Text('Category:',
-                  style: TextStyle(
-                      fontWeight: FontWeight.w700, fontSize: 15)),
+                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
               const SizedBox(
                 width: 20,
               ),
@@ -927,7 +1050,10 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                         'validity': _validity.text,
                         "type": sele,
                         'ptype': packagetype,
-                        'banner': _banner.text
+                        'banner': _banner.text,
+                        'tdescribe': _tdescribe.text,
+                        'trending_img':
+                            image12 != null ? image12 : widget.trending_img
                       };
                       await documentReference
                           .update(data)
@@ -950,5 +1076,117 @@ class _ProductEditBoxState extends State<ProductEditBox> {
         ),
       ),
     );
+  }
+}
+
+class editim extends StatefulWidget {
+  const editim({Key? key, required this.imagea, required this.gymid})
+      : super(key: key);
+  final String imagea;
+  final String gymid;
+  @override
+  State<editim> createState() => _editimState();
+}
+
+var image13;
+
+class _editimState extends State<editim> {
+  @override
+  String i2 = '';
+  void initState() {
+    // TODO: implement initState
+    i2 = widget.imagea;
+    super.initState();
+  }
+
+// <<<<<<< HEAD
+  @override
+  bool isloading = false;
+  var imagee;
+  Widget build(BuildContext context) {
+    return Container(
+      child: Row(
+        children: [
+          ElevatedButton(
+            onPressed: () async {
+              setState(() {
+                isloading = true;
+              });
+              var dic = await chooseImage();
+              await addImageToStorage(dic, widget.gymid);
+              setState(() {
+                isloading = false;
+              });
+            },
+            child: const Text(
+              'Upload Trending Icon',
+              style:
+                  TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
+            ),
+          ),
+          const SizedBox(
+            width: 20,
+          ),
+          isloading
+              ? Container(
+                  height: 200,
+                  width: 200,
+                  child: const CircularProgressIndicator())
+              : image13 != null
+                  ? Image(
+                      image: NetworkImage(image13.toString()),
+                      height: 200,
+                      width: 200,
+                    )
+                  : Image(
+                      image: NetworkImage(i2),
+                      height: 200,
+                      width: 200,
+                    )
+        ],
+      ),
+    );
+  }
+
+  addImageToStorage(XFile? pickedFile, String? id) async {
+    if (kIsWeb) {
+      Reference _reference = FirebaseStorage.instance
+          .ref()
+          .child("product_details")
+          .child('trending/$id');
+      await _reference
+          .putData(
+        await pickedFile!.readAsBytes(),
+        SettableMetadata(contentType: 'image/jpeg'),
+      )
+          .whenComplete(() async {
+        await _reference.getDownloadURL().then((value) async {
+          var uploadedPhotoUrl = value;
+          setState(() {
+            image13 = value;
+          });
+          print(value);
+          await FirebaseFirestore.instance
+              .collection('product_details')
+              .doc(globalGymId)
+              .collection('package')
+              .doc("normal_package")
+              .collection("gym")
+              .doc(id)
+              .update({'image': image13});
+// =======
+//       reader.readAsDataUrl(file!);
+//       reader.onLoadEnd.listen((event) async {
+//         var snapshot =
+//         await fs.ref().child('product_image/${widget.gymId}').putBlob(file);
+//         String downloadUrl = await snapshot.ref.getDownloadURL();
+//         setState(() {
+//           image = downloadUrl;
+// >>>>>>> 21d9c030cebb9d9fd030fc57983203910f0655fa
+        });
+      });
+    } else {
+//write a code for android or ios
+    }
   }
 }

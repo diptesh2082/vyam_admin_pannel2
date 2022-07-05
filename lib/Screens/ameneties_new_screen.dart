@@ -122,37 +122,57 @@ class _loadimageState extends State<loadimage> {
           ),
           InkWell(
             onTap: () async {
-              setState(() {
-                isloading = true;
-              });
-              image = await chooseImage();
-              await getUrlImage(image);
+              try {
+                image = await chooseImage();
+                if (image != null) {
+                  setState(() {
+                    isloading = true;
+                  });
+                }
+                await getUrlImage(image);
+                setState(() {
+                  isloading = false;
+                });
+              } finally {
+                setState(() {
+                  isloading = false;
+                });
+              }
             },
             child: const Icon(
               Icons.upload_file_outlined,
             ),
           ),
           SizedBox(
-              width: 300,
-              height: 200,
-              child: isloading
-                  ? ds != null
-                      ? Container(
-                          child: Image.network(ds),
-                        )
-                      : Container(
-                          child: Center(child: CircularProgressIndicator()))
-                  : Container(
-                      color: Colors.white,
-                      child: Center(
+            width: 300,
+            height: 200,
+            child: isloading && ds == null
+                ? Container(
+                    height: 100,
+                    width: 200,
+                    child: Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  )
+                : ds != null
+                    ? Container(
+                        height: 100,
+                        width: 200,
+                        child: Image.network(ds),
+                      )
+                    : Container(
+                        height: 100,
+                        width: 200,
+                        child: Center(
                           child: Text(
-                        'Please Upload Image',
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 24),
-                      )),
-                    ))
+                            "Please Upload Image",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 24),
+                          ),
+                        ),
+                      ),
+          ),
         ],
       ),
     );

@@ -61,15 +61,28 @@ class _PushState extends State<Push> {
               children: [
                 Padding(
                   padding: const EdgeInsets.only(top: 8.0, left: 8.0),
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      textStyle: const TextStyle(fontSize: 15),
-                    ),
-                    onPressed: () async {
-                      // await  FirebaseMessaging.instance.subscribeToTopic("push_notifications");
-                      Get.to(() => const pushNew());
-                    },
-                    child: Text('Add Push Notification'),
+                  child: Row(
+                    children: [
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          textStyle: const TextStyle(fontSize: 15),
+                        ),
+                        onPressed: () async {
+                          // await  FirebaseMessaging.instance.subscribeToTopic("push_notifications");
+                          Get.to(() => const pushNew());
+                        },
+                        child: Text('Add Push Notification'),
+                      ),
+                      SizedBox(
+                        width: 25,
+                      ),
+                      ElevatedButton(
+                        onPressed: () => Navigator.of(context).push(
+                            MaterialPageRoute(
+                                builder: (context) => Personalised())),
+                        child: Text("Personalised Notification"),
+                      ),
+                    ],
                   ),
                 ),
                 Center(
@@ -107,12 +120,7 @@ class _PushState extends State<Push> {
                               //     style: TextStyle(fontWeight: FontWeight.w600),
                               //   ),
                               // ),
-                              DataColumn(
-                                label: Text(
-                                  'Personalised Notification',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
-                              ),
+
                               DataColumn(
                                 label: Text(
                                   'Timestamp',
@@ -220,13 +228,7 @@ class _PushState extends State<Push> {
           ? Text(data['definition'] ?? "")
           : const Text("")),
       // DataCell(data['id'] != null ? Text(data['id'] ?? "") : const Text("")),
-      DataCell(ElevatedButton(
-        onPressed: () => Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => Personalised(idds: pushIdData))),
-        child: Text("Personalised Notification"),
-      )),
+
       DataCell(data['timestamp'] != null
           ? Text(data['timestamp'] ?? "")
           : const Text("")),
