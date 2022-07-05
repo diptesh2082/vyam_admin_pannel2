@@ -823,7 +823,7 @@ class _cardssState extends State<cardss> {
                             height: 8,
                           ),
                           Text(
-                            snapshot.data.docs.length.toString(),
+                            doc.length.toString(),
                             style: const TextStyle(
                               color: Colors.white,
                               fontSize: 25,

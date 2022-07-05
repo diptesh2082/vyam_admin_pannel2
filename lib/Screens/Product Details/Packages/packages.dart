@@ -63,8 +63,7 @@ class _PackagesPageState extends State<PackagesPage> {
 
   @override
   Widget build(BuildContext context) {
-    return
-        Scaffold(
+    return Scaffold(
       appBar: AppBar(
         title: Center(
           child: Text(
@@ -502,6 +501,11 @@ class _addboxxState extends State<addboxx> {
             customTextField(hinttext: "Banner", addcontroller: _banner),
             customTextField(
                 hinttext: "Trending Description", addcontroller: _tdescribe),
+
+            const SizedBox(
+              height: 8,
+            ),
+            loadimage(id: finalPackID),
             const SizedBox(
               height: 8,
             ),
@@ -575,8 +579,6 @@ class _addboxxState extends State<addboxx> {
             ),
             customTextField(hinttext: "validity", addcontroller: _validity),
             // customTextField(hinttext: "price", addcontroller: _price),
-
-            loadimage(id: finalPackID),
 
             const Text(
               'Category',
@@ -707,11 +709,24 @@ class _loadimageState extends State<loadimage> {
         InkWell(
           child: const Icon(Icons.camera_alt),
           onTap: () async {
-            setState(() {
-              isloading = true;
-            });
-            var profileImage = await chooseImage();
-            await getUrlImage(profileImage);
+            try {
+              var profileImage = await chooseImage();
+              if (profileImage != null) {
+                setState(() {
+                  isloading = true;
+                });
+              }
+
+              await getUrlImage(profileImage);
+              setState(() {
+                isloading = false;
+              });
+            } finally {
+              print("++++++++++++++++++");
+              setState(() {
+                isloading = false;
+              });
+            }
             setState(() {
               isloading = false;
             });
@@ -720,7 +735,7 @@ class _loadimageState extends State<loadimage> {
         SizedBox(
           width: 200,
           height: 100,
-          child: isloading
+          child: isloading && image12 == null
               ? Container(
                   height: 100,
                   width: 200,
@@ -728,7 +743,7 @@ class _loadimageState extends State<loadimage> {
                     child: CircularProgressIndicator(),
                   ),
                 )
-              : image12 != null
+              : image12 != null && isloading == false
                   ? Container(
                       height: 100,
                       width: 200,
@@ -901,6 +916,10 @@ class _ProductEditBoxState extends State<ProductEditBox> {
               const SizedBox(
                 height: 8,
               ),
+              editim(imagea: widget.trending_img, gymid: widget.id),
+              const SizedBox(
+                height: 8,
+              ),
               const Text("Description"),
               MarkdownTextInput(
                 (String value) => setState(() => description = value),
@@ -917,8 +936,8 @@ class _ProductEditBoxState extends State<ProductEditBox> {
               Row(
                 children: [
                   const Text('Type:',
-                      style: TextStyle(
-                          fontWeight: FontWeight.w700, fontSize: 15)),
+                      style:
+                          TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
                   const SizedBox(
                     width: 20,
                   ),
@@ -964,13 +983,11 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                         ],
                         onChanged: dropDowntype),
                   ),
-                  editim(imagea: widget.trending_img, gymid: widget.id),
                 ],
               ),
               customTextField(hinttext: "validity", addcontroller: _validity),
               const Text('Category:',
-                  style: TextStyle(
-                      fontWeight: FontWeight.w700, fontSize: 15)),
+                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
               const SizedBox(
                 width: 20,
               ),

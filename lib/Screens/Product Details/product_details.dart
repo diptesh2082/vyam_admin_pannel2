@@ -25,6 +25,12 @@ import 'package:admin_panel_vyam/services/CustomTextFieldClass.dart';
 List<String> arr = [];
 List<String> workoutArray = [];
 List<String> d = [];
+List<String> rules = [
+  '· Bring your towel and use it',
+  '· Bring seperate shoes.',
+  '· Re-rack equipments',
+  '· No heavy lifting without spotter'
+];
 
 class ProductDetails extends StatefulWidget {
   const ProductDetails({
@@ -178,17 +184,36 @@ class _ProductDetailsState extends State<ProductDetails> {
                           child: DataTable(
                               // ? DATATABLE
                               dataRowHeight: 65,
-                              columns: const [
+                              columns: [
                                 DataColumn(
                                     label: Text(
                                   'Index',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 )),
+
+                                // DataColumn(
+                                //     label: InkWell(
+                                //   onTap: () {
+                                //     doc.forEach((element) async {
+                                //       await FirebaseFirestore.instance
+                                //           .collection('product_details')
+                                //           .doc(element.id)
+                                //           .update({'rules': rules});
+                                //     });
+                                //   },
+                                //   child: Text(
+                                //     'Name',
+                                //     style:
+                                //         TextStyle(fontWeight: FontWeight.w600),
+                                //   ),
+                                // )),
                                 DataColumn(
-                                    label: Text(
-                                  'Name',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                )),
+                                  label: Text(
+                                    'Name',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.w600),
+                                  ),
+                                ),
                                 DataColumn(
                                   label: Text(
                                     'Address',
@@ -263,9 +288,9 @@ class _ProductDetailsState extends State<ProductDetails> {
                                   label: Text(
                                     'Offers',
                                     style:
-                                    TextStyle(fontWeight: FontWeight.w600),
+                                        TextStyle(fontWeight: FontWeight.w600),
                                   ),
-                                ),//!For Package
+                                ), //!For Package
                                 // DataColumn(
                                 //   label: Text(
                                 //     'Extra Packages',
@@ -663,13 +688,11 @@ class _ProductDetailsState extends State<ProductDetails> {
         child: const Text('Offers'),
         onPressed: () {
           Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) =>
-                 offersPage( offerId: gymId, name: name, landmark:data['branch']),
+            builder: (context) => offersPage(
+                offerId: gymId, name: name, landmark: data['branch']),
           ));
         },
       )),
-
-
 
       DataCell(
         Row(
@@ -904,24 +927,23 @@ class _ProductDetailsState extends State<ProductDetails> {
               context,
               MaterialPageRoute(
                   builder: (context) => ProductEditBox(
-                        address: data['address'],
-                        gender: data['gender'],
-                        name: data['name'],
-                        pincode: data['pincode'],
-                        branch: data['branch'],
-                        gymId: data['gym_id'],
-                        gymOwner: data['gym_owner'],
-                        // landmark: data['landmark'],
-                        password: data['password'],
-                        imagee: data['display_picture'],
-                        arr2: arr2,
-                        WorkoutArray: WorkoutArray,
+                      address: data['address'],
+                      gender: data['gender'],
+                      name: data['name'],
+                      pincode: data['pincode'],
+                      branch: data['branch'],
+                      gymId: data['gym_id'],
+                      gymOwner: data['gym_owner'],
+                      // landmark: data['landmark'],
+                      password: data['password'],
+                      imagee: data['display_picture'],
+                      arr2: arr2,
+                      WorkoutArray: WorkoutArray,
+                      serviceArray: serviceArray,
+                      description: data['description'],
+                      rules: data['rules']
 
-                        serviceArray: serviceArray,
-
-                        description: data['description'],
-
-                        // location: data['location'],
+                      // location: data['location'],
                       )));
         },
       ),
@@ -1031,6 +1053,8 @@ class _ShowAddBoxState extends State<ShowAddBox> {
   final TextEditingController _branchController = TextEditingController();
   final TextEditingController _descriptionCon = TextEditingController();
   final TextEditingController _numberCon = TextEditingController();
+  final TextEditingController _addrules = TextEditingController();
+
   var dic;
   var multipic;
   var impath;
@@ -1375,6 +1399,43 @@ class _ShowAddBoxState extends State<ShowAddBox> {
                 addcontroller: _numberCon,
                 hinttext: "Number",
               ),
+              const SizedBox(height: 20),
+              customTextField(
+                addcontroller: _addrules,
+                hinttext: "Rules",
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+
+              Row(
+                children: [
+                  ElevatedButton(
+                      onPressed: () {
+                        setState(() {
+                          rules.add(_addrules.text);
+                          _addrules.text = "";
+                        });
+                      },
+                      child: Text("Add Rules")),
+                  SizedBox(width: 20),
+                  ElevatedButton(
+                      onPressed: () {
+                        setState(() {
+                          rules.removeLast();
+                          _addrules.text = "";
+                        });
+                      },
+                      child: Text("Remove Rules"))
+                ],
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Text(
+                rules.toString(),
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
               const SizedBox(
                 height: 10,
               ),
@@ -1447,7 +1508,8 @@ class _ShowAddBoxState extends State<ShowAddBox> {
                           "amenities": arr,
                           "workouts": workoutArray,
                           "password": _addpassword.text,
-                          'valid': true
+                          'valid': true,
+                          'rules': rules,
                         },
                         // ).then((snapshot) async {
                         //   await uploadImageToStorage(dic, _addgymownerid.text);
@@ -1922,6 +1984,7 @@ class ProductEditBox extends StatefulWidget {
     this.description,
     required this.password,
     required this.branch,
+    required this.rules,
   }) : super(key: key);
 
   final String name;
@@ -1937,6 +2000,7 @@ class ProductEditBox extends StatefulWidget {
   final String imagee;
   final arr2;
   final WorkoutArray;
+  final List rules;
 
   final serviceArray;
 
@@ -1956,9 +2020,12 @@ class _ProductEditBoxState extends State<ProductEditBox> {
   final TextEditingController _branch = TextEditingController();
   final TextEditingController _pincode = TextEditingController();
   final TextEditingController _description = TextEditingController();
+  final TextEditingController _rules = TextEditingController();
+
   final TextEditingController _latitudeController = TextEditingController();
   final TextEditingController _longitudeController = TextEditingController();
   String imagess = '';
+  List rs = [];
   CollectionReference? amenitiesStream;
   CollectionReference? workoutStream;
   CollectionReference? categoryStream;
@@ -1975,6 +2042,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
     _branch.text = widget.branch;
     imagess = widget.imagee;
     _password.text = widget.password;
+    rs = widget.rules;
     _description.text = widget.description;
     amenitiesStream = FirebaseFirestore.instance.collection("amenities");
     workoutStream = FirebaseFirestore.instance.collection("workouts");
@@ -2013,6 +2081,43 @@ class _ProductEditBoxState extends State<ProductEditBox> {
               customTextField(
                   hinttext: "Description", addcontroller: _description),
               customTextField(hinttext: 'Password', addcontroller: _password),
+              const SizedBox(height: 20),
+              customTextField(
+                addcontroller: _rules,
+                hinttext: "Rules",
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+
+              Row(
+                children: [
+                  ElevatedButton(
+                      onPressed: () {
+                        setState(() {
+                          rs.add(_rules.text);
+                          _rules.text = "";
+                        });
+                      },
+                      child: Text("Add Rules")),
+                  SizedBox(width: 20),
+                  ElevatedButton(
+                      onPressed: () {
+                        setState(() {
+                          rs.removeLast();
+                          _rules.text = "";
+                        });
+                      },
+                      child: Text("Remove Rules"))
+                ],
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Text(
+                rs.toString(),
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
               // customTextField(
               //     hinttext: 'Longitude', addcontroller: _longitudeController),
               customTextField(hinttext: "Branch", addcontroller: _branch),
@@ -2150,6 +2255,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                         'description': _description.text,
                         'display_picture':
                             image2 != null ? image2 : widget.imagee,
+                        'rules': rs
                       };
                       await documentReference.update(data).whenComplete(() {
                         print("Item Updated");
@@ -2197,14 +2303,23 @@ class _editimState extends State<editim> {
         children: [
           ElevatedButton(
             onPressed: () async {
-              setState(() {
-                isloading = true;
-              });
-              var dic = await chooseImage();
-              await addImageToStorage(dic, widget.gymid);
-              setState(() {
-                isloading = false;
-              });
+              try {
+                var dic = await chooseImage();
+                if (dic != null) {
+                  setState(() {
+                    isloading = true;
+                  });
+                }
+
+                await addImageToStorage(dic, widget.gymid);
+                setState(() {
+                  isloading = false;
+                });
+              } finally {
+                setState(() {
+                  isloading = false;
+                });
+              }
             },
             child: const Text(
               'Upload Gym Image',
