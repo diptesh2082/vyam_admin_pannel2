@@ -218,19 +218,19 @@ class _todayState extends State<today> {
 // <<<<<<< HEAD
                         docs.forEach((element) {
                           if (element
-                                      .get('order_date')
+                                      .get('booking_date')
                                       .toDate()
                                       .day
                                       .toString() ==
                                   tdate &&
                               element
-                                      .get('order_date')
+                                      .get('booking_date')
                                       .toDate()
                                       .month
                                       .toString() ==
                                   tmonth &&
                               element
-                                      .get('order_date')
+                                      .get('booking_date')
                                       .toDate()
                                       .year
                                       .toString() ==
@@ -502,10 +502,10 @@ class _todayState extends State<today> {
         DateFormat("MMM, dd, yyyy").format(data["plan_end_duration"].toDate());
     // "${data['plan_end_duration'].toDate().year}/${data['plan_end_duration'].toDate().month}/${data['plan_end_duration'].toDate().day}";
     String orderDate =
-        DateFormat("MMM, dd, yyyy").format(data["order_date"].toDate());
+        DateFormat("MMM, dd, yyyy hh:mm a").format(data["order_date"].toDate());
     // "${data['order_date'].toDate().year}/${data['order_date'].toDate().month}/${data['order_date'].toDate().day}";
     String bookingDate =
-        DateFormat("MMM, dd, yyyy").format(data["booking_date"].toDate());
+        DateFormat("MMM, dd, yyyy ").format(data["booking_date"].toDate());
     // "${data['booking_date'].toDate().year}/${data['booking_date'].toDate().month}/${data['booking_date'].toDate().day}";
     String x;
     return DataRow(cells: [
@@ -541,7 +541,8 @@ class _todayState extends State<today> {
 
       // DataCell(data['order_date'] != null ? Text(orderDate) : const Text("")),
       // =======
-      DataCell(data['booking_date'] != null ? Text(orderDate) : const Text("")),
+      DataCell(
+          data['booking_date'] != null ? Text(bookingDate) : const Text("")),
 
       // >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
 // >>>>>>> ae7259e7ba6e19ed4976a35667cb3a762fe66e2c

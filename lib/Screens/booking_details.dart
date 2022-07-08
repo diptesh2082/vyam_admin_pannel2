@@ -666,13 +666,13 @@ class _BookingDetailsState extends State<BookingDetails> {
     bool bookingAccepted = data['booking_accepted'];
 
     String durationEnd =
-        DateFormat("MMM, dd, yyyy").format(data["plan_end_duration"].toDate());
+        DateFormat("MMM, dd, yyyy ").format(data["plan_end_duration"].toDate());
     // "${data['plan_end_duration'].toDate().year}/${data['plan_end_duration'].toDate().month}/${data['plan_end_duration'].toDate().day}";
     String orderDate =
-        DateFormat("MMM, dd, yyyy").format(data["order_date"].toDate());
+        DateFormat("MMM, dd, yyyy hh:mm a").format(data["order_date"].toDate());
     // "${data['order_date'].toDate().year}/${data['order_date'].toDate().month}/${data['order_date'].toDate().day}";
     String bookingDate =
-        DateFormat("MMM, dd, yyyy").format(data["booking_date"].toDate());
+        DateFormat("MMM, dd, yyyy ").format(data["booking_date"].toDate());
     // "${data['booking_date'].toDate().year}/${data['booking_date'].toDate().month}/${data['booking_date'].toDate().day}";
     String x;
     String statement = "";
