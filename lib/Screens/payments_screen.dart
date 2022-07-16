@@ -62,7 +62,7 @@ class _PaymentsPageState extends State<PaymentsPage> {
                         //from firebase
                         dt = DateTime.fromMillisecondsSinceEpoch(
                             dtime.millisecondsSinceEpoch);
-                        d12 = DateFormat('dd/MM/yyyy, HH:mm').format(dt);
+                        d12 = DateFormat('dd/MM/yyyy, hh:mm a').format(dt);
                       });
                       Navigator.push(
                           context,

@@ -506,15 +506,23 @@ class _editimState extends State<editim> {
         children: [
           ElevatedButton(
             onPressed: () async {
-              setState(() {
-                isloading = true;
-              });
-              var dic = await chooseImage();
-              await addImageToStorage(dic, di);
-              setState(() {
-                isloading = false;
-                i2 = image3;
-              });
+              try {
+                var dic = await chooseImage();
+                if (dic != null) {
+                  setState(() {
+                    isloading = true;
+                  });
+                }
+                await addImageToStorage(dic, di);
+                setState(() {
+                  isloading = false;
+                  i2 = image3;
+                });
+              } finally {
+                setState(() {
+                  isloading = false;
+                });
+              }
             },
             child: const Text(
               'Upload Gym Image',

@@ -214,7 +214,7 @@ class _TimingsState extends State<Timings> {
       DataCell(data != null ? Text(data["timing_id"] ?? "") : Text("")),
       DataCell(data != null ? Text(data["Morning"] ?? "") : Text("")),
       DataCell(data != null ? Text(data['Evening'] ?? "") : Text("")),
-      DataCell(data != null ? Text(data['closed'] ?? "") : Text("")),
+      DataCell(data != null ? Text(data['closed'].toString()) : Text("")),
       DataCell(data != null ? Text(data['morning_days'] ?? "") : Text("")),
       DataCell(data != null ? Text(data['evening_days'] ?? "") : Text("")),
       DataCell(data != null ? Text(data['position'] ?? "") : Text("")),
@@ -259,10 +259,11 @@ class _ShowAddBoxState extends State<ShowAddBox> {
   //
   //   super.initState();
   // }
+  List<String> closed = [];
   final TextEditingController typecon = TextEditingController();
   final TextEditingController morning = TextEditingController();
   final TextEditingController evening = TextEditingController();
-  final TextEditingController closed = TextEditingController();
+  // final TextEditingController closed = TextEditingController();
   final TextEditingController morning_days = TextEditingController();
   final TextEditingController evening_days = TextEditingController();
   final TextEditingController position = TextEditingController();
@@ -291,9 +292,85 @@ class _ShowAddBoxState extends State<ShowAddBox> {
             customTextField(
                 hinttext: "Evening Timings : 5.00PM-10.00PM",
                 addcontroller: evening),
-            customTextField(
-                hinttext: "Closed : Saturday and Sunday",
-                addcontroller: closed),
+            Container(
+              padding: EdgeInsets.all(40),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              closed.add("Sunday");
+                            });
+                          },
+                          child: Text("Sunday")),
+                      ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              closed.add("Monday");
+                            });
+                          },
+                          child: Text("Monday")),
+                      ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              closed.add("Tuesday");
+                            });
+                          },
+                          child: Text("Tuesday")),
+                      ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              closed.add("Wednesday");
+                            });
+                          },
+                          child: Text("Wednesday")),
+                      ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              closed.add("Thursday");
+                            });
+                          },
+                          child: Text("Thursday")),
+                      ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              closed.add("Friday");
+                            });
+                          },
+                          child: Text("Friday")),
+                      ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              closed.add("Saturday");
+                            });
+                          },
+                          child: Text("Saturday")),
+                      ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              closed.removeLast();
+                            });
+                          },
+                          child: Text("Remove Last")),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Text(
+                    closed.toString(),
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                  )
+                ],
+              ),
+            ),
+
+            // customTextField(
+            //     hinttext: "Closed : Saturday and Sunday",
+            //     addcontroller: closed),
             customTextField(
               addcontroller: morning_days,
               hinttext: "Morning Days : Morning(mon-fri)",
@@ -314,7 +391,7 @@ class _ShowAddBoxState extends State<ShowAddBox> {
                     {
                       "Morning": morning.text,
                       "Evening": evening.text,
-                      "closed": closed.text,
+                      "closed": closed,
                       "morning_days": morning_days.text,
                       "evening_days": evening_days.text,
                       'timing_id': typecon.text,
@@ -348,7 +425,7 @@ class ProductEditBox extends StatefulWidget {
 
   final String morning;
   final String evening;
-  final String closed;
+  final List<dynamic> closed;
   final String morning_days;
   final String eveninging_days;
   final String typeId;
@@ -363,18 +440,18 @@ class _ProductEditBoxState extends State<ProductEditBox> {
   final TextEditingController typecon = TextEditingController();
   final TextEditingController morning = TextEditingController();
   final TextEditingController evening = TextEditingController();
-  final TextEditingController closed = TextEditingController();
+  // final TextEditingController closed = TextEditingController();
   final TextEditingController morning_days = TextEditingController();
   final TextEditingController evening_days = TextEditingController();
   final TextEditingController position = TextEditingController();
-
+  List<dynamic> closed = [];
   @override
   void initState() {
     super.initState();
     typecon.text = widget.typeId;
     morning.text = widget.morning;
     evening.text = widget.evening;
-    closed.text = widget.closed;
+    closed = widget.closed;
     morning_days.text = widget.morning_days;
     evening_days.text = widget.eveninging_days;
     position.text = widget.position;
@@ -407,9 +484,85 @@ class _ProductEditBoxState extends State<ProductEditBox> {
               customTextField(
                   hinttext: "Evening Timings : 5.00PM-10.00PM",
                   addcontroller: evening),
-              customTextField(
-                  hinttext: "Closed : Saturday and Sunday",
-                  addcontroller: closed),
+              Container(
+                padding: EdgeInsets.all(40),
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        ElevatedButton(
+                            onPressed: () {
+                              setState(() {
+                                closed.add("Sunday");
+                              });
+                            },
+                            child: Text("Sunday")),
+                        ElevatedButton(
+                            onPressed: () {
+                              setState(() {
+                                closed.add("Monday");
+                              });
+                            },
+                            child: Text("Monday")),
+                        ElevatedButton(
+                            onPressed: () {
+                              setState(() {
+                                closed.add("Tuesday");
+                              });
+                            },
+                            child: Text("Tuesday")),
+                        ElevatedButton(
+                            onPressed: () {
+                              setState(() {
+                                closed.add("Wednesday");
+                              });
+                            },
+                            child: Text("Wednesday")),
+                        ElevatedButton(
+                            onPressed: () {
+                              setState(() {
+                                closed.add("Thursday");
+                              });
+                            },
+                            child: Text("Thursday")),
+                        ElevatedButton(
+                            onPressed: () {
+                              setState(() {
+                                closed.add("Friday");
+                              });
+                            },
+                            child: Text("Friday")),
+                        ElevatedButton(
+                            onPressed: () {
+                              setState(() {
+                                closed.add("Saturday");
+                              });
+                            },
+                            child: Text("Saturday")),
+                        ElevatedButton(
+                            onPressed: () {
+                              setState(() {
+                                closed.removeLast();
+                              });
+                            },
+                            child: Text("Remove Last")),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Text(
+                      closed.toString(),
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                    )
+                  ],
+                ),
+              ),
+              // customTextField(
+              //     hinttext: "Closed : Saturday and Sunday",
+              //     addcontroller: closed),
               customTextField(
                 addcontroller: morning_days,
                 hinttext: "Morning Days : Morning(mon-fri)",
@@ -433,7 +586,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                       Map<String, dynamic> data = <String, dynamic>{
                         "Morning": morning.text,
                         "Evening": evening.text,
-                        "closed": closed.text,
+                        "closed": closed,
                         "morning_days": morning_days.text,
                         "evening_days": evening_days.text,
                         'timing_id': typecon.text,
