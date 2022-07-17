@@ -518,7 +518,7 @@ class _UserInformationState extends State<UserInformation> {
       DataCell(data != null ? Text(index.toString()) : Text("")),
 
       DataCell(
-        profileImage != "null" || profileImage != null
+        profileImage != "null" && profileImage != null
             ? CircleAvatar(
                 child: CachedNetworkImage(
                   imageUrl: profileImage,
@@ -541,18 +541,22 @@ class _UserInformationState extends State<UserInformation> {
               ),
       ),
       // DataCell(data != null ? Text(userIDData) : Text("")),
-      DataCell(data != null ? Text(data['name'] ?? "") : Text("")),
-      DataCell(data != null ? Text(data['email'] ?? "") : Text("")),
-      DataCell(data != null ? Text(data['gender'] ?? "") : Text("")),
-      DataCell(data != null
+      DataCell(data['name'] != null ? Text(data['name'] ?? "") : Text("")),
+      DataCell(data['email'] != null ? Text(data['email'] ?? "") : Text("")),
+      DataCell(data['gender'] != null ? Text(data['gender'] ?? "") : Text("")),
+      DataCell(data['number'] != null
           ? Text((data['number'])
               .toString()
               .substring(3, data['number'].toString().length))
           : Text("")),
-      DataCell(data != null ? Text(data['address'] ?? "") : Text("")),
-      DataCell(data != null ? Text(data['locality'] ?? "") : Text("")),
+      DataCell(
+          data['address'] != null ? Text(data['address'] ?? "") : Text("")),
+      DataCell(
+          data['locality'] != null ? Text(data['locality'] ?? "") : Text("")),
       // DataCell(data != null ? Text(data['subLocality'] ?? "") : Text("")),
-      DataCell(data != null ? Text(data['pincode'].toString()) : Text("")),
+      DataCell(data['pincode'] != null
+          ? Text(data['pincode'].toString())
+          : Text("")),
       DataCell(
         Center(
           child: ElevatedButton(
@@ -578,7 +582,7 @@ class _UserInformationState extends State<UserInformation> {
             context,
             MaterialPageRoute(
               builder: (conext) => EditBox(
-                imageurl: data['image'],
+                imageurl: data['image'].toString(),
                 address: data['address'],
                 gender: data['gender'],
                 email: data['email'],
@@ -906,7 +910,7 @@ class _EditBoxState extends State<EditBox> {
                             Map<String, dynamic> data = <String, dynamic>{
                               // 'address':'',
                               'gender': gvalue != null ? gvalue : "",
-                              'image': image5 != null ? image5 : "",
+                              'image': image5 != null ? image5 : img,
                               'name': _name.text,
                               'email': _email.text,
                               'number': '+91${_number.text}',

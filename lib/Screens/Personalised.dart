@@ -92,12 +92,12 @@ class _PersonalisedState extends State<Personalised> {
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
-                              DataColumn(
-                                label: Text(
-                                  'Validity',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
-                              ),
+                              // DataColumn(
+                              //   label: Text(
+                              //     'Validity',
+                              //     style: TextStyle(fontWeight: FontWeight.w600),
+                              //   ),
+                              // ),
                               DataColumn(
                                 label: Text(
                                   'Edit',
@@ -194,7 +194,7 @@ class _PersonalisedState extends State<Personalised> {
     var millis = data['timestamp'].millisecondsSinceEpoch;
     var dt = DateTime.fromMillisecondsSinceEpoch(millis);
     var d12 = DateFormat('dd/MMM/yyyy, hh:mm a').format(dt);
-    bool not = data['valid'];
+    // bool not = data['valid'];
     return DataRow(cells: [
       DataCell(data['p_title'] != null
           ? Text(data['p_title'] ?? "")
@@ -203,26 +203,26 @@ class _PersonalisedState extends State<Personalised> {
           ? Text(data['description'])
           : const Text("")),
       DataCell(data['timestamp'] != null ? Text(d12) : const Text("")),
-      DataCell(ElevatedButton(
-        onPressed: () async {
-          bool temp = not;
-          temp = !temp;
-          DocumentReference documentReference = FirebaseFirestore.instance
-              .collection('personalised_notification')
-              .doc(pushIdData);
-          await documentReference
-              .update({'valid': temp})
-              .whenComplete(() => print("Legitimate toggled"))
-              .catchError((e) => print(e));
-        },
-        child: Text(not ? "Yes" : "No"),
-        style:
-            ElevatedButton.styleFrom(primary: not ? Colors.green : Colors.red),
-      )),
+      // DataCell(ElevatedButton(
+      //   onPressed: () async {
+      //     bool temp = not;
+      //     temp = !temp;
+      //     DocumentReference documentReference = FirebaseFirestore.instance
+      //         .collection('personalised_notification')
+      //         .doc(pushIdData);
+      //     await documentReference
+      //         .update({'valid': temp})
+      //         .whenComplete(() => print("Legitimate toggled"))
+      //         .catchError((e) => print(e));
+      //   },
+      //   child: Text(not ? "Yes" : "No"),
+      //   style:
+      //       ElevatedButton.styleFrom(primary: not ? Colors.green : Colors.red),
+      // )),
       DataCell(const Text(""), showEditIcon: true, onTap: () {
         Get.to(() => ProductEditBox(
               title: data['p_title'],
-              image: data['image'],
+              image: data['image'].toString(),
               description: data['description'],
               replacement: data['replacement'],
               id: data.id,
@@ -617,7 +617,7 @@ class _pnewState extends State<pnew> {
                               'replacement': replacement,
                               'image': image7 != null ? image7 : "",
                               'timestamp': DateTime.now(),
-                              'valid': false,
+                              // 'valid': false,
                             },
                           );
                           Navigator.pop(context);

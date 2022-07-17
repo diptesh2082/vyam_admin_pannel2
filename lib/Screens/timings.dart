@@ -211,13 +211,22 @@ class _TimingsState extends State<Timings> {
     String timeId = data['timing_id'];
     print(timeId);
     return DataRow(cells: [
-      DataCell(data != null ? Text(data["timing_id"] ?? "") : Text("")),
-      DataCell(data != null ? Text(data["Morning"] ?? "") : Text("")),
-      DataCell(data != null ? Text(data['Evening'] ?? "") : Text("")),
-      DataCell(data != null ? Text(data['closed'].toString()) : Text("")),
-      DataCell(data != null ? Text(data['morning_days'] ?? "") : Text("")),
-      DataCell(data != null ? Text(data['evening_days'] ?? "") : Text("")),
-      DataCell(data != null ? Text(data['position'] ?? "") : Text("")),
+      DataCell(
+          data["timing_id"] != null ? Text(data["timing_id"] ?? "") : Text("")),
+      DataCell(
+          data["Morning"] != null ? Text(data["Morning"] ?? "") : Text("")),
+      DataCell(
+          data['Evening'] != null ? Text(data['Evening'] ?? "") : Text("")),
+      DataCell(
+          data['closed'] != null ? Text(data['closed'].toString()) : Text("")),
+      DataCell(data['morning_days'] != null
+          ? Text(data['morning_days'] ?? "")
+          : Text("")),
+      DataCell(data['evening_days'] != null
+          ? Text(data['evening_days'] ?? "")
+          : Text("")),
+      DataCell(
+          data['position'] != null ? Text(data['position'] ?? "") : Text("")),
       DataCell(const Text(""), showEditIcon: true, onTap: () {
         Navigator.push(
             context,

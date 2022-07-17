@@ -22,14 +22,13 @@ Future<void> deleteMethodVendor(
     String? uniqueDocId,
     String? imagess,
     List? imlist}) async {
-  if(imagess == null || imagess == "")
-    {
-      return stream!
-          .doc(uniqueDocId)
-          .delete()
-          .then((value) => print("User Deleted"))
-          .catchError((error) => print("Failed to delete user: $error"));
-    }
+  if (imagess == null || imagess == "") {
+    return stream!
+        .doc(uniqueDocId)
+        .delete()
+        .then((value) => print("User Deleted"))
+        .catchError((error) => print("Failed to delete user: $error"));
+  }
   // await deletee(
   // '12.jpeg',
   // imlist[0].toString();
@@ -52,22 +51,26 @@ Future<void> deleteMethodI({
   String? uniqueDocId,
   String? imagess,
 }) async {
-  if(imagess ==null || imagess == "")
-    {
+  // if(imagess ==null || imagess == "")
+  //   {
+  //
+  //
+  //   }
 
-      return stream!
-          .doc(uniqueDocId)
-          .delete()
-          .then((value) => print("User Deleted"))
-          .catchError((error) => print("Failed to delete user: $error"));
-    }
-
-  await deletee(imagess.toString());
-  return stream!
-      .doc(uniqueDocId)
-      .delete()
-      .then((value) => print("User Deleted"))
-      .catchError((error) => print("Failed to delete user: $error"));
+  try {
+    await deletee(imagess.toString());
+    return stream!
+        .doc(uniqueDocId)
+        .delete()
+        .then((value) => print("User Deleted"))
+        .catchError((error) => print("Failed to delete user: $error"));
+  } catch (e) {
+    return stream!
+        .doc(uniqueDocId)
+        .delete()
+        .then((value) => print("User Deleted"))
+        .catchError((error) => print("Failed to delete user: $error"));
+  }
 }
 
 Future<void> deleteMethod({

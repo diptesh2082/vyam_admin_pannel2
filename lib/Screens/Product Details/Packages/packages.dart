@@ -254,12 +254,12 @@ class _PackagesPageState extends State<PackagesPage> {
       // DataCell(data != null ? Text(data['id'] ?? "") : Text("")),
       DataCell(data != null ? Text(data['index'].toString()) : const Text("")),
 
-      DataCell(data != null
+      DataCell(data['title'] != null
           ? Text(data['title'].toString().toUpperCase())
           : const Text("")),
       DataCell(
-          data != null ? Text(data['original_price'] ?? "") : const Text("")),
-      DataCell(data != null ? Text(data['discount'] ?? "") : const Text("")),
+          data['original_price'] != null ? Text(data['original_price'] ?? "") : const Text("")),
+      DataCell(data['discount'] != null ? Text(data['discount'] ?? "") : const Text("")),
       DataCell(
         Center(
           child: ElevatedButton(
@@ -314,7 +314,7 @@ class _PackagesPageState extends State<PackagesPage> {
           ),
         ),
       ),
-      DataCell(data != null
+      DataCell(data['type'] != null
           ? Text(data['type'].toString().toUpperCase())
           : const Text("")),
       // DataCell(data != null ? Text(data['validity'] ?? "") : Text("")),
@@ -336,7 +336,7 @@ class _PackagesPageState extends State<PackagesPage> {
                     description: data['description'],
                     ptype: data['ptype'],
                     banner: data['banner'],
-                    trending_img: data['trending_img'],
+                    trending_img: data['trending_img'].toString(),
                     t_describe: data['tdescribe'])));
       }),
       DataCell(const Icon(Icons.delete), onTap: () {

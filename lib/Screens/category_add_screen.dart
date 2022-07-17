@@ -173,7 +173,7 @@ class _loadimageState extends State<loadimage> {
         child: Row(
       children: [
         const Text(
-          "User Image",
+          "Category Image",
           style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
         ),
         const SizedBox(
@@ -233,8 +233,7 @@ class _loadimageState extends State<loadimage> {
 
   getUrlImage(XFile? pickedFile) async {
     if (kIsWeb) {
-      final _firebaseStorage =
-          FirebaseStorage.instance.ref().child("user_details");
+      final _firebaseStorage = FirebaseStorage.instance.ref().child("category");
 
       Reference _reference =
           _firebaseStorage.child('category/${Path.basename(pickedFile!.path)}');

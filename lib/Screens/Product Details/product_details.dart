@@ -629,7 +629,7 @@ class _ProductDetailsState extends State<ProductDetails> {
     bool cash_pay = data['cash_pay'];
     List imgList = data['images'];
     // String landmark = data['landmark'];
-    String imagess = data['display_picture'];
+    String imagess = data['display_picture'].toString();
     List<dynamic> arr2 = data['amenities'];
     List<dynamic> WorkoutArray = data['workouts'];
     List<dynamic> serviceArray = data['service'];
@@ -637,19 +637,26 @@ class _ProductDetailsState extends State<ProductDetails> {
 
     return DataRow(cells: [
       DataCell(data != null ? Text(index.toString()) : const Text("")),
-      DataCell(data != null ? Text(data['name'] ?? "") : const Text("")),
-      DataCell(data != null ? Text(data['address'] ?? "") : const Text("")),
-      DataCell(data != null ? Text(gymId) : const Text("")),
       DataCell(
-          data != null ? Text(data['password'].toString()) : const Text("")),
+          data['name'] != null ? Text(data['name'] ?? "") : const Text("")),
+      DataCell(data['address'] != null
+          ? Text(data['address'] ?? "")
+          : const Text("")),
+      DataCell(data != null ? Text(gymId) : const Text("")),
+      DataCell(data['password'] != null
+          ? Text(data['password'].toString())
+          : const Text("")),
 
-      DataCell(data != null ? Text(data['gym_owner'] ?? "") : const Text("")),
+      DataCell(data['gym_owner'] != null
+          ? Text(data['gym_owner'] ?? "")
+          : const Text("")),
 // <<<<<<< HEAD
 //       DataCell(data != null
 //           ? Text(data['gender'].toString().toUpperCase())
 //           : const Text("")),
 // =======
-      DataCell(data != null ? Text(data['gender'] ?? "") : const Text("")),
+      DataCell(
+          data['gender'] != null ? Text(data['gender'] ?? "") : const Text("")),
 // >>>>>>> cf1997613ff877c63a56c61e3009bdfe3639ccfa
       // DataCell(data != null
       //     ? GestureDetector(
@@ -658,8 +665,11 @@ class _ProductDetailsState extends State<ProductDetails> {
       //         },
       //         child: Text(loctext))
       //: const Text("")),
-      DataCell(data != null ? Text(data['branch'] ?? "") : const Text("")),
-      DataCell(data != null ? Text(data['pincode'] ?? "") : const Text("")),
+      DataCell(
+          data['branch'] != null ? Text(data['branch'] ?? "") : const Text("")),
+      DataCell(data['pincode'] != null
+          ? Text(data['pincode'] ?? "")
+          : const Text("")),
 
       DataCell(ElevatedButton(
           child: const Text(
@@ -726,55 +736,77 @@ class _ProductDetailsState extends State<ProductDetails> {
                       child: StreamBuilder<Object>(
                           stream: productStream!.snapshots(),
                           builder: (context, AsyncSnapshot snapshot) {
-                            return GridView.builder(
-                                padding: const EdgeInsets.all(20.0),
-                                gridDelegate:
-                                    const SliverGridDelegateWithFixedCrossAxisCount(
-                                        crossAxisCount: 2),
-                                itemCount: data['images'].length,
-                                itemBuilder: (BuildContext context, int index) {
-                                  return SizedBox(
-                                    height: MediaQuery.of(context).size.height *
-                                        .75,
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        SizedBox(
-                                          height: 500,
-                                          width: 500,
-                                          child: FittedBox(
-                                            child: Image.network(
-                                              data['images'][index].toString(),
-                                              fit: BoxFit.fill,
+                            return data['images'] != null &&
+                                    data['images'] != "null"
+                                ? GridView.builder(
+                                    padding: const EdgeInsets.all(20.0),
+                                    gridDelegate:
+                                        const SliverGridDelegateWithFixedCrossAxisCount(
+                                            crossAxisCount: 2),
+                                    itemCount: data['images'].length,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      return SizedBox(
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                                .75,
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            SizedBox(
+                                              height: 500,
+                                              width: 500,
+                                              child: FittedBox(
+                                                  child: Image.network(
+                                                data['images'][index]
+                                                    .toString(),
+                                                fit: BoxFit.fill,
+                                              )),
                                             ),
-                                          ),
+                                            const SizedBox(width: 20),
+                                            IconButton(
+                                              onPressed: () async {
+                                                print(data['images'].length);
+                                                await deletee(
+                                                    // '12.jpeg',
+                                                    imgList[index].toString(),
+                                                    data['images']);
+                                                await FirebaseFirestore.instance
+                                                    .collection(
+                                                        'product_details')
+                                                    .doc(gymId)
+                                                    .update({
+                                                  'images':
+                                                      FieldValue.arrayRemove(
+                                                          [imgList[index]])
+                                                });
+                                                print("Delete!");
+                                              },
+                                              icon: const Icon(Icons.delete),
+                                            )
+                                          ],
                                         ),
-                                        const SizedBox(width: 20),
-                                        IconButton(
-                                          onPressed: () async {
-                                            print(data['images'].length);
-                                            await deletee(
-                                                // '12.jpeg',
-                                                imgList[index].toString(),
-                                                data['images']);
-                                            await FirebaseFirestore.instance
-                                                .collection('product_details')
-                                                .doc(gymId)
-                                                .update({
-                                              'images': FieldValue.arrayRemove(
-                                                  [imgList[index]])
-                                            });
-                                            print("Delete!");
-                                          },
-                                          icon: const Icon(Icons.delete),
-                                        )
-                                      ],
-                                    ),
 
-                                    // minLeadin≥gWidth: double.infinity,
-                                  );
-                                });
+                                        // minLeadin≥gWidth: double.infinity,
+                                      );
+                                    })
+                                : AlertDialog(
+                                    shape: const RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(30))),
+                                    content: SizedBox(
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              .90,
+                                      width: MediaQuery.of(context).size.width *
+                                          .92,
+                                      child: Container(
+                                        child: Center(
+                                          child: Text("Upload Images"),
+                                        ),
+                                      ),
+                                    ));
                           }),
                     ),
                   ),
@@ -917,7 +949,7 @@ class _ProductDetailsState extends State<ProductDetails> {
       ),
 
       DataCell(datacelldisplay(
-          disimg: data['display_picture'], idd: data['gym_id'])),
+          disimg: data['display_picture'].toString(), idd: data['gym_id'])),
 
       DataCell(
         const Text(""),
@@ -936,7 +968,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                       gymOwner: data['gym_owner'],
                       // landmark: data['landmark'],
                       password: data['password'],
-                      imagee: data['display_picture'],
+                      imagee: data['display_picture'].toString(),
                       arr2: arr2,
                       WorkoutArray: WorkoutArray,
                       serviceArray: serviceArray,
@@ -2437,11 +2469,15 @@ class _datacelldisplayState extends State<datacelldisplay> {
                   child: CircularProgressIndicator(),
                 ),
               )
-            : Container(
-                height: 100,
-                width: 200,
-                child: Image.network(widget.disimg),
-              ),
+            : widget.disimg != null && widget.disimg != "null"
+                ? Container(
+                    height: 100,
+                    width: 200,
+                    child: Image.network(widget.disimg),
+                  )
+                : Container(
+                    child: Center(child: Text("Image Not Uploaded")),
+                  ),
       ]),
     );
   }

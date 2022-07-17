@@ -261,7 +261,7 @@ class _PaymentsPageState extends State<PaymentsPage> {
         .doc(data['name'])
         .get()
         .then((d) {
-      ds = d['name'];
+      ds = d['name'].toString();
     });
     dss = DateTime.fromMillisecondsSinceEpoch(timestamp.millisecondsSinceEpoch);
     d122 = DateFormat('dd/MM/yyyy, HH:mm').format(dss);
