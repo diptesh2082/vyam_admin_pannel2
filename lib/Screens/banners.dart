@@ -277,7 +277,9 @@ class _BannerPageState extends State<BannerPage> {
           : const Text("")),
       DataCell(
           data['name'] != null ? Text(data['name'] ?? "") : const Text("")),
-      DataCell(Image.network(data['image'])),
+      DataCell(data['image'] != null && data['image'] != "null"
+          ? Image.network(data['image'])
+          : Text("Image Not Uploaded")),
       DataCell(ElevatedButton(
         onPressed: () async {
           setnavv = !setnavv;
@@ -331,7 +333,7 @@ class _BannerPageState extends State<BannerPage> {
           () => EditBox(
               position: data['position_id'],
               name: data['name'],
-              image: data['image'],
+              image: data['image'].toString(),
               id: data['id'],
               access: data['access'],
               navigation: data['navigation'],

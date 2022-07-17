@@ -225,16 +225,16 @@ class _offersPageState extends State<offersPage> {
       int start, int end) {
     return DataRow(cells: [
       DataCell(data != null ? Text(index.toString()) : const Text("")),
-      DataCell(data != null
+      DataCell(data['title'] != null
           ? Text(data['title'].toString().toUpperCase())
           : const Text("")),
-      DataCell(data != null
+      DataCell(data['description'] != null
           ? Text(data['description'].toString().toUpperCase())
           : const Text("")),
-      DataCell(data != null
+      DataCell(data['offer'] != null
           ? Text(data['offer'].toString().toUpperCase())
           : const Text("")),
-      DataCell(data != null
+      DataCell(data['offer_type'] != null
           ? Text(data['offer_type'].toString().toUpperCase())
           : const Text("")),
       DataCell(const Text(""), showEditIcon: true, onTap: () {

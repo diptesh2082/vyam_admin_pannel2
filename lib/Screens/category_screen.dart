@@ -262,20 +262,20 @@ class _CategoryInfoScreenState extends State<CategoryInfoScreen> {
     String categoryID = data['category_id'];
     String x;
     bool status = data['status'];
-    String img = data['image'];
+    String img = data['image'].toString();
     return DataRow(cells: [
       DataCell(
         data['name'] != null ? Text(data['name'] ?? "") : const Text(""),
       ),
       DataCell(
-        data['image'] != null
+        data['image'] != null && data['image'].toString() != "null"
             ? Image.network(
-                data['image'] ?? "",
+                data['image'],
                 scale: 0.5,
                 height: 150,
                 width: 150,
               )
-            : const Text(""),
+            : const Text("Image Not Uploaded"),
       ),
       DataCell(
         Center(
@@ -315,7 +315,7 @@ class _CategoryInfoScreenState extends State<CategoryInfoScreen> {
           Get.to(() => ProductEditBox(
               name: data['name'],
               status: data['status'],
-              image: data['image'],
+              image: data['image'].toString(),
               categoryId: data['category_id'],
               position: data['position']));
         },

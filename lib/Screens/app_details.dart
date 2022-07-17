@@ -29,167 +29,169 @@ class _appDetailsState extends State<appDetails> {
       appBar: AppBar(
         title: const Text("App Details"),
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(
-            height: 10.0,
-          ),
-          StreamBuilder<DocumentSnapshot>(
-            stream: appdetailStream!.doc('contact_us').snapshots(),
-            builder: (context, AsyncSnapshot snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const CircularProgressIndicator();
-              }
-              if (snapshot.data == null) {
-                return Container();
-              }
-              String aemail = snapshot.data.get('email').toString();
-              return Column(
-                children: [
-                  TextButton(
-                      child: Container(
-                        color: Colors.white54,
-                        padding: EdgeInsets.only(right: 200),
-                        child: Text(
-                          "Contact",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 25.0,
+      body: Container(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(
+              height: 10.0,
+            ),
+            StreamBuilder<DocumentSnapshot>(
+              stream: appdetailStream!.doc('contact_us').snapshots(),
+              builder: (context, AsyncSnapshot snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const CircularProgressIndicator();
+                }
+                if (snapshot.data == null) {
+                  return Container();
+                }
+                // String aemail = snapshot.data.get('email').toString();
+                return Column(
+                  children: [
+                    TextButton(
+                        child: Container(
+                          color: Colors.white54,
+                          padding: EdgeInsets.only(right: 200),
+                          child: Text(
+                            "Contact",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 25.0,
+                            ),
                           ),
                         ),
-                      ),
-                      onPressed: () {
-                        // print(snapshot.data['email']);
-                        Get.to(
-                          () => ContactUs(
-                            email: snapshot.data.get('email').toString(),
-                            instaId: snapshot.data['instaId'].toString(),
-                            phonenumber:
-                                snapshot.data['phonenumber'].toString(),
-                            website: snapshot.data['website'].toString(),
-                          ),
-                        );
-                      })
-                ],
-              );
-            },
-          ),
-          const SizedBox(
-            height: 70,
-          ),
-          StreamBuilder<DocumentSnapshot>(
-            stream: appdetailStream!.doc('about_us').snapshots(),
-            builder: (context, AsyncSnapshot snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const CircularProgressIndicator();
-              }
-              if (snapshot.data == null) {
-                return Container();
-              }
-              return Column(
-                children: [
-                  TextButton(
-                      child: Container(
-                        color: Colors.white54,
-                        padding: EdgeInsets.only(right: 200),
-                        child: Text(
-                          "About",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 25.0,
-                          ),
-                        ),
-                      ),
-                      onPressed: () {
-                        // print(snapshot.data['email']);
-                        Get.to(
-                          () => AboutUs(
-                            about: snapshot.data.get('about').toString(),
-                          ),
-                        );
-                      })
-                ],
-              );
-            },
-          ),
-          const SizedBox(
-            height: 70,
-          ),
-          StreamBuilder<DocumentSnapshot>(
-            stream: appdetailStream!.doc('t&c').snapshots(),
-            builder: (context, AsyncSnapshot snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const CircularProgressIndicator();
-              }
-              if (snapshot.data == null) {
-                return Container();
-              }
-              return Column(
-                children: [
-                  TextButton(
-                      child: Container(
-                        color: Colors.white54,
-                        padding: EdgeInsets.only(right: 200),
-                        child: Text(
-                          "Terms And Conditions",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 25.0,
+                        onPressed: () {
+                          // print(snapshot.data['email']);
+                          Get.to(
+                            () => ContactUs(
+                              email: snapshot.data.get('email').toString(),
+                              instaId: snapshot.data.get['instaId'].toString(),
+                              phonenumber:
+                                  snapshot.data.get['phonenumber'].toString(),
+                              website: snapshot.data.get['website'].toString(),
+                            ),
+                          );
+                        })
+                  ],
+                );
+              },
+            ),
+            const SizedBox(
+              height: 70,
+            ),
+            StreamBuilder<DocumentSnapshot>(
+              stream: appdetailStream!.doc('about_us').snapshots(),
+              builder: (context, AsyncSnapshot snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const CircularProgressIndicator();
+                }
+                if (snapshot.data == null) {
+                  return Container();
+                }
+                return Column(
+                  children: [
+                    TextButton(
+                        child: Container(
+                          color: Colors.white54,
+                          padding: EdgeInsets.only(right: 200),
+                          child: Text(
+                            "About",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 25.0,
+                            ),
                           ),
                         ),
-                      ),
-                      onPressed: () {
-                        // print(snapshot.data['email']);
-                        Get.to(
-                          () => TandC(
-                            tnc: snapshot.data.get('t&c').toString(),
-                          ),
-                        );
-                      })
-                ],
-              );
-            },
-          ),
-          const SizedBox(
-            height: 70,
-          ),
-          StreamBuilder<DocumentSnapshot>(
-            stream: appdetailStream!.doc('privacy_policy').snapshots(),
-            builder: (context, AsyncSnapshot snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const CircularProgressIndicator();
-              }
-              if (snapshot.data == null) {
-                return Container();
-              }
-              return Column(
-                children: [
-                  TextButton(
-                      child: Container(
-                        color: Colors.white54,
-                        padding: EdgeInsets.only(right: 200),
-                        child: const Text(
-                          "Policy",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 25.0,
+                        onPressed: () {
+                          // print(snapshot.data['email']);
+                          Get.to(
+                            () => AboutUs(
+                              about: snapshot.data.get('about').toString(),
+                            ),
+                          );
+                        })
+                  ],
+                );
+              },
+            ),
+            const SizedBox(
+              height: 70,
+            ),
+            StreamBuilder<DocumentSnapshot>(
+              stream: appdetailStream!.doc('t&c').snapshots(),
+              builder: (context, AsyncSnapshot snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const CircularProgressIndicator();
+                }
+                if (snapshot.data == null) {
+                  return Container();
+                }
+                return Column(
+                  children: [
+                    TextButton(
+                        child: Container(
+                          color: Colors.white54,
+                          padding: EdgeInsets.only(right: 200),
+                          child: Text(
+                            "Terms And Conditions",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 25.0,
+                            ),
                           ),
                         ),
-                      ),
-                      onPressed: () {
-                        // print(snapshot.data['email']);
-                        Get.to(
-                          () => PrivacyPolicy(
-                            policy: snapshot.data.get('policy').toString(),
+                        onPressed: () {
+                          // print(snapshot.data['email']);
+                          Get.to(
+                            () => TandC(
+                              tnc: snapshot.data.get('t&c').toString(),
+                            ),
+                          );
+                        })
+                  ],
+                );
+              },
+            ),
+            const SizedBox(
+              height: 70,
+            ),
+            StreamBuilder<DocumentSnapshot>(
+              stream: appdetailStream!.doc('privacy_policy').snapshots(),
+              builder: (context, AsyncSnapshot snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const CircularProgressIndicator();
+                }
+                if (snapshot.data == null) {
+                  return Container();
+                }
+                return Column(
+                  children: [
+                    TextButton(
+                        child: Container(
+                          color: Colors.white54,
+                          padding: EdgeInsets.only(right: 200),
+                          child: const Text(
+                            "Policy",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 25.0,
+                            ),
                           ),
-                        );
-                      })
-                ],
-              );
-            },
-          ),
-        ],
+                        ),
+                        onPressed: () {
+                          // print(snapshot.data['email']);
+                          Get.to(
+                            () => PrivacyPolicy(
+                              policy: snapshot.data.get('policy').toString(),
+                            ),
+                          );
+                        })
+                  ],
+                );
+              },
+            ),
+          ],
+        ),
       ),
     );
   }

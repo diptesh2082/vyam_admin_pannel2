@@ -262,14 +262,14 @@ class _AmenetiesScreenState extends State<AmenetiesScreen> {
       //   data['id'] != null ? Text(data['id'] ?? "") : const Text(""),
       // ),
       DataCell(
-        data['image'] != null
+        data['image'] != null && data['image'] != "null"
             ? Image.network(
                 data['image'] ?? "",
                 scale: 0.5,
                 height: 150,
                 width: 150,
               )
-            : const Text(""),
+            : const Text("Image Not Uploaded"),
       ),
       DataCell(
         data['name'] != null ? Text(data['name']) : const Text("Disabled"),
@@ -280,7 +280,7 @@ class _AmenetiesScreenState extends State<AmenetiesScreen> {
         onTap: () {
           Get.to(() => ProductEditBox(
               name: data['name'],
-              image: data['image'],
+              image: data['image'].toString(),
               amenityId: data['id'],
               am: amenitiesId));
           // showDialog(

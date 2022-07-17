@@ -282,28 +282,35 @@ class _TrainerPageState extends State<TrainerPage> {
 
   DataRow _buildListItem(BuildContext context, DocumentSnapshot data, int index,
       int start, int end) {
-    String imageUrl = data['image'];
+    String imageUrl = data['image'].toString();
     bool tvalid = data['eligible'];
 
     String trainerId = data['trainer_id'];
     // var cert = data['certification'];
     // String gymid = data['gym_id'];
     return DataRow(cells: [
-      DataCell(data != null
+      DataCell(data['image'] != null && data['image'] != "null"
           ? CircleAvatar(backgroundImage: NetworkImage(imageUrl))
-          : const Text("")),
+          : const Text("Image Not Uploaded")),
       // DataCell(data != null ? Text(trainerId) : Text("")),
-      DataCell(data != null ? Text(data['name'] ?? "") : const Text("")),
-      DataCell(data != null ? Text(data['branch'] ?? "") : const Text("")),
-      DataCell(data != null ? Text(data['place'] ?? "") : const Text("")),
-      DataCell(data != null ? Text(data['experience'] ?? "") : const Text("")),
-      DataCell(data != null
+      DataCell(
+          data['name'] != null ? Text(data['name'] ?? "") : const Text("")),
+      DataCell(
+          data['branch'] != null ? Text(data['branch'] ?? "") : const Text("")),
+      DataCell(
+          data['place'] != null ? Text(data['place'] ?? "") : const Text("")),
+      DataCell(data['experience'] != null
+          ? Text(data['experience'] ?? "")
+          : const Text("")),
+      DataCell(data['about'] != null
           ? SingleChildScrollView(
               child: Container(
                   width: 400, height: 300, child: Text(data['about'] ?? "")),
             )
           : const Text("")),
-      DataCell(data != null ? Text(data['clients'] ?? "") : const Text("")),
+      DataCell(data['clients'] != null
+          ? Text(data['clients'] ?? "")
+          : const Text("")),
 
       DataCell(
         Center(
@@ -332,14 +339,16 @@ class _TrainerPageState extends State<TrainerPage> {
         ),
       ),
 
-      DataCell(data != null ? Text(data['position'] ?? "") : const Text("")),
+      DataCell(data['position'] != null
+          ? Text(data['position'] ?? "")
+          : const Text("")),
 
       DataCell(const Text(""), showEditIcon: true, onTap: () {
         Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => ProductEditBox(
-                images: data['image'],
+                images: data['image'].toString(),
                 name: data['name'],
                 about: data['about'],
                 experience: data['experience'],
