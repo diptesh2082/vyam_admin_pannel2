@@ -50,10 +50,10 @@ class _addbookingsState extends State<addbookings> {
     return Scaffold(
       backgroundColor: Colors.white10,
       appBar: AppBar(
-        title: Text('New Booking'),
+        title: const Text('New Booking'),
       ),
       body: Container(
-        margin: EdgeInsets.all(15.0),
+        margin: const EdgeInsets.all(15.0),
         child: SingleChildScrollView(
           child: Column(
             children: <Widget>[
@@ -64,7 +64,7 @@ class _addbookingsState extends State<addbookings> {
                   child: SingleChildScrollView(
                       child: Column(
                     children: <Widget>[
-                      Text(
+                      const Text(
                         'Add Records',
                         style: TextStyle(
                             fontFamily: 'poppins',
@@ -131,25 +131,23 @@ class _addbookingsState extends State<addbookings> {
                           addcontroller: _addbookingplan),
                       CustomTextField(
                           hinttext: "booking ID", addcontroller: _addbookingid),
-                      Container(
-                        child: Row(
-                          children: [
-                            const Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: Text('Select Date & Time For Bookings:',
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                  )),
-                            ),
-                            ElevatedButton(
-                              child:
-                                  const Text('Select Date & Time For Bookings'),
-                              onPressed: () => pickDateTime(context),
-                            ),
-                            SizedBox(width: 15),
-                          ],
-                        ),
+                      Row(
+                        children: [
+                          const Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Text('Select Date & Time For Bookings:',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                )),
+                          ),
+                          ElevatedButton(
+                            child:
+                                const Text('Select Date & Time For Bookings'),
+                            onPressed: () => pickDateTime(context),
+                          ),
+                          const SizedBox(width: 15),
+                        ],
                       ),
                       // CustomTextField(
                       //     hinttext: "Booking Date Y",
@@ -285,7 +283,7 @@ class _addbookingsState extends State<addbookings> {
   }
 
   Future pickTime(BuildContext context) async {
-    const intialTime = const TimeOfDay(hour: 9, minute: 0);
+    const intialTime = TimeOfDay(hour: 9, minute: 0);
     final newTime =
         await showTimePicker(context: context, initialTime: time ?? intialTime);
     if (newTime == null) return;

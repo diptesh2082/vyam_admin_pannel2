@@ -1,11 +1,9 @@
 import 'dart:async';
-import 'dart:html';
 import 'dart:io';
 import 'package:admin_panel_vyam/services/MatchIDMethod.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
@@ -21,6 +19,7 @@ String globalGymId = '';
 String gymname = '';
 String branch = '';
 
+// ignore: must_be_immutable
 class TrainerPage extends StatefulWidget {
   TrainerPage(
     this.tGymId,
@@ -304,7 +303,7 @@ class _TrainerPageState extends State<TrainerPage> {
           : const Text("")),
       DataCell(data['about'] != null
           ? SingleChildScrollView(
-              child: Container(
+              child: SizedBox(
                   width: 400, height: 300, child: Text(data['about'] ?? "")),
             )
           : const Text("")),
@@ -568,23 +567,23 @@ class _loadimageState extends State<loadimage> {
           width: 200,
           height: 100,
           child: isloading
-              ? Container(
+              ? const SizedBox(
                   height: 100,
                   width: 200,
-                  child: const Center(
+                  child: Center(
                     child: CircularProgressIndicator(),
                   ),
                 )
               : image3 != null
-                  ? Container(
+                  ? SizedBox(
                       height: 100,
                       width: 200,
                       child: Image.network(image3),
                     )
-                  : Container(
+                  : const SizedBox(
                       height: 100,
                       width: 200,
-                      child: const Center(child: Text("Please Upload Image")),
+                      child: Center(child: Text("Please Upload Image")),
                     ),
         ),
       ],
@@ -645,8 +644,8 @@ class _ShowAddboxState extends State<ShowAddbox> {
   List<String> certification = [];
   List<String> specialization = [];
   // final TextEditingController _addCertification = TextEditingController();
-  @override
   CollectionReference? trainerStream;
+  @override
   void initState() {
     // TODO: implement initState
     trainerStream = FirebaseFirestore.instance
@@ -865,8 +864,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
   final TextEditingController _experience = TextEditingController();
   final TextEditingController _clients = TextEditingController();
   final TextEditingController _review = TextEditingController();
-  final TextEditingController _specialization =
-      TextEditingController(); //todo: later
+  final TextEditingController _specialization = TextEditingController();
   final TextEditingController _socialMedia = TextEditingController();
   final TextEditingController _position = TextEditingController();
   List<dynamic> cert = [];
@@ -1134,10 +1132,8 @@ class _editimState extends State<editim> {
             width: 20,
           ),
           isloading
-              ? Container(
-                  height: 200,
-                  width: 200,
-                  child: const CircularProgressIndicator())
+              ? const SizedBox(
+                  height: 200, width: 200, child: CircularProgressIndicator())
               : image2 != null
                   ? Image(
                       image: NetworkImage(image2.toString()),

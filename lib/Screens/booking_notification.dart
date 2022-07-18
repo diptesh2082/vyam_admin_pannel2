@@ -18,7 +18,7 @@ class _bookingNotificationState extends State<bookingNotification> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("Booking Notifications"),
+          title: const Text("Booking Notifications"),
         ),
         backgroundColor: Colors.white10,
         body: SingleChildScrollView(
@@ -96,12 +96,12 @@ class _bookingNotificationState extends State<bookingNotification> {
                   );
                 },
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   ElevatedButton(
-                    child: Text("Previous Page"),
+                    child: const Text("Previous Page"),
                     onPressed: () {
                       setState(() {
                         if (start >= 1) page--;

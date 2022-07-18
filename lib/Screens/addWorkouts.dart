@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../services/CustomTextFieldClass.dart';
@@ -33,63 +32,62 @@ class _addWorkoutsState extends State<addWorkouts> {
     return Scaffold(
       backgroundColor: Colors.white10,
       appBar: AppBar(
-        title: Text('Add Workouts'),
+        title: const Text('Add Workouts'),
       ),
-      body: Container(
-        child: Column(
-          children: [
-            Center(
-              child: Form(
-                key: _formKey,
-                child: SizedBox(
-                  width: 800,
-                  height: 600,
-                  child: SingleChildScrollView(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'Add Records',
-                          style: TextStyle(
-                              fontFamily: 'poppins',
-                              fontWeight: FontWeight.w600,
-                              fontSize: 14),
-                        ),
-                        customTextField3(hinttext: "ID", addcontroller: _addId),
-                        customTextField3(
-                            hinttext: "Name", addcontroller: _addWorkout),
-                        Container(
-                          padding: const EdgeInsets.all(20),
-                          child: ElevatedButton(
-                            onPressed: () async {
-                              if (_formKey.currentState!.validate()) {
-                                await matchID(
-                                    newId: id,
-                                    matchStream: couponStream,
-                                    idField: 'id');
-                                await FirebaseFirestore.instance.collection('workouts')
-                                    .doc(id)
-                                    .set(
-                                  {
+      body: Column(
+        children: [
+          Center(
+            child: Form(
+              key: _formKey,
+              child: SizedBox(
+                width: 800,
+                height: 600,
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Add Records',
+                        style: TextStyle(
+                            fontFamily: 'poppins',
+                            fontWeight: FontWeight.w600,
+                            fontSize: 14),
+                      ),
+                      customTextField3(hinttext: "ID", addcontroller: _addId),
+                      customTextField3(
+                          hinttext: "Name", addcontroller: _addWorkout),
+                      Container(
+                        padding: const EdgeInsets.all(20),
+                        child: ElevatedButton(
+                          onPressed: () async {
+                            if (_formKey.currentState!.validate()) {
+                              await matchID(
+                                  newId: id,
+                                  matchStream: couponStream,
+                                  idField: 'id');
+                              await FirebaseFirestore.instance
+                                  .collection('workouts')
+                                  .doc(id)
+                                  .set(
+                                {
                                   'type': _addWorkout.text,
                                   'gym_id': _addId.text,
-                                    'id' : id,
+                                  'id': id,
                                 },
-                                );
-                                Navigator.pop(context);
-                              }
-                            },
-                            child: Text('Done'),
-                          ),
+                              );
+                              Navigator.pop(context);
+                            }
+                          },
+                          child: const Text('Done'),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

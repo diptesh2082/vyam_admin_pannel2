@@ -94,7 +94,7 @@ class _pushNewState extends State<pushNew> {
                             {
                               'title': _addtitle.text,
                               'definition': _adddefiniton.text,
-                              'image': image4 != null ? image4 : "",
+                              'image': image4 ?? "",
                               // 'id': "id",
                               'timestamp': d12,
                               'p_title': "",
@@ -150,8 +150,7 @@ class _loadimageState extends State<loadimage> {
   bool isloading = false;
   @override
   Widget build(BuildContext context) {
-    return Container(
-        child: Row(
+    return Row(
       children: [
         const Text(
           "User Image",
@@ -189,7 +188,7 @@ class _loadimageState extends State<loadimage> {
           width: 200,
           height: 100,
           child: isloading
-              ? Container(
+              ? const SizedBox(
                   height: 100,
                   width: 200,
                   child: const Center(
@@ -197,19 +196,19 @@ class _loadimageState extends State<loadimage> {
                   ),
                 )
               : image4 != null
-                  ? Container(
+                  ? SizedBox(
                       height: 100,
                       width: 200,
                       child: Image.network(image4),
                     )
-                  : Container(
+                  : const SizedBox(
                       height: 100,
                       width: 200,
                       child: const Center(child: Text("Please Upload Image")),
                     ),
         ),
       ],
-    ));
+    );
   }
 
   getUrlImage(XFile? pickedFile) async {

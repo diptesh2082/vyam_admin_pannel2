@@ -69,7 +69,7 @@ class _UserInformationState extends State<UserInformation> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => detailsadd()));
+                              builder: (context) => const detailsadd()));
                     },
                     child: const Text('Add User'),
                   ),
@@ -298,12 +298,12 @@ class _UserInformationState extends State<UserInformation> {
                     //   },
                     // ),
 
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         ElevatedButton(
-                          child: Text("Previous Page"),
+                          child: const Text("Previous Page"),
                           onPressed: () {
                             setState(() {
                               if (start >= 1) page--;
@@ -315,7 +315,7 @@ class _UserInformationState extends State<UserInformation> {
                             print("Previous Page");
                           },
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 20,
                         ),
                         StreamBuilder<QuerySnapshot>(
@@ -359,7 +359,7 @@ class _UserInformationState extends State<UserInformation> {
                                             mainAxisAlignment:
                                                 MainAxisAlignment.start,
                                             children: [
-                                              SizedBox(
+                                              const SizedBox(
                                                 width: 20,
                                               ),
                                               Container(
@@ -370,14 +370,14 @@ class _UserInformationState extends State<UserInformation> {
                                                 width: 50,
                                                 child: Text(
                                                   "${index + 1}",
-                                                  style: TextStyle(
+                                                  style: const TextStyle(
                                                       color: Colors.white,
                                                       fontWeight:
                                                           FontWeight.bold),
                                                   textAlign: TextAlign.center,
                                                 ),
                                               ),
-                                              SizedBox(width: 20),
+                                              const SizedBox(width: 20),
                                             ],
                                           ),
                                           onTap: () {
@@ -395,7 +395,7 @@ class _UserInformationState extends State<UserInformation> {
                                     }),
                               );
                             }),
-                        SizedBox(
+                        const SizedBox(
                           width: 20,
                         ),
                         GestureDetector(
@@ -410,7 +410,7 @@ class _UserInformationState extends State<UserInformation> {
                             height: 20,
                             width: 80,
                             color: Colors.teal,
-                            child: Text(
+                            child: const Text(
                               "Last Page",
                               style: TextStyle(
                                   color: Colors.white,
@@ -419,9 +419,9 @@ class _UserInformationState extends State<UserInformation> {
                             ),
                           ),
                         ),
-                        SizedBox(width: 20),
+                        const SizedBox(width: 20),
                         ElevatedButton(
-                          child: Text("Next Page"),
+                          child: const Text("Next Page"),
                           onPressed: () {
                             setState(() {
                               if (end <= length) page++;
@@ -515,7 +515,7 @@ class _UserInformationState extends State<UserInformation> {
     bool legit = data['legit'];
 
     return DataRow(cells: [
-      DataCell(data != null ? Text(index.toString()) : Text("")),
+      DataCell(data != null ? Text(index.toString()) : const Text("")),
 
       DataCell(
         profileImage != "null" && profileImage != null
@@ -541,22 +541,27 @@ class _UserInformationState extends State<UserInformation> {
               ),
       ),
       // DataCell(data != null ? Text(userIDData) : Text("")),
-      DataCell(data['name'] != null ? Text(data['name'] ?? "") : Text("")),
-      DataCell(data['email'] != null ? Text(data['email'] ?? "") : Text("")),
-      DataCell(data['gender'] != null ? Text(data['gender'] ?? "") : Text("")),
+      DataCell(
+          data['name'] != null ? Text(data['name'] ?? "") : const Text("")),
+      DataCell(
+          data['email'] != null ? Text(data['email'] ?? "") : const Text("")),
+      DataCell(
+          data['gender'] != null ? Text(data['gender'] ?? "") : const Text("")),
       DataCell(data['number'] != null
           ? Text((data['number'])
               .toString()
               .substring(3, data['number'].toString().length))
-          : Text("")),
-      DataCell(
-          data['address'] != null ? Text(data['address'] ?? "") : Text("")),
-      DataCell(
-          data['locality'] != null ? Text(data['locality'] ?? "") : Text("")),
+          : const Text("")),
+      DataCell(data['address'] != null
+          ? Text(data['address'] ?? "")
+          : const Text("")),
+      DataCell(data['locality'] != null
+          ? Text(data['locality'] ?? "")
+          : const Text("")),
       // DataCell(data != null ? Text(data['subLocality'] ?? "") : Text("")),
       DataCell(data['pincode'] != null
           ? Text(data['pincode'].toString())
-          : Text("")),
+          : const Text("")),
       DataCell(
         Center(
           child: ElevatedButton(
@@ -597,7 +602,7 @@ class _UserInformationState extends State<UserInformation> {
               ),
             ));
       }),
-      DataCell(Icon(Icons.delete), onTap: () {
+      DataCell(const Icon(Icons.delete), onTap: () {
         // deleteMethod(stream: userDetailStream, uniqueDocId: userIDData);
 
         showDialog(
@@ -909,8 +914,8 @@ class _EditBoxState extends State<EditBox> {
                                     .doc("${x}");
                             Map<String, dynamic> data = <String, dynamic>{
                               // 'address':'',
-                              'gender': gvalue != null ? gvalue : "",
-                              'image': image5 != null ? image5 : img,
+                              'gender': gvalue ?? "",
+                              'image': image5 ?? img,
                               'name': _name.text,
                               'email': _email.text,
                               'number': '+91${_number.text}',
@@ -991,46 +996,44 @@ class _editimState extends State<editim> {
   @override
   bool isloading = false;
   var imagee;
+  @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Row(
-        children: [
-          ElevatedButton(
-            onPressed: () async {
-              setState(() {
-                isloading = true;
-                i2 = image5;
-              });
-              var dic = await chooseImage();
-              await getUrlImage(dic, widget.gymid);
-              setState(() {
-                isloading = false;
-              });
-            },
-            child: const Text(
-              'Upload Gym Image',
-              style:
-                  TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
-            ),
+    return Row(
+      children: [
+        ElevatedButton(
+          onPressed: () async {
+            setState(() {
+              isloading = true;
+              i2 = image5;
+            });
+            var dic = await chooseImage();
+            await getUrlImage(dic, widget.gymid);
+            setState(() {
+              isloading = false;
+            });
+          },
+          child: const Text(
+            'Upload Gym Image',
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
           ),
-          const SizedBox(
-            width: 20,
-          ),
-          isloading
-              ? Container(
-                  height: 100,
-                  width: 200,
-                  child: const Center(
-                    child: CircularProgressIndicator(),
-                  ),
-                )
-              : Container(
-                  height: 100,
-                  width: 200,
-                  child: Image.network(i2),
+        ),
+        const SizedBox(
+          width: 20,
+        ),
+        isloading
+            ? const SizedBox(
+                height: 100,
+                width: 200,
+                child: Center(
+                  child: CircularProgressIndicator(),
                 ),
-        ],
-      ),
+              )
+            : SizedBox(
+                height: 100,
+                width: 200,
+                child: Image.network(i2),
+              ),
+      ],
     );
   }
 
@@ -1246,16 +1249,16 @@ class _loadimageState extends State<loadimage> {
                   ),
                 )
               : ds != null
-                  ? Container(
+                  ? SizedBox(
                       height: 100,
                       width: 200,
                       child: Image.network(ds),
                     )
-                  : Container(
+                  : const SizedBox(
                       height: 100,
                       width: 200,
                       child: Center(
-                        child: const Text(
+                        child: Text(
                           "Please Upload Image",
                           textAlign: TextAlign.center,
                         ),

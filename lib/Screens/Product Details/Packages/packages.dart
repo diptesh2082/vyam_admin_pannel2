@@ -12,6 +12,7 @@ import '../../../services/image_picker_api.dart';
 String globalGymId = '';
 String name = '';
 
+// ignore: must_be_immutable
 class PackagesPage extends StatefulWidget {
   String pGymId;
   String o, land;
@@ -257,9 +258,12 @@ class _PackagesPageState extends State<PackagesPage> {
       DataCell(data['title'] != null
           ? Text(data['title'].toString().toUpperCase())
           : const Text("")),
-      DataCell(
-          data['original_price'] != null ? Text(data['original_price'] ?? "") : const Text("")),
-      DataCell(data['discount'] != null ? Text(data['discount'] ?? "") : const Text("")),
+      DataCell(data['original_price'] != null
+          ? Text(data['original_price'] ?? "")
+          : const Text("")),
+      DataCell(data['discount'] != null
+          ? Text(data['discount'] ?? "")
+          : const Text("")),
       DataCell(
         Center(
           child: ElevatedButton(
@@ -406,6 +410,7 @@ class _PackagesPageState extends State<PackagesPage> {
   }
 }
 
+// ignore: camel_case_types
 class addboxx extends StatefulWidget {
   final String pGymID;
 
@@ -415,6 +420,7 @@ class addboxx extends StatefulWidget {
   State<addboxx> createState() => _addboxxState();
 }
 
+// ignore: camel_case_types
 class _addboxxState extends State<addboxx> {
   final TextEditingController _discount = TextEditingController();
   final TextEditingController _originalprice = TextEditingController();
@@ -559,7 +565,7 @@ class _addboxxState extends State<addboxx> {
                   "Select Package type",
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
                 ),
-                Container(
+                SizedBox(
                   width: 280,
                   child: DropdownButton(
                       hint: Text("${print_type}"),
@@ -662,7 +668,7 @@ class _addboxxState extends State<addboxx> {
                       'ptype': packagetype,
                       'banner': _banner.text,
                       'tdescribe': _tdescribe.text,
-                      'trending_img': image12 != null ? image12 : ""
+                      'trending_img': image12 ?? ""
                     },
                   );
                   await FirebaseFirestore.instance
@@ -683,8 +689,10 @@ class _addboxxState extends State<addboxx> {
   }
 }
 
+// ignore: prefer_typing_uninitialized_variables
 var image12;
 
+// ignore: camel_case_types
 class loadimage extends StatefulWidget {
   loadimage({Key? key, required this.id}) : super(key: key);
   final String id;
@@ -696,8 +704,7 @@ class _loadimageState extends State<loadimage> {
   bool isloading = false;
   @override
   Widget build(BuildContext context) {
-    return Container(
-        child: Row(
+    return Row(
       children: [
         const Text(
           "Trending Icon",
@@ -736,27 +743,27 @@ class _loadimageState extends State<loadimage> {
           width: 200,
           height: 100,
           child: isloading && image12 == null
-              ? Container(
+              ? const SizedBox(
                   height: 100,
                   width: 200,
-                  child: const Center(
+                  child: Center(
                     child: CircularProgressIndicator(),
                   ),
                 )
               : image12 != null && isloading == false
-                  ? Container(
+                  ? SizedBox(
                       height: 100,
                       width: 200,
                       child: Image.network(image12),
                     )
-                  : Container(
+                  : const SizedBox(
                       height: 100,
                       width: 200,
-                      child: const Center(child: Text("Please Upload Image")),
+                      child: Center(child: Text("Please Upload Image")),
                     ),
         ),
       ],
-    ));
+    );
   }
 
   getUrlImage(XFile? pickedFile) async {
@@ -837,7 +844,9 @@ class _ProductEditBoxState extends State<ProductEditBox> {
   final TextEditingController _tdescribe = TextEditingController();
 
   // final TextEditingController _type = TextEditingController();
+  // ignore: prefer_typing_uninitialized_variables
   var selectedvaluee;
+  // ignore: prefer_typing_uninitialized_variables
   var sele;
   String description = '';
 
@@ -967,7 +976,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                     "Select Package type",
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
                   ),
-                  Container(
+                  SizedBox(
                     width: 280,
                     child: DropdownButton(
                         hint: Text("${ptypee}"),
@@ -1052,8 +1061,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                         'ptype': packagetype,
                         'banner': _banner.text,
                         'tdescribe': _tdescribe.text,
-                        'trending_img':
-                            image12 != null ? image12 : widget.trending_img
+                        'trending_img': image12 ?? widget.trending_img
                       };
                       await documentReference
                           .update(data)
@@ -1093,6 +1101,7 @@ var image13;
 class _editimState extends State<editim> {
   @override
   String i2 = '';
+  @override
   void initState() {
     // TODO: implement initState
     i2 = widget.imagea;
@@ -1100,7 +1109,6 @@ class _editimState extends State<editim> {
   }
 
 // <<<<<<< HEAD
-  @override
   bool isloading = false;
   var imagee;
   Widget build(BuildContext context) {

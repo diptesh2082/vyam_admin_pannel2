@@ -24,7 +24,7 @@ class _ReviewPage extends State<ReviewPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Review")),
+      appBar: AppBar(title: const Text("Review")),
       body: SafeArea(
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 5),
@@ -119,12 +119,12 @@ class _ReviewPage extends State<ReviewPage> {
                     },
                   ),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     ElevatedButton(
-                      child: Text("Previous Page"),
+                      child: const Text("Previous Page"),
                       onPressed: () {
                         setState(() {
                           if (start >= 1) page--;
@@ -138,17 +138,17 @@ class _ReviewPage extends State<ReviewPage> {
                       },
                     ),
                     Container(
-                      margin: EdgeInsets.symmetric(horizontal: 20),
+                      margin: const EdgeInsets.symmetric(horizontal: 20),
                       child: Text(
                         page.toString(),
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 15,
                             color: Colors.teal),
                       ),
                     ),
                     ElevatedButton(
-                      child: Text("Next Page"),
+                      child: const Text("Next Page"),
                       onPressed: () {
                         setState(() {
                           if (end <= length) page++;
@@ -303,7 +303,7 @@ class _ReviewPage extends State<ReviewPage> {
         //   },
         // ),
         DataCell(
-          Icon(Icons.delete),
+          const Icon(Icons.delete),
           onTap: () {
             deleteMethod(stream: reviewStream, uniqueDocId: reviewId);
           },

@@ -67,7 +67,7 @@ class _ProductDetailsState extends State<ProductDetails> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Vendor Details"),
+        title: const Text("Vendor Details"),
       ),
       body: SafeArea(
         child: Material(
@@ -99,7 +99,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                               builder: (context) => const ShowAddBox(),
                             ));
                           },
-                          child: Text('Add Product'),
+                          child: const Text('Add Product'),
                         ),
                       ),
                       const Spacer(),
@@ -184,7 +184,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                           child: DataTable(
                               // ? DATATABLE
                               dataRowHeight: 65,
-                              columns: [
+                              columns: const [
                                 DataColumn(
                                     label: Text(
                                   'Index',
@@ -399,12 +399,12 @@ class _ProductDetailsState extends State<ProductDetails> {
                       //   },
                       // ),
 
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           ElevatedButton(
-                            child: Text("Previous Page"),
+                            child: const Text("Previous Page"),
                             onPressed: () {
                               setState(() {
                                 if (start >= 1) page--;
@@ -416,7 +416,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                               print("Previous Page");
                             },
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 20,
                           ),
                           StreamBuilder<QuerySnapshot>(
@@ -460,7 +460,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                                               mainAxisAlignment:
                                                   MainAxisAlignment.start,
                                               children: [
-                                                SizedBox(
+                                                const SizedBox(
                                                   width: 20,
                                                 ),
                                                 Container(
@@ -471,14 +471,14 @@ class _ProductDetailsState extends State<ProductDetails> {
                                                   width: 20,
                                                   child: Text(
                                                     "${index + 1}",
-                                                    style: TextStyle(
+                                                    style: const TextStyle(
                                                         color: Colors.white,
                                                         fontWeight:
                                                             FontWeight.bold),
                                                     textAlign: TextAlign.center,
                                                   ),
                                                 ),
-                                                SizedBox(width: 20),
+                                                const SizedBox(width: 20),
                                               ],
                                             ),
                                             onTap: () {
@@ -496,7 +496,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                                       }),
                                 );
                               }),
-                          SizedBox(
+                          const SizedBox(
                             width: 20,
                           ),
                           GestureDetector(
@@ -511,7 +511,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                               height: 20,
                               width: 80,
                               color: Colors.teal,
-                              child: Text(
+                              child: const Text(
                                 "Last Page",
                                 style: TextStyle(
                                     color: Colors.white,
@@ -520,9 +520,9 @@ class _ProductDetailsState extends State<ProductDetails> {
                               ),
                             ),
                           ),
-                          SizedBox(width: 20),
+                          const SizedBox(width: 20),
                           ElevatedButton(
-                            child: Text("Next Page"),
+                            child: const Text("Next Page"),
                             onPressed: () {
                               setState(() {
                                 if (end <= length) page++;
@@ -801,10 +801,8 @@ class _ProductDetailsState extends State<ProductDetails> {
                                               .90,
                                       width: MediaQuery.of(context).size.width *
                                           .92,
-                                      child: Container(
-                                        child: Center(
-                                          child: Text("Upload Images"),
-                                        ),
+                                      child: const Center(
+                                        child: Text("Upload Images"),
                                       ),
                                     ));
                           }),
@@ -1182,33 +1180,31 @@ class _ShowAddBoxState extends State<ShowAddBox> {
 
               //customTextField(hinttext: "Gender", addcontroller: _addgender),
 
-              Container(
-                child: Row(
-                  children: [
-                    const Text('Gender:',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w700, fontSize: 15)),
-                    DropdownButton(
-                        value: selectedValue,
-                        items: const [
-                          DropdownMenuItem(
-                            child: Text("Male"),
-                            value: "MALE",
-                          ),
-                          DropdownMenuItem(
-                            child: Text("Female"),
-                            value: "FEMALE",
-                          ),
-                          DropdownMenuItem(
-                              child: Text("Unisex"), value: "UNISEX"),
-                        ],
-                        onChanged: (value) {
-                          setState(() {
-                            selectedValue = value as String;
-                          });
-                        }),
-                  ],
-                ),
+              Row(
+                children: [
+                  const Text('Gender:',
+                      style:
+                          TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
+                  DropdownButton(
+                      value: selectedValue,
+                      items: const [
+                        DropdownMenuItem(
+                          child: Text("Male"),
+                          value: "MALE",
+                        ),
+                        DropdownMenuItem(
+                          child: Text("Female"),
+                          value: "FEMALE",
+                        ),
+                        DropdownMenuItem(
+                            child: Text("Unisex"), value: "UNISEX"),
+                      ],
+                      onChanged: (value) {
+                        setState(() {
+                          selectedValue = value as String;
+                        });
+                      }),
+                ],
               ),
 
               const SizedBox(height: 15),
@@ -1449,8 +1445,8 @@ class _ShowAddBoxState extends State<ShowAddBox> {
                           _addrules.text = "";
                         });
                       },
-                      child: Text("Add Rules")),
-                  SizedBox(width: 20),
+                      child: const Text("Add Rules")),
+                  const SizedBox(width: 20),
                   ElevatedButton(
                       onPressed: () {
                         setState(() {
@@ -1458,7 +1454,7 @@ class _ShowAddBoxState extends State<ShowAddBox> {
                           _addrules.text = "";
                         });
                       },
-                      child: Text("Remove Rules"))
+                      child: const Text("Remove Rules"))
                 ],
               ),
               const SizedBox(
@@ -1466,7 +1462,8 @@ class _ShowAddBoxState extends State<ShowAddBox> {
               ),
               Text(
                 rules.toString(),
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                style:
+                    const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
               const SizedBox(
                 height: 10,
@@ -1625,7 +1622,7 @@ class _loadimageState extends State<loadimage> {
                         height: 200,
                         width: 200,
                       )
-                    : Center(child: const CircularProgressIndicator()))
+                    : const Center(child: CircularProgressIndicator()))
             : Container(
                 child: const Text(
                 "Please Upload Image",
@@ -1682,24 +1679,22 @@ class _CheckBoxxState extends State<CheckBoxx> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        children: [
-          CheckboxListTile(
-              // bool selected=false;
-              value: check,
-              title: Text(widget.doc),
-              onChanged: (bool? selected) async {
-                setState(() {
-                  check = selected!;
-                });
-                if (selected == true) arr.add(widget.id);
-                print(arr);
-                if (selected == false) arr.remove(widget.id);
-                print(arr);
-              }),
-        ],
-      ),
+    return Column(
+      children: [
+        CheckboxListTile(
+            // bool selected=false;
+            value: check,
+            title: Text(widget.doc),
+            onChanged: (bool? selected) async {
+              setState(() {
+                check = selected!;
+              });
+              if (selected == true) arr.add(widget.id);
+              print(arr);
+              if (selected == false) arr.remove(widget.id);
+              print(arr);
+            }),
+      ],
     );
   }
 }
@@ -1744,35 +1739,33 @@ class _ECheckBoxState extends State<ECheckBox> {
     return Container(
       child: Column(
         children: [
-          Container(
-            child: CheckboxListTile(
-                // bool selected=false;
-                value: check,
-                title: Text(widget.doc),
-                onChanged: (bool? selected) async {
-                  setState(() {
-                    check = selected!;
+          CheckboxListTile(
+              // bool selected=false;
+              value: check,
+              title: Text(widget.doc),
+              onChanged: (bool? selected) async {
+                setState(() {
+                  check = selected!;
+                });
+                if (selected == true) {
+                  await FirebaseFirestore.instance
+                      .collection('product_details')
+                      .doc(widget.gym_id)
+                      .update({
+                    'amenities': FieldValue.arrayUnion([widget.id])
                   });
-                  if (selected == true) {
-                    await FirebaseFirestore.instance
-                        .collection('product_details')
-                        .doc(widget.gym_id)
-                        .update({
-                      'amenities': FieldValue.arrayUnion([widget.id])
-                    });
-                  }
-                  // print(widget.arr2);
-                  if (selected == false) {
-                    await FirebaseFirestore.instance
-                        .collection('product_details')
-                        .doc(widget.gym_id)
-                        .update({
-                      'amenities': FieldValue.arrayRemove([widget.id])
-                    });
-                  }
-                  // print(widget.arr2);
-                }),
-          ),
+                }
+                // print(widget.arr2);
+                if (selected == false) {
+                  await FirebaseFirestore.instance
+                      .collection('product_details')
+                      .doc(widget.gym_id)
+                      .update({
+                    'amenities': FieldValue.arrayRemove([widget.id])
+                  });
+                }
+                // print(widget.arr2);
+              }),
         ],
       ),
     );
@@ -2132,8 +2125,8 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                           _rules.text = "";
                         });
                       },
-                      child: Text("Add Rules")),
-                  SizedBox(width: 20),
+                      child: const Text("Add Rules")),
+                  const SizedBox(width: 20),
                   ElevatedButton(
                       onPressed: () {
                         setState(() {
@@ -2141,7 +2134,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                           _rules.text = "";
                         });
                       },
-                      child: Text("Remove Rules"))
+                      child: const Text("Remove Rules"))
                 ],
               ),
               const SizedBox(
@@ -2149,7 +2142,8 @@ class _ProductEditBoxState extends State<ProductEditBox> {
               ),
               Text(
                 rs.toString(),
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                style:
+                    const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
               // customTextField(
               //     hinttext: 'Longitude', addcontroller: _longitudeController),
@@ -2286,8 +2280,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                         'gym_owner': _gymowner.text,
                         'branch': _branch.text,
                         'description': _description.text,
-                        'display_picture':
-                            image2 != null ? image2 : widget.imagee,
+                        'display_picture': image2 ?? widget.imagee,
                         'rules': rs
                       };
                       await documentReference.update(data).whenComplete(() {
@@ -2330,55 +2323,55 @@ class _editimState extends State<editim> {
   @override
   bool isloading = false;
   // var imagee;
+  @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Row(
-        children: [
-          ElevatedButton(
-            onPressed: () async {
-              try {
-                var dic = await chooseImage();
-                if (dic != null) {
-                  setState(() {
-                    isloading = true;
-                  });
-                }
-
-                await addImageToStorage(dic, widget.gymid);
+    return Row(
+      children: [
+        ElevatedButton(
+          onPressed: () async {
+            try {
+              var dic = await chooseImage();
+              if (dic != null) {
                 setState(() {
-                  isloading = false;
-                });
-              } finally {
-                setState(() {
-                  isloading = false;
+                  isloading = true;
                 });
               }
-            },
-            child: const Text(
-              'Upload Gym Image',
-              style:
-                  TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
-            ),
+
+              await addImageToStorage(dic, widget.gymid);
+              setState(() {
+                isloading = false;
+              });
+            } finally {
+              setState(() {
+                isloading = false;
+              });
+            }
+          },
+          child: const Text(
+            'Upload Gym Image',
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
           ),
-          const SizedBox(
-            width: 20,
-          ),
-          isloading && image2 == null
-              ? Container(
-                  height: 200, width: 200, child: CircularProgressIndicator())
-              : image2 != null
-                  ? Image(
-                      image: NetworkImage(image2.toString()),
-                      height: 200,
-                      width: 200,
-                    )
-                  : Image(
-                      image: NetworkImage(i2),
-                      height: 200,
-                      width: 200,
-                    )
-        ],
-      ),
+        ),
+        const SizedBox(
+          width: 20,
+        ),
+        isloading && image2 == null
+            ? SizedBox(
+                height: 200,
+                width: 200,
+                child: const CircularProgressIndicator())
+            : image2 != null
+                ? Image(
+                    image: NetworkImage(image2.toString()),
+                    height: 200,
+                    width: 200,
+                  )
+                : Image(
+                    image: NetworkImage(i2),
+                    height: 200,
+                    width: 200,
+                  )
+      ],
     );
   }
 
@@ -2434,7 +2427,6 @@ class datacelldisplay extends StatefulWidget {
 }
 
 class _datacelldisplayState extends State<datacelldisplay> {
-  @override
   bool isloadingg = false;
   Widget build(BuildContext context) {
     return Center(
@@ -2462,22 +2454,20 @@ class _datacelldisplayState extends State<datacelldisplay> {
           ],
         ),
         isloadingg
-            ? Container(
+            ? const SizedBox(
                 height: 100,
                 width: 200,
-                child: const Center(
+                child: Center(
                   child: CircularProgressIndicator(),
                 ),
               )
-            : widget.disimg != null && widget.disimg != "null"
-                ? Container(
+            : widget.disimg != "null"
+                ? SizedBox(
                     height: 100,
                     width: 200,
                     child: Image.network(widget.disimg),
                   )
-                : Container(
-                    child: Center(child: Text("Image Not Uploaded")),
-                  ),
+                : const Center(child: Text("Image Not Uploaded")),
       ]),
     );
   }

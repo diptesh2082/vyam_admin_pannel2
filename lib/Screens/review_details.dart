@@ -31,7 +31,7 @@ class _ReviewInfoState extends State<ReviewInfo> {
     return Scaffold(
       body: SafeArea(
         child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 5),
+          padding: const EdgeInsets.symmetric(horizontal: 5),
           decoration: BoxDecoration(
               color: Colors.grey.shade100,
               borderRadius: BorderRadius.circular(20.0)),
@@ -137,10 +137,16 @@ class _ReviewInfoState extends State<ReviewInfo> {
 
   DataRow _buildListItem(BuildContext context, DocumentSnapshot data) {
     return DataRow(cells: [
-      DataCell(data != null ? Text(data['experience'] ?? "") : Text("")),
-      DataCell(data != null ? Text(data['rating'] ?? "") : Text("")),
-      DataCell(data != null ? Text(data['title'] ?? "") : Text("")),
-      DataCell(data != null ? Text(data['user_id'] ?? "") : Text("")),
+      DataCell(data['experience'] != null
+          ? Text(data['experience'] ?? "")
+          : const Text("")),
+      DataCell(
+          data['rating'] != null ? Text(data['rating'] ?? "") : const Text("")),
+      DataCell(
+          data['title'] != null ? Text(data['title'] ?? "") : const Text("")),
+      DataCell(data['user_id'] != null
+          ? Text(data['user_id'] ?? "")
+          : const Text("")),
       // DataCell(const Text(""), showEditIcon: true, onTap: () {
       //   Navigator.push(
       //       context,
@@ -154,17 +160,15 @@ class _ReviewInfoState extends State<ReviewInfo> {
       //         ),
       //       ));
       // }),
-      DataCell(
-        Icon(Icons.delete),
+      const DataCell(
+        const Icon(Icons.delete),
       ),
     ]);
   }
 
-  TextEditingController _addexperience = TextEditingController();
-  TextEditingController _addrating = TextEditingController();
-  TextEditingController _addtitle = TextEditingController();
-  TextEditingController _adduserid = TextEditingController();
-  TextEditingController _addgymid = TextEditingController();
+  // final TextEditingController _addrating = TextEditingController();
+  // final TextEditingController _adduserid = TextEditingController();
+  // final TextEditingController _addgymid = TextEditingController();
 
   // showAddbox() => showDialog(
   //     context: context,
@@ -248,7 +252,7 @@ class CustomTextField extends StatelessWidget {
         controller: addcontroller,
         maxLines: 3,
         decoration: InputDecoration(
-            contentPadding: EdgeInsets.all(20),
+            contentPadding: const EdgeInsets.all(20),
             border: InputBorder.none,
             hintStyle: const TextStyle(
               fontSize: 14,

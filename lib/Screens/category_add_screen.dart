@@ -85,7 +85,7 @@ class _categoryAddScreenState extends State<categoryAddScreen> {
                   // customTextField3(
                   //     hinttext: "Status", addcontroller: _addStatus),
                   const Text("Choose Position Except These"),
-                  Container(
+                  SizedBox(
                     height: 100,
                     width: 700,
                     child: StreamBuilder(
@@ -203,7 +203,7 @@ class _loadimageState extends State<loadimage> {
           width: 200,
           height: 100,
           child: isloading && ds == null
-              ? Container(
+              ? const SizedBox(
                   height: 100,
                   width: 200,
                   child: Center(
@@ -211,12 +211,12 @@ class _loadimageState extends State<loadimage> {
                   ),
                 )
               : ds != null
-                  ? Container(
+                  ? SizedBox(
                       height: 100,
                       width: 200,
                       child: Image.network(ds),
                     )
-                  : Container(
+                  : const SizedBox(
                       height: 100,
                       width: 200,
                       child: Text(

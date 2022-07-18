@@ -1,4 +1,4 @@
-import 'package:admin_panel_vyam/services/maps_api.dart';
+// import 'package:admin_panel_vyam/services/maps_api.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -6,9 +6,10 @@ import '../../../services/CustomTextFieldClass.dart';
 
 String globalGymId = '';
 
+// ignore: must_be_immutable
 class ExtraPackagesPage extends StatefulWidget {
   String pGymId;
-  ExtraPackagesPage({required this.pGymId});
+  ExtraPackagesPage({Key? key, required this.pGymId}) : super(key: key);
 
   @override
   State<ExtraPackagesPage> createState() => _ExtraPackagesPageState();
@@ -58,12 +59,12 @@ class _ExtraPackagesPageState extends State<ExtraPackagesPage> {
                               onPressed: () {
                                 Navigator.pop(context);
                               },
-                              child: Icon(Icons.add)),
-                          SizedBox(
+                              child: const Icon(Icons.add)),
+                          const SizedBox(
                             width: 20,
                           ),
-                          Icon(Icons.add),
-                          Text('Add Product',
+                          const Icon(Icons.add),
+                          const Text('Add Product',
                               style: TextStyle(fontWeight: FontWeight.w400)),
                         ],
                       ),
@@ -170,13 +171,23 @@ class _ExtraPackagesPageState extends State<ExtraPackagesPage> {
     }
 
     return DataRow(cells: [
-      DataCell(data != null ? Text(docId) : Text("")),
-      DataCell(data != null ? Text(data['discount'] ?? "") : Text("")),
-      DataCell(data != null ? Text(data['original_price'] ?? "") : Text("")),
-      DataCell(data != null ? Text(data['price'] ?? "") : Text("")),
-      DataCell(data != null ? Text(data['title'] ?? "") : Text("")),
-      DataCell(data != null ? Text(data['type'] ?? "") : Text("")),
-      DataCell(data != null ? Text(data['validity'] ?? "") : Text("")),
+      // ignore: unnecessary_null_comparison
+      DataCell(data != null ? Text(docId) : const Text("")),
+      DataCell(data['discount'] != null
+          ? Text(data['discount'] ?? "")
+          : const Text("")),
+      DataCell(data['original_price'] != null
+          ? Text(data['original_price'] ?? "")
+          : const Text("")),
+      DataCell(
+          data['price'] != null ? Text(data['price'] ?? "") : const Text("")),
+      DataCell(
+          data['title'] != null ? Text(data['title'] ?? "") : const Text("")),
+      DataCell(
+          data['type'] != null ? Text(data['type'] ?? "") : const Text("")),
+      DataCell(data['validity'] != null
+          ? Text(data['validity'] ?? "")
+          : const Text("")),
       DataCell(
         const Text(""),
         showEditIcon: true,
@@ -204,7 +215,7 @@ class _ExtraPackagesPageState extends State<ExtraPackagesPage> {
           );
         },
       ),
-      DataCell(Icon(Icons.delete), onTap: () {
+      DataCell(const Icon(Icons.delete), onTap: () {
         deleteMethod();
       })
     ]);
