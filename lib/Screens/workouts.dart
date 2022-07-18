@@ -35,7 +35,7 @@ class _workoutsGymState extends State<workoutsGym> {
       // appBar: AppBar(title: const Text('Workouts'),
       // backgroundColor: Colors.white10,
       // ),
-      appBar: AppBar(title: Text("Workouts")),
+      appBar: AppBar(title: const Text("Workouts")),
       body: Container(
         padding: const EdgeInsets.symmetric(horizontal: 5),
         decoration: BoxDecoration(
@@ -59,7 +59,7 @@ class _workoutsGymState extends State<workoutsGym> {
                           builder: (context) => const addWorkouts(),
                         ));
                       },
-                      child: Text('Add Workout'),
+                      child: const Text('Add Workout'),
                     ),
                   ),
                   const Spacer(),
@@ -82,7 +82,7 @@ class _workoutsGymState extends State<workoutsGym> {
                         },
                         // controller: searchController,
                         onChanged: (value) {
-                          if (value.length == 0) {
+                          if (value.isEmpty) {
                             // _node.canRequestFocus=false;
                             // FocusScope.of(context).unfocus();
                           }
@@ -120,7 +120,7 @@ class _workoutsGymState extends State<workoutsGym> {
 
                   var doc = snapshot.data.docs;
 
-                  if (searchWorkout.length > 0) {
+                  if (searchWorkout.isNotEmpty) {
                     doc = doc.where((element) {
                       return element
                               .get('type')
@@ -175,12 +175,12 @@ class _workoutsGymState extends State<workoutsGym> {
                   );
                 },
               )),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   ElevatedButton(
-                    child: Text("Previous Page"),
+                    child: const Text("Previous Page"),
                     onPressed: () {
                       setState(() {
                         if (start >= 1) page--;
@@ -194,17 +194,17 @@ class _workoutsGymState extends State<workoutsGym> {
                     },
                   ),
                   Container(
-                    margin: EdgeInsets.symmetric(horizontal: 20),
+                    margin: const EdgeInsets.symmetric(horizontal: 20),
                     child: Text(
                       page.toString(),
-                      style: TextStyle(
+                      style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 15,
                           color: Colors.teal),
                     ),
                   ),
                   ElevatedButton(
-                    child: Text("Next Page"),
+                    child: const Text("Next Page"),
                     onPressed: () {
                       setState(() {
                         if (end <= length) page++;
@@ -254,8 +254,10 @@ class _workoutsGymState extends State<workoutsGym> {
 
     return DataRow(cells: [
       DataCell(data != null ? Text(index.toString()) : const Text("")),
-      DataCell(data != null ? Text(data['gym_id'] ?? "") : const Text("")),
-      DataCell(data != null ? Text(data['type'] ?? "") : const Text("")),
+      DataCell(
+          data['gym_id'] != null ? Text(data['gym_id'] ?? "") : const Text("")),
+      DataCell(
+          data['type'] != null ? Text(data['type'] ?? "") : const Text("")),
       DataCell(const Text(""), showEditIcon: true, onTap: () {
         //TODO: Create Edit PAge
         Get.to(() =>
@@ -302,7 +304,7 @@ class _EditBoxState extends State<EditBox> {
     return Scaffold(
       backgroundColor: Colors.white10,
       appBar: AppBar(
-        title: Text('Edit Workouts'),
+        title: const Text('Edit Workouts'),
       ),
       body: Center(
         child: SizedBox(
@@ -312,7 +314,7 @@ class _EditBoxState extends State<EditBox> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Center(
+                const Center(
                   child: Text(
                     'Update Records for this doc',
                     style: TextStyle(
@@ -324,7 +326,7 @@ class _EditBoxState extends State<EditBox> {
                 CustomTextField(hinttext: "Name", addcontroller: _type),
                 CustomTextField(hinttext: "Gym_Id", addcontroller: _gymId),
                 Padding(
-                  padding: EdgeInsets.all(50),
+                  padding: const EdgeInsets.all(50),
                   child: Center(
                     child: ElevatedButton(
                       onPressed: () async {

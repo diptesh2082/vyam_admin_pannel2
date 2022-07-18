@@ -35,7 +35,7 @@ class _TimingsState extends State<Timings> {
     print(finalPackID);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Timings'),
+        title: const Text('Timings'),
       ),
       body: SafeArea(
         child: Container(
@@ -55,7 +55,7 @@ class _TimingsState extends State<Timings> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => ShowAddBox(),
+                          builder: (context) => const ShowAddBox(),
                         ),
                       );
                     },
@@ -143,7 +143,7 @@ class _TimingsState extends State<Timings> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     ElevatedButton(
-                      child: Text("Previous Page"),
+                      child: const Text("Previous Page"),
                       onPressed: () {
                         setState(() {
                           if (start > 0 && end > 0) {
@@ -211,22 +211,27 @@ class _TimingsState extends State<Timings> {
     String timeId = data['timing_id'];
     print(timeId);
     return DataRow(cells: [
-      DataCell(
-          data["timing_id"] != null ? Text(data["timing_id"] ?? "") : Text("")),
-      DataCell(
-          data["Morning"] != null ? Text(data["Morning"] ?? "") : Text("")),
-      DataCell(
-          data['Evening'] != null ? Text(data['Evening'] ?? "") : Text("")),
-      DataCell(
-          data['closed'] != null ? Text(data['closed'].toString()) : Text("")),
+      DataCell(data["timing_id"] != null
+          ? Text(data["timing_id"] ?? "")
+          : const Text("")),
+      DataCell(data["Morning"] != null
+          ? Text(data["Morning"] ?? "")
+          : const Text("")),
+      DataCell(data['Evening'] != null
+          ? Text(data['Evening'] ?? "")
+          : const Text("")),
+      DataCell(data['closed'] != null
+          ? Text(data['closed'].toString())
+          : const Text("")),
       DataCell(data['morning_days'] != null
           ? Text(data['morning_days'] ?? "")
-          : Text("")),
+          : const Text("")),
       DataCell(data['evening_days'] != null
           ? Text(data['evening_days'] ?? "")
-          : Text("")),
-      DataCell(
-          data['position'] != null ? Text(data['position'] ?? "") : Text("")),
+          : const Text("")),
+      DataCell(data['position'] != null
+          ? Text(data['position'] ?? "")
+          : const Text("")),
       DataCell(const Text(""), showEditIcon: true, onTap: () {
         Navigator.push(
             context,
@@ -242,7 +247,7 @@ class _TimingsState extends State<Timings> {
                   position: data['position']),
             ));
       }),
-      DataCell(Icon(Icons.delete), onTap: () {
+      DataCell(const Icon(Icons.delete), onTap: () {
         deleteMethod(stream: packageStream, uniqueDocId: timeId);
       })
     ]);
@@ -257,7 +262,6 @@ class ShowAddBox extends StatefulWidget {
 }
 
 class _ShowAddBoxState extends State<ShowAddBox> {
-  @override
   // var idd;
   // Future<void> initState() async {
   //   // TODO: implement initState
@@ -281,7 +285,7 @@ class _ShowAddBoxState extends State<ShowAddBox> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Add Timings"),
+        title: const Text("Add Timings"),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -302,7 +306,7 @@ class _ShowAddBoxState extends State<ShowAddBox> {
                 hinttext: "Evening Timings : 5.00PM-10.00PM",
                 addcontroller: evening),
             Container(
-              padding: EdgeInsets.all(40),
+              padding: const EdgeInsets.all(40),
               child: Column(
                 children: [
                   Row(
@@ -314,64 +318,65 @@ class _ShowAddBoxState extends State<ShowAddBox> {
                               closed.add("Sunday");
                             });
                           },
-                          child: Text("Sunday")),
+                          child: const Text("Sunday")),
                       ElevatedButton(
                           onPressed: () {
                             setState(() {
                               closed.add("Monday");
                             });
                           },
-                          child: Text("Monday")),
+                          child: const Text("Monday")),
                       ElevatedButton(
                           onPressed: () {
                             setState(() {
                               closed.add("Tuesday");
                             });
                           },
-                          child: Text("Tuesday")),
+                          child: const Text("Tuesday")),
                       ElevatedButton(
                           onPressed: () {
                             setState(() {
                               closed.add("Wednesday");
                             });
                           },
-                          child: Text("Wednesday")),
+                          child: const Text("Wednesday")),
                       ElevatedButton(
                           onPressed: () {
                             setState(() {
                               closed.add("Thursday");
                             });
                           },
-                          child: Text("Thursday")),
+                          child: const Text("Thursday")),
                       ElevatedButton(
                           onPressed: () {
                             setState(() {
                               closed.add("Friday");
                             });
                           },
-                          child: Text("Friday")),
+                          child: const Text("Friday")),
                       ElevatedButton(
                           onPressed: () {
                             setState(() {
                               closed.add("Saturday");
                             });
                           },
-                          child: Text("Saturday")),
+                          child: const Text("Saturday")),
                       ElevatedButton(
                           onPressed: () {
                             setState(() {
                               closed.removeLast();
                             });
                           },
-                          child: Text("Remove Last")),
+                          child: const Text("Remove Last")),
                     ],
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   Text(
                     closed.toString(),
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold, fontSize: 20),
                   )
                 ],
               ),
@@ -472,7 +477,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
     print("The Gym id is : ${widget.gymId}");
     return Scaffold(
       appBar: AppBar(
-        title: Text("Edit"),
+        title: const Text("Edit"),
       ),
       body: Container(
         child: SingleChildScrollView(
@@ -494,7 +499,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                   hinttext: "Evening Timings : 5.00PM-10.00PM",
                   addcontroller: evening),
               Container(
-                padding: EdgeInsets.all(40),
+                padding: const EdgeInsets.all(40),
                 child: Column(
                   children: [
                     Row(
@@ -506,65 +511,65 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                                 closed.add("Sunday");
                               });
                             },
-                            child: Text("Sunday")),
+                            child: const Text("Sunday")),
                         ElevatedButton(
                             onPressed: () {
                               setState(() {
                                 closed.add("Monday");
                               });
                             },
-                            child: Text("Monday")),
+                            child: const Text("Monday")),
                         ElevatedButton(
                             onPressed: () {
                               setState(() {
                                 closed.add("Tuesday");
                               });
                             },
-                            child: Text("Tuesday")),
+                            child: const Text("Tuesday")),
                         ElevatedButton(
                             onPressed: () {
                               setState(() {
                                 closed.add("Wednesday");
                               });
                             },
-                            child: Text("Wednesday")),
+                            child: const Text("Wednesday")),
                         ElevatedButton(
                             onPressed: () {
                               setState(() {
                                 closed.add("Thursday");
                               });
                             },
-                            child: Text("Thursday")),
+                            child: const Text("Thursday")),
                         ElevatedButton(
                             onPressed: () {
                               setState(() {
                                 closed.add("Friday");
                               });
                             },
-                            child: Text("Friday")),
+                            child: const Text("Friday")),
                         ElevatedButton(
                             onPressed: () {
                               setState(() {
                                 closed.add("Saturday");
                               });
                             },
-                            child: Text("Saturday")),
+                            child: const Text("Saturday")),
                         ElevatedButton(
                             onPressed: () {
                               setState(() {
                                 closed.removeLast();
                               });
                             },
-                            child: Text("Remove Last")),
+                            child: const Text("Remove Last")),
                       ],
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
                     Text(
                       closed.toString(),
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 20),
                     )
                   ],
                 ),

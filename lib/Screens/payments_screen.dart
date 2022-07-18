@@ -39,7 +39,7 @@ class _PaymentsPageState extends State<PaymentsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Payments"),
+        title: const Text("Payments"),
       ),
       body: SafeArea(
         child: Container(
@@ -183,12 +183,12 @@ class _PaymentsPageState extends State<PaymentsPage> {
                     },
                   ),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     ElevatedButton(
-                      child: Text("Previous Page"),
+                      child: const Text("Previous Page"),
                       onPressed: () {
                         setState(() {
                           if (start > 0 && end > 0) {

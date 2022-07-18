@@ -29,7 +29,7 @@ class _overviewState extends State<overview> {
   calculation() async {
     var booking;
     if (namee == 'all') {
-      await FirebaseFirestore.instance
+      FirebaseFirestore.instance
           .collection('bookings')
           .where('booking_status',
               whereIn: ['active', 'upcoming', 'completed', 'cancelled'])
@@ -305,7 +305,7 @@ class _overviewState extends State<overview> {
 
     var vendor;
 
-    await FirebaseFirestore.instance
+    FirebaseFirestore.instance
         .collection('product_details')
         .doc(namee)
         .collection('package')
@@ -397,9 +397,9 @@ class _overviewState extends State<overview> {
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(left: 8.0),
-            child: const Text(
+          const Padding(
+            padding: EdgeInsets.only(left: 8.0),
+            child: Text(
               "Select Vendor",
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
@@ -561,10 +561,10 @@ class _overviewState extends State<overview> {
               ),
             ],
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
-          Center(
+          const Center(
             child: Text(
               "Overview",
               textAlign: TextAlign.center,
@@ -576,7 +576,7 @@ class _overviewState extends State<overview> {
           ),
           GridView.builder(
             shrinkWrap: true,
-            padding: EdgeInsets.all(10),
+            padding: const EdgeInsets.all(10),
             itemCount: 14,
             itemBuilder: (ctx, i) {
               if (i == 0) {
@@ -585,7 +585,7 @@ class _overviewState extends State<overview> {
                     title: 'Total Bookings',
                     count:
                         Get.find<calculator>().totalbookings.value.toString(),
-                    icons: Icon(Icons.trending_up),
+                    icons: const Icon(Icons.trending_up),
                   ),
                 );
               }
@@ -594,7 +594,7 @@ class _overviewState extends State<overview> {
                   () => Cards(
                     title: 'Total Per Day',
                     count: Get.find<calculator>().totalperday.value.toString(),
-                    icons: Icon(Icons.trending_up),
+                    icons: const Icon(Icons.trending_up),
                   ),
                 );
               }
@@ -604,7 +604,7 @@ class _overviewState extends State<overview> {
                     title: 'Total Packages',
                     count:
                         Get.find<calculator>().totalpackages.value.toString(),
-                    icons: Icon(Icons.trending_up),
+                    icons: const Icon(Icons.trending_up),
                   ),
                 );
               }
@@ -613,7 +613,7 @@ class _overviewState extends State<overview> {
                   () => Cards(
                     title: 'Total Confirm',
                     count: Get.find<calculator>().totalconfirm.value.toString(),
-                    icons: Icon(Icons.trending_up),
+                    icons: const Icon(Icons.trending_up),
                   ),
                 );
               }
@@ -622,7 +622,7 @@ class _overviewState extends State<overview> {
                   () => Cards(
                     title: 'Total Active',
                     count: Get.find<calculator>().totalactive.value.toString(),
-                    icons: Icon(Icons.trending_up),
+                    icons: const Icon(Icons.trending_up),
                   ),
                 );
               }
@@ -632,7 +632,7 @@ class _overviewState extends State<overview> {
                     title: 'Total Upcoming',
                     count:
                         Get.find<calculator>().totalupcoming.value.toString(),
-                    icons: Icon(Icons.trending_up),
+                    icons: const Icon(Icons.trending_up),
                   ),
                 );
               }
@@ -643,7 +643,7 @@ class _overviewState extends State<overview> {
                     title: 'Total Completed',
                     count:
                         Get.find<calculator>().totalcomplete.value.toString(),
-                    icons: Icon(Icons.trending_up),
+                    icons: const Icon(Icons.trending_up),
                   ),
                 );
               }
@@ -653,7 +653,7 @@ class _overviewState extends State<overview> {
                     title: 'Total Cancelled',
                     count:
                         Get.find<calculator>().totalcancelled.value.toString(),
-                    icons: Icon(Icons.trending_up),
+                    icons: const Icon(Icons.trending_up),
                   ),
                 );
               }
@@ -663,7 +663,7 @@ class _overviewState extends State<overview> {
                     title: 'Total Amount',
                     count:
                         "₹ ${Get.find<calculator>().totalamount.value.toString()}",
-                    icons: Icon(Icons.calculate),
+                    icons: const Icon(Icons.calculate),
                   ),
                 );
               }
@@ -672,7 +672,7 @@ class _overviewState extends State<overview> {
                   () => Cards(
                     title: 'Cash',
                     count: "₹ ${Get.find<calculator>().cash.value.toString()}",
-                    icons: Icon(Icons.calculate),
+                    icons: const Icon(Icons.calculate),
                   ),
                 );
               }
@@ -682,7 +682,7 @@ class _overviewState extends State<overview> {
                     title: 'Online',
                     count:
                         "₹ ${Get.find<calculator>().online.value.toString()}",
-                    icons: Icon(Icons.calculate),
+                    icons: const Icon(Icons.calculate),
                   ),
                 );
               }
@@ -692,7 +692,7 @@ class _overviewState extends State<overview> {
                     title: 'Online (Paid)',
                     count:
                         "₹ ${Get.find<calculator>().totalo_p.value.toString()}",
-                    icons: Icon(Icons.calculate),
+                    icons: const Icon(Icons.calculate),
                   ),
                 );
               }
@@ -702,7 +702,7 @@ class _overviewState extends State<overview> {
                     title: 'Cash (Paid)',
                     count:
                         "₹ ${Get.find<calculator>().totalcash_p.value.toString()}",
-                    icons: Icon(Icons.calculate),
+                    icons: const Icon(Icons.calculate),
                   ),
                 );
               }
@@ -712,7 +712,7 @@ class _overviewState extends State<overview> {
                     title: 'Total Due',
                     count:
                         "₹ ${(Get.find<calculator>().online.value + Get.find<calculator>().cash.value - Get.find<calculator>().totalcash_p.value - Get.find<calculator>().totalo_p.value).toString()}",
-                    icons: Icon(Icons.calculate),
+                    icons: const Icon(Icons.calculate),
                   ),
                 );
               }
@@ -731,7 +731,7 @@ class _overviewState extends State<overview> {
               //   );
               // }
 
-              return Spacer();
+              return const Spacer();
             },
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 4,
@@ -767,7 +767,7 @@ class _CardsState extends State<Cards> {
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
         width: 300,
         height: 100,
-        decoration: BoxDecoration(color: Colors.red),
+        decoration: const BoxDecoration(color: Colors.red),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
@@ -783,14 +783,14 @@ class _CardsState extends State<Cards> {
                 children: [
                   Text(
                     "${widget.title}",
-                    style: TextStyle(color: Colors.white, fontSize: 14),
+                    style: const TextStyle(color: Colors.white, fontSize: 14),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 8,
                   ),
                   Text(
                     widget.count,
-                    style: TextStyle(
+                    style: const TextStyle(
                         color: Colors.white,
                         fontSize: 25,
                         fontWeight: FontWeight.bold),

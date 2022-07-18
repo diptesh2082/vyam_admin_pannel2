@@ -6,9 +6,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:http/http.dart' as http;
 
-
 // import '../private_variable.dart';
-final placesApiKey="AIzaSyD-lbw_9Rs2jniKN2iVZ1zhh_9dtFvN7IM";
+const placesApiKey = "AIzaSyD-lbw_9Rs2jniKN2iVZ1zhh_9dtFvN7IM";
+
 class RequestHelper {
   Future getPlaces({String? query}) async {
     String url =

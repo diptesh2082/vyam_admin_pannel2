@@ -1,4 +1,3 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -13,16 +12,10 @@ class editBanner extends StatefulWidget {
 }
 
 class _editBannerState extends State<editBanner> {
-
-
-
   final TextEditingController _name = TextEditingController();
   var id;
   var image;
   bool access = false;
-
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -31,12 +24,10 @@ class _editBannerState extends State<editBanner> {
       appBar: AppBar(
         title: const Text('Edit'),
       ),
-      body: Column(
-
-        children:<Widget>[
-          CustomTextField(hinttext: "Name", addcontroller: _name),
+      body: Column(children: <Widget>[
+        CustomTextField(hinttext: "Name", addcontroller: _name),
         Container(
-          padding: EdgeInsets.all(20),
+          padding: const EdgeInsets.all(20),
           child: Row(
             children: [
               const Text(
@@ -60,37 +51,33 @@ class _editBannerState extends State<editBanner> {
             ],
           ),
         ),
+        Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Center(
+            child: ElevatedButton(
+              onPressed: () async {
+                print("/////");
 
-          Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: Center(
-              child: ElevatedButton(
-                onPressed: () async {
-                  print("/////");
-
-                  FirebaseFirestore.instance
-                      .collection('banner_details')
-                      .doc(id)
-                      .update(
-                    {
-                      'name': _name.text,
-                      //'image': image,
-                      'id': id,
-                      'access':access,
-                    },
-                  ).then((snapshot) async {
-                    await uploadImageToBanner(image, id);
-                  });
-                  Navigator.pop(context);
-                },
-                child: const Text('Done'),
-              ),
+                FirebaseFirestore.instance
+                    .collection('banner_details')
+                    .doc(id)
+                    .update(
+                  {
+                    'name': _name.text,
+                    //'image': image,
+                    'id': id,
+                    'access': access,
+                  },
+                ).then((snapshot) async {
+                  await uploadImageToBanner(image, id);
+                });
+                Navigator.pop(context);
+              },
+              child: const Text('Done'),
             ),
-          )
-
-
-  ]
-      ),
+          ),
+        )
+      ]),
     );
   }
 }

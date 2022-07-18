@@ -32,7 +32,7 @@ class _PersonalisedState extends State<Personalised> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Personalised Notification")),
+      appBar: AppBar(title: const Text("Personalised Notification")),
       body: SafeArea(
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 5),
@@ -51,10 +51,12 @@ class _PersonalisedState extends State<Personalised> {
                     ),
                     onPressed: () async {
                       // await  FirebaseMessaging.instance.subscribeToTopic("push_notifications");
-                      Navigator.pushReplacement(context,
-                          MaterialPageRoute(builder: (context) => pnew()));
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const pnew()));
                     },
-                    child: Text('Add Personalised Notification'),
+                    child: const Text('Add Personalised Notification'),
                   ),
                 ),
                 Center(
@@ -121,7 +123,7 @@ class _PersonalisedState extends State<Personalised> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     ElevatedButton(
-                      child: Text("Previous Page"),
+                      child: const Text("Previous Page"),
                       onPressed: () {
                         setState(() {
                           if (start >= 1) page--;
@@ -333,7 +335,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
     return Scaffold(
       backgroundColor: Colors.white10,
       appBar: AppBar(
-        title: Text('Edit Personalised Push Notification'),
+        title: const Text('Edit Personalised Push Notification'),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -360,8 +362,8 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                         _replacement.text = "";
                       });
                     },
-                    child: Text("Add Replacement")),
-                SizedBox(
+                    child: const Text("Add Replacement")),
+                const SizedBox(
                   width: 20,
                 ),
                 ElevatedButton(
@@ -371,12 +373,12 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                         _replacement.text = "";
                       });
                     },
-                    child: Text("Remove Replacement")),
+                    child: const Text("Remove Replacement")),
               ],
             ),
             Text(
               repla.toString(),
-              style: TextStyle(
+              style: const TextStyle(
                   color: Colors.grey,
                   fontWeight: FontWeight.bold,
                   fontSize: 20),
@@ -397,7 +399,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                       'description': _description.text,
                       'replacement': repla,
                       'timestamp': DateTime.now(),
-                      'image': image8 != null ? image8 : widget.image,
+                      'image': image8 ?? widget.image,
                       // 'id': id,
                     };
                     await documentReference
@@ -427,8 +429,8 @@ class editim extends StatefulWidget {
 }
 
 class _editimState extends State<editim> {
-  @override
   String i2 = '';
+  @override
   void initState() {
     // TODO: implement initState
     i2 = widget.imagea;
@@ -436,51 +438,48 @@ class _editimState extends State<editim> {
   }
 
 // <<<<<<< HEAD
-  @override
   bool isloading = false;
   var imagee;
+  @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Row(
-        children: [
-          ElevatedButton(
-            onPressed: () async {
-              setState(() {
-                isloading = true;
-              });
-              var dic = await chooseImage();
-              await addImageToStorage(dic, widget.notifyid);
-              setState(() {
-                isloading = false;
-              });
-            },
-            child: const Text(
-              'Personalised Image',
-              style:
-                  TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
-            ),
+    return Row(
+      children: [
+        ElevatedButton(
+          onPressed: () async {
+            setState(() {
+              isloading = true;
+            });
+            var dic = await chooseImage();
+            await addImageToStorage(dic, widget.notifyid);
+            setState(() {
+              isloading = false;
+            });
+          },
+          child: const Text(
+            'Personalised Image',
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
           ),
-          const SizedBox(
-            width: 20,
-          ),
-          isloading
-              ? Container(
-                  height: 200,
-                  width: 200,
-                  child: const CircularProgressIndicator())
-              : image8 != null
-                  ? Image(
-                      image: NetworkImage(image8.toString()),
-                      height: 200,
-                      width: 200,
-                    )
-                  : Image(
-                      image: NetworkImage(i2),
-                      height: 200,
-                      width: 200,
-                    )
-        ],
-      ),
+        ),
+        const SizedBox(
+          width: 20,
+        ),
+        isloading
+            ? SizedBox(
+                height: 200,
+                width: 200,
+                child: const CircularProgressIndicator())
+            : image8 != null
+                ? Image(
+                    image: NetworkImage(image8.toString()),
+                    height: 200,
+                    width: 200,
+                  )
+                : Image(
+                    image: NetworkImage(i2),
+                    height: 200,
+                    width: 200,
+                  )
+      ],
     );
   }
 
@@ -579,8 +578,8 @@ class _pnewState extends State<pnew> {
                               _addreplacement.text = "";
                             });
                           },
-                          child: Text("Add Replacement")),
-                      SizedBox(
+                          child: const Text("Add Replacement")),
+                      const SizedBox(
                         width: 20,
                       ),
                       ElevatedButton(
@@ -590,17 +589,17 @@ class _pnewState extends State<pnew> {
                               _addreplacement.text = "";
                             });
                           },
-                          child: Text("Remove Replacement")),
+                          child: const Text("Remove Replacement")),
                     ],
                   ),
                   Text(
                     replacement.toString(),
-                    style: TextStyle(
+                    style: const TextStyle(
                         color: Colors.grey,
                         fontWeight: FontWeight.bold,
                         fontSize: 20),
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   loadimage(id: id),
                   Center(
                     child: ElevatedButton(
@@ -615,7 +614,7 @@ class _pnewState extends State<pnew> {
                               'p_title': _addtitle.text,
                               'description': _adddescription.text,
                               'replacement': replacement,
-                              'image': image7 != null ? image7 : "",
+                              'image': image7 ?? "",
                               'timestamp': DateTime.now(),
                               // 'valid': false,
                             },
@@ -649,8 +648,7 @@ class _loadimageState extends State<loadimage> {
   bool isloading = false;
   @override
   Widget build(BuildContext context) {
-    return Container(
-        child: Row(
+    return Row(
       children: [
         const Text(
           "Personalised Image",
@@ -676,7 +674,7 @@ class _loadimageState extends State<loadimage> {
           width: 200,
           height: 100,
           child: isloading
-              ? Container(
+              ? const SizedBox(
                   height: 100,
                   width: 200,
                   child: Center(
@@ -684,19 +682,19 @@ class _loadimageState extends State<loadimage> {
                   ),
                 )
               : image7 != null
-                  ? Container(
+                  ? SizedBox(
                       height: 100,
                       width: 200,
                       child: Image.network(image7),
                     )
-                  : Container(
+                  : const SizedBox(
                       height: 100,
                       width: 200,
                       child: Center(child: Text("Upload Personalised Image")),
                     ),
         ),
       ],
-    ));
+    );
   }
 
   getUrlImage(XFile? pickedFile) async {

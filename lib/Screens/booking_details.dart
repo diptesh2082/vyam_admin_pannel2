@@ -434,12 +434,12 @@ class _BookingDetailsState extends State<BookingDetails> {
                         //   },
                         // ),
 
-                        SizedBox(height: 20),
+                        const SizedBox(height: 20),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             ElevatedButton(
-                              child: Text("Previous Page"),
+                              child: const Text("Previous Page"),
                               onPressed: () {
                                 setState(() {
                                   if (start >= 1) page--;
@@ -451,7 +451,7 @@ class _BookingDetailsState extends State<BookingDetails> {
                                 print("Previous Page");
                               },
                             ),
-                            SizedBox(
+                            const SizedBox(
                               width: 20,
                             ),
                             StreamBuilder<QuerySnapshot>(
@@ -501,7 +501,7 @@ class _BookingDetailsState extends State<BookingDetails> {
                                                 mainAxisAlignment:
                                                     MainAxisAlignment.start,
                                                 children: [
-                                                  SizedBox(
+                                                  const SizedBox(
                                                     width: 20,
                                                   ),
                                                   Container(
@@ -512,7 +512,7 @@ class _BookingDetailsState extends State<BookingDetails> {
                                                     width: 20,
                                                     child: Text(
                                                       "${index + 1}",
-                                                      style: TextStyle(
+                                                      style: const TextStyle(
                                                           color: Colors.white,
                                                           fontWeight:
                                                               FontWeight.bold),
@@ -520,7 +520,7 @@ class _BookingDetailsState extends State<BookingDetails> {
                                                           TextAlign.center,
                                                     ),
                                                   ),
-                                                  SizedBox(width: 20),
+                                                  const SizedBox(width: 20),
                                                 ],
                                               ),
                                               onTap: () {
@@ -539,7 +539,7 @@ class _BookingDetailsState extends State<BookingDetails> {
                                         }),
                                   );
                                 }),
-                            SizedBox(
+                            const SizedBox(
                               width: 20,
                             ),
                             GestureDetector(
@@ -554,7 +554,7 @@ class _BookingDetailsState extends State<BookingDetails> {
                                 height: 20,
                                 width: 80,
                                 color: Colors.teal,
-                                child: Text(
+                                child: const Text(
                                   "Last Page",
                                   style: TextStyle(
                                       color: Colors.white,
@@ -563,9 +563,9 @@ class _BookingDetailsState extends State<BookingDetails> {
                                 ),
                               ),
                             ),
-                            SizedBox(width: 20),
+                            const SizedBox(width: 20),
                             ElevatedButton(
-                              child: Text("Next Page"),
+                              child: const Text("Next Page"),
                               onPressed: () {
                                 setState(() {
                                   if (end <= length) page++;
@@ -721,7 +721,7 @@ class _BookingDetailsState extends State<BookingDetails> {
           ? Text('₹${data['grand_total'].toString()}')
           : const Text("")),
       DataCell(data['payment_method'] != null
-          ? Text('${data['payment_method'].toString().toUpperCase()}')
+          ? Text(data['payment_method'].toString().toUpperCase())
           : const Text("")),
       // DataCell(Center(
       //   child: ElevatedButton(
@@ -746,87 +746,85 @@ class _BookingDetailsState extends State<BookingDetails> {
 
       DataCell(
         Center(
-          child: Container(
-            child: Row(
-              children: [
-                DropdownButton(
-                    hint: Text(data['booking_status'].toString()),
-                    value: data['booking_status'].toString(),
-                    items: const [
-                      DropdownMenuItem(
-                        child: Text("Active"),
-                        value: "active",
-                      ),
-                      DropdownMenuItem(
-                        child: Text("Upcoming"),
-                        value: "upcoming",
-                      ),
-                      DropdownMenuItem(
-                          child: Text("Completed"), value: "completed"),
-                      DropdownMenuItem(
-                          child: Text("Cancelled"), value: "cancelled"),
-                    ],
-                    onChanged: (value) async {
-                      setState(() {
-                        selectedValue = value as String;
-                      });
+          child: Row(
+            children: [
+              DropdownButton(
+                  hint: Text(data['booking_status'].toString()),
+                  value: data['booking_status'].toString(),
+                  items: const [
+                    DropdownMenuItem(
+                      child: Text("Active"),
+                      value: "active",
+                    ),
+                    DropdownMenuItem(
+                      child: Text("Upcoming"),
+                      value: "upcoming",
+                    ),
+                    DropdownMenuItem(
+                        child: Text("Completed"), value: "completed"),
+                    DropdownMenuItem(
+                        child: Text("Cancelled"), value: "cancelled"),
+                  ],
+                  onChanged: (value) async {
+                    setState(() {
+                      selectedValue = value as String;
+                    });
 
+                    await FirebaseFirestore.instance
+                        .collection('bookings')
+                        .doc(bookingId)
+                        .update({'booking_status': value});
+                    if (value == "upcoming") {
+                      setState(() {
+                        statement = "Upcoming Booking";
+                      });
+                    }
+                    if (value == "cancelled") {
+                      setState(() {
+                        statement = "Cancelled Booking";
+                      });
+                    }
+                    if (value == "active") {
+                      setState(() {
+                        statement = "Active Booking";
+                      });
+                    }
+                    if (value == "completed") {
+                      setState(() {
+                        statement = "Completed Booking";
+                      });
+                    }
+                    if (value == "active") {
                       await FirebaseFirestore.instance
                           .collection('bookings')
                           .doc(bookingId)
-                          .update({'booking_status': value});
-                      if (value == "upcoming") {
-                        setState(() {
-                          statement = "Upcoming Booking";
-                        });
-                      }
-                      if (value == "cancelled") {
-                        setState(() {
-                          statement = "Cancelled Booking";
-                        });
-                      }
-                      if (value == "active") {
-                        setState(() {
-                          statement = "Active Booking";
-                        });
-                      }
-                      if (value == "completed") {
-                        setState(() {
-                          statement = "Completed Booking";
-                        });
-                      }
-                      if (value == "active") {
-                        await FirebaseFirestore.instance
-                            .collection('bookings')
-                            .doc(bookingId)
-                            .update({'payment_done': true});
-                      }
-                      // var xps = await FirebaseFirestore.instance
-                      //     .collection('booking_notifications')
-                      //     .doc()
-                      //     .id;
+                          .update({'payment_done': true});
+                    }
+                    // var xps = await FirebaseFirestore.instance
+                    //     .collection('booking_notifications')
+                    //     .doc()
+                    //     .id;
 
-                      await FirebaseFirestore.instance
-                          .collection("booking_notifications")
-                          .doc()
-                          .set({
-                        "title": statement,
-                        "status": selectedValue,
-                        "booking_id": data['booking_id'],
-                        // "payment_done": false,
-                        // "notification_id": xps.toString(),
-                        "branch": data['gym_details']['branch'],
-                        "user_id": data['userId'],
-                        "user_name": data["user_name"],
-                        "vendor_id": data['vendorId'],
-                        "vendor_name": data['gym_details']['name'],
+                    await FirebaseFirestore.instance
+                        .collection("booking_notifications")
+                        .doc()
+                        .set({
+                      "title": statement,
+                      "status": selectedValue,
+                      "booking_id": data['booking_id'],
+                      // "payment_done": false,
+                      // "notification_id": xps.toString(),
+                      "branch": data['gym_details']['branch'],
+                      "user_id": data['userId'],
+                      "user_name": data["user_name"],
+                      "vendor_id": data['vendorId'],
+                      "vendor_name": data['gym_details']['name'],
 
-                        'time_stamp': DateTime.now(),
-                        'seen': false
-                      }).whenComplete(() => Text('COMPLETED BOOKING'));
-                    }),
-              ],
-            ),
+                      'time_stamp': DateTime.now(),
+                      'seen': false
+                    }).whenComplete(() => const Text('COMPLETED BOOKING'));
+                  }),
+            ],
           ),
         ),
       ),
@@ -1285,7 +1283,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                     padding: const EdgeInsets.all(20),
                     child: Center(
                       child: Text(
-                        'Booking ID: ${idss}',
+                        'Booking ID: $idss',
                         style: const TextStyle(
                             fontFamily: 'poppins',
                             fontWeight: FontWeight.w600,
@@ -1745,94 +1743,87 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                   const SizedBox(
                     height: 20,
                   ),
-                  Container(
-                    child: Row(
-                      children: [
-                        const Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Text('Booking Date:',
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                              )),
-                        ),
-                        const SizedBox(width: 40),
-                        Text(
-                          ots.toString(),
-                          style: const TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 20),
-                        ),
-                        const SizedBox(width: 40),
-                        // ElevatedButton(
-                        //     child: const Text('Edit'),
-                        //     onPressed: () {
-                        //       print(datetimee);
-                        //       pickorderDateTime(context);
-                        //       print(datetimee2);
-                        //     }),
-                        const SizedBox(width: 20),
-                      ],
-                    ),
+                  Row(
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text('Booking Date:',
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            )),
+                      ),
+                      const SizedBox(width: 40),
+                      Text(
+                        ots.toString(),
+                        style: const TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 20),
+                      ),
+                      const SizedBox(width: 40),
+                      // ElevatedButton(
+                      //     child: const Text('Edit'),
+                      //     onPressed: () {
+                      //       print(datetimee);
+                      //       pickorderDateTime(context);
+                      //       print(datetimee2);
+                      //     }),
+                      const SizedBox(width: 20),
+                    ],
                   ),
                   const SizedBox(
                     height: 20,
                   ),
-                  Container(
-                    child: Row(
-                      children: [
-                        const Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Text('Start Date:',
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                              )),
-                        ),
-                        const SizedBox(width: 40),
-                        Text(
-                            DateFormat.yMMMd().format(bookingdate!).toString()),
-                        const SizedBox(width: 40),
-                        ElevatedButton(
-                            child: const Text('Edit'),
-                            onPressed: () {
-                              // DateFormat("MMM, dd, yyyy")
-                              //     .format(data["booking_date"].toDate());
-                              // print(_addbookingyear);
+                  Row(
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text('Start Date:',
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            )),
+                      ),
+                      const SizedBox(width: 40),
+                      Text(DateFormat.yMMMd().format(bookingdate!).toString()),
+                      const SizedBox(width: 40),
+                      ElevatedButton(
+                          child: const Text('Edit'),
+                          onPressed: () {
+                            // DateFormat("MMM, dd, yyyy")
+                            //     .format(data["booking_date"].toDate());
+                            // print(_addbookingyear);
 
-                              print(bookingdate);
-                              pickDateTime(context);
-                            }),
-                        const SizedBox(width: 15),
-                      ],
-                    ),
+                            print(bookingdate);
+                            pickDateTime(context);
+                          }),
+                      const SizedBox(width: 15),
+                    ],
                   ),
 
                   const SizedBox(
                     height: 20,
                   ),
-                  Container(
-                    child: Row(
-                      children: [
-                        const Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Text('End Date:',
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                              )),
-                        ),
-                        const SizedBox(width: 40),
-                        Text(DateFormat.yMMMd().format(plandate!).toString()),
-                        const SizedBox(width: 40),
-                        ElevatedButton(
-                            child: const Text('Edit'),
-                            onPressed: () {
-                              print(plandate);
-                              pickplanDateTime(context);
-                            }),
-                        const SizedBox(width: 15),
-                      ],
-                    ),
+                  Row(
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text('End Date:',
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            )),
+                      ),
+                      const SizedBox(width: 40),
+                      Text(DateFormat.yMMMd().format(plandate!).toString()),
+                      const SizedBox(width: 40),
+                      ElevatedButton(
+                          child: const Text('Edit'),
+                          onPressed: () {
+                            print(plandate);
+                            pickplanDateTime(context);
+                          }),
+                      const SizedBox(width: 15),
+                    ],
                   ),
                   const SizedBox(
                     height: 20,
@@ -1856,13 +1847,13 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                                   .doc(_addbookingid.text);
 
                               Map<String, dynamic> data = <String, dynamic>{
-                                'plan_end_duration': d2 != null ? d2 : plandate,
+                                'plan_end_duration': d2 ?? plandate,
 
                                 'order_date': datetimee2,
 
                                 'booking_status': _addbookingstatus.text,
 
-                                'booking_date': d1 != null ? d1 : bookingdate,
+                                'booking_date': d1 ?? bookingdate,
 
                                 // 'booking_accepted':
                                 //     _addbookingaccepted.text == 'true'
@@ -1891,7 +1882,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                                   'branch': widget.branch,
                                   'seen': false
                                 }).whenComplete(
-                                        () => Text('COMPLETED BOOKING'));
+                                        () => const Text('COMPLETED BOOKING'));
 
                                 // var x = await FirebaseFirestore.instance
                                 //     .collection("booking_notifications")
@@ -1973,7 +1964,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
   }
 
   Future pickTime(BuildContext context) async {
-    const intialTime = const TimeOfDay(hour: 9, minute: 0);
+    const intialTime = TimeOfDay(hour: 9, minute: 0);
     final newTime =
 // <<<<<<< HEAD
 // <<<<<<< HEAD
@@ -2183,16 +2174,14 @@ class _RadioBoxxState extends State<RadioBoxx> {
     return Container(
       child: Column(
         children: [
-          Container(
-            child: RadioListTile<String>(
-              value: widget.name,
-              groupValue: check,
-              onChanged: (String? abcd) {
-                widget.cat = abcd;
-                print(abcd);
-              },
-              title: Text(widget.name),
-            ),
+          RadioListTile<String>(
+            value: widget.name,
+            groupValue: check,
+            onChanged: (String? abcd) {
+              widget.cat = abcd;
+              print(abcd);
+            },
+            title: Text(widget.name),
           ),
         ],
       ),

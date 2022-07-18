@@ -50,7 +50,7 @@ class _BannerPageState extends State<BannerPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Banners"),
+        title: const Text("Banners"),
       ),
       body: SafeArea(
         child: Container(
@@ -71,7 +71,7 @@ class _BannerPageState extends State<BannerPage> {
                       onPressed: () {
                         Get.to(const bannerNewPage()); //showAddbox,
                       },
-                      child: Text('Add Banner')),
+                      child: const Text('Add Banner')),
                 ),
                 Container(
                   width: 500,
@@ -191,12 +191,12 @@ class _BannerPageState extends State<BannerPage> {
                     },
                   ),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     ElevatedButton(
-                      child: Text("Previous Page"),
+                      child: const Text("Previous Page"),
                       onPressed: () {
                         setState(() {
                           if (start >= 1) page--;
@@ -210,7 +210,7 @@ class _BannerPageState extends State<BannerPage> {
                       },
                     ),
                     Container(
-                      margin: EdgeInsets.symmetric(horizontal: 20),
+                      margin: const EdgeInsets.symmetric(horizontal: 20),
                       child: Text(
                         page.toString(),
                         style: const TextStyle(
@@ -279,13 +279,13 @@ class _BannerPageState extends State<BannerPage> {
           data['name'] != null ? Text(data['name'] ?? "") : const Text("")),
       DataCell(data['image'] != null && data['image'] != "null"
           ? Image.network(data['image'])
-          : Text("Image Not Uploaded")),
+          : const Text("Image Not Uploaded")),
       DataCell(ElevatedButton(
         onPressed: () async {
           setnavv = !setnavv;
           com = setnavv ? "/gym_details" : "";
 
-          print("New ${com}");
+          print("New $com");
           DocumentReference documentReference = FirebaseFirestore.instance
               .collection('banner_details')
               .doc(banner_id);
@@ -300,7 +300,8 @@ class _BannerPageState extends State<BannerPage> {
         },
         child: Text(
           setnavv ? "Activated" : "Deactivated",
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          style:
+              const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         style: ElevatedButton.styleFrom(
             primary: setnavv ? Colors.green : Colors.red),
@@ -471,50 +472,49 @@ class _naveditState extends State<navedit> {
   @override
   void initState() {
     // TODO: implement initState
-    if (widget.navtext == "/gym_details")
+    if (widget.navtext == "/gym_details") {
       setState(() {
         setnav = true;
       });
+    }
 
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Row(
-        children: [
-          Text("Set Navigation"),
-          SizedBox(
-            width: 20,
+    return Row(
+      children: [
+        const Text("Set Navigation"),
+        const SizedBox(
+          width: 20,
+        ),
+        ElevatedButton(
+          onPressed: () {
+            if (setnav == false) {
+              setState(() {
+                setnav = true;
+                navcommandedit = "/gym_details";
+                print("Set NAv Activated In Edit");
+              });
+            } else {
+              setState(() {
+                setnav = false;
+                navcommandedit = "";
+                print("SET NAV DEACTIVATED In Edit");
+              });
+            }
+            print("New $navcommandedit");
+          },
+          child: Text(
+            setnav ? "Activated" : "Deactivated",
+            style: const TextStyle(
+                color: Colors.white, fontWeight: FontWeight.bold),
           ),
-          ElevatedButton(
-            onPressed: () {
-              if (setnav == false) {
-                setState(() {
-                  setnav = true;
-                  navcommandedit = "/gym_details";
-                  print("Set NAv Activated In Edit");
-                });
-              } else {
-                setState(() {
-                  setnav = false;
-                  navcommandedit = "";
-                  print("SET NAV DEACTIVATED In Edit");
-                });
-              }
-              print("New ${navcommandedit}");
-            },
-            child: Text(
-              setnav ? "Activated" : "Deactivated",
-              style:
-                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-            ),
-            style: ElevatedButton.styleFrom(
-                primary: setnav ? Colors.green : Colors.red),
-          )
-        ],
-      ),
+          style: ElevatedButton.styleFrom(
+              primary: setnav ? Colors.green : Colors.red),
+        )
+      ],
     );
   }
 }
@@ -595,7 +595,7 @@ class _EditBoxState extends State<EditBox> {
     return Scaffold(
         backgroundColor: Colors.white10,
         appBar: AppBar(
-          title: Text('Edit Banners'),
+          title: const Text('Edit Banners'),
         ),
         body: Center(
           child: SizedBox(
@@ -717,8 +717,8 @@ class _EditBoxState extends State<EditBox> {
                   //CustomTextField(hinttext: "Image url", addcontroller: _image),
                   Row(
                     children: [
-                      Text('Area Selection: '),
-                      SizedBox(
+                      const Text('Area Selection: '),
+                      const SizedBox(
                         width: 20,
                       ),
                       Container(
@@ -752,7 +752,7 @@ class _EditBoxState extends State<EditBox> {
                             MapView(
                               address_con: _addaddress,
                             ),
-                            Center(
+                            const Center(
                               child: Icon(
                                 Icons.location_on_rounded,
                                 size: 40,
@@ -773,7 +773,7 @@ class _EditBoxState extends State<EditBox> {
                   Row(
                     children: [
                       Padding(
-                        padding: EdgeInsets.all(50),
+                        padding: const EdgeInsets.all(50),
                         child: Center(
                           child: ElevatedButton(
                             onPressed: () async {
@@ -786,8 +786,7 @@ class _EditBoxState extends State<EditBox> {
                                 {
                                   'position_id': _position.text,
                                   'name': _name.text,
-                                  'image':
-                                      image3 != null ? image3 : widget.image,
+                                  'image': image3 ?? widget.image,
                                   'id': id,
                                   'access': access,
                                   'gym_id': namee,
@@ -847,49 +846,46 @@ class _editimState extends State<editim> {
   }
 
 // <<<<<<< HEAD
-  @override
   bool isloading = false;
   var imagee;
+  @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Row(
-        children: [
-          ElevatedButton(
-            onPressed: () async {
-              setState(() {
-                isloading = true;
-              });
-              var dic = await chooseImage();
-              await addImageToStorage(dic, widget.idd);
-              setState(() {
-                isloading = false;
-                i2 = image3;
-              });
-            },
-            child: const Text(
-              'Upload Gym Image',
-              style:
-                  TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
-            ),
+    return Row(
+      children: [
+        ElevatedButton(
+          onPressed: () async {
+            setState(() {
+              isloading = true;
+            });
+            var dic = await chooseImage();
+            await addImageToStorage(dic, widget.idd);
+            setState(() {
+              isloading = false;
+              i2 = image3;
+            });
+          },
+          child: const Text(
+            'Upload Gym Image',
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
           ),
-          const SizedBox(
-            width: 20,
-          ),
-          isloading
-              ? Container(
-                  height: 100,
-                  width: 200,
-                  child: Center(
-                    child: CircularProgressIndicator(),
-                  ),
-                )
-              : Container(
-                  height: 100,
-                  width: 200,
-                  child: Image.network(i2),
+        ),
+        const SizedBox(
+          width: 20,
+        ),
+        isloading
+            ? const SizedBox(
+                height: 100,
+                width: 200,
+                child: Center(
+                  child: CircularProgressIndicator(),
                 ),
-        ],
-      ),
+              )
+            : SizedBox(
+                height: 100,
+                width: 200,
+                child: Image.network(i2),
+              ),
+      ],
     );
   }
 

@@ -27,7 +27,7 @@ class _FaqDetailsState extends State<FaqDetails> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("FAQ")),
+      appBar: AppBar(title: const Text("FAQ")),
       body: SafeArea(
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 5),
@@ -116,12 +116,12 @@ class _FaqDetailsState extends State<FaqDetails> {
                     },
                   ),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     ElevatedButton(
-                      child: Text("Previous Page"),
+                      child: const Text("Previous Page"),
                       onPressed: () {
                         if (start >= 1) page--;
 
@@ -135,17 +135,17 @@ class _FaqDetailsState extends State<FaqDetails> {
                       },
                     ),
                     Container(
-                      margin: EdgeInsets.symmetric(horizontal: 20),
+                      margin: const EdgeInsets.symmetric(horizontal: 20),
                       child: Text(
                         page.toString(),
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 15,
                             color: Colors.teal),
                       ),
                     ),
                     ElevatedButton(
-                      child: Text("Next Page"),
+                      child: const Text("Next Page"),
                       onPressed: () {
                         setState(() {
                           if (end <= length) page++;
@@ -215,7 +215,7 @@ class _FaqDetailsState extends State<FaqDetails> {
               ),
             ));
       }),
-      DataCell(Icon(Icons.delete), onTap: () {
+      DataCell(const Icon(Icons.delete), onTap: () {
         deleteMethod(stream: faqStream, uniqueDocId: idData);
       })
     ]);
@@ -321,11 +321,11 @@ class _EditBoxState extends State<EditBox> {
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
-          title: Text('Edit Booking'),
+          title: const Text('Edit Booking'),
         ),
         body: SafeArea(
           child: Container(
-            padding: EdgeInsets.all(20),
+            padding: const EdgeInsets.all(20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

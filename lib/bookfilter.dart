@@ -38,7 +38,7 @@ class _BookingDetails1State extends State<BookingDetails1> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Bookings'),
+        title: const Text('Bookings'),
       ),
       body: SafeArea(
 // <<<<<<< HEAD
@@ -66,7 +66,7 @@ class _BookingDetails1State extends State<BookingDetails1> {
 // <<<<<<< HEAD
 // =======
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   Column(
                     children: [
                       Row(
@@ -183,7 +183,7 @@ class _BookingDetails1State extends State<BookingDetails1> {
                   ),
                   Container(
                     alignment: Alignment.topRight,
-                    child: Icon(
+                    child: const Icon(
                       Icons.date_range,
                     ),
                   ),
@@ -326,12 +326,12 @@ class _BookingDetails1State extends State<BookingDetails1> {
                       },
                     ),
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       ElevatedButton(
-                        child: Text("Previous Page"),
+                        child: const Text("Previous Page"),
                         onPressed: () {
                           setState(() {
                             if (start >= 1) page--;
@@ -343,7 +343,7 @@ class _BookingDetails1State extends State<BookingDetails1> {
                           print("Previous Page");
                         },
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 20,
                       ),
                       StreamBuilder<QuerySnapshot>(
@@ -387,7 +387,7 @@ class _BookingDetails1State extends State<BookingDetails1> {
                                           mainAxisAlignment:
                                               MainAxisAlignment.start,
                                           children: [
-                                            SizedBox(
+                                            const SizedBox(
                                               width: 20,
                                             ),
                                             Container(
@@ -398,14 +398,14 @@ class _BookingDetails1State extends State<BookingDetails1> {
                                               width: 20,
                                               child: Text(
                                                 "${index + 1}",
-                                                style: TextStyle(
+                                                style: const TextStyle(
                                                     color: Colors.white,
                                                     fontWeight:
                                                         FontWeight.bold),
                                                 textAlign: TextAlign.center,
                                               ),
                                             ),
-                                            SizedBox(
+                                            const SizedBox(
                                               width: 20,
                                             ),
                                           ],
@@ -425,11 +425,11 @@ class _BookingDetails1State extends State<BookingDetails1> {
                                   }),
                             );
                           }),
-                      SizedBox(
+                      const SizedBox(
                         width: 20,
                       ),
                       ElevatedButton(
-                        child: Text("Next Page"),
+                        child: const Text("Next Page"),
                         onPressed: () {
                           setState(() {
                             if (end <= length) page++;
@@ -560,7 +560,7 @@ class _BookingDetails1State extends State<BookingDetails1> {
           : const Text("")),
       DataCell(data['userId'] != null
           ? Text(data['userId'].toString().substring(3, 13))
-          : Text("")),
+          : const Text("")),
       DataCell(data["gym_details"] != null
           ? Text(
               '${data['gym_details']['name'].toString().toUpperCase()}|${data['gym_details']['branch'].toString().toUpperCase()}')
@@ -616,81 +616,79 @@ class _BookingDetails1State extends State<BookingDetails1> {
 
       DataCell(
         Center(
-          child: Container(
-            child: Row(
-              children: [
-                DropdownButton(
-                    hint: Text(data['booking_status'].toString()),
-                    value: data['booking_status'].toString(),
-                    items: const [
-                      DropdownMenuItem(
-                        child: Text("Active"),
-                        value: "active",
-                      ),
-                      DropdownMenuItem(
-                        child: Text("Upcoming"),
-                        value: "upcoming",
-                      ),
-                      DropdownMenuItem(
-                          child: Text("Completed"), value: "completed"),
-                      DropdownMenuItem(
-                          child: Text("Cancelled"), value: "cancelled"),
-                    ],
-                    onChanged: (value) async {
+          child: Row(
+            children: [
+              DropdownButton(
+                  hint: Text(data['booking_status'].toString()),
+                  value: data['booking_status'].toString(),
+                  items: const [
+                    DropdownMenuItem(
+                      child: Text("Active"),
+                      value: "active",
+                    ),
+                    DropdownMenuItem(
+                      child: Text("Upcoming"),
+                      value: "upcoming",
+                    ),
+                    DropdownMenuItem(
+                        child: Text("Completed"), value: "completed"),
+                    DropdownMenuItem(
+                        child: Text("Cancelled"), value: "cancelled"),
+                  ],
+                  onChanged: (value) async {
+                    setState(() {
+                      selectedValue = value as String;
+                    });
+                    await FirebaseFirestore.instance
+                        .collection('bookings')
+                        .doc(bookingId)
+                        .update({'booking_status': value});
+                    if (value == "upcoming") {
                       setState(() {
-                        selectedValue = value as String;
+                        statement = "Upcoming Booking";
                       });
+                    }
+                    if (value == "cancelled") {
+                      setState(() {
+                        statement = "Cancelled Booking";
+                      });
+                    }
+                    if (value == "active") {
+                      setState(() {
+                        statement = "Active Booking";
+                      });
+                    }
+                    if (value == "completed") {
+                      setState(() {
+                        statement = "Completed Booking";
+                      });
+                    }
+
+                    if (value == "active") {
                       await FirebaseFirestore.instance
                           .collection('bookings')
                           .doc(bookingId)
-                          .update({'booking_status': value});
-                      if (value == "upcoming") {
-                        setState(() {
-                          statement = "Upcoming Booking";
-                        });
-                      }
-                      if (value == "cancelled") {
-                        setState(() {
-                          statement = "Cancelled Booking";
-                        });
-                      }
-                      if (value == "active") {
-                        setState(() {
-                          statement = "Active Booking";
-                        });
-                      }
-                      if (value == "completed") {
-                        setState(() {
-                          statement = "Completed Booking";
-                        });
-                      }
-
-                      if (value == "active") {
-                        await FirebaseFirestore.instance
-                            .collection('bookings')
-                            .doc(bookingId)
-                            .update({'payment_done': true});
-                        // var x=await FirebaseFirestore.instance.collection("booking_notifications").id;
-                        await FirebaseFirestore.instance
-                            .collection("booking_notifications")
-                            .doc()
-                            .set({
-                          "title": statement,
-                          "status": selectedValue,
-                          // "payment_done": false,
-                          'booking_id': data['booking_id'],
-                          'branch': data['gym_details']['branch'],
-                          "user_id": data['userId'],
-                          "user_name": data["user_name"],
-                          "vendor_id": data['vendorId'],
-                          "vendor_name": data['gym_details']['name'],
-                          'time_stamp': DateTime.now(),
-                          'seen': false
-                        });
-                      }
-                    }),
-              ],
-            ),
+                          .update({'payment_done': true});
+                      // var x=await FirebaseFirestore.instance.collection("booking_notifications").id;
+                      await FirebaseFirestore.instance
+                          .collection("booking_notifications")
+                          .doc()
+                          .set({
+                        "title": statement,
+                        "status": selectedValue,
+                        // "payment_done": false,
+                        'booking_id': data['booking_id'],
+                        'branch': data['gym_details']['branch'],
+                        "user_id": data['userId'],
+                        "user_name": data["user_name"],
+                        "vendor_id": data['vendorId'],
+                        "vendor_name": data['gym_details']['name'],
+                        'time_stamp': DateTime.now(),
+                        'seen': false
+                      });
+                    }
+                  }),
+            ],
           ),
         ),
       ),
@@ -1218,10 +1216,10 @@ class _ProductEditBoxState extends State<ProductEditBox> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text('Edit Booking'),
+        title: const Text('Edit Booking'),
       ),
       body: Container(
-        margin: EdgeInsets.all(15.0),
+        margin: const EdgeInsets.all(15.0),
         child: Center(
           child: SizedBox(
             child: SingleChildScrollView(
@@ -1229,11 +1227,11 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    padding: EdgeInsets.all(20),
+                    padding: const EdgeInsets.all(20),
                     child: Center(
                       child: Text(
-                        'Booking ID: ${idss}',
-                        style: TextStyle(
+                        'Booking ID: $idss',
+                        style: const TextStyle(
                             fontFamily: 'poppins',
                             fontWeight: FontWeight.w600,
                             fontSize: 20),
@@ -1275,7 +1273,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                       padding: const EdgeInsets.all(8.0),
                       child: Row(
                         children: [
-                          Text(
+                          const Text(
                             "User Name: ",
                             style: TextStyle(
                               fontSize: 20,
@@ -1283,11 +1281,11 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                               fontWeight: FontWeight.w400,
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 20,
                           ),
                           Text(_addusername.text,
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 15)),
                         ],
                       ),
@@ -1297,7 +1295,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   Container(
@@ -1305,7 +1303,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                       padding: const EdgeInsets.all(8.0),
                       child: Row(
                         children: [
-                          Text(
+                          const Text(
                             "User ID:",
                             style: TextStyle(
                               fontSize: 20,
@@ -1313,11 +1311,11 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                               fontWeight: FontWeight.w400,
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 20,
                           ),
                           Text(widget.userid,
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 15)),
                         ],
                       ),
@@ -1327,7 +1325,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   Container(
@@ -1335,7 +1333,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                       padding: const EdgeInsets.all(8.0),
                       child: Row(
                         children: [
-                          Text(
+                          const Text(
                             "Gym Name:",
                             style: TextStyle(
                               fontSize: 20,
@@ -1343,11 +1341,11 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                               fontWeight: FontWeight.w400,
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 20,
                           ),
                           Text(widget.gymname,
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 15)),
                         ],
                       ),
@@ -1357,7 +1355,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   Container(
@@ -1365,7 +1363,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                       padding: const EdgeInsets.all(8.0),
                       child: Row(
                         children: [
-                          Text(
+                          const Text(
                             "Gym Address:",
                             style: TextStyle(
                               fontSize: 20,
@@ -1373,11 +1371,11 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                               fontWeight: FontWeight.w400,
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 20,
                           ),
                           Text(_addgymaddress.text,
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 15)),
                         ],
                       ),
@@ -1387,7 +1385,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   Container(
@@ -1395,7 +1393,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                       padding: const EdgeInsets.all(8.0),
                       child: Row(
                         children: [
-                          Text(
+                          const Text(
                             "Total Days:",
                             style: TextStyle(
                               fontSize: 20,
@@ -1403,11 +1401,11 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                               fontWeight: FontWeight.w400,
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 20,
                           ),
                           Text(_addtotaldays.text,
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 15)),
                         ],
                       ),
@@ -1447,15 +1445,15 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                   //     borderRadius: BorderRadius.circular(10),
                   //   ),
                   // ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   Container(
                     child: Padding(
-                      padding: EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.all(8.0),
                       child: Row(
                         children: [
-                          Text(
+                          const Text(
                             'Payment Type:',
                             style: TextStyle(
                               fontSize: 20,
@@ -1463,11 +1461,11 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                               fontWeight: FontWeight.w400,
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 20,
                           ),
                           Text(widget.payment_method.toString().toUpperCase(),
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 15)),
                         ],
                       ),
@@ -1477,7 +1475,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   Container(
@@ -1485,7 +1483,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                       padding: const EdgeInsets.all(8.0),
                       child: Row(
                         children: [
-                          Text(
+                          const Text(
                             "Package Type:",
                             style: TextStyle(
                               fontSize: 20,
@@ -1493,11 +1491,11 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                               fontWeight: FontWeight.w400,
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 20,
                           ),
                           Text(_addpackagetype.text,
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 15)),
                         ],
                       ),
@@ -1507,7 +1505,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   Container(
@@ -1515,17 +1513,17 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                       padding: const EdgeInsets.all(8.0),
                       child: Row(
                         children: [
-                          Text("Booking Plan",
+                          const Text("Booking Plan",
                               style: TextStyle(
                                 fontSize: 20,
                                 fontFamily: 'poppins',
                                 fontWeight: FontWeight.w400,
                               )),
-                          SizedBox(
+                          const SizedBox(
                             width: 20,
                           ),
                           Text(_addbookingplan.text,
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 15)),
                         ],
                       ),
@@ -1536,7 +1534,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                     ),
                   ),
 
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   Container(
@@ -1544,17 +1542,17 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                       padding: const EdgeInsets.all(8.0),
                       child: Row(
                         children: [
-                          Text("Booking Price (₹)",
+                          const Text("Booking Price (₹)",
                               style: TextStyle(
                                 fontSize: 20,
                                 fontFamily: 'poppins',
                                 fontWeight: FontWeight.w400,
                               )),
-                          SizedBox(
+                          const SizedBox(
                             width: 20,
                           ),
                           Text(_addbookingprice.text,
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 15)),
                         ],
                       ),
@@ -1564,7 +1562,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   Container(
@@ -1572,7 +1570,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                       padding: const EdgeInsets.all(8.0),
                       child: Row(
                         children: [
-                          Text(
+                          const Text(
                             "Discount (₹):",
                             style: TextStyle(
                               fontSize: 20,
@@ -1580,11 +1578,11 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                               fontWeight: FontWeight.w400,
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 20,
                           ),
                           Text(_adddiscount.text,
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 15)),
                         ],
                       ),
@@ -1594,7 +1592,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   Container(
@@ -1602,7 +1600,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                       padding: const EdgeInsets.all(8.0),
                       child: Row(
                         children: [
-                          Text(
+                          const Text(
                             "Grand Total (₹):",
                             style: TextStyle(
                               fontSize: 20,
@@ -1610,11 +1608,11 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                               fontWeight: FontWeight.w400,
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 20,
                           ),
                           Text(_addgrandtotal.text,
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 15)),
                         ],
                       ),
@@ -1625,15 +1623,15 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                     ),
                   ),
 
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   Container(
                     child: Padding(
-                      padding: EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.all(8.0),
                       child: Row(
                         children: [
-                          Text(
+                          const Text(
                             'Booking Status:',
                             style: TextStyle(
                               fontSize: 20,
@@ -1641,7 +1639,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                               fontWeight: FontWeight.w400,
                             ),
                           ),
-                          SizedBox(width: 20),
+                          const SizedBox(width: 20),
                           DropdownButton(
                             value: dropdownstatusvalue,
                             icon: const Icon(Icons.keyboard_arrow_down),
@@ -1688,7 +1686,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                     ),
                   ),
 
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   // CustomTextField(
@@ -1729,13 +1727,13 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                                 fontWeight: FontWeight.bold,
                               )),
                         ),
-                        SizedBox(width: 40),
+                        const SizedBox(width: 40),
                         Text(
                           ots.toString(),
-                          style: TextStyle(
+                          style: const TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 20),
                         ),
-                        SizedBox(width: 40),
+                        const SizedBox(width: 40),
                         // ElevatedButton(
                         //     child: const Text('Edit'),
                         //     onPressed: () {
@@ -1743,44 +1741,41 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                         //       pickorderDateTime(context);
                         //       print(datetimee2);
                         //     }),
-                        SizedBox(width: 20),
+                        const SizedBox(width: 20),
                       ],
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
-                  Container(
-                    child: Row(
-                      children: [
-                        const Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Text('Start Date:',
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                              )),
-                        ),
-                        SizedBox(width: 40),
-                        Text(
-                            DateFormat.yMMMd().format(bookingdate!).toString()),
-                        SizedBox(width: 40),
-                        ElevatedButton(
-                            child: const Text('Edit'),
-                            onPressed: () {
-                              // DateFormat("MMM, dd, yyyy")
-                              //     .format(data["booking_date"].toDate());
-                              // print(_addbookingyear);
+                  Row(
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text('Start Date:',
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            )),
+                      ),
+                      const SizedBox(width: 40),
+                      Text(DateFormat.yMMMd().format(bookingdate!).toString()),
+                      const SizedBox(width: 40),
+                      ElevatedButton(
+                          child: const Text('Edit'),
+                          onPressed: () {
+                            // DateFormat("MMM, dd, yyyy")
+                            //     .format(data["booking_date"].toDate());
+                            // print(_addbookingyear);
 
-                              print(bookingdate);
-                              pickDateTime(context);
-                            }),
-                        const SizedBox(width: 15),
-                      ],
-                    ),
+                            print(bookingdate);
+                            pickDateTime(context);
+                          }),
+                      const SizedBox(width: 15),
+                    ],
                   ),
 
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   Container(
@@ -1794,20 +1789,20 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                                 fontWeight: FontWeight.bold,
                               )),
                         ),
-                        SizedBox(width: 40),
+                        const SizedBox(width: 40),
                         Text(DateFormat.yMMMd().format(plandate!).toString()),
-                        SizedBox(width: 40),
+                        const SizedBox(width: 40),
                         ElevatedButton(
                             child: const Text('Edit'),
                             onPressed: () {
                               print(plandate);
                               pickplanDateTime(context);
                             }),
-                        SizedBox(width: 15),
+                        const SizedBox(width: 15),
                       ],
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
 
@@ -1829,13 +1824,13 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                                   .doc(_addbookingid.text);
 
                               Map<String, dynamic> data = <String, dynamic>{
-                                'plan_end_duration': d2 != null ? d2 : plandate,
+                                'plan_end_duration': d2 ?? plandate,
 
                                 'order_date': datetimee2,
 
                                 'booking_status': _addbookingstatus.text,
 
-                                'booking_date': d1 != null ? d1 : bookingdate,
+                                'booking_date': d1 ?? bookingdate,
 
                                 // 'booking_accepted':
                                 //     _addbookingaccepted.text == 'true'
@@ -1944,7 +1939,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
   }
 
   Future pickTime(BuildContext context) async {
-    const intialTime = const TimeOfDay(hour: 9, minute: 0);
+    const intialTime = TimeOfDay(hour: 9, minute: 0);
     final newTime =
 // <<<<<<< HEAD
 // <<<<<<< HEAD
@@ -2071,7 +2066,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
   }
 
   Future pickorderTime(BuildContext context) async {
-    final intialTime = TimeOfDay(hour: 9, minute: 0);
+    const intialTime = TimeOfDay(hour: 9, minute: 0);
     final newTime =
         await showTimePicker(context: context, initialTime: time ?? intialTime);
 

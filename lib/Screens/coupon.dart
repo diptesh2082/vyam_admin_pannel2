@@ -41,7 +41,7 @@ class _CouponState extends State<Coupon> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Coupons"),
+        title: const Text("Coupons"),
       ),
       body: SafeArea(
         child: Container(
@@ -220,12 +220,12 @@ class _CouponState extends State<Coupon> {
                     },
                   ),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     ElevatedButton(
-                      child: Text("Previous Page"),
+                      child: const Text("Previous Page"),
                       onPressed: () {
                         setState(() {
                           if (start > 0 && end > 0) {
@@ -355,7 +355,7 @@ class _CouponState extends State<Coupon> {
                     selectedPackagetype: data['package_type'],
                     offer_type: data['offer_type'])));
       }),
-      DataCell(Icon(Icons.delete), onTap: () {
+      DataCell(const Icon(Icons.delete), onTap: () {
         // deleteMethod(stream: couponStream, uniqueDocId: couponIdData);
 
         showDialog(
@@ -544,7 +544,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
     return Scaffold(
       backgroundColor: Colors.white10,
       appBar: AppBar(
-        title: Text('Edit Coupon'),
+        title: const Text('Edit Coupon'),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -574,7 +574,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                     "Select Package type",
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
                   ),
-                  Container(
+                  SizedBox(
                     width: 280,
                     child: DropdownButton(
                         hint: Text("${Select_Package_type}"),
@@ -700,19 +700,19 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                       ),
                     ],
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
+                      const Text(
                         "Select Coupon type",
                         style: TextStyle(
                             fontSize: 20, fontWeight: FontWeight.w500),
                       ),
-                      Container(
+                      SizedBox(
                         width: 280,
                         child: DropdownButton(
                             hint: Text(
@@ -778,14 +778,14 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                             child: const Text('Done'),
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 10,
                         ),
                         ElevatedButton(
                             onPressed: () {
                               Navigator.pop(context);
                             },
-                            child: Text('Close'))
+                            child: const Text('Close'))
                       ],
                     ),
                   )
