@@ -25,11 +25,12 @@ class offersPage extends StatefulWidget {
   State<offersPage> createState() => _offersPageState();
 }
 
-List offersdescription = [];
+List offersRules = [];
 
 class _offersPageState extends State<offersPage> {
   CollectionReference? offersStream;
   var landmark;
+  var id1;
 
   @override
   void initState() {
@@ -39,10 +40,10 @@ class _offersPageState extends State<offersPage> {
         .collection('product_details')
         .doc(widget.offerId)
         .collection('offers');
-
     globalOfferId = widget.offerId;
     globalName = widget.name;
     landmark = widget.landmark;
+
     super.initState();
   }
 
@@ -142,6 +143,11 @@ class _offersPageState extends State<offersPage> {
                               style: TextStyle(fontWeight: FontWeight.w600),
                             )),
                             DataColumn(
+                                label: Text(
+                              'Validity',
+                              style: TextStyle(fontWeight: FontWeight.w600),
+                            )),
+                            DataColumn(
                               label: Text(
                                 'Edit',
                                 style: TextStyle(fontWeight: FontWeight.w600),
@@ -223,6 +229,7 @@ class _offersPageState extends State<offersPage> {
 
   DataRow _buildListItem(BuildContext context, DocumentSnapshot data, int index,
       int start, int end) {
+    bool legit = data['validity'];
     return DataRow(cells: [
       DataCell(data != null ? Text(index.toString()) : const Text("")),
       DataCell(data['title'] != null
@@ -237,6 +244,30 @@ class _offersPageState extends State<offersPage> {
       DataCell(data['offer_type'] != null
           ? Text(data['offer_type'].toString().toUpperCase())
           : const Text("")),
+      DataCell(
+        Center(
+          child: ElevatedButton(
+            onPressed: () async {
+              print(legit);
+              bool temp = legit;
+              temp = !temp;
+              print(temp);
+
+              await FirebaseFirestore.instance
+                  .collection('product_details')
+                  .doc(globalOfferId)
+                  .collection('offers')
+                  .doc(data['id'])
+                  .update({'validity': temp})
+                  .whenComplete(() => print("Legitimate toggled"))
+                  .catchError((e) => print(e));
+            },
+            child: Text(legit ? "Enable" : "Disable"),
+            style: ElevatedButton.styleFrom(
+                primary: legit ? Colors.green : Colors.red),
+          ),
+        ),
+      ),
       DataCell(const Text(""), showEditIcon: true, onTap: () {
         Navigator.push(
             context,
@@ -248,6 +279,7 @@ class _offersPageState extends State<offersPage> {
                       description: data['description'],
                       offer: data['offer'],
                       offer_type: data['offer_type'],
+                      rules: data['rules'],
                     )));
       }),
       DataCell(const Icon(Icons.delete), onTap: () {
@@ -329,7 +361,8 @@ class _addboxxState extends State<addboxx> {
   final TextEditingController _offer = TextEditingController();
   final TextEditingController _description = TextEditingController();
   final TextEditingController _offer_type = TextEditingController();
-
+  final TextEditingController _rules = TextEditingController();
+  var id1;
   @override
   void initState() {
     // TODO: implement initState
@@ -338,6 +371,13 @@ class _addboxxState extends State<addboxx> {
         .doc(widget.id)
         .collection('offers');
     super.initState();
+
+    id1 = FirebaseFirestore.instance
+        .collection('product_details')
+        .doc(widget.id)
+        .collection('offers')
+        .doc()
+        .id;
   }
 
   @override
@@ -365,33 +405,35 @@ class _addboxxState extends State<addboxx> {
                   hinttext: "Offer Type", addcontroller: _offer_type),
               customTextField(
                   hinttext: 'Description', addcontroller: _description),
-              SizedBox(
+              customTextField(hinttext: 'Rules', addcontroller: _rules),
+              const SizedBox(
                 height: 20,
               ),
               Text(
-                offersdescription.toString(),
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                offersRules.toString(),
+                style:
+                    const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
               Row(
                 children: [
                   ElevatedButton(
                     onPressed: () {
-                      offersdescription.add(_description.text);
+                      offersRules.add(_rules.text);
                       setState(() {
-                        _description.text = "";
+                        _rules.text = "";
                       });
                     },
-                    child: Text("Add Description"),
+                    child: const Text("Add Rules"),
                   ),
-                  SizedBox(width: 20),
+                  const SizedBox(width: 20),
                   ElevatedButton(
                     onPressed: () {
-                      offersdescription.removeLast();
+                      offersRules.removeLast();
                       setState(() {
-                        _description.text = "";
+                        _rules.text = "";
                       });
                     },
-                    child: Text("Remove Description"),
+                    child: const Text("Remove Rules"),
                   ),
                 ],
               ),
@@ -402,13 +444,16 @@ class _addboxxState extends State<addboxx> {
                         .collection('product_details')
                         .doc(widget.id)
                         .collection('offers')
-                        .doc()
+                        .doc(id1)
                         .set(
                       {
                         'title': _title.text,
-                        'description': offersdescription,
+                        'description': _description.text,
                         'offer': _offer.text,
                         'offer_type': _offer_type.text,
+                        'rules': offersRules,
+                        'validity': false,
+                        'id': id1,
                       },
                     );
 
@@ -417,7 +462,7 @@ class _addboxxState extends State<addboxx> {
                   child: const Text('Done'),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               ElevatedButton(
@@ -437,9 +482,10 @@ class OffersEditBox extends StatefulWidget {
   var title;
   var offer_type;
   var offer;
-  List description;
+  var description;
   var id;
   var gym_id;
+  final List rules;
 
   OffersEditBox(
       {Key? key,
@@ -448,7 +494,8 @@ class OffersEditBox extends StatefulWidget {
       required this.offer,
       required this.offer_type,
       required this.id,
-      required this.gym_id})
+      required this.gym_id,
+      required this.rules})
       : super(key: key);
 
   @override
@@ -461,7 +508,8 @@ class _OffersEditBoxState extends State<OffersEditBox> {
   final TextEditingController _description = TextEditingController();
   final TextEditingController _offer = TextEditingController();
   final TextEditingController _offer_type = TextEditingController();
-  List<dynamic> rs = [];
+  final TextEditingController _rules = TextEditingController();
+  List<dynamic> rules = [];
   @override
   void initState() {
     // TODO: implement initState
@@ -472,7 +520,8 @@ class _OffersEditBoxState extends State<OffersEditBox> {
     _title.text = widget.title;
     _offer_type.text = widget.offer_type;
     _offer.text = widget.offer;
-    rs = widget.description;
+    _description.text = widget.description;
+    rules = widget.rules;
 
     super.initState();
   }
@@ -496,33 +545,34 @@ class _OffersEditBoxState extends State<OffersEditBox> {
             customTextField(hinttext: 'Offer Type', addcontroller: _offer_type),
             customTextField(
                 hinttext: 'Description', addcontroller: _description),
-            SizedBox(
+            customTextField(hinttext: 'Rules', addcontroller: _rules),
+            const SizedBox(
               height: 20,
             ),
             Text(
-              rs.toString(),
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              rules.toString(),
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             Row(
               children: [
                 ElevatedButton(
                   onPressed: () {
-                    rs.add(_description.text);
+                    rules.add(_rules.text);
                     setState(() {
                       _description.text = "";
                     });
                   },
-                  child: Text("Add Description"),
+                  child: const Text("Add Rules"),
                 ),
-                SizedBox(width: 20),
+                const SizedBox(width: 20),
                 ElevatedButton(
                   onPressed: () {
-                    rs.removeLast();
+                    rules.removeLast();
                     setState(() {
                       _description.text = "";
                     });
                   },
-                  child: Text("Remove Description"),
+                  child: const Text("Remove Rules"),
                 ),
               ],
             ),
@@ -542,9 +592,10 @@ class _OffersEditBoxState extends State<OffersEditBox> {
                         .doc(widget.id);
                     Map<String, dynamic> data = <String, dynamic>{
                       'title': _title.text,
-                      'description': rs,
+                      'description': _description.text,
                       'offer': _offer.text,
                       'offer_type': _offer_type.text,
+                      'rules': rules,
                     };
                     await documentReference
                         .update(data)
