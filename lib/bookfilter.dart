@@ -63,6 +63,8 @@ class _BookingDetails1State extends State<BookingDetails1> {
                           Get.to(const addbookings()); //showAddbox,
                         },
                         child: const Text('Add Booking')),
+// <<<<<<< HEAD
+// =======
                   ),
                   const SizedBox(height: 20),
                   Column(
@@ -509,6 +511,7 @@ class _BookingDetails1State extends State<BookingDetails1> {
 
     snapshot.forEach((element) {
       var x = element['booking_date'].toDate();
+// <<<<<<< HEAD
       if (x.isAfter(startDate) && x.isBefore(endDate) ||
           x == startDate ||
           x == endDate) {
@@ -516,6 +519,9 @@ class _BookingDetails1State extends State<BookingDetails1> {
           d.add(element);
         }
       }
+      // print('/////////////////DDDDDDDDDDDDDDDDDDDD???????????????');
+      // print(d);
+      // >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
     });
     return d
         .map((data) => _buildListItem(context, data, s, start, end))
@@ -529,165 +535,115 @@ class _BookingDetails1State extends State<BookingDetails1> {
     bool bookingAccepted = data['booking_accepted'];
     String statement = "";
 
-    String? durationEnd;
-    try {
-      durationEnd = DateFormat("MMM, dd, yyyy ")
-          .format(data["plan_end_duration"].toDate());
-    } catch (e) {
-      durationEnd = "#ERROR";
-    }
-
-    String? orderDate;
-    try {
-      orderDate = DateFormat("MMM, dd, yyyy hh:mm a")
-          .format(data["order_date"].toDate());
-    } catch (e) {
-      orderDate = "#ERROR";
-    }
-
+    String durationEnd =
+        DateFormat("MMM, dd, yyyy ").format(data["plan_end_duration"].toDate());
+    // "${data['plan_end_duration'].toDate().year}/${data['plan_end_duration'].toDate().month}/${data['plan_end_duration'].toDate().day}";
+    String orderDate =
+        DateFormat("MMM, dd, yyyy hh:mm a").format(data["order_date"].toDate());
     // "${data['order_date'].toDate().year}/${data['order_date'].toDate().month}/${data['order_date'].toDate().day}";
-    String? bookingDate;
-    try {
-      bookingDate =
-          DateFormat("MMM, dd, yyyy ").format(data["booking_date"].toDate());
-    } catch (e) {
-      bookingDate = "#ERROR";
-    }
-
-    String? id;
-    try {
-      id = data["id"];
-    } catch (e) {
-      id = "#ERROR";
-    }
-
-    String? userName;
-    try {
-      userName = data['user_name'];
-    } catch (e) {
-      userName = "#ERROR";
-    }
-
-    String? userId;
-    try {
-      userId = data['userId'];
-    } catch (e) {
-      userId = "#ERROR";
-    }
-
-    String? gym_details;
-    try {
-      gym_details = data["gym_details"];
-    } catch (e) {
-      gym_details = "#ERROR";
-    }
-
-    String? package_type;
-    try {
-      package_type = data['package_type'];
-    } catch (e) {
-      package_type = "#ERROR";
-    }
-
-    String? booking_plan;
-    try {
-      booking_plan = data['booking_plan'];
-    } catch (e) {
-      booking_plan = "#ERROR";
-    }
-
-    String? totalDays;
-    try {
-      totalDays = data['totalDays'];
-    } catch (e) {
-      totalDays = "#ERROR";
-    }
-
-    String? discount;
-    try {
-      discount = data['discount'];
-    } catch (e) {
-      discount = "#ERROR";
-    }
-
-    String? grandTotal;
-    try {
-      grandTotal = data['grand_total'];
-    } catch (e) {
-      grandTotal = "#ERROR";
-    }
-
-    String? bookingStatus;
-    try {
-      bookingStatus = data['booking_status'];
-    } catch (e) {
-      bookingStream = "#ERROR" as CollectionReference<Object?>;
-    }
-
-    String? gymName;
-    try {
-      gymName = data['gym_details']['name'];
-    } catch (e) {
-      gymName = "#ERROR";
-    }
-
-    String? branchName;
-    try {
-      branchName = data['gym_details']['branch'];
-    } catch (e) {
-      branchName = "#ERROR";
-    }
+    String bookingDate =
+        DateFormat("MMM, dd, yyyy ").format(data["booking_date"].toDate());
+    // "${data['booking_date'].toDate().year}/${data['booking_date'].toDate().month}/${data['booking_date'].toDate().day}";
     String x;
     return DataRow(cells: [
-      DataCell(id != null ? Text(id.toString()) : const Text("")),
-      DataCell(userName != null ? Text(userName.toString()) : const Text("")),
-      DataCell(userId != null
-          ? Text(userId.toString().substring(3, 13))
-          : const Text("")),
-      DataCell(gym_details != null
-
-          ? Text(
-              '${gymName.toString().toUpperCase()}|${branchName.toString().toUpperCase()}')
-          : const Text("")),
-      DataCell(package_type != null
-          ? Text(package_type.toString().toUpperCase())
-          : const Text("")),
-      DataCell(booking_plan != null
-          ? Text(booking_plan.toString())
-          : const Text("")),
-      DataCell(totalDays != null ? Text(totalDays.toString()) : const Text("")),
-      DataCell(bookingDate != null ? Text(bookingDate) : const Text("")),
-      DataCell(durationEnd != null ? Text(durationEnd) : const Text("")),
-      DataCell(orderDate != null ? Text(orderDate) : const Text("")),
       DataCell(
-          discount != null ? Text('₹${discount.toString()}') : const Text("")),
-      DataCell(grandTotal != null
-          ? Text('₹${grandTotal.toString()}')
+          data["id"] != null ? Text(data['id'].toString()) : const Text("")),
+
+      // <<<<<<< HEAD
+      // =======
+      //
+      //
+      // >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
+// >>>>>>> ae7259e7ba6e19ed4976a35667cb3a762fe66e2c
+      DataCell(data['user_name'] != null
+          ? Text(data['user_name'].toString())
           : const Text("")),
+      DataCell(data['userId'] != null
+          ? Text(data['userId'].toString().substring(3, 13))
+          : const Text("")),
+      DataCell(data["gym_details"] != null
+          ? Text(
+              '${data['gym_details']['name'].toString().toUpperCase()}|${data['gym_details']['branch'].toString().toUpperCase()}')
+          : const Text("")),
+
+      DataCell(data['package_type'] != null
+          ? Text(data['package_type'].toString().toUpperCase())
+          : const Text("")),
+      DataCell(data['booking_plan'] != null
+          ? Text(data['booking_plan'].toString())
+          : const Text("")),
+      DataCell(data['totalDays'] != null
+          ? Text(data['totalDays'].toString())
+          : const Text("")),
+
+      // DataCell(data['order_date'] != null ? Text(orderDate) : const Text("")),
+      // =======
+      DataCell(
+          data['booking_date'] != null ? Text(bookingDate) : const Text("")),
+
+      // >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
+// >>>>>>> ae7259e7ba6e19ed4976a35667cb3a762fe66e2c
+      DataCell(data['plan_end_duration'] != null
+          ? Text(durationEnd)
+          : const Text("")),
+      DataCell(data['order_date'] != null ? Text(orderDate) : const Text("")),
+      DataCell(data['discount'] != null
+          ? Text('₹${data['discount'].toString()}')
+          : const Text("")),
+      DataCell(data['grand_total'] != null
+          ? Text('₹${data['grand_total'].toString()}')
+          : const Text("")),
+      // DataCell(Center(
+      //   child: ElevatedButton(
+      //     onPressed: () async {
+      //       bool temp = paymentDoneBool;
+      //       temp = !temp;
+      //       DocumentReference documentReference = FirebaseFirestore.instance
+      //           .collection('bookings')
+      //           .doc(bookingId);
+      //       await documentReference
+      //           .update({'payment_done': temp})
+      //           .whenComplete(() => print("Payment done updated"))
+      //           .catchError((e) => print(e));
+      //     },
+      //     child: Text(x = paymentDoneBool ? 'YES' : 'NO'),
+      //     style: ElevatedButton.styleFrom(
+      //         primary: paymentDoneBool ? Colors.green : Colors.red),
+      //   ),
+      // )),
+      // DataCell(
+      //     data['booking_date'] != null ? Text(bookingDate) : const Text("")),
+
       DataCell(
         Center(
-          child: Container(
-            child: Row(
-              children: [
-                DropdownButton(
-                    hint: Text(bookingStatus.toString()),
-                    value: bookingStatus.toString(),
-                    items: const [
-                      DropdownMenuItem(
-                        child: Text("Active"),
-                        value: "active",
-                      ),
-                      DropdownMenuItem(
-                        child: Text("Upcoming"),
-                        value: "upcoming",
-                      ),
-                      DropdownMenuItem(
-                          child: Text("Completed"), value: "completed"),
-                      DropdownMenuItem(
-                          child: Text("Cancelled"), value: "cancelled"),
-                    ],
-                    onChanged: (value) async {
-
+          child: Row(
+            children: [
+              DropdownButton(
+                  hint: Text(data['booking_status'].toString()),
+                  value: data['booking_status'].toString(),
+                  items: const [
+                    DropdownMenuItem(
+                      child: Text("Active"),
+                      value: "active",
+                    ),
+                    DropdownMenuItem(
+                      child: Text("Upcoming"),
+                      value: "upcoming",
+                    ),
+                    DropdownMenuItem(
+                        child: Text("Completed"), value: "completed"),
+                    DropdownMenuItem(
+                        child: Text("Cancelled"), value: "cancelled"),
+                  ],
+                  onChanged: (value) async {
+                    setState(() {
+                      selectedValue = value as String;
+                    });
+                    await FirebaseFirestore.instance
+                        .collection('bookings')
+                        .doc(bookingId)
+                        .update({'booking_status': value});
+                    if (value == "upcoming") {
                       setState(() {
                         statement = "Upcoming Booking";
                       });
@@ -736,6 +692,23 @@ class _BookingDetails1State extends State<BookingDetails1> {
           ),
         ),
       ),
+// <<<<<<< HEAD
+// <<<<<<< HEAD
+// =======
+// <<<<<<< nihal_new
+// >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
+// =======
+//     <<<<<<< HEAD
+//     =======
+// // <<<<<<< nihal_new
+//     >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
+// >>>>>>> ae7259e7ba6e19ed4976a35667cb3a762fe66e2c
+      // DataCell(data['booking_plan'] != null
+      //     ? Text(data['booking_plan'].toString())
+      //     : const Text("")),
+      // DataCell(data['grand_total'] != null
+      //     ? Text('₹${data['grand_total'].toString()}')
+      //     : const Text("")),
       DataCell(const Text(""), showEditIcon: true, onTap: () {
         Get.to(() => ProductEditBox(
               vendorname: data['gym_details']['name'],
@@ -1257,8 +1230,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                     padding: const EdgeInsets.all(20),
                     child: Center(
                       child: Text(
-                        'Booking ID: ${idss}',
-
+                        'Booking ID: $idss',
                         style: const TextStyle(
                             fontFamily: 'poppins',
                             fontWeight: FontWeight.w600,
@@ -1333,7 +1305,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                         children: [
                           const Text(
                             "User ID:",
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 20,
                               fontFamily: 'poppins',
                               fontWeight: FontWeight.w400,
@@ -1542,8 +1514,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                       child: Row(
                         children: [
                           const Text("Booking Plan",
-                              style: const TextStyle(
-
+                              style: TextStyle(
                                 fontSize: 20,
                                 fontFamily: 'poppins',
                                 fontWeight: FontWeight.w400,
@@ -1631,7 +1602,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                         children: [
                           const Text(
                             "Grand Total (₹):",
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 20,
                               fontFamily: 'poppins',
                               fontWeight: FontWeight.w400,
@@ -1662,7 +1633,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                         children: [
                           const Text(
                             'Booking Status:',
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 20,
                               fontFamily: 'poppins',
                               fontWeight: FontWeight.w400,
@@ -1777,7 +1748,6 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                   const SizedBox(
                     height: 20,
                   ),
-
                   Row(
                     children: [
                       const Padding(
@@ -1804,6 +1774,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                       const SizedBox(width: 15),
                     ],
                   ),
+
                   const SizedBox(
                     height: 20,
                   ),
