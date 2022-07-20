@@ -302,6 +302,7 @@ class _BannerPageState extends State<BannerPage> {
           setnavv ? "Activated" : "Deactivated",
           style:
               const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+
         ),
         style: ElevatedButton.styleFrom(
             primary: setnavv ? Colors.green : Colors.red),
@@ -515,6 +516,7 @@ class _naveditState extends State<navedit> {
               primary: setnav ? Colors.green : Colors.red),
         )
       ],
+
     );
   }
 }
@@ -753,7 +755,8 @@ class _EditBoxState extends State<EditBox> {
                               address_con: _addaddress,
                             ),
                             const Center(
-                              child: Icon(
+
+                              child: const Icon(
                                 Icons.location_on_rounded,
                                 size: 40,
                                 color: Colors.black,
@@ -878,6 +881,7 @@ class _editimState extends State<editim> {
                 width: 200,
                 child: Center(
                   child: CircularProgressIndicator(),
+
                 ),
               )
             : SizedBox(

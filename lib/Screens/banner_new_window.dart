@@ -427,7 +427,7 @@ class _navState extends State<nav> {
           style: ElevatedButton.styleFrom(
               primary: ischeckk ? Colors.green : Colors.red),
         )
-      ],
+      ],    
     );
   }
 }
@@ -458,11 +458,23 @@ class _loadimageState extends State<loadimage> {
         InkWell(
           child: const Icon(Icons.camera_alt),
           onTap: () async {
-            setState(() {
-              isloading = true;
-            });
-            var profileImage = await chooseImage();
-            await getUrlImage(profileImage);
+            try {
+              var profileImage = await chooseImage();
+              if (profileImage != null) {
+                setState(() {
+                  isloading = true;
+                });
+              }
+              await getUrlImage(profileImage);
+              setState(() {
+                isloading = false;
+              });
+            } finally {
+              print("++++++++++++++++++");
+              setState(() {
+                isloading = false;
+              });
+            }
             setState(() {
               isloading = false;
             });
@@ -488,7 +500,7 @@ class _loadimageState extends State<loadimage> {
                   : const SizedBox(
                       height: 100,
                       width: 200,
-                      child: Center(child: Text("Please Upload Image")),
+                      child: const Center(child: Text("Please Upload Image")),
                     ),
         ),
       ],
