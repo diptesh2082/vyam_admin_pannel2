@@ -38,7 +38,7 @@ class _BookingDetails1State extends State<BookingDetails1> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Bookings'),
+        title: const Text('Bookings'),
       ),
       body: SafeArea(
 // <<<<<<< HEAD
@@ -63,10 +63,8 @@ class _BookingDetails1State extends State<BookingDetails1> {
                           Get.to(const addbookings()); //showAddbox,
                         },
                         child: const Text('Add Booking')),
-// <<<<<<< HEAD
-// =======
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   Column(
                     children: [
                       Row(
@@ -183,7 +181,7 @@ class _BookingDetails1State extends State<BookingDetails1> {
                   ),
                   Container(
                     alignment: Alignment.topRight,
-                    child: Icon(
+                    child: const Icon(
                       Icons.date_range,
                     ),
                   ),
@@ -326,12 +324,12 @@ class _BookingDetails1State extends State<BookingDetails1> {
                       },
                     ),
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       ElevatedButton(
-                        child: Text("Previous Page"),
+                        child: const Text("Previous Page"),
                         onPressed: () {
                           setState(() {
                             if (start >= 1) page--;
@@ -343,7 +341,7 @@ class _BookingDetails1State extends State<BookingDetails1> {
                           print("Previous Page");
                         },
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 20,
                       ),
                       StreamBuilder<QuerySnapshot>(
@@ -387,7 +385,7 @@ class _BookingDetails1State extends State<BookingDetails1> {
                                           mainAxisAlignment:
                                               MainAxisAlignment.start,
                                           children: [
-                                            SizedBox(
+                                            const SizedBox(
                                               width: 20,
                                             ),
                                             Container(
@@ -398,14 +396,14 @@ class _BookingDetails1State extends State<BookingDetails1> {
                                               width: 20,
                                               child: Text(
                                                 "${index + 1}",
-                                                style: TextStyle(
+                                                style: const TextStyle(
                                                     color: Colors.white,
                                                     fontWeight:
                                                         FontWeight.bold),
                                                 textAlign: TextAlign.center,
                                               ),
                                             ),
-                                            SizedBox(
+                                            const SizedBox(
                                               width: 20,
                                             ),
                                           ],
@@ -425,11 +423,11 @@ class _BookingDetails1State extends State<BookingDetails1> {
                                   }),
                             );
                           }),
-                      SizedBox(
+                      const SizedBox(
                         width: 20,
                       ),
                       ElevatedButton(
-                        child: Text("Next Page"),
+                        child: const Text("Next Page"),
                         onPressed: () {
                           setState(() {
                             if (end <= length) page++;
@@ -511,7 +509,6 @@ class _BookingDetails1State extends State<BookingDetails1> {
 
     snapshot.forEach((element) {
       var x = element['booking_date'].toDate();
-// <<<<<<< HEAD
       if (x.isAfter(startDate) && x.isBefore(endDate) ||
           x == startDate ||
           x == endDate) {
@@ -519,9 +516,6 @@ class _BookingDetails1State extends State<BookingDetails1> {
           d.add(element);
         }
       }
-      // print('/////////////////DDDDDDDDDDDDDDDDDDDD???????????????');
-      // print(d);
-      // >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
     });
     return d
         .map((data) => _buildListItem(context, data, s, start, end))
@@ -535,93 +529,148 @@ class _BookingDetails1State extends State<BookingDetails1> {
     bool bookingAccepted = data['booking_accepted'];
     String statement = "";
 
-    String durationEnd =
-        DateFormat("MMM, dd, yyyy ").format(data["plan_end_duration"].toDate());
-    // "${data['plan_end_duration'].toDate().year}/${data['plan_end_duration'].toDate().month}/${data['plan_end_duration'].toDate().day}";
-    String orderDate =
-        DateFormat("MMM, dd, yyyy hh:mm a").format(data["order_date"].toDate());
+    String? durationEnd;
+    try {
+      durationEnd = DateFormat("MMM, dd, yyyy ")
+          .format(data["plan_end_duration"].toDate());
+    } catch (e) {
+      durationEnd = "#ERROR";
+    }
+
+    String? orderDate;
+    try {
+      orderDate = DateFormat("MMM, dd, yyyy hh:mm a")
+          .format(data["order_date"].toDate());
+    } catch (e) {
+      orderDate = "#ERROR";
+    }
+
     // "${data['order_date'].toDate().year}/${data['order_date'].toDate().month}/${data['order_date'].toDate().day}";
-    String bookingDate =
-        DateFormat("MMM, dd, yyyy ").format(data["booking_date"].toDate());
-    // "${data['booking_date'].toDate().year}/${data['booking_date'].toDate().month}/${data['booking_date'].toDate().day}";
+    String? bookingDate;
+    try {
+      bookingDate =
+          DateFormat("MMM, dd, yyyy ").format(data["booking_date"].toDate());
+    } catch (e) {
+      bookingDate = "#ERROR";
+    }
+
+    String? id;
+    try {
+      id = data["id"];
+    } catch (e) {
+      id = "#ERROR";
+    }
+
+    String? userName;
+    try {
+      userName = data['user_name'];
+    } catch (e) {
+      userName = "#ERROR";
+    }
+
+    String? userId;
+    try {
+      userId = data['userId'];
+    } catch (e) {
+      userId = "#ERROR";
+    }
+
+    String? gym_details;
+    try {
+      gym_details = data["gym_details"];
+    } catch (e) {
+      gym_details = "#ERROR";
+    }
+
+    String? package_type;
+    try {
+      package_type = data['package_type'];
+    } catch (e) {
+      package_type = "#ERROR";
+    }
+
+    String? booking_plan;
+    try {
+      booking_plan = data['booking_plan'];
+    } catch (e) {
+      booking_plan = "#ERROR";
+    }
+
+    String? totalDays;
+    try {
+      totalDays = data['totalDays'];
+    } catch (e) {
+      totalDays = "#ERROR";
+    }
+
+    String? discount;
+    try {
+      discount = data['discount'];
+    } catch (e) {
+      discount = "#ERROR";
+    }
+
+    String? grandTotal;
+    try {
+      grandTotal = data['grand_total'];
+    } catch (e) {
+      grandTotal = "#ERROR";
+    }
+
+    String? bookingStatus;
+    try {
+      bookingStatus = data['booking_status'];
+    } catch (e) {
+      bookingStream = "#ERROR" as CollectionReference<Object?>;
+    }
+
+    String? gymName;
+    try {
+      gymName = data['gym_details']['name'];
+    } catch (e) {
+      gymName = "#ERROR";
+    }
+
+    String? branchName;
+    try {
+      branchName = data['gym_details']['branch'];
+    } catch (e) {
+      branchName = "#ERROR";
+    }
     String x;
     return DataRow(cells: [
-      DataCell(
-          data["id"] != null ? Text(data['id'].toString()) : const Text("")),
-
-      // <<<<<<< HEAD
-      // =======
-      //
-      //
-      // >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
-// >>>>>>> ae7259e7ba6e19ed4976a35667cb3a762fe66e2c
-      DataCell(data['user_name'] != null
-          ? Text(data['user_name'].toString())
+      DataCell(id != null ? Text(id.toString()) : const Text("")),
+      DataCell(userName != null ? Text(userName.toString()) : const Text("")),
+      DataCell(userId != null
+          ? Text(userId.toString().substring(3, 13))
           : const Text("")),
-      DataCell(data['userId'] != null
-          ? Text(data['userId'].toString().substring(3, 13))
-          : Text("")),
-      DataCell(data["gym_details"] != null
+      DataCell(gym_details != null
           ? Text(
-              '${data['gym_details']['name'].toString().toUpperCase()}|${data['gym_details']['branch'].toString().toUpperCase()}')
+              '${gymName.toString().toUpperCase()}|${branchName.toString().toUpperCase()}')
           : const Text("")),
-
-      DataCell(data['package_type'] != null
-          ? Text(data['package_type'].toString().toUpperCase())
+      DataCell(package_type != null
+          ? Text(package_type.toString().toUpperCase())
           : const Text("")),
-      DataCell(data['booking_plan'] != null
-          ? Text(data['booking_plan'].toString())
+      DataCell(booking_plan != null
+          ? Text(booking_plan.toString())
           : const Text("")),
-      DataCell(data['totalDays'] != null
-          ? Text(data['totalDays'].toString())
-          : const Text("")),
-
-      // DataCell(data['order_date'] != null ? Text(orderDate) : const Text("")),
-      // =======
+      DataCell(totalDays != null ? Text(totalDays.toString()) : const Text("")),
+      DataCell(bookingDate != null ? Text(bookingDate) : const Text("")),
+      DataCell(durationEnd != null ? Text(durationEnd) : const Text("")),
+      DataCell(orderDate != null ? Text(orderDate) : const Text("")),
       DataCell(
-          data['booking_date'] != null ? Text(bookingDate) : const Text("")),
-
-      // >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
-// >>>>>>> ae7259e7ba6e19ed4976a35667cb3a762fe66e2c
-      DataCell(data['plan_end_duration'] != null
-          ? Text(durationEnd)
+          discount != null ? Text('₹${discount.toString()}') : const Text("")),
+      DataCell(grandTotal != null
+          ? Text('₹${grandTotal.toString()}')
           : const Text("")),
-      DataCell(data['order_date'] != null ? Text(orderDate) : const Text("")),
-      DataCell(data['discount'] != null
-          ? Text('₹${data['discount'].toString()}')
-          : const Text("")),
-      DataCell(data['grand_total'] != null
-          ? Text('₹${data['grand_total'].toString()}')
-          : const Text("")),
-      // DataCell(Center(
-      //   child: ElevatedButton(
-      //     onPressed: () async {
-      //       bool temp = paymentDoneBool;
-      //       temp = !temp;
-      //       DocumentReference documentReference = FirebaseFirestore.instance
-      //           .collection('bookings')
-      //           .doc(bookingId);
-      //       await documentReference
-      //           .update({'payment_done': temp})
-      //           .whenComplete(() => print("Payment done updated"))
-      //           .catchError((e) => print(e));
-      //     },
-      //     child: Text(x = paymentDoneBool ? 'YES' : 'NO'),
-      //     style: ElevatedButton.styleFrom(
-      //         primary: paymentDoneBool ? Colors.green : Colors.red),
-      //   ),
-      // )),
-      // DataCell(
-      //     data['booking_date'] != null ? Text(bookingDate) : const Text("")),
-
       DataCell(
         Center(
           child: Container(
             child: Row(
               children: [
                 DropdownButton(
-                    hint: Text(data['booking_status'].toString()),
-                    value: data['booking_status'].toString(),
+                    hint: Text(bookingStatus.toString()),
+                    value: bookingStatus.toString(),
                     items: const [
                       DropdownMenuItem(
                         child: Text("Active"),
@@ -694,23 +743,6 @@ class _BookingDetails1State extends State<BookingDetails1> {
           ),
         ),
       ),
-// <<<<<<< HEAD
-// <<<<<<< HEAD
-// =======
-// <<<<<<< nihal_new
-// >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
-// =======
-//     <<<<<<< HEAD
-//     =======
-// // <<<<<<< nihal_new
-//     >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
-// >>>>>>> ae7259e7ba6e19ed4976a35667cb3a762fe66e2c
-      // DataCell(data['booking_plan'] != null
-      //     ? Text(data['booking_plan'].toString())
-      //     : const Text("")),
-      // DataCell(data['grand_total'] != null
-      //     ? Text('₹${data['grand_total'].toString()}')
-      //     : const Text("")),
       DataCell(const Text(""), showEditIcon: true, onTap: () {
         Get.to(() => ProductEditBox(
               vendorname: data['gym_details']['name'],
@@ -1218,10 +1250,10 @@ class _ProductEditBoxState extends State<ProductEditBox> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text('Edit Booking'),
+        title: const Text('Edit Booking'),
       ),
       body: Container(
-        margin: EdgeInsets.all(15.0),
+        margin: const EdgeInsets.all(15.0),
         child: Center(
           child: SizedBox(
             child: SingleChildScrollView(
@@ -1229,11 +1261,11 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    padding: EdgeInsets.all(20),
+                    padding: const EdgeInsets.all(20),
                     child: Center(
                       child: Text(
                         'Booking ID: ${idss}',
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontFamily: 'poppins',
                             fontWeight: FontWeight.w600,
                             fontSize: 20),
@@ -1275,7 +1307,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                       padding: const EdgeInsets.all(8.0),
                       child: Row(
                         children: [
-                          Text(
+                          const Text(
                             "User Name: ",
                             style: TextStyle(
                               fontSize: 20,
@@ -1283,11 +1315,11 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                               fontWeight: FontWeight.w400,
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 20,
                           ),
                           Text(_addusername.text,
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 15)),
                         ],
                       ),
@@ -1297,7 +1329,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   Container(
@@ -1305,19 +1337,19 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                       padding: const EdgeInsets.all(8.0),
                       child: Row(
                         children: [
-                          Text(
+                          const Text(
                             "User ID:",
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 20,
                               fontFamily: 'poppins',
                               fontWeight: FontWeight.w400,
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 20,
                           ),
                           Text(widget.userid,
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 15)),
                         ],
                       ),
@@ -1327,7 +1359,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   Container(
@@ -1335,7 +1367,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                       padding: const EdgeInsets.all(8.0),
                       child: Row(
                         children: [
-                          Text(
+                          const Text(
                             "Gym Name:",
                             style: TextStyle(
                               fontSize: 20,
@@ -1343,11 +1375,11 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                               fontWeight: FontWeight.w400,
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 20,
                           ),
                           Text(widget.gymname,
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 15)),
                         ],
                       ),
@@ -1357,7 +1389,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   Container(
@@ -1365,7 +1397,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                       padding: const EdgeInsets.all(8.0),
                       child: Row(
                         children: [
-                          Text(
+                          const Text(
                             "Gym Address:",
                             style: TextStyle(
                               fontSize: 20,
@@ -1373,11 +1405,11 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                               fontWeight: FontWeight.w400,
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 20,
                           ),
                           Text(_addgymaddress.text,
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 15)),
                         ],
                       ),
@@ -1387,7 +1419,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   Container(
@@ -1395,7 +1427,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                       padding: const EdgeInsets.all(8.0),
                       child: Row(
                         children: [
-                          Text(
+                          const Text(
                             "Total Days:",
                             style: TextStyle(
                               fontSize: 20,
@@ -1403,11 +1435,11 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                               fontWeight: FontWeight.w400,
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 20,
                           ),
                           Text(_addtotaldays.text,
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 15)),
                         ],
                       ),
@@ -1447,15 +1479,15 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                   //     borderRadius: BorderRadius.circular(10),
                   //   ),
                   // ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   Container(
                     child: Padding(
-                      padding: EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.all(8.0),
                       child: Row(
                         children: [
-                          Text(
+                          const Text(
                             'Payment Type:',
                             style: TextStyle(
                               fontSize: 20,
@@ -1463,11 +1495,11 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                               fontWeight: FontWeight.w400,
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 20,
                           ),
                           Text(widget.payment_method.toString().toUpperCase(),
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 15)),
                         ],
                       ),
@@ -1477,7 +1509,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   Container(
@@ -1485,7 +1517,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                       padding: const EdgeInsets.all(8.0),
                       child: Row(
                         children: [
-                          Text(
+                          const Text(
                             "Package Type:",
                             style: TextStyle(
                               fontSize: 20,
@@ -1493,11 +1525,11 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                               fontWeight: FontWeight.w400,
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 20,
                           ),
                           Text(_addpackagetype.text,
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 15)),
                         ],
                       ),
@@ -1507,7 +1539,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   Container(
@@ -1515,17 +1547,17 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                       padding: const EdgeInsets.all(8.0),
                       child: Row(
                         children: [
-                          Text("Booking Plan",
-                              style: TextStyle(
+                          const Text("Booking Plan",
+                              style: const TextStyle(
                                 fontSize: 20,
                                 fontFamily: 'poppins',
                                 fontWeight: FontWeight.w400,
                               )),
-                          SizedBox(
+                          const SizedBox(
                             width: 20,
                           ),
                           Text(_addbookingplan.text,
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 15)),
                         ],
                       ),
@@ -1536,7 +1568,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                     ),
                   ),
 
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   Container(
@@ -1544,17 +1576,17 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                       padding: const EdgeInsets.all(8.0),
                       child: Row(
                         children: [
-                          Text("Booking Price (₹)",
+                          const Text("Booking Price (₹)",
                               style: TextStyle(
                                 fontSize: 20,
                                 fontFamily: 'poppins',
                                 fontWeight: FontWeight.w400,
                               )),
-                          SizedBox(
+                          const SizedBox(
                             width: 20,
                           ),
                           Text(_addbookingprice.text,
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 15)),
                         ],
                       ),
@@ -1564,7 +1596,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   Container(
@@ -1572,7 +1604,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                       padding: const EdgeInsets.all(8.0),
                       child: Row(
                         children: [
-                          Text(
+                          const Text(
                             "Discount (₹):",
                             style: TextStyle(
                               fontSize: 20,
@@ -1580,11 +1612,11 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                               fontWeight: FontWeight.w400,
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 20,
                           ),
                           Text(_adddiscount.text,
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 15)),
                         ],
                       ),
@@ -1594,7 +1626,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   Container(
@@ -1602,19 +1634,19 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                       padding: const EdgeInsets.all(8.0),
                       child: Row(
                         children: [
-                          Text(
+                          const Text(
                             "Grand Total (₹):",
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 20,
                               fontFamily: 'poppins',
                               fontWeight: FontWeight.w400,
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 20,
                           ),
                           Text(_addgrandtotal.text,
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 15)),
                         ],
                       ),
@@ -1625,23 +1657,23 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                     ),
                   ),
 
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   Container(
                     child: Padding(
-                      padding: EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.all(8.0),
                       child: Row(
                         children: [
-                          Text(
+                          const Text(
                             'Booking Status:',
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 20,
                               fontFamily: 'poppins',
                               fontWeight: FontWeight.w400,
                             ),
                           ),
-                          SizedBox(width: 20),
+                          const SizedBox(width: 20),
                           DropdownButton(
                             value: dropdownstatusvalue,
                             icon: const Icon(Icons.keyboard_arrow_down),
@@ -1688,7 +1720,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                     ),
                   ),
 
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   // CustomTextField(
@@ -1729,13 +1761,13 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                                 fontWeight: FontWeight.bold,
                               )),
                         ),
-                        SizedBox(width: 40),
+                        const SizedBox(width: 40),
                         Text(
                           ots.toString(),
-                          style: TextStyle(
+                          style: const TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 20),
                         ),
-                        SizedBox(width: 40),
+                        const SizedBox(width: 40),
                         // ElevatedButton(
                         //     child: const Text('Edit'),
                         //     onPressed: () {
@@ -1743,11 +1775,11 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                         //       pickorderDateTime(context);
                         //       print(datetimee2);
                         //     }),
-                        SizedBox(width: 20),
+                        const SizedBox(width: 20),
                       ],
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   Container(
@@ -1761,10 +1793,10 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                                 fontWeight: FontWeight.bold,
                               )),
                         ),
-                        SizedBox(width: 40),
+                        const SizedBox(width: 40),
                         Text(
                             DateFormat.yMMMd().format(bookingdate!).toString()),
-                        SizedBox(width: 40),
+                        const SizedBox(width: 40),
                         ElevatedButton(
                             child: const Text('Edit'),
                             onPressed: () {
@@ -1780,7 +1812,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                     ),
                   ),
 
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   Container(
@@ -1794,20 +1826,20 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                                 fontWeight: FontWeight.bold,
                               )),
                         ),
-                        SizedBox(width: 40),
+                        const SizedBox(width: 40),
                         Text(DateFormat.yMMMd().format(plandate!).toString()),
-                        SizedBox(width: 40),
+                        const SizedBox(width: 40),
                         ElevatedButton(
                             child: const Text('Edit'),
                             onPressed: () {
                               print(plandate);
                               pickplanDateTime(context);
                             }),
-                        SizedBox(width: 15),
+                        const SizedBox(width: 15),
                       ],
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
 
@@ -2071,7 +2103,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
   }
 
   Future pickorderTime(BuildContext context) async {
-    final intialTime = TimeOfDay(hour: 9, minute: 0);
+    final intialTime = const TimeOfDay(hour: 9, minute: 0);
     final newTime =
         await showTimePicker(context: context, initialTime: time ?? intialTime);
 

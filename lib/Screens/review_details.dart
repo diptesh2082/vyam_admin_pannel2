@@ -141,19 +141,6 @@ class _ReviewInfoState extends State<ReviewInfo> {
       DataCell(data != null ? Text(data['rating'] ?? "") : Text("")),
       DataCell(data != null ? Text(data['title'] ?? "") : Text("")),
       DataCell(data != null ? Text(data['user_id'] ?? "") : Text("")),
-      // DataCell(const Text(""), showEditIcon: true, onTap: () {
-      //   Navigator.push(
-      //       context,
-      //       MaterialPageRoute(
-      //         builder: (context) => EditBox(
-      //           reviewid: data['review_id'],
-      //           userid: data['user_id'],
-      //           title: data['title'],
-      //           experience: data['experience'],
-      //           rating: data['rating'],
-      //         ),
-      //       ));
-      // }),
       DataCell(
         Icon(Icons.delete),
       ),

@@ -32,7 +32,7 @@ class _appDetailsState extends State<appDetails> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(
+          const SizedBox(
             height: 10.0,
           ),
           StreamBuilder<DocumentSnapshot>(
@@ -50,8 +50,8 @@ class _appDetailsState extends State<appDetails> {
                   TextButton(
                       child: Container(
                         color: Colors.white54,
-                        padding: EdgeInsets.only(right: 200),
-                        child: Text(
+                        padding: const EdgeInsets.only(right: 200),
+                        child: const Text(
                           "Contact",
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
@@ -92,8 +92,8 @@ class _appDetailsState extends State<appDetails> {
                   TextButton(
                       child: Container(
                         color: Colors.white54,
-                        padding: EdgeInsets.only(right: 200),
-                        child: Text(
+                        padding: const EdgeInsets.only(right: 200),
+                        child: const Text(
                           "About",
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
@@ -130,8 +130,8 @@ class _appDetailsState extends State<appDetails> {
                   TextButton(
                       child: Container(
                         color: Colors.white54,
-                        padding: EdgeInsets.only(right: 200),
-                        child: Text(
+                        padding: const EdgeInsets.only(right: 200),
+                        child: const Text(
                           "Terms And Conditions",
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
@@ -168,7 +168,7 @@ class _appDetailsState extends State<appDetails> {
                   TextButton(
                       child: Container(
                         color: Colors.white54,
-                        padding: EdgeInsets.only(right: 200),
+                        padding: const EdgeInsets.only(right: 200),
                         child: const Text(
                           "Policy",
                           style: TextStyle(
@@ -235,7 +235,7 @@ class _ContactUsState extends State<ContactUs> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Contact Us"),
+        title: const Text("Contact Us"),
       ),
       body: SafeArea(
         child: Container(
@@ -270,7 +270,7 @@ class _ContactUsState extends State<ContactUs> {
                         child: ElevatedButton(
                           onPressed: () async {
                             print("/////");
-                            print('${widget.email}');
+                            print(widget.email);
 
                             DocumentReference documentReference =
                                 FirebaseFirestore.instance
@@ -334,12 +334,12 @@ class _AboutUsState extends State<AboutUs> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("About Us"),
+        title: const Text("About Us"),
       ),
       body: Column(
         children: [
           Container(
-            margin: EdgeInsets.all(8),
+            margin: const EdgeInsets.all(8),
             child: MarkdownTextInput(
               (String value) => setState(() => descriptionn = value),
               descriptionn,
@@ -354,12 +354,8 @@ class _AboutUsState extends State<AboutUs> {
               child: ElevatedButton(
                 onPressed: () async {
                   print("/////");
-                  print('${widget.about}');
+                  print(widget.about);
 
-                  DocumentReference documentReference = FirebaseFirestore
-                      .instance
-                      .collection('app_details')
-                      .doc('about_us');
                   Map<String, dynamic> data = {
                     'about': descriptionn,
                   };
@@ -410,12 +406,12 @@ class _TandC extends State<TandC> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Terms And Conditions"),
+        title: const Text("Terms And Conditions"),
       ),
       body: Column(
         children: [
           Container(
-            margin: EdgeInsets.all(8),
+            margin: const EdgeInsets.all(8),
             child: MarkdownTextInput(
               (String value) => setState(() => descriptionn = value),
               descriptionn,
@@ -430,12 +426,8 @@ class _TandC extends State<TandC> {
               child: ElevatedButton(
                 onPressed: () async {
                   print("/////");
-                  print('${widget.tnc}');
+                  print(widget.tnc);
 
-                  DocumentReference documentReference = FirebaseFirestore
-                      .instance
-                      .collection('app_details')
-                      .doc('t&c');
                   Map<String, dynamic> data = {
                     't&c': descriptionn,
                   };
@@ -487,12 +479,12 @@ class _PrivacyPolicy extends State<PrivacyPolicy> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Privacy Policy"),
+        title: const Text("Privacy Policy"),
       ),
       body: Column(
         children: [
           Container(
-            margin: EdgeInsets.all(8),
+            margin: const EdgeInsets.all(8),
             child: MarkdownTextInput(
               (String value) => setState(() => descriptionn = value),
               descriptionn,
@@ -507,12 +499,8 @@ class _PrivacyPolicy extends State<PrivacyPolicy> {
               child: ElevatedButton(
                 onPressed: () async {
                   print("/////");
-                  print('${widget.policy}');
+                  print(widget.policy);
 
-                  DocumentReference documentReference = FirebaseFirestore
-                      .instance
-                      .collection('app_details')
-                      .doc('privacy_policy');
                   Map<String, dynamic> data = {
                     'policy': descriptionn,
                   };

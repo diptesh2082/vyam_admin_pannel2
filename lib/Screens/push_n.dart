@@ -30,12 +30,6 @@ class _PushState extends State<Push> {
     super.initState();
   }
 
-  // var id = FirebaseFirestore.instance
-  //     .collection('push_notifications')
-  //     .doc()
-  //     .id
-  //     .toString();
-
   var millis, dt, d12, image;
 
   date() {
@@ -221,24 +215,48 @@ class _PushState extends State<Push> {
   DataRow _buildListItem(BuildContext context, DocumentSnapshot data, int index,
       int start, int end) {
     String pushIdData = data.id;
+
+    String? title;
+    try {
+      title = data['title'];
+    } catch (e) {
+      title = "#ERROR";
+    }
+
+    String? definition;
+    try {
+      definition = data['definition'];
+    } catch (e) {
+      definition = "#ERROR";
+    }
+
+    String? timestamp;
+    try {
+      timestamp = data['timestamp'];
+    } catch (e) {
+      timestamp = "#ERROR";
+    }
+
+    String? image;
+    try {
+      image = data['image'];
+    } catch (e) {
+      image = "#ERROR";
+    }
+
     return DataRow(cells: [
-      DataCell(
-          data['title'] != null ? Text(data['title'] ?? "") : const Text("")),
-      DataCell(data['definition'] != null
-          ? Text(data['definition'] ?? "")
-          : const Text("")),
+      DataCell(title != null ? Text(title.toString()) : const Text("")),
+      DataCell(definition != null ? Text(definition) : const Text("")),
       // DataCell(data['id'] != null ? Text(data['id'] ?? "") : const Text("")),
 
-      DataCell(data['timestamp'] != null
-          ? Text(data['timestamp'] ?? "")
-          : const Text("")),
+      DataCell(timestamp != null ? Text(timestamp.toString()) : const Text("")),
       DataCell(const Text(""), showEditIcon: true, onTap: () {
         Get.to(() => ProductEditBox(
-            title: data['title'],
-            definition: data['definition'],
+            title: title.toString(),
+            definition: definition.toString(),
             id: data.id,
-            timestamp: data['timestamp'],
-            image: data['image'].toString()));
+            timestamp: timestamp.toString(),
+            image: image.toString()));
       }),
       DataCell(const Icon(Icons.delete), onTap: () {
         // deleteMethod(stream: pushStream, uniqueDocId: pushIdData);

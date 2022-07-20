@@ -28,7 +28,7 @@ class _CitiesScreenState extends State<CitiesScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Cities"),
+        title: const Text("Cities"),
       ),
       body: SafeArea(
         child: Container(
@@ -49,7 +49,7 @@ class _CitiesScreenState extends State<CitiesScreen> {
                     onPressed: () {
                       Get.to(() => const citiesAdd());
                     },
-                    child: Text('Add Cities'),
+                    child: const Text('Add Cities'),
                   ),
                 ),
                 Center(
@@ -181,17 +181,33 @@ class _CitiesScreenState extends State<CitiesScreen> {
 
   DataRow _buildListItem(BuildContext context, DocumentSnapshot data, int index,
       int start, int end) {
-    String cityId = data['id'];
-    bool status = data['Status'];
+    bool status = false;
+    try {
+      status = data['Status'];
+    } catch (e) {
+      status = false;
+    }
+
+    String address;
+    try {
+      address = data['Address'];
+    } catch (e) {
+      address = "#ERROR";
+    }
+
+    String cityId;
+    try {
+      cityId = data['id'];
+    } catch (e) {
+      cityId = "#ERROR";
+    }
     return DataRow(cells: [
       DataCell(data != null ? Text(index.toString()) : const Text("")),
       DataCell(
-        data['Address'] != null ? Text(data['Address'] ?? "") : const Text(""),
+        address != null ? Text(address.toString()) : const Text(""),
       ),
       DataCell(
-        data['Status'] != null
-            ? Text(data['Status'].toString())
-            : const Text(""),
+        status != null ? Text(status.toString()) : const Text(""),
       ),
       // DataCell(
       //   data['id'] != null ? Text(data['id']) : const Text(""),
@@ -200,10 +216,8 @@ class _CitiesScreenState extends State<CitiesScreen> {
         const Text(''),
         showEditIcon: true,
         onTap: () {
-          Get.to(() => ProductEditBox(
-              address: data['Address'],
-              status: data['Status'],
-              cityId: data['id']));
+          Get.to(() =>
+              ProductEditBox(address: address, status: status, cityId: cityId));
         },
       ),
       DataCell(const Icon(Icons.delete), onTap: () {
@@ -373,7 +387,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
     return Scaffold(
       backgroundColor: Colors.white10,
       appBar: AppBar(
-        title: Text('Edit Cities'),
+        title: const Text('Edit Cities'),
       ),
       body: Center(
         child: SizedBox(
@@ -390,12 +404,12 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                       fontWeight: FontWeight.w600,
                       fontSize: 14),
                 ),
-                SizedBox(width: 15),
+                const SizedBox(width: 15),
 // <<<<<<< HEAD
 //                 Text('Address'),
 // =======
 //
-                Text('Address'),
+                const Text('Address'),
 
 // >>>>>>> e2b255f6cfc25eda9d5d8491339e8c2023780f47
                 const SizedBox(
@@ -420,12 +434,12 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                       getImmediateSuggestions: true,
                       hideSuggestionsOnKeyboardHide: false,
                       hideOnEmpty: false,
-                      noItemsFoundBuilder: (context) => Padding(
-                        padding: const EdgeInsets.all(8.0),
+                      noItemsFoundBuilder: (context) => const Padding(
+                        padding: EdgeInsets.all(8.0),
                         child: Text('No Item Found'),
                       ),
                       textFieldConfiguration: TextFieldConfiguration(
-                        scrollPadding: EdgeInsets.all(20),
+                        scrollPadding: const EdgeInsets.all(20),
                         cursorWidth: 2.0,
                         controller: _addAddress,
                       ),
