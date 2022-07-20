@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_null_comparison
+
 import 'dart:ui';
 import 'map_view.dart';
 import 'package:admin_panel_vyam/Screens/banner_edit.dart';
@@ -91,7 +93,7 @@ class _BannerPageState extends State<BannerPage> {
                       },
                       // controller: searchController,
                       onChanged: (value) {
-                        if (value.length == 0) {
+                        if (value.isEmpty) {
                           // _node.canRequestFocus=false;
                           // FocusScope.of(context).unfocus();
                         }
@@ -265,21 +267,86 @@ class _BannerPageState extends State<BannerPage> {
 
   DataRow _buildListItem(BuildContext context, DocumentSnapshot data, int index,
       int start, int end) {
-    bool access = data['access'];
-    bool visible = data['visible'];
-    String banner_id = data['id'];
-    bool setnavv = data['navigation'] == "/gym_details" ? true : false;
+    bool setnavv;
+    try {
+      setnavv = data['navigation'] == "/gym_details" ? true : false;
+    } catch (e) {
+      setnavv = false;
+    }
+
     String com = '';
 
+    String? banner_id;
+    try {
+      banner_id = data['id'];
+    } catch (e) {
+      banner_id = "#ERROR";
+    }
+
+    String postition_id;
+    try {
+      postition_id = data['position_id'];
+    } catch (e) {
+      postition_id = "#ERROR";
+    }
+
+    String? name;
+    try {
+      name = data['name'];
+    } catch (e) {
+      name = "#ERROR";
+    }
+
+    String? image;
+    try {
+      image = data['image'];
+    } catch (e) {
+      image = "";
+    }
+
+    bool access = false;
+    try {
+      access = data['access'];
+    } catch (e) {
+      access = false;
+    }
+
+    bool visible = false;
+    try {
+      visible = data['visible'];
+    } catch (e) {
+      visible = false;
+    }
+
+    String? gymId;
+    try {
+      gymId = data['gym_id'];
+    } catch (e) {
+      gymId = "#ERROR";
+    }
+
+    bool area;
+    try {
+      area = data['area'];
+    } catch (e) {
+      area = false;
+    }
+
+    GeoPoint selectedArea;
+    try {
+      selectedArea = data['selected_area'];
+    } catch (e) {
+      selectedArea = GeoPoint(0, 0);
+    }
+
     return DataRow(cells: [
-      DataCell(data['position_id'] != null
-          ? Text(data['position_id'] ?? "")
+      DataCell(postition_id != null
+          ? Text(postition_id.toString())
           : const Text("")),
-      DataCell(
-          data['name'] != null ? Text(data['name'] ?? "") : const Text("")),
-      DataCell(data['image'] != null && data['image'] != "null"
-          ? Image.network(data['image'])
-          : const Text("Image Not Uploaded")),
+
+      DataCell(name != null ? Text(name.toString()) : const Text("")),
+      DataCell(Image.network(image!)),
+
       DataCell(ElevatedButton(
         onPressed: () async {
           setnavv = !setnavv;
@@ -294,7 +361,7 @@ class _BannerPageState extends State<BannerPage> {
               .whenComplete(() => print("Legitimate toggled"))
               .catchError((e) => print(e));
           await documentReference
-              .update({'access': setnavv})
+              .update({access.toString(): setnavv})
               .whenComplete(() => print("Legitimate toggled"))
               .catchError((e) => print(e));
         },
@@ -302,7 +369,6 @@ class _BannerPageState extends State<BannerPage> {
           setnavv ? "Activated" : "Deactivated",
           style:
               const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-
         ),
         style: ElevatedButton.styleFrom(
             primary: setnavv ? Colors.green : Colors.red),
@@ -317,14 +383,11 @@ class _BannerPageState extends State<BannerPage> {
                   .collection('banner_details')
                   .doc(banner_id);
               await documentReference
-                  .update({'visible': temp})
+                  .update({visible.toString(): temp})
                   .whenComplete(() => print("Legitimate toggled"))
                   .catchError((e) => print(e));
             },
-// <<<<<<< HEAD
-// <<<<<<< HEAD
             child: Text(visible ? "Enable" : "Disable"),
-
             style: ElevatedButton.styleFrom(
                 primary: visible ? Colors.green : Colors.red),
           ),
@@ -333,23 +396,18 @@ class _BannerPageState extends State<BannerPage> {
       DataCell(const Text(""), showEditIcon: true, onTap: () {
         Get.to(
           () => EditBox(
-              position: data['position_id'],
-              name: data['name'],
-              image: data['image'].toString(),
-              id: data['id'],
-              access: data['access'],
-              navigation: data['navigation'],
-              gym_id: data['gym_id'],
-              area: data['area'],
-              selectedArea: data['selected_area']),
+              position: postition_id.toString(),
+              name: name.toString(),
+              image: image.toString(),
+              id: banner_id.toString(),
+              access: access,
+              navigation: setnavv.toString(),
+              gym_id: gymId.toString(),
+              area: area,
+              selectedArea: selectedArea),
         );
       }),
       DataCell(const Icon(Icons.delete), onTap: () {
-        // deleteMethodI(
-        //     stream: bannerStream,
-        //     uniqueDocId: banner_id,
-        //     imagess: data['image']);
-
         showDialog(
           context: context,
           builder: (context) => AlertDialog(
@@ -512,10 +570,34 @@ class _naveditState extends State<navedit> {
             style: const TextStyle(
                 color: Colors.white, fontWeight: FontWeight.bold),
           ),
-          style: ElevatedButton.styleFrom(
-              primary: setnav ? Colors.green : Colors.red),
-        )
-      ],
+
+          ElevatedButton(
+            onPressed: () {
+              if (setnav == false) {
+                setState(() {
+                  setnav = true;
+                  navcommandedit = "/gym_details";
+                  print("Set NAv Activated In Edit");
+                });
+              } else {
+                setState(() {
+                  setnav = false;
+                  navcommandedit = "";
+                  print("SET NAV DEACTIVATED In Edit");
+                });
+              }
+              print("New ${navcommandedit}");
+            },
+            child: Text(
+              setnav ? "Activated" : "Deactivated",
+              style: const TextStyle(
+                  color: Colors.white, fontWeight: FontWeight.bold),
+            ),
+            style: ElevatedButton.styleFrom(
+                primary: setnav ? Colors.green : Colors.red),
+          )
+        ],
+      ),
 
     );
   }

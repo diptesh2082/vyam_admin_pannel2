@@ -244,21 +244,41 @@ class _ContactUsState extends State<ContactUs> {
         title: const Text("Contact Us"),
       ),
       body: SafeArea(
-        child: Column(
-          children: [
-            customTextField(hinttext: "Email", addcontroller: _email),
-            customTextField(
-                hinttext: "Instagram User Name", addcontroller: _instaId),
-            customTextField(
-                hinttext: "Phone Number", addcontroller: _phonenumber),
-            customTextField(hinttext: "Website Link", addcontroller: _website),
-            Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Center(
-                child: ElevatedButton(
-                  onPressed: () async {
-                    print("/////");
-                    print(widget.email);
+
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 5),
+          decoration: BoxDecoration(
+            color: Colors.grey.shade100,
+            borderRadius: BorderRadius.circular(20.0),
+          ),
+          child: StreamBuilder<QuerySnapshot>(
+            stream: appdetailStream!.snapshots(),
+            builder: (context, AsyncSnapshot snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const CircularProgressIndicator();
+              }
+              if (snapshot.data == null) {
+                return Container();
+              }
+              return Container(
+                child: Column(
+                  children: [
+                    customTextField(hinttext: "Email", addcontroller: _email),
+                    customTextField(
+                        hinttext: "Instagram User Name",
+                        addcontroller: _instaId),
+                    customTextField(
+                        hinttext: "Phone Number", addcontroller: _phonenumber),
+                    customTextField(
+                        hinttext: "Website Link", addcontroller: _website),
+                    Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: Center(
+                        child: ElevatedButton(
+                          onPressed: () async {
+                            print("/////");
+                            print(widget.email);
+
 
                     DocumentReference documentReference = FirebaseFirestore
                         .instance
@@ -320,43 +340,39 @@ class _AboutUsState extends State<AboutUs> {
       appBar: AppBar(
         title: const Text("About Us"),
       ),
-      body: SafeArea(
-        child: Column(
-          children: [
-            Container(
-              margin: const EdgeInsets.all(8),
-              child: MarkdownTextInput(
-                (String value) => setState(() => descriptionn = value),
-                descriptionn,
-                label: 'Description',
-                actions: actions,
-                controller: controller,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Center(
-                child: ElevatedButton(
-                  onPressed: () async {
-                    print("/////");
-                    print(widget.about);
 
-                    DocumentReference documentReference = FirebaseFirestore
-                        .instance
-                        .collection('app_details')
-                        .doc('about_us');
-                    Map<String, dynamic> data = {
-                      'about': descriptionn,
-                    };
-                    await FirebaseFirestore.instance
-                        .collection('app_details')
-                        .doc('about_us')
-                        .update(data);
-                    print("after");
-                    Navigator.pop(context);
-                  },
-                  child: const Text('Done'),
-                ),
+      body: Column(
+        children: [
+          Container(
+            margin: const EdgeInsets.all(8),
+            child: MarkdownTextInput(
+              (String value) => setState(() => descriptionn = value),
+              descriptionn,
+              label: 'Description',
+              actions: actions,
+              controller: controller,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Center(
+              child: ElevatedButton(
+                onPressed: () async {
+                  print("/////");
+                  print(widget.about);
+
+                  Map<String, dynamic> data = {
+                    'about': descriptionn,
+                  };
+                  await FirebaseFirestore.instance
+                      .collection('app_details')
+                      .doc('about_us')
+                      .update(data);
+                  print("after");
+                  Navigator.pop(context);
+                },
+                child: const Text('Done'),
+
               ),
             )
           ],
@@ -418,10 +434,6 @@ class _TandC extends State<TandC> {
                   print("/////");
                   print(widget.tnc);
 
-                  DocumentReference documentReference = FirebaseFirestore
-                      .instance
-                      .collection('app_details')
-                      .doc('t&c');
                   Map<String, dynamic> data = {
                     't&c': descriptionn,
                   };
@@ -495,10 +507,6 @@ class _PrivacyPolicy extends State<PrivacyPolicy> {
                   print("/////");
                   print(widget.policy);
 
-                  DocumentReference documentReference = FirebaseFirestore
-                      .instance
-                      .collection('app_details')
-                      .doc('privacy_policy');
                   Map<String, dynamic> data = {
                     'policy': descriptionn,
                   };

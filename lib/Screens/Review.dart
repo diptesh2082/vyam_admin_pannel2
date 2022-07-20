@@ -193,73 +193,128 @@ class _ReviewPage extends State<ReviewPage> {
 
   DataRow _buildListItem(BuildContext context, DocumentSnapshot data, int index,
       int start, int end) {
-    String reviewId = data['review'];
+    String? reviewId;
+    try {
+      reviewId = data['review'];
+    } catch (e) {
+      reviewId = "#ERROR";
+    }
+
+    String? userpic;
+    try {
+      userpic = data['user']['user_pic'];
+    } catch (e) {
+      userpic = "";
+    }
+
+    String? username;
+    try {
+      username = data['user']['user_name'];
+    } catch (e) {
+      username = "#ERROR";
+    }
+
+    String? experience;
+    try {
+      experience = data['experience'];
+    } catch (e) {
+      experience = "#ERROR";
+    }
+
+    String? rating;
+    try {
+      rating = data['rating'];
+    } catch (e) {
+      rating = "#ERROR";
+    }
+
+    String? title;
+    try {
+      title = data['title'];
+    } catch (e) {
+      title = "#ERROR";
+    }
+
+    String? userId;
+    try {
+      userId = data['user']['user_id'];
+    } catch (e) {
+      userId = "#ERROR";
+    }
+
     return DataRow(
       cells: [
         DataCell(
-          data['user']['user_pic'] != null
+          userpic != null
               ? Image.network(
-                  data['user']['user_pic'] ?? "",
+                  userpic,
                   scale: 0.5,
                   height: 100.0,
                   width: 100.0,
                 )
               : const Text(""),
         ),
+
         DataCell(
-          data['user']['user_name'] != null
+          username != null
               ? SizedBox(
                   width: 200.0,
                   child: Text(
-                    data['user']['user_name'],
+                    username,
                   ),
                 )
               : const Text(""),
         ),
+
         DataCell(
-          data['experience'] != null
+          experience != null
               ? SizedBox(
                   width: 400.0,
-                  child: Text(data['experience'] ?? ""),
+                  child: Text(experience),
                 )
               : const Text(""),
         ),
+
+        DataCell(data != null
+            ? StreamBuilder<DocumentSnapshot>(
+                stream: FirebaseFirestore.instance
+                    .collection('product_details')
+                    .doc(data['gym_id'])
+                    .snapshots(),
+                builder: (context, AsyncSnapshot snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const CircularProgressIndicator();
+                  }
+                  if (snapshot.data == null) {
+                    print(snapshot.error);
+                    return Container();
+                  }
+                  if (snapshot.hasError) {
+                    print(snapshot.error);
+                    return Container();
+                  }
+                  return Text(
+                      "${snapshot.data.get('name')} | ${snapshot.data.get('branch').toString().toUpperCase()}");
+                })
+            : const Text("")),
+
         DataCell(
-          data['gym_id'] != null
+          rating != null
               ? SizedBox(
                   width: 200.0,
                   child: Text(
-                    data['gym_id'],
+                    rating,
                   ),
                 )
               : const Text(""),
         ),
+
         DataCell(
-          data['rating'] != null
+          title != null
               ? SizedBox(
                   width: 200.0,
                   child: Text(
-                    data['rating'],
-                  ),
-                )
-              : const Text(""),
-        ),
-        // DataCell(
-        //   data['review'] != null
-        //       ? SizedBox(
-        //           width: 200.0,
-        //           child: Text(
-        //             data['review'],
-        //           ),
-        //         )
-        //       : const Text(""),
-        // ),
-        DataCell(
-          data['title'] != null
-              ? SizedBox(
-                  width: 200.0,
-                  child: Text(
-                    data['title'],
+                    title,
                   ),
                 )
               : const Text(""),
@@ -267,11 +322,11 @@ class _ReviewPage extends State<ReviewPage> {
         // .toString().substring(3, 13))
         //   : Text("")),
         DataCell(
-          data['user']['user_id'] != null
+          userId != null
               ? SizedBox(
                   width: 200.0,
                   child: Text(
-                    data['user']['user_id'].toString().substring(3, 13),
+                    userId.toString().substring(3, 13),
                   ),
                 )
               : const Text(""),

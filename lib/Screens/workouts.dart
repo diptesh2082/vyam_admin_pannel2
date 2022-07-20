@@ -248,20 +248,38 @@ class _workoutsGymState extends State<workoutsGym> {
 
   DataRow _buildListItem(BuildContext context, DocumentSnapshot data, int index,
       int start, int end) {
-    String name = data['type'];
-    String id = data['gym_id'];
-    String id1 = data['id'];
+    String? name;
+    try {
+      name = data['type'];
+    } catch (e) {
+      name = "#ERROR";
+    }
+
+    String? gymId;
+    try {
+      gymId = data['gym_id'];
+    } catch (e) {
+      gymId = "#ERROR";
+    }
+
+    String? id1;
+    try {
+      id1 = data['id'];
+    } catch (e) {
+      id1 = "#ERROR";
+    }
 
     return DataRow(cells: [
-      DataCell(data != null ? Text(index.toString()) : const Text("")),
-      DataCell(
-          data['gym_id'] != null ? Text(data['gym_id'] ?? "") : const Text("")),
-      DataCell(
-          data['type'] != null ? Text(data['type'] ?? "") : const Text("")),
+      DataCell(index != null ? Text(index.toString()) : const Text("")),
+      DataCell(gymId != null ? Text(gymId.toString()) : const Text("")),
+      DataCell(name != null ? Text(name.toString()) : const Text("")),
+
       DataCell(const Text(""), showEditIcon: true, onTap: () {
         //TODO: Create Edit PAge
-        Get.to(() =>
-            EditBox(gymId: data['gym_id'], type: data['type'], id: data['id']));
+        Get.to(() => EditBox(
+            gymId: gymId.toString(),
+            type: name.toString(),
+            id: id1.toString()));
       }),
       DataCell(const Icon(Icons.delete), onTap: () {
         deleteMethod(stream: couponStream, uniqueDocId: id1);

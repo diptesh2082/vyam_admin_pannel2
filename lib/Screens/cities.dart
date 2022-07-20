@@ -91,10 +91,24 @@ class _AmenetiesScreenState extends State<AmenetiesScreen> {
 
   DataRow _buildListItem(BuildContext context, DocumentSnapshot data, int index,
       int start, int end) {
+    String? id;
+    try {
+      id = data['id'];
+    } catch (e) {
+      id = "#ERROR";
+    }
+
+    String? name;
+    try {
+      name = data['name'];
+    } catch (e) {
+      name = "#ERROR";
+    }
+
     return DataRow(
       cells: [
         DataCell(
-          data['id'] != null ? Text(data['id'] ?? "") : const Text(""),
+          id != null ? Text(id.toString()) : const Text(""),
         ),
         DataCell(
           data['image'] != null
@@ -107,7 +121,7 @@ class _AmenetiesScreenState extends State<AmenetiesScreen> {
               : const Text(""),
         ),
         DataCell(
-          data['name'] != null ? Text(data['name']) : const Text("Disabled"),
+          name != null ? Text(name.toString()) : const Text("Disabled"),
         ),
         DataCell(
           const Text(''),
