@@ -190,23 +190,6 @@ class _ProductDetailsState extends State<ProductDetails> {
                                   'Index',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 )),
-
-                                // DataColumn(
-                                //     label: InkWell(
-                                //   onTap: () {
-                                //     doc.forEach((element) async {
-                                //       await FirebaseFirestore.instance
-                                //           .collection('product_details')
-                                //           .doc(element.id)
-                                //           .update({'rules': rules});
-                                //     });
-                                //   },
-                                //   child: Text(
-                                //     'Name',
-                                //     style:
-                                //         TextStyle(fontWeight: FontWeight.w600),
-                                //   ),
-                                // )),
                                 DataColumn(
                                   label: Text(
                                     'Name',
@@ -360,9 +343,6 @@ class _ProductDetailsState extends State<ProductDetails> {
                                         TextStyle(fontWeight: FontWeight.w600),
                                   ),
                                 ),
-
-                                // DataColumn(label: Text('')), //! For edit pencil
-                                // DataColumn(label: Text('')),
                               ],
                               rows: _buildlist(context, doc)),
                         );
@@ -373,32 +353,6 @@ class _ProductDetailsState extends State<ProductDetails> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      // ElevatedButton(
-                      //   child: const Text("Previous Page"),
-                      //   onPressed: () {
-                      //     setState(() {
-                      //       if (start > 0 && end > 0) {
-                      //         start = start - 10;
-                      //         end = end - 10;
-                      //       }
-                      //     });
-                      //     print("Previous Page");
-                      //   },
-                      // ),
-                      // const SizedBox(width: 20),
-                      // ElevatedButton(
-                      //   child: const Text("Next Page"),
-                      //   onPressed: () {
-                      //     setState(() {
-                      //       if (end < length) {
-                      //         start = start + 10;
-                      //         end = end + 10;
-                      //       }
-                      //     });
-                      //     print("Next Page");
-                      //   },
-                      // ),
-
                       const SizedBox(height: 20),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -536,48 +490,6 @@ class _ProductDetailsState extends State<ProductDetails> {
                           ),
                         ],
                       )
-                      // Row(
-                      //   mainAxisAlignment: MainAxisAlignment.center,
-                      //   children: [
-                      //     ElevatedButton(
-                      //       child: Text("Previous Page"),
-                      //       onPressed: () {
-                      //         setState(() {
-                      //           if (start >= 1) page--;
-                      //
-                      //           if (start > 0 && end > 0) {
-                      //             start = start - 10;
-                      //             end = end - 10;
-                      //           }
-                      //         });
-                      //         print("Previous Page");
-                      //       },
-                      //     ),
-                      //     Container(
-                      //       margin: EdgeInsets.symmetric(horizontal: 20),
-                      //       child: Text(
-                      //         page.toString(),
-                      //         style: const TextStyle(
-                      //             fontWeight: FontWeight.bold,
-                      //             fontSize: 15,
-                      //             color: Colors.teal),
-                      //       ),
-                      //     ),
-                      //     ElevatedButton(
-                      //       child: const Text("Next Page"),
-                      //       onPressed: () {
-                      //         setState(() {
-                      //           if (end <= length) page++;
-                      //           if (end < length) {
-                      //             start = start + 10;
-                      //             end = end + 10;
-                      //           }
-                      //         });
-                      //         print("Next Page");
-                      //       },
-                      //     ),
-                      //   ],
-                      // ),
                     ],
                   ),
                 ],
@@ -620,43 +532,157 @@ class _ProductDetailsState extends State<ProductDetails> {
 
   DataRow _buildListItem(BuildContext context, DocumentSnapshot data, int index,
       int start, int end) {
-    String gymId = data['gym_id'];
+    String? gymId;
+    try {
+      gymId = data['gym_id'].toString();
+    } catch (e) {
+      gymId = "#ERROR";
+    }
     // GeoPoint loc = data['location'];
-    String name = data['name'];
-    bool legit = data['legit'];
-    bool status = data["gym_status"];
-    bool online_pay = data["online_pay"];
-    bool cash_pay = data['cash_pay'];
-    List imgList = data['images'];
+    String? name;
+    try {
+      name = data['name'].toString();
+    } catch (e) {
+      name = "#ERROR";
+    }
+
+    bool legit = false;
+    try {
+      legit = data['legit'];
+    } catch (e) {
+      legit = false;
+    }
+
+    bool status = false;
+    try {
+      status = data["gym_status"];
+    } catch (e) {
+      status = false;
+    }
+
+    bool online_pay = false;
+    try {
+      online_pay = data["online_pay"];
+    } catch (e) {
+      online_pay = false;
+    }
+    bool cash_pay = false;
+    try {
+      cash_pay = data["cash_pay"];
+    } catch (e) {
+      cash_pay = false;
+    }
+
+    // bool legit = data['legit'];
+    // bool status = data["gym_status"];
+    // bool online_pay = data["online_pay"];
+    // bool cash_pay = data['cash_pay'];
+    List imgList = [];
+    try {
+      imgList = data["images"];
+    } catch (e) {
+      imgList = ["Null"];
+    }
+    // List imgList = data['images'];
     // String landmark = data['landmark'];
-    String imagess = data['display_picture'].toString();
-    List<dynamic> arr2 = data['amenities'];
-    List<dynamic> WorkoutArray = data['workouts'];
-    List<dynamic> serviceArray = data['service'];
+    // String imagess = data['display_picture'].toString();
+    String? imagess;
+    try {
+      imagess = data['display_picture'].toString();
+    } catch (e) {
+      imagess = "#ERROR";
+    }
+    String? address;
+    try {
+      address = data['address'].toString();
+    } catch (e) {
+      address = "#ERROR";
+    }
+    String? password;
+    try {
+      password = data['password'].toString();
+    } catch (e) {
+      password = "#ERROR";
+    }
+    String? gym_owner;
+    try {
+      gym_owner = data['gym_owner'].toString();
+    } catch (e) {
+      gym_owner = "#ERROR";
+    }
+    String? gender;
+    try {
+      gender = data['gender'].toString();
+    } catch (e) {
+      gender = "#ERROR";
+    }
+    String? branch;
+    try {
+      branch = data['branch'].toString();
+    } catch (e) {
+      branch = "#ERROR";
+    }
+    String? pincode;
+    try {
+      pincode = data['pincode'].toString();
+    } catch (e) {
+      pincode = "#ERROR";
+    }
+
+    List<dynamic> arr2 = [];
+    try {
+      arr2 = data['amenities'];
+    } catch (e) {
+      arr2 = ["Null"];
+    }
+
+    List<dynamic> WorkoutArray = [];
+    try {
+      WorkoutArray = data['workouts'];
+    } catch (e) {
+      WorkoutArray = ["Null"];
+    }
+
+    List<dynamic> serviceArray = [];
+    try {
+      serviceArray = data['service'];
+    } catch (e) {
+      serviceArray = ["Null"];
+    }
+
+    String? descriptionns;
+    try {
+      descriptionns = data['description'];
+    } catch (e) {
+      descriptionns = "#ERROR";
+    }
+
+    List<dynamic> ruless = [];
+    try {
+      ruless = data['rules'];
+    } catch (e) {
+      ruless = ["Null"];
+    }
+
+    // List<dynamic> arr2 = data['amenities'];
+    // List<dynamic> WorkoutArray = data['workouts'];
+    // List<dynamic> serviceArray = data['service'];
     String x, y;
 
     return DataRow(cells: [
       DataCell(data != null ? Text(index.toString()) : const Text("")),
-      DataCell(
-          data['name'] != null ? Text(data['name'] ?? "") : const Text("")),
-      DataCell(data['address'] != null
-          ? Text(data['address'] ?? "")
-          : const Text("")),
-      DataCell(data != null ? Text(gymId) : const Text("")),
-      DataCell(data['password'] != null
-          ? Text(data['password'].toString())
-          : const Text("")),
+      DataCell(name != null ? Text(name.toString()) : const Text("")),
+      DataCell(address != null ? Text(address.toString()) : const Text("")),
+      DataCell(gymId != null ? Text(gymId.toString()) : const Text("")),
+      DataCell(password != null ? Text(password.toString()) : const Text("")),
 
-      DataCell(data['gym_owner'] != null
-          ? Text(data['gym_owner'] ?? "")
-          : const Text("")),
+      DataCell(gym_owner != null ? Text(gym_owner.toString()) : const Text("")),
 // <<<<<<< HEAD
 //       DataCell(data != null
 //           ? Text(data['gender'].toString().toUpperCase())
 //           : const Text("")),
 // =======
-      DataCell(
-          data['gender'] != null ? Text(data['gender'] ?? "") : const Text("")),
+      DataCell(gender != null ? Text(gender) : const Text("")),
 // >>>>>>> cf1997613ff877c63a56c61e3009bdfe3639ccfa
       // DataCell(data != null
       //     ? GestureDetector(
@@ -665,11 +691,8 @@ class _ProductDetailsState extends State<ProductDetails> {
       //         },
       //         child: Text(loctext))
       //: const Text("")),
-      DataCell(
-          data['branch'] != null ? Text(data['branch'] ?? "") : const Text("")),
-      DataCell(data['pincode'] != null
-          ? Text(data['pincode'] ?? "")
-          : const Text("")),
+      DataCell(branch != null ? Text(branch) : const Text("")),
+      DataCell(pincode != null ? Text(pincode) : const Text("")),
 
       DataCell(ElevatedButton(
           child: const Text(
@@ -679,8 +702,8 @@ class _ProductDetailsState extends State<ProductDetails> {
           style: ElevatedButton.styleFrom(primary: Colors.yellowAccent),
           onPressed: (() {
             Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) =>
-                  TrainerPage(gymId, data['name'], data['branch']),
+              builder: (context) => TrainerPage(
+                  gymId.toString(), name.toString(), branch.toString()),
             ));
           }))),
 
@@ -688,8 +711,10 @@ class _ProductDetailsState extends State<ProductDetails> {
         child: const Text('Packages'),
         onPressed: () {
           Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) =>
-                PackagesPage(pGymId: gymId, o: name, land: ""),
+            builder: (context) => PackagesPage(
+                pGymId: gymId.toString(),
+                o: name.toString(),
+                land: branch.toString()),
           ));
         },
       )),
@@ -699,7 +724,9 @@ class _ProductDetailsState extends State<ProductDetails> {
         onPressed: () {
           Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => offersPage(
-                offerId: gymId, name: name, landmark: data['branch']),
+                offerId: gymId.toString(),
+                name: name.toString(),
+                landmark: branch.toString()),
           ));
         },
       )),
@@ -707,16 +734,14 @@ class _ProductDetailsState extends State<ProductDetails> {
       DataCell(
         Row(
           children: [
-            Container(
-              child: GestureDetector(
-                onTap: () async {
-                  send(gymId);
-                },
-                child: const Center(
-                  child: Icon(
-                    Icons.file_upload_outlined,
-                    size: 20,
-                  ),
+            GestureDetector(
+              onTap: () async {
+                send(gymId.toString());
+              },
+              child: const Center(
+                child: Icon(
+                  Icons.file_upload_outlined,
+                  size: 20,
                 ),
               ),
             ),
@@ -736,75 +761,54 @@ class _ProductDetailsState extends State<ProductDetails> {
                       child: StreamBuilder<Object>(
                           stream: productStream!.snapshots(),
                           builder: (context, AsyncSnapshot snapshot) {
-                            return data['images'] != null &&
-                                    data['images'] != "null"
-                                ? GridView.builder(
-                                    padding: const EdgeInsets.all(20.0),
-                                    gridDelegate:
-                                        const SliverGridDelegateWithFixedCrossAxisCount(
-                                            crossAxisCount: 2),
-                                    itemCount: data['images'].length,
-                                    itemBuilder:
-                                        (BuildContext context, int index) {
-                                      return SizedBox(
-                                        height:
-                                            MediaQuery.of(context).size.height *
-                                                .75,
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            SizedBox(
-                                              height: 500,
-                                              width: 500,
-                                              child: FittedBox(
-                                                  child: Image.network(
-                                                data['images'][index]
-                                                    .toString(),
-                                                fit: BoxFit.fill,
-                                              )),
-                                            ),
-                                            const SizedBox(width: 20),
-                                            IconButton(
-                                              onPressed: () async {
-                                                print(data['images'].length);
-                                                await deletee(
-                                                    // '12.jpeg',
-                                                    imgList[index].toString(),
-                                                    data['images']);
-                                                await FirebaseFirestore.instance
-                                                    .collection(
-                                                        'product_details')
-                                                    .doc(gymId)
-                                                    .update({
-                                                  'images':
-                                                      FieldValue.arrayRemove(
-                                                          [imgList[index]])
-                                                });
-                                                print("Delete!");
-                                              },
-                                              icon: const Icon(Icons.delete),
-                                            )
-                                          ],
+                            return GridView.builder(
+                                padding: const EdgeInsets.all(20.0),
+                                gridDelegate:
+                                    const SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 2),
+                                itemCount: imgList.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  return SizedBox(
+                                    height: MediaQuery.of(context).size.height *
+                                        .75,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        SizedBox(
+                                          height: 500,
+                                          width: 500,
+                                          child: FittedBox(
+                                              child: Image.network(
+                                            imgList[index].toString(),
+                                            fit: BoxFit.fill,
+                                          )),
                                         ),
+                                        const SizedBox(width: 20),
+                                        IconButton(
+                                          onPressed: () async {
+                                            print(imgList.length);
+                                            await deletee(
+                                                // '12.jpeg',
+                                                imgList[index].toString(),
+                                                imgList);
+                                            await FirebaseFirestore.instance
+                                                .collection('product_details')
+                                                .doc(gymId)
+                                                .update({
+                                              'images': FieldValue.arrayRemove(
+                                                  [imgList[index]])
+                                            });
+                                            print("Delete!");
+                                          },
+                                          icon: const Icon(Icons.delete),
+                                        )
+                                      ],
+                                    ),
 
-                                        // minLeadin≥gWidth: double.infinity,
-                                      );
-                                    })
-                                : AlertDialog(
-                                    shape: const RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(30))),
-                                    content: SizedBox(
-                                      height:
-                                          MediaQuery.of(context).size.height *
-                                              .90,
-                                      width: MediaQuery.of(context).size.width *
-                                          .92,
-                                      child: const Center(
-                                        child: Text("Upload Images"),
-                                      ),
-                                    ));
+                                    // minLeadin≥gWidth: double.infinity,
+                                  );
+                                });
                           }),
                     ),
                   ),
@@ -821,7 +825,7 @@ class _ProductDetailsState extends State<ProductDetails> {
               // Adding timings +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++---------------------------------
 
               Get.to(() => Timings(
-                    pGymId: gymId,
+                    pGymId: gymId.toString(),
                   ));
               // bool temp = online_pay;
               // temp = !temp;
@@ -946,8 +950,8 @@ class _ProductDetailsState extends State<ProductDetails> {
         ),
       ),
 
-      DataCell(datacelldisplay(
-          disimg: data['display_picture'].toString(), idd: data['gym_id'])),
+      DataCell(
+          datacelldisplay(disimg: imagess.toString(), idd: gymId.toString())),
 
       DataCell(
         const Text(""),
@@ -957,21 +961,21 @@ class _ProductDetailsState extends State<ProductDetails> {
               context,
               MaterialPageRoute(
                   builder: (context) => ProductEditBox(
-                      address: data['address'],
-                      gender: data['gender'],
-                      name: data['name'],
-                      pincode: data['pincode'],
-                      branch: data['branch'],
-                      gymId: data['gym_id'],
-                      gymOwner: data['gym_owner'],
+                      address: address.toString(),
+                      gender: gender.toString(),
+                      name: name.toString(),
+                      pincode: pincode.toString(),
+                      branch: branch.toString(),
+                      gymId: gymId.toString(),
+                      gymOwner: gym_owner.toString(),
                       // landmark: data['landmark'],
-                      password: data['password'],
-                      imagee: data['display_picture'].toString(),
+                      password: password.toString(),
+                      imagee: imagess.toString(),
                       arr2: arr2,
                       WorkoutArray: WorkoutArray,
                       serviceArray: serviceArray,
-                      description: data['description'],
-                      rules: data['rules']
+                      description: descriptionns,
+                      rules: ruless
 
                       // location: data['location'],
                       )));

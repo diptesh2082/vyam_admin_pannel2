@@ -181,17 +181,33 @@ class _CitiesScreenState extends State<CitiesScreen> {
 
   DataRow _buildListItem(BuildContext context, DocumentSnapshot data, int index,
       int start, int end) {
-    String cityId = data['id'];
-    bool status = data['Status'];
+    // String cityId = data['id'];
+    // bool status = data['Status'];
+    bool status = false;
+    try {
+      status = data['Status'];
+    } catch (e) {
+      status = false;
+    }
+    String? cityId;
+    try {
+      cityId = data['id'];
+    } catch (e) {
+      cityId = '#Error';
+    }
+    String? Address;
+    try {
+      Address = data['Address'];
+    } catch (e) {
+      Address = '#Error';
+    }
     return DataRow(cells: [
       DataCell(data != null ? Text(index.toString()) : const Text("")),
       DataCell(
-        data['Address'] != null ? Text(data['Address'] ?? "") : const Text(""),
+        Address != null ? Text(Address) : const Text(""),
       ),
       DataCell(
-        data['Status'] != null
-            ? Text(data['Status'].toString())
-            : const Text(""),
+        status != null ? Text(status.toString()) : const Text(""),
       ),
       // DataCell(
       //   data['id'] != null ? Text(data['id']) : const Text(""),
@@ -201,9 +217,9 @@ class _CitiesScreenState extends State<CitiesScreen> {
         showEditIcon: true,
         onTap: () {
           Get.to(() => ProductEditBox(
-              address: data['Address'],
-              status: data['Status'],
-              cityId: data['id']));
+              address: Address.toString(),
+              status: status,
+              cityId: cityId.toString()));
         },
       ),
       DataCell(const Icon(Icons.delete), onTap: () {

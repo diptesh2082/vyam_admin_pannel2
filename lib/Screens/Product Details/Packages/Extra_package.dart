@@ -161,7 +161,14 @@ class _ExtraPackagesPageState extends State<ExtraPackagesPage> {
   }
 
   DataRow _buildListItem(BuildContext context, DocumentSnapshot data) {
-    String docId = data['doc_id'];
+    String? docId;
+    String? discount;
+    String? original_price;
+    String? price;
+    String? title;
+    String? type;
+    String? validity;
+
     Future<void> deleteMethod() {
       return extraPackageStream!
           .doc(docId)
@@ -170,24 +177,34 @@ class _ExtraPackagesPageState extends State<ExtraPackagesPage> {
           .catchError((error) => print("Failed to delete user: $error"));
     }
 
+    try {
+      docId = data['doc_id'];
+      discount = data['discount'];
+      original_price = data['original_price'];
+      price = data['price'];
+      title = data['title'];
+      type = data['type'];
+      validity = data['validity'];
+    } catch (e) {
+      docId = '#ERROR';
+      discount = '#ERROR';
+      original_price = '#ERROR';
+      price = '#ERROR';
+      title = '#ERROR';
+      type = '#ERROR';
+      validity = '#ERROR';
+    }
     return DataRow(cells: [
       // ignore: unnecessary_null_comparison
-      DataCell(data != null ? Text(docId) : const Text("")),
-      DataCell(data['discount'] != null
-          ? Text(data['discount'] ?? "")
-          : const Text("")),
-      DataCell(data['original_price'] != null
-          ? Text(data['original_price'] ?? "")
-          : const Text("")),
+
+      DataCell(data != null ? Text(docId!) : const Text("")),
+      DataCell(discount != null ? Text(discount ?? "") : const Text("")),
       DataCell(
-          data['price'] != null ? Text(data['price'] ?? "") : const Text("")),
-      DataCell(
-          data['title'] != null ? Text(data['title'] ?? "") : const Text("")),
-      DataCell(
-          data['type'] != null ? Text(data['type'] ?? "") : const Text("")),
-      DataCell(data['validity'] != null
-          ? Text(data['validity'] ?? "")
-          : const Text("")),
+          original_price != null ? Text(original_price ?? "") : const Text("")),
+      DataCell(price != null ? Text(price ?? "") : const Text("")),
+      DataCell(title != null ? Text(title ?? "") : const Text("")),
+      DataCell(type != null ? Text(type ?? "") : const Text("")),
+      DataCell(validity != null ? Text(validity ?? "") : const Text("")),
       DataCell(
         const Text(""),
         showEditIcon: true,
@@ -199,13 +216,13 @@ class _ExtraPackagesPageState extends State<ExtraPackagesPage> {
                 // ? Added Gesture Detecter for popping off update record Card
                 child: SingleChildScrollView(
                   child: ProductEditBox(
-                    discount: data['discount'],
-                    originalPrice: data['original_price'],
-                    price: data['price'],
-                    title: data['title'],
-                    type: data['type'],
-                    validity: data['validity'],
-                    docId: data['doc_id'],
+                    discount: discount.toString(),
+                    originalPrice: original_price.toString(),
+                    price: price.toString(),
+                    title: title.toString(),
+                    type: type.toString(),
+                    validity: validity.toString(),
+                    docId: docId.toString(),
                   ),
                 ),
                 onTap: () =>

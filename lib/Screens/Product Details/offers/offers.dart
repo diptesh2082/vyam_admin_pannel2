@@ -223,20 +223,59 @@ class _offersPageState extends State<offersPage> {
 
   DataRow _buildListItem(BuildContext context, DocumentSnapshot data, int index,
       int start, int end) {
+    // String? offer;
+    // String? offer_type;
+    String? title;
+    try {
+      title = data['title'].toString();
+    } catch (e) {
+      title = "#ERROR";
+    }
+    List descriptionn = [];
+    try {
+      descriptionn = data['description'];
+    } catch (e) {
+      descriptionn = [];
+    }
+    String? offer;
+    try {
+      offer = data['offer'].toString();
+    } catch (e) {
+      offer = "#ERROR";
+    }
+    String? offer_type;
+    try {
+      offer_type = data['offer_type'].toString();
+    } catch (e) {
+      offer_type = "#ERROR";
+    }
+
+    // try {
+    //   // title = data['title'].toString();
+    //   // descriptionn = data['description'].toString();
+    //   // offer = data['offer'].toString();
+    //   // offer_type = data['offer_type'].toString();
+    // } catch (e) {
+    //   title = '#ERROR';
+    //   descriptionn = '#ERROR';
+    //   offer = '#ERROR';
+    //   offer_type = '#ERROR';
+    //
+    //   // print(e);
+    // }
+
     return DataRow(cells: [
       DataCell(data != null ? Text(index.toString()) : const Text("")),
-      DataCell(data['title'] != null
-          ? Text(data['title'].toString().toUpperCase())
+      DataCell(title != null
+          ? Text(title.toString().toUpperCase())
           : const Text("")),
-      DataCell(data['description'] != null
-          ? Text(data['description'].toString().toUpperCase())
+      DataCell(descriptionn != null
+          ? Text(descriptionn.toString().toUpperCase())
           : const Text("")),
-      DataCell(data['offer'] != null
-          ? Text(data['offer'].toString().toUpperCase())
+      DataCell(offer != null
+          ? Text(offer.toString().toUpperCase())
           : const Text("")),
-      DataCell(data['offer_type'] != null
-          ? Text(data['offer_type'].toString().toUpperCase())
-          : const Text("")),
+      DataCell(offer_type != null ? Text(offer_type) : const Text("")),
       DataCell(const Text(""), showEditIcon: true, onTap: () {
         Navigator.push(
             context,
@@ -244,10 +283,10 @@ class _offersPageState extends State<offersPage> {
                 builder: (context) => OffersEditBox(
                       gym_id: globalOfferId,
                       id: data.id,
-                      title: data['title'],
-                      description: data['description'],
-                      offer: data['offer'],
-                      offer_type: data['offer_type'],
+                      title: title,
+                      description: descriptionn,
+                      offer: offer,
+                      offer_type: offer_type,
                     )));
       }),
       DataCell(const Icon(Icons.delete), onTap: () {

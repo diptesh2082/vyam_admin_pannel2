@@ -208,44 +208,80 @@ class _TimingsState extends State<Timings> {
 
   DataRow _buildListItem(BuildContext context, DocumentSnapshot data, int index,
       int start, int end) {
-    String timeId = data['timing_id'];
-    print(timeId);
+    // String timeId = data['timing_id'];
+
+    // print(timeId);
+    String? timeId;
+    try {
+      timeId = data['timing_id'];
+    } catch (e) {
+      timeId = '#ERROR';
+    }
+    String? Evening;
+    try {
+      Evening = data['Evening'];
+    } catch (e) {
+      Evening = '#ERROR';
+    }
+    String? Morning;
+    try {
+      Morning = data['Morning'];
+    } catch (e) {
+      Morning = '#ERROR';
+    }
+    String? original_price;
+    try {
+      original_price = data['original_price'];
+    } catch (e) {
+      original_price = '#ERROR';
+    }
+    List closed = [];
+    try {
+      closed = data['closed'];
+    } catch (e) {
+      closed = [];
+    }
+    String? morning_days;
+    try {
+      morning_days = data['morning_days'];
+    } catch (e) {
+      morning_days = '#ERROR';
+    }
+    String? evening_days;
+    try {
+      evening_days = data['evening_days'];
+    } catch (e) {
+      evening_days = '#ERROR';
+    }
+    String? position;
+    try {
+      position = data['position'];
+    } catch (e) {
+      position = '#ERROR';
+    }
+
     return DataRow(cells: [
-      DataCell(data["timing_id"] != null
-          ? Text(data["timing_id"] ?? "")
-          : const Text("")),
-      DataCell(data["Morning"] != null
-          ? Text(data["Morning"] ?? "")
-          : const Text("")),
-      DataCell(data['Evening'] != null
-          ? Text(data['Evening'] ?? "")
-          : const Text("")),
-      DataCell(data['closed'] != null
-          ? Text(data['closed'].toString())
-          : const Text("")),
-      DataCell(data['morning_days'] != null
-          ? Text(data['morning_days'] ?? "")
-          : const Text("")),
-      DataCell(data['evening_days'] != null
-          ? Text(data['evening_days'] ?? "")
-          : const Text("")),
-      DataCell(data['position'] != null
-          ? Text(data['position'] ?? "")
-          : const Text("")),
+      DataCell(timeId != null ? Text(timeId) : const Text("")),
+      DataCell(Morning != null ? Text(Morning) : const Text("")),
+      DataCell(Evening != null ? Text(Evening ?? "") : const Text("")),
+      DataCell(closed != null ? Text(closed.toString()) : const Text("")),
+      DataCell(morning_days != null ? Text(morning_days) : const Text("")),
+      DataCell(evening_days != null ? Text(evening_days) : const Text("")),
+      DataCell(position != null ? Text(position) : const Text("")),
       DataCell(const Text(""), showEditIcon: true, onTap: () {
         Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => ProductEditBox(
-                  gymId: widget.pGymId,
-                  typeId: timeId,
-                  closed: data['closed'],
-                  eveninging_days: data['evening_days'],
-                  morning: data["Morning"],
-                  morning_days: data['morning_days'],
-                  evening: data['Evening'],
-                  position: data['position']),
-            ));
+                builder: (context) => ProductEditBox(
+                      gymId: widget.pGymId,
+                      typeId: timeId.toString(),
+                      closed: closed,
+                      eveninging_days: evening_days.toString(),
+                      morning: Morning.toString(),
+                      morning_days: morning_days.toString(),
+                      evening: Evening.toString(),
+                      position: position.toString(),
+                    )));
       }),
       DataCell(const Icon(Icons.delete), onTap: () {
         deleteMethod(stream: packageStream, uniqueDocId: timeId);
