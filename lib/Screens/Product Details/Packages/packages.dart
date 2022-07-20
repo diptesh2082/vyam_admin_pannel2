@@ -357,10 +357,10 @@ class _PackagesPageState extends State<PackagesPage> {
 
       DataCell(title != null ? Text(title.toString()) : const Text("")),
       DataCell(original_price != null
-          ? Text(original_price.toString() ?? "")
+          ? Text(original_price.toString())
           : const Text("")),
       DataCell(
-          discount != null ? Text(discount.toString() ?? "") : const Text("")),
+          discount != null ? Text(discount.toString() ) : const Text("")),
       DataCell(
         Center(
           child: ElevatedButton(

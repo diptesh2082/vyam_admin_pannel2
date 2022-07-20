@@ -263,7 +263,7 @@ class _TimingsState extends State<Timings> {
     return DataRow(cells: [
       DataCell(timeId != null ? Text(timeId) : const Text("")),
       DataCell(Morning != null ? Text(Morning) : const Text("")),
-      DataCell(Evening != null ? Text(Evening ?? "") : const Text("")),
+      DataCell(Evening != null ? Text(Evening.toString()) : const Text("")),
       DataCell(closed != null ? Text(closed.toString()) : const Text("")),
       DataCell(morning_days != null ? Text(morning_days) : const Text("")),
       DataCell(evening_days != null ? Text(evening_days) : const Text("")),

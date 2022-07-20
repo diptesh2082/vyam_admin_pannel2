@@ -355,7 +355,7 @@ class _PaymentsPageState extends State<PaymentsPage> {
                 return Text("${gname} | ${gbranch.toString().toUpperCase()}");
               })
           : const Text("")),
-      DataCell(amount != null ? Text(amount ?? "") : const Text("")),
+      DataCell(amount != null ? Text(amount.toString()) : const Text("")),
       // DataCell(data != null ? Text(data['place'] ?? "") : Text("")),
       DataCell(
           type != null ? Text(type.toString().toUpperCase()) : const Text("")),

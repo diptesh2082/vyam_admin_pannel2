@@ -610,7 +610,7 @@ class _UserInformationState extends State<UserInformation> {
               .substring(3, number.toString().length))
           : const Text("")),
       DataCell(
-          address != null ? Text(address.toString() ?? "") : const Text("")),
+          address != null ? Text(address.toString() ) : const Text("")),
       DataCell(locality != null ? Text(locality.toString()) : const Text("")),
       // DataCell(data != null ? Text(data['subLocality'] ?? "") : Text("")),
       DataCell(pincode != null ? Text(pincode.toString()) : const Text("")),
@@ -966,7 +966,7 @@ class _EditBoxState extends State<EditBox> {
                                     .doc("${x}");
                             Map<String, dynamic> data = <String, dynamic>{
                               // 'address':'',
-                              'gender': gvalue ?? "",
+                              'gender': gvalue.toString(),
                               'image': image5 ?? img,
                               'name': _name.text,
                               'email': _email.text,
