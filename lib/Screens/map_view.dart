@@ -32,9 +32,9 @@ class _MapViewState extends State<MapView> {
     final scaleDiff = details.scale - _scaleStart;
     _scaleStart = details.scale;
 
-    if (scaleDiff > 0)
+    if (scaleDiff > 0) {
       controller.zoom += 0.02;
-    else if (scaleDiff < 0)
+    } else if (scaleDiff < 0)
       controller.zoom -= 0.02;
     else {
       final now = details.focalPoint;
@@ -99,7 +99,7 @@ class _MapViewState extends State<MapView> {
           Align(
             alignment: Alignment.bottomRight,
             child: Container(
-              margin: EdgeInsets.all(12),
+              margin: const EdgeInsets.all(12),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -107,14 +107,14 @@ class _MapViewState extends State<MapView> {
                       height: 50,
                       minWidth: 50,
                       color: Colors.blue,
-                      child: Icon(Icons.zoom_in, color: Colors.white),
+                      child: const Icon(Icons.zoom_in, color: Colors.white),
                       onPressed: () => controller.zoom += 0.2),
-                  SizedBox(height: 3),
+                  const SizedBox(height: 3),
                   MaterialButton(
                       height: 50,
                       minWidth: 50,
                       color: Colors.blue,
-                      child: Icon(Icons.zoom_out, color: Colors.white),
+                      child: const Icon(Icons.zoom_out, color: Colors.white),
                       onPressed: () => controller.zoom -= 0.2)
                 ],
               ),
@@ -137,13 +137,13 @@ class _MapViewState extends State<MapView> {
               child: Container(
                 width: 500,
                 height: 75,
-                padding: EdgeInsets.all(6),
+                padding: const EdgeInsets.all(6),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text('Lat: $lat , Long: $long'),
-                    loading ? CupertinoActivityIndicator() : Text('$address')
+                    loading ? const CupertinoActivityIndicator() : Text(address)
                   ],
                 ),
               ),

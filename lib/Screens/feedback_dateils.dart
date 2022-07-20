@@ -26,7 +26,7 @@ class _FeedBackInfoState extends State<FeedBackInfo> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Feedback'),
+        title: const Text('Feedback'),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -50,7 +50,7 @@ class _FeedBackInfoState extends State<FeedBackInfo> {
                   },
                   // controller: searchController,
                   onChanged: (value) {
-                    if (value.length == 0) {
+                    if (value.isEmpty) {
                       // _node.canRequestFocus=false;
                       // FocusScope.of(context).unfocus();
                     }
@@ -85,7 +85,7 @@ class _FeedBackInfoState extends State<FeedBackInfo> {
                   var doc = snapshot.data.docs;
 
 // <<<<<<< HEAD
-                  if (searchGymName.length > 0) {
+                  if (searchGymName.isNotEmpty) {
                     doc = doc.where((element) {
                       return element
                               .get('feedback_review')
@@ -207,21 +207,19 @@ class _FeedBackInfoState extends State<FeedBackInfo> {
                             style: TextStyle(fontWeight: FontWeight.w600),
                           ),
                         ),
-
                       ],
                       rows: _buildlist(context, doc),
                     ),
                   );
-
                 },
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ElevatedButton(
-                  child: Text("Previous Page"),
+                  child: const Text("Previous Page"),
                   onPressed: () {
                     setState(() {
                       if (start > 0 && end > 0) {
@@ -296,7 +294,7 @@ class _FeedBackInfoState extends State<FeedBackInfo> {
         ),
         DataCell(data['user_id'] != null
             ? Text(data['user_id'].toString().substring(3, 13))
-            : Text("")),
+            : const Text("")),
         DataCell(
           data['vendor_id'] != null
               ? Text(data['vendor_id'] ?? "")
@@ -334,48 +332,62 @@ class _FeedBackInfoState extends State<FeedBackInfo> {
         //     print("Open Edit Box");
         //   },
         // ),
-        DataCell(Icon(Icons.delete), onTap: () {
+        DataCell(const Icon(Icons.delete), onTap: () {
           // deleteMethod(stream: categoryStream, uniqueDocId: categoryID);
 
-          showDialog(context: context, builder: (context)=>  AlertDialog(
-            shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(16))),
-            content: SizedBox(
-              height: 170,
-              width: 280,
-              child: Stack(
-                children: [
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children:  [
-                      const Text('Do you want to delete?' , style: TextStyle(fontWeight: FontWeight.bold),),
-                      const SizedBox(height: 15,),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const SizedBox(height: 15),
-                          ElevatedButton.icon(
-                            onPressed: (){
-                              deleteMethod(stream: categoryStream, uniqueDocId: categoryID);
-                              Navigator.pop(context);
-                            } ,
-                            icon: const Icon(Icons.check),
-                            label: const Text('Yes'),
-                          ),
-                          const SizedBox(width: 20,),
-                          ElevatedButton.icon(onPressed: (){
-                            Navigator.pop(context);
-                          } ,
-                            icon: const Icon(Icons.clear),
-                            label: const Text('No'),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ],
+          showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(16))),
+              content: SizedBox(
+                height: 170,
+                width: 280,
+                child: Stack(
+                  children: [
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text(
+                          'Do you want to delete?',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(
+                          height: 15,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const SizedBox(height: 15),
+                            ElevatedButton.icon(
+                              onPressed: () {
+                                deleteMethod(
+                                    stream: categoryStream,
+                                    uniqueDocId: categoryID);
+                                Navigator.pop(context);
+                              },
+                              icon: const Icon(Icons.check),
+                              label: const Text('Yes'),
+                            ),
+                            const SizedBox(
+                              width: 20,
+                            ),
+                            ElevatedButton.icon(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              icon: const Icon(Icons.clear),
+                              label: const Text('No'),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),);
+          );
         })
       ],
     );

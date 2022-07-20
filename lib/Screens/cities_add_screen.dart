@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:admin_panel_vyam/Screens/map_view.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:get/get.dart';
@@ -36,7 +35,6 @@ class _citiesAddState extends State<citiesAdd> {
 
   var id = FirebaseFirestore.instance.collection('Cities').doc().id;
 
-  late List<PlacesApiHelperModel>? _list = [];
   FocusNode myFocousNode = FocusNode();
 
   final TextEditingController _addAddress = TextEditingController();

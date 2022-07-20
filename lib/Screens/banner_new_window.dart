@@ -35,7 +35,6 @@ class _bannerNewPageState extends State<bannerNewPage> {
   final TextEditingController _addnavigation = TextEditingController();
   final TextEditingController _addaddress = TextEditingController();
 
-  final bool _accesible = false;
   var image;
   var imgUrl1;
 
@@ -79,7 +78,6 @@ class _bannerNewPageState extends State<bannerNewPage> {
   }
 
   late DropzoneViewController controller;
-  bool _saving = false;
   CollectionReference? productStream;
   @override
   void initState() {
@@ -399,39 +397,37 @@ bool setnav = false;
 class _navState extends State<nav> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Row(
-        children: [
-          const Text("Set Navigation"),
-          const SizedBox(
-            width: 20,
+    return Row(
+      children: [
+        const Text("Set Navigation"),
+        const SizedBox(
+          width: 20,
+        ),
+        ElevatedButton(
+          onPressed: () {
+            setState(() {
+              print(load1);
+              load1 = !load1;
+              // setnav = false;
+              navcommand = "";
+              namee = "";
+              print("SET NAV DEACTIVATED and Nav Command==$navcommand");
+              print(load1);
+              ischeckk = false;
+              load1 = !load1;
+            });
+            print("Value of namee: $namee");
+            print(navcommand.toString());
+          },
+          child: Text(
+            ischeckk ? "Activated" : "Deactivated",
+            style: const TextStyle(
+                color: Colors.white, fontWeight: FontWeight.bold),
           ),
-          ElevatedButton(
-            onPressed: () {
-              setState(() {
-                print(load1);
-                load1 = !load1;
-                // setnav = false;
-                navcommand = "";
-                namee = "";
-                print("SET NAV DEACTIVATED and Nav Command==$navcommand");
-                print(load1);
-                ischeckk = false;
-                load1 = !load1;
-              });
-              print("Value of namee: $namee");
-              print(navcommand.toString());
-            },
-            child: Text(
-              ischeckk ? "Activated" : "Deactivated",
-              style: const TextStyle(
-                  color: Colors.white, fontWeight: FontWeight.bold),
-            ),
-            style: ElevatedButton.styleFrom(
-                primary: ischeckk ? Colors.green : Colors.red),
-          )
-        ],
-      ),
+          style: ElevatedButton.styleFrom(
+              primary: ischeckk ? Colors.green : Colors.red),
+        )
+      ],    
     );
   }
 }
@@ -488,7 +484,7 @@ class _loadimageState extends State<loadimage> {
           width: 200,
           height: 100,
           child: isloading
-              ? Container(
+              ? SizedBox(
                   height: 100,
                   width: 200,
                   child: const Center(
@@ -496,12 +492,12 @@ class _loadimageState extends State<loadimage> {
                   ),
                 )
               : image3 != null
-                  ? Container(
+                  ? SizedBox(
                       height: 100,
                       width: 200,
                       child: Image.network(image3),
                     )
-                  : Container(
+                  : const SizedBox(
                       height: 100,
                       width: 200,
                       child: const Center(child: Text("Please Upload Image")),

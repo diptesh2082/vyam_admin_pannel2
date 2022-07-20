@@ -343,14 +343,16 @@ class _BannerPageState extends State<BannerPage> {
       DataCell(postition_id != null
           ? Text(postition_id.toString())
           : const Text("")),
+
       DataCell(name != null ? Text(name.toString()) : const Text("")),
       DataCell(Image.network(image!)),
+
       DataCell(ElevatedButton(
         onPressed: () async {
           setnavv = !setnavv;
           com = setnavv ? "/gym_details" : "";
 
-          print("New ${com}");
+          print("New $com");
           DocumentReference documentReference = FirebaseFirestore.instance
               .collection('banner_details')
               .doc(banner_id);
@@ -529,23 +531,46 @@ class _naveditState extends State<navedit> {
   @override
   void initState() {
     // TODO: implement initState
-    if (widget.navtext == "/gym_details")
+    if (widget.navtext == "/gym_details") {
       setState(() {
         setnav = true;
       });
+    }
 
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Row(
-        children: [
-          const Text("Set Navigation"),
-          const SizedBox(
-            width: 20,
+    return Row(
+      children: [
+        const Text("Set Navigation"),
+        const SizedBox(
+          width: 20,
+        ),
+        ElevatedButton(
+          onPressed: () {
+            if (setnav == false) {
+              setState(() {
+                setnav = true;
+                navcommandedit = "/gym_details";
+                print("Set NAv Activated In Edit");
+              });
+            } else {
+              setState(() {
+                setnav = false;
+                navcommandedit = "";
+                print("SET NAV DEACTIVATED In Edit");
+              });
+            }
+            print("New $navcommandedit");
+          },
+          child: Text(
+            setnav ? "Activated" : "Deactivated",
+            style: const TextStyle(
+                color: Colors.white, fontWeight: FontWeight.bold),
           ),
+
           ElevatedButton(
             onPressed: () {
               if (setnav == false) {
@@ -573,6 +598,7 @@ class _naveditState extends State<navedit> {
           )
         ],
       ),
+
     );
   }
 }
@@ -811,6 +837,7 @@ class _EditBoxState extends State<EditBox> {
                               address_con: _addaddress,
                             ),
                             const Center(
+
                               child: const Icon(
                                 Icons.location_on_rounded,
                                 size: 40,
@@ -844,8 +871,7 @@ class _EditBoxState extends State<EditBox> {
                                 {
                                   'position_id': _position.text,
                                   'name': _name.text,
-                                  'image':
-                                      image3 != null ? image3 : widget.image,
+                                  'image': image3 ?? widget.image,
                                   'id': id,
                                   'access': access,
                                   'gym_id': namee,
@@ -905,49 +931,47 @@ class _editimState extends State<editim> {
   }
 
 // <<<<<<< HEAD
-  @override
   bool isloading = false;
   var imagee;
+  @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Row(
-        children: [
-          ElevatedButton(
-            onPressed: () async {
-              setState(() {
-                isloading = true;
-              });
-              var dic = await chooseImage();
-              await addImageToStorage(dic, widget.idd);
-              setState(() {
-                isloading = false;
-                i2 = image3;
-              });
-            },
-            child: const Text(
-              'Upload Gym Image',
-              style:
-                  TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
-            ),
+    return Row(
+      children: [
+        ElevatedButton(
+          onPressed: () async {
+            setState(() {
+              isloading = true;
+            });
+            var dic = await chooseImage();
+            await addImageToStorage(dic, widget.idd);
+            setState(() {
+              isloading = false;
+              i2 = image3;
+            });
+          },
+          child: const Text(
+            'Upload Gym Image',
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
           ),
-          const SizedBox(
-            width: 20,
-          ),
-          isloading
-              ? Container(
-                  height: 100,
-                  width: 200,
-                  child: const Center(
-                    child: CircularProgressIndicator(),
-                  ),
-                )
-              : Container(
-                  height: 100,
-                  width: 200,
-                  child: Image.network(i2),
+        ),
+        const SizedBox(
+          width: 20,
+        ),
+        isloading
+            ? const SizedBox(
+                height: 100,
+                width: 200,
+                child: Center(
+                  child: CircularProgressIndicator(),
+
                 ),
-        ],
-      ),
+              )
+            : SizedBox(
+                height: 100,
+                width: 200,
+                child: Image.network(i2),
+              ),
+      ],
     );
   }
 

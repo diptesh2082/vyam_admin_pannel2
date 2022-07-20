@@ -39,7 +39,7 @@ class _PaymentsPageState extends State<PaymentsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Payments"),
+        title: const Text("Payments"),
       ),
       body: SafeArea(
         child: Container(
@@ -183,12 +183,12 @@ class _PaymentsPageState extends State<PaymentsPage> {
                     },
                   ),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     ElevatedButton(
-                      child: Text("Previous Page"),
+                      child: const Text("Previous Page"),
                       onPressed: () {
                         setState(() {
                           if (start > 0 && end > 0) {
@@ -254,19 +254,67 @@ class _PaymentsPageState extends State<PaymentsPage> {
 
   DataRow _buildListItem(BuildContext context, DocumentSnapshot data, int index,
       int start, int end) {
-    Timestamp timestamp = data['timestamp'];
+    // Timestamp timestamp = data['timestamp'];
+    Timestamp timestamp;
+    try {
+      timestamp = data['timestamp'];
+    } catch (e) {
+      timestamp = Timestamp.now();
+    }
+    String? userid;
+    try {
+      userid = data['userid'];
+    } catch (e) {
+      userid = '#Error';
+    }
+    String? amount;
+    try {
+      amount = data['amount'];
+    } catch (e) {
+      amount = '#Error';
+    }
+    String? type;
+    try {
+      type = data['type'];
+    } catch (e) {
+      type = '#Error';
+    }
+    String? place;
+    try {
+      place = data['place'];
+    } catch (e) {
+      place = '#Error';
+    }
+    String? gym_id;
+    try {
+      gym_id = data['gym_id'];
+    } catch (e) {
+      gym_id = '#Error';
+    }
+    String? name;
+    try {
+      name = data['name'];
+    } catch (e) {
+      name = '#Error';
+    }
     var ds;
     var z = FirebaseFirestore.instance
         .collection('product_details')
-        .doc(data['name'])
+        .doc(name)
         .get()
         .then((d) {
-      ds = d['name'];
+      String? name;
+      try {
+        name = d['name'];
+      } catch (e) {
+        name = '#Error';
+      }
+      ds = name.toString();
     });
     dss = DateTime.fromMillisecondsSinceEpoch(timestamp.millisecondsSinceEpoch);
     d122 = DateFormat('dd/MM/yyyy, HH:mm').format(dss);
-    String stamp = timestamp.toString();
-    String id = data['userid'];
+    // String stamp = timestamp.toString();
+    // String id = user;
     // var dtt = DateTime.fromMillisecondsSinceEpoch(stamp.millisecondsSinceEpoch);
     // var d122 = DateFormat('dd/MM/yyyy, HH:mm').format(dt);
     // String paymentID = data['payment_id'];
@@ -277,7 +325,7 @@ class _PaymentsPageState extends State<PaymentsPage> {
           ? StreamBuilder<DocumentSnapshot>(
               stream: FirebaseFirestore.instance
                   .collection('product_details')
-                  .doc(data['name'])
+                  .doc(name)
                   .snapshots(),
               builder: (context, AsyncSnapshot snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
@@ -291,16 +339,26 @@ class _PaymentsPageState extends State<PaymentsPage> {
                   print(snapshot.error);
                   return Container();
                 }
+                String? gname;
+                try {
+                  gname = snapshot.data.get('name');
+                } catch (e) {
+                  name = '#Error';
+                }
+                String? gbranch;
+                try {
+                  gbranch = snapshot.data.get('branch');
+                } catch (e) {
+                  gbranch = '#Error';
+                }
 
-                return Text(
-                    "${snapshot.data.get('name')} | ${snapshot.data.get('branch').toString().toUpperCase()}");
+                return Text("${gname} | ${gbranch.toString().toUpperCase()}");
               })
           : const Text("")),
-      DataCell(data != null ? Text(data['amount'] ?? "") : const Text("")),
+      DataCell(amount != null ? Text(amount ?? "") : const Text("")),
       // DataCell(data != null ? Text(data['place'] ?? "") : Text("")),
-      DataCell(data != null
-          ? Text(data['type'].toString().toUpperCase())
-          : const Text("")),
+      DataCell(
+          type != null ? Text(type.toString().toUpperCase()) : const Text("")),
       DataCell(data != null ? Text(d122) : const Text("")),
       DataCell(
         const Text(""),
@@ -309,14 +367,14 @@ class _PaymentsPageState extends State<PaymentsPage> {
           // ? Added Gesture Detecter for popping off update record Card
           Get.to(
             () => ProductEditBox(
-              amount: data['amount'],
-              gym_id: data['gym_id'],
-              name: data['name'],
-              type: data['type'],
+              amount: amount.toString(),
+              gym_id: gym_id.toString(),
+              name: name.toString(),
+              type: type.toString(),
               // paymentid: data['paymentid'],
-              place: data['place'],
-              timestamp: data['timestamp'],
-              userid: data['userid'],
+              place: place.toString(),
+              timestamp: timestamp,
+              userid: userid.toString(),
             ),
           );
         },
@@ -351,8 +409,7 @@ class _PaymentsPageState extends State<PaymentsPage> {
                           ElevatedButton.icon(
                             onPressed: () {
                               deleteMethod(
-                                  stream: paymentStream,
-                                  uniqueDocId: data['userid']);
+                                  stream: paymentStream, uniqueDocId: userid);
                               Navigator.pop(context);
                             },
                             icon: const Icon(Icons.check),

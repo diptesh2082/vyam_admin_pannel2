@@ -37,7 +37,7 @@ class _AmenetiesScreenState extends State<AmenetiesScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Amenities"),
+        title: const Text("Amenities"),
       ),
       body: SafeArea(
         child: Container(
@@ -56,9 +56,9 @@ class _AmenetiesScreenState extends State<AmenetiesScreen> {
                       textStyle: const TextStyle(fontSize: 15),
                     ),
                     onPressed: () {
-                      Get.to(() => newAmeneties());
+                      Get.to(() => const newAmeneties());
                     },
-                    child: Text('Add Product'),
+                    child: const Text('Add Product'),
                     // Container(
                     //   width: 120,
                     //   decoration: BoxDecoration(
@@ -93,7 +93,7 @@ class _AmenetiesScreenState extends State<AmenetiesScreen> {
                       },
                       // controller: searchController,
                       onChanged: (value) {
-                        if (value.length == 0) {
+                        if (value.isEmpty) {
                           // _node.canRequestFocus=false;
                           // FocusScope.of(context).unfocus();
                         }
@@ -255,34 +255,58 @@ class _AmenetiesScreenState extends State<AmenetiesScreen> {
 
   DataRow _buildListItem(BuildContext context, DocumentSnapshot data, int index,
       int start, int end) {
-    String amenitiesId = data['amenity_id'];
+    // String amenitiesId = data['amenity_id'];
+    String? amenitiesId;
+    try {
+      amenitiesId = data['amenity_id'];
+    } catch (e) {
+      amenitiesId = '#Error';
+    }
+    String? image;
+    try {
+      image = data['image'];
+    } catch (e) {
+      image = '#Error';
+    }
+    String? name;
+    try {
+      name = data['name'];
+    } catch (e) {
+      name = '#Error';
+    }
+    String? id;
+    try {
+      id = data['id'];
+    } catch (e) {
+      id = '#Error';
+    }
     return DataRow(cells: [
       DataCell(data != null ? Text(index.toString()) : const Text("")),
       // DataCell(
       //   data['id'] != null ? Text(data['id'] ?? "") : const Text(""),
       // ),
       DataCell(
-        data['image'] != null
+        image != null && image != "null"
             ? Image.network(
-                data['image'] ?? "",
+                image,
                 scale: 0.5,
                 height: 150,
                 width: 150,
               )
-            : const Text(""),
+            : const Text("Image Not Uploaded"),
       ),
       DataCell(
-        data['name'] != null ? Text(data['name']) : const Text("Disabled"),
+        name != null ? Text(name) : const Text("Disabled"),
       ),
       DataCell(
         const Text(''),
         showEditIcon: true,
         onTap: () {
           Get.to(() => ProductEditBox(
-              name: data['name'],
-              image: data['image'],
-              amenityId: data['id'],
-              am: amenitiesId));
+              name: name.toString(),
+              image: image.toString(),
+              amenityId: id.toString(),
+              am: amenitiesId.toString()));
           // showDialog(
           //   context: context,
           //   builder: (context) {
@@ -300,7 +324,7 @@ class _AmenetiesScreenState extends State<AmenetiesScreen> {
           // );
         },
       ),
-      DataCell(Icon(Icons.delete), onTap: () {
+      DataCell(const Icon(Icons.delete), onTap: () {
         // deleteMethodI(
         //     stream: FirebaseFirestore.instance.collection('amenities'),
         //     uniqueDocId: amenitiesId,
@@ -413,7 +437,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
     return Scaffold(
       backgroundColor: Colors.white10,
       appBar: AppBar(
-        title: Text('Edit Amenites'),
+        title: const Text('Edit Amenites'),
       ),
       body: Center(
         child: SizedBox(
@@ -447,7 +471,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                             .update(
                           {
                             'name': _name.text,
-                            'image': image3 != null ? image3 : im1,
+                            'image': image3 ?? im1,
                             'id': _amenityId.text,
                             'amenity_id': amm,
                             'gym_id': [],
@@ -497,57 +521,54 @@ class _editimState extends State<editim> {
   }
 
 // <<<<<<< HEAD
-  @override
   bool isloading = false;
   var imagee;
+  @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Row(
-        children: [
-          ElevatedButton(
-            onPressed: () async {
-              try {
-                var dic = await chooseImage();
-                if (dic != null) {
-                  setState(() {
-                    isloading = true;
-                  });
-                }
-                await addImageToStorage(dic, di);
+    return Row(
+      children: [
+        ElevatedButton(
+          onPressed: () async {
+            try {
+              var dic = await chooseImage();
+              if (dic != null) {
                 setState(() {
-                  isloading = false;
-                  i2 = image3;
-                });
-              } finally {
-                setState(() {
-                  isloading = false;
+                  isloading = true;
                 });
               }
-            },
-            child: const Text(
-              'Upload Gym Image',
-              style:
-                  TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
-            ),
+              await addImageToStorage(dic, di);
+              setState(() {
+                isloading = false;
+                i2 = image3;
+              });
+            } finally {
+              setState(() {
+                isloading = false;
+              });
+            }
+          },
+          child: const Text(
+            'Upload Gym Image',
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
           ),
-          const SizedBox(
-            width: 20,
-          ),
-          isloading
-              ? Container(
-                  height: 100,
-                  width: 200,
-                  child: Center(
-                    child: CircularProgressIndicator(),
-                  ),
-                )
-              : Container(
-                  height: 100,
-                  width: 200,
-                  child: Image.network(i2),
+        ),
+        const SizedBox(
+          width: 20,
+        ),
+        isloading
+            ? const SizedBox(
+                height: 100,
+                width: 200,
+                child: Center(
+                  child: CircularProgressIndicator(),
                 ),
-        ],
-      ),
+              )
+            : SizedBox(
+                height: 100,
+                width: 200,
+                child: Image.network(i2),
+              ),
+      ],
     );
   }
 

@@ -229,26 +229,70 @@ class _offersPageState extends State<offersPage> {
 
   DataRow _buildListItem(BuildContext context, DocumentSnapshot data, int index,
       int start, int end) {
-    bool legit = data['validity'];
+// <<<<<<< HEAD
+    // String? offer;
+    // String? offer_type;
+    String? title;
+    try {
+      title = data['title'].toString();
+    } catch (e) {
+      title = "#ERROR";
+    }
+    List descriptionn = [];
+    try {
+      descriptionn = data['description'];
+    } catch (e) {
+      descriptionn = [];
+    }
+    String? offer;
+    try {
+      offer = data['offer'].toString();
+    } catch (e) {
+      offer = "#ERROR";
+    }
+    String? offer_type;
+    try {
+      offer_type = data['offer_type'].toString();
+    } catch (e) {
+      offer_type = "#ERROR";
+    }
+    String? id;
+    try {
+      id = data['id'].toString();
+    } catch (e) {
+      id = "#ERROR";
+    }
+    bool legit = false;
+    try {
+      legit = data['validity'];
+    } catch (e) {
+      legit = false;
+    }
+    List rules = [];
+    try {
+      rules = data['rules'];
+    } catch (e) {
+      rules = [];
+    }
     return DataRow(cells: [
       DataCell(data != null ? Text(index.toString()) : const Text("")),
-      DataCell(data != null
-          ? Text(data['title'].toString().toUpperCase())
+      DataCell(title != null
+          ? Text(title.toString().toUpperCase())
           : const Text("")),
-      DataCell(data != null
-          ? Text(data['description'].toString().toUpperCase())
+      DataCell(descriptionn != null
+          ? Text(descriptionn.toString().toUpperCase())
           : const Text("")),
-      DataCell(data != null
-          ? Text(data['offer'].toString().toUpperCase())
+      DataCell(offer != null
+          ? Text(offer.toString().toUpperCase())
           : const Text("")),
-      DataCell(data != null
-          ? Text(data['offer_type'].toString().toUpperCase())
-          : const Text("")),
+// <<<<<<< HEAD
+      DataCell(offer_type != null ? Text(offer_type) : const Text("")),
+// =======
       DataCell(
         Center(
           child: ElevatedButton(
             onPressed: () async {
-              print(legit);
+              // print(legit);
               bool temp = legit;
               temp = !temp;
               print(temp);
@@ -257,7 +301,7 @@ class _offersPageState extends State<offersPage> {
                   .collection('product_details')
                   .doc(globalOfferId)
                   .collection('offers')
-                  .doc(data['id'])
+                  .doc(id)
                   .update({'validity': temp})
                   .whenComplete(() => print("Legitimate toggled"))
                   .catchError((e) => print(e));
@@ -268,6 +312,7 @@ class _offersPageState extends State<offersPage> {
           ),
         ),
       ),
+// >>>>>>> 4de0f6fb5e41317835ad04a3523b56bc17c652c4
       DataCell(const Text(""), showEditIcon: true, onTap: () {
         Navigator.push(
             context,
@@ -275,11 +320,11 @@ class _offersPageState extends State<offersPage> {
                 builder: (context) => OffersEditBox(
                       gym_id: globalOfferId,
                       id: data.id,
-                      title: data['title'],
-                      description: data['description'],
-                      offer: data['offer'],
-                      offer_type: data['offer_type'],
-                      rules: data['rules'],
+                      title: title,
+                      description: descriptionn,
+                      offer: offer,
+                      offer_type: offer_type,
+                      rules: rules,
                     )));
       }),
       DataCell(const Icon(Icons.delete), onTap: () {

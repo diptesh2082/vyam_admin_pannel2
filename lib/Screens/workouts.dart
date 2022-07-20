@@ -82,7 +82,7 @@ class _workoutsGymState extends State<workoutsGym> {
                         },
                         // controller: searchController,
                         onChanged: (value) {
-                          if (value.length == 0) {
+                          if (value.isEmpty) {
                             // _node.canRequestFocus=false;
                             // FocusScope.of(context).unfocus();
                           }
@@ -120,7 +120,7 @@ class _workoutsGymState extends State<workoutsGym> {
 
                   var doc = snapshot.data.docs;
 
-                  if (searchWorkout.length > 0) {
+                  if (searchWorkout.isNotEmpty) {
                     doc = doc.where((element) {
                       return element
                               .get('type')
@@ -273,6 +273,7 @@ class _workoutsGymState extends State<workoutsGym> {
       DataCell(index != null ? Text(index.toString()) : const Text("")),
       DataCell(gymId != null ? Text(gymId.toString()) : const Text("")),
       DataCell(name != null ? Text(name.toString()) : const Text("")),
+
       DataCell(const Text(""), showEditIcon: true, onTap: () {
         //TODO: Create Edit PAge
         Get.to(() => EditBox(

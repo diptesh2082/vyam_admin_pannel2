@@ -67,7 +67,7 @@ class _ProductDetailsState extends State<ProductDetails> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Vendor Details"),
+        title: const Text("Vendor Details"),
       ),
       body: SafeArea(
         child: Material(
@@ -99,7 +99,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                               builder: (context) => const ShowAddBox(),
                             ));
                           },
-                          child: Text('Add Product'),
+                          child: const Text('Add Product'),
                         ),
                       ),
                       const Spacer(),
@@ -184,29 +184,12 @@ class _ProductDetailsState extends State<ProductDetails> {
                           child: DataTable(
                               // ? DATATABLE
                               dataRowHeight: 65,
-                              columns: [
+                              columns: const [
                                 DataColumn(
                                     label: Text(
                                   'Index',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 )),
-
-                                // DataColumn(
-                                //     label: InkWell(
-                                //   onTap: () {
-                                //     doc.forEach((element) async {
-                                //       await FirebaseFirestore.instance
-                                //           .collection('product_details')
-                                //           .doc(element.id)
-                                //           .update({'rules': rules});
-                                //     });
-                                //   },
-                                //   child: Text(
-                                //     'Name',
-                                //     style:
-                                //         TextStyle(fontWeight: FontWeight.w600),
-                                //   ),
-                                // )),
                                 DataColumn(
                                   label: Text(
                                     'Name',
@@ -360,9 +343,6 @@ class _ProductDetailsState extends State<ProductDetails> {
                                         TextStyle(fontWeight: FontWeight.w600),
                                   ),
                                 ),
-
-                                // DataColumn(label: Text('')), //! For edit pencil
-                                // DataColumn(label: Text('')),
                               ],
                               rows: _buildlist(context, doc)),
                         );
@@ -373,38 +353,12 @@ class _ProductDetailsState extends State<ProductDetails> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      // ElevatedButton(
-                      //   child: const Text("Previous Page"),
-                      //   onPressed: () {
-                      //     setState(() {
-                      //       if (start > 0 && end > 0) {
-                      //         start = start - 10;
-                      //         end = end - 10;
-                      //       }
-                      //     });
-                      //     print("Previous Page");
-                      //   },
-                      // ),
-                      // const SizedBox(width: 20),
-                      // ElevatedButton(
-                      //   child: const Text("Next Page"),
-                      //   onPressed: () {
-                      //     setState(() {
-                      //       if (end < length) {
-                      //         start = start + 10;
-                      //         end = end + 10;
-                      //       }
-                      //     });
-                      //     print("Next Page");
-                      //   },
-                      // ),
-
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           ElevatedButton(
-                            child: Text("Previous Page"),
+                            child: const Text("Previous Page"),
                             onPressed: () {
                               setState(() {
                                 if (start >= 1) page--;
@@ -416,7 +370,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                               print("Previous Page");
                             },
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 20,
                           ),
                           StreamBuilder<QuerySnapshot>(
@@ -460,7 +414,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                                               mainAxisAlignment:
                                                   MainAxisAlignment.start,
                                               children: [
-                                                SizedBox(
+                                                const SizedBox(
                                                   width: 20,
                                                 ),
                                                 Container(
@@ -471,14 +425,14 @@ class _ProductDetailsState extends State<ProductDetails> {
                                                   width: 20,
                                                   child: Text(
                                                     "${index + 1}",
-                                                    style: TextStyle(
+                                                    style: const TextStyle(
                                                         color: Colors.white,
                                                         fontWeight:
                                                             FontWeight.bold),
                                                     textAlign: TextAlign.center,
                                                   ),
                                                 ),
-                                                SizedBox(width: 20),
+                                                const SizedBox(width: 20),
                                               ],
                                             ),
                                             onTap: () {
@@ -496,7 +450,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                                       }),
                                 );
                               }),
-                          SizedBox(
+                          const SizedBox(
                             width: 20,
                           ),
                           GestureDetector(
@@ -511,7 +465,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                               height: 20,
                               width: 80,
                               color: Colors.teal,
-                              child: Text(
+                              child: const Text(
                                 "Last Page",
                                 style: TextStyle(
                                     color: Colors.white,
@@ -520,9 +474,9 @@ class _ProductDetailsState extends State<ProductDetails> {
                               ),
                             ),
                           ),
-                          SizedBox(width: 20),
+                          const SizedBox(width: 20),
                           ElevatedButton(
-                            child: Text("Next Page"),
+                            child: const Text("Next Page"),
                             onPressed: () {
                               setState(() {
                                 if (end <= length) page++;
@@ -536,48 +490,6 @@ class _ProductDetailsState extends State<ProductDetails> {
                           ),
                         ],
                       )
-                      // Row(
-                      //   mainAxisAlignment: MainAxisAlignment.center,
-                      //   children: [
-                      //     ElevatedButton(
-                      //       child: Text("Previous Page"),
-                      //       onPressed: () {
-                      //         setState(() {
-                      //           if (start >= 1) page--;
-                      //
-                      //           if (start > 0 && end > 0) {
-                      //             start = start - 10;
-                      //             end = end - 10;
-                      //           }
-                      //         });
-                      //         print("Previous Page");
-                      //       },
-                      //     ),
-                      //     Container(
-                      //       margin: EdgeInsets.symmetric(horizontal: 20),
-                      //       child: Text(
-                      //         page.toString(),
-                      //         style: const TextStyle(
-                      //             fontWeight: FontWeight.bold,
-                      //             fontSize: 15,
-                      //             color: Colors.teal),
-                      //       ),
-                      //     ),
-                      //     ElevatedButton(
-                      //       child: const Text("Next Page"),
-                      //       onPressed: () {
-                      //         setState(() {
-                      //           if (end <= length) page++;
-                      //           if (end < length) {
-                      //             start = start + 10;
-                      //             end = end + 10;
-                      //           }
-                      //         });
-                      //         print("Next Page");
-                      //       },
-                      //     ),
-                      //   ],
-                      // ),
                     ],
                   ),
                 ],
@@ -620,36 +532,157 @@ class _ProductDetailsState extends State<ProductDetails> {
 
   DataRow _buildListItem(BuildContext context, DocumentSnapshot data, int index,
       int start, int end) {
-    String gymId = data['gym_id'];
+    String? gymId;
+    try {
+      gymId = data['gym_id'].toString();
+    } catch (e) {
+      gymId = "#ERROR";
+    }
     // GeoPoint loc = data['location'];
-    String name = data['name'];
-    bool legit = data['legit'];
-    bool status = data["gym_status"];
-    bool online_pay = data["online_pay"];
-    bool cash_pay = data['cash_pay'];
-    List imgList = data['images'];
+    String? name;
+    try {
+      name = data['name'].toString();
+    } catch (e) {
+      name = "#ERROR";
+    }
+
+    bool legit = false;
+    try {
+      legit = data['legit'];
+    } catch (e) {
+      legit = false;
+    }
+
+    bool status = false;
+    try {
+      status = data["gym_status"];
+    } catch (e) {
+      status = false;
+    }
+
+    bool online_pay = false;
+    try {
+      online_pay = data["online_pay"];
+    } catch (e) {
+      online_pay = false;
+    }
+    bool cash_pay = false;
+    try {
+      cash_pay = data["cash_pay"];
+    } catch (e) {
+      cash_pay = false;
+    }
+
+    // bool legit = data['legit'];
+    // bool status = data["gym_status"];
+    // bool online_pay = data["online_pay"];
+    // bool cash_pay = data['cash_pay'];
+    List imgList = [];
+    try {
+      imgList = data["images"];
+    } catch (e) {
+      imgList = ["Null"];
+    }
+    // List imgList = data['images'];
     // String landmark = data['landmark'];
-    String imagess = data['display_picture'];
-    List<dynamic> arr2 = data['amenities'];
-    List<dynamic> WorkoutArray = data['workouts'];
-    List<dynamic> serviceArray = data['service'];
+    // String imagess = data['display_picture'].toString();
+    String? imagess;
+    try {
+      imagess = data['display_picture'].toString();
+    } catch (e) {
+      imagess = "#ERROR";
+    }
+    String? address;
+    try {
+      address = data['address'].toString();
+    } catch (e) {
+      address = "#ERROR";
+    }
+    String? password;
+    try {
+      password = data['password'].toString();
+    } catch (e) {
+      password = "#ERROR";
+    }
+    String? gym_owner;
+    try {
+      gym_owner = data['gym_owner'].toString();
+    } catch (e) {
+      gym_owner = "#ERROR";
+    }
+    String? gender;
+    try {
+      gender = data['gender'].toString();
+    } catch (e) {
+      gender = "#ERROR";
+    }
+    String? branch;
+    try {
+      branch = data['branch'].toString();
+    } catch (e) {
+      branch = "#ERROR";
+    }
+    String? pincode;
+    try {
+      pincode = data['pincode'].toString();
+    } catch (e) {
+      pincode = "#ERROR";
+    }
+
+    List<dynamic> arr2 = [];
+    try {
+      arr2 = data['amenities'];
+    } catch (e) {
+      arr2 = ["Null"];
+    }
+
+    List<dynamic> WorkoutArray = [];
+    try {
+      WorkoutArray = data['workouts'];
+    } catch (e) {
+      WorkoutArray = ["Null"];
+    }
+
+    List<dynamic> serviceArray = [];
+    try {
+      serviceArray = data['service'];
+    } catch (e) {
+      serviceArray = ["Null"];
+    }
+
+    String? descriptionns;
+    try {
+      descriptionns = data['description'];
+    } catch (e) {
+      descriptionns = "#ERROR";
+    }
+
+    List<dynamic> ruless = [];
+    try {
+      ruless = data['rules'];
+    } catch (e) {
+      ruless = ["Null"];
+    }
+
+    // List<dynamic> arr2 = data['amenities'];
+    // List<dynamic> WorkoutArray = data['workouts'];
+    // List<dynamic> serviceArray = data['service'];
     String x, y;
 
     return DataRow(cells: [
       DataCell(data != null ? Text(index.toString()) : const Text("")),
-      DataCell(data != null ? Text(data['name'] ?? "") : const Text("")),
-      DataCell(data != null ? Text(data['address'] ?? "") : const Text("")),
-      DataCell(data != null ? Text(gymId) : const Text("")),
-      DataCell(
-          data != null ? Text(data['password'].toString()) : const Text("")),
+      DataCell(name != null ? Text(name.toString()) : const Text("")),
+      DataCell(address != null ? Text(address.toString()) : const Text("")),
+      DataCell(gymId != null ? Text(gymId.toString()) : const Text("")),
+      DataCell(password != null ? Text(password.toString()) : const Text("")),
 
-      DataCell(data != null ? Text(data['gym_owner'] ?? "") : const Text("")),
+      DataCell(gym_owner != null ? Text(gym_owner.toString()) : const Text("")),
 // <<<<<<< HEAD
 //       DataCell(data != null
 //           ? Text(data['gender'].toString().toUpperCase())
 //           : const Text("")),
 // =======
-      DataCell(data != null ? Text(data['gender'] ?? "") : const Text("")),
+      DataCell(gender != null ? Text(gender) : const Text("")),
 // >>>>>>> cf1997613ff877c63a56c61e3009bdfe3639ccfa
       // DataCell(data != null
       //     ? GestureDetector(
@@ -658,8 +691,8 @@ class _ProductDetailsState extends State<ProductDetails> {
       //         },
       //         child: Text(loctext))
       //: const Text("")),
-      DataCell(data != null ? Text(data['branch'] ?? "") : const Text("")),
-      DataCell(data != null ? Text(data['pincode'] ?? "") : const Text("")),
+      DataCell(branch != null ? Text(branch) : const Text("")),
+      DataCell(pincode != null ? Text(pincode) : const Text("")),
 
       DataCell(ElevatedButton(
           child: const Text(
@@ -669,8 +702,8 @@ class _ProductDetailsState extends State<ProductDetails> {
           style: ElevatedButton.styleFrom(primary: Colors.yellowAccent),
           onPressed: (() {
             Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) =>
-                  TrainerPage(gymId, data['name'], data['branch']),
+              builder: (context) => TrainerPage(
+                  gymId.toString(), name.toString(), branch.toString()),
             ));
           }))),
 
@@ -678,8 +711,10 @@ class _ProductDetailsState extends State<ProductDetails> {
         child: const Text('Packages'),
         onPressed: () {
           Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) =>
-                PackagesPage(pGymId: gymId, o: name, land: ""),
+            builder: (context) => PackagesPage(
+                pGymId: gymId.toString(),
+                o: name.toString(),
+                land: branch.toString()),
           ));
         },
       )),
@@ -689,7 +724,9 @@ class _ProductDetailsState extends State<ProductDetails> {
         onPressed: () {
           Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => offersPage(
-                offerId: gymId, name: name, landmark: data['branch']),
+                offerId: gymId.toString(),
+                name: name.toString(),
+                landmark: branch.toString()),
           ));
         },
       )),
@@ -697,16 +734,14 @@ class _ProductDetailsState extends State<ProductDetails> {
       DataCell(
         Row(
           children: [
-            Container(
-              child: GestureDetector(
-                onTap: () async {
-                  send(gymId);
-                },
-                child: const Center(
-                  child: Icon(
-                    Icons.file_upload_outlined,
-                    size: 20,
-                  ),
+            GestureDetector(
+              onTap: () async {
+                send(gymId.toString());
+              },
+              child: const Center(
+                child: Icon(
+                  Icons.file_upload_outlined,
+                  size: 20,
                 ),
               ),
             ),
@@ -731,7 +766,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                                 gridDelegate:
                                     const SliverGridDelegateWithFixedCrossAxisCount(
                                         crossAxisCount: 2),
-                                itemCount: data['images'].length,
+                                itemCount: imgList.length,
                                 itemBuilder: (BuildContext context, int index) {
                                   return SizedBox(
                                     height: MediaQuery.of(context).size.height *
@@ -744,20 +779,19 @@ class _ProductDetailsState extends State<ProductDetails> {
                                           height: 500,
                                           width: 500,
                                           child: FittedBox(
-                                            child: Image.network(
-                                              data['images'][index].toString(),
-                                              fit: BoxFit.fill,
-                                            ),
-                                          ),
+                                              child: Image.network(
+                                            imgList[index].toString(),
+                                            fit: BoxFit.fill,
+                                          )),
                                         ),
                                         const SizedBox(width: 20),
                                         IconButton(
                                           onPressed: () async {
-                                            print(data['images'].length);
+                                            print(imgList.length);
                                             await deletee(
                                                 // '12.jpeg',
                                                 imgList[index].toString(),
-                                                data['images']);
+                                                imgList);
                                             await FirebaseFirestore.instance
                                                 .collection('product_details')
                                                 .doc(gymId)
@@ -791,7 +825,7 @@ class _ProductDetailsState extends State<ProductDetails> {
               // Adding timings +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++---------------------------------
 
               Get.to(() => Timings(
-                    pGymId: gymId,
+                    pGymId: gymId.toString(),
                   ));
               // bool temp = online_pay;
               // temp = !temp;
@@ -916,8 +950,8 @@ class _ProductDetailsState extends State<ProductDetails> {
         ),
       ),
 
-      DataCell(datacelldisplay(
-          disimg: data['display_picture'], idd: data['gym_id'])),
+      DataCell(
+          datacelldisplay(disimg: imagess.toString(), idd: gymId.toString())),
 
       DataCell(
         const Text(""),
@@ -927,21 +961,21 @@ class _ProductDetailsState extends State<ProductDetails> {
               context,
               MaterialPageRoute(
                   builder: (context) => ProductEditBox(
-                      address: data['address'],
-                      gender: data['gender'],
-                      name: data['name'],
-                      pincode: data['pincode'],
-                      branch: data['branch'],
-                      gymId: data['gym_id'],
-                      gymOwner: data['gym_owner'],
+                      address: address.toString(),
+                      gender: gender.toString(),
+                      name: name.toString(),
+                      pincode: pincode.toString(),
+                      branch: branch.toString(),
+                      gymId: gymId.toString(),
+                      gymOwner: gym_owner.toString(),
                       // landmark: data['landmark'],
-                      password: data['password'],
-                      imagee: data['display_picture'],
+                      password: password.toString(),
+                      imagee: imagess.toString(),
                       arr2: arr2,
                       WorkoutArray: WorkoutArray,
                       serviceArray: serviceArray,
-                      description: data['description'],
-                      rules: data['rules']
+                      description: descriptionns,
+                      rules: ruless
 
                       // location: data['location'],
                       )));
@@ -1150,33 +1184,31 @@ class _ShowAddBoxState extends State<ShowAddBox> {
 
               //customTextField(hinttext: "Gender", addcontroller: _addgender),
 
-              Container(
-                child: Row(
-                  children: [
-                    const Text('Gender:',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w700, fontSize: 15)),
-                    DropdownButton(
-                        value: selectedValue,
-                        items: const [
-                          DropdownMenuItem(
-                            child: Text("Male"),
-                            value: "MALE",
-                          ),
-                          DropdownMenuItem(
-                            child: Text("Female"),
-                            value: "FEMALE",
-                          ),
-                          DropdownMenuItem(
-                              child: Text("Unisex"), value: "UNISEX"),
-                        ],
-                        onChanged: (value) {
-                          setState(() {
-                            selectedValue = value as String;
-                          });
-                        }),
-                  ],
-                ),
+              Row(
+                children: [
+                  const Text('Gender:',
+                      style:
+                          TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
+                  DropdownButton(
+                      value: selectedValue,
+                      items: const [
+                        DropdownMenuItem(
+                          child: Text("Male"),
+                          value: "MALE",
+                        ),
+                        DropdownMenuItem(
+                          child: Text("Female"),
+                          value: "FEMALE",
+                        ),
+                        DropdownMenuItem(
+                            child: Text("Unisex"), value: "UNISEX"),
+                      ],
+                      onChanged: (value) {
+                        setState(() {
+                          selectedValue = value as String;
+                        });
+                      }),
+                ],
               ),
 
               const SizedBox(height: 15),
@@ -1417,8 +1449,8 @@ class _ShowAddBoxState extends State<ShowAddBox> {
                           _addrules.text = "";
                         });
                       },
-                      child: Text("Add Rules")),
-                  SizedBox(width: 20),
+                      child: const Text("Add Rules")),
+                  const SizedBox(width: 20),
                   ElevatedButton(
                       onPressed: () {
                         setState(() {
@@ -1426,7 +1458,7 @@ class _ShowAddBoxState extends State<ShowAddBox> {
                           _addrules.text = "";
                         });
                       },
-                      child: Text("Remove Rules"))
+                      child: const Text("Remove Rules"))
                 ],
               ),
               const SizedBox(
@@ -1434,7 +1466,8 @@ class _ShowAddBoxState extends State<ShowAddBox> {
               ),
               Text(
                 rules.toString(),
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                style:
+                    const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
               const SizedBox(
                 height: 10,
@@ -1593,7 +1626,7 @@ class _loadimageState extends State<loadimage> {
                         height: 200,
                         width: 200,
                       )
-                    : Center(child: const CircularProgressIndicator()))
+                    : const Center(child: CircularProgressIndicator()))
             : Container(
                 child: const Text(
                 "Please Upload Image",
@@ -1650,24 +1683,22 @@ class _CheckBoxxState extends State<CheckBoxx> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        children: [
-          CheckboxListTile(
-              // bool selected=false;
-              value: check,
-              title: Text(widget.doc),
-              onChanged: (bool? selected) async {
-                setState(() {
-                  check = selected!;
-                });
-                if (selected == true) arr.add(widget.id);
-                print(arr);
-                if (selected == false) arr.remove(widget.id);
-                print(arr);
-              }),
-        ],
-      ),
+    return Column(
+      children: [
+        CheckboxListTile(
+            // bool selected=false;
+            value: check,
+            title: Text(widget.doc),
+            onChanged: (bool? selected) async {
+              setState(() {
+                check = selected!;
+              });
+              if (selected == true) arr.add(widget.id);
+              print(arr);
+              if (selected == false) arr.remove(widget.id);
+              print(arr);
+            }),
+      ],
     );
   }
 }
@@ -1712,35 +1743,33 @@ class _ECheckBoxState extends State<ECheckBox> {
     return Container(
       child: Column(
         children: [
-          Container(
-            child: CheckboxListTile(
-                // bool selected=false;
-                value: check,
-                title: Text(widget.doc),
-                onChanged: (bool? selected) async {
-                  setState(() {
-                    check = selected!;
+          CheckboxListTile(
+              // bool selected=false;
+              value: check,
+              title: Text(widget.doc),
+              onChanged: (bool? selected) async {
+                setState(() {
+                  check = selected!;
+                });
+                if (selected == true) {
+                  await FirebaseFirestore.instance
+                      .collection('product_details')
+                      .doc(widget.gym_id)
+                      .update({
+                    'amenities': FieldValue.arrayUnion([widget.id])
                   });
-                  if (selected == true) {
-                    await FirebaseFirestore.instance
-                        .collection('product_details')
-                        .doc(widget.gym_id)
-                        .update({
-                      'amenities': FieldValue.arrayUnion([widget.id])
-                    });
-                  }
-                  // print(widget.arr2);
-                  if (selected == false) {
-                    await FirebaseFirestore.instance
-                        .collection('product_details')
-                        .doc(widget.gym_id)
-                        .update({
-                      'amenities': FieldValue.arrayRemove([widget.id])
-                    });
-                  }
-                  // print(widget.arr2);
-                }),
-          ),
+                }
+                // print(widget.arr2);
+                if (selected == false) {
+                  await FirebaseFirestore.instance
+                      .collection('product_details')
+                      .doc(widget.gym_id)
+                      .update({
+                    'amenities': FieldValue.arrayRemove([widget.id])
+                  });
+                }
+                // print(widget.arr2);
+              }),
         ],
       ),
     );
@@ -2100,8 +2129,8 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                           _rules.text = "";
                         });
                       },
-                      child: Text("Add Rules")),
-                  SizedBox(width: 20),
+                      child: const Text("Add Rules")),
+                  const SizedBox(width: 20),
                   ElevatedButton(
                       onPressed: () {
                         setState(() {
@@ -2109,7 +2138,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                           _rules.text = "";
                         });
                       },
-                      child: Text("Remove Rules"))
+                      child: const Text("Remove Rules"))
                 ],
               ),
               const SizedBox(
@@ -2117,7 +2146,8 @@ class _ProductEditBoxState extends State<ProductEditBox> {
               ),
               Text(
                 rs.toString(),
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                style:
+                    const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
               // customTextField(
               //     hinttext: 'Longitude', addcontroller: _longitudeController),
@@ -2254,8 +2284,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                         'gym_owner': _gymowner.text,
                         'branch': _branch.text,
                         'description': _description.text,
-                        'display_picture':
-                            image2 != null ? image2 : widget.imagee,
+                        'display_picture': image2 ?? widget.imagee,
                         'rules': rs
                       };
                       await documentReference.update(data).whenComplete(() {
@@ -2298,55 +2327,55 @@ class _editimState extends State<editim> {
   @override
   bool isloading = false;
   // var imagee;
+  @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Row(
-        children: [
-          ElevatedButton(
-            onPressed: () async {
-              try {
-                var dic = await chooseImage();
-                if (dic != null) {
-                  setState(() {
-                    isloading = true;
-                  });
-                }
-
-                await addImageToStorage(dic, widget.gymid);
+    return Row(
+      children: [
+        ElevatedButton(
+          onPressed: () async {
+            try {
+              var dic = await chooseImage();
+              if (dic != null) {
                 setState(() {
-                  isloading = false;
-                });
-              } finally {
-                setState(() {
-                  isloading = false;
+                  isloading = true;
                 });
               }
-            },
-            child: const Text(
-              'Upload Gym Image',
-              style:
-                  TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
-            ),
+
+              await addImageToStorage(dic, widget.gymid);
+              setState(() {
+                isloading = false;
+              });
+            } finally {
+              setState(() {
+                isloading = false;
+              });
+            }
+          },
+          child: const Text(
+            'Upload Gym Image',
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
           ),
-          const SizedBox(
-            width: 20,
-          ),
-          isloading && image2 == null
-              ? Container(
-                  height: 200, width: 200, child: CircularProgressIndicator())
-              : image2 != null
-                  ? Image(
-                      image: NetworkImage(image2.toString()),
-                      height: 200,
-                      width: 200,
-                    )
-                  : Image(
-                      image: NetworkImage(i2),
-                      height: 200,
-                      width: 200,
-                    )
-        ],
-      ),
+        ),
+        const SizedBox(
+          width: 20,
+        ),
+        isloading && image2 == null
+            ? SizedBox(
+                height: 200,
+                width: 200,
+                child: const CircularProgressIndicator())
+            : image2 != null
+                ? Image(
+                    image: NetworkImage(image2.toString()),
+                    height: 200,
+                    width: 200,
+                  )
+                : Image(
+                    image: NetworkImage(i2),
+                    height: 200,
+                    width: 200,
+                  )
+      ],
     );
   }
 
@@ -2402,7 +2431,6 @@ class datacelldisplay extends StatefulWidget {
 }
 
 class _datacelldisplayState extends State<datacelldisplay> {
-  @override
   bool isloadingg = false;
   Widget build(BuildContext context) {
     return Center(
@@ -2430,18 +2458,20 @@ class _datacelldisplayState extends State<datacelldisplay> {
           ],
         ),
         isloadingg
-            ? Container(
+            ? const SizedBox(
                 height: 100,
                 width: 200,
-                child: const Center(
+                child: Center(
                   child: CircularProgressIndicator(),
                 ),
               )
-            : Container(
-                height: 100,
-                width: 200,
-                child: Image.network(widget.disimg),
-              ),
+            : widget.disimg != "null"
+                ? SizedBox(
+                    height: 100,
+                    width: 200,
+                    child: Image.network(widget.disimg),
+                  )
+                : const Center(child: Text("Image Not Uploaded")),
       ]),
     );
   }

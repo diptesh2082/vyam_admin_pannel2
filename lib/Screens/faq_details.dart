@@ -27,7 +27,7 @@ class _FaqDetailsState extends State<FaqDetails> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("FAQ")),
+      appBar: AppBar(title: const Text("FAQ")),
       body: SafeArea(
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 5),
@@ -116,12 +116,12 @@ class _FaqDetailsState extends State<FaqDetails> {
                     },
                   ),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     ElevatedButton(
-                      child: Text("Previous Page"),
+                      child: const Text("Previous Page"),
                       onPressed: () {
                         if (start >= 1) page--;
 
@@ -135,17 +135,17 @@ class _FaqDetailsState extends State<FaqDetails> {
                       },
                     ),
                     Container(
-                      margin: EdgeInsets.symmetric(horizontal: 20),
+                      margin: const EdgeInsets.symmetric(horizontal: 20),
                       child: Text(
                         page.toString(),
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 15,
                             color: Colors.teal),
                       ),
                     ),
                     ElevatedButton(
-                      child: Text("Next Page"),
+                      child: const Text("Next Page"),
                       onPressed: () {
                         setState(() {
                           if (end <= length) page++;
@@ -190,13 +190,42 @@ class _FaqDetailsState extends State<FaqDetails> {
 
   DataRow _buildListItem(BuildContext context, DocumentSnapshot data, int index,
       int start, int end) {
-    String idData = data['id'];
+    String? question;
+    try {
+      question = data['question'];
+    } catch (e) {
+      question = '#Error';
+    }
+    String? answer;
+    try {
+      answer = data['answer'];
+    } catch (e) {
+      answer = '#Error';
+    }
+    String? idData;
+    try {
+      idData = data['id'];
+    } catch (e) {
+      idData = '#Error';
+    }
+    String? user_id;
+    try {
+      user_id = data['user_id'];
+    } catch (e) {
+      user_id = '#Error';
+    }
+    String? gym_id;
+    try {
+      gym_id = data['gym_id'];
+    } catch (e) {
+      gym_id = '#Error';
+    }
+    // data['gym_id']
+    // data['user_id']
+    // String idData = data['id'];
     return DataRow(cells: [
-      DataCell(data['question'] != null
-          ? Text(data['question'] ?? "")
-          : const Text("")),
-      DataCell(
-          data['answer'] != null ? Text(data['answer'] ?? "") : const Text("")),
+      DataCell(question != null ? Text(question) : const Text("")),
+      DataCell(answer != null ? Text(answer) : const Text("")),
       // DataCell(
       //     data['gym_id'] != null ? Text(data['gym_id'] ?? "") : const Text("")),
       // DataCell(data['user_id'] != null
@@ -207,15 +236,15 @@ class _FaqDetailsState extends State<FaqDetails> {
             context,
             MaterialPageRoute(
               builder: (context) => EditBox(
-                userid: data['user_id'],
-                answer: data['answer'],
-                gymid: data['gym_id'],
-                question: data['question'],
-                id: data['id'],
+                userid: user_id.toString(),
+                answer: answer.toString(),
+                gymid: gym_id.toString(),
+                question: question.toString(),
+                id: idData.toString(),
               ),
             ));
       }),
-      DataCell(Icon(Icons.delete), onTap: () {
+      DataCell(const Icon(Icons.delete), onTap: () {
         deleteMethod(stream: faqStream, uniqueDocId: idData);
       })
     ]);
@@ -321,11 +350,11 @@ class _EditBoxState extends State<EditBox> {
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
-          title: Text('Edit Booking'),
+          title: const Text('Edit Booking'),
         ),
         body: SafeArea(
           child: Container(
-            padding: EdgeInsets.all(20),
+            padding: const EdgeInsets.all(20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

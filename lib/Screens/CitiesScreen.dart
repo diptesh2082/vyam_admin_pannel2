@@ -181,30 +181,30 @@ class _CitiesScreenState extends State<CitiesScreen> {
 
   DataRow _buildListItem(BuildContext context, DocumentSnapshot data, int index,
       int start, int end) {
+    // String cityId = data['id'];
+    // bool status = data['Status'];
     bool status = false;
     try {
       status = data['Status'];
     } catch (e) {
       status = false;
     }
-
-    String address;
-    try {
-      address = data['Address'];
-    } catch (e) {
-      address = "#ERROR";
-    }
-
-    String cityId;
+    String? cityId;
     try {
       cityId = data['id'];
     } catch (e) {
-      cityId = "#ERROR";
+      cityId = '#Error';
+    }
+    String? Address;
+    try {
+      Address = data['Address'];
+    } catch (e) {
+      Address = '#Error';
     }
     return DataRow(cells: [
       DataCell(data != null ? Text(index.toString()) : const Text("")),
       DataCell(
-        address != null ? Text(address.toString()) : const Text(""),
+        Address != null ? Text(Address) : const Text(""),
       ),
       DataCell(
         status != null ? Text(status.toString()) : const Text(""),
@@ -216,8 +216,10 @@ class _CitiesScreenState extends State<CitiesScreen> {
         const Text(''),
         showEditIcon: true,
         onTap: () {
-          Get.to(() =>
-              ProductEditBox(address: address, status: status, cityId: cityId));
+          Get.to(() => ProductEditBox(
+              address: Address.toString(),
+              status: status,
+              cityId: cityId.toString()));
         },
       ),
       DataCell(const Icon(Icons.delete), onTap: () {
@@ -448,31 +450,29 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                 ),
 // <<<<<<< HEAD
                 // customTextField3(hinttext: "ID", addcontroller: _cityId),
-                Container(
-                  child: Row(
-                    children: [
-                      const Text('Status :',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w700, fontSize: 15)),
-                      DropdownButton(
-                          value: selectedValue,
-                          items: const [
-                            DropdownMenuItem(
-                              child: Text("TRUE"),
-                              value: true,
-                            ),
-                            DropdownMenuItem(
-                              child: Text("FALSE"),
-                              value: false,
-                            ),
-                          ],
-                          onChanged: (bool? value) {
-                            setState(() {
-                              selectedValue = value!;
-                            });
-                          }),
-                    ],
-                  ),
+                Row(
+                  children: [
+                    const Text('Status :',
+                        style: TextStyle(
+                            fontWeight: FontWeight.w700, fontSize: 15)),
+                    DropdownButton(
+                        value: selectedValue,
+                        items: const [
+                          DropdownMenuItem(
+                            child: Text("TRUE"),
+                            value: true,
+                          ),
+                          DropdownMenuItem(
+                            child: Text("FALSE"),
+                            value: false,
+                          ),
+                        ],
+                        onChanged: (bool? value) {
+                          setState(() {
+                            selectedValue = value!;
+                          });
+                        }),
+                  ],
                 ),
 // =======
                 // customTextField3(hinttext: "Name", addcontroller: _address),

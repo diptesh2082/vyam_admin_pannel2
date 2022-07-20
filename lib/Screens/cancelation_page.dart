@@ -32,7 +32,7 @@ class _CancelationPageState extends State<CancelationPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Cancellation Data")),
+      appBar: AppBar(title: const Text("Cancellation Data")),
       body: SafeArea(
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 5),
@@ -63,7 +63,7 @@ class _CancelationPageState extends State<CancelationPage> {
                       },
                       // controller: searchController,
                       onChanged: (value) {
-                        if (value.length == 0) {
+                        if (value.isEmpty) {
                           // _node.canRequestFocus=false;
                           // FocusScope.of(context).unfocus();
                         }
@@ -101,7 +101,7 @@ class _CancelationPageState extends State<CancelationPage> {
                       }
                       var doc = snapshot.data.docs;
 
-                      if (searchGymName.length > 0) {
+                      if (searchGymName.isNotEmpty) {
                         doc = doc.where((element) {
                           return element
                                   .get('cancel_choice')
@@ -192,12 +192,12 @@ class _CancelationPageState extends State<CancelationPage> {
                     },
                   ),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     ElevatedButton(
-                      child: Text("Previous Page"),
+                      child: const Text("Previous Page"),
                       onPressed: () {
                         setState(() {
                           if (start >= 1) page--;
@@ -211,17 +211,17 @@ class _CancelationPageState extends State<CancelationPage> {
                       },
                     ),
                     Container(
-                      margin: EdgeInsets.symmetric(horizontal: 20),
+                      margin: const EdgeInsets.symmetric(horizontal: 20),
                       child: Text(
                         page.toString(),
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 15,
                             color: Colors.teal),
                       ),
                     ),
                     ElevatedButton(
-                      child: Text("Next Page"),
+                      child: const Text("Next Page"),
                       onPressed: () {
                         setState(() {
                           if (end <= length) page++;
@@ -298,7 +298,7 @@ class _CancelationPageState extends State<CancelationPage> {
                 child: Text((data['user_number'])
                     .toString()
                     .substring(0, numbers.length)))
-            : Text("")),
+            : const Text("")),
         // DataCell(
         //   data['vendor_id'] != null
         //       ? SizedBox(
@@ -314,7 +314,7 @@ class _CancelationPageState extends State<CancelationPage> {
               ? SizedBox(
                   width: 150.0,
                   height: 100,
-                  child: Text("${data['vendor_name']} ||\n${branch}"),
+                  child: Text("${data['vendor_name']} ||\n$branch"),
                 )
               : const Text(""),
         ),
@@ -364,7 +364,7 @@ class _CancelationPageState extends State<CancelationPage> {
           },
         ),
         DataCell(
-          Icon(Icons.delete),
+          const Icon(Icons.delete),
           onTap: () {
             deleteMethod(stream: cancellationStream, uniqueDocId: Id);
           },
@@ -412,9 +412,9 @@ class _CancelationEditBoxState extends State<CancelationEditBox> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Edit Box")),
+      appBar: AppBar(title: const Text("Edit Box")),
       body: Container(
-        padding: EdgeInsets.all(20),
+        padding: const EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -530,7 +530,7 @@ class _CancelationEditBoxState extends State<CancelationEditBox> {
                 child: ElevatedButton(
                   onPressed: () async {
                     print("/////");
-                    print('${widget.Id}');
+                    print(widget.Id);
 
                     DocumentReference documentReference = FirebaseFirestore
                         .instance

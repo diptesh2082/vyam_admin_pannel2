@@ -35,7 +35,7 @@ class _filtersState extends State<filters> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Filters")),
+      appBar: AppBar(title: const Text("Filters")),
       backgroundColor: Colors.white10,
       body: Padding(
         padding: const EdgeInsets.all(25.0),

@@ -1,11 +1,9 @@
 import 'dart:async';
-import 'dart:html';
 import 'dart:io';
 import 'package:admin_panel_vyam/services/MatchIDMethod.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
@@ -21,6 +19,7 @@ String globalGymId = '';
 String gymname = '';
 String branch = '';
 
+// ignore: must_be_immutable
 class TrainerPage extends StatefulWidget {
   TrainerPage(
     this.tGymId,
@@ -117,9 +116,9 @@ class _TrainerPageState extends State<TrainerPage> {
 
                       var document = snapshot.data.docs;
                       int documentLength = snapshot.data.docs.length;
-                      for (int i = 0; i <= documentLength - 1; i++) {
-                        print(document[i]['name']);
-                      }
+                      // for (int i = 0; i <= documentLength - 1; i++) {
+                      //   print(document[i]['name']);
+                      // }
                       return SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
                         child: DataTable(
@@ -282,28 +281,120 @@ class _TrainerPageState extends State<TrainerPage> {
 
   DataRow _buildListItem(BuildContext context, DocumentSnapshot data, int index,
       int start, int end) {
-    String imageUrl = data['image'];
-    bool tvalid = data['eligible'];
+    // String imageUrl = data['image'].toString();
+    // bool tvalid = data['eligible'];
 
-    String trainerId = data['trainer_id'];
+    bool tvalid = false;
+    try {
+      tvalid = data['eligible'];
+    } catch (e) {
+      tvalid = false;
+    }
+
+    // String trainerId = data['trainer_id'];
+
+    String? image;
+    try {
+      image = data['image'].toString();
+    } catch (e) {
+      image = "#ERROR";
+    }
+
+    String? name;
+    try {
+      name = data['name'].toString();
+    } catch (e) {
+      name = "#ERROR";
+    }
+    String? branch;
+    try {
+      branch = data['branch'].toString();
+    } catch (e) {
+      branch = "#ERROR";
+    }
+
+    String? place;
+    try {
+      place = data['place'].toString();
+    } catch (e) {
+      place = "#ERROR";
+    }
+
+    String? experience;
+    try {
+      experience = data['experience'].toString();
+    } catch (e) {
+      experience = "#ERROR";
+    }
+
+    String? about;
+    try {
+      about = data['about'].toString();
+    } catch (e) {
+      about = "#ERROR";
+    }
+
+    String? clients;
+    try {
+      clients = data['clients'].toString();
+    } catch (e) {
+      clients = "#ERROR";
+    }
+
+    String position = '';
+    try {
+      position = data['position'].toString();
+    } catch (e) {
+      position = "#ERROR";
+    }
+
+    String? instaId;
+    try {
+      instaId = data['insta_id'].toString();
+    } catch (e) {
+      instaId = "#ERROR";
+    }
+
+    String trainerid = '';
+    try {
+      trainerid = data['trainer_id'];
+    } catch (e) {
+      trainerid = "#ERROR";
+    }
+
+    List<dynamic> certi = [];
+    try {
+      certi = data['certification'];
+    } catch (e) {
+      certi = ["Null"];
+    }
+
+    List<dynamic> spec = [];
+    try {
+      spec = data['specialization'];
+    } catch (e) {
+      spec = ["Null"];
+    }
+
+    // List<dynamic> certif
+
     // var cert = data['certification'];
     // String gymid = data['gym_id'];
     return DataRow(cells: [
-      DataCell(data != null
-          ? CircleAvatar(backgroundImage: NetworkImage(imageUrl))
-          : const Text("")),
+      DataCell(image != "null"
+          ? CircleAvatar(backgroundImage: NetworkImage(image))
+          : const Text("Image Not Uploaded")),
       // DataCell(data != null ? Text(trainerId) : Text("")),
-      DataCell(data != null ? Text(data['name'] ?? "") : const Text("")),
-      DataCell(data != null ? Text(data['branch'] ?? "") : const Text("")),
-      DataCell(data != null ? Text(data['place'] ?? "") : const Text("")),
-      DataCell(data != null ? Text(data['experience'] ?? "") : const Text("")),
-      DataCell(data != null
+      DataCell(name != null ? Text(name) : const Text("")),
+      DataCell(branch != null ? Text(branch) : const Text("")),
+      DataCell(place != null ? Text(place) : const Text("")),
+      DataCell(experience != null ? Text(experience) : const Text("")),
+      DataCell(about != null
           ? SingleChildScrollView(
-              child: Container(
-                  width: 400, height: 300, child: Text(data['about'] ?? "")),
+              child: SizedBox(width: 400, height: 300, child: Text(about)),
             )
           : const Text("")),
-      DataCell(data != null ? Text(data['clients'] ?? "") : const Text("")),
+      DataCell(clients != null ? Text(clients) : const Text("")),
 
       DataCell(
         Center(
@@ -315,7 +406,7 @@ class _TrainerPageState extends State<TrainerPage> {
                   .collection('product_details')
                   .doc(globalGymId)
                   .collection('trainer')
-                  .doc(trainerId);
+                  .doc(trainerid);
               await documentReference
                   .update({'eligible': temp})
                   .whenComplete(() => print("Legitimate toggled"))
@@ -332,23 +423,23 @@ class _TrainerPageState extends State<TrainerPage> {
         ),
       ),
 
-      DataCell(data != null ? Text(data['position'] ?? "") : const Text("")),
+      DataCell(position != null ? Text(position) : const Text("")),
 
       DataCell(const Text(""), showEditIcon: true, onTap: () {
         Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => ProductEditBox(
-                images: data['image'],
-                name: data['name'],
-                about: data['about'],
-                experience: data['experience'],
-                social_link: data['insta_id'],
-                clients: data['clients'],
-                certification: data['certification'],
-                specialization: data['specialization'],
-                trainerId: data['trainer_id'],
-                position: data['position'],
+                images: image.toString(),
+                name: name.toString(),
+                about: about.toString(),
+                experience: experience.toString(),
+                social_link: instaId.toString(),
+                clients: clients.toString(),
+                certification: certi.toList(),
+                specialization: spec.toList(),
+                trainerId: trainerid,
+                position: position,
               ),
             ));
       }),
@@ -384,7 +475,7 @@ class _TrainerPageState extends State<TrainerPage> {
                             onPressed: () {
                               deleteMethod(
                                   stream: trainerStream,
-                                  uniqueDocId: trainerId);
+                                  uniqueDocId: trainerid);
                               Navigator.pop(context);
                             },
                             icon: const Icon(Icons.check),
@@ -559,23 +650,23 @@ class _loadimageState extends State<loadimage> {
           width: 200,
           height: 100,
           child: isloading
-              ? Container(
+              ? const SizedBox(
                   height: 100,
                   width: 200,
-                  child: const Center(
+                  child: Center(
                     child: CircularProgressIndicator(),
                   ),
                 )
               : image3 != null
-                  ? Container(
+                  ? SizedBox(
                       height: 100,
                       width: 200,
                       child: Image.network(image3),
                     )
-                  : Container(
+                  : const SizedBox(
                       height: 100,
                       width: 200,
-                      child: const Center(child: Text("Please Upload Image")),
+                      child: Center(child: Text("Please Upload Image")),
                     ),
         ),
       ],
@@ -636,8 +727,8 @@ class _ShowAddboxState extends State<ShowAddbox> {
   List<String> certification = [];
   List<String> specialization = [];
   // final TextEditingController _addCertification = TextEditingController();
-  @override
   CollectionReference? trainerStream;
+  @override
   void initState() {
     // TODO: implement initState
     trainerStream = FirebaseFirestore.instance
@@ -856,8 +947,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
   final TextEditingController _experience = TextEditingController();
   final TextEditingController _clients = TextEditingController();
   final TextEditingController _review = TextEditingController();
-  final TextEditingController _specialization =
-      TextEditingController(); //todo: later
+  final TextEditingController _specialization = TextEditingController();
   final TextEditingController _socialMedia = TextEditingController();
   final TextEditingController _position = TextEditingController();
   List<dynamic> cert = [];
@@ -1125,10 +1215,8 @@ class _editimState extends State<editim> {
             width: 20,
           ),
           isloading
-              ? Container(
-                  height: 200,
-                  width: 200,
-                  child: const CircularProgressIndicator())
+              ? const SizedBox(
+                  height: 200, width: 200, child: CircularProgressIndicator())
               : image2 != null
                   ? Image(
                       image: NetworkImage(image2.toString()),

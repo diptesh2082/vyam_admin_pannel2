@@ -36,7 +36,7 @@ class _CategoryInfoScreenState extends State<CategoryInfoScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Category"),
+        title: const Text("Category"),
       ),
       body: SafeArea(
         child: Container(
@@ -91,7 +91,7 @@ class _CategoryInfoScreenState extends State<CategoryInfoScreen> {
                       },
                       // controller: searchController,
                       onChanged: (value) {
-                        if (value.length == 0) {
+                        if (value.isEmpty) {
                           // _node.canRequestFocus=false;
                           // FocusScope.of(context).unfocus();
                         }
@@ -126,7 +126,7 @@ class _CategoryInfoScreenState extends State<CategoryInfoScreen> {
 
                       var doc = snapshot.data.docs;
 
-                      if (searchCateogryName.length > 0) {
+                      if (searchCateogryName.isNotEmpty) {
                         doc = doc.where((element) {
                           return element
                               .get('name')
@@ -184,12 +184,12 @@ class _CategoryInfoScreenState extends State<CategoryInfoScreen> {
                     },
                   ),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     ElevatedButton(
-                      child: Text("Previous Page"),
+                      child: const Text("Previous Page"),
                       onPressed: () {
                         setState(() {
                           if (start > 1) page--;
@@ -203,17 +203,17 @@ class _CategoryInfoScreenState extends State<CategoryInfoScreen> {
                       },
                     ),
                     Container(
-                      margin: EdgeInsets.symmetric(horizontal: 20),
+                      margin: const EdgeInsets.symmetric(horizontal: 20),
                       child: Text(
                         page.toString(),
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 15,
                             color: Colors.teal),
                       ),
                     ),
                     ElevatedButton(
-                      child: Text("Next Page"),
+                      child: const Text("Next Page"),
                       onPressed: () {
                         setState(() {
                           if (end <= length) page++;
@@ -259,23 +259,55 @@ class _CategoryInfoScreenState extends State<CategoryInfoScreen> {
 
   DataRow _buildListItem(BuildContext context, DocumentSnapshot data, int index,
       int start, int end) {
-    String categoryID = data['category_id'];
+    // String categoryID = data['category_id'];
     String x;
-    bool status = data['status'];
-    String img = data['image'];
+    // bool status = data['status'];
+    // String img = data['image'].toString();
+
+    String? categoryID;
+    try {
+      categoryID = data['category_id'];
+    } catch (e) {
+      categoryID = '#Error';
+    }
+    bool status = false;
+    try {
+      status = data['status'];
+    } catch (e) {
+      status = false;
+    }
+    String? img;
+    try {
+      img = data['image'];
+    } catch (e) {
+      img = '#Error';
+    }
+    String? name;
+    try {
+      name = data['name'];
+    } catch (e) {
+      name = '#Error';
+    }
+    String? position;
+    try {
+      position = data['position'];
+    } catch (e) {
+      position = '#Error';
+    }
+
     return DataRow(cells: [
       DataCell(
-        data['name'] != null ? Text(data['name'] ?? "") : const Text(""),
+        name != null ? Text(name) : const Text(""),
       ),
       DataCell(
-        data['image'] != null
+        img != null && img != "null"
             ? Image.network(
-                data['image'] ?? "",
+                img,
                 scale: 0.5,
                 height: 150,
                 width: 150,
               )
-            : const Text(""),
+            : const Text("Image Not Uploaded"),
       ),
       DataCell(
         Center(
@@ -304,8 +336,8 @@ class _CategoryInfoScreenState extends State<CategoryInfoScreen> {
         ),
       ),
       DataCell(
-        data['position'] != null
-            ? Center(child: Text(data['position'].toString()))
+        position != null
+            ? Center(child: Text(position.toString()))
             : const Text(""),
       ),
       DataCell(
@@ -313,11 +345,11 @@ class _CategoryInfoScreenState extends State<CategoryInfoScreen> {
         showEditIcon: true,
         onTap: () {
           Get.to(() => ProductEditBox(
-              name: data['name'],
-              status: data['status'],
-              image: data['image'],
-              categoryId: data['category_id'],
-              position: data['position']));
+              name: name.toString(),
+              status: status,
+              image: img.toString(),
+              categoryId: categoryID.toString(),
+              position: position.toString()));
         },
       ),
       DataCell(const Icon(Icons.delete), onTap: () {
@@ -349,7 +381,7 @@ class _CategoryInfoScreenState extends State<CategoryInfoScreen> {
                             onPressed: () {
                               deleteMethodI(
                                   stream: categoryStream,
-                                  uniqueDocId: data['category_id'],
+                                  uniqueDocId: categoryID.toString(),
                                   imagess: img);
                               Navigator.pop(context);
                             },
@@ -456,9 +488,9 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                             .doc(categoryId)
                             .update(
                           {
-                            'image': image3 != null ? image3 : widget.image,
+                            'image': image3 ?? widget.image,
                             'name': _name.text,
-                            'category_id': categoryId,
+                            // 'category_id': categoryId,
                             'position': _position.text,
                           },
                         ).whenComplete(() {
@@ -504,54 +536,52 @@ class _editimState extends State<editim> {
   @override
   bool isloading = false;
   var imagee;
+  @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Row(
-        children: [
-          ElevatedButton(
-            onPressed: () async {
-              try {
-                var dic = await chooseImage();
-                if (dic != null) {
-                  setState(() {
-                    isloading = true;
-                  });
-                }
-                await addImageToStorage(dic, widget.catid);
+    return Row(
+      children: [
+        ElevatedButton(
+          onPressed: () async {
+            try {
+              var dic = await chooseImage();
+              if (dic != null) {
                 setState(() {
-                  isloading = false;
-                  i2 = image3;
-                });
-              } finally {
-                setState(() {
-                  isloading = false;
+                  isloading = true;
                 });
               }
-            },
-            child: Text(
-              'Upload Gym Image',
-              style:
-                  TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
-            ),
+              await addImageToStorage(dic, widget.catid);
+              setState(() {
+                isloading = false;
+                i2 = image3;
+              });
+            } finally {
+              setState(() {
+                isloading = false;
+              });
+            }
+          },
+          child: const Text(
+            'Upload Gym Image',
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
           ),
-          const SizedBox(
-            width: 20,
-          ),
-          isloading
-              ? Container(
-                  height: 100,
-                  width: 200,
-                  child: Center(
-                    child: CircularProgressIndicator(),
-                  ),
-                )
-              : Container(
-                  height: 100,
-                  width: 200,
-                  child: Image.network(i2),
+        ),
+        const SizedBox(
+          width: 20,
+        ),
+        isloading
+            ? const SizedBox(
+                height: 100,
+                width: 200,
+                child: Center(
+                  child: CircularProgressIndicator(),
                 ),
-        ],
-      ),
+              )
+            : SizedBox(
+                height: 100,
+                width: 200,
+                child: Image.network(i2),
+              ),
+      ],
     );
   }
 

@@ -69,7 +69,7 @@ class _UserInformationState extends State<UserInformation> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => detailsadd()));
+                              builder: (context) => const detailsadd()));
                     },
                     child: const Text('Add User'),
                   ),
@@ -298,12 +298,12 @@ class _UserInformationState extends State<UserInformation> {
                     //   },
                     // ),
 
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         ElevatedButton(
-                          child: Text("Previous Page"),
+                          child: const Text("Previous Page"),
                           onPressed: () {
                             setState(() {
                               if (start >= 1) page--;
@@ -315,7 +315,7 @@ class _UserInformationState extends State<UserInformation> {
                             print("Previous Page");
                           },
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 20,
                         ),
                         StreamBuilder<QuerySnapshot>(
@@ -359,7 +359,7 @@ class _UserInformationState extends State<UserInformation> {
                                             mainAxisAlignment:
                                                 MainAxisAlignment.start,
                                             children: [
-                                              SizedBox(
+                                              const SizedBox(
                                                 width: 20,
                                               ),
                                               Container(
@@ -370,14 +370,14 @@ class _UserInformationState extends State<UserInformation> {
                                                 width: 50,
                                                 child: Text(
                                                   "${index + 1}",
-                                                  style: TextStyle(
+                                                  style: const TextStyle(
                                                       color: Colors.white,
                                                       fontWeight:
                                                           FontWeight.bold),
                                                   textAlign: TextAlign.center,
                                                 ),
                                               ),
-                                              SizedBox(width: 20),
+                                              const SizedBox(width: 20),
                                             ],
                                           ),
                                           onTap: () {
@@ -395,7 +395,7 @@ class _UserInformationState extends State<UserInformation> {
                                     }),
                               );
                             }),
-                        SizedBox(
+                        const SizedBox(
                           width: 20,
                         ),
                         GestureDetector(
@@ -410,7 +410,7 @@ class _UserInformationState extends State<UserInformation> {
                             height: 20,
                             width: 80,
                             color: Colors.teal,
-                            child: Text(
+                            child: const Text(
                               "Last Page",
                               style: TextStyle(
                                   color: Colors.white,
@@ -419,9 +419,9 @@ class _UserInformationState extends State<UserInformation> {
                             ),
                           ),
                         ),
-                        SizedBox(width: 20),
+                        const SizedBox(width: 20),
                         ElevatedButton(
-                          child: Text("Next Page"),
+                          child: const Text("Next Page"),
                           onPressed: () {
                             setState(() {
                               if (end <= length) page++;
@@ -510,18 +510,78 @@ class _UserInformationState extends State<UserInformation> {
 
   DataRow _buildListItem(BuildContext context, DocumentSnapshot data, int index,
       int start, int end) {
-    String userIDData = data['userId'];
-    String profileImage = data['image'];
-    bool legit = data['legit'];
+    String? userIDData;
+    try {
+      userIDData = data['userId'];
+    } catch (e) {
+      userIDData = '#Error';
+    }
+    String? address;
+    try {
+      address = data['address'];
+    } catch (e) {
+      address = '#Error';
+    }
+    String? gender;
+    try {
+      gender = data['gender'];
+    } catch (e) {
+      gender = '#Error';
+    }
+    String? number;
+    try {
+      number = data['number'];
+    } catch (e) {
+      number = '#Error';
+    }
+    String? pincode;
+    try {
+      pincode = data['pincode'];
+    } catch (e) {
+      pincode = '#Error';
+    }
+
+    String? email;
+    try {
+      email = data['email'];
+    } catch (e) {
+      email = '#Error';
+    }
+
+    String? name;
+    try {
+      name = data['name'];
+    } catch (e) {
+      name = '#Error';
+    }
+    String? profileImage;
+    try {
+      profileImage = data['image'];
+    } catch (e) {
+      profileImage = '#Error';
+    }
+    String? locality;
+    try {
+      locality = data['locality'];
+    } catch (e) {
+      locality = '#Error';
+    }
+
+    bool legit = false;
+    try {
+      legit = data['legit'];
+    } catch (e) {
+      legit = false;
+    }
 
     return DataRow(cells: [
-      DataCell(data != null ? Text(index.toString()) : Text("")),
+      DataCell(data != null ? Text(index.toString()) : const Text("")),
 
       DataCell(
-        profileImage != "null" || profileImage != null
+        profileImage.toString() != "null"
             ? CircleAvatar(
                 child: CachedNetworkImage(
-                  imageUrl: profileImage,
+                  imageUrl: profileImage.toString(),
                   imageBuilder: (context, imageProvider) => Container(
                     width: 100.0,
                     height: 100.0,
@@ -541,18 +601,19 @@ class _UserInformationState extends State<UserInformation> {
               ),
       ),
       // DataCell(data != null ? Text(userIDData) : Text("")),
-      DataCell(data != null ? Text(data['name'] ?? "") : Text("")),
-      DataCell(data != null ? Text(data['email'] ?? "") : Text("")),
-      DataCell(data != null ? Text(data['gender'] ?? "") : Text("")),
-      DataCell(data != null
-          ? Text((data['number'])
+      DataCell(name != null ? Text(name.toString()) : const Text("")),
+      DataCell(email != null ? Text(email.toString()) : const Text("")),
+      DataCell(gender != null ? Text(gender.toString()) : const Text("")),
+      DataCell(number != null
+          ? Text((number.toString())
               .toString()
-              .substring(3, data['number'].toString().length))
-          : Text("")),
-      DataCell(data != null ? Text(data['address'] ?? "") : Text("")),
-      DataCell(data != null ? Text(data['locality'] ?? "") : Text("")),
+              .substring(3, number.toString().length))
+          : const Text("")),
+      DataCell(
+          address != null ? Text(address.toString() ?? "") : const Text("")),
+      DataCell(locality != null ? Text(locality.toString()) : const Text("")),
       // DataCell(data != null ? Text(data['subLocality'] ?? "") : Text("")),
-      DataCell(data != null ? Text(data['pincode'].toString()) : Text("")),
+      DataCell(pincode != null ? Text(pincode.toString()) : const Text("")),
       DataCell(
         Center(
           child: ElevatedButton(
@@ -578,22 +639,22 @@ class _UserInformationState extends State<UserInformation> {
             context,
             MaterialPageRoute(
               builder: (conext) => EditBox(
-                imageurl: data['image'],
-                address: data['address'],
-                gender: data['gender'],
-                email: data['email'],
+                imageurl: profileImage.toString(),
+                address: address.toString(),
+                gender: gender.toString(),
+                email: email.toString(),
                 // latitude: data['lat'].toString(),
                 // longitude: data['long'].toString(),
-                locality: data['locality'],
-                number: data['number'],
+                locality: locality.toString(),
+                number: number.toString(),
                 subLocality: data['subLocality'],
-                userid: data['userId'],
-                name: data['name'],
-                pincode: data['pincode'],
+                userid: userIDData.toString(),
+                name: name.toString(),
+                pincode: pincode.toString(),
               ),
             ));
       }),
-      DataCell(Icon(Icons.delete), onTap: () {
+      DataCell(const Icon(Icons.delete), onTap: () {
         // deleteMethod(stream: userDetailStream, uniqueDocId: userIDData);
 
         showDialog(
@@ -905,8 +966,8 @@ class _EditBoxState extends State<EditBox> {
                                     .doc("${x}");
                             Map<String, dynamic> data = <String, dynamic>{
                               // 'address':'',
-                              'gender': gvalue != null ? gvalue : "",
-                              'image': image5 != null ? image5 : "",
+                              'gender': gvalue ?? "",
+                              'image': image5 ?? img,
                               'name': _name.text,
                               'email': _email.text,
                               'number': '+91${_number.text}',
@@ -987,46 +1048,44 @@ class _editimState extends State<editim> {
   @override
   bool isloading = false;
   var imagee;
+  @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Row(
-        children: [
-          ElevatedButton(
-            onPressed: () async {
-              setState(() {
-                isloading = true;
-                i2 = image5;
-              });
-              var dic = await chooseImage();
-              await getUrlImage(dic, widget.gymid);
-              setState(() {
-                isloading = false;
-              });
-            },
-            child: const Text(
-              'Upload Gym Image',
-              style:
-                  TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
-            ),
+    return Row(
+      children: [
+        ElevatedButton(
+          onPressed: () async {
+            setState(() {
+              isloading = true;
+              i2 = image5;
+            });
+            var dic = await chooseImage();
+            await getUrlImage(dic, widget.gymid);
+            setState(() {
+              isloading = false;
+            });
+          },
+          child: const Text(
+            'Upload Gym Image',
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
           ),
-          const SizedBox(
-            width: 20,
-          ),
-          isloading
-              ? Container(
-                  height: 100,
-                  width: 200,
-                  child: const Center(
-                    child: CircularProgressIndicator(),
-                  ),
-                )
-              : Container(
-                  height: 100,
-                  width: 200,
-                  child: Image.network(i2),
+        ),
+        const SizedBox(
+          width: 20,
+        ),
+        isloading
+            ? const SizedBox(
+                height: 100,
+                width: 200,
+                child: Center(
+                  child: CircularProgressIndicator(),
                 ),
-        ],
-      ),
+              )
+            : SizedBox(
+                height: 100,
+                width: 200,
+                child: Image.network(i2),
+              ),
+      ],
     );
   }
 
@@ -1242,16 +1301,16 @@ class _loadimageState extends State<loadimage> {
                   ),
                 )
               : ds != null
-                  ? Container(
+                  ? SizedBox(
                       height: 100,
                       width: 200,
                       child: Image.network(ds),
                     )
-                  : Container(
+                  : const SizedBox(
                       height: 100,
                       width: 200,
                       child: Center(
-                        child: const Text(
+                        child: Text(
                           "Please Upload Image",
                           textAlign: TextAlign.center,
                         ),

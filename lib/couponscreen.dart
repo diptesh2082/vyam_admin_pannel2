@@ -104,10 +104,10 @@ class _CouponScreenState extends State<CouponScreen> {
     return Scaffold(
       backgroundColor: Colors.white10,
       appBar: AppBar(
-        title: Text('Add Coupon'),
+        title: const Text('Add Coupon'),
       ),
       body: Container(
-        padding: EdgeInsets.all(50),
+        padding: const EdgeInsets.all(50),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -141,10 +141,10 @@ class _CouponScreenState extends State<CouponScreen> {
                           TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
                     ),
                   ),
-                  Container(
+                  SizedBox(
                     width: 280,
                     child: DropdownButton(
-                        hint: Text("${Select_Package_type}"),
+                        hint: Text("$Select_Package_type"),
                         items: const [
                           DropdownMenuItem(
                             child: Text("pay per session"),
@@ -240,7 +240,7 @@ class _CouponScreenState extends State<CouponScreen> {
                                     .format(start_date!)
                                     .toString()
                                 : "",
-                            style: TextStyle(fontWeight: FontWeight.bold),
+                            style: const TextStyle(fontWeight: FontWeight.bold),
                           ),
                         ],
                       ),
@@ -269,7 +269,7 @@ class _CouponScreenState extends State<CouponScreen> {
                                     .format(end_date!)
                                     .toString()
                                 : "",
-                            style: TextStyle(fontWeight: FontWeight.bold),
+                            style: const TextStyle(fontWeight: FontWeight.bold),
                           ),
                         ],
                       ),
@@ -285,7 +285,7 @@ class _CouponScreenState extends State<CouponScreen> {
                         style: TextStyle(
                             fontSize: 20, fontWeight: FontWeight.w500),
                       ),
-                      Container(
+                      SizedBox(
                         width: 280,
                         child: DropdownButton(
                             hint: Text("${print_type}"),

@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
@@ -7,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../services/CustomTextFieldClass.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:path/path.dart' as Path;
 import '../services/image_picker_api.dart';
 
@@ -33,7 +30,7 @@ class _newAmenetiesState extends State<newAmeneties> {
     return Scaffold(
       backgroundColor: Colors.white10,
       appBar: AppBar(
-        title: Text('Add Amenites'),
+        title: const Text('Add Amenites'),
       ),
       body: Form(
         key: _formKey,
@@ -55,7 +52,7 @@ class _newAmenetiesState extends State<newAmeneties> {
                   customTextField3(hinttext: "Name", addcontroller: _addName),
                   // customTextField(
                   //     hinttext: "Image", addcontroller: _addImage),
-                  loadimage(),
+                  const loadimage(),
                   // customTextField(hinttext: "ID", addcontroller: _addId),
                   Center(
                     child: ElevatedButton(
@@ -105,11 +102,11 @@ class loadimage extends StatefulWidget {
 }
 
 class _loadimageState extends State<loadimage> {
-  @override
   bool isloading = false;
+  @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(20),
+      padding: const EdgeInsets.all(20),
       child: Row(
         children: [
           const Text(
@@ -150,17 +147,17 @@ class _loadimageState extends State<loadimage> {
                 ? Container(
                     height: 100,
                     width: 200,
-                    child: Center(
+                    child: const Center(
                       child: CircularProgressIndicator(),
                     ),
                   )
                 : ds != null
-                    ? Container(
+                    ? SizedBox(
                         height: 100,
                         width: 200,
                         child: Image.network(ds),
                       )
-                    : Container(
+                    : const SizedBox(
                         height: 100,
                         width: 200,
                         child: Center(

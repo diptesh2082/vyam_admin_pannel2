@@ -31,7 +31,7 @@ class _CancelationQuestionState extends State<CancelationQuestion> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Cancellation Questions")),
+      appBar: AppBar(title: const Text("Cancellation Questions")),
       body: SafeArea(
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 5),
@@ -52,7 +52,7 @@ class _CancelationQuestionState extends State<CancelationQuestion> {
                       onPressed: () {
                         Get.to(const addQuestion()); //showAddbox,
                       },
-                      child: Text('Add Question')),
+                      child: const Text('Add Question')),
                 ),
                 Center(
                   child: StreamBuilder<QuerySnapshot>(
@@ -141,7 +141,7 @@ class _CancelationQuestionState extends State<CancelationQuestion> {
           };
         }),
         DataCell(
-          Icon(Icons.delete),
+          const Icon(Icons.delete),
           onTap: () {
             deleteMethod(stream: questionStream, uniqueDocId: Id);
           },
@@ -182,10 +182,10 @@ class _QuestionEditBoxState extends State<QuestionEditBox> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Edit cancelation questions"),
+        title: const Text("Edit cancellation questions"),
       ),
       body: Container(
-        margin: EdgeInsets.all(15.0),
+        margin: const EdgeInsets.all(15.0),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -205,7 +205,7 @@ class _QuestionEditBoxState extends State<QuestionEditBox> {
                   child: ElevatedButton(
                     onPressed: () async {
                       print("/////");
-                      print('${widget.Id}');
+                      print(widget.Id);
 
                       DocumentReference documentReference = FirebaseFirestore
                           .instance

@@ -12,6 +12,7 @@ import '../../../services/image_picker_api.dart';
 String globalGymId = '';
 String name = '';
 
+// ignore: must_be_immutable
 class PackagesPage extends StatefulWidget {
   String pGymId;
   String o, land;
@@ -247,19 +248,119 @@ class _PackagesPageState extends State<PackagesPage> {
 
   DataRow _buildListItem(BuildContext context, DocumentSnapshot data, int index,
       int start, int end) {
-    String packId = data['id'];
-    bool legit = data['valid'];
-    bool legit2 = data['trending'];
+    // String packId = data['id'];
+    // bool legit = data['valid'];
+    // bool legit2 = data['trending'];
+
+    bool legit = false;
+    try {
+      legit = data['valid'];
+    } catch (e) {
+      legit = false;
+    }
+    String? validity;
+    try {
+      validity = data['validity'];
+    } catch (e) {
+      validity = '#ERROR';
+    }
+    bool legit2 = false;
+    try {
+      legit2 = data['trending'];
+    } catch (e) {
+      legit2 = false;
+    }
+    String? title;
+    try {
+      title = data['title'];
+    } catch (e) {
+      title = '#ERROR';
+    }
+    String? packId;
+    try {
+      packId = data['id'];
+    } catch (e) {
+      packId = '#ERROR';
+    }
+    String? type;
+    try {
+      type = data['type'];
+    } catch (e) {
+      type = '#ERROR';
+    }
+    String? discount;
+    try {
+      discount = data['discount'];
+    } catch (e) {
+      title = '';
+      discount = '#ERROR';
+    }
+    String? original_price;
+    try {
+      original_price = data['original_price'];
+    } catch (e) {
+      original_price = '#ERROR';
+    }
+    String? price;
+    try {
+      price = data['price'];
+    } catch (e) {
+      price = '#ERROR';
+    }
+    // data["price"]
+    String? package_type;
+    try {
+      package_type = data['package_type'];
+    } catch (e) {
+      package_type = '#ERROR';
+    }
+    int index = 1;
+    try {
+      index = data['index'];
+    } catch (e) {
+      index = 0;
+    }
+    String? description;
+    try {
+      description = data['description'];
+    } catch (e) {
+      description = '#ERROR';
+    }
+    bool ptype = false;
+    try {
+      ptype = data['ptype'];
+    } catch (e) {
+      ptype = false;
+    }
+    String? banner;
+    try {
+      banner = data['banner'];
+    } catch (e) {
+      banner = '#ERROR';
+    }
+    String? trending_img;
+    try {
+      trending_img = data['trending_img'];
+    } catch (e) {
+      trending_img = '#ERROR';
+    }
+    String? t_describe;
+    try {
+      t_describe = data['tdescribe'];
+    } catch (e) {
+      t_describe = '#ERROR';
+    }
+
     return DataRow(cells: [
       // DataCell(data != null ? Text(data['id'] ?? "") : Text("")),
-      DataCell(data != null ? Text(data['index'].toString()) : const Text("")),
+      DataCell(data != null ? Text(index.toString()) : const Text("")),
 
-      DataCell(data != null
-          ? Text(data['title'].toString().toUpperCase())
+      DataCell(title != null ? Text(title.toString()) : const Text("")),
+      DataCell(original_price != null
+          ? Text(original_price.toString() ?? "")
           : const Text("")),
       DataCell(
-          data != null ? Text(data['original_price'] ?? "") : const Text("")),
-      DataCell(data != null ? Text(data['discount'] ?? "") : const Text("")),
+          discount != null ? Text(discount.toString() ?? "") : const Text("")),
       DataCell(
         Center(
           child: ElevatedButton(
@@ -314,30 +415,29 @@ class _PackagesPageState extends State<PackagesPage> {
           ),
         ),
       ),
-      DataCell(data != null
-          ? Text(data['type'].toString().toUpperCase())
-          : const Text("")),
+      DataCell(
+          type != null ? Text(type.toString().toUpperCase()) : const Text("")),
       // DataCell(data != null ? Text(data['validity'] ?? "") : Text("")),
       DataCell(const Text(""), showEditIcon: true, onTap: () {
         Navigator.push(
             context,
             MaterialPageRoute(
                 builder: (context) => ProductEditBox(
-                    validity: data['validity'],
+                    validity: validity.toString(),
                     gym_id: widget.pGymId,
-                    price: data["price"],
-                    type: data['type'],
-                    package_type: data['package_type'],
-                    index: data['index'],
-                    discount: data['discount'],
-                    title: data['title'],
-                    originalprice: data['original_price'],
-                    id: packId,
-                    description: data['description'],
-                    ptype: data['ptype'],
-                    banner: data['banner'],
-                    trending_img: data['trending_img'],
-                    t_describe: data['tdescribe'])));
+                    price: price.toString(),
+                    type: type.toString(),
+                    package_type: package_type.toString(),
+                    index: index,
+                    discount: discount.toString(),
+                    title: title.toString(),
+                    originalprice: original_price.toString(),
+                    id: packId.toString(),
+                    description: description.toString(),
+                    ptype: ptype,
+                    banner: banner.toString(),
+                    trending_img: trending_img.toString(),
+                    t_describe: t_describe.toString())));
       }),
       DataCell(const Icon(Icons.delete), onTap: () {
         // deleteMethod(stream: packageStream, uniqueDocId: packId);
@@ -372,8 +472,7 @@ class _PackagesPageState extends State<PackagesPage> {
                                   .collection('product_details')
                                   .doc(widget.pGymId)
                                   .update({
-                                'service':
-                                    FieldValue.arrayRemove([data['type']])
+                                'service': FieldValue.arrayRemove([type])
                               });
                               deleteMethod(
                                   stream: packageStream, uniqueDocId: packId);
@@ -406,6 +505,7 @@ class _PackagesPageState extends State<PackagesPage> {
   }
 }
 
+// ignore: camel_case_types
 class addboxx extends StatefulWidget {
   final String pGymID;
 
@@ -415,6 +515,7 @@ class addboxx extends StatefulWidget {
   State<addboxx> createState() => _addboxxState();
 }
 
+// ignore: camel_case_types
 class _addboxxState extends State<addboxx> {
   final TextEditingController _discount = TextEditingController();
   final TextEditingController _originalprice = TextEditingController();
@@ -559,7 +660,7 @@ class _addboxxState extends State<addboxx> {
                   "Select Package type",
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
                 ),
-                Container(
+                SizedBox(
                   width: 280,
                   child: DropdownButton(
                       hint: Text("${print_type}"),
@@ -662,7 +763,7 @@ class _addboxxState extends State<addboxx> {
                       'ptype': packagetype,
                       'banner': _banner.text,
                       'tdescribe': _tdescribe.text,
-                      'trending_img': image12 != null ? image12 : ""
+                      'trending_img': image12 ?? ""
                     },
                   );
                   await FirebaseFirestore.instance
@@ -683,8 +784,10 @@ class _addboxxState extends State<addboxx> {
   }
 }
 
+// ignore: prefer_typing_uninitialized_variables
 var image12;
 
+// ignore: camel_case_types
 class loadimage extends StatefulWidget {
   loadimage({Key? key, required this.id}) : super(key: key);
   final String id;
@@ -696,8 +799,7 @@ class _loadimageState extends State<loadimage> {
   bool isloading = false;
   @override
   Widget build(BuildContext context) {
-    return Container(
-        child: Row(
+    return Row(
       children: [
         const Text(
           "Trending Icon",
@@ -736,27 +838,27 @@ class _loadimageState extends State<loadimage> {
           width: 200,
           height: 100,
           child: isloading && image12 == null
-              ? Container(
+              ? const SizedBox(
                   height: 100,
                   width: 200,
-                  child: const Center(
+                  child: Center(
                     child: CircularProgressIndicator(),
                   ),
                 )
               : image12 != null && isloading == false
-                  ? Container(
+                  ? SizedBox(
                       height: 100,
                       width: 200,
                       child: Image.network(image12),
                     )
-                  : Container(
+                  : const SizedBox(
                       height: 100,
                       width: 200,
-                      child: const Center(child: Text("Please Upload Image")),
+                      child: Center(child: Text("Please Upload Image")),
                     ),
         ),
       ],
-    ));
+    );
   }
 
   getUrlImage(XFile? pickedFile) async {
@@ -837,7 +939,9 @@ class _ProductEditBoxState extends State<ProductEditBox> {
   final TextEditingController _tdescribe = TextEditingController();
 
   // final TextEditingController _type = TextEditingController();
+  // ignore: prefer_typing_uninitialized_variables
   var selectedvaluee;
+  // ignore: prefer_typing_uninitialized_variables
   var sele;
   String description = '';
 
@@ -872,7 +976,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
     categoryStream = FirebaseFirestore.instance.collection("category");
     _banner.text = widget.banner;
     _discount.text = widget.discount;
-    _validity.text = widget.validity;
+    _validity.text = widget.validity.toString();
     _originalprice.text = widget.originalprice;
     _index.text = widget.index.toString();
     _title.text = widget.title;
@@ -967,7 +1071,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                     "Select Package type",
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
                   ),
-                  Container(
+                  SizedBox(
                     width: 280,
                     child: DropdownButton(
                         hint: Text("${ptypee}"),
@@ -1052,8 +1156,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                         'ptype': packagetype,
                         'banner': _banner.text,
                         'tdescribe': _tdescribe.text,
-                        'trending_img':
-                            image12 != null ? image12 : widget.trending_img
+                        'trending_img': image12 ?? widget.trending_img
                       };
                       await documentReference
                           .update(data)
@@ -1093,6 +1196,7 @@ var image13;
 class _editimState extends State<editim> {
   @override
   String i2 = '';
+  @override
   void initState() {
     // TODO: implement initState
     i2 = widget.imagea;
@@ -1100,7 +1204,6 @@ class _editimState extends State<editim> {
   }
 
 // <<<<<<< HEAD
-  @override
   bool isloading = false;
   var imagee;
   Widget build(BuildContext context) {

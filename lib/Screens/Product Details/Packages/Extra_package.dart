@@ -1,4 +1,4 @@
-import 'package:admin_panel_vyam/services/maps_api.dart';
+// import 'package:admin_panel_vyam/services/maps_api.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -6,9 +6,10 @@ import '../../../services/CustomTextFieldClass.dart';
 
 String globalGymId = '';
 
+// ignore: must_be_immutable
 class ExtraPackagesPage extends StatefulWidget {
   String pGymId;
-  ExtraPackagesPage({required this.pGymId});
+  ExtraPackagesPage({Key? key, required this.pGymId}) : super(key: key);
 
   @override
   State<ExtraPackagesPage> createState() => _ExtraPackagesPageState();
@@ -58,12 +59,12 @@ class _ExtraPackagesPageState extends State<ExtraPackagesPage> {
                               onPressed: () {
                                 Navigator.pop(context);
                               },
-                              child: Icon(Icons.add)),
-                          SizedBox(
+                              child: const Icon(Icons.add)),
+                          const SizedBox(
                             width: 20,
                           ),
-                          Icon(Icons.add),
-                          Text('Add Product',
+                          const Icon(Icons.add),
+                          const Text('Add Product',
                               style: TextStyle(fontWeight: FontWeight.w400)),
                         ],
                       ),
@@ -160,7 +161,14 @@ class _ExtraPackagesPageState extends State<ExtraPackagesPage> {
   }
 
   DataRow _buildListItem(BuildContext context, DocumentSnapshot data) {
-    String docId = data['doc_id'];
+    String? docId;
+    String? discount;
+    String? original_price;
+    String? price;
+    String? title;
+    String? type;
+    String? validity;
+
     Future<void> deleteMethod() {
       return extraPackageStream!
           .doc(docId)
@@ -169,14 +177,34 @@ class _ExtraPackagesPageState extends State<ExtraPackagesPage> {
           .catchError((error) => print("Failed to delete user: $error"));
     }
 
+    try {
+      docId = data['doc_id'];
+      discount = data['discount'];
+      original_price = data['original_price'];
+      price = data['price'];
+      title = data['title'];
+      type = data['type'];
+      validity = data['validity'];
+    } catch (e) {
+      docId = '#ERROR';
+      discount = '#ERROR';
+      original_price = '#ERROR';
+      price = '#ERROR';
+      title = '#ERROR';
+      type = '#ERROR';
+      validity = '#ERROR';
+    }
     return DataRow(cells: [
-      DataCell(data != null ? Text(docId) : Text("")),
-      DataCell(data != null ? Text(data['discount'] ?? "") : Text("")),
-      DataCell(data != null ? Text(data['original_price'] ?? "") : Text("")),
-      DataCell(data != null ? Text(data['price'] ?? "") : Text("")),
-      DataCell(data != null ? Text(data['title'] ?? "") : Text("")),
-      DataCell(data != null ? Text(data['type'] ?? "") : Text("")),
-      DataCell(data != null ? Text(data['validity'] ?? "") : Text("")),
+      // ignore: unnecessary_null_comparison
+
+      DataCell(data != null ? Text(docId!) : const Text("")),
+      DataCell(discount != null ? Text(discount ?? "") : const Text("")),
+      DataCell(
+          original_price != null ? Text(original_price ?? "") : const Text("")),
+      DataCell(price != null ? Text(price ?? "") : const Text("")),
+      DataCell(title != null ? Text(title ?? "") : const Text("")),
+      DataCell(type != null ? Text(type ?? "") : const Text("")),
+      DataCell(validity != null ? Text(validity ?? "") : const Text("")),
       DataCell(
         const Text(""),
         showEditIcon: true,
@@ -188,13 +216,13 @@ class _ExtraPackagesPageState extends State<ExtraPackagesPage> {
                 // ? Added Gesture Detecter for popping off update record Card
                 child: SingleChildScrollView(
                   child: ProductEditBox(
-                    discount: data['discount'],
-                    originalPrice: data['original_price'],
-                    price: data['price'],
-                    title: data['title'],
-                    type: data['type'],
-                    validity: data['validity'],
-                    docId: data['doc_id'],
+                    discount: discount.toString(),
+                    originalPrice: original_price.toString(),
+                    price: price.toString(),
+                    title: title.toString(),
+                    type: type.toString(),
+                    validity: validity.toString(),
+                    docId: docId.toString(),
                   ),
                 ),
                 onTap: () =>
@@ -204,7 +232,7 @@ class _ExtraPackagesPageState extends State<ExtraPackagesPage> {
           );
         },
       ),
-      DataCell(Icon(Icons.delete), onTap: () {
+      DataCell(const Icon(Icons.delete), onTap: () {
         deleteMethod();
       })
     ]);

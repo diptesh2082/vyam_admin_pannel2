@@ -645,6 +645,7 @@ class _BookingDetails1State extends State<BookingDetails1> {
           ? Text(userId.toString().substring(3, 13))
           : const Text("")),
       DataCell(gym_details != null
+
           ? Text(
               '${gymName.toString().toUpperCase()}|${branchName.toString().toUpperCase()}')
           : const Text("")),
@@ -686,60 +687,52 @@ class _BookingDetails1State extends State<BookingDetails1> {
                           child: Text("Cancelled"), value: "cancelled"),
                     ],
                     onChanged: (value) async {
+
                       setState(() {
-                        selectedValue = value as String;
+                        statement = "Upcoming Booking";
                       });
+                    }
+                    if (value == "cancelled") {
+                      setState(() {
+                        statement = "Cancelled Booking";
+                      });
+                    }
+                    if (value == "active") {
+                      setState(() {
+                        statement = "Active Booking";
+                      });
+                    }
+                    if (value == "completed") {
+                      setState(() {
+                        statement = "Completed Booking";
+                      });
+                    }
+
+                    if (value == "active") {
                       await FirebaseFirestore.instance
                           .collection('bookings')
                           .doc(bookingId)
-                          .update({'booking_status': value});
-                      if (value == "upcoming") {
-                        setState(() {
-                          statement = "Upcoming Booking";
-                        });
-                      }
-                      if (value == "cancelled") {
-                        setState(() {
-                          statement = "Cancelled Booking";
-                        });
-                      }
-                      if (value == "active") {
-                        setState(() {
-                          statement = "Active Booking";
-                        });
-                      }
-                      if (value == "completed") {
-                        setState(() {
-                          statement = "Completed Booking";
-                        });
-                      }
-
-                      if (value == "active") {
-                        await FirebaseFirestore.instance
-                            .collection('bookings')
-                            .doc(bookingId)
-                            .update({'payment_done': true});
-                        // var x=await FirebaseFirestore.instance.collection("booking_notifications").id;
-                        await FirebaseFirestore.instance
-                            .collection("booking_notifications")
-                            .doc()
-                            .set({
-                          "title": statement,
-                          "status": selectedValue,
-                          // "payment_done": false,
-                          'booking_id': data['booking_id'],
-                          'branch': data['gym_details']['branch'],
-                          "user_id": data['userId'],
-                          "user_name": data["user_name"],
-                          "vendor_id": data['vendorId'],
-                          "vendor_name": data['gym_details']['name'],
-                          'time_stamp': DateTime.now(),
-                          'seen': false
-                        });
-                      }
-                    }),
-              ],
-            ),
+                          .update({'payment_done': true});
+                      // var x=await FirebaseFirestore.instance.collection("booking_notifications").id;
+                      await FirebaseFirestore.instance
+                          .collection("booking_notifications")
+                          .doc()
+                          .set({
+                        "title": statement,
+                        "status": selectedValue,
+                        // "payment_done": false,
+                        'booking_id': data['booking_id'],
+                        'branch': data['gym_details']['branch'],
+                        "user_id": data['userId'],
+                        "user_name": data["user_name"],
+                        "vendor_id": data['vendorId'],
+                        "vendor_name": data['gym_details']['name'],
+                        'time_stamp': DateTime.now(),
+                        'seen': false
+                      });
+                    }
+                  }),
+            ],
           ),
         ),
       ),
@@ -1265,6 +1258,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                     child: Center(
                       child: Text(
                         'Booking ID: ${idss}',
+
                         style: const TextStyle(
                             fontFamily: 'poppins',
                             fontWeight: FontWeight.w600,
@@ -1549,6 +1543,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                         children: [
                           const Text("Booking Plan",
                               style: const TextStyle(
+
                                 fontSize: 20,
                                 fontFamily: 'poppins',
                                 fontWeight: FontWeight.w400,
@@ -1782,36 +1777,33 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                   const SizedBox(
                     height: 20,
                   ),
-                  Container(
-                    child: Row(
-                      children: [
-                        const Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Text('Start Date:',
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                              )),
-                        ),
-                        const SizedBox(width: 40),
-                        Text(
-                            DateFormat.yMMMd().format(bookingdate!).toString()),
-                        const SizedBox(width: 40),
-                        ElevatedButton(
-                            child: const Text('Edit'),
-                            onPressed: () {
-                              // DateFormat("MMM, dd, yyyy")
-                              //     .format(data["booking_date"].toDate());
-                              // print(_addbookingyear);
 
-                              print(bookingdate);
-                              pickDateTime(context);
-                            }),
-                        const SizedBox(width: 15),
-                      ],
-                    ),
+                  Row(
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text('Start Date:',
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            )),
+                      ),
+                      const SizedBox(width: 40),
+                      Text(DateFormat.yMMMd().format(bookingdate!).toString()),
+                      const SizedBox(width: 40),
+                      ElevatedButton(
+                          child: const Text('Edit'),
+                          onPressed: () {
+                            // DateFormat("MMM, dd, yyyy")
+                            //     .format(data["booking_date"].toDate());
+                            // print(_addbookingyear);
+
+                            print(bookingdate);
+                            pickDateTime(context);
+                          }),
+                      const SizedBox(width: 15),
+                    ],
                   ),
-
                   const SizedBox(
                     height: 20,
                   ),
@@ -1861,13 +1853,13 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                                   .doc(_addbookingid.text);
 
                               Map<String, dynamic> data = <String, dynamic>{
-                                'plan_end_duration': d2 != null ? d2 : plandate,
+                                'plan_end_duration': d2 ?? plandate,
 
                                 'order_date': datetimee2,
 
                                 'booking_status': _addbookingstatus.text,
 
-                                'booking_date': d1 != null ? d1 : bookingdate,
+                                'booking_date': d1 ?? bookingdate,
 
                                 // 'booking_accepted':
                                 //     _addbookingaccepted.text == 'true'
@@ -1976,7 +1968,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
   }
 
   Future pickTime(BuildContext context) async {
-    const intialTime = const TimeOfDay(hour: 9, minute: 0);
+    const intialTime = TimeOfDay(hour: 9, minute: 0);
     final newTime =
 // <<<<<<< HEAD
 // <<<<<<< HEAD
@@ -2103,7 +2095,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
   }
 
   Future pickorderTime(BuildContext context) async {
-    final intialTime = const TimeOfDay(hour: 9, minute: 0);
+    const intialTime = TimeOfDay(hour: 9, minute: 0);
     final newTime =
         await showTimePicker(context: context, initialTime: time ?? intialTime);
 

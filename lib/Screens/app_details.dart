@@ -36,7 +36,10 @@ class _appDetailsState extends State<appDetails> {
             height: 10.0,
           ),
           StreamBuilder<DocumentSnapshot>(
-            stream: appdetailStream!.doc('contact_us').snapshots(),
+            stream: FirebaseFirestore.instance
+                .collection('app_details')
+                .doc('contact_us')
+                .snapshots(),
             builder: (context, AsyncSnapshot snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const CircularProgressIndicator();
@@ -44,7 +47,7 @@ class _appDetailsState extends State<appDetails> {
               if (snapshot.data == null) {
                 return Container();
               }
-              String aemail = snapshot.data.get('email').toString();
+              // String aemail = snapshot.data.get('email').toString();
               return Column(
                 children: [
                   TextButton(
@@ -64,10 +67,10 @@ class _appDetailsState extends State<appDetails> {
                         Get.to(
                           () => ContactUs(
                             email: snapshot.data.get('email').toString(),
-                            instaId: snapshot.data['instaId'].toString(),
+                            instaId: snapshot.data.get('instaId').toString(),
                             phonenumber:
-                                snapshot.data['phonenumber'].toString(),
-                            website: snapshot.data['website'].toString(),
+                                snapshot.data.get('phonenumber').toString(),
+                            website: snapshot.data.get('website').toString(),
                           ),
                         );
                       })
@@ -79,7 +82,10 @@ class _appDetailsState extends State<appDetails> {
             height: 70,
           ),
           StreamBuilder<DocumentSnapshot>(
-            stream: appdetailStream!.doc('about_us').snapshots(),
+            stream: FirebaseFirestore.instance
+                .collection('app_details')
+                .doc('about_us')
+                .snapshots(),
             builder: (context, AsyncSnapshot snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const CircularProgressIndicator();
@@ -102,7 +108,7 @@ class _appDetailsState extends State<appDetails> {
                         ),
                       ),
                       onPressed: () {
-                        // print(snapshot.data['email']);
+                        // print(snapshot.data.get('about').toString());
                         Get.to(
                           () => AboutUs(
                             about: snapshot.data.get('about').toString(),
@@ -238,6 +244,7 @@ class _ContactUsState extends State<ContactUs> {
         title: const Text("Contact Us"),
       ),
       body: SafeArea(
+
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 5),
           decoration: BoxDecoration(
@@ -272,32 +279,29 @@ class _ContactUsState extends State<ContactUs> {
                             print("/////");
                             print(widget.email);
 
-                            DocumentReference documentReference =
-                                FirebaseFirestore.instance
-                                    .collection('app_details')
-                                    .doc('contact_us');
-                            Map<String, dynamic> data = {
-                              'email': _email.text,
-                              'instaId': _instaId.text,
-                              'phonenumber': _phonenumber.text,
-                              'website': _website.text,
-                            };
-                            await FirebaseFirestore.instance
-                                .collection('app_details')
-                                .doc('contact_us')
-                                .update(data);
-                            print("after");
-                            Navigator.pop(context);
-                          },
-                          child: const Text('Done'),
-                        ),
-                      ),
-                    ),
-                  ],
+
+                    DocumentReference documentReference = FirebaseFirestore
+                        .instance
+                        .collection('app_details')
+                        .doc('contact_us');
+                    Map<String, dynamic> data = {
+                      'email': _email.text,
+                      'instaId': _instaId.text,
+                      'phonenumber': _phonenumber.text,
+                      'website': _website.text,
+                    };
+                    await FirebaseFirestore.instance
+                        .collection('app_details')
+                        .doc('contact_us')
+                        .update(data);
+                    print("after");
+                    Navigator.pop(context);
+                  },
+                  child: const Text('Done'),
                 ),
-              );
-            },
-          ),
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -336,6 +340,7 @@ class _AboutUsState extends State<AboutUs> {
       appBar: AppBar(
         title: const Text("About Us"),
       ),
+
       body: Column(
         children: [
           Container(
@@ -367,10 +372,11 @@ class _AboutUsState extends State<AboutUs> {
                   Navigator.pop(context);
                 },
                 child: const Text('Done'),
+
               ),
-            ),
-          )
-        ],
+            )
+          ],
+        ),
       ),
     );
   }

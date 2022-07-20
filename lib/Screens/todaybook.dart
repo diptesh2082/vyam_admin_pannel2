@@ -1588,6 +1588,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                         const SizedBox(width: 20),
                       ],
                     ),
+
                   ),
                   const SizedBox(
                     height: 20,
@@ -1766,7 +1767,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
   }
 
   Future pickTime(BuildContext context) async {
-    const intialTime = const TimeOfDay(hour: 9, minute: 0);
+    const intialTime = TimeOfDay(hour: 9, minute: 0);
     final newTime =
 // <<<<<<< HEAD
 // <<<<<<< HEAD
@@ -1975,22 +1976,20 @@ class _RadioBoxxState extends State<RadioBoxx> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        children: [
-          Container(
-            child: RadioListTile<String>(
-              value: widget.name,
-              groupValue: check,
-              onChanged: (String? abcd) {
-                widget.cat = abcd;
-                print(abcd);
-              },
-              title: Text(widget.name),
-            ),
+    return Column(
+      children: [
+        Container(
+          child: RadioListTile<String>(
+            value: widget.name,
+            groupValue: check,
+            onChanged: (String? abcd) {
+              widget.cat = abcd;
+              print(abcd);
+            },
+            title: Text(widget.name),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
