@@ -255,16 +255,40 @@ class _AmenetiesScreenState extends State<AmenetiesScreen> {
 
   DataRow _buildListItem(BuildContext context, DocumentSnapshot data, int index,
       int start, int end) {
-    String amenitiesId = data['amenity_id'];
+    // String amenitiesId = data['amenity_id'];
+    String? amenitiesId;
+    try {
+      amenitiesId = data['amenity_id'];
+    } catch (e) {
+      amenitiesId = '#Error';
+    }
+    String? image;
+    try {
+      image = data['image'];
+    } catch (e) {
+      image = '#Error';
+    }
+    String? name;
+    try {
+      name = data['name'];
+    } catch (e) {
+      name = '#Error';
+    }
+    String? id;
+    try {
+      id = data['id'];
+    } catch (e) {
+      id = '#Error';
+    }
     return DataRow(cells: [
       DataCell(data != null ? Text(index.toString()) : const Text("")),
       // DataCell(
       //   data['id'] != null ? Text(data['id'] ?? "") : const Text(""),
       // ),
       DataCell(
-        data['image'] != null && data['image'] != "null"
+        image != null && image != "null"
             ? Image.network(
-                data['image'] ?? "",
+                image,
                 scale: 0.5,
                 height: 150,
                 width: 150,
@@ -272,17 +296,17 @@ class _AmenetiesScreenState extends State<AmenetiesScreen> {
             : const Text("Image Not Uploaded"),
       ),
       DataCell(
-        data['name'] != null ? Text(data['name']) : const Text("Disabled"),
+        name != null ? Text(name) : const Text("Disabled"),
       ),
       DataCell(
         const Text(''),
         showEditIcon: true,
         onTap: () {
           Get.to(() => ProductEditBox(
-              name: data['name'],
-              image: data['image'].toString(),
-              amenityId: data['id'],
-              am: amenitiesId));
+              name: name.toString(),
+              image: image.toString(),
+              amenityId: id.toString(),
+              am: amenitiesId.toString()));
           // showDialog(
           //   context: context,
           //   builder: (context) {

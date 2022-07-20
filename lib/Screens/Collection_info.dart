@@ -510,18 +510,78 @@ class _UserInformationState extends State<UserInformation> {
 
   DataRow _buildListItem(BuildContext context, DocumentSnapshot data, int index,
       int start, int end) {
-    String userIDData = data['userId'];
-    String profileImage = data['image'];
-    bool legit = data['legit'];
+    String? userIDData;
+    try {
+      userIDData = data['userId'];
+    } catch (e) {
+      userIDData = '#Error';
+    }
+    String? address;
+    try {
+      address = data['address'];
+    } catch (e) {
+      address = '#Error';
+    }
+    String? gender;
+    try {
+      gender = data['gender'];
+    } catch (e) {
+      gender = '#Error';
+    }
+    String? number;
+    try {
+      number = data['number'];
+    } catch (e) {
+      number = '#Error';
+    }
+    String? pincode;
+    try {
+      pincode = data['pincode'];
+    } catch (e) {
+      pincode = '#Error';
+    }
+
+    String? email;
+    try {
+      email = data['email'];
+    } catch (e) {
+      email = '#Error';
+    }
+
+    String? name;
+    try {
+      name = data['name'];
+    } catch (e) {
+      name = '#Error';
+    }
+    String? profileImage;
+    try {
+      profileImage = data['image'];
+    } catch (e) {
+      profileImage = '#Error';
+    }
+    String? locality;
+    try {
+      locality = data['locality'];
+    } catch (e) {
+      locality = '#Error';
+    }
+
+    bool legit = false;
+    try {
+      legit = data['legit'];
+    } catch (e) {
+      legit = false;
+    }
 
     return DataRow(cells: [
       DataCell(data != null ? Text(index.toString()) : const Text("")),
 
       DataCell(
-        profileImage != "null" && profileImage != null
+        profileImage.toString() != "null"
             ? CircleAvatar(
                 child: CachedNetworkImage(
-                  imageUrl: profileImage,
+                  imageUrl: profileImage.toString(),
                   imageBuilder: (context, imageProvider) => Container(
                     width: 100.0,
                     height: 100.0,
@@ -541,27 +601,19 @@ class _UserInformationState extends State<UserInformation> {
               ),
       ),
       // DataCell(data != null ? Text(userIDData) : Text("")),
-      DataCell(
-          data['name'] != null ? Text(data['name'] ?? "") : const Text("")),
-      DataCell(
-          data['email'] != null ? Text(data['email'] ?? "") : const Text("")),
-      DataCell(
-          data['gender'] != null ? Text(data['gender'] ?? "") : const Text("")),
-      DataCell(data['number'] != null
-          ? Text((data['number'])
+      DataCell(name != null ? Text(name.toString()) : const Text("")),
+      DataCell(email != null ? Text(email.toString()) : const Text("")),
+      DataCell(gender != null ? Text(gender.toString()) : const Text("")),
+      DataCell(number != null
+          ? Text((number.toString())
               .toString()
-              .substring(3, data['number'].toString().length))
+              .substring(3, number.toString().length))
           : const Text("")),
-      DataCell(data['address'] != null
-          ? Text(data['address'] ?? "")
-          : const Text("")),
-      DataCell(data['locality'] != null
-          ? Text(data['locality'] ?? "")
-          : const Text("")),
+      DataCell(
+          address != null ? Text(address.toString() ?? "") : const Text("")),
+      DataCell(locality != null ? Text(locality.toString()) : const Text("")),
       // DataCell(data != null ? Text(data['subLocality'] ?? "") : Text("")),
-      DataCell(data['pincode'] != null
-          ? Text(data['pincode'].toString())
-          : const Text("")),
+      DataCell(pincode != null ? Text(pincode.toString()) : const Text("")),
       DataCell(
         Center(
           child: ElevatedButton(
@@ -587,18 +639,18 @@ class _UserInformationState extends State<UserInformation> {
             context,
             MaterialPageRoute(
               builder: (conext) => EditBox(
-                imageurl: data['image'].toString(),
-                address: data['address'],
-                gender: data['gender'],
-                email: data['email'],
+                imageurl: profileImage.toString(),
+                address: address.toString(),
+                gender: gender.toString(),
+                email: email.toString(),
                 // latitude: data['lat'].toString(),
                 // longitude: data['long'].toString(),
-                locality: data['locality'],
-                number: data['number'],
+                locality: locality.toString(),
+                number: number.toString(),
                 subLocality: data['subLocality'],
-                userid: data['userId'],
-                name: data['name'],
-                pincode: data['pincode'],
+                userid: userIDData.toString(),
+                name: name.toString(),
+                pincode: pincode.toString(),
               ),
             ));
       }),

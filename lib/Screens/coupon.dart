@@ -291,31 +291,103 @@ class _CouponState extends State<Coupon> {
 
   DataRow _buildListItem(BuildContext context, DocumentSnapshot data, int index,
       int start, int end) {
-    String couponIdData = data['coupon_id'];
-    bool validity = data['validity'];
-    String start =
-        DateFormat("MMM, dd, yyyy").format(data["start_date"].toDate());
-    String end = DateFormat("MMM, dd, yyyy").format(data["end_date"].toDate());
+    String? couponIdData;
+    try {
+      couponIdData = data['coupon_id'];
+    } catch (e) {
+      couponIdData = '#Error';
+    }
+    bool validity = false;
+    try {
+      validity = data['validity'];
+    } catch (e) {
+      validity = false;
+    }
+    Timestamp start_date;
+    try {
+      start_date = data['start_date'];
+    } catch (e) {
+      start_date = Timestamp.now();
+    }
+    Timestamp end_date;
+    try {
+      end_date = data['end_date'];
+    } catch (e) {
+      end_date = Timestamp.now();
+    }
+    String? package_type;
+    try {
+      package_type = data['package_type'];
+    } catch (e) {
+      package_type = '#Error';
+    }
+    String? tag;
+    try {
+      tag = data['tag'];
+    } catch (e) {
+      tag = '#Error';
+    }
+    String? code;
+    try {
+      code = data['code'];
+    } catch (e) {
+      code = '#Error';
+    }
+    String? detail;
+    try {
+      detail = data['detail'];
+    } catch (e) {
+      detail = '#Error';
+    }
+    String? description;
+    try {
+      description = data['description'];
+    } catch (e) {
+      description = '#Error';
+    }
+    String? discount;
+    try {
+      discount = data['discount'];
+    } catch (e) {
+      discount = '#Error';
+    }
+    String? max_dis;
+    try {
+      max_dis = data['max_dis'];
+    } catch (e) {
+      max_dis = '#Error';
+    }
+    bool offer_type = false;
+    try {
+      offer_type = data['offer_type'];
+    } catch (e) {
+      offer_type = false;
+    }
+    String? minimum_cart_value;
+    try {
+      minimum_cart_value = data['minimum_cart_value'];
+    } catch (e) {
+      minimum_cart_value = '#Error';
+    }
+    // data['minimum_cart_value']
+    // data[]
+    // String couponIdData = data['coupon_id'];
+    // bool validity = data['validity'];
+    String start = DateFormat("MMM, dd, yyyy").format(start_date.toDate());
+    String end = DateFormat("MMM, dd, yyyy").format(end_date.toDate());
     return DataRow(cells: [
-      DataCell(data['package_type'] != null
-          ? Text(data['package_type'] ?? "")
+      DataCell(package_type != null
+          ? Text(package_type.toString())
           : const Text("")),
-      DataCell(data['tag'] != null ? Text(data['tag'] ?? "") : const Text("")),
+      DataCell(tag != null ? Text(tag.toString()) : const Text("")),
+      DataCell(code != null ? Text(code.toString()) : const Text("")),
+      DataCell(detail != null ? Text(detail.toString()) : const Text("")),
       DataCell(
-          data['code'] != null ? Text(data['code'] ?? "") : const Text("")),
-      DataCell(
-          data['detail'] != null ? Text(data['detail'] ?? "") : const Text("")),
-      DataCell(data['description'] != null
-          ? Text(data['description'] ?? "")
-          : const Text("")),
-      DataCell(start != null ? Text(start) : const Text("")),
-      DataCell(end != null ? Text(end) : const Text("")),
-      DataCell(data['discount'] != null
-          ? Text(data['discount'] ?? "")
-          : const Text("")),
-      DataCell(data['max_dis'] != null
-          ? Text(data['max_dis'] ?? "")
-          : const Text("")),
+          description != null ? Text(description.toString()) : const Text("")),
+      DataCell(Text(start)),
+      DataCell(Text(end)),
+      DataCell(discount != null ? Text(discount.toString()) : const Text("")),
+      DataCell(max_dis != null ? Text(max_dis.toString()) : const Text("")),
       DataCell(
         Center(
           child: ElevatedButton(
@@ -341,19 +413,19 @@ class _CouponState extends State<Coupon> {
             context,
             MaterialPageRoute(
                 builder: (context) => ProductEditBox(
-                    details: data['detail'],
-                    discount: data['discount'],
-                    title: data['tag'],
-                    code: data['code'],
-                    couponId: data['coupon_id'],
-                    max_dis: data['max_dis'],
+                    details: detail.toString(),
+                    discount: discount.toString(),
+                    title: tag.toString(),
+                    code: code.toString(),
+                    couponId: couponIdData.toString(),
+                    max_dis: max_dis.toString(),
                     // price: data['price'],
-                    tag: data['tag'],
-                    minimum_cart_value: data['minimum_cart_value'],
-                    start_date: data['start_date'].toDate(),
-                    end_date: data['end_date'].toDate(),
-                    selectedPackagetype: data['package_type'],
-                    offer_type: data['offer_type'])));
+                    tag: tag.toString(),
+                    minimum_cart_value: minimum_cart_value.toString(),
+                    start_date: start_date.toDate(),
+                    end_date: end_date.toDate(),
+                    selectedPackagetype: package_type.toString(),
+                    offer_type: offer_type)));
       }),
       DataCell(const Icon(Icons.delete), onTap: () {
         // deleteMethod(stream: couponStream, uniqueDocId: couponIdData);

@@ -116,9 +116,9 @@ class _TrainerPageState extends State<TrainerPage> {
 
                       var document = snapshot.data.docs;
                       int documentLength = snapshot.data.docs.length;
-                      for (int i = 0; i <= documentLength - 1; i++) {
-                        print(document[i]['name']);
-                      }
+                      // for (int i = 0; i <= documentLength - 1; i++) {
+                      //   print(document[i]['name']);
+                      // }
                       return SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
                         child: DataTable(
@@ -281,35 +281,120 @@ class _TrainerPageState extends State<TrainerPage> {
 
   DataRow _buildListItem(BuildContext context, DocumentSnapshot data, int index,
       int start, int end) {
-    String imageUrl = data['image'].toString();
-    bool tvalid = data['eligible'];
+    // String imageUrl = data['image'].toString();
+    // bool tvalid = data['eligible'];
 
-    String trainerId = data['trainer_id'];
+    bool tvalid = false;
+    try {
+      tvalid = data['eligible'];
+    } catch (e) {
+      tvalid = false;
+    }
+
+    // String trainerId = data['trainer_id'];
+
+    String? image;
+    try {
+      image = data['image'].toString();
+    } catch (e) {
+      image = "#ERROR";
+    }
+
+    String? name;
+    try {
+      name = data['name'].toString();
+    } catch (e) {
+      name = "#ERROR";
+    }
+    String? branch;
+    try {
+      branch = data['branch'].toString();
+    } catch (e) {
+      branch = "#ERROR";
+    }
+
+    String? place;
+    try {
+      place = data['place'].toString();
+    } catch (e) {
+      place = "#ERROR";
+    }
+
+    String? experience;
+    try {
+      experience = data['experience'].toString();
+    } catch (e) {
+      experience = "#ERROR";
+    }
+
+    String? about;
+    try {
+      about = data['about'].toString();
+    } catch (e) {
+      about = "#ERROR";
+    }
+
+    String? clients;
+    try {
+      clients = data['clients'].toString();
+    } catch (e) {
+      clients = "#ERROR";
+    }
+
+    String position = '';
+    try {
+      position = data['position'].toString();
+    } catch (e) {
+      position = "#ERROR";
+    }
+
+    String? instaId;
+    try {
+      instaId = data['insta_id'].toString();
+    } catch (e) {
+      instaId = "#ERROR";
+    }
+
+    String trainerid = '';
+    try {
+      trainerid = data['trainer_id'];
+    } catch (e) {
+      trainerid = "#ERROR";
+    }
+
+    List<dynamic> certi = [];
+    try {
+      certi = data['certification'];
+    } catch (e) {
+      certi = ["Null"];
+    }
+
+    List<dynamic> spec = [];
+    try {
+      spec = data['specialization'];
+    } catch (e) {
+      spec = ["Null"];
+    }
+
+    // List<dynamic> certif
+
     // var cert = data['certification'];
     // String gymid = data['gym_id'];
     return DataRow(cells: [
-      DataCell(data['image'] != null && data['image'] != "null"
-          ? CircleAvatar(backgroundImage: NetworkImage(imageUrl))
+      DataCell(image != "null"
+          ? CircleAvatar(backgroundImage: NetworkImage(image))
           : const Text("Image Not Uploaded")),
       // DataCell(data != null ? Text(trainerId) : Text("")),
-      DataCell(
-          data['name'] != null ? Text(data['name'] ?? "") : const Text("")),
-      DataCell(
-          data['branch'] != null ? Text(data['branch'] ?? "") : const Text("")),
-      DataCell(
-          data['place'] != null ? Text(data['place'] ?? "") : const Text("")),
-      DataCell(data['experience'] != null
-          ? Text(data['experience'] ?? "")
-          : const Text("")),
-      DataCell(data['about'] != null
+      DataCell(name != null ? Text(name) : const Text("")),
+      DataCell(branch != null ? Text(branch) : const Text("")),
+      DataCell(place != null ? Text(place) : const Text("")),
+      DataCell(experience != null ? Text(experience) : const Text("")),
+      DataCell(about != null
           ? SingleChildScrollView(
-              child: SizedBox(
-                  width: 400, height: 300, child: Text(data['about'] ?? "")),
+              child: SizedBox(width: 400, height: 300, child: Text(about)),
             )
           : const Text("")),
-      DataCell(data['clients'] != null
-          ? Text(data['clients'] ?? "")
-          : const Text("")),
+      DataCell(clients != null ? Text(clients) : const Text("")),
 
       DataCell(
         Center(
@@ -321,7 +406,7 @@ class _TrainerPageState extends State<TrainerPage> {
                   .collection('product_details')
                   .doc(globalGymId)
                   .collection('trainer')
-                  .doc(trainerId);
+                  .doc(trainerid);
               await documentReference
                   .update({'eligible': temp})
                   .whenComplete(() => print("Legitimate toggled"))
@@ -338,25 +423,23 @@ class _TrainerPageState extends State<TrainerPage> {
         ),
       ),
 
-      DataCell(data['position'] != null
-          ? Text(data['position'] ?? "")
-          : const Text("")),
+      DataCell(position != null ? Text(position) : const Text("")),
 
       DataCell(const Text(""), showEditIcon: true, onTap: () {
         Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => ProductEditBox(
-                images: data['image'].toString(),
-                name: data['name'],
-                about: data['about'],
-                experience: data['experience'],
-                social_link: data['insta_id'],
-                clients: data['clients'],
-                certification: data['certification'],
-                specialization: data['specialization'],
-                trainerId: data['trainer_id'],
-                position: data['position'],
+                images: image.toString(),
+                name: name.toString(),
+                about: about.toString(),
+                experience: experience.toString(),
+                social_link: instaId.toString(),
+                clients: clients.toString(),
+                certification: certi.toList(),
+                specialization: spec.toList(),
+                trainerId: trainerid,
+                position: position,
               ),
             ));
       }),
@@ -392,7 +475,7 @@ class _TrainerPageState extends State<TrainerPage> {
                             onPressed: () {
                               deleteMethod(
                                   stream: trainerStream,
-                                  uniqueDocId: trainerId);
+                                  uniqueDocId: trainerid);
                               Navigator.pop(context);
                             },
                             icon: const Icon(Icons.check),

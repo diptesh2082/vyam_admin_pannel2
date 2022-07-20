@@ -259,18 +259,50 @@ class _CategoryInfoScreenState extends State<CategoryInfoScreen> {
 
   DataRow _buildListItem(BuildContext context, DocumentSnapshot data, int index,
       int start, int end) {
-    String categoryID = data['category_id'];
+    // String categoryID = data['category_id'];
     String x;
-    bool status = data['status'];
-    String img = data['image'].toString();
+    // bool status = data['status'];
+    // String img = data['image'].toString();
+
+    String? categoryID;
+    try {
+      categoryID = data['category_id'];
+    } catch (e) {
+      categoryID = '#Error';
+    }
+    bool status = false;
+    try {
+      status = data['status'];
+    } catch (e) {
+      status = false;
+    }
+    String? img;
+    try {
+      img = data['image'];
+    } catch (e) {
+      img = '#Error';
+    }
+    String? name;
+    try {
+      name = data['name'];
+    } catch (e) {
+      name = '#Error';
+    }
+    String? position;
+    try {
+      position = data['position'];
+    } catch (e) {
+      position = '#Error';
+    }
+
     return DataRow(cells: [
       DataCell(
-        data['name'] != null ? Text(data['name'] ?? "") : const Text(""),
+        name != null ? Text(name) : const Text(""),
       ),
       DataCell(
-        data['image'] != null && data['image'].toString() != "null"
+        img != null && img != "null"
             ? Image.network(
-                data['image'],
+                img,
                 scale: 0.5,
                 height: 150,
                 width: 150,
@@ -304,8 +336,8 @@ class _CategoryInfoScreenState extends State<CategoryInfoScreen> {
         ),
       ),
       DataCell(
-        data['position'] != null
-            ? Center(child: Text(data['position'].toString()))
+        position != null
+            ? Center(child: Text(position.toString()))
             : const Text(""),
       ),
       DataCell(
@@ -313,11 +345,11 @@ class _CategoryInfoScreenState extends State<CategoryInfoScreen> {
         showEditIcon: true,
         onTap: () {
           Get.to(() => ProductEditBox(
-              name: data['name'],
-              status: data['status'],
-              image: data['image'].toString(),
-              categoryId: data['category_id'],
-              position: data['position']));
+              name: name.toString(),
+              status: status,
+              image: img.toString(),
+              categoryId: categoryID.toString(),
+              position: position.toString()));
         },
       ),
       DataCell(const Icon(Icons.delete), onTap: () {
@@ -349,7 +381,7 @@ class _CategoryInfoScreenState extends State<CategoryInfoScreen> {
                             onPressed: () {
                               deleteMethodI(
                                   stream: categoryStream,
-                                  uniqueDocId: data['category_id'],
+                                  uniqueDocId: categoryID.toString(),
                                   imagess: img);
                               Navigator.pop(context);
                             },
@@ -458,7 +490,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                           {
                             'image': image3 ?? widget.image,
                             'name': _name.text,
-                            'category_id': categoryId,
+                            // 'category_id': categoryId,
                             'position': _position.text,
                           },
                         ).whenComplete(() {

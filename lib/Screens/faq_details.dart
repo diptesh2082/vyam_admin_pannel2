@@ -190,13 +190,42 @@ class _FaqDetailsState extends State<FaqDetails> {
 
   DataRow _buildListItem(BuildContext context, DocumentSnapshot data, int index,
       int start, int end) {
-    String idData = data['id'];
+    String? question;
+    try {
+      question = data['question'];
+    } catch (e) {
+      question = '#Error';
+    }
+    String? answer;
+    try {
+      answer = data['answer'];
+    } catch (e) {
+      answer = '#Error';
+    }
+    String? idData;
+    try {
+      idData = data['id'];
+    } catch (e) {
+      idData = '#Error';
+    }
+    String? user_id;
+    try {
+      user_id = data['user_id'];
+    } catch (e) {
+      user_id = '#Error';
+    }
+    String? gym_id;
+    try {
+      gym_id = data['gym_id'];
+    } catch (e) {
+      gym_id = '#Error';
+    }
+    // data['gym_id']
+    // data['user_id']
+    // String idData = data['id'];
     return DataRow(cells: [
-      DataCell(data['question'] != null
-          ? Text(data['question'] ?? "")
-          : const Text("")),
-      DataCell(
-          data['answer'] != null ? Text(data['answer'] ?? "") : const Text("")),
+      DataCell(question != null ? Text(question) : const Text("")),
+      DataCell(answer != null ? Text(answer) : const Text("")),
       // DataCell(
       //     data['gym_id'] != null ? Text(data['gym_id'] ?? "") : const Text("")),
       // DataCell(data['user_id'] != null
@@ -207,11 +236,11 @@ class _FaqDetailsState extends State<FaqDetails> {
             context,
             MaterialPageRoute(
               builder: (context) => EditBox(
-                userid: data['user_id'],
-                answer: data['answer'],
-                gymid: data['gym_id'],
-                question: data['question'],
-                id: data['id'],
+                userid: user_id.toString(),
+                answer: answer.toString(),
+                gymid: gym_id.toString(),
+                question: question.toString(),
+                id: idData.toString(),
               ),
             ));
       }),
