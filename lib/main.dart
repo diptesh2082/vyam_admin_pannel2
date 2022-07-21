@@ -27,14 +27,14 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      // scrollBehavior: const MaterialScrollBehavior().copyWith(
-      //   dragDevices: {
-      //     PointerDeviceKind.mouse,
-      //     PointerDeviceKind.touch,
-      //     PointerDeviceKind.stylus,
-      //     PointerDeviceKind.unknown
-      //   },
-      // ),
+      scrollBehavior: const MaterialScrollBehavior().copyWith(
+        dragDevices: {
+          PointerDeviceKind.mouse,
+          PointerDeviceKind.touch,
+          PointerDeviceKind.stylus,
+          PointerDeviceKind.unknown
+        },
+      ),
       title: 'Vyam Admin Panel',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
