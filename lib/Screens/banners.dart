@@ -267,7 +267,7 @@ class _BannerPageState extends State<BannerPage> {
 
   DataRow _buildListItem(BuildContext context, DocumentSnapshot data, int index,
       int start, int end) {
-    bool setnavv;
+    bool setnavv = false;
     try {
       setnavv = data['navigation'] == "/gym_details" ? true : false;
     } catch (e) {
@@ -343,10 +343,8 @@ class _BannerPageState extends State<BannerPage> {
       DataCell(postition_id != null
           ? Text(postition_id.toString())
           : const Text("")),
-
       DataCell(name != null ? Text(name.toString()) : const Text("")),
       DataCell(Image.network(image!)),
-
       DataCell(ElevatedButton(
         onPressed: () async {
           setnavv = !setnavv;
@@ -361,7 +359,7 @@ class _BannerPageState extends State<BannerPage> {
               .whenComplete(() => print("Legitimate toggled"))
               .catchError((e) => print(e));
           await documentReference
-              .update({access.toString(): setnavv})
+              .update({'access': setnavv})
               .whenComplete(() => print("Legitimate toggled"))
               .catchError((e) => print(e));
         },
@@ -383,7 +381,7 @@ class _BannerPageState extends State<BannerPage> {
                   .collection('banner_details')
                   .doc(banner_id);
               await documentReference
-                  .update({visible.toString(): temp})
+                  .update({'visible': temp})
                   .whenComplete(() => print("Legitimate toggled"))
                   .catchError((e) => print(e));
             },
@@ -437,7 +435,7 @@ class _BannerPageState extends State<BannerPage> {
                               deleteMethodI(
                                   stream: bannerStream,
                                   uniqueDocId: banner_id,
-                                  imagess: data['image']);
+                                  imagess: image);
                               Navigator.pop(context);
                             },
                             icon: const Icon(Icons.check),
@@ -570,35 +568,8 @@ class _naveditState extends State<navedit> {
             style: const TextStyle(
                 color: Colors.white, fontWeight: FontWeight.bold),
           ),
-
-          ElevatedButton(
-            onPressed: () {
-              if (setnav == false) {
-                setState(() {
-                  setnav = true;
-                  navcommandedit = "/gym_details";
-                  print("Set NAv Activated In Edit");
-                });
-              } else {
-                setState(() {
-                  setnav = false;
-                  navcommandedit = "";
-                  print("SET NAV DEACTIVATED In Edit");
-                });
-              }
-              print("New ${navcommandedit}");
-            },
-            child: Text(
-              setnav ? "Activated" : "Deactivated",
-              style: const TextStyle(
-                  color: Colors.white, fontWeight: FontWeight.bold),
-            ),
-            style: ElevatedButton.styleFrom(
-                primary: setnav ? Colors.green : Colors.red),
-          )
-        ],
-      ),
-
+        ),
+      ],
     );
   }
 }
@@ -837,7 +808,6 @@ class _EditBoxState extends State<EditBox> {
                               address_con: _addaddress,
                             ),
                             const Center(
-
                               child: const Icon(
                                 Icons.location_on_rounded,
                                 size: 40,
@@ -963,7 +933,6 @@ class _editimState extends State<editim> {
                 width: 200,
                 child: Center(
                   child: CircularProgressIndicator(),
-
                 ),
               )
             : SizedBox(
