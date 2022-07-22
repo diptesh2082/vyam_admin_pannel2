@@ -510,64 +510,64 @@ class _UserInformationState extends State<UserInformation> {
 
   DataRow _buildListItem(BuildContext context, DocumentSnapshot data, int index,
       int start, int end) {
-    String? userIDData;
+    String? userIDData="";
     try {
       userIDData = data['userId'];
     } catch (e) {
       userIDData = '#Error';
     }
-    String? address;
+    String? address="";
     try {
       address = data['address'];
     } catch (e) {
       address = '#Error';
     }
-    String? gender;
+    String? gender="";
     try {
       gender = data['gender'];
     } catch (e) {
       gender = '#Error';
     }
-    String? number;
+    String? number="";
     try {
       number = data['number'];
     } catch (e) {
       number = '#Error';
     }
-    String? pincode;
+    String? pincode="";
     try {
       pincode = data['pincode'];
     } catch (e) {
       pincode = '#Error';
     }
 
-    String? email;
+    String? email="";
     try {
       email = data['email'];
     } catch (e) {
       email = '#Error';
     }
 
-    String? name;
+    String? name="";
     try {
       name = data['name'];
     } catch (e) {
       name = '#Error';
     }
-    String? profileImage;
+    String? profileImage="";
     try {
       profileImage = data['image'];
     } catch (e) {
       profileImage = '#Error';
     }
-    String? locality;
+    String? locality="";
     try {
       locality = data['locality'];
     } catch (e) {
       locality = '#Error';
     }
 
-    bool legit = false;
+    bool legit=false;
     try {
       legit = data['legit'];
     } catch (e) {
@@ -610,7 +610,7 @@ class _UserInformationState extends State<UserInformation> {
               .substring(3, number.toString().length))
           : const Text("")),
       DataCell(
-          address != null ? Text(address.toString() ?? "") : const Text("")),
+          address != null ? Text(address.toString() ) : const Text("")),
       DataCell(locality != null ? Text(locality.toString()) : const Text("")),
       // DataCell(data != null ? Text(data['subLocality'] ?? "") : Text("")),
       DataCell(pincode != null ? Text(pincode.toString()) : const Text("")),
@@ -966,7 +966,7 @@ class _EditBoxState extends State<EditBox> {
                                     .doc("${x}");
                             Map<String, dynamic> data = <String, dynamic>{
                               // 'address':'',
-                              'gender': gvalue ?? "",
+                              'gender': gvalue.toString(),
                               'image': image5 ?? img,
                               'name': _name.text,
                               'email': _email.text,
