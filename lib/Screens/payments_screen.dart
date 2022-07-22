@@ -590,15 +590,33 @@ class _PaymentScreenState extends State<PaymentScreen> {
                           return ListView.builder(
                             itemCount: doc.length,
                             itemBuilder: (BuildContext context, int index) {
+                              String? gym_idd;
+                              try {
+                                gym_idd = doc[index]['gym_id'];
+                              } catch (e) {
+                                gym_idd = '#Error';
+                              }
+                              String? branch;
+                              try {
+                                branch = doc[index]['branch'];
+                              } catch (e) {
+                                branch = '#Error';
+                              }
+                              String? name;
+                              try {
+                                name = doc[index]['name'];
+                              } catch (e) {
+                                name = '#Error';
+                              }
                               return RadioListTile<String>(
-                                  value: doc[index]['gym_id'],
+                                  value: gym_idd.toString(),
                                   title: Text(
-                                      "${doc[index]['name'].toString()} || ${doc[index]['branch']}"),
+                                      "${name.toString()} || ${branch.toString()}"),
                                   groupValue: namee,
                                   onChanged: (String? valuee) {
                                     setState(() {
                                       namee = valuee!;
-                                      place = doc[index]['branch'];
+                                      place = branch.toString();
                                     });
                                     print(namee);
                                   });
@@ -940,14 +958,34 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                         return ListView.builder(
                           itemCount: doc.length,
                           itemBuilder: (BuildContext context, int index) {
+                            String? gym_idd;
+                            try {
+                              gym_idd = doc[index]['gym_id'];
+                            } catch (e) {
+                              gym_idd = '#Error';
+                            }
+                            String? branch;
+                            try {
+                              branch = doc[index]['branch'];
+                            } catch (e) {
+                              branch = '#Error';
+                            }
+                            String? name;
+                            try {
+                              name = doc[index]['name'];
+                            } catch (e) {
+                              name = '#Error';
+                            }
+
                             return RadioListTile<String>(
-                                value: doc[index]['gym_id'],
-                                title: Text(doc[index]['name'].toString()),
+                                value: gym_idd.toString(),
+                                title: Text(
+                                    "${name} | ${branch.toString().toUpperCase()}"),
                                 groupValue: gym_id,
                                 onChanged: (String? valuee) {
                                   setState(() {
                                     gym_id = valuee!;
-                                    _place.text = doc[index]['branch'];
+                                    _place.text = branch.toString();
                                   });
                                   print(gym_id.toString());
                                 });

@@ -238,11 +238,11 @@ class _offersPageState extends State<offersPage> {
     } catch (e) {
       title = "#ERROR";
     }
-    List descriptionn = [];
+    String? descriptionn;
     try {
-      descriptionn = data['description'];
+      descriptionn = data['description'].toString();
     } catch (e) {
-      descriptionn = [];
+      descriptionn = '';
     }
     String? offer;
     try {
@@ -250,12 +250,12 @@ class _offersPageState extends State<offersPage> {
     } catch (e) {
       offer = "#ERROR";
     }
-    String? offer_type;
-    try {
-      offer_type = data['offer_type'].toString();
-    } catch (e) {
-      offer_type = "#ERROR";
-    }
+    // String? offer_type;
+    // try {
+    //   offer_type = data['offer_type'].toString();
+    // } catch (e) {
+    //   offer_type = "#ERROR";
+    // }
     String? id;
     try {
       id = data['id'].toString();
@@ -286,7 +286,7 @@ class _offersPageState extends State<offersPage> {
           ? Text(offer.toString().toUpperCase())
           : const Text("")),
 // <<<<<<< HEAD
-      DataCell(offer_type != null ? Text(offer_type) : const Text("")),
+//       DataCell(offer_type != null ? Text(offer_type) : const Text("")),
 // =======
       DataCell(
         Center(
@@ -323,7 +323,7 @@ class _offersPageState extends State<offersPage> {
                       title: title,
                       description: descriptionn,
                       offer: offer,
-                      offer_type: offer_type,
+                      // offer_type: offer_type,
                       rules: rules,
                     )));
       }),
@@ -405,7 +405,7 @@ class _addboxxState extends State<addboxx> {
   final TextEditingController _title = TextEditingController();
   final TextEditingController _offer = TextEditingController();
   final TextEditingController _description = TextEditingController();
-  final TextEditingController _offer_type = TextEditingController();
+  // final TextEditingController _offer_type = TextEditingController();
   final TextEditingController _rules = TextEditingController();
   var id1;
   @override
@@ -446,8 +446,8 @@ class _addboxxState extends State<addboxx> {
               ),
               customTextField(hinttext: "Title", addcontroller: _title),
               customTextField(hinttext: "Offer", addcontroller: _offer),
-              customTextField(
-                  hinttext: "Offer Type", addcontroller: _offer_type),
+              // customTextField(
+              //     hinttext: "Offer Type", addcontroller: _offer_type),
               customTextField(
                   hinttext: 'Description', addcontroller: _description),
               customTextField(hinttext: 'Rules', addcontroller: _rules),
@@ -495,7 +495,7 @@ class _addboxxState extends State<addboxx> {
                         'title': _title.text,
                         'description': _description.text,
                         'offer': _offer.text,
-                        'offer_type': _offer_type.text,
+                        // 'offer_type': _offer_type.text,
                         'rules': offersRules,
                         'validity': false,
                         'id': id1,
@@ -525,7 +525,7 @@ class _addboxxState extends State<addboxx> {
 
 class OffersEditBox extends StatefulWidget {
   var title;
-  var offer_type;
+  // var offer_type;
   var offer;
   var description;
   var id;
@@ -537,7 +537,7 @@ class OffersEditBox extends StatefulWidget {
       required this.title,
       required this.description,
       required this.offer,
-      required this.offer_type,
+      // required this.offer_type,
       required this.id,
       required this.gym_id,
       required this.rules})
@@ -552,7 +552,7 @@ class _OffersEditBoxState extends State<OffersEditBox> {
   final TextEditingController _title = TextEditingController();
   final TextEditingController _description = TextEditingController();
   final TextEditingController _offer = TextEditingController();
-  final TextEditingController _offer_type = TextEditingController();
+  // final TextEditingController _offer_type = TextEditingController();
   final TextEditingController _rules = TextEditingController();
   List<dynamic> rules = [];
   @override
@@ -563,7 +563,7 @@ class _OffersEditBoxState extends State<OffersEditBox> {
         .doc(widget.id)
         .collection('offers');
     _title.text = widget.title;
-    _offer_type.text = widget.offer_type;
+    // _offer_type.text = widget.offer_type;
     _offer.text = widget.offer;
     _description.text = widget.description;
     rules = widget.rules;
@@ -587,7 +587,7 @@ class _OffersEditBoxState extends State<OffersEditBox> {
             ),
             customTextField(hinttext: 'Title', addcontroller: _title),
             customTextField(hinttext: 'Offer', addcontroller: _offer),
-            customTextField(hinttext: 'Offer Type', addcontroller: _offer_type),
+            // customTextField(hinttext: 'Offer Type', addcontroller: _offer_type),
             customTextField(
                 hinttext: 'Description', addcontroller: _description),
             customTextField(hinttext: 'Rules', addcontroller: _rules),
@@ -639,7 +639,7 @@ class _OffersEditBoxState extends State<OffersEditBox> {
                       'title': _title.text,
                       'description': _description.text,
                       'offer': _offer.text,
-                      'offer_type': _offer_type.text,
+                      // 'offer_type': _offer_type.text,
                       'rules': rules,
                     };
                     await documentReference

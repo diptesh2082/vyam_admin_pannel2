@@ -293,8 +293,19 @@ class _ReviewPage extends State<ReviewPage> {
                     print(snapshot.error);
                     return Container();
                   }
-                  return Text(
-                      "${snapshot.data.get('name')} | ${snapshot.data.get('branch').toString().toUpperCase()}");
+                  String? name;
+                  try {
+                    name = snapshot.data.get('name');
+                  } catch (e) {
+                    name = '#NO Data';
+                  }
+                  String? gname;
+                  try {
+                    gname = snapshot.data.get('branch');
+                  } catch (e) {
+                    gname = '#NO Data';
+                  }
+                  return Text("$name | ${gname.toString().toUpperCase()}");
                 })
             : const Text("")),
 

@@ -157,16 +157,17 @@ class _TrainerPageState extends State<TrainerPage> {
                                 ),
                               ),
                               DataColumn(
+                                  label: Text(
+                                'User InstaID',
+                                style: TextStyle(fontWeight: FontWeight.w600),
+                              )),
+                              DataColumn(
                                 label: Text(
                                   'About',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
-                              DataColumn(
-                                  label: Text(
-                                'Clients',
-                                style: TextStyle(fontWeight: FontWeight.w600),
-                              )),
+
                               DataColumn(
                                   label: Text(
                                 'Enable/Disable',
@@ -334,12 +335,12 @@ class _TrainerPageState extends State<TrainerPage> {
       about = "#ERROR";
     }
 
-    String? clients;
-    try {
-      clients = data['clients'].toString();
-    } catch (e) {
-      clients = "#ERROR";
-    }
+    // String? clients;
+    // try {
+    //   clients = data['clients'].toString();
+    // } catch (e) {
+    //   clients = "#ERROR";
+    // }
 
     String position = '';
     try {
@@ -353,6 +354,12 @@ class _TrainerPageState extends State<TrainerPage> {
       instaId = data['insta_id'].toString();
     } catch (e) {
       instaId = "#ERROR";
+    }
+    String? user_instaid;
+    try {
+      user_instaid = data['user_instaid'].toString();
+    } catch (e) {
+      user_instaid = "#ERROR";
     }
 
     String trainerid = '';
@@ -389,12 +396,13 @@ class _TrainerPageState extends State<TrainerPage> {
       DataCell(branch != null ? Text(branch) : const Text("")),
       DataCell(place != null ? Text(place) : const Text("")),
       DataCell(experience != null ? Text(experience) : const Text("")),
+      DataCell(user_instaid != null ? Text(user_instaid) : const Text("")),
       DataCell(about != null
           ? SingleChildScrollView(
               child: SizedBox(width: 400, height: 300, child: Text(about)),
             )
           : const Text("")),
-      DataCell(clients != null ? Text(clients) : const Text("")),
+      // DataCell(clients != null ? Text(clients) : const Text("")),
 
       DataCell(
         Center(
@@ -430,17 +438,17 @@ class _TrainerPageState extends State<TrainerPage> {
             context,
             MaterialPageRoute(
               builder: (context) => ProductEditBox(
-                images: image.toString(),
-                name: name.toString(),
-                about: about.toString(),
-                experience: experience.toString(),
-                social_link: instaId.toString(),
-                clients: clients.toString(),
-                certification: certi.toList(),
-                specialization: spec.toList(),
-                trainerId: trainerid,
-                position: position,
-              ),
+                  images: image.toString(),
+                  name: name.toString(),
+                  about: about.toString(),
+                  experience: experience.toString(),
+                  social_link: instaId.toString(),
+                  // clients: clients.toString(),
+                  certification: certi.toList(),
+                  specialization: spec.toList(),
+                  trainerId: trainerid,
+                  position: position,
+                  user_instaid: user_instaid.toString()),
             ));
       }),
 
@@ -718,10 +726,11 @@ class _ShowAddboxState extends State<ShowAddbox> {
   final TextEditingController _addabout = TextEditingController();
   final TextEditingController _addcertifications = TextEditingController();
   final TextEditingController _addexperience = TextEditingController();
-  final TextEditingController _addclients = TextEditingController();
+  // final TextEditingController _addclients = TextEditingController();
   final TextEditingController _addreview = TextEditingController();
   final TextEditingController _addspecialization = TextEditingController();
   final TextEditingController social = TextEditingController();
+  final TextEditingController user_insta = TextEditingController();
   final TextEditingController postion = TextEditingController();
 
   List<String> certification = [];
@@ -764,10 +773,12 @@ class _ShowAddboxState extends State<ShowAddbox> {
                 customTextField3(hinttext: "about", addcontroller: _addabout),
                 customTextField3(
                     hinttext: "experience", addcontroller: _addexperience),
-                customTextField3(
-                    hinttext: "clients", addcontroller: _addclients),
+                // customTextField3(
+                //     hinttext: "clients", addcontroller: _addclients),
                 customTextField3(
                     hinttext: "Social Media Link", addcontroller: social),
+                customTextField(
+                    hinttext: "Insta Username", addcontroller: user_insta),
                 customTextField(
                     hinttext: "Add Specialization",
                     addcontroller: _addspecialization),
@@ -864,9 +875,10 @@ class _ShowAddboxState extends State<ShowAddbox> {
                             'about': _addabout.text,
                             'certification': certification,
                             'specialization': specialization,
-                            'clients': _addclients.text,
+                            // 'clients': _addclients.text,
                             'insta_id': social.text,
                             'eligible': true,
+                            'user_instaid': user_insta.text
                           },
                         );
                         Navigator.pop(context);
@@ -914,12 +926,13 @@ class ProductEditBox extends StatefulWidget {
     required this.about,
     // required this.certifications,
     required this.experience,
-    required this.clients,
+    // required this.clients,
     required this.specialization,
     required this.trainerId,
     required this.certification,
     required this.social_link,
     required this.position,
+    required this.user_instaid,
   }) : super(key: key);
   final String social_link;
   final String name;
@@ -927,12 +940,13 @@ class ProductEditBox extends StatefulWidget {
   final String about;
   final List certification;
   final String experience;
-  final String clients;
+  // final String clients;
   // final String review;
   final List specialization;
   // final String socialMedia;
   final String trainerId;
   final String position;
+  final String user_instaid;
 
   @override
   _ProductEditBoxState createState() => _ProductEditBoxState();
@@ -945,11 +959,13 @@ class _ProductEditBoxState extends State<ProductEditBox> {
   final TextEditingController _social = TextEditingController();
   final TextEditingController _certification = TextEditingController();
   final TextEditingController _experience = TextEditingController();
-  final TextEditingController _clients = TextEditingController();
+  // final TextEditingController _clients = TextEditingController();
   final TextEditingController _review = TextEditingController();
   final TextEditingController _specialization = TextEditingController();
   final TextEditingController _socialMedia = TextEditingController();
   final TextEditingController _position = TextEditingController();
+  final TextEditingController user_instaid = TextEditingController();
+
   List<dynamic> cert = [];
   List<dynamic> spec = [];
   var imgUrl11;
@@ -963,11 +979,12 @@ class _ProductEditBoxState extends State<ProductEditBox> {
     _about.text = widget.about;
     cert = widget.certification;
     _experience.text = widget.experience;
-    _clients.text = widget.clients;
+    // _clients.text = widget.clients;
     // _review.text = widget.review;
     spec = widget.specialization;
     _social.text = widget.social_link;
     _position.text = widget.position;
+    user_instaid.text = widget.user_instaid;
 
     // _socialMedia.text = widget.socialMedia;
   }
@@ -996,9 +1013,11 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                 // CustomTextField(hinttext: "Certifications", addcontroller: _certifications),
                 customTextField(
                     hinttext: "Experience", addcontroller: _experience),
-                customTextField(hinttext: "Client", addcontroller: _clients),
+                // customTextField(hinttext: "Client", addcontroller: _clients),
                 customTextField(
                     hinttext: "Social Media Link", addcontroller: _social),
+                customTextField(
+                    hinttext: "Insta User Name", addcontroller: user_instaid),
                 customTextField(
                     hinttext: "Specialization", addcontroller: _specialization),
 
@@ -1140,10 +1159,11 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                           'name': _name.text,
                           'about': _about.text,
                           'experience': _experience.text,
-                          'clients': _clients.text,
+                          // 'clients': _clients.text,
                           'certification': cert,
                           'specialization': spec,
                           'insta_id': _social.text,
+                          'user_instaid': user_instaid.text,
 // <<<<<<< someshwar
 
                           'position': _position.text,

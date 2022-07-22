@@ -267,7 +267,7 @@ class _BannerPageState extends State<BannerPage> {
 
   DataRow _buildListItem(BuildContext context, DocumentSnapshot data, int index,
       int start, int end) {
-    bool setnavv;
+    bool setnavv = false;
     try {
       setnavv = data['navigation'] == "/gym_details" ? true : false;
     } catch (e) {
@@ -359,7 +359,7 @@ class _BannerPageState extends State<BannerPage> {
               .whenComplete(() => print("Legitimate toggled"))
               .catchError((e) => print(e));
           await documentReference
-              .update({access.toString(): setnavv})
+              .update({'access': setnavv})
               .whenComplete(() => print("Legitimate toggled"))
               .catchError((e) => print(e));
         },
@@ -381,7 +381,7 @@ class _BannerPageState extends State<BannerPage> {
                   .collection('banner_details')
                   .doc(banner_id);
               await documentReference
-                  .update({visible.toString(): temp})
+                  .update({'visible': temp})
                   .whenComplete(() => print("Legitimate toggled"))
                   .catchError((e) => print(e));
             },
@@ -435,7 +435,7 @@ class _BannerPageState extends State<BannerPage> {
                               deleteMethodI(
                                   stream: bannerStream,
                                   uniqueDocId: banner_id,
-                                  imagess: data['image']);
+                                  imagess: image);
                               Navigator.pop(context);
                             },
                             icon: const Icon(Icons.check),

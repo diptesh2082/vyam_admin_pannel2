@@ -572,20 +572,13 @@ class _ProductDetailsState extends State<ProductDetails> {
     } catch (e) {
       cash_pay = false;
     }
-
-    // bool legit = data['legit'];
-    // bool status = data["gym_status"];
-    // bool online_pay = data["online_pay"];
-    // bool cash_pay = data['cash_pay'];
     List imgList = [];
     try {
       imgList = data["images"];
     } catch (e) {
       imgList = ["Null"];
     }
-    // List imgList = data['images'];
-    // String landmark = data['landmark'];
-    // String imagess = data['display_picture'].toString();
+
     String? imagess;
     try {
       imagess = data['display_picture'].toString();
@@ -627,6 +620,12 @@ class _ProductDetailsState extends State<ProductDetails> {
       pincode = data['pincode'].toString();
     } catch (e) {
       pincode = "#ERROR";
+    }
+    GeoPoint location = GeoPoint(0, 0);
+    try {
+      location = data['location'];
+    } catch (e) {
+      location = GeoPoint(0, 0);
     }
 
     List<dynamic> arr2 = [];
@@ -961,23 +960,22 @@ class _ProductDetailsState extends State<ProductDetails> {
               context,
               MaterialPageRoute(
                   builder: (context) => ProductEditBox(
-                      address: address.toString(),
-                      gender: gender.toString(),
-                      name: name.toString(),
-                      pincode: pincode.toString(),
-                      branch: branch.toString(),
-                      gymId: gymId.toString(),
-                      gymOwner: gym_owner.toString(),
-                      // landmark: data['landmark'],
-                      password: password.toString(),
-                      imagee: imagess.toString(),
-                      arr2: arr2,
-                      WorkoutArray: WorkoutArray,
-                      serviceArray: serviceArray,
-                      description: descriptionns,
-                      rules: ruless
-
-                      // location: data['location'],
+                        address: address.toString(),
+                        gender: gender.toString(),
+                        name: name.toString(),
+                        pincode: pincode.toString(),
+                        branch: branch.toString(),
+                        gymId: gymId.toString(),
+                        gymOwner: gym_owner.toString(),
+                        // landmark: data['landmark'],
+                        password: password.toString(),
+                        imagee: imagess.toString(),
+                        arr2: arr2,
+                        WorkoutArray: WorkoutArray,
+                        serviceArray: serviceArray,
+                        description: descriptionns,
+                        rules: ruless,
+                        location: location,
                       )));
         },
       ),
@@ -1079,6 +1077,9 @@ class _ShowAddBoxState extends State<ShowAddBox> {
   // final TextEditingController _addlandmark = TextEditingController();
   final TextEditingController _addgymownerid = TextEditingController();
   final TextEditingController _addpassword = TextEditingController();
+  final TextEditingController _latitude = TextEditingController();
+
+  final TextEditingController _longitude = TextEditingController();
 
   final _latitudeController = 0;
   final _longitudeController = 0;
@@ -1150,7 +1151,8 @@ class _ShowAddBoxState extends State<ShowAddBox> {
               ),
 
               customTextField(hinttext: "Address", addcontroller: _addaddress),
-
+              customTextField(hinttext: "Latitude", addcontroller: _latitude),
+              customTextField(hinttext: "Longitude", addcontroller: _longitude),
               const SizedBox(height: 15),
               const Padding(
                 padding: EdgeInsets.all(8.0),
@@ -1212,46 +1214,9 @@ class _ShowAddBoxState extends State<ShowAddBox> {
               ),
 
               const SizedBox(height: 15),
-              Row(
-                children: const [
-                  Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Text('Latitude:',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w700, fontSize: 15)),
-                  ),
-                  SizedBox(
-                    width: 15,
-                  ),
-                  Text(
-                    'Not Required',
-                    style: TextStyle(
-                        color: Colors.red,
-                        fontWeight: FontWeight.bold,
-                        fontStyle: FontStyle.italic),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 15),
 // <<<<<<< HEAD
               Row(
                 children: [
-                  const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Text('Longitude:',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w700, fontSize: 15)),
-                  ),
-                  const SizedBox(
-                    width: 15,
-                  ),
-                  const Text(
-                    'Not Required',
-                    style: TextStyle(
-                        color: Colors.red,
-                        fontWeight: FontWeight.bold,
-                        fontStyle: FontStyle.italic),
-                  ),
                   const SizedBox(
                     height: 15,
                   ),
@@ -1434,7 +1399,7 @@ class _ShowAddBoxState extends State<ShowAddBox> {
               const SizedBox(height: 20),
               customTextField(
                 addcontroller: _addrules,
-                hinttext: "Rules",
+                hinttext: "Bullet Points",
               ),
               const SizedBox(
                 height: 10,
@@ -1449,7 +1414,7 @@ class _ShowAddBoxState extends State<ShowAddBox> {
                           _addrules.text = "";
                         });
                       },
-                      child: const Text("Add Rules")),
+                      child: const Text("Add Points")),
                   const SizedBox(width: 20),
                   ElevatedButton(
                       onPressed: () {
@@ -1458,7 +1423,7 @@ class _ShowAddBoxState extends State<ShowAddBox> {
                           _addrules.text = "";
                         });
                       },
-                      child: const Text("Remove Rules"))
+                      child: const Text("Remove Points"))
                 ],
               ),
               const SizedBox(
@@ -1499,8 +1464,8 @@ class _ShowAddBoxState extends State<ShowAddBox> {
                     onPressed: () async {
                       print(dic);
                       GeoPoint dataForGeoPint = GeoPoint(
-                          double.parse(_latitudeController.toString()),
-                          double.parse(_longitudeController.toString()));
+                          double.parse(_latitude.text.toString()),
+                          double.parse(_longitude.text.toString()));
 
                       await matchID(
                           newId: _addgymownerid.text,
@@ -2004,6 +1969,7 @@ class ProductEditBox extends StatefulWidget {
     required this.gymId,
     required this.gymOwner,
     required this.gender,
+    required this.location,
     // required this.location,
     // required this.landmark,
     required this.pincode,
@@ -2024,7 +1990,7 @@ class ProductEditBox extends StatefulWidget {
   final String gymOwner;
   final String gender;
   final String password;
-  // final GeoPoint location;
+  final GeoPoint location;
   // final String landmark;
   final String pincode;
   final String imagee;
@@ -2078,8 +2044,8 @@ class _ProductEditBoxState extends State<ProductEditBox> {
     workoutStream = FirebaseFirestore.instance.collection("workouts");
     categoryStream = FirebaseFirestore.instance.collection('category');
     // _location.text = "${widget.location.latitude}, ${widget.location.latitude}";
-    // _latitudeController.text = widget.location.latitude.toString();
-    // _longitudeController.text = widget.location.longitude.toString();
+    _latitudeController.text = widget.location.latitude.toString();
+    _longitudeController.text = widget.location.longitude.toString();
     // print(widget.location.latitude);
   }
 
@@ -2105,6 +2071,11 @@ class _ProductEditBoxState extends State<ProductEditBox> {
               ),
               customTextField(hinttext: "Name", addcontroller: _name),
               customTextField(hinttext: "Address", addcontroller: _address),
+              customTextField(
+                  hinttext: "Latitude", addcontroller: _latitudeController),
+              customTextField(
+                  hinttext: "Longitude", addcontroller: _longitudeController),
+
               customTextField(hinttext: "Gym ID", addcontroller: _gymiid),
               customTextField(hinttext: "Gym Owner", addcontroller: _gymowner),
               customTextField(hinttext: "Gender", addcontroller: _gender),
@@ -2114,7 +2085,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
               const SizedBox(height: 20),
               customTextField(
                 addcontroller: _rules,
-                hinttext: "Rules",
+                hinttext: "Bullet Points",
               ),
               const SizedBox(
                 height: 10,
@@ -2129,7 +2100,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                           _rules.text = "";
                         });
                       },
-                      child: const Text("Add Rules")),
+                      child: const Text("Add Points")),
                   const SizedBox(width: 20),
                   ElevatedButton(
                       onPressed: () {
@@ -2138,7 +2109,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                           _rules.text = "";
                         });
                       },
-                      child: const Text("Remove Rules"))
+                      child: const Text("Remove Points"))
                 ],
               ),
               const SizedBox(
@@ -2267,6 +2238,9 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                 child: Center(
                   child: ElevatedButton(
                     onPressed: () async {
+                      GeoPoint dataForGeoPint = GeoPoint(
+                          double.parse(_latitudeController.toString()),
+                          double.parse(_longitudeController.toString()));
                       print("The Gym id is : ${_gymiid.text}");
                       DocumentReference documentReference = FirebaseFirestore
                           .instance
@@ -2278,7 +2252,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                         'gender': _gender.text,
                         'name': _name.text,
                         'pincode': _pincode.text,
-                        // 'location': dataForGeoPint,
+                        'location': dataForGeoPint,
                         'password': _password.text,
                         'gym_id': _gymiid.text,
                         'gym_owner': _gymowner.text,
