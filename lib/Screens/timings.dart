@@ -108,6 +108,11 @@ class _TimingsState extends State<Timings> {
                               )),
                               DataColumn(
                                   label: Text(
+                                'Closed Day Comment',
+                                style: TextStyle(fontWeight: FontWeight.w600),
+                              )),
+                              DataColumn(
+                                  label: Text(
                                 'Morning Days',
                                 style: TextStyle(fontWeight: FontWeight.w600),
                               )),
@@ -247,6 +252,12 @@ class _TimingsState extends State<Timings> {
     } catch (e) {
       morning_days = '#ERROR';
     }
+    String? closed_day;
+    try {
+      closed_day = data['closed_day'];
+    } catch (e) {
+      closed_day = '#ERROR';
+    }
     String? evening_days;
     try {
       evening_days = data['evening_days'];
@@ -265,6 +276,8 @@ class _TimingsState extends State<Timings> {
       DataCell(Morning != null ? Text(Morning) : const Text("")),
       DataCell(Evening != null ? Text(Evening ?? "") : const Text("")),
       DataCell(closed != null ? Text(closed.toString()) : const Text("")),
+      DataCell(
+          closed_day != null ? Text(closed_day.toString()) : const Text("")),
       DataCell(morning_days != null ? Text(morning_days) : const Text("")),
       DataCell(evening_days != null ? Text(evening_days) : const Text("")),
       DataCell(position != null ? Text(position) : const Text("")),
@@ -273,15 +286,15 @@ class _TimingsState extends State<Timings> {
             context,
             MaterialPageRoute(
                 builder: (context) => ProductEditBox(
-                      gymId: widget.pGymId,
-                      typeId: timeId.toString(),
-                      closed: closed,
-                      eveninging_days: evening_days.toString(),
-                      morning: Morning.toString(),
-                      morning_days: morning_days.toString(),
-                      evening: Evening.toString(),
-                      position: position.toString(),
-                    )));
+                    gymId: widget.pGymId,
+                    typeId: timeId.toString(),
+                    closed: closed,
+                    eveninging_days: evening_days.toString(),
+                    morning: Morning.toString(),
+                    morning_days: morning_days.toString(),
+                    evening: Evening.toString(),
+                    position: position.toString(),
+                    closed_day: closed_day.toString())));
       }),
       DataCell(const Icon(Icons.delete), onTap: () {
         deleteMethod(stream: packageStream, uniqueDocId: timeId);
@@ -314,6 +327,8 @@ class _ShowAddBoxState extends State<ShowAddBox> {
   final TextEditingController evening = TextEditingController();
   // final TextEditingController closed = TextEditingController();
   final TextEditingController morning_days = TextEditingController();
+  final TextEditingController closed_day = TextEditingController();
+
   final TextEditingController evening_days = TextEditingController();
   final TextEditingController position = TextEditingController();
 
@@ -341,10 +356,17 @@ class _ShowAddBoxState extends State<ShowAddBox> {
             customTextField(
                 hinttext: "Evening Timings : 5.00PM-10.00PM",
                 addcontroller: evening),
+            customTextField(
+                hinttext: "Closed Day Comment", addcontroller: closed_day),
             Container(
               padding: const EdgeInsets.all(40),
               child: Column(
                 children: [
+                  Text(
+                    "ADD Closed Days",
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                  ),
+                  SizedBox(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -445,7 +467,8 @@ class _ShowAddBoxState extends State<ShowAddBox> {
                       "morning_days": morning_days.text,
                       "evening_days": evening_days.text,
                       'timing_id': typecon.text,
-                      'position': position.text
+                      'position': position.text,
+                      'closed_day': closed_day.text
                     },
                   );
                   Navigator.pop(context);
@@ -471,6 +494,7 @@ class ProductEditBox extends StatefulWidget {
     required this.typeId,
     required this.gymId,
     required this.position,
+    required this.closed_day,
   }) : super(key: key);
 
   final String morning;
@@ -481,6 +505,7 @@ class ProductEditBox extends StatefulWidget {
   final String typeId;
   final String gymId;
   final String position;
+  final String closed_day;
 
   @override
   _ProductEditBoxState createState() => _ProductEditBoxState();
@@ -490,7 +515,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
   final TextEditingController typecon = TextEditingController();
   final TextEditingController morning = TextEditingController();
   final TextEditingController evening = TextEditingController();
-  // final TextEditingController closed = TextEditingController();
+  final TextEditingController closed_day = TextEditingController();
   final TextEditingController morning_days = TextEditingController();
   final TextEditingController evening_days = TextEditingController();
   final TextEditingController position = TextEditingController();
@@ -505,6 +530,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
     morning_days.text = widget.morning_days;
     evening_days.text = widget.eveninging_days;
     position.text = widget.position;
+    closed_day.text = widget.closed_day;
   }
 
   @override
@@ -534,10 +560,18 @@ class _ProductEditBoxState extends State<ProductEditBox> {
               customTextField(
                   hinttext: "Evening Timings : 5.00PM-10.00PM",
                   addcontroller: evening),
+              customTextField(
+                  hinttext: "Closed Day Comment", addcontroller: closed_day),
               Container(
                 padding: const EdgeInsets.all(40),
                 child: Column(
                   children: [
+                    Text(
+                      "ADD Closed Days",
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                    ),
+                    SizedBox(height: 20),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -641,6 +675,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                         "evening_days": evening_days.text,
                         'timing_id': typecon.text,
                         'position': position.text,
+                        'closed_day': closed_day.text
                       };
                       await documentReference
                           .update(data)
@@ -659,354 +694,3 @@ class _ProductEditBoxState extends State<ProductEditBox> {
     );
   }
 }
-
-// import 'package:admin_panel_vyam/dashboard.dart';
-// import 'package:admin_panel_vyam/services/deleteMethod.dart';
-// import 'package:cloud_firestore/cloud_firestore.dart';
-// import 'package:flutter/material.dart';
-//
-// import '../services/CustomTextFieldClass.dart';
-// import '../services/MatchIDMethod.dart';
-//
-// class Timings extends StatefulWidget {
-//   final gymId;
-//   const Timings({Key? key,required this.gymId}) : super(key: key);
-//
-//   @override
-//   State<Timings> createState() => _TimingsState();
-// }
-//
-// class _TimingsState extends State<Timings> {
-//   DocumentReference? TimeStream;
-//   final catId =
-//   FirebaseFirestore.instance.collection('product_details').doc().id.toString();
-//
-//   @override
-//   void initState() {
-//     TimeStream = FirebaseFirestore.instance.collection('product_details').doc(widget.gymId);
-//     super.initState();
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       body: SafeArea(
-//         child: Container(
-//           padding: const EdgeInsets.symmetric(horizontal: 5),
-//           decoration: BoxDecoration(
-//               color: Colors.grey.shade100,
-//               borderRadius: BorderRadius.circular(20.0)),
-//           child: SingleChildScrollView(
-//             child: Column(
-//               crossAxisAlignment: CrossAxisAlignment.start,
-//               children: [
-//                 Padding(
-//                   padding: const EdgeInsets.only(top: 8.0, left: 8.0),
-//                   child: GestureDetector(
-//                     onTap: showAddbox,
-//                     child: Container(
-//                       width: 120,
-//                       decoration: BoxDecoration(
-//                           color: Colors.white,
-//                           borderRadius: BorderRadius.circular(20.0)),
-//                       child: Row(
-//                         children: const [
-//                           Icon(Icons.add),
-//                           Text('Add Product',
-//                               style: TextStyle(fontWeight: FontWeight.w400)),
-//                         ],
-//                       ),
-//                     ),
-//                   ),
-//                 ),
-//                 Center(
-//                   child: StreamBuilder<DocumentSnapshot>(
-//                     stream: TimeStream!.snapshots(),
-//                     builder: (context, AsyncSnapshot snapshot) {
-//                       if (snapshot.connectionState == ConnectionState.waiting) {
-//                         return const CircularProgressIndicator();
-//                       }
-//                       if (snapshot.data == null) {
-//                         return Container();
-//                       }
-//                       var doc=snapshot.data;
-//                         print(doc);
-//                       if (snapshot.data.get("timings")==null){
-//                         return Container();
-//                       }
-//                       return SingleChildScrollView(
-//                         scrollDirection: Axis.horizontal,
-//                         child: DataTable(
-//                           dataRowHeight: 65,
-//                           columns: const [
-//                             DataColumn(
-//                               label: Text(
-//                                 'Evening',
-//                                 style: TextStyle(fontWeight: FontWeight.w600),
-//                               ),
-//                             ),
-//                             DataColumn(
-//                               label: Text(
-//                                 'Morning',
-//                                 style: TextStyle(fontWeight: FontWeight.w600),
-//                               ),
-//                             ),
-//                             DataColumn(
-//                               label: Text(
-//                                 'Closed',
-//                                 style: TextStyle(fontWeight: FontWeight.w600),
-//                               ),
-//                             ),
-//                             DataColumn(
-//                               label: Text(
-//                                 'Evening_Days',
-//                                 style: TextStyle(fontWeight: FontWeight.w600),
-//                               ),
-//                             ),
-//                             DataColumn(
-//                               label: Text(
-//                                 'Morning_days',
-//                                 style: TextStyle(fontWeight: FontWeight.w600),
-//                               ),
-//                             ),
-//                             DataColumn(
-//                               label: Text(
-//                                 'Edit',
-//                                 style: TextStyle(fontWeight: FontWeight.w600),
-//                               ),
-//                             ),
-//                             // DataColumn(
-//                             //   label: Text(
-//                             //     'Delete',
-//                             //     style: TextStyle(fontWeight: FontWeight.w600),
-//                             //   ),
-//                             // ),
-//                           ],
-//                           rows: _buildlist(context, [doc],"gym"),
-//                         ),
-//                       );
-//                     },
-//                   ),
-//                 ),
-//               ],
-//             ),
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-//
-//   List<DataRow> _buildlist(
-//       BuildContext context, List<DocumentSnapshot> snapshot,String type) {
-//     return snapshot.map((data) => _buildListItem(context, data)).toList();
-//   }
-//
-//   DataRow _buildListItem(BuildContext context, DocumentSnapshot data) {
-//
-//     String gymId= data["gym_id"].toString();
-//     String type= data["timings"][0].toString();
-//     return DataRow(cells: [
-//       DataCell(
-//         data.get("timings")["${type}"]['Evening'] != null ? Text(data.get("timings")["${type}"]['Evening'] ?? "") : const Text(""),
-//       ),
-//       DataCell(
-//           data.get("timings")["${type}"]['Morning'] != null ? Text(data.get("timings")["${type}"]['Morning'] ?? "") : const Text(""),
-//       ),
-//       DataCell(
-//         data.get("timings")["${type}"]['Morning'] != null ? Text(data.get("timings")["${type}"]['Morning'] ?? "") : const Text(""),
-//       ),
-//       DataCell(
-//         data.get("timings")["${type}"]['closed'] != null ? Center(child: Text(data.get("timings")["${type}"]['closed'].toString() )) : const Text(""),
-//       ),
-//       DataCell(
-//         data.get("timings")["${type}"]['evening_days'] != null ? Text(data.get("timings")["${type}"]['evening_days'] ?? "") : const Text(""),
-//       ),
-//       DataCell(
-//         data.get("timings")["${type}"]['morning_days'] != null ? Text(data.get("timings")["${type}"]['morning_days'] ?? "") : const Text(""),
-//       ),
-//       DataCell(
-//         const Text(""),
-//         showEditIcon: true,
-//         onTap: () {
-//           showDialog(
-//             context: context,
-//             builder: (context) {
-//               return GestureDetector(
-//                 onTap: () => Navigator.pop(context),
-//                 child: SingleChildScrollView(
-//                   child: ProductEditBox(Morning: _Morning, evening_days: _evening_days,
-//                     Evening: _Evening,morning_days: _morning_days, Closed: _Closed,id: gymId,
-//
-//                   ),
-//                 ),
-//               );
-//             },
-//           );
-//         },
-//       ),
-//       // DataCell(const Icon(Icons.delete), onTap: () {
-//       //   deleteMethod(stream: TimeStream, uniqueDocId: gymId);
-//       // })
-//     ]);
-//   }
-//
-//   final TextEditingController _Evening = TextEditingController();
-//   final TextEditingController _Morning = TextEditingController();
-//   final TextEditingController _Closed = TextEditingController();
-//   final TextEditingController _evening_days = TextEditingController();
-//   final TextEditingController _morning_days = TextEditingController();
-//   showAddbox() => showDialog(
-//     context: context,
-//     builder: (context) => AlertDialog(
-//       shape: const RoundedRectangleBorder(
-//           borderRadius: BorderRadius.all(Radius.circular(30))),
-//       content: SizedBox(
-//         height: 480,
-//         width: 800,
-//         child: SingleChildScrollView(
-//           child: Column(
-//             crossAxisAlignment: CrossAxisAlignment.start,
-//             children: [
-//               const Text(
-//                 'Add Records',
-//                 style: TextStyle(
-//                     fontFamily: 'poppins',
-//                     fontWeight: FontWeight.w600,
-//                     fontSize: 14),
-//               ),
-//               customTextField(hinttext: "Evening Time", addcontroller: _Evening),
-//               customTextField(
-//                   hinttext: "Evening Time", addcontroller: _Morning),
-//               customTextField(hinttext: "Closed day", addcontroller: _Closed),
-//               customTextField(hinttext: "Closed day", addcontroller: _evening_days),
-//               customTextField(hinttext: "Closed day", addcontroller: _morning_days),
-//               Center(
-//                 child: ElevatedButton(
-//                   onPressed: () async {
-//                     await
-//                     FirebaseFirestore.instance
-//                         .collection('product_details')
-//                         .doc(widget.gymId)
-//                         .update(
-//                       {
-//                         "timings":{
-//                         "gym": {
-//
-//                           'Evening': _Evening.text,
-//                           'Morning': _Morning.text,
-//                           'closed': _Closed.text,
-//                           'evening_days': _evening_days.text,
-//                           'morning_days':  _morning_days.text    ,
-//                         }
-//                       }
-//                       },
-//
-//
-//                     );
-//                     Navigator.pop(context);
-//                   },
-//                   child: const Text('Done'),
-//                 ),
-//               )
-//             ],
-//           ),
-//         ),
-//       ),
-//     ),
-//   );
-// }
-//
-// // EDIT FEATURE
-// class ProductEditBox extends StatefulWidget {
-//   const ProductEditBox({
-//     Key? key,required this.Evening,required this.Morning,required this.Closed,required this.evening_days,required this.morning_days,required this.id,
-//
-//   }) : super(key: key);
-//
-//   final Evening ;
-//   final Morning ;
-//   final Closed ;
-//   final evening_days;
-//   final  morning_days;
-//   final id;
-//
-//   @override
-//   _ProductEditBoxState createState() => _ProductEditBoxState();
-// }
-//
-// class _ProductEditBoxState extends State<ProductEditBox> {
-//   final TextEditingController _Evening = TextEditingController();
-//   final TextEditingController _Morning = TextEditingController();
-//   final TextEditingController _Closed = TextEditingController();
-//   final TextEditingController _evening_days = TextEditingController();
-//   final TextEditingController _morning_days = TextEditingController();
-//
-//   @override
-//   void initState() {
-//     super.initState();
-//
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return AlertDialog(
-//       shape: const RoundedRectangleBorder(
-//           borderRadius: BorderRadius.all(Radius.circular(30))),
-//       content: SizedBox(
-//         height: 580,
-//         width: 800,
-//         child: SingleChildScrollView(
-//           child: Column(
-//             crossAxisAlignment: CrossAxisAlignment.start,
-//             children: [
-//               const Text(
-//                 'Update Records for this doc',
-//                 style: TextStyle(
-//                     fontFamily: 'poppins',
-//                     fontWeight: FontWeight.w600,
-//                     fontSize: 14),
-//               ),
-//               customTextField(hinttext: "Evening Time", addcontroller: _Evening),
-//               customTextField(
-//                   hinttext: "Evening Time", addcontroller: _Morning),
-//               customTextField(hinttext: "Closed day", addcontroller: _Closed),
-//               customTextField(hinttext: "Closed day", addcontroller: _evening_days),
-//               customTextField(hinttext: "Closed day", addcontroller: _morning_days),
-//               Padding(
-//                 padding: const EdgeInsets.all(12.0),
-//                 child: Center(
-//                   child: ElevatedButton(
-//                     onPressed: () async {
-//                       await
-//                       FirebaseFirestore.instance
-//                           .collection('product_details')
-//                           .doc(widget.id)
-//                           .update(
-//                         {
-//                           "timings":{
-//                             "gym": {
-//
-//                               'Evening': _Evening.text,
-//                               'Morning': _Morning.text,
-//                               'closed': _Closed.text,
-//                               'evening_days': _evening_days.text,
-//                               'morning_days':  _morning_days.text    ,
-//                             }
-//                           }
-//                         },
-//
-//
-//                       );
-//                       Navigator.pop(context);
-//                     },
-//                     child: const Text('Done'),
-//                   ),
-//                 ),
-//               )
-//             ],
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }
