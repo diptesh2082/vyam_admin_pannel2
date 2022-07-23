@@ -137,11 +137,11 @@ class _offersPageState extends State<offersPage> {
                               'Offer',
                               style: TextStyle(fontWeight: FontWeight.w600),
                             )),
-                            DataColumn(
-                                label: Text(
-                              'Offer Type',
-                              style: TextStyle(fontWeight: FontWeight.w600),
-                            )),
+                            // DataColumn(
+                            //     label: Text(
+                            //   'Offer Type',
+                            //   style: TextStyle(fontWeight: FontWeight.w600),
+                            // )),
                             DataColumn(
                                 label: Text(
                               'Validity',

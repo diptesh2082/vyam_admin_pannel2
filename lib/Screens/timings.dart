@@ -426,6 +426,13 @@ class _ShowAddBoxState extends State<ShowAddBox> {
                             });
                           },
                           child: const Text("Remove Last")),
+                      ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              closed.add("None");
+                            });
+                          },
+                          child: const Text("None")),
                     ],
                   ),
                   const SizedBox(
@@ -624,6 +631,13 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                               });
                             },
                             child: const Text("Saturday")),
+                        ElevatedButton(
+                            onPressed: () {
+                              setState(() {
+                                closed.add("None");
+                              });
+                            },
+                            child: const Text("None")),
                         ElevatedButton(
                             onPressed: () {
                               setState(() {
