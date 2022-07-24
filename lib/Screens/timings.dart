@@ -108,7 +108,12 @@ class _TimingsState extends State<Timings> {
                               )),
                               DataColumn(
                                   label: Text(
-                                'Closed Day Comment',
+                                'Closed Title',
+                                style: TextStyle(fontWeight: FontWeight.w600),
+                              )),
+                              DataColumn(
+                                  label: Text(
+                                'Closed Comment',
                                 style: TextStyle(fontWeight: FontWeight.w600),
                               )),
                               DataColumn(
@@ -270,12 +275,21 @@ class _TimingsState extends State<Timings> {
     } catch (e) {
       position = '#ERROR';
     }
+    String? closed_title;
+    try {
+      closed_title = data['closed_title'];
+    } catch (e) {
+      closed_title = '#ERROR';
+    }
 
     return DataRow(cells: [
       DataCell(timeId != null ? Text(timeId) : const Text("")),
       DataCell(Morning != null ? Text(Morning) : const Text("")),
       DataCell(Evening != null ? Text(Evening.toString()) : const Text("")),
       DataCell(closed != null ? Text(closed.toString()) : const Text("")),
+      DataCell(closed_title != null
+          ? Text(closed_title.toString())
+          : const Text("")),
       DataCell(
           closed_day != null ? Text(closed_day.toString()) : const Text("")),
       DataCell(morning_days != null ? Text(morning_days) : const Text("")),
@@ -289,6 +303,7 @@ class _TimingsState extends State<Timings> {
                     gymId: widget.pGymId,
                     typeId: timeId.toString(),
                     closed: closed,
+                    closed_title: closed_title.toString(),
                     eveninging_days: evening_days.toString(),
                     morning: Morning.toString(),
                     morning_days: morning_days.toString(),
@@ -328,6 +343,7 @@ class _ShowAddBoxState extends State<ShowAddBox> {
   // final TextEditingController closed = TextEditingController();
   final TextEditingController morning_days = TextEditingController();
   final TextEditingController closed_day = TextEditingController();
+  final TextEditingController closed_title = TextEditingController();
 
   final TextEditingController evening_days = TextEditingController();
   final TextEditingController position = TextEditingController();
@@ -351,13 +367,22 @@ class _ShowAddBoxState extends State<ShowAddBox> {
             ),
             customTextField(hinttext: "Timing Type", addcontroller: typecon),
             customTextField(
+              addcontroller: morning_days,
+              hinttext: "Morning Days : Morning(mon-fri)",
+            ),
+            customTextField(
                 hinttext: "Morning timings :6.00AM-12.00PM ",
                 addcontroller: morning),
+            customTextField(
+                hinttext: "Evening Days : Evening(mon-fri)",
+                addcontroller: evening_days),
             customTextField(
                 hinttext: "Evening Timings : 5.00PM-10.00PM",
                 addcontroller: evening),
             customTextField(
-                hinttext: "Closed Day Comment", addcontroller: closed_day),
+                hinttext: "Closed Title", addcontroller: closed_title),
+            customTextField(
+                hinttext: "Closed Comment", addcontroller: closed_day),
             Container(
               padding: const EdgeInsets.all(40),
               child: Column(
@@ -450,13 +475,7 @@ class _ShowAddBoxState extends State<ShowAddBox> {
             // customTextField(
             //     hinttext: "Closed : Saturday and Sunday",
             //     addcontroller: closed),
-            customTextField(
-              addcontroller: morning_days,
-              hinttext: "Morning Days : Morning(mon-fri)",
-            ),
-            customTextField(
-                hinttext: "Evening Days : Evening(mon-fri)",
-                addcontroller: evening_days),
+
             customTextField(hinttext: "Position", addcontroller: position),
             Center(
               child: ElevatedButton(
@@ -471,6 +490,7 @@ class _ShowAddBoxState extends State<ShowAddBox> {
                       "Morning": morning.text,
                       "Evening": evening.text,
                       "closed": closed,
+                      'closed_title': closed_title.text,
                       "morning_days": morning_days.text,
                       "evening_days": evening_days.text,
                       'timing_id': typecon.text,
@@ -502,8 +522,10 @@ class ProductEditBox extends StatefulWidget {
     required this.gymId,
     required this.position,
     required this.closed_day,
+    required this.closed_title,
   }) : super(key: key);
 
+  final String closed_title;
   final String morning;
   final String evening;
   final List<dynamic> closed;
@@ -522,6 +544,8 @@ class _ProductEditBoxState extends State<ProductEditBox> {
   final TextEditingController typecon = TextEditingController();
   final TextEditingController morning = TextEditingController();
   final TextEditingController evening = TextEditingController();
+  final TextEditingController closed_title = TextEditingController();
+
   final TextEditingController closed_day = TextEditingController();
   final TextEditingController morning_days = TextEditingController();
   final TextEditingController evening_days = TextEditingController();
@@ -538,6 +562,7 @@ class _ProductEditBoxState extends State<ProductEditBox> {
     evening_days.text = widget.eveninging_days;
     position.text = widget.position;
     closed_day.text = widget.closed_day;
+    closed_title.text = widget.closed_title;
   }
 
   @override
@@ -560,13 +585,24 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                     fontWeight: FontWeight.w600,
                     fontSize: 14),
               ),
-              // customTextField(hinttext: "Timing Type", addcontroller: typecon),
+              customTextField(
+                addcontroller: morning_days,
+                hinttext: "Morning Days : Morning(mon-fri)",
+              ),
               customTextField(
                   hinttext: "Morning timings :6.00AM-12.00PM ",
                   addcontroller: morning),
               customTextField(
+                  hinttext: "Evening Days : Evening(mon-fri)",
+                  addcontroller: evening_days),
+
+              // customTextField(hinttext: "Timing Type", addcontroller: typecon),
+
+              customTextField(
                   hinttext: "Evening Timings : 5.00PM-10.00PM",
                   addcontroller: evening),
+              customTextField(
+                  hinttext: "Closed Title", addcontroller: closed_title),
               customTextField(
                   hinttext: "Closed Day Comment", addcontroller: closed_day),
               Container(
@@ -661,13 +697,6 @@ class _ProductEditBoxState extends State<ProductEditBox> {
               // customTextField(
               //     hinttext: "Closed : Saturday and Sunday",
               //     addcontroller: closed),
-              customTextField(
-                addcontroller: morning_days,
-                hinttext: "Morning Days : Morning(mon-fri)",
-              ),
-              customTextField(
-                  hinttext: "Evening Days : Evening(mon-fri)",
-                  addcontroller: evening_days),
               customTextField(hinttext: "Position", addcontroller: position),
               Padding(
                 padding: const EdgeInsets.all(12.0),
@@ -689,7 +718,8 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                         "evening_days": evening_days.text,
                         'timing_id': typecon.text,
                         'position': position.text,
-                        'closed_day': closed_day.text
+                        'closed_day': closed_day.text,
+                        'closed_title': closed_title.text
                       };
                       await documentReference
                           .update(data)
