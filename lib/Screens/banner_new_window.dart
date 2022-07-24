@@ -41,7 +41,7 @@ class _bannerNewPageState extends State<bannerNewPage> {
   final _formKey = GlobalKey<FormState>();
   String? selectedType;
   String? print_type = 'Clickable';
-  String? acs = 'true';
+  String? acs = "True/False";
   bool area = false;
   // String namee = "";
   String place = "";
@@ -340,7 +340,7 @@ class _bannerNewPageState extends State<bannerNewPage> {
                                 {
                                   'position_id': _addposition.text,
                                   'name': _addname.text,
-                                  'image': image3,
+                                  'image': image3 != null ? image3 : "",
                                   'access': navcommand == "/gym_details"
                                       ? true
                                       : false,
@@ -427,7 +427,7 @@ class _navState extends State<nav> {
           style: ElevatedButton.styleFrom(
               primary: ischeckk ? Colors.green : Colors.red),
         )
-      ],    
+      ],
     );
   }
 }

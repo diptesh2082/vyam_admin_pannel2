@@ -44,7 +44,9 @@ class _overviewState extends State<overview> {
 
                 Get.find<calculator>().totalbookings.value = booking.length;
 
-                if ((element['booking_plan'].toString().toLowerCase().trim() ==
+                if (['upcoming', 'active']
+                        .contains(element['booking_status']) &&
+                    (element['booking_plan'].toString().toLowerCase().trim() ==
                             'pay per day' ||
                         element['booking_plan']
                                 .toString()
@@ -57,17 +59,17 @@ class _overviewState extends State<overview> {
                   Get.find<calculator>().totalperday.value =
                       1 + Get.find<calculator>().totalperday.value;
                 }
-                if ((['active', 'completed', 'upcoming'].contains(
-                        element['booking_status']
-                            .toString()
-                            .toLowerCase()
-                            .trim())) &&
-                    (x.isAfter(startDate) && x.isBefore(endDate) ||
-                        x == startDate ||
-                        x == endDate)) {
-                  Get.find<calculator>().totalconfirm.value =
-                      1 + Get.find<calculator>().totalconfirm.value;
-                }
+                // if ((['active', 'completed', 'upcoming'].contains(
+                //         element['booking_status']
+                //             .toString()
+                //             .toLowerCase()
+                //             .trim())) &&
+                //     (x.isAfter(startDate) && x.isBefore(endDate) ||
+                //         x == startDate ||
+                //         x == endDate)) {
+                //   Get.find<calculator>().totalconfirm.value =
+                //       1 + Get.find<calculator>().totalconfirm.value;
+                // }
                 if ((['active'].contains(element['booking_status']
                         .toString()
                         .toLowerCase()
@@ -109,8 +111,8 @@ class _overviewState extends State<overview> {
                   Get.find<calculator>().totalcancelled.value =
                       1 + Get.find<calculator>().totalcancelled.value;
                 }
-                if ((element['booking_status'].toString().toLowerCase() ==
-                            "upcoming" &&
+                if ((["upcoming", "active"]
+                            .contains(element['booking_status']) &&
                         element['payment_method'].toString().toLowerCase() ==
                             "offline") &&
                     (x.isAfter(startDate) && x.isBefore(endDate) ||
@@ -120,7 +122,7 @@ class _overviewState extends State<overview> {
                       int.parse(element['grand_total'].toString()) +
                           Get.find<calculator>().cash.value;
                 }
-                if ((["upcoming", "active", "completed"]
+                if ((["upcoming", "active"]
                             .contains(element['booking_status']) &&
                         ["online", "offline"]
                             .contains(element['payment_method'])) &&
@@ -131,7 +133,8 @@ class _overviewState extends State<overview> {
                       int.parse(element['grand_total'].toString()) +
                           Get.find<calculator>().totalamount.value;
                 }
-                if ((element['payment_done'] == true &&
+                if (["active"].contains(element['booking_status']) &&
+                    (element['payment_done'] == true &&
                         element['payment_method'].toString().toLowerCase() ==
                             'offline') &&
                     (x.isAfter(startDate) && x.isBefore(endDate) ||
@@ -141,7 +144,8 @@ class _overviewState extends State<overview> {
                       int.parse(element['grand_total'].toString()) +
                           Get.find<calculator>().totalcash_p.value;
                 }
-                if ((element['payment_done'] == true &&
+                if (["active"].contains(element['booking_status']) &&
+                    (element['payment_done'] == true &&
                         element['payment_method'].toString().toLowerCase() ==
                             'online') &&
                     (x.isAfter(startDate) && x.isBefore(endDate) ||
@@ -151,7 +155,9 @@ class _overviewState extends State<overview> {
                       int.parse(element['grand_total'].toString()) +
                           Get.find<calculator>().totalo_p.value;
                 }
-                if ((element['payment_method'].toString().toLowerCase() ==
+                if (["upcoming", "active"]
+                        .contains(element['booking_status']) &&
+                    (element['payment_method'].toString().toLowerCase() ==
                         'online') &&
                     (x.isAfter(startDate) && x.isBefore(endDate) ||
                         x == startDate ||
@@ -180,7 +186,8 @@ class _overviewState extends State<overview> {
                 Get.find<calculator>().totalbookings.value = booking.length;
                 var x = element['booking_date'].toDate();
 
-                if ((element['booking_plan'].toString().toLowerCase().trim() ==
+                if (['upcoming'].contains(element['booking_status']) &&
+                    (element['booking_plan'].toString().toLowerCase().trim() ==
                             'pay per day' ||
                         element['booking_plan']
                                 .toString()
@@ -193,17 +200,17 @@ class _overviewState extends State<overview> {
                   Get.find<calculator>().totalperday.value =
                       1 + Get.find<calculator>().totalperday.value;
                 }
-                if ((['active', 'completed', 'upcoming'].contains(
-                        element['booking_status']
-                            .toString()
-                            .toLowerCase()
-                            .trim())) &&
-                    (x.isAfter(startDate) && x.isBefore(endDate) ||
-                        x == startDate ||
-                        x == endDate)) {
-                  Get.find<calculator>().totalconfirm.value =
-                      1 + Get.find<calculator>().totalconfirm.value;
-                }
+                // if ((['active', 'completed', 'upcoming'].contains(
+                //         element['booking_status']
+                //             .toString()
+                //             .toLowerCase()
+                //             .trim())) &&
+                //     (x.isAfter(startDate) && x.isBefore(endDate) ||
+                //         x == startDate ||
+                //         x == endDate)) {
+                //   Get.find<calculator>().totalconfirm.value =
+                //       1 + Get.find<calculator>().totalconfirm.value;
+                // }
                 if ((['active'].contains(element['booking_status']
                         .toString()
                         .toLowerCase()
@@ -245,8 +252,8 @@ class _overviewState extends State<overview> {
                   Get.find<calculator>().totalcancelled.value =
                       1 + Get.find<calculator>().totalcancelled.value;
                 }
-                if ((element['booking_status'].toString().toLowerCase() ==
-                            "upcoming" &&
+                if ((["upcoming", "active"]
+                            .contains(element['booking_status']) &&
                         element['payment_method'].toString().toLowerCase() ==
                             "offline") &&
                     (x.isAfter(startDate) && x.isBefore(endDate) ||
@@ -267,7 +274,8 @@ class _overviewState extends State<overview> {
                       int.parse(element['grand_total'].toString()) +
                           Get.find<calculator>().totalamount.value;
                 }
-                if ((element['payment_done'] == true &&
+                if (["active"].contains(element['booking_status']) &&
+                    (element['payment_done'] == true &&
                         element['payment_method'].toString().toLowerCase() ==
                             'offline') &&
                     (x.isAfter(startDate) && x.isBefore(endDate) ||
@@ -277,7 +285,8 @@ class _overviewState extends State<overview> {
                       int.parse(element['grand_total'].toString()) +
                           Get.find<calculator>().totalcash_p.value;
                 }
-                if ((element['payment_done'] == true &&
+                if (["active"].contains(element['booking_status']) &&
+                    (element['payment_done'] == true &&
                         element['payment_method'].toString().toLowerCase() ==
                             'online') &&
                     (x.isAfter(startDate) && x.isBefore(endDate) ||
@@ -287,7 +296,9 @@ class _overviewState extends State<overview> {
                       int.parse(element['grand_total'].toString()) +
                           Get.find<calculator>().totalo_p.value;
                 }
-                if ((element['payment_method'].toString().toLowerCase() ==
+                if (["upcoming", "active"]
+                        .contains(element['booking_status']) &&
+                    (element['payment_method'].toString().toLowerCase() ==
                         'online') &&
                     (x.isAfter(startDate) && x.isBefore(endDate) ||
                         x == startDate ||
@@ -295,6 +306,20 @@ class _overviewState extends State<overview> {
                   Get.find<calculator>().online.value =
                       int.parse(element['grand_total'].toString()) +
                           Get.find<calculator>().online.value;
+                }
+                if (['upcoming', "active"]
+                        .contains(element['booking_status']) &&
+                    (element['booking_plan'].toString().toLowerCase().trim() !=
+                        'pay per day') &&
+                    ['upcoming', "active"]
+                        .contains(element['booking_status']) &&
+                    (element['booking_plan'].toString().toLowerCase().trim() !=
+                        'pay per session') &&
+                    (x.isAfter(startDate) && x.isBefore(endDate) ||
+                        x == startDate ||
+                        x == endDate)) {
+                  Get.find<calculator>().totalpackages.value =
+                      1 + Get.find<calculator>().totalpackages.value;
                 }
 
                 print(Get.find<calculator>().totalbookings.value);
@@ -305,21 +330,21 @@ class _overviewState extends State<overview> {
 
     var vendor;
 
-    FirebaseFirestore.instance
-        .collection('product_details')
-        .doc(namee)
-        .collection('package')
-        .doc("normal_package")
-        .collection("gym")
-        .snapshots()
-        .listen((snapshot) {
-      if (snapshot.docs.isNotEmpty) {
-        vendor = snapshot.docs;
-        vendor.forEach((element) {
-          Get.find<calculator>().totalpackages.value = booking.length;
-        });
-      }
-    });
+    // FirebaseFirestore.instance
+    //     .collection('product_details')
+    //     .doc(namee)
+    //     .collection('package')
+    //     .doc("normal_package")
+    //     .collection("gym")
+    //     .snapshots()
+    //     .listen((snapshot) {
+    //   if (snapshot.docs.isNotEmpty) {
+    //     vendor = snapshot.docs;
+    //     vendor.forEach((element) {
+    //
+    //     });
+    //   }
+    // });
     // print(booking);
     // print("++++++++++++++++++++++++++++++++++");
     // print(vendor);
@@ -537,7 +562,7 @@ class _overviewState extends State<overview> {
                     Get.find<calculator>().totalbookings.value = 0;
                     Get.find<calculator>().totalperday.value = 0;
                     Get.find<calculator>().totalactive.value = 0;
-                    Get.find<calculator>().totalconfirm.value = 0;
+                    // Get.find<calculator>().totalconfirm.value = 0;
                     Get.find<calculator>().totalcancelled.value = 0;
                     Get.find<calculator>().totalupcoming.value = 0;
                     Get.find<calculator>().totalcash_p.value = 0;
@@ -547,6 +572,7 @@ class _overviewState extends State<overview> {
                     Get.find<calculator>().totalamount.value = 0;
                     Get.find<calculator>().online.value = 0;
                     Get.find<calculator>().totalpackages.value = 0;
+                    Get.find<calculator>().totalcomplete.value = 0;
 
                     // Get.find<calculator>().totalconfirm.value=0;
 
@@ -608,16 +634,16 @@ class _overviewState extends State<overview> {
                   ),
                 );
               }
+              // if (i == 3) {
+              //   return Obx(
+              //     () => Cards(
+              //       title: 'Total Confirm',
+              //       count: Get.find<calculator>().totalconfirm.value.toString(),
+              //       icons: const Icon(Icons.trending_up),
+              //     ),
+              //   );
+              // }
               if (i == 3) {
-                return Obx(
-                  () => Cards(
-                    title: 'Total Confirm',
-                    count: Get.find<calculator>().totalconfirm.value.toString(),
-                    icons: const Icon(Icons.trending_up),
-                  ),
-                );
-              }
-              if (i == 4) {
                 return Obx(
                   () => Cards(
                     title: 'Total Active',
@@ -626,7 +652,7 @@ class _overviewState extends State<overview> {
                   ),
                 );
               }
-              if (i == 5) {
+              if (i == 4) {
                 return Obx(
                   () => Cards(
                     title: 'Total Upcoming',
@@ -637,7 +663,7 @@ class _overviewState extends State<overview> {
                 );
               }
 
-              if (i == 6) {
+              if (i == 5) {
                 return Obx(
                   () => Cards(
                     title: 'Total Completed',
@@ -647,7 +673,7 @@ class _overviewState extends State<overview> {
                   ),
                 );
               }
-              if (i == 7) {
+              if (i == 6) {
                 return Obx(
                   () => Cards(
                     title: 'Total Cancelled',
@@ -657,7 +683,7 @@ class _overviewState extends State<overview> {
                   ),
                 );
               }
-              if (i == 8) {
+              if (i == 7) {
                 return Obx(
                   () => Cards(
                     title: 'Total Amount',
@@ -667,7 +693,7 @@ class _overviewState extends State<overview> {
                   ),
                 );
               }
-              if (i == 9) {
+              if (i == 8) {
                 return Obx(
                   () => Cards(
                     title: 'Cash',
@@ -676,7 +702,7 @@ class _overviewState extends State<overview> {
                   ),
                 );
               }
-              if (i == 10) {
+              if (i == 9) {
                 return Obx(
                   () => Cards(
                     title: 'Online',
@@ -686,7 +712,7 @@ class _overviewState extends State<overview> {
                   ),
                 );
               }
-              if (i == 11) {
+              if (i == 10) {
                 return Obx(
                   () => Cards(
                     title: 'Online (Paid)',
@@ -696,7 +722,7 @@ class _overviewState extends State<overview> {
                   ),
                 );
               }
-              if (i == 12) {
+              if (i == 11) {
                 return Obx(
                   () => Cards(
                     title: 'Cash (Paid)',
@@ -706,12 +732,12 @@ class _overviewState extends State<overview> {
                   ),
                 );
               }
-              if (i == 13) {
+              if (i == 12) {
                 return Obx(
                   () => Cards(
                     title: 'Total Due',
                     count:
-                        "₹ ${(Get.find<calculator>().online.value + Get.find<calculator>().cash.value - Get.find<calculator>().totalcash_p.value - Get.find<calculator>().totalo_p.value).toString()}",
+                        "₹ ${(Get.find<calculator>().totalamount.value - Get.find<calculator>().totalcash_p.value - Get.find<calculator>().totalo_p.value).toString()}",
                     icons: const Icon(Icons.calculate),
                   ),
                 );

@@ -47,11 +47,13 @@ class _MapViewState extends State<MapView> {
   void _onScaleEnd(ScaleEndDetails details) async {
     try {
       setState(() {
+        lat = controller.center.latitude;
+        long = controller.center.longitude;
+
+        sa = GeoPoint(lat, long);
         loading = true;
       });
-      lat = controller.center.latitude;
-      long = controller.center.longitude;
-      sa = GeoPoint(lat, long);
+
       GeoCode geocode = GeoCode();
       Address add =
           await geocode.reverseGeocoding(latitude: lat, longitude: long);
