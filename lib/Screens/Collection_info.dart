@@ -510,68 +510,74 @@ class _UserInformationState extends State<UserInformation> {
 
   DataRow _buildListItem(BuildContext context, DocumentSnapshot data, int index,
       int start, int end) {
-    String? userIDData="";
+    String? userIDData = "";
     try {
       userIDData = data['userId'];
     } catch (e) {
       userIDData = '#Error';
     }
-    String? address="";
+    String? address = "";
     try {
       address = data['address'];
     } catch (e) {
       address = '#Error';
     }
-    String? gender="";
+    String? gender = "";
     try {
       gender = data['gender'];
     } catch (e) {
       gender = '#Error';
     }
-    String? number="";
+    String? number = "";
     try {
       number = data['number'];
     } catch (e) {
       number = '#Error';
     }
-    String? pincode="";
+    String? pincode = "";
     try {
       pincode = data['pincode'];
     } catch (e) {
       pincode = '#Error';
     }
 
-    String? email="";
+    String? email = "";
     try {
       email = data['email'];
     } catch (e) {
       email = '#Error';
     }
 
-    String? name="";
+    String? name = "";
     try {
       name = data['name'];
     } catch (e) {
       name = '#Error';
     }
-    String? profileImage="";
+    String? profileImage = "";
     try {
       profileImage = data['image'];
     } catch (e) {
       profileImage = '#Error';
     }
-    String? locality="";
+    String? locality = "";
     try {
       locality = data['locality'];
     } catch (e) {
       locality = '#Error';
     }
 
-    bool legit=false;
+    bool legit = false;
     try {
       legit = data['legit'];
     } catch (e) {
       legit = false;
+    }
+    String? sublocality;
+    try {
+      sublocality = data['subLocality'];
+    } catch (e) {
+      sublocality = '#Error';
     }
 
     return DataRow(cells: [
@@ -609,8 +615,7 @@ class _UserInformationState extends State<UserInformation> {
               .toString()
               .substring(3, number.toString().length))
           : const Text("")),
-      DataCell(
-          address != null ? Text(address.toString() ) : const Text("")),
+      DataCell(address != null ? Text(address.toString()) : const Text("")),
       DataCell(locality != null ? Text(locality.toString()) : const Text("")),
       // DataCell(data != null ? Text(data['subLocality'] ?? "") : Text("")),
       DataCell(pincode != null ? Text(pincode.toString()) : const Text("")),
@@ -647,7 +652,7 @@ class _UserInformationState extends State<UserInformation> {
                 // longitude: data['long'].toString(),
                 locality: locality.toString(),
                 number: number.toString(),
-                subLocality: data['subLocality'],
+                subLocality: sublocality.toString(),
                 userid: userIDData.toString(),
                 name: name.toString(),
                 pincode: pincode.toString(),
@@ -854,6 +859,75 @@ class _EditBoxState extends State<EditBox> {
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.w400,
                       ),
+                      controller: _address,
+                      maxLines: 3,
+                      decoration: const InputDecoration(
+                          border: InputBorder.none,
+                          hintStyle: TextStyle(
+                            fontSize: 14,
+                            fontFamily: 'Poppins',
+                            fontWeight: FontWeight.w400,
+                          ),
+                          hintMaxLines: 2,
+                          hintText: 'Address'),
+                    )),
+                  ),
+                  SizedBox(
+                    height: 50,
+                    child: Card(
+                        child: TextField(
+                      autofocus: true,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w400,
+                      ),
+                      controller: _locality,
+                      maxLines: 3,
+                      decoration: const InputDecoration(
+                          border: InputBorder.none,
+                          hintStyle: TextStyle(
+                            fontSize: 14,
+                            fontFamily: 'Poppins',
+                            fontWeight: FontWeight.w400,
+                          ),
+                          hintMaxLines: 2,
+                          hintText: 'Locality'),
+                    )),
+                  ),
+                  SizedBox(
+                    height: 50,
+                    child: Card(
+                        child: TextField(
+                      autofocus: true,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w400,
+                      ),
+                      controller: _pincode,
+                      maxLines: 3,
+                      decoration: const InputDecoration(
+                          border: InputBorder.none,
+                          hintStyle: TextStyle(
+                            fontSize: 14,
+                            fontFamily: 'Poppins',
+                            fontWeight: FontWeight.w400,
+                          ),
+                          hintMaxLines: 2,
+                          hintText: 'Pincode'),
+                    )),
+                  ),
+                  SizedBox(
+                    height: 50,
+                    child: Card(
+                        child: TextField(
+                      autofocus: true,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w400,
+                      ),
                       controller: _email,
                       maxLines: 3,
                       decoration: const InputDecoration(
@@ -883,7 +957,7 @@ class _EditBoxState extends State<EditBox> {
                           items: const [
                             DropdownMenuItem(
                               child: Text("Not Specified"),
-                              value: "Not Specified",
+                              value: "",
                             ),
                             DropdownMenuItem(
                               child: Text("Male"),
@@ -971,6 +1045,9 @@ class _EditBoxState extends State<EditBox> {
                               'name': _name.text,
                               'email': _email.text,
                               'number': '+91${_number.text}',
+                              'address': _address.text,
+                              'pincode': _pincode.text,
+                              'locality': _locality.text
                             };
                             await documentReference
                                 .update(data)
