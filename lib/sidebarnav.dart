@@ -349,6 +349,16 @@ class _SideNavBar1State extends State<SideNavBar1> {
             ),
             // ListTile(
             //   title: Text(
+            //     'Simpl',
+            //     style: kTextStyle,
+            //   ),
+            //   onTap: () {
+            //     index = 24;
+            //     setState(() {});
+            //   },
+            // ),
+            // ListTile(
+            //   title: Text(
             //     'User2',
             //     style: kTextStyle,
             //   ),
@@ -397,6 +407,7 @@ class _SideNavBar1State extends State<SideNavBar1> {
           index == 21 ? const bookingNotification() : Container(),
           index == 22 ? const overview() : Container(),
           index == 23 ? const simpl() : Container(),
+          // index == 24 ? const user2() : Container(),
 
           // index == 23 ? const user2() : Container(),
         ],

@@ -130,7 +130,7 @@ class _user2State extends State<user2> {
                       if (snapshot.data == null) {
                         return Container();
                       }
-                      print("-----------------------------------");
+                      // print("-----------------------------------");
 
                       var doc = snapshot.data.docs;
 
@@ -172,37 +172,38 @@ class _user2State extends State<user2> {
                         }).toList();
                       }
 
-                      print(snapshot.data.docs);
+                      // print(snapshot.data.docs);
                       return SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
                         child: DataTable(
                             dataRowHeight: 65,
-                            columns: const [
-                              // DataColumn(
-                              //   label: InkWell(
-                              //     onTap: () {
-                              //       doc.forEach((element) async {
-                              //         await FirebaseFirestore.instance
-                              //             .collection('user_details')
-                              //             .doc(element.id)
-                              //             .update({
-                              //           'time_stamp': DateTime.now(),
-                              //         });
-                              //       });
-                              //     },
-                              //     child: Text(
-                              //       'S.No',
-                              //       style:
-                              //       TextStyle(fontWeight: FontWeight.w600),
-                              //     ),
-                              //   ),
-                              // ),
+                            columns: [
                               DataColumn(
-                                label: Text(
-                                  'S.No',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                label: InkWell(
+                                  onTap: () {
+                                    doc.forEach((element) async {
+                                      await FirebaseFirestore.instance
+                                          .collection('user_details')
+                                          .doc(element.id)
+                                          .update({
+                                        'time_stamp': DateTime.now(),
+                                      }).whenComplete(() => print(
+                                              "completed++++++++++++++++++"));
+                                    });
+                                  },
+                                  child: Text(
+                                    'S.No',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.w600),
+                                  ),
                                 ),
                               ),
+                              // DataColumn(
+                              //   label: Text(
+                              //     'S.No',
+                              //     style: TextStyle(fontWeight: FontWeight.w600),
+                              //   ),
+                              // ),
                               DataColumn(
                                 label: Text(
                                   'Profile Image',
@@ -346,7 +347,7 @@ class _user2State extends State<user2> {
                             print("Previous Page");
                           },
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 20,
                         ),
                         StreamBuilder<QuerySnapshot>(

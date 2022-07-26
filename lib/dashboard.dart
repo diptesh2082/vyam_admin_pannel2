@@ -883,7 +883,8 @@ class Carddb extends StatelessWidget {
           List<DocumentSnapshot> doc = [];
           docs.forEach((element) {
             if ((element.get('booking_status').toString() == 'upcoming') ||
-                (element.get('booking_status').toString() == 'completed')) {
+                (element.get('booking_status').toString() == 'completed') ||
+                (element.get('booking_status').toString() == 'active')) {
               doc.add(element);
             }
           });

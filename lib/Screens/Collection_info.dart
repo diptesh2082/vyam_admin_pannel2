@@ -117,7 +117,10 @@ class _UserInformationState extends State<UserInformation> {
                 ),
                 Center(
                   child: StreamBuilder<QuerySnapshot>(
-                    stream: userDetailStream!.snapshots(),
+                    stream: FirebaseFirestore.instance
+                        .collection("user_details")
+                        // .orderBy('time_stamp', descending: true)
+                        .snapshots(),
                     builder: (context, AsyncSnapshot snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return const CircularProgressIndicator();
