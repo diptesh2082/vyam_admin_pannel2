@@ -551,12 +551,12 @@ class _perdayState extends State<perday> {
     } catch (e) {
       gym_details = '#Error';
     }
-    String? gym_name;
-    try {
-      gym_details = data['gym_details']['branch'];
-    } catch (e) {
-      gym_details = '#Error';
-    }
+    // String? gym_name;
+    // try {
+    //   gym_details = data['gym_details']['branch'];
+    // } catch (e) {
+    //   gym_details = '#Error';
+    // }
     String? vendorId;
     try {
       vendorId = data['vendorId'];
@@ -707,7 +707,7 @@ class _perdayState extends State<perday> {
           : const Text("")),
       DataCell(gym_details != null
           ? Text(
-              '${gym_details.toString().toUpperCase()}|${gym_name.toString().toUpperCase()}')
+              '${gym_details.toString().toUpperCase()}|${gym_branch.toString().toUpperCase()}')
           : const Text("")),
 
       DataCell(package_type != null
@@ -736,7 +736,7 @@ class _perdayState extends State<perday> {
           : const Text("")),
       DataCell(const Text(""), showEditIcon: true, onTap: () {
         Get.to(() => ProductEditBox(
-              vendorname: gym_name.toString(),
+              vendorname: gym_branch.toString(),
               vendorid: vendorId.toString(),
               username: username.toString(),
               userid: userId.toString(),

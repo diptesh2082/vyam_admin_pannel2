@@ -2239,8 +2239,8 @@ class _ProductEditBoxState extends State<ProductEditBox> {
                   child: ElevatedButton(
                     onPressed: () async {
                       GeoPoint dataForGeoPint = GeoPoint(
-                          double.parse(_latitudeController.toString()),
-                          double.parse(_longitudeController.toString()));
+                          double.parse(_latitudeController.text),
+                          double.parse(_longitudeController.text));
                       print("The Gym id is : ${_gymiid.text}");
                       DocumentReference documentReference = FirebaseFirestore
                           .instance
