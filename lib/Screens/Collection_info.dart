@@ -119,7 +119,7 @@ class _UserInformationState extends State<UserInformation> {
                   child: StreamBuilder<QuerySnapshot>(
                     stream: FirebaseFirestore.instance
                         .collection("user_details")
-                        // .orderBy('time_stamp', descending: true)
+                        .orderBy('time_stamp', descending: false)
                         .snapshots(),
                     builder: (context, AsyncSnapshot snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {

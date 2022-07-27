@@ -349,7 +349,7 @@ class _SideNavBar1State extends State<SideNavBar1> {
             ),
             // ListTile(
             //   title: Text(
-            //     'Simpl',
+            //     'User2',
             //     style: kTextStyle,
             //   ),
             //   onTap: () {

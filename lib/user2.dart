@@ -133,6 +133,7 @@ class _user2State extends State<user2> {
                       // print("-----------------------------------");
 
                       var doc = snapshot.data.docs;
+                      int indexxx = 0;
 
                       // doc.forEach((element) async {
                       //   await FirebaseFirestore.instance
@@ -187,8 +188,11 @@ class _user2State extends State<user2> {
                                           .doc(element.id)
                                           .update({
                                         'time_stamp': DateTime.now(),
-                                      }).whenComplete(() => print(
-                                              "completed++++++++++++++++++"));
+                                      }).whenComplete(() {
+                                        print(
+                                            "completed++++++++++++++++++$indexxx");
+                                        index++;
+                                      });
                                     });
                                   },
                                   child: Text(
