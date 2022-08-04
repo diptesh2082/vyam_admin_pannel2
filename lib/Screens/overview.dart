@@ -382,6 +382,84 @@ class _overviewState extends State<overview> {
     // print(vendor);
   }
 
+  payment() {
+    var paya;
+    if (namee == 'all') {
+      FirebaseFirestore.instance
+          .collection('payment')
+          .snapshots()
+          .listen((snapshot) {
+        if (snapshot.docs.isNotEmpty) {
+          paya = snapshot.docs;
+        }
+        paya.forEach((element) {
+          var x = element['timestamp'].toDate();
+          if (["cash"].contains(element['type'].toString().toLowerCase()) &&
+              (x.isAfter(startDate) && x.isBefore(endDate) ||
+                  x == startDate ||
+                  x == endDate)) {
+            Get.find<calculator>().ven_c.value =
+                int.parse(element['amount'].toString()) +
+                    Get.find<calculator>().ven_c.value;
+          }
+          if (["online"].contains(element['type'].toString().toLowerCase()) &&
+              (x.isAfter(startDate) && x.isBefore(endDate) ||
+                  x == startDate ||
+                  x == endDate)) {
+            Get.find<calculator>().ven_o.value =
+                int.parse(element['amount'].toString()) +
+                    Get.find<calculator>().ven_o.value;
+          }
+          if ((["cash", "online"].contains(element['type'])) &&
+              (x.isAfter(startDate) && x.isBefore(endDate) ||
+                  x == startDate ||
+                  x == endDate)) {
+            Get.find<calculator>().ven_t.value =
+                int.parse(element['amount'].toString()) +
+                    Get.find<calculator>().ven_t.value;
+          }
+        });
+      });
+    } else {
+      FirebaseFirestore.instance
+          .collection('payment')
+          .where('gym_id', isEqualTo: namee)
+          .snapshots()
+          .listen((snapshot) {
+        if (snapshot.docs.isNotEmpty) {
+          paya = snapshot.docs;
+        }
+        paya.forEach((element) {
+          var x = element['timestamp'].toDate();
+          if (["cash"].contains(element['type'].toString().toLowerCase()) &&
+              (x.isAfter(startDate) && x.isBefore(endDate) ||
+                  x == startDate ||
+                  x == endDate)) {
+            Get.find<calculator>().ven_c.value =
+                int.parse(element['amount'].toString()) +
+                    Get.find<calculator>().ven_c.value;
+          }
+          if (["online"].contains(element['type'].toString().toLowerCase()) &&
+              (x.isAfter(startDate) && x.isBefore(endDate) ||
+                  x == startDate ||
+                  x == endDate)) {
+            Get.find<calculator>().ven_o.value =
+                int.parse(element['amount'].toString()) +
+                    Get.find<calculator>().ven_o.value;
+          }
+          // if ((["Cash", "ONLINE"].contains(element['type'])) &&
+          //     (x.isAfter(startDate) && x.isBefore(endDate) ||
+          //         x == startDate ||
+          //         x == endDate)) {
+          //   Get.find<calculator>().ven_t.value =
+          //       int.parse(element['amount'].toString()) +
+          //           Get.find<calculator>().ven_t.value;
+          // }
+        });
+      });
+    }
+  }
+
   void initState() {
     calculation();
 
@@ -512,6 +590,7 @@ class _overviewState extends State<overview> {
                                 place = doc[index]['branch'];
                               });
                               calculation();
+                              payment();
 
                               print(namee);
                             });
@@ -527,6 +606,7 @@ class _overviewState extends State<overview> {
                               // place = doc[index]['branch'];
                             });
                             calculation();
+                            payment();
 
                             print(namee);
                           });
@@ -605,6 +685,9 @@ class _overviewState extends State<overview> {
                     Get.find<calculator>().online.value = 0;
                     Get.find<calculator>().totalpackages.value = 0;
                     Get.find<calculator>().totalcomplete.value = 0;
+                    Get.find<calculator>().ven_c.value = 0;
+                    Get.find<calculator>().ven_o.value = 0;
+                    Get.find<calculator>().ven_t.value = 0;
 
                     // Get.find<calculator>().totalconfirm.value=0;
 
@@ -635,7 +718,7 @@ class _overviewState extends State<overview> {
           GridView.builder(
             shrinkWrap: true,
             padding: const EdgeInsets.all(10),
-            itemCount: 14,
+            itemCount: 15,
             itemBuilder: (ctx, i) {
               if (i == 0) {
                 return Obx(
@@ -764,30 +847,36 @@ class _overviewState extends State<overview> {
                   ),
                 );
               }
+
               if (i == 12) {
                 return Obx(
                   () => Cards(
-                    title: 'Total Due',
-                    count:
-                        "₹ ${(Get.find<calculator>().totalamount.value - Get.find<calculator>().totalcash_p.value - Get.find<calculator>().totalo_p.value).toString()}",
+                    title: 'Cash (Vendor)',
+                    count: "₹ ${Get.find<calculator>().ven_c.value.toString()}",
                     icons: const Icon(Icons.calculate),
                   ),
                 );
               }
-              // if (i == 13) {
-              //   return Cards(
-              //     title: 'Total Online(paid)',
-              //     count: 'NA',
-              //     icons: Icon(Icons.calculate),
-              //   );
-              // }
-              // if (i == 14) {
-              //   return Cards(
-              //     title: 'Total Due',
-              //     count: 'NA',
-              //     icons: Icon(Icons.calculate),
-              //   );
-              // }
+              if (i == 13) {
+                return Obx(
+                  () => Cards(
+                    title: 'Online (Vendor)',
+                    count:
+                        "₹ ${(Get.find<calculator>().ven_o.value.toString())}",
+                    icons: const Icon(Icons.calculate),
+                  ),
+                );
+              }
+              if (i == 14) {
+                return Obx(
+                  () => Cards(
+                    title: 'Total Due',
+                    count:
+                        "₹ ${(Get.find<calculator>().totalamount.value - Get.find<calculator>().ven_c.value - Get.find<calculator>().ven_o.value).toString()}",
+                    icons: const Icon(Icons.calculate),
+                  ),
+                );
+              }
 
               return const Spacer();
             },

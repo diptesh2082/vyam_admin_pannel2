@@ -21,4 +21,7 @@ class calculator extends GetxController {
   var totalcash_p = 0.obs;
   var totalo_p = 0.obs;
   var total_due = 0.obs;
+  var ven_c = 0.obs;
+  var ven_o = 0.obs;
+  var ven_t = 0.obs;
 }
