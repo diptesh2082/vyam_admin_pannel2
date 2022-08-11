@@ -741,6 +741,20 @@ class _BookingDetailsState extends State<BookingDetails> {
       booking_plan = '#Error';
     }
 
+    String? reference_for;
+    try {
+      reference_for = data['reference_for'];
+    } catch (e) {
+      reference_for = '';
+    }
+
+    String? reference_number;
+    try {
+      reference_number = data['reference_number'];
+    } catch (e) {
+      reference_number = '';
+    }
+
     Timestamp booking_date;
     try {
       booking_date = data['booking_date'];
@@ -846,10 +860,14 @@ class _BookingDetailsState extends State<BookingDetails> {
       //
       // >>>>>>> e7a2f855481cf7af1fb6b535cb09e976cfd11949
 // >>>>>>> ae7259e7ba6e19ed4976a35667cb3a762fe66e2c
-      DataCell(username != null ? Text(username.toString()) : const Text("")),
-      DataCell(userId != null
-          ? Text(userId.toString().substring(3, 13))
-          : const Text("")),
+      DataCell(reference_for != ''
+          ? Text(
+              "Ref. For: ${reference_for.toString()}\nBook By:${username.toString()} ")
+          : Text(username.toString())),
+      DataCell(reference_number != ''
+          ? Text(
+              "Ref. No: ${reference_number.toString().substring(3, 13)}\nBook By:${userId.toString().substring(3, 13)} ")
+          : Text(userId.toString().substring(3, 13))),
       DataCell(gym_details != null
           ? Text(
               '${gym_details.toString().toUpperCase()}\n${gym_branch.toString().toUpperCase()}')
